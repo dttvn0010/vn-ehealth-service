@@ -1,0 +1,73 @@
+{
+	"emrDmGioiTinh": {
+		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
+	},
+	
+	"emrDmDanToc": {
+		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
+	},
+	
+	"emrDmQuocGia": {
+		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
+	},
+	
+	"emrDmNgheNghiep": {
+		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
+	},
+	
+	"emrDmPhuongXa": {
+		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
+	},
+	
+	"emrDmQuanHuyen": {
+		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
+	},
+	
+	"emrDmTinhThanh": {
+		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
+	},
+	
+	"emrDmNgheNghiepBo": {
+		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
+	},
+	
+	"emrDmNgheNghiepMe": {
+		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
+	},
+	
+	"iddinhdanhchinh": {"type" : "String", "required" : true},
+	
+	"iddinhdanhphu": {"type" : "String"},
+	
+	"idhis": {"type" : "String"},
+	
+	"tendaydu": {"type" : "String"},
+	
+	"ngaysinh": {"type" : "Date"},
+	
+	"diachi": {"type" : "String"},
+		
+	"noilamviec": {"type" : "String"},
+		
+	"sobhyt": {"type" : "String"},
+		
+	"ngayhethanthebhyt": {"type" : "Date"},
+	
+	"hotenbo": {"type" : "String"},
+	
+	"hotenme": {"type" : "String"},
+	
+	"tennguoibaotin": {"type" : "String"},
+	
+	"diachinguoibaotin": {"type" : "String"},
+	
+	"sodienthoainguoibaotin": {"type" : "String"},
+	
+	"ngaySinhCuaBo": {"type" : "Date"},
+	
+	"ngaySinhCuaMe": {"type" : "Date"},
+	
+	"trinhDoVanHoaCuaBo": {"type" : "String"},
+	
+	"trinhDoVanHoaCuaMe": {"type" : "String"}	
+}

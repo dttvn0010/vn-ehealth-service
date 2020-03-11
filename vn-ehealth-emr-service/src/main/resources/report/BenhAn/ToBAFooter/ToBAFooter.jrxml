@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ToBAFooter" pageWidth="595" pageHeight="165" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" scriptletClass="vn.ehealth.emr.utils.JasperUtils" isIgnorePagination="true" uuid="d690969c-41b5-4f27-a7bb-35ca19a7d2ba">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="440"/>
+	<property name="ireport.y" value="0"/>
+	<scriptlet name="Header" class="vn.ehealth.emr.utils.JasperUtils"/>
+	<parameter name="danhSachHSBA" class="vn.ehealth.emr.model.EmrHoSoBenhAn"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<lastPageFooter>
+		<band height="162" splitType="Prevent">
+			<staticText>
+				<reportElement x="14" y="100" width="142" height="17" uuid="95466c3f-ef80-4ec6-b4e4-24ea67131ff2"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[-  Xét nghiệm]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="83" width="142" height="17" uuid="04851a3e-47fa-43e5-8c04-2615a5c56fee"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[-  Siêu âm]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="430" y="142" width="128" height="17" uuid="f9f5a252-c995-49b7-90b3-ef5bcee74289"/>
+				<textElement textAlignment="Left" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getBacSiDieuTri(
+    $P{danhSachHSBA})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="278" y="6" width="100" height="17" uuid="54d868fb-b621-4c2e-95bf-c6a51ccf7b42"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Người giao hồ sơ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="298" y="142" width="96" height="17" uuid="3cd72c53-6fc2-4c8b-97ef-e8a07d9a6dae"/>
+				<textElement textAlignment="Left" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{danhSachHSBA}.emrTongKetRaVien.nguoinhanhoso]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="279" y="83" width="100" height="17" uuid="bd4b806c-ccc4-4df6-9a38-aa92feb4a84a"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Người nhận hồ sơ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="118" width="142" height="17" uuid="cfceafda-eee7-4b2f-b0fa-513b5a824552"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[-  Khác]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="23" width="260" height="1" uuid="77e4dd7b-1f75-4c9c-8ee6-10142062219d"/>
+			</line>
+			<staticText>
+				<reportElement x="77" y="5" width="100" height="17" uuid="406d1ac2-5d46-4717-8ac6-ae9b98a0ac49"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hồ sơ, phim, ảnh]]></text>
+			</staticText>
+			<line>
+				<reportElement x="263" y="80" width="130" height="1" uuid="4f306e57-59ca-4fec-bdbe-52880a36f46d"/>
+			</line>
+			<line>
+				<reportElement x="262" y="1" width="1" height="160" uuid="2b51e1a9-d127-4603-91bc-bb6753574fba"/>
+			</line>
+			<staticText>
+				<reportElement x="199" y="26" width="60" height="17" uuid="5728fc3a-422b-4472-8204-da42473662c8"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Số tờ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="0" width="538" height="1" uuid="1d567dcd-c306-4711-8e26-7be214442ac2"/>
+			</line>
+			<line>
+				<reportElement x="1" y="45" width="260" height="1" uuid="19643a33-5f5a-4411-8982-640dbe33fe1e"/>
+			</line>
+			<line>
+				<reportElement x="198" y="25" width="1" height="136" uuid="c65bdf8e-2d57-4e03-b46d-0e7c313db503"/>
+			</line>
+			<staticText>
+				<reportElement x="14" y="49" width="142" height="17" uuid="3e5a4f68-a166-4552-8087-d0287d11d5ef"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[-  X - quang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="418" y="29" width="100" height="17" uuid="9ad9b439-5c83-4e2b-8d04-3a4a3b63f7b7"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bác sỹ điều trị]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="136" width="142" height="20" uuid="61508fb8-d54c-4753-a4ce-3bdf212fb136"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[-  Toàn bộ hồ sơ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="394" y="1" width="1" height="160" uuid="2a127ae1-cd34-41d8-b392-80f66e181b4d"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="298" y="63" width="96" height="17" uuid="31873f65-9e26-47dd-999c-738a9dca0692"/>
+				<textElement textAlignment="Left" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{danhSachHSBA}.emrTongKetRaVien.nguoigiaohoso]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="14" y="66" width="142" height="17" uuid="5e2872e1-1361-4b77-8f46-7aecff27d2aa"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[-  CT Scanner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="66" y="26" width="60" height="17" uuid="64ff5059-4066-4278-9183-419aeb03a5f2"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Loại]]></text>
+			</staticText>
+			<textField pattern="yyyy" isBlankWhenNull="true">
+				<reportElement x="399" y="10" width="141" height="17" uuid="3a1e65d9-a227-407e-a02d-cfc67b8600f4"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTime_DDMMYYYY($P{danhSachHSBA}.emrQuanLyNguoiBenh.ngaygioravien)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="217" y="49" width="27" height="17" uuid="e40799dc-a3c5-426d-93da-f076885e6d25"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{danhSachHSBA}.emrTongKetRaVien.soToXQuang]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="217" y="66" width="27" height="17" uuid="61dc7028-bd70-4191-ad45-60fe79cd0da8"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{danhSachHSBA}.emrTongKetRaVien.soToCTScanner]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="217" y="83" width="27" height="17" uuid="727b6080-e9ae-407f-b61d-f6d8b6c98efc"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{danhSachHSBA}.emrTongKetRaVien.soToSieuAm]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="217" y="101" width="27" height="17" uuid="2239cde3-2eac-46cf-b5ed-995a7f8dd879"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{danhSachHSBA}.emrTongKetRaVien.soToXetNghiem]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="217" y="118" width="27" height="17" uuid="6332edfb-152f-4d45-88f7-18b55656cd7a"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{danhSachHSBA}.emrTongKetRaVien.soToKhac]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="217" y="136" width="27" height="20" uuid="6d0eb491-1889-4042-81e4-eff8ab4ea84c"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{danhSachHSBA}.emrTongKetRaVien.soToXQuang+
+$P{danhSachHSBA}.emrTongKetRaVien.soToCTScanner+
+$P{danhSachHSBA}.emrTongKetRaVien.soToSieuAm+
+$P{danhSachHSBA}.emrTongKetRaVien.soToXetNghiem+
+$P{danhSachHSBA}.emrTongKetRaVien.soToKhac]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="265" y="63" width="33" height="17" uuid="7a5c8dcb-064c-424f-88a9-06a892050ecb"/>
+				<textElement textAlignment="Left" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Họ tên: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="265" y="142" width="33" height="17" uuid="130658c3-a5c1-4560-9dcc-359b00d52c34"/>
+				<textElement textAlignment="Left" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Họ tên: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="142" width="33" height="17" uuid="8ec9c1be-0f33-4b7c-8fbf-ca4f624d568b"/>
+				<textElement textAlignment="Left" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Họ tên: ]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+</jasperReport>

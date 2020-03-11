@@ -1,0 +1,99 @@
+package vn.ehealth.hl7.fhir.medication.entity;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import org.bson.types.ObjectId;
+import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.Immunization;
+import org.hl7.fhir.r4.model.Immunization.ImmunizationStatus;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
+
+import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
+import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
+import vn.ehealth.hl7.fhir.core.entity.BaseReference;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
+
+@Document(collection = "immunization")
+public class ImmunizationEntity extends BaseResource {
+    @Id
+    public ObjectId id;
+    public List<BaseIdentifier> identifier;
+    public String status;
+    //public Boolean notGiven;
+    public CodeableConcept vaccineCode;
+    public BaseReference patient;
+    public BaseReference encounter;
+    public Date recorded;
+    public boolean primarySource;
+    public CodeableConcept reportOrigin;
+    public BaseReference location;
+    public BaseReference manufacturer;
+    public String lotNumber;
+    public Date expirationDate;
+    public CodeableConcept site;
+    public CodeableConcept route;
+    public BaseQuantity doseQuantity;
+    public List<ImmunizationPerformerEntity> performer;
+    public List<BaseAnnotation> note;
+    // public ImmunizationExplanationEntity explanation;
+    public List<ImmunizationReactionEntity> reaction;
+    // public List<ImmunizationVaccinationProtocolEntity> vaccinationProtocol;
+    
+    public static ImmunizationEntity fromImmunization(Immunization obj) {
+        if(obj == null) return null;
+        var ent = new ImmunizationEntity();
+        ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
+        ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
+        ent.vaccineCode = obj.getVaccineCode();
+        ent.patient = BaseReference.fromReference(obj.getPatient());
+        ent.encounter = BaseReference.fromReference(obj.getEncounter());
+        ent.recorded = obj.getRecorded();        
+        ent.primarySource = obj.getPrimarySource();
+        ent.reportOrigin = obj.getReportOrigin();
+        ent.location = BaseReference.fromReference(obj.getLocation());
+        ent.manufacturer = BaseReference.fromReference(obj.getManufacturer());
+        ent.lotNumber = obj.getLotNumber();
+        ent.expirationDate = obj.getExpirationDate();
+        ent.site = obj.getSite();
+        ent.route = obj.getRoute();
+        ent.doseQuantity = BaseQuantity.fromQuantity(obj.getDoseQuantity());
+        ent.performer = transform(obj.getPerformer(), ImmunizationPerformerEntity::fromImmunizationPerformerComponent);
+        ent.note = BaseAnnotation.fromAnnotationList(obj.getNote());
+        ent.reaction = transform(obj.getReaction(), ImmunizationReactionEntity::fromImmunizationReactionComponent);
+        return ent;
+    }
+    
+    public static Immunization toImmunization(ImmunizationEntity ent) {
+        if(ent == null) return null;
+        var obj = new Immunization();
+        obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
+        obj.setStatus(ImmunizationStatus.fromCode(ent.status));
+        obj.setVaccineCode(ent.vaccineCode);
+        obj.setPatient(BaseReference.toReference(ent.patient));
+        obj.setEncounter(BaseReference.toReference(ent.encounter));
+        obj.setRecorded(ent.recorded);
+        obj.setPrimarySource(ent.primarySource);
+        obj.setReportOrigin(ent.reportOrigin);
+        obj.setLocation(BaseReference.toReference(ent.location));
+        obj.setManufacturer(BaseReference.toReference(ent.manufacturer));
+        obj.setLotNumber(ent.lotNumber);
+        obj.setExpirationDate(ent.expirationDate);
+        obj.setSite(ent.site);
+        obj.setRoute(ent.route);
+        obj.setDoseQuantity(BaseQuantity.toQuantity(ent.doseQuantity));
+        obj.setPerformer(transform(ent.performer, ImmunizationPerformerEntity::toImmunizationPerformerComponent));
+        obj.setNote(BaseAnnotation.toAnnotationList(ent.note));
+        obj.setReaction(transform(ent.reaction, ImmunizationReactionEntity::toImmunizationReactionComponent));
+        
+        return obj;
+                
+        
+    }
+}

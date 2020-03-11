@@ -1,0 +1,338 @@
+<root>
+	<item>
+		<name>COUNT_HS</name>
+		<sql>
+			<![CDATA[
+                SELECT COUNT(DISTINCT(ba.id))
+                FROM emr_danh_sach_ho_so_benh_an ba
+                WHERE 
+                	(ba.daxoa IS NULL OR ba.daxoa = FALSE)
+                	AND ba.idtrangthai=? 
+                	[MA_YTE_CHECK]
+			]]>			
+		</sql>
+	</item>
+	<item>
+		<name>DS_HS</name>
+		<sql>
+			<![CDATA[
+                SELECT DISTINCT ON (ba.id) ba.id as id,
+                    ba.matraodoi as so_benh_an, 
+                    bn.idhis as ma_benh_nhan,
+                    bn.tendaydu as ten_benh_nhan, 
+                    bn.diachi as diachi, 
+                    lba.ten as loai_benh_an, 
+                    ba.mayte as ma_yte, 
+                    ba.maluutru as ma_luutru,
+                    cd_vv.ma as vaovien_mabenh, 
+                    cd_vv.ten as vaovien_tenbenh, 
+                    cd.motachandoankkb as vaovien_mota,
+                    cd_rv.ma as ravien_mabenh, 
+                    cd_rv.ten as ravien_tenbenh, 
+                    cd.motachandoanravienchinh as ravien_mota, 
+                    khoa_dt.ten as khoa_ravien, 
+                    qlnb.ngaygiovaovien as ngay_vaovien, 
+                    qlnb.ngaygioravien as ngay_ravien, 
+                    ba.ngaytao as ngay_tiepnhan, 
+                    nguoitao.username as canbo_tiepnhan,
+                    ba.ngaysua as ngay_luutru, 
+                    nguoisua.username as canbo_luutru,	
+                    dm_ndl.ten as nguon_dulieu
+                FROM emr_danh_sach_ho_so_benh_an ba
+                    left join emr_benh_nhan bn on bn.id = ba.idbenhnhan
+                    left join emr_dm_loai_benh_an lba on lba.id = ba.idloaibenhan 
+                    left join emr_vao_khoa vk on vk.idhsba=ba.id
+                    left join emr_dm_khoa_dieu_tri khoa_dt on khoa_dt.id=vk.idkhoadieutri
+                    left join emr_chan_doan cd on cd.idhsba = ba.id
+                    left join emr_dm_ma_benh cd_vv on cd_vv.id=cd.idicd_chandoankkb
+                    left join emr_dm_ma_benh cd_rv on cd_rv.id=cd.idicd_chandoanravienchinh
+                    left join emr_quan_ly_nguoi_benh qlnb on qlnb.idhsba=ba.id
+                    left join users nguoitao on nguoitao.user_id=ba.idnguoitao
+                    left join users nguoisua on nguoisua.user_id=ba.idnguoisua
+                    left join emr_dm_tu_sinh dm_ndl on dm_ndl.id=ba.idnguondulieu
+                WHERE 
+                	(ba.daxoa IS NULL OR ba.daxoa = FALSE)
+                	AND ba.idtrangthai=? 
+                	[MA_YTE_CHECK]
+                	ORDER BY ba.id DESC
+			]]>			
+		</sql>
+	</item>
+	<item>
+		<name>HS_BY_MA</name>
+		<sql>
+			<![CDATA[
+                SELECT DISTINCT ON (ba.id) ba.id as id,
+                    ba.matraodoi as so_benh_an, 
+                    bn.idhis as ma_benh_nhan,
+                    bn.tendaydu as ten_benh_nhan, 
+                    bn.diachi as diachi, 
+                    lba.ten as loai_benh_an, 
+                    ba.mayte as ma_yte, 
+                    ba.maluutru as ma_luutru,
+                    cd_vv.ma as vaovien_mabenh, 
+                    cd_vv.ten as vaovien_tenbenh, 
+                    cd.motachandoankkb as vaovien_mota,
+                    cd_rv.ma as ravien_mabenh, 
+                    cd_rv.ten as ravien_tenbenh, 
+                    cd.motachandoanravienchinh as ravien_mota, 
+                    khoa_dt.ten as khoa_ravien, 
+                    qlnb.ngaygiovaovien as ngay_vaovien, 
+                    qlnb.ngaygioravien as ngay_ravien, 
+                    ba.ngaytao as ngay_tiepnhan, 
+                    nguoitao.username as canbo_tiepnhan,
+                    ba.ngaysua as ngay_luutru, 
+                    nguoisua.username as canbo_luutru,	
+                    dm_ndl.ten as nguon_dulieu
+                FROM emr_danh_sach_ho_so_benh_an ba
+                    join emr_benh_nhan bn on bn.id = ba.idbenhnhan
+                    join emr_dm_loai_benh_an lba on lba.id = ba.idloaibenhan 
+                    join emr_vao_khoa vk on vk.idhsba=ba.id
+                    join emr_dm_khoa_dieu_tri khoa_dt on khoa_dt.id=vk.idkhoadieutri
+                    join emr_chan_doan cd on cd.idhsba = ba.id
+                    join emr_dm_ma_benh cd_vv on cd_vv.id=cd.idicd_chandoankkb
+                    join emr_dm_ma_benh cd_rv on cd_rv.id=cd.idicd_chandoanravienchinh
+                    join emr_quan_ly_nguoi_benh qlnb on qlnb.idhsba=ba.id
+                    left join users nguoitao on nguoitao.user_id=ba.idnguoitao
+                    left join users nguoisua on nguoisua.user_id=ba.idnguoisua
+                    join emr_dm_tu_sinh dm_ndl on dm_ndl.id=ba.idnguondulieu
+                WHERE 
+                	(ba.daxoa IS NULL OR ba.daxoa = FALSE) 
+                    AND mayte=?
+			]]>			
+		</sql>
+	</item>	
+	
+	<item>
+		<name>THONGTIN_HOSO</name>
+		<sql>
+			<![CDATA[
+				SELECT mayte as ma_yte, 
+			    	ba.bacsylambenhan as bacsy_lam_benhanh, 
+					ba.ngaykybenhan as  ngayky_benhan
+				FROM emr_danh_sach_ho_so_benh_an hs_ba 
+					join emr_benh_an ba on hs_ba.id=ba.idhsba
+				WHERE
+				    (ba.daxoa IS NULL OR ba.daxoa = FALSE) 
+					AND hs_ba.id=?
+			]]>			
+		</sql>
+	</item>
+	
+	<item>
+		<name>THONGTIN_BENHNHAN</name>
+		<sql>
+			<![CDATA[
+				SELECT
+					tendaydu as hoten, 
+					ngaysinh as ngaysinj, 
+					idgioitinh as gioitinh_id, 
+					idhis as ma_benh_nhan, 
+					iddinhdanhphu as cmnd_hochieu,
+					idnghenghiep as nghe_nghiep_id,
+					idquocgia as quoc_gia_id, 
+					iddantoc as dan_toc_id, 
+					diachi as diachi, 
+					idtinhthanh as tinh_thanh_id, 
+					idquanhuyen as quan_huyen_id, 
+					idphuongxa as phuong_xa_id, 
+					noilamviec as noi_lamviec,
+					sobhyt as so_the_bhyt,
+					ngayhethanthebhyt as ngay_hethan_bhyt,
+					hotenbo as hoten_bo, 
+					ngay_sinh_cua_bo as ngaysinh_bo, 
+					idnghebo as nghe_nghiep_bo_id, 
+					trinh_do_van_hoa_cua_bo as tdvh_bo,
+					hotenme as hoten_me, 
+					ngay_sinh_cua_me as ngaysinh_me, 
+					idngheme as nghe_nghiep_me_id, 
+					trinh_do_van_hoa_cua_me as tdvh_me,
+					tennguoibaotin as hoten_nguoi_lien_he, 
+					diachinguoibaotin as diachi_nguoi_lien_he, 
+					sodienthoainguoibaotin as sdt_nguoi_lien_he
+				FROM emr_benh_nhan bn
+				WHERE
+					(daxoa IS NULL OR daxoa = FALSE)
+					AND bn.id=?
+			]]>			
+		</sql>
+	</item>
+	
+	<item>
+		<name>THONGTIN_VAOVIEN</name>
+		<sql>
+			<![CDATA[
+				SELECT 
+				    ngaygiovaovien as ngaygio_vaovien, 
+				    idnoitructiepvao as noi_tructiep_vao_id, 
+				    vaovienlanthu as lan_vao_vien, 
+				    idnoigioithieu as noi_gioithieu_id, 
+				    iddoituongtaichinh as doituong_hanhchinh_id,
+				    tenbacsikham as bacsy_kham,
+				    idloaivaovien as loai_vaovien_id
+				FROM emr_quan_ly_nguoi_benh 
+				WHERE 
+					(daxoa IS NULL OR daxoa = FALSE)
+					AND idhsba=?								
+			]]>			
+		</sql>
+	</item>
+	
+	<item>
+		<name>THONGTIN_VAOKHOA</name>
+		<sql>
+			<![CDATA[
+				SELECT 
+					idkhoadieutri as khoadieutri_id,
+					tentruongkhoa as truong_khoa, 
+					bacsidieutri as bacsy_dieutri,
+					ngaygiovaokhoa as ngay_batdau_dieutri, 
+					ngayketthucdieutri as ngay_ketthuc_dieutri,
+					phong as so_phong, 
+					giuong as so_giuong
+				FROM emr_vao_khoa 
+				WHERE
+					(daxoa IS NULL OR daxoa = FALSE) 
+					AND idhsba=?								
+			]]>			
+		</sql>
+	</item>
+	
+	<item>
+		<name>THONGTIN_RAVIEN</name>
+		<sql>
+			<![CDATA[
+				SELECT 
+					ngaygiovaovien as ngaygio_ravien, 
+					idloairavien as loairavien_id,
+					tenbacsichoravien as bacsy_cho_ravien, 
+					idloaichuyenvien as loaichuyenvien_id
+				FROM emr_quan_ly_nguoi_benh 
+				WHERE 
+					(daxoa IS NULL OR daxoa = FALSE)
+					AND idhsba=?								
+			]]>			
+		</sql>
+	</item>
+	
+	
+	<item>
+		<name>THONGTIN_RAVIEN</name>
+		<sql>
+			<![CDATA[
+				SELECT 
+					ngaygiovaovien as ngaygio_ravien, 
+					idloairavien as loairavien_id,
+					tenbacsichoravien as bacsy_cho_ravien, 
+					idloaichuyenvien as loaichuyenvien_id
+				FROM emr_quan_ly_nguoi_benh 
+				WHERE 
+					(daxoa IS NULL OR daxoa = FALSE)
+					AND idhsba=?								
+			]]>			
+		</sql>
+	</item>
+	
+	<item>
+		<name>CHANDOAN_VAOVIEN</name>
+		<sql>
+			<![CDATA[
+				SELECT 
+					idicd_chandoannoiden as chandoan_noiden_icd, 
+					motachandoannoiden as chandoan_noiden_mota, 
+					idicd_chandoankkb as chandoan_vaovien_icd, 
+					motachandoankkb  as chandoan_vaovien_mota
+				FROM emr_chan_doan 
+				WHERE
+					(daxoa IS NULL OR daxoa = FALSE)
+					AND idhsba=?								
+			]]>			
+		</sql>
+	</item>
+	
+	
+	<item>
+		<name>CHANDOAN_VAOKHOA</name>
+		<sql>
+			<![CDATA[
+				SELECT 
+					idicd_chandoanbenhchinh as chandoan_benhchinh_icd, 
+					motachandoanbenhchinh as chandoan_benhchinh_mota,
+					idicd_chandoankemtheo  as chandoan_kemtheo_icd, 
+					motachandoankemtheo as chandoan_kemtheo_mota,
+					idicd_chandoanphanbiet as chandoan_phanbiet_icd,
+					motachandoanphanbiet as chandoan_phanbiet_mota
+				FROM emr_benh_an 
+				WHERE
+					(daxoa IS NULL OR daxoa = FALSE)
+					AND idhsba=?
+								
+			]]>			
+		</sql>
+	</item>
+	
+	<item>
+		<name>CHANDOAN_RAVIEN</name>
+		<sql>
+			<![CDATA[
+				SELECT 
+					idicd_chandoanravienchinh as chandoan_ravien_chinh_icd,
+					motachandoanravienchinh as chandoan_ravien_chinh_mota,
+					idicd_chandoanravienkemtheo as chandoan_ravien_kemtheo_icd,
+					motachandoanravienkemtheo as chandoan_ravien_kemtheo_mota,
+					idicd_chandoanraviennguyennhan as chandoan_ravien_nguyennhan_icd,
+					motachandoanraviennguyennhan as chandoan_ravien_nguyennhan_mota,
+					idicd_chandoantruocpt as chandoan_truoc_phauthuat_icd, 
+					motachandoantruocpt as chandoan_truoc_phauthuat_mota,
+					idicd_chandoansaupt as chandoan_sau_phauthuat_icd, 
+					motachandoansaupt as chandoan_sau_phauthuat_mota,
+					bitaibien as bi_taibien, 
+					bibienchung as bi_bienchung, 
+					idlydotbbc as lydo_taibien_bienchung_id,
+					tongsolanpt as solan_phauthuat, 
+					tongsongaysaupt as songay_dieutri_saupt
+				FROM emr_chan_doan 
+				WHERE
+					(daxoa IS NULL OR daxoa = FALSE)
+					AND idhsba=?								
+			]]>			
+		</sql>
+	</item>
+	
+	<item>
+		<name>TINHTRANG_RAVIEN</name>
+		<sql>
+			<![CDATA[
+				SELECT 
+					idketquadieutri as ketqua_dieutri_id, 
+					idgiaiphaubenh as giaiphau_benh_id,
+					ngaygiotuvong as ngaygio_tuvong, 
+					idlydotuvong as lydo_tuvong_id,
+					khamnghiemtuthi as khamnghiem_tuthi, 
+					idicd_nguyennhantuvong as nguyennhan_tuvong_icd,
+					motanguyennhantuvong as nguyennhan_tuvong_mota,
+					idicd_giaiphaututhi as giaiphau_tuthi_icd,	
+					motagiaiphaututhi as giaiphau_tuthi_mota
+				FROM emr_tinh_trang_ra_vien 
+				WHERE
+					(daxoa IS NULL OR daxoa = FALSE)
+					AND idhsba=?
+			]]>			
+		</sql>
+	</item>
+	
+	<item>
+		<name>THONGTIN_LANHDAO</name>
+		<sql>
+			<![CDATA[
+				SELECT 
+					giamdocbenhvien as giamdoc_benhvien, 
+					truongphongth as truongphong_khth 
+				FROM emr_danh_sach_ho_so_benh_an  
+				WHERE
+					(daxoa IS NULL OR daxoa = FALSE)
+					AND id=?
+			]]>			
+		</sql>
+	</item>
+</root>

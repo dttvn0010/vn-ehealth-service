@@ -1,0 +1,179 @@
+{
+  "dataTypes": [
+     {
+        "id": "chandoan_Section",
+        "templateId":"2.16.840.1.113883.3.6000.4.3",
+        "parent": "Section",
+        
+        "fieldDefaults": [
+           {"field": "code.code", "value" : "29308-4"},
+           {"field": "code.codeSystem", "value": "2.16.840.1.113883.6.1"},
+           {"field": "code.codeSystemName", "value": "LOINC"},
+           {"field": "code.displayName", "value" : "Diagnosis"}
+        ],
+        
+        "fieldValidations": [
+          {
+            "field": "entries[act.type=chandoan_Act_ravien]",
+            "rules": [{"check": "size", "min": 1, "max": 1}]
+          },
+          {
+            "field": "code.code",
+            "rules": [{"check": "equal", "value": "29308-4"}]            
+          },
+          {
+            "field": "code.codeSystem",
+            "rules": [{"check": "equal", "value": "2.16.840.1.113883.6.1" }]
+          }
+        ]
+     },     
+     
+     {
+       "id": "chandoan_Act_noiden",
+       "templateId": "2.16.840.1.113883.3.6000.5.1.1",
+       "parent": "Act",      
+       "fieldValidations": [
+          {
+            "field": "entryRelationships[observation.type=chandoan_Observation_chinh]",
+            "rules": [ { "check": "size", "min": 1, "max": 1 }]
+          }
+        ]
+     },     
+
+     {
+       "id": "chandoan_Act_vaovien",
+       "templateId": "2.16.840.1.113883.3.6000.5.1.2",
+       "parent": "Act",
+       "fieldValidations": [
+          {
+            "field": "entryRelationships[observation.type=chandoan_Observation_chinh]",
+            "rules": [{ "check": "size", "min": 1, "max": 1 }]            
+          }
+        ]
+     },
+  
+     {
+       "id": "chandoan_Act_ravien",
+       "templateId": "2.16.840.1.113883.3.6000.5.1.4",
+       "parent": "Act",
+       "data": {         
+         "entryRelationships" : {
+           "type": "List_EntryRelationships"           
+         }
+       },
+       "fieldValidations": [
+          {
+            "field": "entryRelationships[observation.type=chandoan_Observation_chinh]",
+            "rules": [{"check" : "size" , "min": 1, "max": 1 }]
+          }
+        ]
+     },
+     
+     {
+       "id": "chandoan_Act_truocpt",
+       "templateId": "2.16.840.1.113883.3.6000.5.1.5",
+       "parent": "Act",
+       "fieldValidations": [
+          {
+            "field": "entryRelationships[observation.type=chandoan_Observation_chinh]",
+            "rules": [{"check" : "size" , "min": 1, "max": 1 }]
+          }
+        ]
+     },
+     
+     {
+       "id": "chandoan_Act_saupt",
+       "templateId": "2.16.840.1.113883.3.6000.5.1.6",
+       "parent": "Act",
+       "fieldValidations": [
+          {
+            "field": "entryRelationships[observation.type=chandoan_Observation_chinh]",
+            "rules": [{"check" : "size" , "min": 1, "max": 1 }]
+          }
+        ]
+     },
+     
+     {
+        "id": "chandoan_Observation_chinh",
+        "templateId": "2.16.840.1.113883.3.6000.5.1.0.1",
+        "parent": "Observation",
+        
+         "fieldDefaults": [
+          {"field": "code.code", "value": "282291009"},
+          {"field": "code.codeSystem", "value": "2.16.840.1.113883.6.96"},
+          {"field": "code.codeSystemName", "value": "SNOMED CT"},
+          {"field": "code.displayName", "value": "Diagnosis"}
+        ],
+                
+        "fieldValidations": [
+          {
+            "field": "code.code",
+            "rules": [{"check": "equal", "value": "282291009"}]
+          },
+          {
+            "field": "code.codeSystem",
+            "rules": [{"check": "equal", "value": "2.16.840.1.113883.6.96"}]
+          },
+          {
+            "field": "value.codeSystem",
+            "rules": [{"check": "equal", "value": "2.16.840.1.113883.3.6000.6.3"}]
+          }
+        ]
+     },
+     
+     {
+        "id": "chandoan_Observation_kemtheo",
+        "templateId": "2.16.840.1.113883.3.6000.5.1.0.2",
+        "parent": "Observation",
+        
+        "fieldDefaults": [
+          {"field": "code.code", "value": "55607006"},
+          {"field": "code.codeSystem", "value": "2.16.840.1.113883.6.96"},
+          {"field": "code.codeSystemName", "value": "SNOMED CT"},
+          {"field": "code.displayName", "value": "Problem"}
+        ],
+        
+        "fieldValidations": [
+          {
+            "field": "code.code",
+            "rules": [{"check": "equal", "value": "55607006"}]
+          },
+          {
+            "field": "code.codeSystem",
+            "rules": [{"check": "equal", "value": "2.16.840.1.113883.6.96"}]
+          },
+          {
+            "field": "value.codeSystem",
+            "rules": [{"check": "equal", "value": "2.16.840.1.113883.3.6000.6.3"}]
+          }
+        ]
+     },
+     {
+        "id": "chandoan_Observation_nguyennhan",
+        "templateId": "2.16.840.1.113883.3.6000.5.1.0.3",
+        "parent": "Observation",
+        
+        "fieldDefaults": [
+          {"field": "code.code", "value": "409586006"},
+          {"field": "code.codeSystem", "value": "2.16.840.1.113883.6.96"},
+          {"field": "code.codeSystemName", "value": "SNOMED CT"},
+          {"field": "code.displayName", "value": "Complaint"}
+        ],
+        
+        "fieldValidations": [
+          {
+            "field": "code.code",
+            "rules": [{"check": "equal", "value": "409586006"}]
+          },
+          {
+            "field": "code.codeSystem",
+            "rules": [{"check": "equal", "value": "2.16.840.1.113883.6.96"}]
+          },
+          {
+            "field": "value.codeSystem",
+            "rules": [{"check": "equal", "value": "2.16.840.1.113883.3.6000.6.3"}]
+          }
+        ]
+     }
+  ]
+}

@@ -1,0 +1,3788 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="HSBA" pageWidth="595" pageHeight="845" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5cc241fd-bf11-4148-a34e-43304ab6e860">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="2887"/>
+	<scriptlet name="Header" class="vn.ehealth.emr.utils.JasperUtils"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="danhSachHSBA" class="vn.ehealth.emr.model.EmrHoSoBenhAn"/>
+	<parameter name="SUBREPORT_DAUHIEUSINHTON_DIR" class="java.lang.String"/>
+	<parameter name="IMG_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="coPhauThuat" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[coPhauThuat]]></fieldDescription>
+	</field>
+	<field name="coThuThuat" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[coThuThuat]]></fieldDescription>
+	</field>
+	<field name="donvichuquan" class="java.lang.String">
+		<fieldDescription><![CDATA[donvichuquan]]></fieldDescription>
+	</field>
+	<field name="emrBenhNhan" class="vn.ehealth.emr.model.EmrBenhNhan">
+		<fieldDescription><![CDATA[emrBenhNhan]]></fieldDescription>
+	</field>
+	<field name="emrChanDoan" class="vn.ehealth.emr.model.EmrChanDoan">
+		<fieldDescription><![CDATA[emrChanDoan]]></fieldDescription>
+	</field>
+	<field name="emrDmLoaiBenhAn" class="vn.ehealth.emr.model.EmrDm">
+		<fieldDescription><![CDATA[emrDmLoaiBenhAn]]></fieldDescription>
+	</field>
+	<field name="emrPhauThuatThuThuats" class="vn.ehealth.emr.model.EmrPhauThuatThuThuat[]">
+		<fieldDescription><![CDATA[emrPhauThuatThuThuats]]></fieldDescription>
+	</field>
+	<field name="emrQuanLyNguoiBenh" class="vn.ehealth.emr.model.EmrQuanLyNguoiBenh">
+		<fieldDescription><![CDATA[emrQuanLyNguoiBenh]]></fieldDescription>
+	</field>
+	<field name="emrTinhTrangRaVien" class="vn.ehealth.emr.model.EmrTinhTrangRaVien">
+		<fieldDescription><![CDATA[emrTinhTrangRaVien]]></fieldDescription>
+	</field>
+	<field name="emrTongKetRaVien" class="vn.ehealth.emr.model.EmrTongKetRaVien">
+		<fieldDescription><![CDATA[emrTongKetRaVien]]></fieldDescription>
+	</field>
+	<field name="emrTongKetSanKhoa" class="vn.ehealth.emr.model.EmrTongKetSanKhoa">
+		<fieldDescription><![CDATA[emrTongKetSanKhoa]]></fieldDescription>
+	</field>
+	<field name="emrVaoKhoas" class="vn.ehealth.emr.model.EmrVaoKhoa[]">
+		<fieldDescription><![CDATA[emrVaoKhoas]]></fieldDescription>
+	</field>
+	<field name="emrYhctBenhAn" class="vn.ehealth.emr.model.EmrYhctBenhAn">
+		<fieldDescription><![CDATA[emrYhctBenhAn]]></fieldDescription>
+	</field>
+	<field name="emrYhctChanDoan" class="vn.ehealth.emr.model.EmrYhctChanDoan">
+		<fieldDescription><![CDATA[emrYhctChanDoan]]></fieldDescription>
+	</field>
+	<field name="giamdocbenhvien" class="java.lang.String">
+		<fieldDescription><![CDATA[giamdocbenhvien]]></fieldDescription>
+	</field>
+	<field name="maluutru" class="java.lang.String">
+		<fieldDescription><![CDATA[maluutru]]></fieldDescription>
+	</field>
+	<field name="mayte" class="java.lang.String">
+		<fieldDescription><![CDATA[mayte]]></fieldDescription>
+	</field>
+	<field name="tenbenhvien" class="java.lang.String">
+		<fieldDescription><![CDATA[tenbenhvien]]></fieldDescription>
+	</field>
+	<field name="truongphongth" class="java.lang.String">
+		<fieldDescription><![CDATA[truongphongth]]></fieldDescription>
+	</field>
+	<field name="emrBenhAn" class="vn.ehealth.emr.model.EmrBenhAn">
+		<fieldDescription><![CDATA[emrBenhAn]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="805" splitType="Immediate">
+			<rectangle>
+				<reportElement x="9" y="426" width="538" height="152" uuid="0a6560aa-00bb-4046-a263-9297e3eef72f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="10" y="261" width="538" height="145" uuid="b8221ffd-128a-499a-b6c2-5e68d1269035"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="9" y="599" width="538" height="113" uuid="10c35e65-2858-4efc-8da2-544aacb1825b"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="12" y="25" width="22" height="17" uuid="b139fe8b-e8ba-41ff-94a9-a936dbf6e4f8"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[BV: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="41" width="30" height="17" uuid="d8cfac79-f7d9-4f93-8a92-364c20ab8701"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Khoa: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="406" y="8" width="49" height="17" uuid="8b41819d-c84b-4b74-ab92-089d32865564"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Số lưu trữ: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="406" y="24" width="36" height="17" uuid="841ddb6f-63ba-4de0-ae91-e7bd2fb14333"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Mã YT: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="213" y="9" width="160" height="30" uuid="a613b0f4-3cf9-4d7f-bc9b-40a1f8e1bc60"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BỆNH ÁN BỎNG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="58" width="40" height="17" uuid="64e34ae0-2690-440b-97c1-16dca5d678cc"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Giường: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="96" width="100" height="17" uuid="3f752373-9382-4053-8a05-0908c9595b85"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[1. Họ và tên]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="77" width="100" height="20" uuid="cb26c6a1-58b5-4087-b74b-d57d7becc3d3"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[I. HÀNH CHÍNH:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="112" width="39" height="17" uuid="43380c8c-57e0-41cc-989a-2f9b8655c58e"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[3. Giới: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="282" y="112" width="73" height="17" uuid="7b959145-69ae-41c7-91ca-3fca6fc0a4ea"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[4. Nghề nghiệp: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="282" y="96" width="65" height="17" uuid="11fdcf6f-d4c8-4f1a-87f0-9cb527028648"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[2. Sinh ngày: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="128" width="51" height="17" uuid="2f210a2e-758a-4647-b6b6-c4093716fb6f"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[5. Dân tộc: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="67" y="96" width="42" height="17" uuid="9fa3b284-14ce-4135-85b0-7227418e303b"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[(In hoa):]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="108" y="96" width="178" height="17" uuid="1bdff84a-19ad-4967-88a6-08977f79544c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhNhan}.tendaydu.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="282" y="128" width="65" height="17" uuid="f901ff2b-6333-4fc8-bf47-c46677b4aa0e"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<text><![CDATA[6. Ngoại kiều: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="144" width="51" height="17" uuid="d340bff4-3994-4d7d-9da4-6efa351825b3"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[7. Địa chỉ:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="281" y="174" width="65" height="17" uuid="e50d9f01-f627-4edf-ae39-8f5401d0dd2c"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[9. Đối tượng: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="160" width="69" height="17" uuid="c82809e2-0e43-446e-8bb8-22e7b512301e"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Huyện (Q, Tx):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="176" width="73" height="17" uuid="6a587ff7-1b8e-4b3e-b62e-0913e74ebc4e"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[8. Nơi làm việc: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="192" width="124" height="17" uuid="387f9193-b0fb-45b6-8ac9-c24797bb3233"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[10. BHYT giá trị đến ngày: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="282" y="192" width="67" height="17" uuid="9ba46672-394e-4a0d-853d-1f974cbff003"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Số thẻ BHYT:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="208" width="204" height="17" uuid="bd22c083-9da5-43e7-8691-4aea0056d7e4"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[11. Họ tên, địa chỉ người nhà khi cần báo tin: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="224" width="65" height="17" uuid="a8906b33-1346-46c8-8dd7-ef08952079b8"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Điện thoại số: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="9" y="241" width="193" height="20" uuid="caad9a1a-1824-45bb-817f-e6b63b40976a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[II. QUẢN LÝ NGƯỜI BỆNH]]></text>
+			</staticText>
+			<line>
+				<reportElement x="10" y="292" width="538" height="1" uuid="6edc1a7a-d069-49be-b231-28f1936e3c47"/>
+			</line>
+			<line>
+				<reportElement x="288" y="261" width="1" height="144" uuid="f3c0e1ba-7e3d-4370-9142-9819b8b48c82"/>
+			</line>
+			<staticText>
+				<reportElement x="12" y="261" width="69" height="15" uuid="ee977cb7-3ee6-4162-9855-6d937b98fbe8"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[12. Vào viện: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="276" width="63" height="15" uuid="32003cc9-a9a1-4410-94fe-d09931deec98"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[13. Trực tiếp: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="261" width="86" height="15" uuid="800a92c4-6d5c-4844-aaa9-f6115eb9c2df"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[14. Nơi giới thiệu: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="276" width="155" height="15" uuid="ad8c6605-09b9-4ba5-a553-28aa3b91f37b"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[ - Vào viện do bệnh này là lần thứ: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="308" width="63" height="15" uuid="752af821-53ba-4a29-913b-135dc29e58dc"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[15. Vào khoa: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="87" y="293" width="35" height="15" uuid="ba9451e9-39e8-44bd-ac02-6efe0a44a1da"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Khoa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="293" width="48" height="15" uuid="81ee2a33-2dba-4cdc-b7a8-1f4863b597ba"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Thời gian]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="229" y="293" width="57" height="15" uuid="e8f091b6-5d0f-427f-9c3a-a8dd33b5d68d"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Số ngày Đtr]]></text>
+			</staticText>
+			<textField pattern="HH:mm dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="143" y="325" width="105" height="15" uuid="69bc5744-c053-4e5b-8c8d-da5bea14c937"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 0) ?
+$P{Header_SCRIPTLET}.getTime_VK($F{emrVaoKhoas}[0].ngaygiovaokhoa):""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="341" width="97" height="15" uuid="b28bdf12-1f94-484c-b9a0-538898955de2"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[16. Chuyển Khoa:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="357" width="122" height="15" uuid="08db92b0-ce30-4020-af7f-ea6ff4770959"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTenKhoaDieuTri( $F{emrVaoKhoas},1 )]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="239" y="408" width="35" height="17" uuid="5c43a262-4f88-41bc-a625-3ac5896d4441"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[MÃ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="373" width="122" height="15" uuid="288845c6-9ba9-4337-9069-cf2a7e16c19f"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTenKhoaDieuTri( $F{emrVaoKhoas},2 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="143" y="357" width="105" height="15" uuid="b19b5789-874a-446b-83f1-48532a8224c9"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 1) ?
+$P{Header_SCRIPTLET}.getTime_VK($F{emrVaoKhoas}[1].ngaygiovaokhoa):""]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="143" y="373" width="105" height="15" uuid="1d9a7e1f-3fe3-405d-ad5a-accd0dbe770c"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 2) ?
+$P{Header_SCRIPTLET}.getTime_VK($F{emrVaoKhoas}[2].ngaygiovaokhoa):""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="291" y="293" width="78" height="15" uuid="a464e25b-8854-458f-947a-6efbdb5e48ca"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[17. Chuyển viện: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="308" width="68" height="15" uuid="80c87a7c-5120-4b13-9294-e0a3a0df3f77"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[- Chuyển đến: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="357" width="56" height="15" uuid="3ee8de9b-863f-4bb6-8f53-3f8fc32677ef"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[18. Ra viện: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="390" width="103" height="15" uuid="6af90263-1503-4983-b367-50880d764ec3"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[19. Tổng ngày điều trị:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="406" width="193" height="20" uuid="685c18c1-8ac1-496a-b0ae-d2a1365469f4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[III. CHẨN ĐOÁN]]></text>
+			</staticText>
+			<line>
+				<reportElement x="277" y="426" width="1" height="152" uuid="b44a355f-cba0-4385-84c4-39eef824450f"/>
+			</line>
+			<staticText>
+				<reportElement x="11" y="426" width="154" height="15" uuid="1b36ca32-749b-4d36-b8a2-86a861107105"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[20. Nơi chuyển đến: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="508" y="407" width="31" height="17" uuid="5d853f9e-94ab-4811-beab-4ddabf811d79"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[MÃ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="456" width="154" height="15" uuid="86986a4e-a83a-449c-8897-1218652110e0"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[21. KKB, cấp cứu: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="486" width="154" height="15" uuid="177259fe-6937-481c-99b5-80a3e3ea0736"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[22. Khi vào khoa điều trị: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="11" y="501" width="185" height="15" uuid="10621624-e82d-4d8c-a51b-301975fde49a"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrBenhAn}.motachandoanbenhchinh,
+    $F{emrBenhAn}.emrDmMaBenhChandoanbenhchinh)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="547" width="185" height="15" uuid="3f08985c-ad7f-4a59-9218-68645535178e"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[23. Tổng số ngày điều trị sau phẫu thuật: :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="562" width="122" height="15" uuid="60929c02-645c-4b34-a3e4-ae01ac34fe29"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[24. Tổng số lần phẫu thuật: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="279" y="426" width="154" height="15" uuid="4998360f-3dfa-401e-964e-a72eac40ec38"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[25. Ra viện: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="279" y="441" width="66" height="15" uuid="8d4afbc0-fa20-4869-829a-4927f68eb844"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Bệnh chính: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="348" y="441" width="75" height="15" uuid="553fc73d-d84c-4277-a6e8-4db0eda40e67"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[(tổn thương) ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="279" y="471" width="79" height="15" uuid="ef0aaa40-167f-4895-b2e9-5094aec4464b"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[(nguyên nhân): ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="279" y="486" width="156" height="15" uuid="633082cc-6b70-47da-87fc-a6556a37dce8"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Bệnh kèm theo: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="279" y="517" width="156" height="15" uuid="3466b03d-6074-47bd-bfbf-41b4996359f9"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Chẩn đoán trước phẫu thuật: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="279" y="547" width="156" height="15" uuid="310cd63d-a63d-4e46-88ea-45edd8f6d663"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Chẩn đoán sau phẫu thuật: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="580" width="193" height="20" uuid="4caa774b-90ad-4244-b0e8-e91c9e55ef78"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IV. TÌNH TRẠNG RA VIỆN]]></text>
+			</staticText>
+			<line>
+				<reportElement x="217" y="600" width="1" height="112" uuid="f9fa1fd7-27bd-4f67-8392-95876a759024"/>
+			</line>
+			<staticText>
+				<reportElement x="13" y="599" width="139" height="15" uuid="7ff99232-bc8e-44cc-8398-9ca676bfca11"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[26. Kết quả điều trị:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="667" width="86" height="15" uuid="5538f147-0ce9-4b10-a21d-e24e36b7ff8b"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[27. Giải phẫu bệnh]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="98" y="667" width="90" height="17" uuid="6fe031b3-3b7a-4cd7-9c69-fa20b3e7e0de"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[(khi có sinh thiết)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="224" y="599" width="104" height="15" uuid="e9073d6e-8e9e-49c2-bb30-d8d213945976"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[28. Tình hình tử vong:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="226" y="647" width="162" height="15" uuid="c42a9bee-d523-4bdc-94ac-a3de3620bda2"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[29. Nguyên nhân chính tử vong:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="227" y="679" width="110" height="15" uuid="b577aa48-49e1-4317-9f77-b1ff4f6884e1"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[30. Khám nghiệm tử thi:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="388" y="679" width="155" height="15" uuid="3e5142ac-a08f-42ae-9aac-3f664e107e52"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[31. Chẩn đoán giải phẫu tử thi:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="734" width="109" height="20" uuid="5a985989-b19b-4854-ad83-b563314d1b1a"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Giám đốc bệnh viện]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="387" y="732" width="72" height="20" uuid="21492425-71e8-4528-9d91-3685f53ce568"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Trưởng khoa]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="326" y="766" width="195" height="17" uuid="21108926-f32b-49af-b142-0b3c7c3e5c4c"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 0)?
+$F{emrVaoKhoas}[0].tentruongkhoa:""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="11" y="441" width="185" height="15" uuid="402ef134-38da-40e3-9518-931e70b04278"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrChanDoan}.motachandoannoiden,
+    $F{emrChanDoan}.emrDmMaBenhChandoannoiden)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="11" y="471" width="185" height="15" uuid="a687225f-000a-4cbe-af2d-9f5f8b32abc5"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrChanDoan}.motachandoankkb,
+    $F{emrChanDoan}.emrDmMaBenhChandoankkb)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="11" y="532" width="100" height="15" uuid="7b25b438-f1ae-4a14-814b-31fa44034f23"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrChanDoan}.emrDmLyDoTaiBienBienChung.ten]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="279" y="456" width="186" height="15" uuid="95f8129b-6672-4c8b-ba6b-20279ca02ac6"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrChanDoan}.motachandoanravienchinh,
+    $F{emrChanDoan}.emrDmMaBenhChandoanravienchinh)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="509" y="471" width="32" height="15" uuid="775b3b4c-11cb-40fe-a775-c566c969ac58"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrChanDoan}.emrDmMaBenhChandoanraviennguyennhan.ma]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="279" y="501" width="186" height="15" uuid="68f59513-dd58-4e4b-9a93-94fa9aaa3203"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrChanDoan}.motachandoanravienkemtheo,
+    $F{emrChanDoan}.emrDmMaBenhChandoanravienkemtheo)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="279" y="532" width="186" height="15" uuid="3e097922-1ed7-4732-9617-43fc6cea8036"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrChanDoan}.motachandoantruocpt,
+    $F{emrChanDoan}.emrDmMaBenhChandoantruocpt)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="279" y="562" width="186" height="15" uuid="3b233602-cedd-4dea-9222-15dd8b1e1d4e"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrChanDoan}.motachandoansaupt,
+    $F{emrChanDoan}.emrDmMaBenhChandoansaupt)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="229" y="695" width="236" height="15" uuid="a4fce979-0a47-441e-8eb9-67b9994e6bcb"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrTinhTrangRaVien}.motagiaiphaututhi,
+    $F{emrTinhTrangRaVien}.emrDmGiaiphaututhi)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="226" y="663" width="239" height="15" uuid="e42d34ab-9262-4242-89a0-6c0cbdea78d3"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrTinhTrangRaVien}.motanguyennhantuvong,
+    $F{emrTinhTrangRaVien}.emrDmNguyennhantuvong)]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="133" y="192" width="154" height="17" uuid="4a04becf-831f-433f-8795-f0b5a39c3e4e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTime_DDMMYYYY($F{emrBenhNhan}.ngayhethanthebhyt)]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="84" y="261" width="133" height="15" uuid="458ab77d-9405-4a74-80fe-dc9abe28c83a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTime_HHmmDDMMYYYY($F{emrQuanLyNguoiBenh}.ngaygiovaovien)]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="351" y="357" width="188" height="15" uuid="69994aba-05b9-4221-8c0a-4a99650dba00"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTime_HHmmDDMMYYYY($F{emrQuanLyNguoiBenh}.ngaygioravien)]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="330" y="599" width="188" height="15" uuid="1cf06709-bad9-4070-af32-b1bd1ee71dd4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTime_HHmmDDMMYYYY($F{emrTinhTrangRaVien}.ngaygiotuvong)]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement x="0" y="798" width="100" height="1" isRemoveLineWhenBlank="true" uuid="64c8a578-f016-471c-baba-0d491eed1dab"/>
+			</break>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="9" width="197" height="17" uuid="61658815-91dc-400a-8f02-e09fea5093b2"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{donvichuquan}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="34" y="25" width="175" height="17" uuid="e8cba6a1-2da0-4aea-98f5-ec00318f5bb7"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tenbenhvien}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="42" y="41" width="167" height="17" uuid="30f2ded7-56f6-4845-b3ae-e28a285d0509"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTenKhoaDieuTri( $F{emrVaoKhoas},0 )]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="51" y="58" width="158" height="17" uuid="f06dffdc-4af2-4576-9a29-6806a26c87d9"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 0)?
+$F{emrVaoKhoas}[0].giuong:""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="455" y="8" width="90" height="17" uuid="ce9be992-049c-49fc-af62-839d1505376a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{maluutru}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="443" y="24" width="103" height="17" uuid="8fb16b4d-afc5-46d3-82d0-5c74ddd2024b"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mayte}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="354" y="112" width="153" height="17" uuid="d9548c37-0299-4280-a367-d8a4a7e8f0a2"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhNhan}.emrDmNgheNghiep.ten]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="60" y="128" width="169" height="17" uuid="c95a3b52-0eb2-4308-a9a5-09aeefa90bdb"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhNhan}.emrDmDanToc.ten]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="347" y="128" width="191" height="17" uuid="19c2afec-ae60-4a5c-8747-a68e6d0f63d5"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhNhan}.emrDmQuocGia.ten]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="81" y="176" width="206" height="17" uuid="732d3bd7-077a-40bf-9ecc-6ad4f8cc81c6"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhNhan}.noilamviec]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="418" y="224" width="82" height="17" uuid="95955298-1153-43d8-a9d7-88f3e6ac01a0"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhNhan}.sodienthoainguoibaotin]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="325" width="122" height="15" uuid="6756c80d-e4b5-40e5-95d8-160ce2129add"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTenKhoaDieuTri( $F{emrVaoKhoas},0 )]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="390" width="122" height="15" uuid="7a71598b-7b85-4b3c-90fa-b061bff377a8"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTenKhoaDieuTri( $F{emrVaoKhoas},3 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="143" y="390" width="105" height="15" uuid="154ef02b-b9cf-4b6c-95d7-aaca743b553f"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 3) ?
+$P{Header_SCRIPTLET}.getTime_VK($F{emrVaoKhoas}[3].ngaygiovaokhoa):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="24" y="766" width="164" height="17" uuid="fd60e073-4144-4e9f-adc5-a91608ea6a39"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{giamdocbenhvien}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="196" y="547" width="40" height="17" uuid="a17f2d5c-9fe1-45b8-8c69-2461c3d94cce"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrChanDoan}.tongsongaysaupt]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="363" y="471" width="143" height="15" uuid="bed96110-b555-49f7-be65-3cf348752e53"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrChanDoan}.motachandoanraviennguyennhan,
+    $F{emrChanDoan}.emrDmMaBenhChandoanraviennguyennhan)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="60" y="144" width="227" height="17" uuid="f5cff468-5d8d-40c8-b539-58e469e96c16"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhNhan}.diachi]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="340" y="144" width="198" height="17" uuid="759eabed-ac65-404d-b02e-44e97e9e0fad"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhNhan}.emrDmPhuongXa.ten]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="282" y="144" width="58" height="17" uuid="c48d645f-c42e-484c-a1d8-4e18e9aeda80"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Xã, phường:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="80" y="160" width="149" height="17" uuid="ce4ae050-7462-4a41-8c13-f5ccc48350a3"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhNhan}.emrDmQuanHuyen.ten]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="357" y="160" width="151" height="17" uuid="f66f94bb-2676-423f-9945-5bb0353516df"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhNhan}.emrDmTinhThanh.ten]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="282" y="160" width="76" height="17" uuid="c7b80af0-fcca-4f38-a24b-4eea1f5829b8"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Tỉnh, thành phố:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="213" y="208" width="335" height="17" uuid="1993ab62-f742-4a3c-949c-743634aa884c"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhNhan}.tennguoibaotin]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="295" y="325" width="247" height="30" uuid="8a5ddc7d-7d71-4c95-bb74-254c2ff5988d"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrQuanLyNguoiBenh}.noichuyenden]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="398" y="390" width="145" height="15" uuid="5a2d835b-93cd-4185-a9ec-611256e44e83"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTongSoNgayDieuTri($F{emrQuanLyNguoiBenh} )]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="9" y="225" width="336" height="17" uuid="295f542c-3520-4560-9d8c-5edfb2985fd4"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhNhan}.diachinguoibaotin]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="264" y="783" width="27" height="17" uuid="f680a5f3-83fb-4a1f-8f14-23deb8e7ad8a"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement x="367" y="-520" width="18" height="17" uuid="9116d2bb-53b6-4131-873a-6bb124b41c1c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.ngaykybenhan.getDate()]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement x="410" y="-520" width="15" height="17" uuid="96bfdb62-1ae4-44c8-8ebe-c63ebfdba64b"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.ngaykybenhan.getMonth() + 1]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="383" y="-520" width="26" height="17" uuid="fb0b0d25-687b-4bab-b45b-78b0c780accb"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[tháng]]></text>
+			</staticText>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement x="447" y="-520" width="38" height="17" uuid="ff41f2d3-cab8-4068-b95d-2b6498a70faf"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.ngaykybenhan.getYear() + 1990]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="426" y="-520" width="19" height="17" uuid="e9fa681c-d8b5-4c04-9cc9-b372684123a5"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[năm]]></text>
+			</staticText>
+			<textField pattern="yyyy" isBlankWhenNull="true">
+				<reportElement x="355" y="714" width="136" height="17" uuid="3b9931db-e087-4cf0-a5f2-42ce6c652c71"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTime_DDMMYYYY($F{emrQuanLyNguoiBenh}.ngaygioravien)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="203" y="242" width="89" height="17" forecolor="#000000" uuid="bf81d73b-7e1f-49aa-873c-2f388fa81ee6"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Thời gian bị bỏng:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="292" y="242" width="218" height="17" uuid="02bd3093-7821-4ffe-a11d-0dec43e1f6e1"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getThoiGianBiBong$P{danhSachHSBA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="517" width="50" height="15" uuid="aae6b574-28a1-4799-950b-9b4adc46d20f"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[- Tai biến:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="137" y="517" width="65" height="15" uuid="99bd82ba-1d59-4d06-9b53-fc33b82df81a"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[- Biến chứng:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="77" y="516" width="15" height="15" uuid="91833c09-58a5-4725-9d87-8cc344e489a7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan}.bitaibien == true) ? "X" : ""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="206" y="516" width="15" height="15" uuid="9946724c-b7ef-482b-ad88-948f22ab28fc"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan}.bibienchung == true) ? "X" : ""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="330" y="630" width="85" height="15" forecolor="#000000" uuid="e39f7d57-6c0d-418a-8b8b-302884a66f35"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[2.Trong 48 giờ vào viện]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="225" y="630" width="82" height="15" forecolor="#000000" uuid="b2994ef2-f4e5-4a79-8618-1dc57c32814a"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[1.Trong 24 giờ vào viện]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="415" y="615" width="15" height="15" forecolor="#000000" uuid="831e0ec4-9ef8-404e-abd5-271eca24cc59"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien}.emrDmLyDoTuVong != null  && "02".equals($F{emrTinhTrangRaVien}.emrDmLyDoTuVong.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="525" y="615" width="15" height="15" forecolor="#000000" uuid="8f6c620d-074f-4d54-a5f9-20bec3e1e37a"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien}.emrDmLyDoTuVong != null  && "03".equals($F{emrTinhTrangRaVien}.emrDmLyDoTuVong.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="525" y="630" width="15" height="15" forecolor="#000000" uuid="924e63d0-a0a0-4a2f-bed0-7738440bb38d"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getLoaiThoiGianTuVong($P{danhSachHSBA})==3?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="330" y="615" width="85" height="15" forecolor="#000000" uuid="76c1ae9e-5ed4-4e74-95bf-60c3624541c9"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[2.Do tai biến điều trị]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="439" y="630" width="86" height="15" forecolor="#000000" uuid="d6ea4fd7-c2be-456f-b19a-805f94e16c4e"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[3.Trong 72 giờ vào viện]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="439" y="615" width="86" height="15" forecolor="#000000" uuid="95aa1c15-b6c3-4e45-8170-9d63e997a23a"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[3.Khác]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="415" y="630" width="15" height="15" forecolor="#000000" uuid="3896f7e1-ef79-41de-8490-3698d8812ff1"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getLoaiThoiGianTuVong($P{danhSachHSBA})==2?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="225" y="615" width="82" height="15" forecolor="#000000" uuid="913b95e4-3642-4f2a-bdb4-3f0ce5629b95"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[1.Do bệnh]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="307" y="615" width="15" height="15" forecolor="#000000" uuid="fa158c5f-cfbe-4688-85fc-fde39747b235"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien}.emrDmLyDoTuVong != null  && "01".equals($F{emrTinhTrangRaVien}.emrDmLyDoTuVong.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="307" y="630" width="15" height="15" forecolor="#000000" uuid="7eb0cfa7-3aae-40b6-b0cf-5c37915e7a0f"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getLoaiThoiGianTuVong($P{danhSachHSBA})==1?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="349" y="193" width="25" height="15" forecolor="#000000" uuid="8f21ee58-20aa-4317-a93a-c087c555ff3f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrBenhNhan}.sobhyt != null&&$F{emrBenhNhan}.sobhyt.length() >2)?$F{emrBenhNhan}.sobhyt.substring(0, 2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="375" y="193" width="15" height="15" forecolor="#000000" uuid="51d9c2d0-a768-40ff-a12e-66cd0d5c353c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrBenhNhan}.sobhyt != null&&$F{emrBenhNhan}.sobhyt.length() >3)?$F{emrBenhNhan}.sobhyt.substring(2, 3):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="193" width="25" height="15" forecolor="#000000" uuid="7e655141-1963-42ee-afa0-1701930a84ad"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrBenhNhan}.sobhyt != null&&$F{emrBenhNhan}.sobhyt.length() >5)?$F{emrBenhNhan}.sobhyt.substring(3, 5):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="446" y="193" width="31" height="15" forecolor="#000000" uuid="7ee1b929-ef38-4516-8595-2e9982054b44"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrBenhNhan}.sobhyt != null&&$F{emrBenhNhan}.sobhyt.length() >10)?$F{emrBenhNhan}.sobhyt.substring(7, 10):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="479" y="193" width="51" height="15" forecolor="#000000" uuid="74104ff2-d283-4831-af44-e3b1f496ce09"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrBenhNhan}.sobhyt != null&&$F{emrBenhNhan}.sobhyt.length() >14)?$F{emrBenhNhan}.sobhyt.substring(10, 15):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="419" y="193" width="25" height="15" forecolor="#000000" uuid="b998d56a-e0ca-43bb-9203-79e8d74ae5db"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrBenhNhan}.sobhyt != null&&$F{emrBenhNhan}.sobhyt.length() >7)?$F{emrBenhNhan}.sobhyt.substring(5,7):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="174" y="113" width="16" height="16" uuid="1da9c9ba-2747-457a-95e5-b4452aa13182"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrBenhNhan}.emrDmGioiTinh != null && "F".equals($F{emrBenhNhan}.emrDmGioiTinh.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="51" y="112" width="40" height="17" uuid="2c32dc05-ccbe-4edb-bf06-08546ff91ccc"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[1. Nam]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="95" y="112" width="16" height="16" uuid="03877f2f-2c0f-4ac2-81b0-7da9fb387864"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrBenhNhan}.emrDmGioiTinh != null && "M".equals($F{emrBenhNhan}.emrDmGioiTinh.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="139" y="112" width="31" height="17" uuid="9fa26e24-3095-4a74-afc3-2ec387dd7c64"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[2. Nữ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="367" y="294" width="54" height="15" forecolor="#000000" uuid="fadf13fa-d192-415c-9942-b76093ac9c61"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[1.Tuyến trên]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="508" y="294" width="24" height="15" forecolor="#000000" uuid="e94a696e-2437-48c6-8cde-395ea30d3be0"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[3.CK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="436" y="294" width="58" height="15" forecolor="#000000" uuid="ee17d6f5-a2e7-4463-8ec9-77f445a64a9a"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[2.Tuyến dưới]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="147" y="276" width="34" height="15" forecolor="#000000" uuid="8ab12a56-f1b9-4148-a459-692f6d5ca614"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[2. KKB]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="127" y="276" width="14" height="15" forecolor="#000000" uuid="caa3094c-8516-4175-a320-24201fed2b46"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmNoiTrucTiepVao != null  && "01".equals($F{emrQuanLyNguoiBenh}.emrDmNoiTrucTiepVao.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="78" y="276" width="48" height="15" forecolor="#000000" uuid="97768949-e133-4554-8173-5ea935c011b9"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[1.Cấp cứu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="203" y="276" width="64" height="15" forecolor="#000000" uuid="34a98e9a-57da-4df7-9c1e-fec89205704c"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[3.Khoa điều trị]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="182" y="276" width="14" height="15" forecolor="#000000" uuid="eeed1418-7bb8-4ed9-94ca-45db6849c8d7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmNoiTrucTiepVao != null  && "02".equals($F{emrQuanLyNguoiBenh}.emrDmNoiTrucTiepVao.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="268" y="276" width="14" height="15" forecolor="#000000" uuid="fd74b094-b7d9-4927-aaee-4d61f97c0b05"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmNoiTrucTiepVao != null  && "03".equals($F{emrQuanLyNguoiBenh}.emrDmNoiTrucTiepVao.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="420" y="294" width="14" height="15" forecolor="#000000" uuid="ffb04ec6-a3ed-476b-ae7b-6bfe64d8ab8c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmLoaiChuyenVien != null  && "01".equals($F{emrQuanLyNguoiBenh}.emrDmLoaiChuyenVien.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="493" y="294" width="14" height="15" forecolor="#000000" uuid="90d306b0-9f6e-4772-b0cb-a67cfe3b8ea1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmLoaiChuyenVien != null  && "02".equals($F{emrQuanLyNguoiBenh}.emrDmLoaiChuyenVien.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="532" y="294" width="14" height="15" forecolor="#000000" uuid="78e6996d-d5d9-4ed7-aec4-96cce9584f32"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmLoaiChuyenVien != null  && "03".equals($F{emrQuanLyNguoiBenh}.emrDmLoaiChuyenVien.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="488" y="175" width="15" height="15" forecolor="#000000" uuid="0def03c5-c6dd-43a7-b014-6e544d3504de"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmLoaiDoiTuongTaiChinh != null  && "03".equals($F{emrQuanLyNguoiBenh}.emrDmLoaiDoiTuongTaiChinh.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="456" y="174" width="36" height="15" forecolor="#000000" uuid="4312321c-0f6d-4d73-8c3f-f6eb1d0137e0"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[3. Miễn]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="379" y="175" width="15" height="15" forecolor="#000000" uuid="30c2c010-c659-4047-b383-83226ac433b5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmLoaiDoiTuongTaiChinh != null  && "01".equals($F{emrQuanLyNguoiBenh}.emrDmLoaiDoiTuongTaiChinh.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="538" y="174" width="15" height="15" forecolor="#000000" uuid="227527bc-12c9-494a-a4c2-cfb405d657cb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmLoaiDoiTuongTaiChinh != null  && "04".equals($F{emrQuanLyNguoiBenh}.emrDmLoaiDoiTuongTaiChinh.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="395" y="174" width="49" height="15" forecolor="#000000" uuid="9e279546-bf33-48e5-82c4-ae7fb079a927"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[2. Thu phí]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="505" y="174" width="38" height="15" forecolor="#000000" uuid="cf8402a2-ccb1-474e-91c3-09c71aa24262"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[4. Khác]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="341" y="174" width="42" height="15" forecolor="#000000" uuid="29b6a4f5-f3e0-4a50-8cf2-8c97ae205473"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[1. BHYT]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="439" y="175" width="15" height="15" forecolor="#000000" uuid="b969564f-74f5-4115-929c-da94cc76fe2e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmLoaiDoiTuongTaiChinh != null  && "02".equals($F{emrQuanLyNguoiBenh}.emrDmLoaiDoiTuongTaiChinh.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="435" y="261" width="13" height="15" forecolor="#000000" uuid="a4bd4e61-62d0-44c8-b01e-9bc353c15dee"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmNoiGioiThieu != null  && "01".equals($F{emrQuanLyNguoiBenh}.emrDmNoiGioiThieu.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="373" y="260" width="62" height="15" forecolor="#000000" uuid="0000b125-bea5-41d1-adcb-f6481b43b3b7"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[1.Cơ quan y tế]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="260" width="37" height="15" forecolor="#000000" uuid="364c1582-5ddc-4450-bc3f-7f0f871627cc"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[2.Tự đến]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="502" y="260" width="31" height="15" forecolor="#000000" uuid="37be5103-7337-4b1f-8746-950b261544a4"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[3.Khác]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="532" y="261" width="13" height="15" forecolor="#000000" uuid="33240f11-701c-48bf-9c58-7b3f1af0f634"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmNoiGioiThieu != null  && "03".equals($F{emrQuanLyNguoiBenh}.emrDmNoiGioiThieu.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="487" y="261" width="13" height="15" forecolor="#000000" uuid="94a56f7a-1e13-47a7-ad08-1015cd1984bd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmNoiGioiThieu != null  && "02".equals($F{emrQuanLyNguoiBenh}.emrDmNoiGioiThieu.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="421" y="373" width="42" height="15" forecolor="#000000" uuid="4ed082dd-0dde-482e-b50a-3fdb52b2ae40"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[3. Bỏ về]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="404" y="373" width="14" height="15" forecolor="#000000" uuid="76dd17a0-356f-45fa-b962-0c996b671093"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmLoaiRaVien != null  && "02".equals($F{emrQuanLyNguoiBenh}.emrDmLoaiRaVien.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="361" y="373" width="42" height="15" forecolor="#000000" uuid="7c4f82a5-b4fa-4196-b2ce-78e60d6452da"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[2. Xin về]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="340" y="373" width="14" height="15" forecolor="#000000" uuid="e3af5fef-6ae8-4526-8f7b-6ac72834d6fc"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmLoaiRaVien != null  && "01".equals($F{emrQuanLyNguoiBenh}.emrDmLoaiRaVien.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="464" y="373" width="14" height="15" forecolor="#000000" uuid="ad22f018-d689-4584-9a61-f7d1eaeb022c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmLoaiRaVien != null  && "03".equals($F{emrQuanLyNguoiBenh}.emrDmLoaiRaVien.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="296" y="373" width="42" height="15" forecolor="#000000" uuid="40472a32-0334-480d-99c6-4afaee5591c6"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[1. Ra viện]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="531" y="96" width="15" height="15" forecolor="#000000" uuid="5ae8d6b5-b193-49c0-a29f-18cbbadded7d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTuoi_yhct( $P{danhSachHSBA},2 )]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="382" y="97" width="15" height="15" forecolor="#000000" uuid="58a4d869-d7b4-4355-808b-7b06b7a362e4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getIndexDateTime($F{emrBenhNhan}.ngaysinh,4)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="514" y="96" width="15" height="15" forecolor="#000000" uuid="d8866b1a-890d-41d9-9bc7-8c00404ea876"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTuoi_yhct( $P{danhSachHSBA},1 )]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="399" y="97" width="15" height="15" forecolor="#000000" uuid="fb632ac4-b2a9-4932-a2f7-2d22d59bed36"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getIndexDateTime($F{emrBenhNhan}.ngaysinh,5)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="347" y="97" width="15" height="15" forecolor="#000000" uuid="776dfcc6-aa5f-47c0-8510-9b700b0dfb85"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getIndexDateTime($F{emrBenhNhan}.ngaysinh,6)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="501" y="77" width="58" height="17" uuid="e9612547-b831-411a-a49a-376ef2624e89"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getNhanTuoi_YHCT( $P{danhSachHSBA})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="450" y="97" width="15" height="15" forecolor="#000000" uuid="39cf050a-6b14-4d55-9078-e503a34e532e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getIndexDateTime($F{emrBenhNhan}.ngaysinh,2)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="433" y="97" width="15" height="15" forecolor="#000000" uuid="ea60ced9-e3d9-4fbc-9dc8-540f7c5883e9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getIndexDateTime($F{emrBenhNhan}.ngaysinh,1)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="467" y="97" width="15" height="15" forecolor="#000000" uuid="186d59ab-6174-42d7-8b1f-6bcda0a01dfe"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getIndexDateTime($F{emrBenhNhan}.ngaysinh,3)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="365" y="97" width="15" height="15" forecolor="#000000" uuid="8de0d9c9-2d75-4a0d-813d-58dc2b4c4263"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getIndexDateTime($F{emrBenhNhan}.ngaysinh,7)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="416" y="97" width="15" height="15" forecolor="#000000" uuid="b1e1c3c0-6068-41a0-8814-d634bea3f932"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getIndexDateTime($F{emrBenhNhan}.ngaysinh,0)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="514" y="113" width="15" height="15" forecolor="#000000" uuid="f5b25184-b039-4c53-87ea-bcd1279b8e5c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="531" y="113" width="15" height="15" forecolor="#000000" uuid="2f683cb5-0eb0-45e8-843a-ede53a02a334"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="515" y="159" width="15" height="15" forecolor="#000000" uuid="01ee8722-3b07-4b78-8049-6c0956381961"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="532" y="159" width="15" height="15" forecolor="#000000" uuid="1d96af84-02c5-4d1d-8c5c-d789e8f5c688"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="238" y="129" width="15" height="15" forecolor="#000000" uuid="0473ca51-6e64-4028-904b-63e0d5a070fd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="255" y="129" width="15" height="15" forecolor="#000000" uuid="d581c933-7a4b-4a8e-ad66-9b1856fc5aa2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="238" y="161" width="15" height="15" forecolor="#000000" uuid="24cede91-6cd0-48ad-b099-565463c2c2ac"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="255" y="161" width="15" height="15" forecolor="#000000" uuid="69af9694-4579-45ab-a1de-1dc0ccf3a80c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="250" y="323" width="15" height="15" forecolor="#000000" uuid="196e3a0f-257a-4954-a694-43514e06ea69"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 0) ?
+$P{Header_SCRIPTLET}.getSoNgayDieuTri(
+    $F{emrVaoKhoas}[0],
+    $F{emrQuanLyNguoiBenh},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="250" y="355" width="15" height="15" forecolor="#000000" uuid="89ab9770-d35d-45ed-a8c4-f562d072bc1d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 1) ?
+$P{Header_SCRIPTLET}.getSoNgayDieuTri(
+    $F{emrVaoKhoas}[1],
+    $F{emrQuanLyNguoiBenh},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="250" y="372" width="15" height="15" forecolor="#000000" uuid="31d79c14-9ee3-40c6-b2f9-7a039c62004d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 2) ?
+$P{Header_SCRIPTLET}.getSoNgayDieuTri(
+    $F{emrVaoKhoas}[2],
+    $F{emrQuanLyNguoiBenh},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="250" y="390" width="15" height="15" forecolor="#000000" uuid="6f4dd101-a1c5-4e28-8416-8f3d57375d4f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 3) ?
+$P{Header_SCRIPTLET}.getSoNgayDieuTri(
+    $F{emrVaoKhoas}[3],
+    $F{emrQuanLyNguoiBenh},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="267" y="323" width="15" height="15" forecolor="#000000" uuid="db6358b8-6fb9-4bf4-90ae-d7c23cb80a84"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 0) ?
+$P{Header_SCRIPTLET}.getSoNgayDieuTri(
+    $F{emrVaoKhoas}[0],
+    $F{emrQuanLyNguoiBenh},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="267" y="355" width="15" height="15" forecolor="#000000" uuid="36b3f940-a058-4ee2-9bcf-0096a18b5ad1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 1) ?
+$P{Header_SCRIPTLET}.getSoNgayDieuTri(
+    $F{emrVaoKhoas}[1],
+    $F{emrQuanLyNguoiBenh},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="267" y="372" width="15" height="15" forecolor="#000000" uuid="afdfb787-75a9-495f-bfca-e40101606d33"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 2) ?
+$P{Header_SCRIPTLET}.getSoNgayDieuTri(
+    $F{emrVaoKhoas}[2],
+    $F{emrQuanLyNguoiBenh},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="267" y="390" width="15" height="15" forecolor="#000000" uuid="13f3d09e-8ac5-40e4-b6a0-890394676163"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrVaoKhoas} != null && $F{emrVaoKhoas}.length > 3) ?
+$P{Header_SCRIPTLET}.getSoNgayDieuTri(
+    $F{emrVaoKhoas}[3],
+    $F{emrQuanLyNguoiBenh},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="217" y="440" width="15" height="15" forecolor="#000000" uuid="54afd439-9bd7-48e6-8a21-026aecd247c2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10(
+    $F{emrChanDoan},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="252" y="440" width="23" height="15" forecolor="#000000" uuid="59d3548c-56c9-43e0-948a-51da217af117"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10(
+    $F{emrChanDoan},4):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="217" y="499" width="15" height="15" forecolor="#000000" uuid="1d1210cf-dec8-4ab9-90b3-2ce4a65ade72"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrBenhAn} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10BenhChinhFromBenhAN(
+    $F{emrBenhAn},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="252" y="470" width="23" height="15" forecolor="#000000" uuid="f59622ce-5511-4799-bd76-85b3e1d8afa0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10FromKKB(
+    $F{emrChanDoan},4):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="200" y="470" width="15" height="15" forecolor="#000000" uuid="dac8e412-9e52-42d0-ab2f-6a90554369b4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10FromKKB(
+    $F{emrChanDoan},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="235" y="499" width="15" height="15" forecolor="#000000" uuid="455b257b-21df-406e-91a7-5f126915f141"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrBenhAn} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10BenhChinhFromBenhAN(
+    $F{emrBenhAn},3):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="252" y="499" width="23" height="15" forecolor="#000000" uuid="d1f55c54-7514-404c-b7b5-3f1e60d70c3d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrBenhAn} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10BenhChinhFromBenhAN(
+    $F{emrBenhAn},4):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="200" y="499" width="15" height="15" forecolor="#000000" uuid="1c719ffc-333e-4d23-b79f-36b9f5f31858"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrBenhAn} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10BenhChinhFromBenhAN(
+    $F{emrBenhAn},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="235" y="470" width="15" height="15" forecolor="#000000" uuid="fa23608b-dddb-4b1f-8b2e-81d2c1015e77"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10FromKKB(
+    $F{emrChanDoan},3):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="235" y="440" width="15" height="15" forecolor="#000000" uuid="0b29e296-a996-46ce-a2c3-25ded194fe95"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10(
+    $F{emrChanDoan},3):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="217" y="470" width="15" height="15" forecolor="#000000" uuid="322b32f2-4980-484c-a975-20b6fb1f79ef"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10FromKKB(
+    $F{emrChanDoan},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="200" y="440" width="15" height="15" forecolor="#000000" uuid="33a41b33-43f6-4ef7-844a-0855b4e051c4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10(
+    $F{emrChanDoan},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="519" y="501" width="23" height="15" forecolor="#000000" uuid="463ebff1-f6a3-4651-b115-25dc2d623001"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10KemTheoFromChanDoan(
+    $F{emrChanDoan},4):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="502" y="455" width="15" height="15" forecolor="#000000" uuid="fc81038d-08ba-400c-8271-ada8711ef6d3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10RaVienFromChanDoan(
+    $F{emrChanDoan},3):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="484" y="501" width="15" height="15" forecolor="#000000" uuid="e550e212-cfdb-4ebd-aa91-224cfd7834df"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10KemTheoFromChanDoan(
+    $F{emrChanDoan},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="502" y="501" width="15" height="15" forecolor="#000000" uuid="f4939a6f-b3da-4563-8b47-ff43f5886f7d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10KemTheoFromChanDoan(
+    $F{emrChanDoan},3):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="519" y="455" width="23" height="15" forecolor="#000000" uuid="1a9d57be-fbbc-4d0d-a219-3a80ef684e47"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10RaVienFromChanDoan(
+    $F{emrChanDoan},4):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="467" y="501" width="15" height="15" forecolor="#000000" uuid="afe4976d-d7bc-414e-8ac3-ad23789dad34"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10KemTheoFromChanDoan(
+    $F{emrChanDoan},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="467" y="455" width="15" height="15" forecolor="#000000" uuid="d2cdaa41-6108-4d33-ae5a-568c423bb81f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10RaVienFromChanDoan(
+    $F{emrChanDoan},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="484" y="455" width="15" height="15" forecolor="#000000" uuid="0dbf8002-4736-4146-854c-4fc3b32d53fd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10RaVienFromChanDoan(
+    $F{emrChanDoan},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="458" y="276" width="14" height="15" forecolor="#000000" uuid="cc3997bc-8302-4859-860c-8ce6d005a7fe"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrQuanLyNguoiBenh}.vaovienlanthu]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="485" y="532" width="15" height="15" forecolor="#000000" uuid="c985513c-3a66-4bc1-ada0-0face06bfc38"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10TruocPhauThuatFromChanDoan(
+    $F{emrChanDoan},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="468" y="532" width="15" height="15" forecolor="#000000" uuid="423e75f3-24a5-437b-a221-1655b3cb6099"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10TruocPhauThuatFromChanDoan(
+    $F{emrChanDoan},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="503" y="532" width="15" height="15" forecolor="#000000" uuid="7810f9af-eaa6-4f80-acbb-fe44d193f8f5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10TruocPhauThuatFromChanDoan(
+    $F{emrChanDoan},3):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="520" y="532" width="23" height="15" forecolor="#000000" uuid="342ba682-c0b7-41fa-a413-36752bbfdb82"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10TruocPhauThuatFromChanDoan(
+    $F{emrChanDoan},4):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="520" y="560" width="23" height="15" forecolor="#000000" uuid="bb30133b-586e-4eca-a8d4-cfd205515ea5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10SauPhauThuatFromChanDoan(
+    $F{emrChanDoan},4):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="503" y="560" width="15" height="15" forecolor="#000000" uuid="80a4d58b-d9a3-4307-ad26-7b5bf9d052a8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10SauPhauThuatFromChanDoan(
+    $F{emrChanDoan},3):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="485" y="560" width="15" height="15" forecolor="#000000" uuid="21eb62cb-f756-481e-a507-cfc4f06d1f41"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10SauPhauThuatFromChanDoan(
+    $F{emrChanDoan},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="468" y="560" width="15" height="15" forecolor="#000000" uuid="ec67496a-ee41-4e3d-814f-67be4c79d70b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrChanDoan} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10SauPhauThuatFromChanDoan(
+    $F{emrChanDoan},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="182" y="635" width="18" height="15" forecolor="#000000" uuid="f686e6c8-6263-4065-ac85-336cdb1ecaf6"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien}.emrDmKetQuaDieuTri != null  && "05".equals($F{emrTinhTrangRaVien}.emrDmKetQuaDieuTri.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="93" y="620" width="18" height="15" forecolor="#000000" uuid="3f96c3fd-2f88-4b71-a0f9-44870b94f22a"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien}.emrDmKetQuaDieuTri != null  && "01".equals($F{emrTinhTrangRaVien}.emrDmKetQuaDieuTri.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="620" width="43" height="15" forecolor="#000000" uuid="a7929c0a-e1c9-438b-ac24-1ac82a761653"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[1. Khỏi]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="93" y="650" width="18" height="15" forecolor="#000000" uuid="4c4be97c-daa4-4b4f-a38c-ccd79a2f8eb9"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien}.emrDmKetQuaDieuTri != null  && "03".equals($F{emrTinhTrangRaVien}.emrDmKetQuaDieuTri.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="93" y="635" width="18" height="15" forecolor="#000000" uuid="0194819c-86df-4396-9bb6-d2d2c52fe4bd"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien}.emrDmKetQuaDieuTri != null  && "02".equals($F{emrTinhTrangRaVien}.emrDmKetQuaDieuTri.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="121" y="635" width="60" height="15" forecolor="#000000" uuid="e81c4b39-ccbb-4843-97b5-4e67a8de036b"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[5. Tử vong]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="182" y="620" width="18" height="15" forecolor="#000000" uuid="4cc7fcbc-d2ac-45e0-b8f0-f1669ba53d1b"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien}.emrDmKetQuaDieuTri != null  && "04".equals($F{emrTinhTrangRaVien}.emrDmKetQuaDieuTri.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="635" width="72" height="15" forecolor="#000000" uuid="83540853-80a7-40a9-8a81-9755bf327874"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[2. Đỡ, giảm]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="650" width="77" height="15" forecolor="#000000" uuid="26adb03a-c7ab-4bde-b2da-df5a69a9ac4f"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[3. Không thay đổi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="122" y="620" width="60" height="15" forecolor="#000000" uuid="45d7e2ab-d9c2-493d-a5d8-f8f91542fc17"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[4. Nặng hơn]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="199" y="690" width="14" height="15" forecolor="#000000" uuid="3d72aea2-ff0a-4952-a5ce-004e927dab10"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien}.emrDmKetQuaGiaiPhauBenh != null  && "03".equals($F{emrTinhTrangRaVien}.emrDmKetQuaGiaiPhauBenh.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="69" y="690" width="14" height="15" forecolor="#000000" uuid="44ebe715-97d5-4e9d-81ee-1bc795277a9e"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien}.emrDmKetQuaGiaiPhauBenh != null  && "01".equals($F{emrTinhTrangRaVien}.emrDmKetQuaGiaiPhauBenh.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="85" y="690" width="50" height="15" forecolor="#000000" uuid="0f13e7fa-beb4-48e6-b094-ec3e07fed64c"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[2. Nghi ngờ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="690" width="54" height="15" forecolor="#000000" uuid="b2299d8a-427c-44e0-8d55-ee0e99394bc6"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[1. Lành tính]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="137" y="690" width="14" height="15" forecolor="#000000" uuid="cbbea15c-5b3f-444a-8e53-9c6a9950d379"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien}.emrDmKetQuaGiaiPhauBenh != null  && "02".equals($F{emrTinhTrangRaVien}.emrDmKetQuaGiaiPhauBenh.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="153" y="690" width="44" height="15" forecolor="#000000" uuid="6185021f-75ce-446e-b450-75043eeefb34"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[3. Ác tính]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="518" y="693" width="23" height="15" forecolor="#000000" uuid="6cb1608c-05f3-46a8-ba42-fb4aabcd43b5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10GiaiPhauFromTTRaVien(
+    $F{emrTinhTrangRaVien},4):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="483" y="693" width="15" height="15" forecolor="#000000" uuid="636b70a7-229b-436b-ac81-51f05517b591"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10GiaiPhauFromTTRaVien(
+    $F{emrTinhTrangRaVien},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="483" y="663" width="15" height="15" forecolor="#000000" uuid="54eb5c97-202b-421e-85e4-c4e2b7c8f24e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10TuVongFromTTRaVien(
+    $F{emrTinhTrangRaVien},2):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="466" y="663" width="15" height="15" forecolor="#000000" uuid="ec602011-8413-4ff3-876e-57d9aec1ed05"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10TuVongFromTTRaVien(
+    $F{emrTinhTrangRaVien},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="501" y="663" width="15" height="15" forecolor="#000000" uuid="9a38b57a-c158-4a44-86aa-9826de36b140"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10TuVongFromTTRaVien(
+    $F{emrTinhTrangRaVien},3):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="518" y="663" width="23" height="15" forecolor="#000000" uuid="65e62fe1-b195-46e9-926d-b0d7e561f1d7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10TuVongFromTTRaVien(
+    $F{emrTinhTrangRaVien},4):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="501" y="693" width="15" height="15" forecolor="#000000" uuid="5966b598-c75b-4365-b1af-c7509ac16dd6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10GiaiPhauFromTTRaVien(
+    $F{emrTinhTrangRaVien},3):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="466" y="693" width="15" height="15" forecolor="#000000" uuid="da10958e-e90b-49f8-b18d-ca5f49c7639e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrTinhTrangRaVien} != null) ?
+$P{Header_SCRIPTLET}.getTextICD10GiaiPhauFromTTRaVien(
+    $F{emrTinhTrangRaVien},1):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="338" y="678" width="17" height="15" forecolor="#000000" uuid="6ab38d6c-15cc-4951-bdf6-99b2a954e576"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{emrTinhTrangRaVien}.khamnghiemtuthi!=null)&&($F{emrTinhTrangRaVien}.khamnghiemtuthi==true))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="530" y="375" width="14" height="15" forecolor="#000000" uuid="49c8a5b2-a178-474e-b0fa-496e1d407159"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrQuanLyNguoiBenh}.emrDmLoaiRaVien != null  && "04".equals($F{emrQuanLyNguoiBenh}.emrDmLoaiRaVien.ma))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="487" y="375" width="42" height="15" forecolor="#000000" uuid="f3d2b209-a60c-4dd4-9ae3-b8b6f045ced5"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="10" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[4. Đưa về]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="259" y="561" width="15" height="15" uuid="56437c60-9162-4202-a52e-3638be62194d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.htSoLanPhauThuat($F{emrChanDoan}.tongsolanpt,2)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="244" y="561" width="15" height="15" uuid="63a79801-0fed-4ce4-954d-749095948b10"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.htSoLanPhauThuat($F{emrChanDoan}.tongsolanpt,1)]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="805">
+			<rectangle>
+				<reportElement x="12" y="280" width="538" height="82" uuid="639d46ce-0958-462e-b2c3-2dfad527d433"/>
+			</rectangle>
+			<line>
+				<reportElement x="34" y="280" width="1" height="82" uuid="6b2b5cb7-5929-4939-a3c9-b20e9cc3bf0f"/>
+			</line>
+			<staticText>
+				<reportElement x="419" y="30" width="61" height="17" uuid="fc29248d-bc46-47e1-b172-3191f7c42d73"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Vào ngày thứ ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="12" y="341" width="538" height="1" uuid="72d9be89-c4f0-4bb2-ac1e-cd7159bcb6a5"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="323" width="22" height="17" uuid="33be3e16-f1e0-4692-b728-5f6598616ad7"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{emrBenhAn}.dacdiemkhac!=null)&&(!"".equals($F{emrBenhAn}.dacdiemkhac)))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="42" y="323" width="64" height="17" uuid="cf237014-1952-4371-a94e-d086f0fd38da"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[- Ma túy]]></text>
+			</staticText>
+			<line>
+				<reportElement x="276" y="280" width="1" height="82" uuid="9fcebdff-a4c3-4a6a-b0e8-93abd283ff75"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="199" width="533" height="66" uuid="56b28e7b-9677-47d3-bdf0-171504a8e8f5"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getThongTinChuyeNKhoa($F{emrBenhAn}.tiensubanthan)]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="12" y="322" width="538" height="1" uuid="2dea30e3-44b4-4c7d-aa9c-8605b5b05faa"/>
+			</line>
+			<staticText>
+				<reportElement x="307" y="304" width="64" height="17" uuid="d4681256-39a3-4c41-beb6-6864d42d6208"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[- Thuốc lá]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="284" width="15" height="17" uuid="26446b9b-63e8-4d03-8dbb-59ca8462e889"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TT]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="448" width="368" height="85" uuid="8453bbef-d111-4018-860c-24d645a0cae0"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.toanthan]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="281" y="304" width="12" height="17" uuid="345e25c3-2a69-40fc-8121-0e8d300f24ea"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[04]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="380" width="535" height="34" uuid="905c92fc-386a-4038-a3fc-821146d603b3"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getThongTinChuyeNKhoa($F{emrBenhAn}.tiensugiadinh)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="42" y="343" width="64" height="17" uuid="8c37c2d4-db42-4d28-9783-ea053fc86bc6"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[- Rượu bia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="323" width="12" height="17" uuid="acb552a2-1bc8-49d6-bcf4-b1537d636ceb"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[02]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="198" y="304" width="63" height="17" uuid="766fc84a-0bc5-4219-b754-f30b83291a4e"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.diung]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="428" y="282" width="120" height="17" uuid="3500e8dd-db56-4713-83c4-baf5a0488009"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Thời gian (tính theo tháng)]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="82" width="533" height="85" uuid="3588eccc-9e01-418a-a77e-a58fd0073800"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.quatrinhbenhly]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="42" y="304" width="64" height="17" uuid="5e54e98e-a293-4ecd-9ea0-587fd6b0f1e7"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[- Dị ứng]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="413" width="193" height="20" uuid="e060bc81-c2ef-4545-81a1-5cb489ac5f67"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[III. Khám bệnh:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="304" width="22" height="17" uuid="25f08eed-e479-4805-b010-395e7bdfdc78"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{emrBenhAn}.thuocla!=null)&&(!"".equals($F{emrBenhAn}.thuocla)))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="432" width="67" height="17" uuid="5df262db-05af-4ce9-90e0-3289f8ac71a8"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[1. Toàn thân:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="105" y="30" width="311" height="17" uuid="c573022a-7280-42c4-b2c3-aaa5e9bbd81b"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.lydovaovien]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="155" y="283" width="120" height="17" uuid="062bdba5-f72d-416d-93ca-4acea9a36e20"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Thời gian (tính theo tháng)]]></text>
+			</staticText>
+			<line>
+				<reportElement x="297" y="280" width="1" height="82" uuid="0f981568-dd59-42d7-9829-e2072b42f060"/>
+			</line>
+			<staticText>
+				<reportElement x="336" y="283" width="64" height="17" uuid="f5ba952a-287f-4695-96d4-147ad77141c7"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Ký hiệu]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="123" y="304" width="22" height="17" uuid="dc610348-164e-4a74-a383-c46720a5f34c"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{emrBenhAn}.diung!=null)&&(!"".equals($F{emrBenhAn}.diung)))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="198" y="323" width="63" height="17" uuid="b1217709-f2da-4f9b-bc3b-ccda9efab4fa"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.matuy]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="166" width="99" height="17" uuid="2c5e0975-5043-45f0-8dca-d22c4b212b47"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[2. Tiền sử bệnh:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="123" y="323" width="22" height="17" uuid="fc3f1193-a781-402c-8e4b-219c087d5310"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{emrBenhAn}.matuy!=null)&&(!"".equals($F{emrBenhAn}.matuy)))?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="282" width="64" height="17" uuid="354cd80b-90a0-4ca5-bb95-f250c46830f2"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Ký hiệu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="264" width="192" height="17" uuid="64b01b69-e6cf-439b-bbe7-592abc84e017"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Đặc điểm liên quan bệnh: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="123" y="343" width="22" height="17" uuid="a7bd2527-3467-40a2-abd3-6c5a5568db74"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{emrBenhAn}.ruoubia!=null)&&(!"".equals($F{emrBenhAn}.ruoubia)))?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="476" y="323" width="56" height="17" uuid="2380497d-b9cd-4926-918d-439c20dce7b0"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.dacdiemkhac]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="152" y="280" width="1" height="82" uuid="013ba7d1-4698-4427-8418-9472fdec5ee2"/>
+			</line>
+			<staticText>
+				<reportElement x="281" y="323" width="12" height="17" uuid="075ec08f-17f0-4afe-8135-6714df3e3f36"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[05]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="66" width="379" height="17" uuid="d52aebe0-4261-44cc-86f0-125fafd3ffd6"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[(hoàn cảnh, thời gian bị bệnh, diễn biến, xử lý điều trị của tuyến dưới v.v...).]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="343" width="12" height="17" uuid="f4df5268-88f9-48fb-8c49-cbe44d185251"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[03]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="307" y="324" width="64" height="17" uuid="c21eaf90-89ef-4611-9ffa-be588946e878"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[- Khác]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="364" width="53" height="17" uuid="1ae1bc13-d1c5-4a66-a481-dd9e5b3b38f3"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Gia đình:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="30" width="94" height="17" uuid="8b5fc158-fac1-4096-9938-9ace1e4f0f49"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[I. Lý do vào viện:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="304" width="12" height="17" uuid="d569914a-0068-451c-9fbc-e3eb311c69f5"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[01]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="476" y="304" width="56" height="17" uuid="ea737fb4-5384-46bd-86fd-1915fe609cd4"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.thuocla]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="17" y="282" width="15" height="17" uuid="21a31fff-1369-4fe5-9f22-ee61eb62b4e6"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TT]]></text>
+			</staticText>
+			<line>
+				<reportElement x="425" y="280" width="1" height="82" uuid="d73f6c07-c837-4e01-b6c5-3011643ce2ea"/>
+			</line>
+			<staticText>
+				<reportElement x="12" y="66" width="102" height="17" uuid="e39e7d8f-62db-47d7-8bcb-a6d180c05f55"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[1. Quá trình bệnh lý:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="198" y="343" width="63" height="17" uuid="325350b5-cffa-4682-934f-852bb92222cf"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.ruoubia]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="182" width="56" height="17" uuid="12aad962-15bb-4044-9756-98cc445487e4"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Bản thân: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="532" width="96" height="20" forecolor="#000000" uuid="721a2303-0582-4725-a5eb-dd498fa1e0ff"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[2. Tổn thương bỏng]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="11" width="193" height="20" uuid="d2f5c0ca-6cac-4341-97d7-3ca5d80eb939"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[A - BỆNH ÁN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="48" width="193" height="17" uuid="ab3c9362-2350-4066-9728-27c08e9cd125"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[II. Hỏi bệnh:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="12" y="302" width="538" height="1" uuid="5fd552ed-1d02-4f34-a9ba-a1e3226ba5ad"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="481" y="30" width="15" height="17" uuid="c51a7798-693e-4fef-b8eb-a2cd1c508b44"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.vaongaythu]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement x="0" y="801" width="100" height="1" uuid="857402ed-1b7b-413b-8f25-59d0ef6590b4"/>
+			</break>
+			<staticText>
+				<reportElement x="493" y="30" width="47" height="17" uuid="5bff2fc7-1d16-4512-b71a-06cbe320de6d"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[của bệnh]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="393" y="-1172" width="61" height="17" uuid="e46197d2-d6c8-450d-8fb5-bef8467839f0"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Vào ngày thứ ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="245" y="771" width="62" height="20" uuid="a29b8259-06ba-45f0-8d7f-1a245976f327"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="109" y="532" width="100" height="20" uuid="ad65e175-0a95-41f1-af76-0686a28103af"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[(khám tại chỗ)]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="391" y="448" width="167" height="85" uuid="543f61a8-bad3-4ce7-a3a7-49c86d385e1a"/>
+				<subreport>
+					<reportElement x="2" y="2" width="150" height="80" uuid="32a1fb42-1937-4c43-9a55-076300025b4a"/>
+					<subreportParameter name="danhSachHSBA">
+						<subreportParameterExpression><![CDATA[$P{danhSachHSBA}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DAUHIEUSINHTON_DIR} + "/DauHieuSinhTon.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+			<image>
+				<reportElement x="217" y="552" width="335" height="219" uuid="10ff7a74-9e89-49c3-8fc1-d4d64654fd66"/>
+				<imageExpression><![CDATA[$P{IMG_DIR}+"//tonthuong//anh8.gif"]]></imageExpression>
+			</image>
+		</band>
+		<band height="805">
+			<staticText>
+				<reportElement x="11" y="97" width="116" height="20" uuid="50c3fd01-4ac3-4b1e-aabc-bfc20edc429a"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[3. Các cơ quan:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="503" width="534" height="119" uuid="0bcbde53-21e5-4979-972e-8ab0528e6c26"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.tomtat]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="412" width="236" height="20" uuid="df8949b4-6ef4-4313-bb45-8fbf0c37864f"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[4. Các xét nghiệm cận lâm sàng cần làm:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="432" width="534" height="51" uuid="6d30ecc9-3664-49db-925f-a0330a1853e2"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.xetnghiemcanlamsang]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="483" width="236" height="20" uuid="6b6d5892-0a88-46c7-b027-aca22da786aa"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[5. Tóm tắt bệnh án:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="361" width="67" height="17" uuid="010222b1-792d-46cb-bd93-4b8249a732de"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Khác:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="219" width="67" height="17" uuid="25d89586-b1a0-4acf-89fd-e82e113ad8dc"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Tiêu hoá:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="149" width="67" height="17" uuid="49d95ab4-bcc7-442d-bda8-f85cf3739fdc"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Tuần hoàn:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="185" width="67" height="17" uuid="a773bfe9-099c-45c7-bc6e-dd3674d38b7e"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+  Hô hấp:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="167" width="537" height="17" uuid="468a8ab3-0af1-4cdd-852f-618dec79a263"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getThongTinChuyeNKhoa($F{emrBenhAn}.tuanhoan)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="323" width="537" height="34" uuid="3779bd1e-c3fc-4108-b0d1-4c252eb08d52"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getThongTinChuyeNKhoa($F{emrBenhAn}.tietnieusinhduc)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="236" width="537" height="17" uuid="cbcc2a8e-800c-457e-9f21-f6fef67ecd38"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getThongTinChuyeNKhoa($F{emrBenhAn}.tieuhoa)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="380" width="537" height="17" uuid="7dd49c4a-c47e-4d1d-8213-86640049cdd0"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getThongTinChuyeNKhoa($F{emrBenhAn}.coquankhac)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="270" width="537" height="34" uuid="a9035463-3635-43c2-b5b8-985583c8e04f"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getThongTinChuyeNKhoa($F{emrBenhAn}.coxuongkhop)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="306" width="122" height="17" uuid="34c3d85f-5509-4128-aed5-7e95640892f1"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Tiết niệu - Sinh dục:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="117" width="106" height="17" uuid="a6d34da0-413d-4a93-a19d-baf24520867e"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Tâm thần, thần kinh:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="202" width="537" height="17" uuid="e74277a7-7f01-4977-8d4d-6d483c6c99a7"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getThongTinChuyeNKhoa($F{emrBenhAn}.hohap)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="133" width="537" height="17" uuid="02daacaf-17cb-474f-bfa9-8bcea11ed2e4"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getThongTinChuyeNKhoa($F{emrBenhAn}.thankinh)]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement x="0" y="793" width="100" height="1" uuid="c4138a1b-ab51-49d9-81d9-136337718c40"/>
+			</break>
+			<staticText>
+				<reportElement x="12" y="254" width="100" height="17" uuid="f210e1e0-919a-4868-a491-8717622bf054"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Cơ-Xương-Khớp:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="72" y="676" width="472" height="17" uuid="565b0e33-d12c-42c8-8981-f8ebd9fee2b3"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrBenhAn}.motachandoanphanbiet,
+    $F{emrBenhAn}.emrDmMaBenhChandoanphanbiet)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="644" width="67" height="17" uuid="0a109e63-65b2-4eee-86a1-3bb54a0f35ac"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Bệnh chính: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="676" width="58" height="17" uuid="f1f68a22-2700-4c54-b677-4e0ba9dbf6a2"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Phân biệt: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="92" y="660" width="43" height="17" uuid="0aa71d29-b066-4582-b330-260f1fb1c6c1"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[(nếu có): ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="81" y="644" width="464" height="17" uuid="07e92086-7ac4-41cb-9f7a-b0ab1498a387"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrBenhAn}.motachandoanbenhchinh,
+    $F{emrBenhAn}.emrDmMaBenhChandoanbenhchinh)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="136" y="660" width="409" height="17" uuid="db68f6bb-a320-461b-9305-9b5413650229"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTextChanDoanYhhd(
+    $F{emrBenhAn}.motachandoankemtheo,
+    $F{emrBenhAn}.emrDmMaBenhChandoankemtheo)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="660" width="78" height="17" uuid="63e918e9-7a63-4cb8-877d-a653115f9a30"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[+ Bệnh kèm theo ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="625" width="193" height="20" uuid="1394e817-2200-4f64-963b-b3aa49431fe1"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IV. Chẩn đoán khi vào khoa điều trị:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="714" width="534" height="17" uuid="23c3fc35-b208-4887-b546-9910c86024d9"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.tienluong]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="695" width="193" height="20" uuid="67f7bbe1-62c4-4b73-ad24-9326c977db22"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[V. Tiên lượng:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="248" y="757" width="58" height="17" uuid="e0ee5bad-f89b-4e45-904f-feb514452a09"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[3]]></text>
+			</staticText>
+			<image>
+				<reportElement x="133" y="0" width="416" height="117" uuid="63040eb6-2408-40f2-8c65-76abaea598e5"/>
+				<imageExpression><![CDATA[$P{IMG_DIR}+"//tonthuong//anh9.gif"]]></imageExpression>
+			</image>
+		</band>
+		<band height="805">
+			<rectangle>
+				<reportElement x="13" y="211" width="538" height="561" uuid="5e73b1e0-8dbe-4be1-a89b-b6c888e3b590"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement x="16" y="233" width="534" height="85" uuid="72b0bec5-219a-4296-9a5c-eddceae978fa"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrTongKetRaVien}.dienbienlamsang]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="16" y="370" width="358" height="20" uuid="fc198cbe-985b-45ed-bc85-37197d4d9cb9"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[3. Phương pháp điều trị:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="16" y="337" width="534" height="34" uuid="5f74ce2b-050e-4eb8-9737-5a94e8b5f273"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrTongKetRaVien}.canlamsang]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="16" y="594" width="534" height="17" uuid="bb66b985-fb39-4a8b-8b55-dbcff3a0809f"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrTongKetRaVien}.chidandieutri]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="16" y="575" width="358" height="20" uuid="1bcc064c-15a6-4b20-a8c3-d4f32f104046"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[5. Hướng điều trị và các chế độ tiếp theo:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="16" y="559" width="534" height="17" uuid="e7783fb7-8431-4fe9-9d12-6363c32b0c19"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrTongKetRaVien}.tinhtrangnguoibenh]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="187" width="193" height="20" uuid="e3aaae3d-bcc4-42c0-959d-c576c84a7017"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[B. TỔNG KẾT BỆNH ÁN]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="16" y="389" width="534" height="34" uuid="a9a2aeac-ac57-427c-81c1-1d2058315236"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrTongKetRaVien}.phuongphapdieutri]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="16" y="539" width="358" height="20" uuid="903d8068-6063-425f-b6a6-551a7795f7ea"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[4. Tình trạng người bệnh ra viện]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="15" y="214" width="236" height="20" uuid="a5270510-14a5-47f6-9340-f782ab1e0186"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[1. Quá trình bệnh lý và diễn biến lâm sàng:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="318" width="358" height="20" uuid="17c80b09-9466-43d4-83f3-50ea51fc798d"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[2. Tóm tắt kết quả xét nghiệm cận lâm sàng có giá trị chẩn đoán:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="12" y="39" width="534" height="34" uuid="5634f2e9-e18c-41ee-88f8-a3d5187b1b83"/>
+				<textElement markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.huongdieutri]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="19" width="193" height="20" uuid="d9b93e5c-1fdf-4ae4-b04a-e7ccd31db8a9"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VI. Hướng dẫn điều trị:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="323" y="142" width="173" height="17" uuid="f908df14-9731-4f04-b271-badcf6ec2827"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emrBenhAn}.bacsylambenhan]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="360" y="94" width="98" height="17" uuid="e2fafab8-2c60-42d1-8299-b41777d1eba8"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bác sỹ làm bệnh án]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="772" width="36" height="20" uuid="b53ed75e-bee1-44aa-95cf-ebf90cb811c0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[4]]></text>
+			</staticText>
+			<textField pattern="yyyy" isBlankWhenNull="true">
+				<reportElement x="337" y="76" width="145" height="17" uuid="87d6bd10-19bb-4f25-a13d-a4952af3fd7f"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Header_SCRIPTLET}.getTime_DDMMYYYY($F{emrBenhAn}.ngaykybenhan)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="99" y="425" width="16" height="16" uuid="0a885480-cefa-4df2-8b5a-5b22a8015fb0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{coPhauThuat} == true)?"X":""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="247" y="425" width="16" height="16" uuid="a09d3930-02ef-40f1-9d57-6adcaab92914"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{coThuThuat} == true)?"X":""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="16" y="426" width="65" height="15" uuid="c1474ddf-4f65-4b7f-bda2-7f23631504e4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[- Phẫu thuật]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="164" y="426" width="65" height="15" uuid="4888b45b-72f1-4bdb-acc2-c708c290ca8f"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[- Thủ thuật]]></text>
+			</staticText>
+			<line>
+				<reportElement x="16" y="537" width="526" height="1" forecolor="#000000" uuid="a51021b8-88c0-4507-977d-20362f0a7682"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="448" y="472" width="92" height="17" forecolor="#000000" uuid="2cc496ec-f610-454e-8cb3-3c72fb09f6e5"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrPhauThuatThuThuats}!= null && $F{emrPhauThuatThuThuats}.length>0
+    && $F{emrPhauThuatThuThuats}[0]!=null)?($F{emrPhauThuatThuThuats}[0]).bacsygayme:""]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="16" y="469" width="526" height="1" forecolor="#000000" uuid="1ebdb018-8bef-43fb-9613-453ac4d2fde8"/>
+			</line>
+			<textField pattern="HH:mm dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="32" y="516" width="84" height="17" forecolor="#000000" uuid="516ed45d-6309-4512-bca8-84650766241a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrPhauThuatThuThuats}!= null && $F{emrPhauThuatThuThuats}.length>2
+    && $F{emrPhauThuatThuThuats}[2]!=null)?$P{Header_SCRIPTLET}.getTime_PTTT(($F{emrPhauThuatThuThuats}[2]).ngaygiopttt):""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="136" y="449" width="188" height="17" forecolor="#000000" uuid="0bdd2179-73b8-4246-88ef-28a23edca238"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Phương pháp phẫu thuật/vô cảm]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="348" y="515" width="95" height="17" forecolor="#000000" uuid="02d33732-9995-423b-9a3a-31de814e48e1"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrPhauThuatThuThuats}!= null && $F{emrPhauThuatThuThuats}.length> 2
+    && $F{emrPhauThuatThuThuats}[2]!=null)?($F{emrPhauThuatThuThuats}[2]).bacsithuchien:""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="348" y="494" width="95" height="17" forecolor="#000000" uuid="ea20e5b5-786e-422e-8365-5bd73ecf2b1b"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrPhauThuatThuThuats}!= null && $F{emrPhauThuatThuThuats}.length> 1
+    && $F{emrPhauThuatThuThuats}[1]!=null)?($F{emrPhauThuatThuThuats}[1]).bacsithuchien:""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="448" y="515" width="92" height="17" forecolor="#000000" uuid="65dc78bd-b54c-46dc-8e61-7e1753cc52a1"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrPhauThuatThuThuats}!= null && $F{emrPhauThuatThuThuats}.length> 2
+    && $F{emrPhauThuatThuThuats}[2]!=null)?($F{emrPhauThuatThuThuats}[2]).bacsygayme:""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="452" y="449" width="81" height="17" forecolor="#000000" uuid="e99901c4-6d7f-496b-8564-69040119f9eb"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bác sỹ gây mê]]></text>
+			</staticText>
+			<line>
+				<reportElement x="16" y="444" width="1" height="93" forecolor="#000000" uuid="145a708a-92d2-4408-abc3-398fb1b882fa"/>
+			</line>
+			<line>
+				<reportElement x="542" y="445" width="1" height="93" forecolor="#000000" uuid="2c095bdc-7ee4-4a69-b852-f83eabd97a2f"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="448" y="493" width="92" height="17" forecolor="#000000" uuid="7f54d15c-c1a4-481c-ac86-d42271ed2245"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrPhauThuatThuThuats}!= null && $F{emrPhauThuatThuThuats}.length> 1
+    && $F{emrPhauThuatThuThuats}[1]!=null)?($F{emrPhauThuatThuThuats}[1]).bacsygayme:""]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="16" y="514" width="526" height="1" forecolor="#000000" uuid="6ada4feb-8bb2-4893-b954-bb0573b0c985"/>
+			</line>
+			<textField pattern="HH:mm dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="30" y="494" width="86" height="17" forecolor="#000000" uuid="19d9f20f-b090-4a73-aa11-3a89efd6159a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrPhauThuatThuThuats}!= null && $F{emrPhauThuatThuThuats}.length>1
+    && $F{emrPhauThuatThuThuats}[1]!=null)?$P{Header_SCRIPTLET}.getTime_PTTT(($F{emrPhauThuatThuThuats}[1]).ngaygiopttt):""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="348" y="472" width="95" height="17" forecolor="#000000" uuid="c8356db6-15fb-4f87-a701-3e82caf12aec"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrPhauThuatThuThuats}!= null && $F{emrPhauThuatThuThuats}.length>0
+    && $F{emrPhauThuatThuThuats}[0]!=null)?($F{emrPhauThuatThuThuats}[0]).bacsithuchien:""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="122" y="472" width="220" height="17" forecolor="#000000" uuid="0a5056e3-728f-466d-9b47-10fa176470dc"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrPhauThuatThuThuats}!= null && $F{emrPhauThuatThuThuats}.length>0
+    && $F{emrPhauThuatThuThuats}[0]!=null)?($F{emrPhauThuatThuThuats}[0]).emrDmPhauThuThuat.ten:""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="122" y="494" width="220" height="17" forecolor="#000000" uuid="13a74095-9ade-4bbd-829e-134d7bb92544"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrPhauThuatThuThuats}!= null && $F{emrPhauThuatThuThuats}.length> 1
+    && $F{emrPhauThuatThuThuats}[1]!=null)?($F{emrPhauThuatThuThuats}[1]).emrDmPhauThuThuat.ten:""]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="445" y="444" width="1" height="94" forecolor="#000000" uuid="9b64b0c7-f520-4820-9f71-8aec8502a5a6"/>
+			</line>
+			<staticText>
+				<reportElement x="348" y="449" width="95" height="17" forecolor="#000000" uuid="831d3cb3-7105-4a87-955a-7fd64f89b2ac"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bác sỹ phẫu thuật]]></text>
+			</staticText>
+			<line>
+				<reportElement x="16" y="491" width="526" height="1" forecolor="#000000" uuid="16a5ad7b-39d3-40c7-a0b8-5c3ce23c7670"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="122" y="515" width="220" height="17" forecolor="#000000" uuid="ff72afd7-473c-4cb1-87bf-717fed7bd037"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrPhauThuatThuThuats}!= null && $F{emrPhauThuatThuThuats}.length> 2
+    && $F{emrPhauThuatThuThuats}[2]!=null)?($F{emrPhauThuatThuThuats}[2]).emrDmPhauThuThuat.ten:""]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="16" y="444" width="526" height="1" forecolor="#000000" uuid="ca1eeed1-c653-47df-ab64-3285b383a5c4"/>
+			</line>
+			<line>
+				<reportElement x="344" y="444" width="1" height="93" forecolor="#000000" uuid="58dac114-274d-4097-99af-ff0eea3a3e63"/>
+			</line>
+			<line>
+				<reportElement x="117" y="445" width="1" height="92" forecolor="#000000" uuid="8ac08cbf-c094-452e-b93c-e280b60df008"/>
+			</line>
+			<textField pattern="HH:mm dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="30" y="472" width="86" height="17" forecolor="#000000" uuid="36b56bf8-ce6f-472d-9a3f-57c47e771df3"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{emrPhauThuatThuThuats}!= null && $F{emrPhauThuatThuThuats}.length>0
+    && $F{emrPhauThuatThuThuats}[0]!=null)?$P{Header_SCRIPTLET}.getTime_PTTT(($F{emrPhauThuatThuThuats}[0]).ngaygiopttt):""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="37" y="449" width="56" height="17" forecolor="#000000" uuid="bcaf85db-9405-4a60-bddb-afc311d99b53"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Giờ, ngày]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="0" y="611" width="555" height="169" uuid="7c716e12-6046-43e9-b85d-88b7647e8fd2"/>
+				<subreport>
+					<reportElement x="13" y="1" width="539" height="163" uuid="dc68e056-fc64-49bf-ba62-0635244dde7c"/>
+					<subreportParameter name="danhSachHSBA">
+						<subreportParameterExpression><![CDATA[$P{danhSachHSBA}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "/ToBAFooter.jasper"]]></subreportExpression>
+				</subreport>
+			</frame>
+		</band>
+	</detail>
+</jasperReport>
