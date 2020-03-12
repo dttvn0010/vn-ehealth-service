@@ -27,9 +27,19 @@ public class PatientController {
         //var json = jsonParser.encodeResourceToString(patientResouce);
         
         var m = FieldUtil.getProjection(patient, 
-                "gender", "birthDate", "address","race.text", "ethic.text");
+                "gender", "birthDate", "race.text", "ethic.text");
+                
+        var identifier = FieldUtil.getListProjection(patient.identifier, "system", "value");
         
-        return ResponseEntity.ok(m);
+        var name = FieldUtil.getListProjection(patient.name, "text");
+        m.put("name", name);
+        
+        var address = FieldUtil.getListProjection(patient.address, 
+                "addressLine1", "addressLine2", "addressLine3", "district", "city", "country", "text");
+        
+        m.put("address", address);
+        
+        return ResponseEntity.ok(patient);
     }
     
 }

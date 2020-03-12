@@ -5,15 +5,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.UsageContext;
 import org.hl7.fhir.r4.model.ValueSet;
 import org.hl7.fhir.r4.model.Enumerations.PublicationStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
-
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
@@ -39,7 +37,7 @@ public class ValueSetEntity extends BaseResource {
     public List<ContactDetailEntity> contact;
     public String description;
     public List<UsageContext> useContext;
-    public List<CodeableConcept> jurisdiction;
+    public List<BaseCodeableConcept> jurisdiction;
     public boolean immutable;
     public String purpose;
     public String copyright;
@@ -62,7 +60,7 @@ public class ValueSetEntity extends BaseResource {
         ent.contact = transform(obj.getContact(), ContactDetailEntity::fromContactDetail);
         ent.description = obj.getDescription();
         ent.useContext = obj.getUseContext();
-        ent.jurisdiction = obj.getJurisdiction();
+        ent.jurisdiction = BaseCodeableConcept.fromCodeableConcept(obj.getJurisdiction());
         ent.immutable = obj.getImmutable();
         ent.purpose = obj.getPurpose();
         ent.copyright = obj.getCopyright();
@@ -86,7 +84,7 @@ public class ValueSetEntity extends BaseResource {
         obj.setContact(transform(ent.contact, ContactDetailEntity::toContactDetail));
         obj.setDescription(ent.description);
         obj.setUseContext(ent.useContext);
-        obj.setJurisdiction(ent.jurisdiction);
+        obj.setJurisdiction(BaseCodeableConcept.toCodeableConcept(ent.jurisdiction));
         obj.setImmutable(ent.immutable);
         obj.setPurpose(ent.purpose);
         obj.setCopyright(ent.copyright);

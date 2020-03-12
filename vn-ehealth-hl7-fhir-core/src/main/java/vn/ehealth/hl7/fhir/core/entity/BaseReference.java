@@ -11,13 +11,13 @@ public class BaseReference {
     public BaseIdentifier identifier;
     public String display;
  
-    public static BaseReference fromReference(Reference ref) {
+    public static BaseReference fromReference(Reference ref) {        
         if(ref == null) return null;
         
         var entity = new BaseReference();
-        entity.reference = ref.getReference();
-        entity.identifier = BaseIdentifier.fromIdentifier(ref.getIdentifier());
-        entity.display = ref.getDisplay();
+        entity.reference = ref.hasReference()? ref.getReference() : null;
+        entity.identifier = ref.hasIdentifier()? BaseIdentifier.fromIdentifier(ref.getIdentifier()) : null;
+        entity.display = ref.hasDisplay()? ref.getDisplay() : null;
         
         return entity;
     }

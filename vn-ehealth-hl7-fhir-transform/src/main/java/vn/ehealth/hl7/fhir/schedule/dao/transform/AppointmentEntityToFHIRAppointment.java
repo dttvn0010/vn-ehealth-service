@@ -18,7 +18,7 @@ public class AppointmentEntityToFHIRAppointment implements Transformer<Appointme
     public Appointment transform(AppointmentEntity ent) {
         var obj = AppointmentEntity.toAppointment(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Appointment-v1.0"));
-        obj.setExtension(ent.extension);
+        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
         obj.setId(ent.fhir_id);
         return obj;
         

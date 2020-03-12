@@ -1,6 +1,5 @@
 package vn.ehealth.hl7.fhir.schedule.dao.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +8,6 @@ import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Appointment;
 import org.hl7.fhir.r4.model.Appointment.AppointmentParticipantComponent;
 import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Period;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -26,9 +24,6 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
-import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
-import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
-import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
@@ -250,23 +245,7 @@ public class AppointmentDao implements IAppointment {
 
     private ParticipantEntity createNewParticipantEntity(ObjectId appointmentEntityId,
             AppointmentParticipantComponent object, int version) {
-        ParticipantEntity participantEntity = new ParticipantEntity();
-        // type
-        if (object.hasType()) {
-            participantEntity.type = object.getType();
-        }
-        // actor
-        if (object.hasActor()) {
-            participantEntity.actor = BaseReference.fromReference(object.getActor());
-        }
-        // required
-        if (object.hasRequired()) {
-            participantEntity.required = object.getRequired().toCode();
-        }
-        // status
-        if (object.hasStatus()) {
-            participantEntity.status = object.getStatus().toCode();
-        }
+        var participantEntity = ParticipantEntity.fromAppointmentParticipantComponent(object);
         // appointmentEntityID
         participantEntity.appointmentEntityID = appointmentEntityId.toString();
         // active

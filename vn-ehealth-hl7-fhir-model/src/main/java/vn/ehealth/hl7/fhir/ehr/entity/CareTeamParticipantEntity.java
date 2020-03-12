@@ -3,15 +3,13 @@ package vn.ehealth.hl7.fhir.ehr.entity;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.CareTeam.CareTeamParticipantComponent;
-import org.hl7.fhir.r4.model.CodeableConcept;
 
-
-
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 
 public class CareTeamParticipantEntity {
-    public List<CodeableConcept> role;
+    public List<BaseCodeableConcept> role;
     public BaseReference member;
     public BaseReference onBehalfOf;
     public BasePeriod period;
@@ -21,7 +19,7 @@ public class CareTeamParticipantEntity {
         
         var ent = new CareTeamParticipantEntity();
         
-        ent.role = obj.getRole();
+        ent.role = BaseCodeableConcept.fromCodeableConcept(obj.getRole());
         ent.member = BaseReference.fromReference(obj.getMember());
         ent.onBehalfOf = BaseReference.fromReference(obj.getOnBehalfOf());
         ent.period = BasePeriod.fromPeriod(obj.getPeriod());
@@ -34,7 +32,7 @@ public class CareTeamParticipantEntity {
         
         var obj = new CareTeamParticipantComponent();
         
-        obj.setRole(ent.role);
+        obj.setRole(BaseCodeableConcept.toCodeableConcept(ent.role));
         obj.setMember(BaseReference.toReference(ent.member));
         obj.setOnBehalfOf(BaseReference.toReference(ent.onBehalfOf));
         obj.setPeriod(BasePeriod.toPeriod(ent.period));

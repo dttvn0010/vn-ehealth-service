@@ -2,16 +2,14 @@ package vn.ehealth.hl7.fhir.clinical.entity;
 
 import java.util.List;
 
-
-
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.ClinicalImpression.ClinicalImpressionInvestigationComponent;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 
 public class ClinicalInvestigationEntity {
 
-    public CodeableConcept code;
+    public BaseCodeableConcept code;
     public List<BaseReference> item;
     
     public static ClinicalInvestigationEntity fromClinicalImpressionInvestigationComponent(ClinicalImpressionInvestigationComponent obj) {
@@ -19,7 +17,7 @@ public class ClinicalInvestigationEntity {
         
         var ent = new ClinicalInvestigationEntity();
         
-        ent.code = obj.getCode();
+        ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
         ent.item = BaseReference.fromReferenceList(obj.getItem());
         
         return ent;
@@ -30,7 +28,7 @@ public class ClinicalInvestigationEntity {
         
         var obj = new ClinicalImpressionInvestigationComponent();
         
-        obj.setCode(ent.code);
+        obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
         obj.setItem(BaseReference.toReferenceList(ent.item));
         return obj;
     }

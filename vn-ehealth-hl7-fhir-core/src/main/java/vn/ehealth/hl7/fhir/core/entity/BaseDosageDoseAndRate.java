@@ -1,33 +1,38 @@
 package vn.ehealth.hl7.fhir.core.entity;
 
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Dosage.DosageDoseAndRateComponent;
 import org.hl7.fhir.r4.model.Type;
 
 public class BaseDosageDoseAndRate {
 
-    public CodeableConcept type;
+    public BaseCodeableConcept type;
     public Type dose;
     public Type rate;
  
-    public static BaseDosageDoseAndRate fromDosageDoseAndRateComponent(DosageDoseAndRateComponent item) {
-        if(item == null) return null;
+    public static BaseDosageDoseAndRate fromDosageDoseAndRateComponent(DosageDoseAndRateComponent obj) {
+        if(obj == null) return null;
         
-        var entity = new BaseDosageDoseAndRate();
-        entity.type = item.getType();
-        entity.dose = item.getDose();
-        entity.rate = item.getRate();
+        var ent = new BaseDosageDoseAndRate();
         
-        return entity;
+        if(obj.hasType())
+            ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
+        
+        if(obj.hasDose())
+            ent.dose = obj.getDose();
+        
+        if(obj.hasRate())
+            ent.rate = obj.getRate();
+        
+        return ent;
     }    
     
-    public static DosageDoseAndRateComponent toDosageDoseAndRateComponent(BaseDosageDoseAndRate entity) {
-        if(entity == null) return null;
+    public static DosageDoseAndRateComponent toDosageDoseAndRateComponent(BaseDosageDoseAndRate ent) {
+        if(ent == null) return null;
                 
-        var item = new DosageDoseAndRateComponent();
-        item.setType(entity.type);
-        item.setDose(entity.dose);
-        item.setRate(entity.rate);
-        return item;
+        var obj = new DosageDoseAndRateComponent();
+        obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
+        obj.setDose(ent.dose);
+        obj.setRate(ent.rate);
+        return obj;
     }
 }

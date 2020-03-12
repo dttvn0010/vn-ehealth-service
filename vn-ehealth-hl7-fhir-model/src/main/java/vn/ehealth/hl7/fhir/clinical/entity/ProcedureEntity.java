@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.Procedure.ProcedureStatus;
 import org.hl7.fhir.r4.model.Type;
@@ -12,6 +11,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -29,25 +29,25 @@ public class ProcedureEntity extends BaseResource {
     public String status;
     //public Boolean notDone;
     //public CodeableConcept notDoneReason;
-    public CodeableConcept category;
-    public CodeableConcept code;
+    public BaseCodeableConcept category;
+    public BaseCodeableConcept code;
     public BaseReference subject;
     //public BaseReference context;
     public Type performed;
     public List<ProcedurePerformerEntity> performer;
     public BaseReference location;
-    public List<CodeableConcept> reasonCode;
+    public List<BaseCodeableConcept> reasonCode;
     public List<BaseReference> reasonReference;
-    public List<CodeableConcept> bodySite;
-    public CodeableConcept outcome;
+    public List<BaseCodeableConcept> bodySite;
+    public BaseCodeableConcept outcome;
     public List<BaseReference> report;
-    public List<CodeableConcept> complication;
+    public List<BaseCodeableConcept> complication;
     public List<BaseReference> complicationDetail;
-    public List<CodeableConcept> followUp;
+    public List<BaseCodeableConcept> followUp;
     public List<BaseAnnotation> note;
     public List<ProcedureFocalDeviceEntity> focalDevice;
     public List<BaseReference> usedReference;
-    public List<CodeableConcept> usedCode;
+    public List<BaseCodeableConcept> usedCode;
     
     public static ProcedureEntity fromProcedure(Procedure obj) {
         if(obj == null) return null;
@@ -58,23 +58,23 @@ public class ProcedureEntity extends BaseResource {
         ent.basedOn = BaseReference.fromReferenceList(obj.getBasedOn());
         ent.partOf = BaseReference.fromReferenceList(obj.getPartOf());
         ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.category = obj.getCategory();
-        ent.code = obj.getCode();
+        ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
+        ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
         ent.subject = BaseReference.fromReference(obj.getSubject());
         ent.performed = obj.getPerformed();
         ent.performer = transform(obj.getPerformer(), ProcedurePerformerEntity::fromProcedurePerformerComponent);
         ent.location = BaseReference.fromReference(obj.getLocation());
-        ent.reasonCode = obj.getReasonCode();
-        ent.bodySite = obj.getBodySite();
-        ent.outcome = obj.getOutcome();
+        ent.reasonCode = BaseCodeableConcept.fromCodeableConcept(obj.getReasonCode());
+        ent.bodySite = BaseCodeableConcept.fromCodeableConcept(obj.getBodySite());
+        ent.outcome = BaseCodeableConcept.fromCodeableConcept(obj.getOutcome());
         ent.report = BaseReference.fromReferenceList(obj.getReport());
-        ent.complication = obj.getComplication();
+        ent.complication = BaseCodeableConcept.fromCodeableConcept(obj.getComplication());
         ent.complicationDetail = BaseReference.fromReferenceList(obj.getComplicationDetail());
-        ent.followUp = obj.getFollowUp();
+        ent.followUp = BaseCodeableConcept.fromCodeableConcept(obj.getFollowUp());
         ent.note = BaseAnnotation.fromAnnotationList(obj.getNote());
         ent.focalDevice = transform(obj.getFocalDevice(), ProcedureFocalDeviceEntity::fromProcedureFocalDeviceComponent);
         ent.usedReference = BaseReference.fromReferenceList(obj.getUsedReference());
-        ent.usedCode = obj.getUsedCode();
+        ent.usedCode = BaseCodeableConcept.fromCodeableConcept(obj.getUsedCode());
         
         return ent;
     }
@@ -88,23 +88,23 @@ public class ProcedureEntity extends BaseResource {
         obj.setBasedOn(BaseReference.toReferenceList(ent.basedOn));
         obj.setPartOf(BaseReference.toReferenceList(ent.partOf));
         obj.setStatus(ProcedureStatus.fromCode(ent.status));
-        obj.setCategory(ent.category);
-        obj.setCode(ent.code);
+        obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
+        obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
         obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setPerformed(ent.performed);
         obj.setPerformer(transform(ent.performer, ProcedurePerformerEntity::toProcedurePerformerComponent));
         obj.setLocation(BaseReference.toReference(ent.location));
-        obj.setReasonCode(ent.reasonCode);
-        obj.setBodySite(ent.bodySite);
-        obj.setOutcome(ent.outcome);
+        obj.setReasonCode(BaseCodeableConcept.toCodeableConcept(ent.reasonCode));
+        obj.setBodySite(BaseCodeableConcept.toCodeableConcept(ent.bodySite));
+        obj.setOutcome(BaseCodeableConcept.toCodeableConcept(ent.outcome));
         obj.setReport(BaseReference.toReferenceList(ent.report));
-        obj.setComplication(ent.complication);
+        obj.setComplication(BaseCodeableConcept.toCodeableConcept(ent.complication));
         obj.setComplicationDetail(BaseReference.toReferenceList(ent.complicationDetail));
-        obj.setFollowUp(ent.followUp);
+        obj.setFollowUp(BaseCodeableConcept.toCodeableConcept(ent.followUp));
         obj.setNote(BaseAnnotation.toAnnotationList(ent.note));
         obj.setFocalDevice(transform(ent.focalDevice, ProcedureFocalDeviceEntity::toProcedureFocalDeviceComponent));
         obj.setUsedReference(BaseReference.toReferenceList(ent.usedReference));
-        obj.setUsedCode(ent.usedCode);
+        obj.setUsedCode(BaseCodeableConcept.toCodeableConcept(ent.usedCode));
         
         return obj;
     }

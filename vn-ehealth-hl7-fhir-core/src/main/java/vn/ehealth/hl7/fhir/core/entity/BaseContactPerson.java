@@ -2,13 +2,12 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.List;
 
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Patient.ContactComponent;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 public class BaseContactPerson {
-    public List<CodeableConcept> relationship;
+    public List<BaseCodeableConcept> relationship;
     public BaseHumanName name;
     public List<BaseContactPoint> telecom;
     public List<BaseAddress> address;
@@ -16,19 +15,19 @@ public class BaseContactPerson {
     public BaseReference organization;
     public BasePeriod period;
     
-    public static BaseContactPerson fromContactComponent(ContactComponent object) {
-        if(object == null) return null;
+    public static BaseContactPerson fromContactComponent(ContactComponent obj) {        
+        if(obj == null) return null;
         
-        var entity = new BaseContactPerson();
+        var ent = new BaseContactPerson();
               
-        entity.relationship = object.getRelationship();
-        entity.name = BaseHumanName.fromHumanName(object.getName());
-        entity.telecom = transform(object.getTelecom(), BaseContactPoint::fromContactPoint);
-        entity.address = List.of(BaseAddress.fromAddress(object.getAddress()));
-        entity.organization = BaseReference.fromReference(object.getOrganization());
-        entity.period = BasePeriod.fromPeriod(object.getPeriod());
+        ent.relationship = obj.hasRelationship()? transform(obj.getRelationship(), BaseCodeableConcept::fromCodeableConcept) : null;
+        ent.name = obj.hasName()? BaseHumanName.fromHumanName(obj.getName()) : null;
+        ent.telecom = obj.hasTelecom()? transform(obj.getTelecom(), BaseContactPoint::fromContactPoint) : null;
+        ent.address = obj.hasAddress()? List.of(BaseAddress.fromAddress(obj.getAddress())) : null;
+        ent.organization = obj.hasOrganization()? BaseReference.fromReference(obj.getOrganization()) : null;
+        ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
         
-        return entity;
+        return ent;
     }
     
     public static List<BaseContactPerson> fromContactComponentList(List<ContactComponent> lst) {
@@ -39,7 +38,7 @@ public class BaseContactPerson {
         if(entity == null) return null;
         
         var object = new ContactComponent();
-        object.setRelationship(entity.relationship);
+        object.setRelationship(transform(entity.relationship, BaseCodeableConcept::toCodeableConcept));
         object.setName(BaseHumanName.toHumanName(entity.name));
         object.setTelecom(transform(entity.telecom, BaseContactPoint::toContactPoint));
 

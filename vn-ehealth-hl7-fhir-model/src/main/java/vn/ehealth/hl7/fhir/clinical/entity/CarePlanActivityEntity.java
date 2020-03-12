@@ -3,14 +3,14 @@ package vn.ehealth.hl7.fhir.clinical.entity;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.CarePlan.CarePlanActivityComponent;
-import org.hl7.fhir.r4.model.CodeableConcept;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 
 public class CarePlanActivityEntity {
     
-    public List<CodeableConcept> outcomeCodeableConcept;
+    public List<BaseCodeableConcept> outcomeCodeableConcept;
     public List<BaseReference> outcomeReference;
     public List<BaseAnnotation> progress;
     public BaseReference reference;
@@ -21,7 +21,7 @@ public class CarePlanActivityEntity {
         if(obj == null) return null;
                 
         var ent = new CarePlanActivityEntity();
-        ent.outcomeCodeableConcept = obj.getOutcomeCodeableConcept();
+        ent.outcomeCodeableConcept = BaseCodeableConcept.fromCodeableConcept(obj.getOutcomeCodeableConcept());
         ent.outcomeReference = BaseReference.fromReferenceList(obj.getOutcomeReference());
         ent.progress = BaseAnnotation.fromAnnotationList(obj.getProgress());
         ent.reference = BaseReference.fromReference(obj.getReference());
@@ -35,7 +35,7 @@ public class CarePlanActivityEntity {
         
         var obj = new CarePlanActivityComponent();
         
-        obj.setOutcomeCodeableConcept(ent.outcomeCodeableConcept);
+        obj.setOutcomeCodeableConcept(BaseCodeableConcept.toCodeableConcept(ent.outcomeCodeableConcept));
         obj.setOutcomeReference(BaseReference.toReferenceList(ent.outcomeReference));
         obj.setProgress(BaseAnnotation.toAnnotationList(ent.progress));
         obj.setReference(BaseReference.toReference(ent.reference));

@@ -6,12 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.ImagingStudy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -37,8 +37,8 @@ public class ImagingStudyEntity extends BaseResource {
     public int numberOfSeries;
     public int numberOfInstances;
     public BaseReference procedureReference;
-    public List<CodeableConcept> procedureCode;
-    public List<CodeableConcept> reasonCode;
+    public List<BaseCodeableConcept> procedureCode;
+    public List<BaseCodeableConcept> reasonCode;
     public String description;
     public List<ImagingStudySeriesEntity> series;
     
@@ -58,8 +58,8 @@ public class ImagingStudyEntity extends BaseResource {
         ent.numberOfSeries = obj.getNumberOfSeries();
         ent.numberOfInstances = obj.getNumberOfInstances();
         ent.procedureReference = BaseReference.fromReference(obj.getProcedureReference());
-        ent.procedureCode = obj.getProcedureCode();
-        ent.reasonCode = obj.getReasonCode();
+        ent.procedureCode = BaseCodeableConcept.fromCodeableConcept(obj.getProcedureCode());
+        ent.reasonCode = BaseCodeableConcept.fromCodeableConcept(obj.getReasonCode());
         ent.description = obj.getDescription();
         ent.series = transform(obj.getSeries(), ImagingStudySeriesEntity::fromImagingStudySeriesComponent);
         
@@ -81,7 +81,8 @@ public class ImagingStudyEntity extends BaseResource {
         obj.setNumberOfSeries(ent.numberOfSeries);
         obj.setNumberOfInstances(ent.numberOfInstances);
         obj.setProcedureReference(BaseReference.toReference(ent.procedureReference));
-        obj.setReasonCode(ent.reasonCode);
+        obj.setProcedureCode(BaseCodeableConcept.toCodeableConcept(ent.procedureCode));
+        obj.setReasonCode(BaseCodeableConcept.toCodeableConcept(ent.reasonCode));
         obj.setDescription(ent.description);
         obj.setSeries(transform(ent.series,ImagingStudySeriesEntity::toImagingStudySeriesComponent));
         

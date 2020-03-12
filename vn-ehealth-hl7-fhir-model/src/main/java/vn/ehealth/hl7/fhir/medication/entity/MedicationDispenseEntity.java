@@ -1,18 +1,16 @@
 package vn.ehealth.hl7.fhir.medication.entity;
 
 import java.util.Date;
-
-
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.MedicationDispense;
 import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseDosage;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
@@ -28,14 +26,14 @@ public class MedicationDispenseEntity extends BaseResource {
     public List<BaseReference> partOf;
     //Enumeration<MedicationDispenseStatus>
     public String status;
-    public CodeableConcept category;
+    public BaseCodeableConcept category;
     public Type medication;
     public BaseReference subject;
     //public BaseReference context;
     public List<BaseReference> supportingInformation;
     public List<MedicationDispensePerformerEntity> performer;
     public List<BaseReference> authorizingPrescription;
-    public CodeableConcept type;
+    public BaseCodeableConcept type;
     public BaseQuantity quantity;
     public BaseQuantity daysSupply;
     public Date whenPrepared;
@@ -57,13 +55,13 @@ public class MedicationDispenseEntity extends BaseResource {
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
         ent.partOf = BaseReference.fromReferenceList(obj.getPartOf());
         ent.status = obj.getStatus();
-        ent.category = obj.getCategory();
+        ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
         ent.medication = obj.getMedication();
         ent.subject = BaseReference.fromReference(obj.getSubject());
         ent.supportingInformation = BaseReference.fromReferenceList(obj.getSupportingInformation());
         ent.performer = transform(obj.getPerformer(),  MedicationDispensePerformerEntity::fromMedicationDispensePerformerComponent);
         ent.authorizingPrescription = BaseReference.fromReferenceList(obj.getAuthorizingPrescription());
-        ent.type = obj.getType();
+        ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
         ent.quantity = BaseQuantity.fromQuantity(obj.getQuantity());
         ent.daysSupply = BaseQuantity.fromQuantity(obj.getDaysSupply());
         ent.whenPrepared = obj.getWhenPrepared();
@@ -86,14 +84,14 @@ public class MedicationDispenseEntity extends BaseResource {
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
         obj.setPartOf(BaseReference.toReferenceList(ent.partOf));
         obj.setStatus(ent.status);
-        obj.setCategory(ent.category);
+        obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
         obj.setMedication(ent.medication);
         obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setSupportingInformation(BaseReference.toReferenceList(ent.supportingInformation));
         obj.setPerformer(transform(ent.performer, MedicationDispensePerformerEntity::toMedicationDispensePerformerComponent));
         obj.setAuthorizingPrescription(BaseReference.toReferenceList(ent.authorizingPrescription));
-        obj.setType(ent.type);
+        obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
         obj.setQuantity(BaseQuantity.toQuantity(ent.quantity));
         obj.setDaysSupply(BaseQuantity.toQuantity(ent.daysSupply));
         obj.setWhenPrepared(ent.whenPrepared);

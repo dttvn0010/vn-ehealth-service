@@ -3,7 +3,6 @@ package vn.ehealth.hl7.fhir.provider.entity;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.PractitionerRole;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAvailableTime;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseNotAvailableTime;
@@ -26,8 +26,8 @@ public class PractitionerRoleEntity extends BaseResource {
     public BasePeriod period;
     public BaseReference practitioner;
     public BaseReference organization;
-    public List<CodeableConcept> code;
-    public List<CodeableConcept> specialty;
+    public List<BaseCodeableConcept> code;
+    public List<BaseCodeableConcept> specialty;
     public List<BaseReference> location;
     public List<BaseReference> healthcareService;
     public List<BaseContactPoint> telecom;
@@ -42,8 +42,8 @@ public class PractitionerRoleEntity extends BaseResource {
         ent.period = BasePeriod.fromPeriod(obj.getPeriod());
         ent.practitioner = BaseReference.fromReference(obj.getPractitioner());
         ent.organization = BaseReference.fromReference(obj.getOrganization());
-        ent.code = obj.getCode();
-        ent.specialty = obj.getSpecialty();
+        ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
+        ent.specialty = BaseCodeableConcept.fromCodeableConcept(obj.getSpecialty());
         ent.location = BaseReference.fromReferenceList(obj.getLocation());
         ent.healthcareService = BaseReference.fromReferenceList(obj.getHealthcareService());
         ent.telecom = BaseContactPoint.fromContactPointList(obj.getTelecom());
@@ -60,8 +60,8 @@ public class PractitionerRoleEntity extends BaseResource {
         obj.setPeriod(BasePeriod.toPeriod(ent.period));
         obj.setPractitioner(BaseReference.toReference(ent.practitioner));
         obj.setOrganization(BaseReference.toReference(ent.organization));
-        obj.setCode(ent.code);
-        obj.setSpecialty(ent.specialty);
+        obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
+        obj.setSpecialty(BaseCodeableConcept.toCodeableConcept(ent.specialty));
         obj.setLocation(BaseReference.toReferenceList(ent.location));
         obj.setHealthcareService(BaseReference.toReferenceList(ent.healthcareService));
         obj.setTelecom(BaseContactPoint.toContactPointList(ent.telecom));

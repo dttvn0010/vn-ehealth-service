@@ -2,37 +2,35 @@ package vn.ehealth.hl7.fhir.ehr.entity;
 
 import java.util.List;
 
-
-
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Encounter.EncounterHospitalizationComponent;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 
 public class HospitalizationEntity{
     public BaseIdentifier preAdmissionIdentifier;
     public BaseReference origin;
-    public CodeableConcept admitSource;
-    public CodeableConcept reAdmission;
-    public List<CodeableConcept> dietPreference;
-    public List<CodeableConcept> specialCourtesy;
-    public List<CodeableConcept> specialArrangement;
+    public BaseCodeableConcept admitSource;
+    public BaseCodeableConcept reAdmission;
+    public List<BaseCodeableConcept> dietPreference;
+    public List<BaseCodeableConcept> specialCourtesy;
+    public List<BaseCodeableConcept> specialArrangement;
     public BaseReference destination;
-    public CodeableConcept dischargeDisposition;
+    public BaseCodeableConcept dischargeDisposition;
     
     public static HospitalizationEntity fromEncounterHospitalizationComponent(EncounterHospitalizationComponent obj) {
         if(obj == null) return null;
         var ent = new HospitalizationEntity();
         ent.preAdmissionIdentifier = BaseIdentifier.fromIdentifier(obj.getPreAdmissionIdentifier());
         ent.origin = BaseReference.fromReference(obj.getOrigin());
-        ent.admitSource = obj.getAdmitSource();
-        ent.reAdmission = obj.getReAdmission();
-        ent.dietPreference = obj.getDietPreference();
-        ent.specialCourtesy = obj.getSpecialCourtesy();
-        ent.specialArrangement = obj.getSpecialArrangement();
+        ent.admitSource = BaseCodeableConcept.fromCodeableConcept(obj.getAdmitSource());
+        ent.reAdmission = BaseCodeableConcept.fromCodeableConcept(obj.getReAdmission());
+        ent.dietPreference = BaseCodeableConcept.fromCodeableConcept(obj.getDietPreference());
+        ent.specialCourtesy = BaseCodeableConcept.fromCodeableConcept(obj.getSpecialCourtesy());
+        ent.specialArrangement = BaseCodeableConcept.fromCodeableConcept(obj.getSpecialArrangement());
         ent.destination = BaseReference.fromReference(obj.getDestination());
-        ent.dischargeDisposition = obj.getDischargeDisposition();
+        ent.dischargeDisposition = BaseCodeableConcept.fromCodeableConcept(obj.getDischargeDisposition());
         return ent;
     }
     
@@ -41,13 +39,13 @@ public class HospitalizationEntity{
         var obj = new EncounterHospitalizationComponent();
         obj.setPreAdmissionIdentifier(BaseIdentifier.toIdentifier(ent.preAdmissionIdentifier));
         obj.setOrigin(BaseReference.toReference(ent.origin));
-        obj.setAdmitSource(ent.admitSource);
-        obj.setReAdmission(ent.reAdmission);
-        obj.setDietPreference(ent.dietPreference);
-        obj.setSpecialCourtesy(ent.specialCourtesy);
-        obj.setSpecialArrangement(ent.specialArrangement);
+        obj.setAdmitSource(BaseCodeableConcept.toCodeableConcept(ent.admitSource));
+        obj.setReAdmission(BaseCodeableConcept.toCodeableConcept(ent.reAdmission));
+        obj.setDietPreference(BaseCodeableConcept.toCodeableConcept(ent.dietPreference));
+        obj.setSpecialCourtesy(BaseCodeableConcept.toCodeableConcept(ent.specialCourtesy));
+        obj.setSpecialArrangement(BaseCodeableConcept.toCodeableConcept(ent.specialArrangement));
         obj.setDestination(BaseReference.toReference(ent.destination));
-        obj.setDischargeDisposition(ent.dischargeDisposition);
+        obj.setDischargeDisposition(BaseCodeableConcept.toCodeableConcept(ent.dischargeDisposition));
         return obj;
     }
 }

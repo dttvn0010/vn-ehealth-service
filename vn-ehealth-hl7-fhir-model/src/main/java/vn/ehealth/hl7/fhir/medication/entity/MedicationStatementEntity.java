@@ -2,12 +2,10 @@ package vn.ehealth.hl7.fhir.medication.entity;
 
 import java.util.Date;
 
-
 import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.MedicationStatement;
 import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.MedicationStatement.MedicationStatementStatus;
@@ -15,6 +13,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseDosage;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -29,7 +28,7 @@ public class MedicationStatementEntity extends BaseResource {
     public List<BaseReference> partOf;
     public BaseReference context;
     public String status;
-    public CodeableConcept category;
+    public BaseCodeableConcept category;
     public Type medication;
     public Type effective;
     public Date dateAsserted;
@@ -38,7 +37,7 @@ public class MedicationStatementEntity extends BaseResource {
     public List<BaseReference> derivedFrom;
     //public String taken;
     //public List<CodeableConcept> reasonNotTaken;
-    public List<CodeableConcept> reasonCode;
+    public List<BaseCodeableConcept> reasonCode;
     public List<BaseReference> reasonReference;
     public List<BaseAnnotation> note;
     public List<BaseDosage> dosage;
@@ -52,14 +51,14 @@ public class MedicationStatementEntity extends BaseResource {
         ent.partOf = BaseReference.fromReferenceList(obj.getPartOf());
         ent.context = BaseReference.fromReference(obj.getContext());
         ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.category = obj.getCategory();
+        ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
         ent.medication = obj.getMedication();
         ent.effective = obj.getEffective();
         ent.dateAsserted = obj.getDateAsserted();
         ent.informationSource = BaseReference.fromReference(obj.getInformationSource());
         ent.subject = BaseReference.fromReference(obj.getSubject());
         ent.derivedFrom = BaseReference.fromReferenceList(obj.getDerivedFrom());
-        ent.reasonCode = obj.getReasonCode();
+        ent.reasonCode = BaseCodeableConcept.fromCodeableConcept(obj.getReasonCode());
         ent.reasonReference = BaseReference.fromReferenceList(obj.getReasonReference());
         ent.note = BaseAnnotation.fromAnnotationList(obj.getNote());
         ent.dosage = BaseDosage.fromDosageList(obj.getDosage());
@@ -75,14 +74,14 @@ public class MedicationStatementEntity extends BaseResource {
         obj.setPartOf(BaseReference.toReferenceList(ent.partOf));
         obj.setContext(BaseReference.toReference(ent.context));        
         obj.setStatus(MedicationStatementStatus.fromCode(ent.status));
-        obj.setCategory(ent.category);
+        obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
         obj.setMedication(ent.medication);
         obj.setEffective(ent.effective);
         obj.setDateAsserted(ent.dateAsserted);
         obj.setInformationSource(BaseReference.toReference(ent.informationSource));
         obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setDerivedFrom(BaseReference.toReferenceList(ent.derivedFrom));
-        obj.setReasonCode(ent.reasonCode);
+        obj.setReasonCode(BaseCodeableConcept.toCodeableConcept(ent.reasonCode));
         obj.setReasonReference(BaseReference.toReferenceList(ent.reasonReference));
         obj.setNote(BaseAnnotation.toAnnotationList(ent.note));
         obj.setDosage(BaseDosage.toDosageList(ent.dosage));

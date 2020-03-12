@@ -13,7 +13,7 @@ public class EpisodeOfCareEntityToFHIREpisodeOfCare implements Transformer<Episo
     public EpisodeOfCare transform(EpisodeOfCareEntity ent) {
         var obj = EpisodeOfCareEntity.toEpisodeOfCare(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "EpisodeOfCare-v1.0"));
-        obj.setExtension(ent.extension);
+        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
         obj.setId(ent.fhir_id);
         return obj;
         

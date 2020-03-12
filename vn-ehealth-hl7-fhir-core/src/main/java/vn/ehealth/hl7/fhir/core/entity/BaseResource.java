@@ -3,10 +3,6 @@ package vn.ehealth.hl7.fhir.core.entity;
 import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.CanonicalType;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.Extension;
-
 public abstract class BaseResource {
     public Date resCreated;
     public Date resUpdated;
@@ -14,11 +10,12 @@ public abstract class BaseResource {
     public String resMessage;
     public String resource;
     public BaseGeneratedText text;
-    public List<CanonicalType> profile;
+    public List<String> profile;
     public Integer version = 1;
     public boolean active;
-    public List<Coding> security;
-    public List<Coding> tag;
-    public List<Extension> extension;
+    public List<BaseCoding> security;
+    public List<BaseCoding> tag;
+    
+    public List<BaseExtension> extension;
     public String fhir_id;
 }

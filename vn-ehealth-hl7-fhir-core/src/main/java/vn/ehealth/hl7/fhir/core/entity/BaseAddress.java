@@ -5,11 +5,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.Address;
-import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Address.AddressType;
 import org.hl7.fhir.r4.model.Address.AddressUse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 /**
@@ -31,41 +29,39 @@ public class BaseAddress {
     public String postalCode;
     public String text;
     
-    @JsonIgnore
-    public List<Extension> extension;
+    public List<BaseExtension> extension;
     public BasePeriod period;
     
-    public static BaseAddress fromAddress(Address object) {
-        if(object == null) {
-            return null;
-        }
+    public static BaseAddress fromAddress(Address obj) {
         
-        var entity = new BaseAddress();
-        if (object.hasLine()) {
-            if (object.getLine().get(0) != null && !object.getLine().get(0).isEmpty()) {
-                entity.addressLine1 = object.getLine().get(0).getValue();
+        if(obj == null) return null;
+        
+        var ent = new BaseAddress();
+        if (obj.hasLine()) {
+            if (obj.getLine().get(0) != null && !obj.getLine().get(0).isEmpty()) {
+                ent.addressLine1 = obj.getLine().get(0).getValue();
             }
 
-            if (object.getLine().size() > 1 && object.getLine().get(1) != null && !object.getLine().get(1).isEmpty()) {
-                entity.addressLine2 = object.getLine().get(1).getValue();
+            if (obj.getLine().size() > 1 && obj.getLine().get(1) != null && !obj.getLine().get(1).isEmpty()) {
+                ent.addressLine2 = obj.getLine().get(1).getValue();
             }
   
-            if (object.getLine().size() > 2 && object.getLine().get(2) != null && !object.getLine().get(2).isEmpty()) {
-                entity.addressLine3 = object.getLine().get(2).getValue();
+            if (obj.getLine().size() > 2 && obj.getLine().get(2) != null && !obj.getLine().get(2).isEmpty()) {
+                ent.addressLine3 = obj.getLine().get(2).getValue();
             }
         }
         
-        entity.district = object.getDistrict();
-        entity.city = object.getCity();
-        entity.state = object.getState();
-        entity.country = object.getCountry();
-        entity.addressUse = object.getUse().toCode();
-        entity.addressType = object.getType().toCode();
-        entity.postalCode = object.getPostalCode();
-        entity.text = object.getText();
-        entity.extension = object.getExtension();
-        entity.period = BasePeriod.fromPeriod(object.getPeriod());
-        return entity;
+        ent.district = obj.hasDistrict()? obj.getDistrict() : null;
+        ent.city = obj.hasCity()? obj.getCity() : null;
+        ent.state = obj.hasState()? obj.getState() : null;
+        ent.country = obj.hasCountry()? obj.getCountry() : null;
+        ent.addressUse = obj.hasUse()? obj.getUse().toCode() : null;
+        ent.addressType = obj.hasType()? obj.getType().toCode() : null;
+        ent.postalCode = obj.hasPostalCode()? obj.getPostalCode() : null;
+        ent.text = obj.hasText()? obj.getText() : null;
+        ent.extension = obj.hasExtension()? transform(obj.getExtension(), BaseExtension::fromExtension) : null;
+        ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
+        return ent;
     }
     
     public static List<BaseAddress> fromAddressList(List<Address> lst) {
@@ -100,7 +96,7 @@ public class BaseAddress {
         object.setType(AddressType.fromCode(entity.addressType));
         object.setPostalCode(entity.postalCode);
         object.setText(entity.text);
-        object.setExtension(entity.extension);
+        object.setExtension(transform(entity.extension, BaseExtension::toExtension));
         object.setPeriod(BasePeriod.toPeriod(entity.period));
       
         return object;

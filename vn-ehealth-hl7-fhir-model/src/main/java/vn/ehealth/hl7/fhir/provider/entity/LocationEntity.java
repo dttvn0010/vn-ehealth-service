@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Location;
 import org.hl7.fhir.r4.model.Location.LocationMode;
@@ -16,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseGeoLocation;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -35,10 +35,10 @@ public class LocationEntity extends BaseResource{
     public List<String> alias;
     public String description;
     public String mode;
-    public List<CodeableConcept> type;
+    public List<BaseCodeableConcept> type;
     public List<BaseContactPoint> telecom;
     public BaseAddress address;
-    public CodeableConcept physicalType;
+    public BaseCodeableConcept physicalType;
     public BaseGeoLocation position;
     public BaseReference managingOrganization;
     public BaseReference partOf;
@@ -54,10 +54,10 @@ public class LocationEntity extends BaseResource{
         ent.alias = transform(obj.getAlias(), x -> x.asStringValue());
         ent.description = obj.getDescription();
         ent.mode = Optional.ofNullable(obj.getMode()).map(x -> x.toCode()).orElse(null);
-        ent.type = obj.getType();
+        ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
         ent.telecom = BaseContactPoint.fromContactPointList(obj.getTelecom());
         ent.address = BaseAddress.fromAddress(obj.getAddress());
-        ent.physicalType = obj.getPhysicalType();
+        ent.physicalType = BaseCodeableConcept.fromCodeableConcept(obj.getPhysicalType());
         ent.position = BaseGeoLocation.fromLocationPositionComponent(obj.getPosition());
         ent.managingOrganization = BaseReference.fromReference(obj.getManagingOrganization());
         ent.partOf = BaseReference.fromReference(obj.getPartOf());
@@ -75,10 +75,10 @@ public class LocationEntity extends BaseResource{
         obj.setAlias(transform(ent.alias, x -> new StringType(x)));
         obj.setDescription(ent.description);
         obj.setMode(LocationMode.fromCode(ent.mode));
-        obj.setType(ent.type);
+        obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
         obj.setTelecom(BaseContactPoint.toContactPointList(ent.telecom));
         obj.setAddress(BaseAddress.toAddress(ent.address));
-        obj.setPhysicalType(ent.physicalType);
+        obj.setPhysicalType(BaseCodeableConcept.toCodeableConcept(ent.physicalType));
         obj.setPosition(BaseGeoLocation.toLocationPositionComponent(ent.position));
         obj.setManagingOrganization(BaseReference.toReference(ent.managingOrganization));
         obj.setPartOf(BaseReference.toReference(ent.partOf));

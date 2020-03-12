@@ -19,7 +19,7 @@ public class CodeSystemEntityToFHIRCodeSystem implements Transformer<CodeSystemE
     public CodeSystem transform(CodeSystemEntity ent) {
         var obj = CodeSystemEntity.toCodeSystem(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "CodeSystem-v1.0"));
-        obj.setExtension(ent.extension);
+        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
         obj.setId(ent.fhir_id);
         return obj;
         

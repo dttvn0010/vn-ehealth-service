@@ -18,7 +18,7 @@ public class ImmunizationEntityToFHIRImmunization implements Transformer<Immuniz
     public Immunization transform(ImmunizationEntity ent) {
         var obj = ImmunizationEntity.toImmunization(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Immunization-v1.0"));
-        obj.setExtension(ent.extension);
+        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
         obj.setId(ent.fhir_id);
         return obj;
         

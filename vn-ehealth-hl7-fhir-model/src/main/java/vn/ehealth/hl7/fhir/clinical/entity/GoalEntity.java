@@ -5,13 +5,13 @@ import java.util.Date;
 
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Goal;
 import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -22,9 +22,9 @@ public class GoalEntity extends BaseResource {
     public ObjectId id;
     public List<BaseIdentifier> identifier;
     //public String status;
-    public List<CodeableConcept> category;
-    public CodeableConcept priority;
-    public CodeableConcept description;
+    public List<BaseCodeableConcept> category;
+    public BaseCodeableConcept priority;
+    public BaseCodeableConcept description;
     public BaseReference subject;
     public Type start;
     /** target **/
@@ -33,7 +33,7 @@ public class GoalEntity extends BaseResource {
     public BaseReference expressedBy;
     public List<BaseReference> addresses;
     public List<BaseAnnotation> note;
-    public List<CodeableConcept> outcomeCode;
+    public List<BaseCodeableConcept> outcomeCode;
     public List<BaseReference> outcomeReference;
     
     public static GoalEntity fromGoalEntity(Goal obj) {
@@ -42,16 +42,16 @@ public class GoalEntity extends BaseResource {
         var ent = new GoalEntity();
         
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.category = obj.getCategory();
-        ent.priority = obj.getPriority();
-        ent.description = obj.getDescription();
+        ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
+        ent.priority = BaseCodeableConcept.fromCodeableConcept(obj.getPriority());
+        ent.description = BaseCodeableConcept.fromCodeableConcept(obj.getDescription());
         ent.subject = BaseReference.fromReference(obj.getSubject());
         ent.start = obj.getStart();
         ent.statusDate = obj.getStatusDate();
         ent.statusReason = obj.getStatusReason();
         ent.addresses = BaseReference.fromReferenceList(obj.getAddresses());
         ent.note = BaseAnnotation.fromAnnotationList(obj.getNote());
-        ent.outcomeCode = obj.getOutcomeCode();
+        ent.outcomeCode = BaseCodeableConcept.fromCodeableConcept(obj.getOutcomeCode());
         ent.outcomeReference = BaseReference.fromReferenceList(obj.getOutcomeReference());
         
         return ent;
@@ -63,16 +63,16 @@ public class GoalEntity extends BaseResource {
         var obj = new Goal();
         
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
-        obj.setCategory(ent.category);
-        obj.setPriority(ent.priority);
-        obj.setDescription(ent.description);
+        obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
+        obj.setPriority(BaseCodeableConcept.toCodeableConcept(ent.priority));
+        obj.setDescription(BaseCodeableConcept.toCodeableConcept(ent.description));
         obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setStart(ent.start);
         obj.setStatusDate(ent.statusDate);
         obj.setStatusReason(ent.statusReason);
         obj.setAddresses(BaseReference.toReferenceList(ent.addresses));
         obj.setNote(BaseAnnotation.toAnnotationList(ent.note));
-        obj.setOutcomeCode(ent.outcomeCode);
+        obj.setOutcomeCode(BaseCodeableConcept.toCodeableConcept(ent.outcomeCode));
         obj.setOutcomeReference(BaseReference.toReferenceList(ent.outcomeReference));
         
         return obj;

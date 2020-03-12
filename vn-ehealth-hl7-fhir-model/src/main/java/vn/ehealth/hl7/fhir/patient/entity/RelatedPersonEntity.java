@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.r4.model.RelatedPerson;
 import org.springframework.data.annotation.Id;
@@ -13,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPerson;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseHumanName;
@@ -27,7 +27,7 @@ public class RelatedPersonEntity extends BaseResource {
     public ObjectId id;
     public List<BaseIdentifier> identifier;
     public BaseReference patient;
-    public List<CodeableConcept> relationship;
+    public List<BaseCodeableConcept> relationship;
     public List<BaseHumanName> name;
     public List<BaseContactPoint> telecom;
     public String gender;
@@ -42,7 +42,7 @@ public class RelatedPersonEntity extends BaseResource {
         var ent = new RelatedPersonEntity();
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
         ent.patient = BaseReference.fromReference(obj.getPatient());
-        ent.relationship = obj.getRelationship();
+        ent.relationship = BaseCodeableConcept.fromCodeableConcept(obj.getRelationship());
         ent.name = BaseHumanName.fromHumanNameList(obj.getName());
         ent.telecom = BaseContactPoint.fromContactPointList(obj.getTelecom());
         ent.gender = Optional.ofNullable(obj.getGender()).map(x -> x.toString()).orElse(null);
@@ -58,7 +58,7 @@ public class RelatedPersonEntity extends BaseResource {
         var obj = new RelatedPerson();
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
         obj.setPatient(BaseReference.toReference(ent.patient));
-        obj.setRelationship(ent.relationship);
+        obj.setRelationship(BaseCodeableConcept.toCodeableConcept(ent.relationship));
         obj.setName(BaseHumanName.toHumanNameList(ent.name));
         obj.setTelecom(BaseContactPoint.toContactPointList(ent.telecom));
         obj.setGender(AdministrativeGender.fromCode(ent.gender));

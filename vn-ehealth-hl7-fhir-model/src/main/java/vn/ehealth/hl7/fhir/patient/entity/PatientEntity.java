@@ -3,9 +3,6 @@ package vn.ehealth.hl7.fhir.patient.entity;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Type;
@@ -18,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPerson;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseHumanName;
@@ -43,7 +41,7 @@ public class PatientEntity extends BaseResource {
     public Date birthDate;
     public Type deceased;
     public List<BaseAddress> address;
-    public CodeableConcept maritalStatus;
+    public BaseCodeableConcept maritalStatus;
     public Type multipleBirth;
     public List<BaseAttachment> photo;
     public List<BaseContactPerson> contact;
@@ -52,25 +50,46 @@ public class PatientEntity extends BaseResource {
     public List<BaseReference> generalPractitioner;
     public BaseReference managingOrganization;
     /** link **/
-    public CodeableConcept ethic;
-    public CodeableConcept race;
+    public BaseCodeableConcept ethic;
+    public BaseCodeableConcept race;
     
-    
-    public static PatientEntity fromPatient(Patient obj) {
+    public static PatientEntity fromPatient(Patient obj) {  
         if(obj == null) return null;
         var ent = new PatientEntity();
-        ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.name = BaseHumanName.fromHumanNameList(obj.getName());
-        ent.telecom = BaseContactPoint.fromContactPointList(obj.getTelecom());
-        ent.gender = Optional.ofNullable(obj.getGender()).map(x -> x.toCode()).orElse(null);
-        ent.deceased = obj.getDeceased();
-        ent.address = BaseAddress.fromAddressList(obj.getAddress());
-        ent.maritalStatus = obj.getMaritalStatus();
-        ent.multipleBirth = obj.getMultipleBirth();
-        ent.photo = BaseAttachment.fromAttachmentList(obj.getPhoto());
-        ent.contact = BaseContactPerson.fromContactComponentList(obj.getContact());
-        ent.generalPractitioner = BaseReference.fromReferenceList(obj.getGeneralPractitioner());
-        ent.managingOrganization = BaseReference.fromReference(obj.getManagingOrganization());
+        
+        if(obj.hasIdentifier())
+            ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
+        
+        if(obj.hasName())
+            ent.name = BaseHumanName.fromHumanNameList(obj.getName());
+        
+        if(obj.hasGender())
+            ent.gender = obj.getGender().toCode();            
+        
+        if(obj.hasDeceased())
+            ent.deceased = obj.getDeceased();
+        
+        if(obj.hasAddress())
+            ent.address = BaseAddress.fromAddressList(obj.getAddress());
+        
+        if(obj.hasMaritalStatus())
+            ent.maritalStatus = BaseCodeableConcept.fromCodeableConcept(obj.getMaritalStatus());
+        
+        if(obj.hasMultipleBirth())
+            ent.multipleBirth = obj.getMultipleBirth();
+        
+        if(obj.hasPhoto())
+            ent.photo = BaseAttachment.fromAttachmentList(obj.getPhoto());
+        
+        if(obj.hasContact())
+            ent.contact = BaseContactPerson.fromContactComponentList(obj.getContact());
+        
+        if(obj.hasGeneralPractitioner())
+            ent.generalPractitioner = BaseReference.fromReferenceList(obj.getGeneralPractitioner());
+        
+        if(obj.hasManagingOrganization())
+            ent.managingOrganization = BaseReference.fromReference(obj.getManagingOrganization());
+
         return ent;
     }
     
@@ -83,12 +102,19 @@ public class PatientEntity extends BaseResource {
         obj.setGender(AdministrativeGender.fromCode(ent.gender));
         obj.setDeceased(ent.deceased);
         obj.setAddress(BaseAddress.toAddressList(ent.address));
-        obj.setMaritalStatus(ent.maritalStatus);
+        obj.setMaritalStatus(BaseCodeableConcept.toCodeableConcept(ent.maritalStatus));
         obj.setMultipleBirth(ent.multipleBirth);
         obj.setPhoto(BaseAttachment.toAttachmentList(ent.photo));
         obj.setContact(BaseContactPerson.toContactComponentList(ent.contact));
         obj.setGeneralPractitioner(BaseReference.toReferenceList(ent.generalPractitioner));
         obj.setManagingOrganization(BaseReference.toReference(ent.managingOrganization));
         return obj;
+    }
+    
+    public BaseHumanName getName() {
+        if(name != null && name.size() > 0) {
+            return name.get(0);
+        }
+        return null;
     }
 }

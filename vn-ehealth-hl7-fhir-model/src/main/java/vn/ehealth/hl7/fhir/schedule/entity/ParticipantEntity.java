@@ -4,15 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Appointment.AppointmentParticipantComponent;
 import org.hl7.fhir.r4.model.Appointment.ParticipantRequired;
 import org.hl7.fhir.r4.model.Appointment.ParticipationStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
-
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -21,7 +19,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 public class ParticipantEntity extends BaseResource {
     @Id
     public ObjectId id;
-    public List<CodeableConcept> type;
+    public List<BaseCodeableConcept> type;
     public BaseReference actor;
     public String required;
     public String status;
@@ -32,7 +30,7 @@ public class ParticipantEntity extends BaseResource {
     public static ParticipantEntity fromAppointmentParticipantComponent(AppointmentParticipantComponent obj) {
         if(obj == null) return null;
         var ent = new ParticipantEntity();
-        ent.type = obj.getType();
+        ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
         ent.actor = BaseReference.fromReference(obj.getActor());
         ent.required = Optional.ofNullable(obj.getRequired()).map(x -> x.toCode()).orElse(null);
         ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
@@ -44,7 +42,7 @@ public class ParticipantEntity extends BaseResource {
         if(ent == null) return null;
         
         var obj = new AppointmentParticipantComponent();
-        obj.setType(ent.type);
+        obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
         obj.setActor(BaseReference.toReference(ent.actor));
         obj.setRequired(ParticipantRequired.fromCode(ent.required));
         obj.setStatus(ParticipationStatus.fromCode(ent.status));

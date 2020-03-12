@@ -16,24 +16,16 @@ public class BaseContactPoint {
     public Integer rank;
     public BasePeriod period;
    
-    public static BaseContactPoint fromContactPoint(ContactPoint object) {
-        if(object == null) return null;
+    public static BaseContactPoint fromContactPoint(ContactPoint obj) {        
+        if(obj == null) return null;
         
-        var entity = new BaseContactPoint();
-        
-        if(object.getSystem() != null) {
-            entity.system = object.getSystem().toCode();
-        }
-        
-        entity.value = object.getValue();
-        
-        if(object.getUse() != null) {
-            entity.use = object.getUse().toCode();
-        }
-        
-        entity.rank = object.getRank();
-        entity.period = BasePeriod.fromPeriod(object.getPeriod());
-        return entity;
+        var ent = new BaseContactPoint();
+        ent.system = obj.hasSystem()? obj.getSystem().toCode() : null;
+        ent.value = obj.hasValue()? obj.getValue() : null;
+        ent.use = obj.hasUse()? obj.getUse().toCode() : null;        
+        ent.rank = obj.hasRank()? obj.getRank() : null;
+        ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
+        return ent;
     }
     
     

@@ -6,11 +6,11 @@ import java.util.Optional;
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.CareTeam;
 import org.hl7.fhir.r4.model.CareTeam.CareTeamStatus;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -23,13 +23,13 @@ public class CareTeamEntity extends BaseResource{
     public ObjectId id;
     public List<BaseIdentifier> identifier;
     public String status;
-    public List<CodeableConcept> category;
+    public List<BaseCodeableConcept> category;
     public String name;
     public BaseReference subject;
     //public BaseReference context;
     public BasePeriod period;
     public List<CareTeamParticipantEntity> participant;
-    public List<CodeableConcept> reasonCode;
+    public List<BaseCodeableConcept> reasonCode;
     public List<BaseReference> reasonReference;
     public List<BaseReference> managingOrganization;
     public List<BaseAnnotation> note;
@@ -41,7 +41,7 @@ public class CareTeamEntity extends BaseResource{
         
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
         ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.category = obj.getCategory();
+        ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
         ent.name = obj.getName();
         ent.subject = BaseReference.fromReference(obj.getSubject());
         ent.period = BasePeriod.fromPeriod(obj.getPeriod());
@@ -49,7 +49,7 @@ public class CareTeamEntity extends BaseResource{
         ent.participant = transform(obj.getParticipant(),
                                         CareTeamParticipantEntity::fromCareTeamParticipantComponent);
         
-        ent.reasonCode = obj.getReasonCode();
+        ent.reasonCode = BaseCodeableConcept.fromCodeableConcept(obj.getReasonCode());
         ent.reasonReference = BaseReference.fromReferenceList(obj.getReasonReference());
         ent.managingOrganization = BaseReference.fromReferenceList(obj.getManagingOrganization());
         ent.note = BaseAnnotation.fromAnnotationList(obj.getNote());
@@ -64,6 +64,7 @@ public class CareTeamEntity extends BaseResource{
         
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
         obj.setStatus(CareTeamStatus.fromCode(ent.status));
+        obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
         obj.setName(ent.name);
         obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setPeriod(BasePeriod.toPeriod(ent.period));
@@ -71,7 +72,7 @@ public class CareTeamEntity extends BaseResource{
         obj.setParticipant(transform(ent.participant,
                                     CareTeamParticipantEntity::toCareTeamParticipantComponent));
         
-        obj.setReasonCode(ent.reasonCode);
+        obj.setReasonCode(BaseCodeableConcept.toCodeableConcept(ent.reasonCode));
         obj.setReasonReference(BaseReference.toReferenceList(ent.reasonReference));
         obj.setManagingOrganization(BaseReference.toReferenceList(ent.managingOrganization));
         obj.setNote(BaseAnnotation.toAnnotationList(ent.note));

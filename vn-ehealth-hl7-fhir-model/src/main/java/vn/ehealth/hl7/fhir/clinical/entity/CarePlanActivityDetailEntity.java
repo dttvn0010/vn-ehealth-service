@@ -2,23 +2,23 @@ package vn.ehealth.hl7.fhir.clinical.entity;
 
 import java.util.List;
 
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.CarePlan.CarePlanActivityDetailComponent;
 import org.hl7.fhir.r4.model.CarePlan.CarePlanActivityStatus;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 
 public class CarePlanActivityDetailEntity {
     //public CodeableConcept category;
     //public BaseReference definition;
-    public CodeableConcept code;
-    public List<CodeableConcept> reasonCode;
+    public BaseCodeableConcept code;
+    public List<BaseCodeableConcept> reasonCode;
     public List<BaseReference> reasonBaseReference;
     public List<BaseReference> goal;
     public String status;
-    public CodeableConcept statusReason;
+    public BaseCodeableConcept statusReason;
     //public Boolean prohibited;
     public Type scheduled;
     public BaseReference location;
@@ -33,12 +33,12 @@ public class CarePlanActivityDetailEntity {
         
         var ent = new CarePlanActivityDetailEntity();
         
-        ent.code = obj.getCode();
-        ent.reasonCode = obj.getReasonCode();
+        ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
+        ent.reasonCode = BaseCodeableConcept.fromCodeableConcept(obj.getReasonCode());
         ent.reasonBaseReference = BaseReference.fromReferenceList(obj.getReasonReference());
         ent.goal = BaseReference.fromReferenceList(obj.getGoal());
         ent.status = obj.getStatus() != null? obj.getStatus().toCode() : null;
-        ent.statusReason = obj.getStatusReason();
+        ent.statusReason = BaseCodeableConcept.fromCodeableConcept(obj.getStatusReason());
         ent.scheduled = obj.getScheduled();
         ent.location = BaseReference.fromReference(obj.getLocation());
         ent.performer = BaseReference.fromReferenceList(obj.getPerformer());
@@ -55,12 +55,12 @@ public class CarePlanActivityDetailEntity {
         
         var obj = new CarePlanActivityDetailComponent();
         
-        obj.setCode(ent.code);
-        obj.setReasonCode(ent.reasonCode);
+        obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
+        obj.setReasonCode(BaseCodeableConcept.toCodeableConcept(ent.reasonCode));
         obj.setReasonReference(BaseReference.toReferenceList(ent.reasonBaseReference));
         obj.setGoal(BaseReference.toReferenceList(ent.goal));
         obj.setStatus(CarePlanActivityStatus.fromCode(ent.status));
-        obj.setStatusReason(ent.statusReason);
+        obj.setStatusReason(BaseCodeableConcept.toCodeableConcept(ent.statusReason));
         obj.setScheduled(ent.scheduled);
         obj.setLocation(BaseReference.toReference(ent.location));
         obj.setPerformer(BaseReference.toReferenceList(ent.performer));

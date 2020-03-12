@@ -2,8 +2,6 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.List;
 
-import org.hl7.fhir.r4.model.CodeableConcept;
-import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Identifier.IdentifierUse;
 
@@ -17,50 +15,51 @@ public class BaseIdentifier {
 
     public Integer order;
     
-    public CodeableConcept type;
+    public BaseCodeableConcept type;
     
     public BasePeriod period;
     
-    public List<Extension> extension;
+    public List<BaseExtension> extension;
     
     public BaseReference assigner;
 
     public IdentifierUse identifierUse;
     
     
-    public static Identifier toIdentifier(BaseIdentifier entity) {
-        if(entity == null) return null;
+    public static Identifier toIdentifier(BaseIdentifier ent) {
+        if(ent == null) return null;
         
-        var identifier = new Identifier();
-        identifier.setSystem(entity.system);
-        identifier.setValue(entity.value);
-        identifier.setType(entity.type);
-        identifier.setExtension(entity.extension);
-        identifier.setUse(entity.identifierUse);
-        identifier.setPeriod(BasePeriod.toPeriod(entity.period));
-        identifier.setAssigner(BaseReference.toReference(entity.assigner));
+        var obj = new Identifier();
+        obj.setSystem(ent.system);
+        obj.setValue(ent.value);
+        obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
+        obj.setExtension(transform(ent.extension, BaseExtension::toExtension));
+        obj.setUse(ent.identifierUse);
+        obj.setPeriod(BasePeriod.toPeriod(ent.period));
+        obj.setAssigner(BaseReference.toReference(ent.assigner));
 
-        return identifier;
+        return obj;
     }
     
     public static List<Identifier> toIdentifierList(List<BaseIdentifier> entityList) {
         return transform(entityList, x -> toIdentifier(x));
     }
     
-    public static BaseIdentifier fromIdentifier(Identifier identifier) {
-        if(identifier == null) return null;
+    public static BaseIdentifier fromIdentifier(Identifier obj) {
+                
+        if(obj == null) return null;
         
-        var entity = new BaseIdentifier();
+        var ent = new BaseIdentifier();
         
-        entity.system = identifier.getSystem();
-        entity.value = identifier.getValue();
-        entity.type = identifier.getType();
-        entity.identifierUse = identifier.getUse();
-        entity.extension = identifier.getExtension();
-        entity.period = BasePeriod.fromPeriod(identifier.getPeriod());
-        entity.assigner = BaseReference.fromReference(identifier.getAssigner());
+        ent.system = obj.hasSystem()? obj.getSystem() : null;
+        ent.value = obj.hasValue()? obj.getValue() : null;
+        ent.type = obj.hasType()? BaseCodeableConcept.fromCodeableConcept(obj.getType()) : null;
+        ent.identifierUse =  obj.hasUse()? obj.getUse() : null;
+        ent.extension = obj.hasExtension()? transform(obj.getExtension(), BaseExtension::fromExtension) : null;
+        ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
+        ent.assigner = obj.hasAssigner()? BaseReference.fromReference(obj.getAssigner()) : null;
         
-        return entity;
+        return ent;
     }
     
     public static List<BaseIdentifier> fromIdentifierList(List<Identifier> identifierList) {

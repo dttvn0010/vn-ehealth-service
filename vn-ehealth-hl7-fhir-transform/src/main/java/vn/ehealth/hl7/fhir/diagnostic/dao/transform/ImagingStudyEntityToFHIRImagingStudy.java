@@ -13,7 +13,7 @@ public class ImagingStudyEntityToFHIRImagingStudy implements Transformer<Imaging
     public ImagingStudy transform(ImagingStudyEntity ent) {
         var obj = ImagingStudyEntity.toImagingStudy(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "ImagingStudy-v1.0"));
-        obj.setExtension(ent.extension);
+        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
         obj.setId(ent.fhir_id);
         return obj;
     }

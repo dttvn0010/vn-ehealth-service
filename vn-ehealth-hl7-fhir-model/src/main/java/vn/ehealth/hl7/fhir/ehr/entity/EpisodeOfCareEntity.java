@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.EpisodeOfCare;
 import org.hl7.fhir.r4.model.EpisodeOfCare.DiagnosisComponent;
 import org.hl7.fhir.r4.model.EpisodeOfCare.EpisodeOfCareStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -22,7 +22,7 @@ public class EpisodeOfCareEntity extends BaseResource{
     
     public static class DiagnosisEntity {
         public BaseReference condition;
-        public CodeableConcept role;
+        public BaseCodeableConcept role;
         public int rank;
         
         public static DiagnosisEntity fromDiagnosisComponent(DiagnosisComponent obj) {
@@ -31,7 +31,7 @@ public class EpisodeOfCareEntity extends BaseResource{
             var ent = new DiagnosisEntity();
                     
             ent.condition = BaseReference.fromReference(obj.getCondition());
-            ent.role = obj.getRole();
+            ent.role = BaseCodeableConcept.fromCodeableConcept(obj.getRole());
             ent.rank = obj.getRank();
                     
             return ent;
@@ -43,7 +43,7 @@ public class EpisodeOfCareEntity extends BaseResource{
             var obj = new DiagnosisComponent();
             
             obj.setCondition(BaseReference.toReference(ent.condition));
-            obj.setRole(ent.role);
+            obj.setRole(BaseCodeableConcept.toCodeableConcept(ent.role));
             obj.setRank(ent.rank);
             
             return obj;
@@ -56,7 +56,7 @@ public class EpisodeOfCareEntity extends BaseResource{
     public List<BaseIdentifier> identifier;
     public String status;
     public List<EOCStatusHistoryEntity> statusHistory;
-    public List<CodeableConcept> type;
+    public List<BaseCodeableConcept> type;
     public List<DiagnosisEntity> diagnosis;
     public BaseReference patient;
     public BaseReference managingOrganization;
@@ -77,7 +77,7 @@ public class EpisodeOfCareEntity extends BaseResource{
                 EOCStatusHistoryEntity::fromEpisodeOfCareStatusHistoryComponent);
         
         
-        ent.type = obj.getType();
+        ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
         
         ent.diagnosis = transform(obj.getDiagnosis(), DiagnosisEntity::fromDiagnosisComponent);
         
@@ -101,7 +101,7 @@ public class EpisodeOfCareEntity extends BaseResource{
         obj.setStatusHistory(transform(ent.statusHistory, 
                                 EOCStatusHistoryEntity::toEpisodeOfCareStatusHistoryComponent));
 
-        obj.setType(ent.type);
+        obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
         obj.setDiagnosis(transform(ent.diagnosis, DiagnosisEntity::toDiagnosisComponent));
         obj.setPatient(BaseReference.toReference(ent.patient));
         obj.setManagingOrganization(BaseReference.toReference(ent.managingOrganization));

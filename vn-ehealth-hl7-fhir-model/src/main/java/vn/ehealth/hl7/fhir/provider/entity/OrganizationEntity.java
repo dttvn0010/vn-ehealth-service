@@ -3,7 +3,6 @@ package vn.ehealth.hl7.fhir.provider.entity;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Organization;
 import org.hl7.fhir.r4.model.StringType;
 import org.springframework.data.annotation.Id;
@@ -12,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -24,7 +24,7 @@ public class OrganizationEntity extends BaseResource {
     public ObjectId id;
 
     public List<BaseIdentifier> identifier;
-    public List<CodeableConcept> type;
+    public List<BaseCodeableConcept> type;
     public String name;
     public List<String> alias;
     public List<BaseContactPoint> telecom;
@@ -37,7 +37,7 @@ public class OrganizationEntity extends BaseResource {
         
         var ent = new OrganizationEntity();
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.type = obj.getType();
+        ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
         ent.name = obj.getName();
         ent.alias = transform(obj.getAlias(), x -> x.asStringValue());
         ent.telecom = BaseContactPoint.fromContactPointList(obj.getTelecom());
@@ -52,7 +52,7 @@ public class OrganizationEntity extends BaseResource {
         
         var obj = new Organization();
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
-        obj.setType(ent.type);
+        obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
         obj.setName(ent.name);
         obj.setAlias(transform(ent.alias, x -> new StringType(x)));
         obj.setTelecom(BaseContactPoint.toContactPointList(ent.telecom));

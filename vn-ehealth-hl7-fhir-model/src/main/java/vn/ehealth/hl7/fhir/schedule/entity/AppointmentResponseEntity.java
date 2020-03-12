@@ -5,13 +5,11 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.AppointmentResponse;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.AppointmentResponse.ParticipantStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
-
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -24,7 +22,7 @@ public class AppointmentResponseEntity extends BaseResource {
     public BaseReference appointment;
     public Date start;
     public Date end;
-    public List<CodeableConcept> participantType;
+    public List<BaseCodeableConcept> participantType;
     public BaseReference actor;
     public ParticipantStatus participantStatus;
     public String comment;
@@ -37,7 +35,7 @@ public class AppointmentResponseEntity extends BaseResource {
         ent.appointment = BaseReference.fromReference(obj.getAppointment());
         ent.start = obj.getStart();
         ent.end = obj.getEnd();
-        ent.participantType = obj.getParticipantType();
+        ent.participantType = BaseCodeableConcept.fromCodeableConcept(obj.getParticipantType());
         ent.actor = BaseReference.fromReference(obj.getActor());
         ent.participantStatus = obj.getParticipantStatus();
         ent.comment = obj.getComment();
@@ -51,7 +49,7 @@ public class AppointmentResponseEntity extends BaseResource {
         obj.setAppointment(BaseReference.toReference(ent.appointment));
         obj.setStart(ent.start);
         obj.setEnd(ent.end);
-        obj.setParticipantType(ent.participantType);
+        obj.setParticipantType(BaseCodeableConcept.toCodeableConcept(ent.participantType));
         obj.setActor(BaseReference.toReference(ent.actor));
         obj.setParticipantStatus(ent.participantStatus);
         obj.setComment(ent.comment);

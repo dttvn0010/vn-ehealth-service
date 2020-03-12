@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Specimen;
 import org.hl7.fhir.r4.model.Specimen.SpecimenStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -26,7 +26,7 @@ public class SpecimenEntity extends BaseResource {
     public List<BaseIdentifier> identifier;
     public BaseIdentifier accessionIdentifier;
     public String status;
-    public CodeableConcept type;
+    public BaseCodeableConcept type;
     public BaseReference subject;
     public Date receivedTime;
     public List<BaseReference> parent;
@@ -44,7 +44,7 @@ public class SpecimenEntity extends BaseResource {
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
         ent.accessionIdentifier = BaseIdentifier.fromIdentifier(obj.getAccessionIdentifier());
         ent.status =  Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.type = obj.getType();
+        ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
         ent.subject = BaseReference.fromReference(obj.getSubject());
         ent.receivedTime = obj.getReceivedTime();
         ent.parent = BaseReference.fromReferenceList(obj.getParent());
@@ -70,7 +70,7 @@ public class SpecimenEntity extends BaseResource {
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
         obj.setAccessionIdentifier(BaseIdentifier.toIdentifier(ent.accessionIdentifier));
         obj.setStatus(SpecimenStatus.fromCode(ent.status));
-        obj.setType(ent.type);
+        obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
         obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setReceivedTime(ent.receivedTime);
         obj.setParent(BaseReference.toReferenceList(ent.parent));

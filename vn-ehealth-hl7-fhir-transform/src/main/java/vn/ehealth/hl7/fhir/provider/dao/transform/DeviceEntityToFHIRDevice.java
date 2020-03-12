@@ -18,7 +18,7 @@ public class DeviceEntityToFHIRDevice implements Transformer<DeviceEntity, Devic
     public Device transform(DeviceEntity ent) {
         var obj = DeviceEntity.toDevice(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Device-v1.0"));
-        obj.setExtension(ent.extension);
+        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
         obj.setId(ent.fhir_id);
         return obj;
         

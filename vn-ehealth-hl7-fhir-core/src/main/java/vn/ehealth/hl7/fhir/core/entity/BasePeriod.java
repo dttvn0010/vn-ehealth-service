@@ -11,12 +11,12 @@ public class BasePeriod {
     public Date start;
     public Date end;
     
-    public static BasePeriod fromPeriod(Period period) {
+    public static BasePeriod fromPeriod(Period period) {        
         if(period == null) return null;
         
         var entity = new BasePeriod();        
-        entity.start = period.getStart();
-        entity.end = period.getEnd();
+        entity.start = period.hasStart()? period.getStart() : null;
+        entity.end = period.hasEnd()? period.getEnd() : null;
         
         return entity;
     }

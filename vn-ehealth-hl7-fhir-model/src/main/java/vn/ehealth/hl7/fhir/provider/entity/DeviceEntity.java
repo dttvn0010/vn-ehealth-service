@@ -5,16 +5,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Device;
-import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Device.FHIRDeviceStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -33,7 +30,7 @@ public class DeviceEntity extends BaseResource {
     public List<BaseIdentifier> identifier;
     public DeviceUdiEntity udi;
     public String status;
-    public CodeableConcept type;
+    public BaseCodeableConcept type;
     public String lotNumber;
     public String manufacturer;
     public Date manufactureDate;
@@ -45,12 +42,13 @@ public class DeviceEntity extends BaseResource {
     public BaseReference location;
     public String url;
     public List<BaseAnnotation> note;
-    public List<CodeableConcept> safety;
+    public List<BaseCodeableConcept> safety;
     
     public static Device toDevice(DeviceEntity ent) {
         if(ent == null) return null;
         var obj = new Device();
         obj.setStatus(FHIRDeviceStatus.fromCode(ent.status));
+        obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
         obj.setLotNumber(ent.lotNumber);        
         obj.setManufacturer(ent.manufacturer);
@@ -63,7 +61,7 @@ public class DeviceEntity extends BaseResource {
         obj.setLocation(BaseReference.toReference(ent.location));
         obj.setUrl(ent.url);
         obj.setNote(BaseAnnotation.toAnnotationList(ent.note));
-        obj.setSafety(ent.safety);
+        obj.setSafety(BaseCodeableConcept.toCodeableConcept(ent.safety));
         return obj;
     }
     
@@ -71,6 +69,7 @@ public class DeviceEntity extends BaseResource {
         if(obj == null) return null;
         var ent = new DeviceEntity();
         ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
+        ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
         ent.lotNumber = obj.getLotNumber();
         ent.manufacturer = obj.getManufacturer();
@@ -83,7 +82,7 @@ public class DeviceEntity extends BaseResource {
         ent.location = BaseReference.fromReference(obj.getLocation());
         ent.url = obj.getUrl();
         ent.note = BaseAnnotation.fromAnnotationList(obj.getNote());
-        ent.safety = obj.getSafety();
+        ent.safety = BaseCodeableConcept.fromCodeableConcept(obj.getSafety());
         return ent;
     }
 }

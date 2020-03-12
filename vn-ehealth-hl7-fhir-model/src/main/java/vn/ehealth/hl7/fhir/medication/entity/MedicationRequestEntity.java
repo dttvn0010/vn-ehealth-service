@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.MedicationRequest;
 import org.hl7.fhir.r4.model.MedicationRequest.MedicationRequestIntent;
 import org.hl7.fhir.r4.model.MedicationRequest.MedicationRequestPriority;
@@ -17,6 +16,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseDosage;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -33,7 +33,7 @@ public class MedicationRequestEntity extends BaseResource {
     public BaseIdentifier groupIdentifier;
     public String status;
     public String intent;
-    public List<CodeableConcept> category;
+    public List<BaseCodeableConcept> category;
     public String priority;
     public Type medication;
     public BaseReference subject;
@@ -42,7 +42,7 @@ public class MedicationRequestEntity extends BaseResource {
     public Date authoredOn;
     public BaseReference requester;//
     public BaseReference recorder;
-    public List<CodeableConcept> reasonCode;
+    public List<BaseCodeableConcept> reasonCode;
     public List<BaseReference> reasonReference;
     public List<BaseAnnotation> note;
     public List<BaseDosage> dosageInstruction;
@@ -61,7 +61,7 @@ public class MedicationRequestEntity extends BaseResource {
         ent.groupIdentifier = BaseIdentifier.fromIdentifier(obj.getGroupIdentifier());
         ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
         ent.intent = Optional.ofNullable(obj.getIntent()).map(x -> x.toCode()).orElse(null);
-        ent.category = obj.getCategory();
+        ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
         ent.priority = Optional.ofNullable(obj.getPriority()).map(x -> x.toCode()).orElse(null);
         ent.medication = obj.getMedication();
         ent.subject = BaseReference.fromReference(obj.getSubject());
@@ -69,7 +69,7 @@ public class MedicationRequestEntity extends BaseResource {
         ent.authoredOn = obj.getAuthoredOn();
         ent.requester = BaseReference.fromReference(obj.getRequester());
         ent.recorder = BaseReference.fromReference(obj.getRecorder());
-        ent.reasonCode = obj.getReasonCode();
+        ent.reasonCode = BaseCodeableConcept.fromCodeableConcept(obj.getReasonCode());
         ent.reasonReference = BaseReference.fromReferenceList(obj.getReasonReference()); 
         ent.note = BaseAnnotation.fromAnnotationList(obj.getNote());
         ent.dosageInstruction = BaseDosage.fromDosageList(obj.getDosageInstruction());
@@ -92,7 +92,7 @@ public class MedicationRequestEntity extends BaseResource {
         obj.setGroupIdentifier(BaseIdentifier.toIdentifier(ent.groupIdentifier));
         obj.setStatus(MedicationRequestStatus.fromCode(ent.status));
         obj.setIntent(MedicationRequestIntent.fromCode(ent.intent));
-        obj.setCategory(ent.category);
+        obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
         obj.setPriority(MedicationRequestPriority.fromCode(ent.priority));
         obj.setMedication(ent.medication);
         obj.setSubject(BaseReference.toReference(ent.subject));
@@ -100,7 +100,7 @@ public class MedicationRequestEntity extends BaseResource {
         obj.setAuthoredOn(ent.authoredOn);
         obj.setRequester(BaseReference.toReference(ent.requester));
         obj.setRecorder(BaseReference.toReference(ent.recorder));
-        obj.setReasonCode(ent.reasonCode);
+        obj.setReasonCode(BaseCodeableConcept.toCodeableConcept(ent.reasonCode));
         obj.setReasonReference(BaseReference.toReferenceList(ent.reasonReference));
         obj.setNote(BaseAnnotation.toAnnotationList(ent.note));
         obj.setDosageInstruction(BaseDosage.toDosageList(ent.dosageInstruction));

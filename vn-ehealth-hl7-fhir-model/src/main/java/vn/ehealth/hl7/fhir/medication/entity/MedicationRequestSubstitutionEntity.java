@@ -1,20 +1,22 @@
 package vn.ehealth.hl7.fhir.medication.entity;
 
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Type;
+
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
+
 import org.hl7.fhir.r4.model.MedicationRequest.MedicationRequestSubstitutionComponent;
 
 
 
 public class MedicationRequestSubstitutionEntity{
     public Type allowed;
-    public CodeableConcept reason;
+    public BaseCodeableConcept reason;
     
     public static MedicationRequestSubstitutionEntity fromMedicationRequestSubstitutionComponent(MedicationRequestSubstitutionComponent obj) {
         if(obj == null) return null;
         var ent = new MedicationRequestSubstitutionEntity();
         ent.allowed = obj.getAllowed();
-        ent.reason = obj.getReason();
+        ent.reason = BaseCodeableConcept.fromCodeableConcept(obj.getReason());
         return ent;
     }
     
@@ -23,7 +25,7 @@ public class MedicationRequestSubstitutionEntity{
         
         var obj = new MedicationRequestSubstitutionComponent();
         obj.setAllowed(ent.allowed);
-        obj.setReason(ent.reason);
+        obj.setReason(BaseCodeableConcept.toCodeableConcept(ent.reason));
         return obj;
     }
 }

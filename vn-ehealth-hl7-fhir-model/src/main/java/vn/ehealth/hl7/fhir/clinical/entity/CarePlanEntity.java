@@ -5,13 +5,13 @@ import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.CarePlan;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.CarePlan.CarePlanIntent;
 import org.hl7.fhir.r4.model.CarePlan.CarePlanStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -29,7 +29,7 @@ public class CarePlanEntity extends BaseResource {
     public List<BaseReference> partOf;
     public String status;
     public String intent;
-    public List<CodeableConcept> category;
+    public List<BaseCodeableConcept> category;
     public String title;
     public String description;
     public BaseReference subject;
@@ -54,7 +54,7 @@ public class CarePlanEntity extends BaseResource {
         ent.partOf = BaseReference.fromReferenceList(obj.getPartOf());
         ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
         ent.intent = Optional.ofNullable(obj.getIntent()).map(x -> x.toCode()).orElse(null);
-        ent.category = obj.getCategory();
+        ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
         ent.title = obj.getTitle();
         ent.description = obj.getDescription();
         ent.subject = BaseReference.fromReference(obj.getSubject());
@@ -81,7 +81,7 @@ public class CarePlanEntity extends BaseResource {
         obj.setPartOf(BaseReference.toReferenceList(ent.partOf));
         obj.setStatus(CarePlanStatus.fromCode(ent.status));
         obj.setIntent(CarePlanIntent.fromCode(ent.intent));
-        obj.setCategory(obj.getCategory());
+        obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
         obj.setTitle(ent.title);
         obj.setDescription(ent.description);
         obj.setSubject(BaseReference.toReference(ent.subject));

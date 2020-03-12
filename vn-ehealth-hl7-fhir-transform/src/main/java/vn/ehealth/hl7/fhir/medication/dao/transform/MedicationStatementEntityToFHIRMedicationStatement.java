@@ -19,7 +19,7 @@ public class MedicationStatementEntityToFHIRMedicationStatement
     public MedicationStatement transform(MedicationStatementEntity ent) {
         var obj = MedicationStatementEntity.toMedicationStatement(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "MedicationStatement-v1.0"));
-        obj.setExtension(ent.extension);
+        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
         obj.setId(ent.fhir_id);
         return obj;        
     }

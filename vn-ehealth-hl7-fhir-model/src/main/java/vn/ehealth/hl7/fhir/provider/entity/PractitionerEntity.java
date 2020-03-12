@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.r4.model.Practitioner;
 import org.springframework.data.annotation.Id;
@@ -14,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseHumanName;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -32,7 +32,7 @@ public class PractitionerEntity extends BaseResource {
     public Date birthDate;
     /** photo **/
     public List<QualificationEntity> qualification;
-    public List<CodeableConcept> communication;
+    public List<BaseCodeableConcept> communication;
     
     public static PractitionerEntity fromPractitioner(Practitioner obj) {
         if(obj == null) return null;
@@ -44,7 +44,7 @@ public class PractitionerEntity extends BaseResource {
         ent.gender = Optional.ofNullable(obj.getGender()).map(x -> x.toCode()).orElse(null);
         ent.birthDate = obj.getBirthDate();
         ent.qualification = transform(obj.getQualification(), QualificationEntity::fromPractitionerQualificationComponent);
-        ent.communication = obj.getCommunication();
+        ent.communication = BaseCodeableConcept.fromCodeableConcept(obj.getCommunication());
         return ent;
     }
     
@@ -58,7 +58,7 @@ public class PractitionerEntity extends BaseResource {
         obj.setGender(AdministrativeGender.fromCode(ent.gender));
         obj.setBirthDate(ent.birthDate);
         obj.setQualification(transform(ent.qualification, QualificationEntity::toPractitionerQualificationComponent));
-        obj.setCommunication(ent.communication);
+        obj.setCommunication(BaseCodeableConcept.toCodeableConcept(ent.communication));
         return obj;
     }
 }

@@ -19,29 +19,20 @@ public class BaseAttachment {
     public Date creation;
   
     
-    public static BaseAttachment fromAttachment(Attachment object) {
-        if(object == null) {
-            return null;
-        }
-        var entity = new BaseAttachment();
+    public static BaseAttachment fromAttachment(Attachment obj) {        
+        if(obj == null) return null;
         
-        entity.contentType = object.getContentType();
-        entity.language = object.getLanguage();
+        var ent = new BaseAttachment();
         
-        if(object.getData() != null) {
-            entity.data = new String(Base64.encodeBase64(object.getData()), ca.uhn.fhir.rest.api.Constants.CHARSET_UTF8);
-        }
-        
-        entity.url = object.getUrl();
-        entity.size = object.getSize();
-        
-        if(object.getHash() != null) {
-            entity.hash = new String(Base64.encodeBase64(object.getHash()), ca.uhn.fhir.rest.api.Constants.CHARSET_UTF8);
-        }
-        
-        entity.title = object.getTitle();
-        entity.creation = object.getCreation();
-        return entity;
+        ent.contentType = obj.hasContentType()? obj.getContentType() : null;
+        ent.language = obj.hasLanguage()? obj.getLanguage() : null;
+        ent.data = obj.hasData()? new String(Base64.encodeBase64(obj.getData()), ca.uhn.fhir.rest.api.Constants.CHARSET_UTF8) : null;
+        ent.url = obj.hasUrl()? obj.getUrl() : null;
+        ent.size = obj.hasSize()? obj.getSize() : null;
+        ent.hash = obj.hasHash()? new String(Base64.encodeBase64(obj.getHash()), ca.uhn.fhir.rest.api.Constants.CHARSET_UTF8) : null;
+        ent.title = obj.hasTitle()? obj.getTitle() : null;
+        ent.creation = obj.hasCreation()? obj.getCreation() : null;
+        return ent;
     }
     
     public static List<BaseAttachment> fromAttachmentList(List<Attachment> lst) {

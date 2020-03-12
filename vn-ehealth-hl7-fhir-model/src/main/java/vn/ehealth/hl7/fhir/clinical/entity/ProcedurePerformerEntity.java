@@ -1,13 +1,13 @@
 package vn.ehealth.hl7.fhir.clinical.entity;
 
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Procedure.ProcedurePerformerComponent;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 
 public class ProcedurePerformerEntity {
 
-    public CodeableConcept function;
+    public BaseCodeableConcept function;
     public BaseReference actor;
     public BaseReference onBehalfOf;
     
@@ -16,7 +16,7 @@ public class ProcedurePerformerEntity {
         
         var ent = new ProcedurePerformerEntity();
         
-        ent.function = obj.getFunction();
+        ent.function = BaseCodeableConcept.fromCodeableConcept(obj.getFunction());
         ent.actor = BaseReference.fromReference(obj.getActor());
         ent.onBehalfOf = BaseReference.fromReference(obj.getOnBehalfOf());
         
@@ -28,7 +28,7 @@ public class ProcedurePerformerEntity {
         
         var obj = new ProcedurePerformerComponent();
         
-        obj.setFunction(ent.function);
+        obj.setFunction(BaseCodeableConcept.toCodeableConcept(ent.function));
         obj.setActor(BaseReference.toReference(ent.actor));
         obj.setOnBehalfOf(BaseReference.toReference(ent.onBehalfOf));
         

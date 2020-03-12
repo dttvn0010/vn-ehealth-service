@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.DiagnosticReport.DiagnosticReportStatus;
 import org.hl7.fhir.r4.model.Type;
@@ -15,6 +14,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -28,8 +28,8 @@ public class DiagnosticReportEntity extends BaseResource {
     public List<BaseIdentifier> identifier;
     public List<BaseReference> basedOn;
     public String status;
-    public List<CodeableConcept> category;
-    public CodeableConcept code;
+    public List<BaseCodeableConcept> category;
+    public BaseCodeableConcept code;
     public BaseReference subject;
     //public BaseReference context;
     public Type effective;
@@ -50,8 +50,8 @@ public class DiagnosticReportEntity extends BaseResource {
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
         ent.basedOn = BaseReference.fromReferenceList(obj.getBasedOn());
         ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.category = obj.getCategory();
-        ent.code = obj.getCode();
+        ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
+        ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
         ent.subject = BaseReference.fromReference(obj.getSubject());
         ent.effective = obj.getEffective();
         ent.issued = obj.getIssued();
@@ -73,8 +73,8 @@ public class DiagnosticReportEntity extends BaseResource {
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
         obj.setBasedOn(BaseReference.toReferenceList(ent.basedOn));
         obj.setStatus(DiagnosticReportStatus.fromCode(ent.status));
-        obj.setCategory(ent.category);
-        obj.setCode(ent.code);
+        obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
+        obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
         obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setEffective(ent.effective);
         obj.setIssued(ent.issued);

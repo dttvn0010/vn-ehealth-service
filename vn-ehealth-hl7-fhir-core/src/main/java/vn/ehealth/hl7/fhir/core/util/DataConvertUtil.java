@@ -4,11 +4,39 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Meta;
+
+import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
+import vn.ehealth.hl7.fhir.core.entity.BaseExtension;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
 public class DataConvertUtil {
+    
+    public static class ObjectWrapper<T> {
+        private T obj;
+        
+        public ObjectWrapper(T obj) {
+            this.obj = obj;
+        }
+        
+        public <U> U evalIf(boolean cond, Function<T, U> f) {
+            if(cond && obj != null) {
+                return f.apply(obj);
+            }
+            return null;
+        }
+        
+        public <U,V> V evalIf(boolean cond, Function<T, U> f1, Function<U, V> f2) {
+            if(cond && obj != null) {
+                var u = f1.apply(obj);
+                if(u != null) return f2.apply(u);
+            }
+            return null;
+        }
+    }
+    
     public static <T, U> List<U> transform(List<T> lst, Function<T, U> func) {
         if(lst != null) {
             return lst.stream().map(x -> func.apply(x))
@@ -16,19 +44,19 @@ public class DataConvertUtil {
         }
         return null;
     }
-    
+   
     public static Meta getMeta(BaseResource entity, String profile) {
         if(entity == null) return null;
         
         var meta = new Meta();
         if(entity.profile != null && entity.profile.size() > 0) {
-            meta.setProfile(entity.profile);
+            meta.setProfile(transform(entity.profile, x -> new CanonicalType(x)));
         }else {
             meta = new Meta().addProfile(ConstantKeys.ENTITY_PROFILE_V1 + profile);
         }
         
-        meta.setSecurity(entity.security);
-        meta.setTag(entity.tag);
+        meta.setSecurity(BaseCoding.toCodingList(entity.security));
+        meta.setTag(BaseCoding.toCodingList(entity.tag));
         
         if(entity.resDeleted != null) {
             meta.setLastUpdated(entity.resDeleted);
@@ -48,19 +76,17 @@ public class DataConvertUtil {
         if(obj != null && ent != null) {
             if(obj.hasMeta()) {
                 if (obj.getMeta().hasProfile()) {
-                    ent.profile = obj.getMeta().getProfile();
+                    ent.profile = transform(obj.getMeta().getProfile() , x -> x.getValue());
                 }
                 if (obj.getMeta().hasSecurity()) {
-                    ent.security = obj.getMeta().getSecurity();
+                    ent.security = BaseCoding.fromCodingList(obj.getMeta().getSecurity());
                 }
                 if (obj.getMeta().hasTag()) {
-                    ent.tag = obj.getMeta().getTag();
+                    ent.tag = BaseCoding.fromCodingList(obj.getMeta().getTag());
                 }
             }
             
-            if (obj.hasExtension()) {
-                ent.extension = obj.getExtension();
-            }
+            ent.extension = transform(obj.getExtension(), BaseExtension::fromExtension);
         }
     }
 }

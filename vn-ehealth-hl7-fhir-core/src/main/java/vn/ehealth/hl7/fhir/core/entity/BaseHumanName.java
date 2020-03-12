@@ -17,23 +17,19 @@ public class BaseHumanName {
     public List<String> suffix;
     public BasePeriod period;
 
-    public static BaseHumanName fromHumanName(HumanName object) {
-        if(object == null) return null;
+    public static BaseHumanName fromHumanName(HumanName obj) {        
+        if(obj == null) return null;
         
-        var entity = new BaseHumanName();
+        var ent = new BaseHumanName();
+        ent.use = obj.hasUse()? obj.getUse().toCode() : null;        
+        ent.text = obj.hasText()? obj.getText() : null;
+        ent.family = obj.hasFamily()? obj.getFamily() : null;
+        ent.given = obj.hasGiven()? transform(obj.getGiven(), x -> x.getValue()) : null;
+        ent.prefix = obj.hasPrefix()? transform(obj.getPrefix(), x -> x.getValue()) : null;
+        ent.suffix = obj.hasSuffix()? transform(obj.getSuffix(), x -> x.getValue()) : null;
+        ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
         
-        if (object.hasUse()) {
-            entity.use = object.getUse().toCode();
-        }
-        
-        entity.text = object.getText();
-        entity.family = object.getFamily();
-        entity.given = transform(object.getGiven(), x -> x.getValue());
-        entity.prefix = transform(object.getPrefix(), x -> x.getValue());
-        entity.suffix = transform(object.getSuffix(), x -> x.getValue());
-        entity.period = BasePeriod.fromPeriod(object.getPeriod());
-        
-        return entity;
+        return ent;
     }
     
     public static List<BaseHumanName> fromHumanNameList(List<HumanName> lst) {

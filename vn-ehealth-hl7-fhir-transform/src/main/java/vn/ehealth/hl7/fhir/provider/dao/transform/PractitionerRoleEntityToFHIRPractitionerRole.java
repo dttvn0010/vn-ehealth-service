@@ -19,7 +19,7 @@ public class PractitionerRoleEntityToFHIRPractitionerRole
     public PractitionerRole transform(PractitionerRoleEntity ent) {
         var obj = PractitionerRoleEntity.toPractitionerRole(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "PractitionerRole-v1.0"));
-        obj.setExtension(ent.extension);
+        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
         obj.setId(ent.fhir_id);
         return obj;
     }

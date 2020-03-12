@@ -7,12 +7,10 @@ import java.util.Optional;
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Appointment;
 import org.hl7.fhir.r4.model.Appointment.AppointmentStatus;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
-
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -25,11 +23,11 @@ public class AppointmentEntity extends BaseResource {
     public ObjectId id;
     public List<BaseIdentifier> identifier;
     public String status;
-    public List<CodeableConcept> serviceCategory;
-    public List<CodeableConcept> serviceType;
-    public List<CodeableConcept> specialty;
-    public CodeableConcept appointmentType;
-    public List<CodeableConcept> reasonCode;
+    public List<BaseCodeableConcept> serviceCategory;
+    public List<BaseCodeableConcept> serviceType;
+    public List<BaseCodeableConcept> specialty;
+    public BaseCodeableConcept appointmentType;
+    public List<BaseCodeableConcept> reasonCode;
     //    public List<BaseReference> indication;
     public int priority;
     public String description;
@@ -49,11 +47,11 @@ public class AppointmentEntity extends BaseResource {
         var ent = new AppointmentEntity();
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
         ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.serviceCategory = obj.getServiceCategory();
-        ent.serviceType = obj.getServiceType();
-        ent.specialty = obj.getSpecialty();
-        ent.appointmentType = obj.getAppointmentType();
-        ent.reasonCode = obj.getReasonCode();
+        ent.serviceCategory = BaseCodeableConcept.fromCodeableConcept(obj.getServiceCategory());
+        ent.serviceType = BaseCodeableConcept.fromCodeableConcept(obj.getServiceType());
+        ent.specialty = BaseCodeableConcept.fromCodeableConcept(obj.getSpecialty());
+        ent.appointmentType = BaseCodeableConcept.fromCodeableConcept(obj.getAppointmentType());
+        ent.reasonCode = BaseCodeableConcept.fromCodeableConcept(obj.getReasonCode());
         ent.priority = obj.getPriority();
         ent.description = obj.getDescription();
         ent.supportingInformation = BaseReference.fromReferenceList(obj.getSupportingInformation());
@@ -72,11 +70,11 @@ public class AppointmentEntity extends BaseResource {
         var obj = new Appointment();
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
         obj.setStatus(AppointmentStatus.fromCode(ent.status));
-        obj.setServiceCategory(ent.serviceCategory);
-        obj.setServiceType(ent.serviceType);
-        obj.setSpecialty(ent.specialty);
-        obj.setAppointmentType(ent.appointmentType);
-        obj.setReasonCode(ent.reasonCode);
+        obj.setServiceCategory(BaseCodeableConcept.toCodeableConcept(ent.serviceCategory));
+        obj.setServiceType(BaseCodeableConcept.toCodeableConcept(ent.serviceType));
+        obj.setSpecialty(BaseCodeableConcept.toCodeableConcept(ent.specialty));
+        obj.setAppointmentType(BaseCodeableConcept.toCodeableConcept(ent.appointmentType));
+        obj.setReasonCode(BaseCodeableConcept.toCodeableConcept(ent.reasonCode));
         obj.setPriority(ent.priority);
         obj.setDescription(ent.description);
         obj.setSupportingInformation(BaseReference.toReferenceList(ent.supportingInformation));

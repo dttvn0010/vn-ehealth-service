@@ -3,13 +3,11 @@ package vn.ehealth.hl7.fhir.schedule.entity;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Schedule;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
-
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -21,9 +19,9 @@ public class ScheduleEntity extends BaseResource {
     public ObjectId id;
 
     public List<BaseIdentifier> identifier;
-    public List<CodeableConcept> serviceCategory;
-    public List<CodeableConcept> serviceType;
-    public List<CodeableConcept> specialty;
+    public List<BaseCodeableConcept> serviceCategory;
+    public List<BaseCodeableConcept> serviceType;
+    public List<BaseCodeableConcept> specialty;
     public List<BaseReference> actor;
     public BasePeriod planningHorizon;
     public String comment;
@@ -32,9 +30,9 @@ public class ScheduleEntity extends BaseResource {
         if(obj == null) return null;
         var ent = new ScheduleEntity();
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.serviceCategory = obj.getServiceCategory();
-        ent.serviceType = obj.getServiceType();
-        ent.specialty = obj.getSpecialty();
+        ent.serviceCategory = BaseCodeableConcept.fromCodeableConcept(obj.getServiceCategory());
+        ent.serviceType = BaseCodeableConcept.fromCodeableConcept(obj.getServiceType());
+        ent.specialty = BaseCodeableConcept.fromCodeableConcept(obj.getSpecialty());
         ent.actor = BaseReference.fromReferenceList(obj.getActor());
         ent.planningHorizon = BasePeriod.fromPeriod(obj.getPlanningHorizon());
         ent.comment = obj.getComment();
@@ -45,9 +43,9 @@ public class ScheduleEntity extends BaseResource {
         if(ent == null) return null;
         var obj = new Schedule();
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
-        obj.setServiceCategory(ent.serviceCategory);
-        obj.setServiceType(ent.serviceType);
-        obj.setSpecialty(ent.specialty);
+        obj.setServiceCategory(BaseCodeableConcept.toCodeableConcept(ent.serviceCategory));
+        obj.setServiceType(BaseCodeableConcept.toCodeableConcept(ent.serviceType));
+        obj.setSpecialty(BaseCodeableConcept.toCodeableConcept(ent.specialty));
         obj.setActor(BaseReference.toReferenceList(ent.actor));
         obj.setPlanningHorizon(BasePeriod.toPeriod(ent.planningHorizon));
         obj.setComment(ent.comment);

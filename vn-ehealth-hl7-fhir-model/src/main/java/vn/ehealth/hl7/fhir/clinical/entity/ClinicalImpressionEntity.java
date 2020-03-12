@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.ClinicalImpression;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.UriType;
 import org.hl7.fhir.r4.model.ClinicalImpression.ClinicalImpressionStatus;
@@ -16,6 +15,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -28,7 +28,7 @@ public class ClinicalImpressionEntity extends BaseResource {
     public ObjectId id;
     public List<BaseIdentifier> identifier;
     public String status;
-    public CodeableConcept code;
+    public BaseCodeableConcept code;
     public String description;
     public BaseReference subject;
     //public BaseReference context;
@@ -41,7 +41,7 @@ public class ClinicalImpressionEntity extends BaseResource {
     public List<UriType> protocol;
     public String summary;
     public List<ClinicalFindingEntity> finding;
-    public List<CodeableConcept> prognosisCodeableConcept;
+    public List<BaseCodeableConcept> prognosisCodeableConcept;
     public List<BaseReference> prognosisReference;
     public List<BaseAnnotation> note;
     
@@ -51,7 +51,7 @@ public class ClinicalImpressionEntity extends BaseResource {
         var ent = new ClinicalImpressionEntity();
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
         ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.code = obj.getCode();
+        ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
         ent.description = obj.getDescription();
         ent.subject = BaseReference.fromReference(obj.getSubject());
         ent.effective = obj.getEffective();
@@ -63,7 +63,7 @@ public class ClinicalImpressionEntity extends BaseResource {
         ent.protocol = obj.getProtocol();
         ent.summary = obj.getSummary();
         ent.finding = transform(obj.getFinding(),ClinicalFindingEntity::fromClinicalImpressionFindingComponent);
-        ent.prognosisCodeableConcept = obj.getPrognosisCodeableConcept();
+        ent.prognosisCodeableConcept = BaseCodeableConcept.fromCodeableConcept(obj.getPrognosisCodeableConcept());
         ent.prognosisReference = BaseReference.fromReferenceList(obj.getPrognosisReference());
         ent.note = BaseAnnotation.fromAnnotationList(obj.getNote());
         
@@ -77,7 +77,7 @@ public class ClinicalImpressionEntity extends BaseResource {
         
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
         obj.setStatus(ClinicalImpressionStatus.fromCode(ent.status));
-        obj.setCode(ent.code);
+        obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
         obj.setDescription(ent.description);
         obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setEffective(ent.effective);
@@ -89,7 +89,7 @@ public class ClinicalImpressionEntity extends BaseResource {
         obj.setProtocol(ent.protocol);
         obj.setSummary(ent.summary);
         obj.setFinding(transform(ent.finding, ClinicalFindingEntity::toClinicalImpressionFindingComponent));
-        obj.setPrognosisCodeableConcept(ent.prognosisCodeableConcept);
+        obj.setPrognosisCodeableConcept(BaseCodeableConcept.toCodeableConcept(ent.prognosisCodeableConcept));
         obj.setPrognosisReference(BaseReference.toReferenceList(ent.prognosisReference));
         obj.setNote(BaseAnnotation.toAnnotationList(ent.note));
         

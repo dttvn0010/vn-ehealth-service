@@ -2,16 +2,14 @@ package vn.ehealth.hl7.fhir.clinical.entity;
 
 import java.util.List;
 
-
-
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Condition.ConditionEvidenceComponent;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 
 public class ConditionEvidenceEntity {
 
-    public List<CodeableConcept> code;
+    public List<BaseCodeableConcept> code;
     public List<BaseReference> detail;
     
     public static ConditionEvidenceEntity fromConditionEvidenceComponent(ConditionEvidenceComponent obj) {
@@ -19,7 +17,7 @@ public class ConditionEvidenceEntity {
         
         var ent = new ConditionEvidenceEntity();
         
-        ent.code = obj.getCode();
+        ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
         ent.detail = BaseReference.fromReferenceList(obj.getDetail());
         
         return ent;
@@ -30,7 +28,7 @@ public class ConditionEvidenceEntity {
         
         var obj = new ConditionEvidenceComponent();
         
-        obj.setCode(ent.code);
+        obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
         obj.setDetail(BaseReference.toReferenceList(ent.detail));
         
         return obj;
