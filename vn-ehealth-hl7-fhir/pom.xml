@@ -17,7 +17,7 @@
     </parent>
 
     <properties>
-        <start-class>vn.ehealth.hl7.fhir.Hl7FhirApplication</start-class>
+        <start-class>vn.ehealth.hl7.fhir.Application</start-class>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot-version>2.1.8.RELEASE</spring-boot-version>
