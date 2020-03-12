@@ -15,7 +15,6 @@ public abstract class BaseResource {
     public boolean active;
     public List<BaseCoding> security;
     public List<BaseCoding> tag;
-    
     public List<BaseExtension> extension;
     public String fhir_id;
 }

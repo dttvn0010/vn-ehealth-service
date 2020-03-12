@@ -44,7 +44,7 @@
 		
 		<dependency>
             <groupId>vn.ehealth</groupId>
-            <artifactId>vn-ehealth-hl7-fhir</artifactId>
+            <artifactId>vn-ehealth-hl7-fhir-model</artifactId>
             <version>1.0</version>
         </dependency>        
         

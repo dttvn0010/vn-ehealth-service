@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
@@ -39,17 +39,20 @@ public class PatientEntity extends BaseResource {
     public List<BaseContactPoint> telecom;
     public String gender;
     public Date birthDate;
+    
+    @JsonIgnore
     public Type deceased;
+    
     public List<BaseAddress> address;
     public BaseCodeableConcept maritalStatus;
+    
+    @JsonIgnore
     public Type multipleBirth;
-    public List<BaseAttachment> photo;
+    
+    public List<BaseAttachment> photo;    
     public List<BaseContactPerson> contact;
-    /** animal **/
-    /** communication **/
-    public List<BaseReference> generalPractitioner;
+    public List<BaseReference> generalPractitioner;    
     public BaseReference managingOrganization;
-    /** link **/
     public BaseCodeableConcept ethic;
     public BaseCodeableConcept race;
     

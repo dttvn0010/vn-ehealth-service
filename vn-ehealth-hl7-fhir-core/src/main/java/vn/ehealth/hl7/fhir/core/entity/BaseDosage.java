@@ -6,6 +6,8 @@ import org.hl7.fhir.r4.model.Dosage;
 import org.hl7.fhir.r4.model.Timing;
 import org.hl7.fhir.r4.model.Type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 public class BaseDosage {
@@ -14,7 +16,7 @@ public class BaseDosage {
     public List<BaseCodeableConcept> additionalInstruction;
     public String patientInstruction;
     public Timing timing;
-    public Type asNeeded;
+    @JsonIgnore public Type asNeeded;
     public BaseCodeableConcept site;
     public BaseCodeableConcept route;
     public BaseCodeableConcept method;

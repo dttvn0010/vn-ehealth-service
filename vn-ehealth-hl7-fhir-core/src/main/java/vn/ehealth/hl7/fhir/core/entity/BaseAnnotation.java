@@ -6,6 +6,8 @@ import java.util.List;
 import org.hl7.fhir.r4.model.Annotation;
 import org.hl7.fhir.r4.model.Type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 /**
@@ -14,7 +16,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
  * @version 1.0
  */
 public class BaseAnnotation {
-    public Type author;
+    @JsonIgnore public Type author;
     public Date time;
     public String text;
   

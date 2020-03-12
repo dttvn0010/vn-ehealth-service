@@ -1,5 +1,6 @@
 package vn.ehealth.emr.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,5 +17,9 @@ public class PatientService {
     
     public Optional<PatientEntity> getById(String id) {
         return patientRepository.findById(id);
+    }
+    
+    public List<PatientEntity> getAll(){
+        return patientRepository.findAll();
     }
 }
