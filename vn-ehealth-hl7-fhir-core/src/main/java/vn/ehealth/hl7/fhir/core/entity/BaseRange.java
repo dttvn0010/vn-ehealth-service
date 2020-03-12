@@ -6,22 +6,22 @@ public class BaseRange {
     public BaseQuantity low;
     public BaseQuantity high;
    
-    public static BaseRange fromRange(Range range) {
-        if(range == null) return null;
+    public static BaseRange fromRange(Range obj) {
+        if(obj == null) return null;
         
-        var entity = new BaseRange();
-        entity.low = BaseQuantity.fromQuantity(range.getLow());
-        entity.high = BaseQuantity.fromQuantity(range.getHigh());
-        return entity;
+        var ent = new BaseRange();
+        ent.low = obj.hasLow()? BaseQuantity.fromQuantity(obj.getLow()) : null;
+        ent.high = obj.hasHigh()? BaseQuantity.fromQuantity(obj.getHigh()) : null;
+        return ent;
     }
     
-    public static Range toRange(BaseRange entity) {
-        if(entity == null) return null;
+    public static Range toRange(BaseRange ent) {
+        if(ent == null) return null;
         
-        var range = new Range();
-        range.setLow(BaseQuantity.toQuantity(entity.low));
-        range.setHigh(BaseQuantity.toQuantity(entity.high));
-        return range;
+        var obj = new Range();
+        obj.setLow(BaseQuantity.toQuantity(ent.low));
+        obj.setHigh(BaseQuantity.toQuantity(ent.high));
+        return obj;
     }
 
 }

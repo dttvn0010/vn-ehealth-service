@@ -14,33 +14,34 @@ public class BaseAvailableTime {
     public String availableEndTime;
 
    
-    public static BaseAvailableTime fromHealthcareServiceAvailableTimeComponent(HealthcareServiceAvailableTimeComponent object) {
-        if(object == null) return null;
+    public static BaseAvailableTime fromHealthcareServiceAvailableTimeComponent(HealthcareServiceAvailableTimeComponent obj) {
+        if(obj == null) return null;
         
-        var entity = new BaseAvailableTime();
-        entity.daysOfWeek = transform(object.getDaysOfWeek(), x -> x.getValueAsString());
-        entity.allDay = object.getAllDay();
-        entity.availableStartTime = object.getAvailableStartTime();
-        entity.availableEndTime = object.getAvailableEndTime();
-        return entity;
+        var ent = new BaseAvailableTime();
+        ent.daysOfWeek = obj.hasDaysOfWeek()? transform(obj.getDaysOfWeek(), x -> x.getValueAsString()) : null;
+        ent.allDay = obj.hasAllDay()? obj.getAllDay() : null;
+        ent.availableStartTime = obj.hasAvailableStartTime()? obj.getAvailableStartTime() : null;
+        ent.availableEndTime = obj.hasAvailableStartTime()? obj.getAvailableEndTime() : null;
+        return ent;
     }
     
     public static List<BaseAvailableTime> fromHealthcareServiceAvailableTimeComponent(List<HealthcareServiceAvailableTimeComponent> lst) {
         return transform(lst, x -> fromHealthcareServiceAvailableTimeComponent(x));        
     }
     
-    public static HealthcareServiceAvailableTimeComponent toHealthcareServiceAvailableTimeComponent(BaseAvailableTime entity) {
-        if(entity == null) return null;
+    public static HealthcareServiceAvailableTimeComponent toHealthcareServiceAvailableTimeComponent(BaseAvailableTime ent) {
+        if(ent == null) return null;
         
-        var object = new HealthcareServiceAvailableTimeComponent();
-        if(entity.daysOfWeek != null) {
-            entity.daysOfWeek.forEach(x -> {
-                object.addDaysOfWeek(DaysOfWeek.fromCode(x.toLowerCase()));
+        var obj = new HealthcareServiceAvailableTimeComponent();
+        if(ent.daysOfWeek != null) {
+            ent.daysOfWeek.forEach(x -> {
+                obj.addDaysOfWeek(DaysOfWeek.fromCode(x.toLowerCase()));
             });
         }
-        object.setAvailableStartTime(entity.availableStartTime);
-        object.setAvailableEndTime(entity.availableEndTime);
-        return object;
+        if(ent.allDay != null) obj.setAllDay(ent.allDay);
+        obj.setAvailableStartTime(ent.availableStartTime);
+        obj.setAvailableEndTime(ent.availableEndTime);
+        return obj;
     }
     
     public static List<HealthcareServiceAvailableTimeComponent> toHealthcareServiceAvailableTimeComponent(List<BaseAvailableTime> entityList) {

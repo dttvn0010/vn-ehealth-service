@@ -20,18 +20,18 @@ public class BaseAnnotation {
     public Date time;
     public String text;
   
-    public static BaseAnnotation fromAnnotation(Annotation object) {
-        if(object == null) {
+    public static BaseAnnotation fromAnnotation(Annotation obj) {
+        if(obj == null) {
             return null;
         }
         
-        var entity = new BaseAnnotation();
+        var ent = new BaseAnnotation();
         
-        entity.author = object.getAuthor();
-        entity.time = object.getTime();
-        entity.text = object.getText();
+        ent.author = obj.hasAuthor()? obj.getAuthor() : null;
+        ent.time = obj.hasTime()? obj.getTime() : null;
+        ent.text = obj.hasText()? obj.getText() : null;
         
-        return entity;
+        return ent;
     }
     
     public static List<BaseAnnotation> fromAnnotationList(List<Annotation> lst) {

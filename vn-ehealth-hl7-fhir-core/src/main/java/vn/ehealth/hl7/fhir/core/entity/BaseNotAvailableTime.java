@@ -10,14 +10,14 @@ public class BaseNotAvailableTime{
     public String description; 
     public BasePeriod during;
 
-    public static BaseNotAvailableTime fromHealthcareServiceNotAvailableComponent(HealthcareServiceNotAvailableComponent object) {
-        if(object == null) return null;
+    public static BaseNotAvailableTime fromHealthcareServiceNotAvailableComponent(HealthcareServiceNotAvailableComponent obj) {
+        if(obj == null) return null;
                 
-        var entity = new BaseNotAvailableTime();
-        entity.description = object.getDescription();
-        entity.during = BasePeriod.fromPeriod(object.getDuring());
+        var ent = new BaseNotAvailableTime();
+        ent.description = obj.hasDescription()? obj.getDescription() : null;
+        ent.during = obj.hasDuring()? BasePeriod.fromPeriod(obj.getDuring()) : null;
         
-        return entity;
+        return ent;
     }
     
     public static List<BaseNotAvailableTime> fromHealthcareServiceNotAvailableComponent(List<HealthcareServiceNotAvailableComponent> lst) {

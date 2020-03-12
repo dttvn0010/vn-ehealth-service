@@ -12,18 +12,16 @@ public class BaseQuantity {
     public String system;
     public String code;
   
-    public static BaseQuantity fromQuantity(Quantity object) {
-        if(object == null) return null;
+    public static BaseQuantity fromQuantity(Quantity obj) {
+        if(obj == null) return null;
         
-        var entity = new BaseQuantity();
-        entity.value = object.getValue();
-        if(object.getComparator() != null) {
-            entity.comparator = object.getComparator().toCode();
-        }
-        entity.unit = object.getUnit();
-        entity.system = object.getSystem();
-        entity.code = object.getCode();
-        return entity;
+        var ent = new BaseQuantity();
+        ent.value = obj.hasValue()? obj.getValue() : null;
+        ent.comparator = obj.hasComparator()? obj.getComparator().toCode() : null;
+        ent.unit = obj.hasUnit()? obj.getUnit() : null;
+        ent.system = obj.hasSystem()? obj.getSystem() : null;
+        ent.code = obj.hasCode()? obj.getCode() : null;
+        return ent;
     }
     
     public static Quantity toQuantity(BaseQuantity entity) {
