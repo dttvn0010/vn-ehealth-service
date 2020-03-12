@@ -9,7 +9,7 @@ import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Address.AddressType;
 import org.hl7.fhir.r4.model.Address.AddressUse;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 /**
@@ -30,6 +30,8 @@ public class BaseAddress {
     public String addressType;
     public String postalCode;
     public String text;
+    
+    @JsonIgnore
     public List<Extension> extension;
     public BasePeriod period;
     

@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.jfree.util.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +19,9 @@ public class FieldUtil {
         return s.replaceAll("(.)(\\p{Upper})", "$1_$2").toLowerCase();
     }
     
-    public static Object getField(Object obj, String fieldName) {
+    private static Object _getField(Object obj, String fieldName) {
+        if(obj == null) return null;
+        
         Field field;
         try {
             field = obj.getClass().getField(fieldName);
@@ -27,6 +31,20 @@ public class FieldUtil {
             Log.error("Cannot set field : ", e);
         }
         return null;
+    }
+    
+    public static Object getField(Object obj, String fieldName) {
+        String[] arrs = fieldName.split("\\.");
+        for(String field: arrs) obj = _getField(obj, field);
+        return obj;
+    }
+    
+    public static Map<String, Object> getProjection(@Nonnull Object obj, String... fields) {
+        var m = new HashMap<String, Object>();
+        for(String key : fields) {
+            m.put(key, getField(obj, key));
+        }
+        return m;
     }
     
     public static void setFields(Object obj, Map<String, Object> record) {

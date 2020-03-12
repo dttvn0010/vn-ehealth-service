@@ -151,7 +151,7 @@ public class Hl7FhirRestfulServer extends RestfulServer {
           responseInterceptor.setAddResponseHeaderOnSeverity(ResultSeverityEnum.INFORMATION);
           responseInterceptor.setResponseHeaderValue("Validation on ${line}: ${message} ${severity}");
           responseInterceptor.setResponseHeaderValueNoIssues("No issues detected");
-          registerInterceptor(responseInterceptor);
+          //registerInterceptor(responseInterceptor);
         
         // This is the format for each line. A number of substitution variables may
         // be used here. See the JavaDoc for LoggingInterceptor for information on
