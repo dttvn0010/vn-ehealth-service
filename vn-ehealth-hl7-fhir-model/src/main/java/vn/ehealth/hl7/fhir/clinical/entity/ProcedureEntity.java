@@ -10,6 +10,8 @@ import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -33,7 +35,7 @@ public class ProcedureEntity extends BaseResource {
     public BaseCodeableConcept code;
     public BaseReference subject;
     //public BaseReference context;
-    public Type performed;
+    @JsonIgnore public Type performed;
     public List<ProcedurePerformerEntity> performer;
     public BaseReference location;
     public List<BaseCodeableConcept> reasonCode;

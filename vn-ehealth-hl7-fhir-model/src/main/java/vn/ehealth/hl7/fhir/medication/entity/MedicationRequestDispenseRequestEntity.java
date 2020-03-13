@@ -1,8 +1,8 @@
 package vn.ehealth.hl7.fhir.medication.entity;
 
-import org.hl7.fhir.r4.model.Duration;
 import org.hl7.fhir.r4.model.MedicationRequest.MedicationRequestDispenseRequestComponent;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseDuration;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -11,7 +11,7 @@ public class MedicationRequestDispenseRequestEntity{
     public BasePeriod validityPeriod;
     public int numberOfRepeatsAllowed;
     public BaseQuantity quantity;
-    public Duration expectedSupplyDuration;
+    public BaseDuration expectedSupplyDuration;
     public BaseReference performer;  
     
     public static MedicationRequestDispenseRequestEntity fromMedicationRequestDispenseRequestComponent(MedicationRequestDispenseRequestComponent obj) {
@@ -20,7 +20,7 @@ public class MedicationRequestDispenseRequestEntity{
         ent.validityPeriod = BasePeriod.fromPeriod(obj.getValidityPeriod());
         ent.numberOfRepeatsAllowed = obj.getNumberOfRepeatsAllowed();
         ent.quantity = BaseQuantity.fromQuantity(obj.getQuantity());
-        ent.expectedSupplyDuration = obj.getExpectedSupplyDuration();
+        ent.expectedSupplyDuration = BaseDuration.fromDuration(obj.getExpectedSupplyDuration());
         ent.performer = BaseReference.fromReference(obj.getPerformer());
         return ent;
         
@@ -31,7 +31,7 @@ public class MedicationRequestDispenseRequestEntity{
         obj.setValidityPeriod(BasePeriod.toPeriod(ent.validityPeriod));
         obj.setNumberOfRepeatsAllowed(ent.numberOfRepeatsAllowed);
         obj.setQuantity(BaseQuantity.toQuantity(ent.quantity));
-        obj.setExpectedSupplyDuration(ent.expectedSupplyDuration);
+        obj.setExpectedSupplyDuration(BaseDuration.toDuration(ent.expectedSupplyDuration));
         obj.setPerformer(BaseReference.toReference(ent.performer));
         return obj;
     }

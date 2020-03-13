@@ -9,6 +9,8 @@ import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseDosage;
@@ -27,7 +29,7 @@ public class MedicationDispenseEntity extends BaseResource {
     //Enumeration<MedicationDispenseStatus>
     public String status;
     public BaseCodeableConcept category;
-    public Type medication;
+    @JsonIgnore public Type medication;
     public BaseReference subject;
     //public BaseReference context;
     public List<BaseReference> supportingInformation;

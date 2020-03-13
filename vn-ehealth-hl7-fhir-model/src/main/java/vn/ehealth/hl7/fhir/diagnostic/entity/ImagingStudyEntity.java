@@ -6,12 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.ImagingStudy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
+import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -25,7 +25,7 @@ public class ImagingStudyEntity extends BaseResource {
     //public BaseIdentifier accession;
     public List<BaseIdentifier> identifier;
     //public String availability;
-    public List<Coding> modalityList;
+    public List<BaseCoding> modalityList;
     //public BaseReference patient;
     //public BaseReference context;
     public Date started;
@@ -48,7 +48,7 @@ public class ImagingStudyEntity extends BaseResource {
         
         var ent = new ImagingStudyEntity();
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.modalityList = obj.getModality();
+        ent.modalityList = BaseCoding.fromCodingList(obj.getModality());
         ent.started = obj.getStarted();
         ent.basedOn = BaseReference.fromReferenceList(obj.getBasedOn());
         ent.referrer = BaseReference.fromReference(obj.getReferrer());
@@ -71,7 +71,7 @@ public class ImagingStudyEntity extends BaseResource {
         
         var obj = new ImagingStudy();
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
-        obj.setModality(ent.modalityList);
+        obj.setModality(BaseCoding.toCodingList(ent.modalityList));
         obj.setStarted(ent.started);
         obj.setBasedOn(BaseReference.toReferenceList(ent.basedOn));
         obj.setReferrer(BaseReference.toReference(ent.referrer));

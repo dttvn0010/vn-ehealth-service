@@ -10,6 +10,8 @@ import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -26,7 +28,7 @@ public class GoalEntity extends BaseResource {
     public BaseCodeableConcept priority;
     public BaseCodeableConcept description;
     public BaseReference subject;
-    public Type start;
+    @JsonIgnore public Type start;
     /** target **/
     public Date statusDate;
     public String statusReason;

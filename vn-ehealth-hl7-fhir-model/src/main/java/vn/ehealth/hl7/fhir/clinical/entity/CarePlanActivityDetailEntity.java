@@ -3,6 +3,9 @@ package vn.ehealth.hl7.fhir.clinical.entity;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Type;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.hl7.fhir.r4.model.CarePlan.CarePlanActivityDetailComponent;
 import org.hl7.fhir.r4.model.CarePlan.CarePlanActivityStatus;
 
@@ -20,10 +23,10 @@ public class CarePlanActivityDetailEntity {
     public String status;
     public BaseCodeableConcept statusReason;
     //public Boolean prohibited;
-    public Type scheduled;
+    @JsonIgnore public Type scheduled;
     public BaseReference location;
     public List<BaseReference> performer;
-    public Type product;
+    @JsonIgnore public Type product;
     public BaseQuantity dailyAmount;
     public BaseQuantity quantity;
     public String description;

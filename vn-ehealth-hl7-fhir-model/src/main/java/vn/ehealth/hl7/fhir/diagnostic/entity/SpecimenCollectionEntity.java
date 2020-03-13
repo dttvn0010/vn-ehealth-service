@@ -3,13 +3,15 @@ package vn.ehealth.hl7.fhir.diagnostic.entity;
 import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.Specimen.SpecimenCollectionComponent;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 
 public class SpecimenCollectionEntity {
     public BaseReference collector;
-    public Type collected;
+    @JsonIgnore public Type collected;
     public BaseQuantity quantity;
     public BaseCodeableConcept method;
     public BaseCodeableConcept bodySite;

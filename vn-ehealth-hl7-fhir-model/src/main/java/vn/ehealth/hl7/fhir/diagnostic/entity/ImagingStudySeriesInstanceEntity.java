@@ -1,12 +1,13 @@
 package vn.ehealth.hl7.fhir.diagnostic.entity;
 
-import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.ImagingStudy.ImagingStudySeriesInstanceComponent;
+
+import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 
 public class ImagingStudySeriesInstanceEntity {
     public String uid;
     public int number;
-    public Coding sopClass;
+    public BaseCoding sopClass;
     public String title;
     
     public static ImagingStudySeriesInstanceEntity fromImagingStudySeriesInstanceComponent(ImagingStudySeriesInstanceComponent obj) {
@@ -15,7 +16,7 @@ public class ImagingStudySeriesInstanceEntity {
         var ent = new ImagingStudySeriesInstanceEntity();
         ent.uid = obj.getUid();
         ent.number = obj.getNumber();
-        ent.sopClass = obj.getSopClass();
+        ent.sopClass = BaseCoding.fromCoding(obj.getSopClass());
         ent.title = obj.getTitle();
         
         return ent;
@@ -27,7 +28,7 @@ public class ImagingStudySeriesInstanceEntity {
         var obj = new ImagingStudySeriesInstanceComponent();
         obj.setUid(ent.uid);
         obj.setNumber(obj.getNumber());
-        obj.setSopClass(ent.sopClass);
+        obj.setSopClass(BaseCoding.toCoding(ent.sopClass));
         obj.setTitle(ent.title);
         
         return obj;

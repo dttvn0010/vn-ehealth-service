@@ -3,11 +3,13 @@ package vn.ehealth.hl7.fhir.term.entity;
 import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.ValueSet.ValueSetExpansionParameterComponent;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class ValueSetExpansionParameterEntity {
 
     
     public String name;
-    public Type value;
+    @JsonIgnore public Type value;
     
     public static ValueSetExpansionParameterEntity fromValueSetExpansionParameterComponent(ValueSetExpansionParameterComponent obj) {
         if(obj == null) return null;

@@ -8,11 +8,13 @@ import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 
 import org.hl7.fhir.r4.model.Observation.ObservationComponentComponent;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 public class ObservationComponentEntity {
     public BaseCodeableConcept code;
-    public Type value;
+    @JsonIgnore public Type value;
     public BaseCodeableConcept dataAbsentReason;
     public List<BaseCodeableConcept> interpretation;
     public List<ObservationReferenceRangeEntity> referenceRange;

@@ -6,7 +6,7 @@ import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Quantity.QuantityComparator;
 
 public class BaseQuantity {
-    public Number value;
+    public BigDecimal value;
     public String comparator;
     public String unit;
     public String system;
@@ -28,7 +28,7 @@ public class BaseQuantity {
         if(entity == null) return null;
         
         var object = new Quantity();
-        object.setValue((BigDecimal) entity.value);
+        object.setValue(entity.value);
         object.setComparator(QuantityComparator.fromCode(entity.comparator));
         object.setUnit(entity.unit);
         object.setSystem(entity.system);

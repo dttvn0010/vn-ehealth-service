@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.Duration;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Encounter.DiagnosisComponent;
 import org.hl7.fhir.r4.model.Encounter.EncounterStatus;
@@ -13,6 +11,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
+import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
+import vn.ehealth.hl7.fhir.core.entity.BaseDuration;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -56,7 +56,7 @@ public class EncounterEntity extends BaseResource{
     public List<BaseIdentifier> identifier;
     public String status;
     public List<EncounterStatusHistoryEntity> statusHistory;
-    public Coding class_;
+    public BaseCoding class_;
     public List<EncounterClassHistoryEntity> classHistory;
     public List<BaseCodeableConcept> type;
     public BaseCodeableConcept priority;
@@ -66,7 +66,7 @@ public class EncounterEntity extends BaseResource{
     public List<EncounterParticipantEntity> participant;
     public List<BaseReference> appointment;
     public BasePeriod period;
-    public Duration length;
+    public BaseDuration length;
     public List<BaseCodeableConcept> reasonCode;
     public List<DiagnosisEntity> diagnosis;
     public HospitalizationEntity hospitalization;
@@ -80,7 +80,9 @@ public class EncounterEntity extends BaseResource{
         var ent = new EncounterEntity();
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
         ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.classHistory = transform(obj.getClassHistory(), EncounterClassHistoryEntity::fromClassHistoryComponent);
+        ent.statusHistory = transform(obj.getStatusHistory(), EncounterStatusHistoryEntity::fromStatusHistoryComponent);
+        ent.class_ = BaseCoding.fromCoding(obj.getClass_());
+        ent.classHistory = transform(obj.getClassHistory(), EncounterClassHistoryEntity::fromClassHistoryComponent);        
         ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
         ent.priority = BaseCodeableConcept.fromCodeableConcept(obj.getPriority());
         ent.episodeOfCare = BaseReference.fromReferenceList(obj.getEpisodeOfCare());
@@ -88,7 +90,7 @@ public class EncounterEntity extends BaseResource{
         ent.participant = transform(obj.getParticipant(), EncounterParticipantEntity::fromEncounterParticipantComponent);
         ent.appointment = BaseReference.fromReferenceList(obj.getAppointment());
         ent.period = BasePeriod.fromPeriod(obj.getPeriod());
-        ent.length = obj.getLength();
+        ent.length = BaseDuration.fromDuration(obj.getLength());
         ent.reasonCode = BaseCodeableConcept.fromCodeableConcept(obj.getReasonCode());
         ent.diagnosis = transform(obj.getDiagnosis(), DiagnosisEntity::fromDiagnosisComponent);
         ent.hospitalization = HospitalizationEntity.fromEncounterHospitalizationComponent(obj.getHospitalization());
@@ -104,6 +106,8 @@ public class EncounterEntity extends BaseResource{
         var obj = new Encounter();
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
         obj.setStatus(EncounterStatus.fromCode(ent.status));
+        obj.setStatusHistory(transform(ent.statusHistory, EncounterStatusHistoryEntity::toStatusHistoryComponent));
+        obj.setClass_(BaseCoding.toCoding(ent.class_));
         obj.setClassHistory(transform(ent.classHistory, EncounterClassHistoryEntity::toClassHistoryComponent));
         obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
         obj.setPriority(BaseCodeableConcept.toCodeableConcept(ent.priority));
@@ -112,7 +116,7 @@ public class EncounterEntity extends BaseResource{
         obj.setParticipant(transform(ent.participant, EncounterParticipantEntity::toEncounterParticipantComponent));
         obj.setAppointment(BaseReference.toReferenceList(ent.appointment));
         obj.setPeriod(BasePeriod.toPeriod(ent.period));
-        obj.setLength(ent.length);
+        obj.setLength(BaseDuration.toDuration(ent.length));
         obj.setReasonCode(BaseCodeableConcept.toCodeableConcept(ent.reasonCode));
         obj.setDiagnosis(transform(ent.diagnosis, DiagnosisEntity::toDiagnosisComponent));
         obj.setHospitalization(HospitalizationEntity.toEncounterHospitalizationComponent(ent.hospitalization));

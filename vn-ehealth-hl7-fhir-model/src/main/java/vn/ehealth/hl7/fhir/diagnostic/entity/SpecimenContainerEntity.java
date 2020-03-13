@@ -2,6 +2,9 @@ package vn.ehealth.hl7.fhir.diagnostic.entity;
 
 import java.util.List;
 import org.hl7.fhir.r4.model.Specimen.SpecimenContainerComponent;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.hl7.fhir.r4.model.Type;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
@@ -14,7 +17,7 @@ public class SpecimenContainerEntity {
     public BaseCodeableConcept type;
     public BaseQuantity capacity;
     public BaseQuantity specimenQuantity;
-    public Type additive;
+    @JsonIgnore public Type additive;
     
     public static SpecimenContainerEntity fromSpecimenContainerComponent(SpecimenContainerComponent obj) {
         if(obj == null) return null;

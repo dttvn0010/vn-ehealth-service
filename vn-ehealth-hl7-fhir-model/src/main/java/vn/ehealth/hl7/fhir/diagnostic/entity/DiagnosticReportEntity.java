@@ -13,6 +13,8 @@ import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -32,7 +34,7 @@ public class DiagnosticReportEntity extends BaseResource {
     public BaseCodeableConcept code;
     public BaseReference subject;
     //public BaseReference context;
-    public Type effective;
+    @JsonIgnore public Type effective;
     public Date issued;
     public List<BaseReference> performer;
     public List<BaseReference> specimen;

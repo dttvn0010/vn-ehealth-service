@@ -6,16 +6,12 @@ import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 
 public class BaseExtension {
     public String url;
     @JsonIgnore public Type value;
-    
-    public static ObjectMapper objMapper = new ObjectMapper(); 
-    
     public static BaseExtension fromExtension(Extension obj) {
         if(obj == null) return null;
         var ent = new BaseExtension();

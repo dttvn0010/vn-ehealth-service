@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Location;
 import org.hl7.fhir.r4.model.Location.LocationMode;
 import org.hl7.fhir.r4.model.Location.LocationStatus;
@@ -12,10 +11,9 @@ import org.hl7.fhir.r4.model.StringType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
+import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseGeoLocation;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -30,7 +28,7 @@ public class LocationEntity extends BaseResource{
     
     public List<BaseIdentifier> identifier;
     public String status;
-    public Coding operationalStatus;
+    public BaseCoding operationalStatus;
     public String name;
     public List<String> alias;
     public String description;
@@ -49,7 +47,7 @@ public class LocationEntity extends BaseResource{
         var ent = new LocationEntity();
         ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
         ent.status =  Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.operationalStatus = obj.getOperationalStatus();
+        ent.operationalStatus = BaseCoding.fromCoding(obj.getOperationalStatus());
         ent.name =  obj.getName();
         ent.alias = transform(obj.getAlias(), x -> x.asStringValue());
         ent.description = obj.getDescription();
@@ -70,7 +68,7 @@ public class LocationEntity extends BaseResource{
         var obj = new Location();
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
         obj.setStatus(LocationStatus.fromCode(ent.status));
-        obj.setOperationalStatus(ent.operationalStatus);
+        obj.setOperationalStatus(BaseCoding.toCoding(ent.operationalStatus));
         obj.setName(ent.name);
         obj.setAlias(transform(ent.alias, x -> new StringType(x)));
         obj.setDescription(ent.description);

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.CodeSystem.ConceptDefinitionComponent;
-import org.hl7.fhir.r4.model.CodeSystem.PropertyType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -31,7 +30,7 @@ public class ConceptEntity extends BaseResource {
     public String codeSystemId;
     public List<ConceptEntity> concept;
     public Integer level;
-    public PropertyType type;
+    //public CodeSystemPropertyEntity type;
     
     public static ConceptEntity fromConceptDefinitionComponent(ConceptDefinitionComponent obj) {
         if(obj == null) return null;

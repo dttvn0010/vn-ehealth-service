@@ -39,16 +39,10 @@ public class PatientEntity extends BaseResource {
     public List<BaseContactPoint> telecom;
     public String gender;
     public Date birthDate;
-    
-    @JsonIgnore
-    public Type deceased;
-    
+    @JsonIgnore public Type deceased;
     public List<BaseAddress> address;
     public BaseCodeableConcept maritalStatus;
-    
-    @JsonIgnore
-    public Type multipleBirth;
-    
+    @JsonIgnore public Type multipleBirth;
     public List<BaseAttachment> photo;    
     public List<BaseContactPerson> contact;
     public List<BaseReference> generalPractitioner;    

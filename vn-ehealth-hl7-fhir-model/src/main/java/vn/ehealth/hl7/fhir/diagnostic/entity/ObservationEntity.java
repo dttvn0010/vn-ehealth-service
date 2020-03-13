@@ -13,6 +13,8 @@ import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -30,10 +32,10 @@ public class ObservationEntity extends BaseResource {
     public BaseCodeableConcept code;
     public BaseReference subject;
     //public BaseReference context;
-    public Type effective;
+    @JsonIgnore public Type effective;
     public Date issued;
     public List<BaseReference> performer;
-    public Type value;
+    @JsonIgnore public Type value;
     public BaseCodeableConcept dataAbsentReason;
     public List<BaseCodeableConcept> interpretation;
     //public String comment;

@@ -38,7 +38,7 @@ public class ClinicalImpressionEntity extends BaseResource {
     public BaseReference previous;
     public List<BaseReference> problem;
     public List<ClinicalInvestigationEntity> investigation;
-    public List<UriType> protocol;
+    public List<String> protocol;
     public String summary;
     public List<ClinicalFindingEntity> finding;
     public List<BaseCodeableConcept> prognosisCodeableConcept;
@@ -60,7 +60,7 @@ public class ClinicalImpressionEntity extends BaseResource {
         ent.previous = BaseReference.fromReference(obj.getPrevious());
         ent.problem = BaseReference.fromReferenceList(obj.getProblem());
         ent.investigation = transform(obj.getInvestigation(), ClinicalInvestigationEntity::fromClinicalImpressionInvestigationComponent);
-        ent.protocol = obj.getProtocol();
+        ent.protocol = transform(obj.getProtocol(), x -> x.getValue());
         ent.summary = obj.getSummary();
         ent.finding = transform(obj.getFinding(),ClinicalFindingEntity::fromClinicalImpressionFindingComponent);
         ent.prognosisCodeableConcept = BaseCodeableConcept.fromCodeableConcept(obj.getPrognosisCodeableConcept());
@@ -86,7 +86,7 @@ public class ClinicalImpressionEntity extends BaseResource {
         obj.setPrevious(BaseReference.toReference(ent.previous));
         obj.setProblem(BaseReference.toReferenceList(ent.problem));
         obj.setInvestigation(transform(ent.investigation, ClinicalInvestigationEntity::toClinicalImpressionInvestigationComponent));
-        obj.setProtocol(ent.protocol);
+        obj.setProtocol(transform(ent.protocol, x -> new UriType(x)));
         obj.setSummary(ent.summary);
         obj.setFinding(transform(ent.finding, ClinicalFindingEntity::toClinicalImpressionFindingComponent));
         obj.setPrognosisCodeableConcept(BaseCodeableConcept.toCodeableConcept(ent.prognosisCodeableConcept));

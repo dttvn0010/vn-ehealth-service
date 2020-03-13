@@ -5,6 +5,8 @@ import java.util.List;
 import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.Specimen.SpecimenProcessingComponent;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 
@@ -13,7 +15,7 @@ public class SpecimenProcessingEntity {
     public String description;
     public BaseCodeableConcept procedure;
     public List<BaseReference> additive;
-    public Type time;
+    @JsonIgnore public Type time;
     
     public static SpecimenProcessingEntity fromSpecimenProcessingComponent(SpecimenProcessingComponent obj) {
         if(obj == null) return null;

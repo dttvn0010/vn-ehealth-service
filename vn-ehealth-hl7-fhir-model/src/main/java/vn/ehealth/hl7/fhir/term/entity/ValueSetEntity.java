@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.UsageContext;
 import org.hl7.fhir.r4.model.ValueSet;
 import org.hl7.fhir.r4.model.Enumerations.PublicationStatus;
 import org.springframework.data.annotation.Id;
@@ -14,6 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseUsageContext;
+
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 /**
@@ -36,7 +37,7 @@ public class ValueSetEntity extends BaseResource {
     public String publisher;
     public List<ContactDetailEntity> contact;
     public String description;
-    public List<UsageContext> useContext;
+    public List<BaseUsageContext> useContext;
     public List<BaseCodeableConcept> jurisdiction;
     public boolean immutable;
     public String purpose;
@@ -59,7 +60,7 @@ public class ValueSetEntity extends BaseResource {
         ent.publisher = obj.getPublisher();
         ent.contact = transform(obj.getContact(), ContactDetailEntity::fromContactDetail);
         ent.description = obj.getDescription();
-        ent.useContext = obj.getUseContext();
+        ent.useContext = transform(obj.getUseContext(), BaseUsageContext::fromUsageContext);
         ent.jurisdiction = BaseCodeableConcept.fromCodeableConcept(obj.getJurisdiction());
         ent.immutable = obj.getImmutable();
         ent.purpose = obj.getPurpose();
@@ -83,7 +84,7 @@ public class ValueSetEntity extends BaseResource {
         obj.setPublisher(ent.publisher);
         obj.setContact(transform(ent.contact, ContactDetailEntity::toContactDetail));
         obj.setDescription(ent.description);
-        obj.setUseContext(ent.useContext);
+        obj.setUseContext(transform(ent.useContext, BaseUsageContext::toUsageContext));
         obj.setJurisdiction(BaseCodeableConcept.toCodeableConcept(ent.jurisdiction));
         obj.setImmutable(ent.immutable);
         obj.setPurpose(ent.purpose);

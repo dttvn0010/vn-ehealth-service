@@ -2,6 +2,8 @@ package vn.ehealth.hl7.fhir.medication.entity;
 
 import org.hl7.fhir.r4.model.Type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 
 import org.hl7.fhir.r4.model.MedicationRequest.MedicationRequestSubstitutionComponent;
@@ -9,7 +11,7 @@ import org.hl7.fhir.r4.model.MedicationRequest.MedicationRequestSubstitutionComp
 
 
 public class MedicationRequestSubstitutionEntity{
-    public Type allowed;
+    @JsonIgnore public Type allowed;
     public BaseCodeableConcept reason;
     
     public static MedicationRequestSubstitutionEntity fromMedicationRequestSubstitutionComponent(MedicationRequestSubstitutionComponent obj) {

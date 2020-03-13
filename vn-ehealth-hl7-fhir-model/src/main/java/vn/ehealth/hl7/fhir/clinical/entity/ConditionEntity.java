@@ -7,6 +7,8 @@ import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -28,8 +30,8 @@ public class ConditionEntity extends BaseResource {
     public List<BaseCodeableConcept> bodySite;
     public BaseReference subject;
     //public BaseReference context;
-    public Type onset;
-    public Type abatement;
+    @JsonIgnore public Type onset;
+    @JsonIgnore public Type abatement;
     //public Date assertedDate;
     public BaseReference asserter;
     public List<ConditionStageEntity> stage;

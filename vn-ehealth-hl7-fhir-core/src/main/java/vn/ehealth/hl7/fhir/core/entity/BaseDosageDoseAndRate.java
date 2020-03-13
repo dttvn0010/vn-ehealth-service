@@ -1,13 +1,16 @@
 package vn.ehealth.hl7.fhir.core.entity;
 
 import org.hl7.fhir.r4.model.Dosage.DosageDoseAndRateComponent;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.hl7.fhir.r4.model.Type;
 
 public class BaseDosageDoseAndRate {
 
     public BaseCodeableConcept type;
-    public Type dose;
-    public Type rate;
+    @JsonIgnore public Type dose;
+    @JsonIgnore public Type rate;
  
     public static BaseDosageDoseAndRate fromDosageDoseAndRateComponent(DosageDoseAndRateComponent obj) {
         if(obj == null) return null;

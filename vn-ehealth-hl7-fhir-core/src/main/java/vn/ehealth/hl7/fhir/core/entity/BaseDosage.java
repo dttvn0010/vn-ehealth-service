@@ -3,7 +3,6 @@ package vn.ehealth.hl7.fhir.core.entity;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Dosage;
-import org.hl7.fhir.r4.model.Timing;
 import org.hl7.fhir.r4.model.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,7 +14,7 @@ public class BaseDosage {
     public String text;
     public List<BaseCodeableConcept> additionalInstruction;
     public String patientInstruction;
-    public Timing timing;
+    public BaseTiming timing;
     @JsonIgnore public Type asNeeded;
     public BaseCodeableConcept site;
     public BaseCodeableConcept route;
@@ -47,7 +46,7 @@ public class BaseDosage {
             ent.patientInstruction = obj.getPatientInstruction();
         
         if(obj.hasTiming())
-            ent.timing = obj.getTiming();
+            ent.timing = BaseTiming.fromTiming(obj.getTiming());
         
         if(obj.hasAsNeeded())
             ent.asNeeded = obj.getAsNeeded();
@@ -91,7 +90,7 @@ public class BaseDosage {
         object.setText(entity.text);
         object.setAdditionalInstruction(BaseCodeableConcept.toCodeableConcept(entity.additionalInstruction));
         object.setPatientInstruction(entity.patientInstruction);
-        object.setTiming(entity.timing);
+        object.setTiming(BaseTiming.toTiming(entity.timing));
         object.setAsNeeded(entity.asNeeded);
         object.setSite(BaseCodeableConcept.toCodeableConcept(entity.site));
         object.setRoute(BaseCodeableConcept.toCodeableConcept(entity.route));
