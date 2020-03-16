@@ -41,10 +41,9 @@ public class MedicationRequestEntity extends BaseResource {
     public String priority;
     @JsonIgnore public Type medication;
     public BaseReference subject;
-    //public BaseReference context;
     public List<BaseReference> supportingInformation;
     public Date authoredOn;
-    public BaseReference requester;//
+    public BaseReference requester;
     public BaseReference recorder;
     public List<BaseCodeableConcept> reasonCode;
     public List<BaseReference> reasonReference;

@@ -33,7 +33,7 @@ public class MedicationDispenseEntity extends BaseResource {
     public BaseCodeableConcept category;
     @JsonIgnore public Type medication;
     public BaseReference subject;
-    //public BaseReference context;
+    public BaseReference context;
     public List<BaseReference> supportingInformation;
     public List<MedicationDispensePerformerEntity> performer;
     public List<BaseReference> authorizingPrescription;
@@ -62,6 +62,7 @@ public class MedicationDispenseEntity extends BaseResource {
         ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
         ent.medication = obj.getMedication();
         ent.subject = BaseReference.fromReference(obj.getSubject());
+        ent.context = BaseReference.fromReference(obj.getContext());
         ent.supportingInformation = BaseReference.fromReferenceList(obj.getSupportingInformation());
         ent.performer = transform(obj.getPerformer(),  MedicationDispensePerformerEntity::fromMedicationDispensePerformerComponent);
         ent.authorizingPrescription = BaseReference.fromReferenceList(obj.getAuthorizingPrescription());
@@ -91,7 +92,7 @@ public class MedicationDispenseEntity extends BaseResource {
         obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
         obj.setMedication(ent.medication);
         obj.setSubject(BaseReference.toReference(ent.subject));
-        obj.setSubject(BaseReference.toReference(ent.subject));
+        obj.setContext(BaseReference.toReference(ent.context));
         obj.setSupportingInformation(BaseReference.toReferenceList(ent.supportingInformation));
         obj.setPerformer(transform(ent.performer, MedicationDispensePerformerEntity::toMedicationDispensePerformerComponent));
         obj.setAuthorizingPrescription(BaseReference.toReferenceList(ent.authorizingPrescription));

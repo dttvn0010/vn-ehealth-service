@@ -85,7 +85,7 @@ public class ServiceRequestEntity extends BaseResource {
         return ent;
     }
     
-    public static ServiceRequest fromServiceRequest(ServiceRequestEntity ent) {
+    public static ServiceRequest toServiceRequest(ServiceRequestEntity ent) {
         if(ent == null) return null;
         
         var obj = new ServiceRequest();
