@@ -32,6 +32,7 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
@@ -266,7 +267,7 @@ public class CodeSystemDao implements ICodeSystem {
                         .getDesignation()) {
                     ConceptDesignationEntity conceptDesignationEntity = new ConceptDesignationEntity();
                     conceptDesignationEntity.language = (conceptDefinitionDesignationComponent.getLanguage());
-                    conceptDesignationEntity.use = (conceptDefinitionDesignationComponent.getUse());
+                    conceptDesignationEntity.use = BaseCoding.fromCoding(conceptDefinitionDesignationComponent.getUse());
                     conceptDesignationEntity.value = (conceptDefinitionDesignationComponent.getValue());
                     conceptDesignationEntitys.add(conceptDesignationEntity);
                 }
@@ -369,7 +370,8 @@ public class CodeSystemDao implements ICodeSystem {
                         for (ConceptDesignationEntity conceptDesignationEntity : designations) {
                             retVal.addParameter().addPart().setName("value")
                                     .setValue(new StringType(conceptDesignationEntity.value));
-                            retVal.addParameter().addPart().setName("use").setValue(conceptDesignationEntity.use);
+                            retVal.addParameter().addPart().setName("use")
+                                    .setValue(BaseCoding.toCoding(conceptDesignationEntity.use));
                             retVal.addParameter().addPart().setName("language")
                                 .setValue(new StringType(conceptDesignationEntity.language));
                         }
@@ -415,7 +417,8 @@ public class CodeSystemDao implements ICodeSystem {
                         for (ConceptDesignationEntity conceptDesignationEntity : designations) {
                             retVal.addParameter().addPart().setName("value")
                                     .setValue(new StringType(conceptDesignationEntity.value));
-                            retVal.addParameter().addPart().setName("use").setValue(conceptDesignationEntity.use);
+                            retVal.addParameter().addPart().setName("use")
+                                    .setValue(BaseCoding.toCoding(conceptDesignationEntity.use));
                             retVal.addParameter().addPart().setName("language")
                                     .setValue(new StringType(conceptDesignationEntity.language));
                         }

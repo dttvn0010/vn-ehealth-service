@@ -31,6 +31,7 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
@@ -318,7 +319,7 @@ public class ValueSetDao implements IValueSet {
                 for (ConceptReferenceDesignationComponent conceptReferenceDesignationComponent : v.getDesignation()) {
                     ConceptReferenceDesignationEntity conceptDesignationEntity = new ConceptReferenceDesignationEntity();
                     conceptDesignationEntity.language = (conceptReferenceDesignationComponent.getLanguage());
-                    conceptDesignationEntity.use = (conceptReferenceDesignationComponent.getUse());
+                    conceptDesignationEntity.use = BaseCoding.fromCoding(conceptReferenceDesignationComponent.getUse());
                     conceptDesignationEntity.value = (conceptReferenceDesignationComponent.getValue());
                     conceptDesignationEntitys.add(conceptDesignationEntity);
                 }
@@ -866,7 +867,7 @@ public class ValueSetDao implements IValueSet {
         }
         // use
         if (object.hasUse()) {
-            entity.use = (object.getUse());
+            entity.use = BaseCoding.fromCoding(object.getUse());
         }
         // value
         if (object.hasValue()) {
