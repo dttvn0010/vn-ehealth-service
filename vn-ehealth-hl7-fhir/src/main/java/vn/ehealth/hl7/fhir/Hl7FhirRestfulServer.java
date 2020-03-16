@@ -205,8 +205,8 @@ public class Hl7FhirRestfulServer extends RestfulServer {
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HISTORY"));
      
         // Create the interceptor and register it
-        CorsInterceptor interceptor = new CorsInterceptor(config);
-        registerInterceptor(interceptor);
+        CorsInterceptor corsInterceptor = new CorsInterceptor(config);
+        registerInterceptor(corsInterceptor);
           
         FifoMemoryPagingProvider pp = new FifoMemoryPagingProvider(ConstantKeys.DEFAULT_PAGE_SIZE);
         pp.setDefaultPageSize(ConstantKeys.DEFAULT_PAGE_SIZE);
