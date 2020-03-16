@@ -11,14 +11,17 @@ import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.cors.CorsConfiguration;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.rest.api.EncodingEnum;
+import ca.uhn.fhir.rest.server.ETagSupportEnum;
 import ca.uhn.fhir.rest.server.FifoMemoryPagingProvider;
 import ca.uhn.fhir.rest.server.HardcodedServerAddressStrategy;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
+import ca.uhn.fhir.rest.server.interceptor.CorsInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.ResponseHighlighterInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.ResponseValidatingInterceptor;
 import ca.uhn.fhir.util.VersionUtil;
@@ -30,6 +33,8 @@ import vn.ehealth.hl7.fhir.clinical.providers.ConditionProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.DetectedIssueProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.GoalProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.ProcedureProvider;
+import vn.ehealth.hl7.fhir.clinical.providers.ServiceRequestProvider;
+import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 //import vn.ehealth.hl7.fhir.core.oauth2.ServerInterceptor;
 import vn.ehealth.hl7.fhir.diagnostic.providers.DiagnosticReportProvider;
 import vn.ehealth.hl7.fhir.diagnostic.providers.ImagingStudyProvider;
@@ -127,7 +132,8 @@ public class Hl7FhirRestfulServer extends RestfulServer {
                 (IResourceProvider) applicationContext.getBean(CodeSystemProvider.class),
                 (IResourceProvider) applicationContext.getBean(ConceptMapProvider.class),
                 (IResourceProvider) applicationContext.getBean(ValueSetProvider.class),
-                (IResourceProvider) applicationContext.getBean(PersonProvider.class)
+                (IResourceProvider) applicationContext.getBean(PersonProvider.class),
+                (IResourceProvider) applicationContext.getBean(ServiceRequestProvider.class)
         ));
         setServerConformanceProvider(new Hl7FhirServerConformanceProvider());
         //ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
@@ -142,15 +148,37 @@ public class Hl7FhirRestfulServer extends RestfulServer {
         
         registerInterceptor(new ResponseHighlighterInterceptor());
         
-        // Create an interceptor to validate responses
+          /*
+  		 * // Create an interceptor to validate incoming requests
+  		 * RequestValidatingInterceptor requestInterceptor = new
+  		 * RequestValidatingInterceptor();
+  		 * 
+  		 * // Register a validator module (you could also use SchemaBaseValidator and/or
+  		 * SchematronBaseValidator) requestInterceptor.addValidatorModule(new
+  		 * FhirInstanceValidator());
+  		 * requestInterceptor.setFailOnSeverity(ResultSeverityEnum.ERROR);
+  		 * requestInterceptor.setAddResponseHeaderOnSeverity(ResultSeverityEnum.
+  		 * INFORMATION); requestInterceptor.
+  		 * setResponseHeaderValue("Validation on ${line}: ${message} ${severity}");
+  		 * requestInterceptor.setResponseHeaderValueNoIssues("No issues detected");
+  		 * 
+  		 * // Now register the validating interceptor
+  		 * registerInterceptor(requestInterceptor);
+  		 */
+          
+          // Create an interceptor to validate responses
           // This is configured in the same way as above
-          ResponseValidatingInterceptor responseInterceptor = new ResponseValidatingInterceptor();
-          responseInterceptor.addValidatorModule(new FhirInstanceValidator());
-          responseInterceptor.setFailOnSeverity(ResultSeverityEnum.ERROR);
-          responseInterceptor.setAddResponseHeaderOnSeverity(ResultSeverityEnum.INFORMATION);
-          responseInterceptor.setResponseHeaderValue("Validation on ${line}: ${message} ${severity}");
-          responseInterceptor.setResponseHeaderValueNoIssues("No issues detected");
-          //registerInterceptor(responseInterceptor);
+  		/*
+  		 * ResponseValidatingInterceptor responseInterceptor = new
+  		 * ResponseValidatingInterceptor(); responseInterceptor.addValidatorModule(new
+  		 * FhirInstanceValidator());
+  		 * responseInterceptor.setFailOnSeverity(ResultSeverityEnum.ERROR);
+  		 * responseInterceptor.setAddResponseHeaderOnSeverity(ResultSeverityEnum.
+  		 * INFORMATION); responseInterceptor.
+  		 * setResponseHeaderValue("Validation on ${line}: ${message} ${severity}");
+  		 * responseInterceptor.setResponseHeaderValueNoIssues("No issues detected");
+  		 * registerInterceptor(responseInterceptor);
+  		 */
         
         // This is the format for each line. A number of substitution variables may
         // be used here. See the JavaDoc for LoggingInterceptor for information on
@@ -159,13 +187,37 @@ public class Hl7FhirRestfulServer extends RestfulServer {
         //ServerInterceptor gatewayInterceptor = new ServerInterceptor(ourLog);
         //registerInterceptor(new OAuth2Interceptor());  // Add OAuth2 Security Filter
         //registerInterceptor(gatewayInterceptor);
-        FifoMemoryPagingProvider pp = new FifoMemoryPagingProvider(10);
-        pp.setDefaultPageSize(10);
-        pp.setMaximumPageSize(100);
+          
+       // Define your CORS configuration. This is an example
+        // showing a typical setup. You should customize this
+        // to your specific needs  
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedHeader("x-fhir-starter");
+        config.addAllowedHeader("Origin");
+        config.addAllowedHeader("Accept");
+        config.addAllowedHeader("X-Requested-With");
+        config.addAllowedHeader("Content-Type");
+     
+        config.addAllowedOrigin("*");
+     
+        config.addExposedHeader("Location");
+        config.addExposedHeader("Content-Location");
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HISTORY"));
+     
+        // Create the interceptor and register it
+        CorsInterceptor interceptor = new CorsInterceptor(config);
+        registerInterceptor(interceptor);
+          
+        FifoMemoryPagingProvider pp = new FifoMemoryPagingProvider(ConstantKeys.DEFAULT_PAGE_SIZE);
+        pp.setDefaultPageSize(ConstantKeys.DEFAULT_PAGE_SIZE);
+        pp.setMaximumPageSize(ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
         setPagingProvider(pp);
 
         setDefaultPrettyPrint(true);
         setDefaultResponseEncoding(EncodingEnum.JSON);
+        
+     // ETag support is enabled by default
+        setETagSupport(ETagSupportEnum.ENABLED);
 
     }
 

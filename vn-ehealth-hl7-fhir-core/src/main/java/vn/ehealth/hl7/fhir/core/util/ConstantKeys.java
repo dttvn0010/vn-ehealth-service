@@ -14,7 +14,7 @@ public class ConstantKeys {
     public static final long TREE_ROOT_ID = -1;
     public static final String NEXT_URL = "nextURL";
     public static final String BACK_URL = "backURL";
-    public static final int DEFAULT_RESOUCE_MAX_SIZE = 50;
+    //public static final int DEFAULT_RESOUCE_MAX_SIZE = 50;
 
     // Maxlenght
     public static final int MAXLENGHT20 = 20;

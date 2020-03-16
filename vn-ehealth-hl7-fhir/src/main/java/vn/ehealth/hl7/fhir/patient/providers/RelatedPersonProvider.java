@@ -1,6 +1,7 @@
 package vn.ehealth.hl7.fhir.patient.providers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.hl7.fhir.r4.model.RelatedPerson;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.instance.model.api.IPrimitiveType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
@@ -43,6 +46,7 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.patient.dao.IRelatedPerson;
 
 @Component
@@ -76,7 +80,7 @@ public class RelatedPersonProvider implements IResourceProvider {
             List<String> myString = new ArrayList<>();
             myString.add("RelatedPerson/" + mongoRelatedPerson.getIdElement());
             method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-                    "urn:uuid: " + mongoRelatedPerson.getId(), IssueSeverity.INFORMATION, IssueType.INCOMPLETE,
+                    "urn:uuid: " + mongoRelatedPerson.getId(), IssueSeverity.INFORMATION, IssueType.VALUE,
                     myString));
             method.setId(mongoRelatedPerson.getIdElement());
             method.setResource(mongoRelatedPerson);
@@ -134,8 +138,9 @@ public class RelatedPersonProvider implements IResourceProvider {
         }
         return object;
     }
-    @Search
-    public List<Resource> searchRelatedPerson(HttpServletRequest request,
+    @SuppressWarnings("unchecked")
+	@Search
+    public List<IBaseResource> search(HttpServletRequest request,
             @OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
             @OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
             @OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
@@ -165,25 +170,61 @@ public class RelatedPersonProvider implements IResourceProvider {
         // OAuth2Util.checkOauth2(request, permissionAccept);
         if (count != null && count > 50) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("Total is not gre > 50"), OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.INFORMATIONAL);
+                    new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE), 
+                    OperationOutcome.IssueSeverity.ERROR, 
+                    OperationOutcome.IssueType.BUSINESSRULE);
         } else {
+        	List<Resource> results = new ArrayList<Resource>();
             if (theSort != null) {
                 String sortParam = theSort.getParamName();
-                List<Resource> results = relatedPersonDao.search(fhirContext, active, address, addressCity, addressCountry,
+                results = relatedPersonDao.search(fhirContext, active, address, addressCity, addressCountry,
                         addressState, birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom,
                         resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count);
-                return results;
-            }
-            List<Resource> results = relatedPersonDao.search(fhirContext, active, address, addressCity, addressCountry,
+            } else 
+            	results = relatedPersonDao.search(fhirContext, active, address, addressCity, addressCountry,
                     addressState, birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom, resid,
                     _lastUpdated, _tag, _profile, _query, _security, _content, _page, "", count);
-            return results;
+            
+            final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x); 
+            
+			return (List<IBaseResource>) new IBundleProvider() {
+                @Override
+                public Integer size() {
+                	return Integer.parseInt(String.valueOf(
+                			relatedPersonDao.findMatchesAdvancedTotal(fhirContext, active, address, addressCity, addressCountry,
+                	                addressState, birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom, resid,
+                	                _lastUpdated, _tag, _profile, _query, _security, _content)));
+                }
+                
+                @Override
+                public Integer preferredPageSize() {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+                
+                @Override
+                public String getUuid() {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+                
+                @Override
+                public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
+                    // TODO Auto-generated method stub
+                    return finalResults;
+                }
+                
+                @Override
+                public IPrimitiveType<Date> getPublished() {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+            };
         }
     }
 
     @Delete
-    public RelatedPerson deleteRelatedPerson(HttpServletRequest request, @IdParam IdType internalId) {
+    public RelatedPerson delete(HttpServletRequest request, @IdParam IdType internalId) {
         log.debug("Delete RelatedPerson Provider called");
         // String permissionAccept =
         // PatientOauth2Keys.RelatedPersonOauth2.RELATED_DELETE;
@@ -193,20 +234,20 @@ public class RelatedPersonProvider implements IResourceProvider {
             log.error("Couldn't delete RelatedPerson" + internalId);
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("RelatedPerson is not exit"), OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.INFORMATIONAL);
+                    OperationOutcome.IssueType.NOTFOUND);
         }
         return obj;
     }
 
     @Update
-    public MethodOutcome updateRelatedPerson(HttpServletRequest request, @IdParam IdType theId,
+    public MethodOutcome update(HttpServletRequest request, @IdParam IdType theId,
             @ResourceParam RelatedPerson patient) {
 
         log.debug("Update RelatedPerson Provider called");
         // String permissionAccept = PatientOauth2Keys.RelatedPersonOauth2.RELATED_ADD;
         // OAuth2Util.checkOauth2(request, permissionAccept);
         MethodOutcome method = new MethodOutcome();
-        method.setCreated(true);
+        method.setCreated(false);
         OperationOutcome opOutcome = new OperationOutcome();
         method.setOperationOutcome(opOutcome);
         RelatedPerson newRelatedPerson = null;
@@ -224,14 +265,14 @@ public class RelatedPersonProvider implements IResourceProvider {
             }
         }
         method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-                "urn:uuid: " + newRelatedPerson.getId(), IssueSeverity.INFORMATION, IssueType.INCOMPLETE));
+                "urn:uuid: " + newRelatedPerson.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
         method.setId(newRelatedPerson.getIdElement());
         method.setResource(newRelatedPerson);
         return method;
     }
 
     @Operation(name = "$total", idempotent = true)
-    public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
+    public Parameters countTotal(HttpServletRequest request,
             @OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam active,
             @OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
             @OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,

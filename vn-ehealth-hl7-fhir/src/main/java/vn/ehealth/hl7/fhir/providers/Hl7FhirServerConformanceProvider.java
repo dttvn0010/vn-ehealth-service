@@ -1,9 +1,14 @@
 package vn.ehealth.hl7.fhir.providers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.r4.hapi.rest.server.ServerCapabilityStatementProvider;
 import org.hl7.fhir.r4.model.CapabilityStatement;
+import org.hl7.fhir.r4.model.ContactDetail;
+import org.hl7.fhir.r4.model.ContactPoint;
 import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.Extension;
 
@@ -81,6 +86,19 @@ public class Hl7FhirServerConformanceProvider extends ServerCapabilityStatementP
             }
         }
 
+        myCapabilityStatement.setCopyright("This implementation is belonged to eHealth Core Team - Vietnam eHealth Innovation Group (VEIG). "
+        		+ "Reproduction or distribution of this product without permission of the owner is prohibited");
+        ContactDetail contact = new ContactDetail();
+        ContactPoint contactPoint = new ContactPoint();
+        contact.setName("Mr. Nguyen Hai Phong");
+        contactPoint.setSystem(org.hl7.fhir.r4.model.ContactPoint.ContactPointSystem.PHONE);
+        contactPoint.setValue("Tel: (+84)-9133.09033 or email: haiphong.nguyen@gmail.com");
+        List<ContactPoint> listContactPoint = new ArrayList<ContactPoint>();
+        listContactPoint.add(contactPoint);
+        contact.setTelecom(listContactPoint);
+        List<ContactDetail> listContact = new ArrayList<ContactDetail>();
+        listContact.add(contact);
+        myCapabilityStatement.setContact(listContact);
 
         return myCapabilityStatement;
     }

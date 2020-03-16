@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.OperationOutcome;
@@ -30,7 +31,9 @@ import ca.uhn.fhir.rest.annotation.Delete;
 import ca.uhn.fhir.rest.annotation.History;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
+import ca.uhn.fhir.rest.annotation.Patch;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
@@ -38,8 +41,10 @@ import ca.uhn.fhir.rest.annotation.Since;
 import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
+import ca.uhn.fhir.rest.api.PatchTypeEnum;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
@@ -90,7 +95,7 @@ public class PatientProvider implements IResourceProvider {
             List<String> myString = new ArrayList<>();
             myString.add("Patient/" + mongoPatient.getIdElement());
             method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-                    "urn:uuid: " + mongoPatient.getId(), IssueSeverity.INFORMATION, IssueType.INCOMPLETE,
+                    "urn:uuid: " + mongoPatient.getId(), IssueSeverity.INFORMATION, IssueType.VALUE,
                     myString));
             method.setId(mongoPatient.getIdElement());
             method.setResource(mongoPatient);
@@ -197,43 +202,40 @@ public class PatientProvider implements IResourceProvider {
         // OAuth2Util.checkOauth2(request, permissionAccept);
         if (count != null && count > 50) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("Total is not gre > 50"), OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.INFORMATIONAL);
+                    new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE), 
+                    OperationOutcome.IssueSeverity.ERROR,
+                    OperationOutcome.IssueType.BUSINESSRULE);
         } else {
-            List<IBaseResource> results01 = new ArrayList<IBaseResource>();;
+            List<IBaseResource> results = new ArrayList<IBaseResource>();
             Date cal = new Date();
             if (theSort != null) {
                 String sortParam = theSort.getParamName();
-                results01 = patientDao.search(fhirContext, active, addressUse, animalBreed, animalSpecies,
+                results = patientDao.search(fhirContext, active, addressUse, animalBreed, animalSpecies,
                         deceased, email, gender, identifier, language, phone, telecom, generalPractitioner, link,
                         organization, birthDate, deathDate, address, addressCity, addressCountry, addressState,
                         familyName, givenName, name, phonetic, resid, _lastUpdated, _tag, _profile, _query, _security,
                         _content, _page, sortParam, count);
                 //return results;
-            }
-            results01 = patientDao.search(fhirContext, active, addressUse, animalBreed, animalSpecies, deceased,
+            } else 
+            	results = patientDao.search(fhirContext, active, addressUse, animalBreed, animalSpecies, deceased,
                     email, gender, identifier, language, phone, telecom, generalPractitioner, link, organization,
                     birthDate, deathDate, address, addressCity, addressCountry, addressState, familyName, givenName,
                     name, phonetic, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, "", count);
             Date cal1 = new Date();
             System.out.println("-------------------search end------------------"+(cal1.getTime()-cal.getTime())+" ms");
-            //return results;
-            final List<IBaseResource> results = results01;
+            final List<IBaseResource> finalResults = results; 
             
             return new IBundleProvider() {
                 
                 @Override
                 public Integer size() {
-                    // TODO Auto-generated method stub
-                    /*
-                     * return Integer.parseInt(String.valueOf(patientDao.findMatchesAdvancedTotal(
-                     * fhirContext, active, addressUse, animalBreed, animalSpecies, deceased, email,
-                     * gender, identifier, language, phone, telecom, generalPractitioner, link,
-                     * organization, birthDate, deathDate, address, addressCity, addressCountry,
-                     * addressState, familyName, givenName, name, phonetic, resid, _lastUpdated,
-                     * _tag, _profile, _query, _security, _content)));
-                     */
-                    return 100000000;
+                	return Integer.parseInt(String.valueOf(
+                			patientDao.findMatchesAdvancedTotal(
+	      					  fhirContext, active, addressUse, animalBreed, animalSpecies, deceased, email,
+	      					  gender, identifier, language, phone, telecom, generalPractitioner, link,
+	      					  organization, birthDate, deathDate, address, addressCity, addressCountry,
+	      					  addressState, familyName, givenName, name, phonetic, resid, _lastUpdated,
+	      					  _tag, _profile, _query, _security, _content)));
                 }
                 
                 @Override
@@ -251,7 +253,7 @@ public class PatientProvider implements IResourceProvider {
                 @Override
                 public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
                     // TODO Auto-generated method stub
-                    return results;
+                    return finalResults;
                 }
                 
                 @Override
@@ -274,7 +276,7 @@ public class PatientProvider implements IResourceProvider {
             log.error("Couldn't delete patient" + internalId);
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("patient is not exit"), OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.INFORMATIONAL);
+                    OperationOutcome.IssueType.NOTFOUND);
 
         }
         Date cal1 = new Date();
@@ -289,7 +291,7 @@ public class PatientProvider implements IResourceProvider {
         // String permissionAccept = PatientOauth2Keys.PatientOauth2.PATIENT_ADD;
         // OAuth2Util.checkOauth2(theRequest, permissionAccept);
         MethodOutcome method = new MethodOutcome();
-        method.setCreated(true);
+        method.setCreated(false);
         OperationOutcome opOutcome = new OperationOutcome();
         method.setOperationOutcome(opOutcome);
         Patient newPatient = null;
@@ -365,6 +367,31 @@ public class PatientProvider implements IResourceProvider {
        retVal = patientDao.getPatientHistory(theId, theSince, theAt); 
        Date cal1 = new Date();
         System.out.println("-------------------history end------------------"+(cal1.getTime()-cal.getTime())+" ms");
+       return retVal;
+    }
+    
+    @Patch
+    public OperationOutcome patch(@IdParam IdType theId, PatchTypeEnum thePatchType, 
+    		@ResourceParam String theBody) {
+    	// Dummy Operations
+        if (thePatchType == PatchTypeEnum.JSON_PATCH) {
+            // do something
+        }
+        if (thePatchType == PatchTypeEnum.XML_PATCH) {
+            // do something
+        }
+         
+        OperationOutcome retVal = new OperationOutcome();
+        retVal.getText().setDivAsString("<div>OK</div>");
+        return retVal;
+    }
+    
+    @Operation(name="$everything", idempotent=true)
+    public Bundle getEverything(@IdParam IdType thePatientId, @OperationParam(name="start") DateParam theStart, 
+    		@OperationParam(name="end") DateParam theEnd) {
+        
+       Bundle retVal = new Bundle();
+       // Populate bundle with matching resources
        return retVal;
     }
 }
