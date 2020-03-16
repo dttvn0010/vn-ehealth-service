@@ -160,7 +160,7 @@ public class PatientProvider implements IResourceProvider {
     }
 
     @Search
-    public IBundleProvider searchPatient(HttpServletRequest request,
+	public IBundleProvider searchPatient(HttpServletRequest request,
             @OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
             @OptionalParam(name = "address-use") TokenParam addressUse,
             @OptionalParam(name = "animal-breed") TokenParam animalBreed,

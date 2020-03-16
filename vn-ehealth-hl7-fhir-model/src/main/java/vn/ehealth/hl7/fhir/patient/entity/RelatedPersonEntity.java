@@ -47,7 +47,7 @@ public class RelatedPersonEntity extends BaseResource {
         ent.relationship = BaseCodeableConcept.fromCodeableConcept(obj.getRelationship());
         ent.name = BaseHumanName.fromHumanNameList(obj.getName());
         ent.telecom = BaseContactPoint.fromContactPointList(obj.getTelecom());
-        ent.gender = Optional.ofNullable(obj.getGender()).map(x -> x.toString()).orElse(null);
+        ent.gender = Optional.ofNullable(obj.getGender()).map(x -> x.toCode()).orElse(null);
         ent.birthDate = obj.getBirthDate();
         ent.address = BaseAddress.fromAddressList(obj.getAddress());
         ent.photo = BaseAttachment.fromAttachmentList(obj.getPhoto());

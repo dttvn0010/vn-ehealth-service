@@ -40,7 +40,7 @@ public class BaseContactPoint {
         object.setSystem(ContactPointSystem.fromCode(entity.system));
         object.setValue(entity.value);
         object.setUse(ContactPointUse.fromCode(entity.use));
-        object.setRank(entity.rank);
+        if(entity.rank != null) object.setRank(entity.rank);
         object.setPeriod(BasePeriod.toPeriod(entity.period));
         return object;
     }
