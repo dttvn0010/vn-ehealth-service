@@ -8,6 +8,7 @@ import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.Procedure.ProcedureStatus;
 import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,6 +21,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "procedure")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class ProcedureEntity extends BaseResource {
 
     @Id
@@ -34,7 +36,7 @@ public class ProcedureEntity extends BaseResource {
     public BaseCodeableConcept category;
     public BaseCodeableConcept code;
     public BaseReference subject;
-    //public BaseReference context;
+    public BaseReference encounter;
     @JsonIgnore public Type performed;
     public List<ProcedurePerformerEntity> performer;
     public BaseReference location;
@@ -63,6 +65,7 @@ public class ProcedureEntity extends BaseResource {
         ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
         ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
         ent.subject = BaseReference.fromReference(obj.getSubject());
+        ent.encounter = BaseReference.fromReference(obj.getEncounter());
         ent.performed = obj.getPerformed();
         ent.performer = transform(obj.getPerformer(), ProcedurePerformerEntity::fromProcedurePerformerComponent);
         ent.location = BaseReference.fromReference(obj.getLocation());
@@ -93,6 +96,7 @@ public class ProcedureEntity extends BaseResource {
         obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
         obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
         obj.setSubject(BaseReference.toReference(ent.subject));
+        obj.setEncounter(BaseReference.toReference(ent.encounter));
         obj.setPerformed(ent.performed);
         obj.setPerformer(transform(ent.performer, ProcedurePerformerEntity::toProcedurePerformerComponent));
         obj.setLocation(BaseReference.toReference(ent.location));

@@ -10,6 +10,7 @@ import org.hl7.fhir.r4.model.ServiceRequest.ServiceRequestPriority;
 import org.hl7.fhir.r4.model.ServiceRequest.ServiceRequestStatus;
 import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
@@ -19,6 +20,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
 @Document(collection = "serviceRequest")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class ServiceRequestEntity extends BaseResource {
     @Id
     public ObjectId id;
@@ -33,9 +35,8 @@ public class ServiceRequestEntity extends BaseResource {
     public Boolean doNotPerform;
     public List<BaseCodeableConcept> category;
     public BaseCodeableConcept code;
-    public BaseReference subject;
-    //BaseReference context;
-    BaseReference encounter;
+    public BaseReference subject;    
+    public BaseReference encounter;
     public Type occurrence;
     public Type asNeeded;
     public Date authoredOn;
@@ -67,7 +68,7 @@ public class ServiceRequestEntity extends BaseResource {
         ent.category = obj.hasCategory()? BaseCodeableConcept.fromCodeableConcept(obj.getCategory()) : null;
         ent.code = obj.hasCode()? BaseCodeableConcept.fromCodeableConcept(obj.getCode()) : null;
         ent.subject = obj.hasSubject()? BaseReference.fromReference(obj.getSubject()) : null;
-        ent.encounter = BaseReference.fromReference(obj.getEncounter());
+        ent.encounter = obj.hasEncounter()? BaseReference.fromReference(obj.getEncounter()) : null;
         ent.occurrence = obj.getOccurrence();        
         ent.asNeeded = obj.getAsNeeded();
         ent.authoredOn = obj.hasAuthoredOn()? obj.getAuthoredOn() : null;

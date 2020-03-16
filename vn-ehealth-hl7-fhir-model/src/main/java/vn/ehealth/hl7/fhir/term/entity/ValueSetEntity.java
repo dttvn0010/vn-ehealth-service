@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.ValueSet;
 import org.hl7.fhir.r4.model.Enumerations.PublicationStatus;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
@@ -23,6 +24,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
  * @version 1.0
  */
 @Document(collection = "valueSet")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class ValueSetEntity extends BaseResource {
 
     @Id

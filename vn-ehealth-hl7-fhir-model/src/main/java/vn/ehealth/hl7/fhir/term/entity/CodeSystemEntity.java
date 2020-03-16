@@ -9,6 +9,7 @@ import org.hl7.fhir.r4.model.CodeSystem;
 import org.hl7.fhir.r4.model.CodeSystem.CodeSystemContentMode;
 import org.hl7.fhir.r4.model.CodeSystem.CodeSystemHierarchyMeaning;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
@@ -24,6 +25,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
  * @version 1.0
  */
 @Document(collection = "codeSystem")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class CodeSystemEntity extends BaseResource {
     @Id
     public ObjectId id;

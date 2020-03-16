@@ -18,7 +18,7 @@ public class RelatedPersonEntityToFHIRRelatedPerson implements Transformer<Relat
     public RelatedPerson transform(RelatedPersonEntity ent) {
         var obj = RelatedPersonEntity.toRelatedPerson(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "RelatedPerson-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;        
     }

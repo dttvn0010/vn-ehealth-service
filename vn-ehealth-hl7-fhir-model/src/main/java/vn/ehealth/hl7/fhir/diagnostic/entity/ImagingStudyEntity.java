@@ -8,6 +8,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.ImagingStudy;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
@@ -18,6 +19,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "imagingStudy")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class ImagingStudyEntity extends BaseResource {
     @Id
     public ObjectId id;
@@ -32,6 +34,7 @@ public class ImagingStudyEntity extends BaseResource {
     public List<BaseReference> basedOn;
     public BaseReference referrer;
     public BaseReference encounter;
+    public BaseReference subject;
     public List<BaseReference> interpreter;
     public List<BaseReference> endpoint;
     public int numberOfSeries;
@@ -53,6 +56,7 @@ public class ImagingStudyEntity extends BaseResource {
         ent.basedOn = BaseReference.fromReferenceList(obj.getBasedOn());
         ent.referrer = BaseReference.fromReference(obj.getReferrer());
         ent.encounter = BaseReference.fromReference(obj.getEncounter());
+        ent.subject = BaseReference.fromReference(obj.getSubject());
         ent.interpreter = BaseReference.fromReferenceList(obj.getInterpreter());
         ent.endpoint = BaseReference.fromReferenceList(obj.getEndpoint());
         ent.numberOfSeries = obj.getNumberOfSeries();
@@ -76,6 +80,7 @@ public class ImagingStudyEntity extends BaseResource {
         obj.setBasedOn(BaseReference.toReferenceList(ent.basedOn));
         obj.setReferrer(BaseReference.toReference(ent.referrer));
         obj.setEncounter(BaseReference.toReference(ent.encounter));
+        obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setInterpreter(BaseReference.toReferenceList(ent.interpreter));
         obj.setEndpoint(BaseReference.toReferenceList(ent.endpoint));
         obj.setNumberOfSeries(ent.numberOfSeries);

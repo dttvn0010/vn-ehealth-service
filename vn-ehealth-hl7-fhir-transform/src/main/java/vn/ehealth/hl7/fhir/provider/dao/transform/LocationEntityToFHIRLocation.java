@@ -13,7 +13,7 @@ public class LocationEntityToFHIRLocation implements Transformer<LocationEntity,
     public Location transform(LocationEntity ent) {
         var obj = LocationEntity.toLocation(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Location-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;
     }

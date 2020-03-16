@@ -13,7 +13,7 @@ public class SlotEntityToFHIRSlot implements Transformer<SlotEntity, Slot> {
     public Slot transform(SlotEntity ent) {
         var obj = SlotEntity.toSlot(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Slot-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;
     }

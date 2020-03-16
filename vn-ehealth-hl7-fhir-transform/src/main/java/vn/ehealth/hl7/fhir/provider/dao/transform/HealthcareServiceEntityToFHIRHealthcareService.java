@@ -17,7 +17,7 @@ public class HealthcareServiceEntityToFHIRHealthcareService
     public HealthcareService transform(HealthcareServiceEntity ent) {
         var obj = HealthcareServiceEntity.toHealthcareService(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "HealthcareService-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;
     }

@@ -9,6 +9,7 @@ import org.hl7.fhir.r4.model.ConceptMap;
 import org.hl7.fhir.r4.model.Enumerations.PublicationStatus;
 import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,6 +27,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
  * @version 1.0
  */
 @Document(collection = "conceptMap")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class ConceptMapEntity extends BaseResource {
     @Id
     public ObjectId id;

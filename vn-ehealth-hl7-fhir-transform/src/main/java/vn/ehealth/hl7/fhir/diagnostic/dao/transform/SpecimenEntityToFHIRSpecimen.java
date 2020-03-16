@@ -13,7 +13,7 @@ public class SpecimenEntityToFHIRSpecimen implements Transformer<SpecimenEntity,
     public Specimen transform(SpecimenEntity ent) {
         var obj = SpecimenEntity.toSpecimen(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Specimen-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;
     }

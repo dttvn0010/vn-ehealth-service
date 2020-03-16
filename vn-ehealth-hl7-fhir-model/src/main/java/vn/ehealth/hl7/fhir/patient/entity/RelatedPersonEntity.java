@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.r4.model.RelatedPerson;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
@@ -21,7 +22,8 @@ import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
-@Document(collection = "idxRelatedPerson")
+@Document(collection = "relatedPerson")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class RelatedPersonEntity extends BaseResource {
     @Id
     public ObjectId id;

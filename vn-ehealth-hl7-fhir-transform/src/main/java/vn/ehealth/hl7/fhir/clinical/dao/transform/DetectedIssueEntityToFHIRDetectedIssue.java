@@ -18,7 +18,7 @@ public class DetectedIssueEntityToFHIRDetectedIssue implements Transformer<Detec
     public DetectedIssue transform(DetectedIssueEntity ent) {
         var obj = DetectedIssueEntity.toDetectedIssue(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "DetectedIssue-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;
     }

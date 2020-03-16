@@ -18,7 +18,7 @@ public class ConditionEntityToFHIRCondition implements Transformer<ConditionEnti
     public Condition transform(ConditionEntity ent) {
         var obj = ConditionEntity.toCondition(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Condition-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;
     }

@@ -18,7 +18,7 @@ public class GoalEntityToFHIRGoal implements Transformer<GoalEntity, Goal> {
     public Goal transform(GoalEntity ent) {
         var obj = GoalEntity.toGoal(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Goal-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;
     

@@ -12,6 +12,7 @@ import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.UriType;
 import org.hl7.fhir.r4.model.ClinicalImpression.ClinicalImpressionStatus;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
@@ -22,6 +23,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "clinicalImpression")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class ClinicalImpressionEntity extends BaseResource {
 
     @Id
@@ -31,7 +33,7 @@ public class ClinicalImpressionEntity extends BaseResource {
     public BaseCodeableConcept code;
     public String description;
     public BaseReference subject;
-    //public BaseReference context;
+    public BaseReference encounter;
     public Type effective;
     public Date date;
     public BaseReference assessor;
@@ -54,6 +56,7 @@ public class ClinicalImpressionEntity extends BaseResource {
         ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
         ent.description = obj.getDescription();
         ent.subject = BaseReference.fromReference(obj.getSubject());
+        ent.encounter = BaseReference.fromReference(obj.getEncounter());
         ent.effective = obj.getEffective();
         ent.date = obj.getDate();
         ent.assessor = BaseReference.fromReference(obj.getAssessor());
@@ -80,6 +83,7 @@ public class ClinicalImpressionEntity extends BaseResource {
         obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
         obj.setDescription(ent.description);
         obj.setSubject(BaseReference.toReference(ent.subject));
+        obj.setEncounter(BaseReference.toReference(ent.encounter));
         obj.setEffective(ent.effective);
         obj.setDate(ent.date);
         obj.setAssessor(BaseReference.toReference(ent.assessor));

@@ -13,7 +13,7 @@ public class PersonEntityToFHIRPerson implements Transformer<PersonEntity, Perso
     public Person transform(PersonEntity ent) {
         var obj = PersonEntity.toPerson(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Person-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;        
     }

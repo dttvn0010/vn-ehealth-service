@@ -11,6 +11,7 @@ import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Observation.ObservationStatus;
 import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,6 +23,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "observation")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class ObservationEntity extends BaseResource {
     @Id
     public ObjectId id;
@@ -31,7 +33,7 @@ public class ObservationEntity extends BaseResource {
     public List<BaseCodeableConcept> category;
     public BaseCodeableConcept code;
     public BaseReference subject;
-    //public BaseReference context;
+    public BaseReference encounter;
     @JsonIgnore public Type effective;
     public Date issued;
     public List<BaseReference> performer;
@@ -58,6 +60,7 @@ public class ObservationEntity extends BaseResource {
         ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
         ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
         ent.subject = BaseReference.fromReference(obj.getSubject());
+        ent.encounter = BaseReference.fromReference(obj.getSubject());
         ent.effective = obj.getEffective();
         ent.issued = obj.getIssued();
         ent.performer = BaseReference.fromReferenceList(obj.getPerformer());
@@ -88,6 +91,7 @@ public class ObservationEntity extends BaseResource {
         obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
         obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
         obj.setSubject(BaseReference.toReference(ent.subject));
+        obj.setEncounter(BaseReference.toReference(ent.encounter));
         obj.setEffective(ent.effective);
         obj.setIssued(ent.issued);
         obj.setPerformer(BaseReference.toReferenceList(ent.performer));

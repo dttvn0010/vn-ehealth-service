@@ -10,6 +10,7 @@ import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Specimen;
 import org.hl7.fhir.r4.model.Specimen.SpecimenStatus;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
@@ -20,6 +21,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "specimen")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class SpecimenEntity extends BaseResource {
     @Id
     public ObjectId id;
@@ -50,13 +52,10 @@ public class SpecimenEntity extends BaseResource {
         ent.parent = BaseReference.fromReferenceList(obj.getParent());
         ent.request = BaseReference.fromReferenceList(obj.getRequest());
         ent.collection = SpecimenCollectionEntity.fromSpecimenCollectionComponent(obj.getCollection());
-        
         ent.processing = transform(obj.getProcessing(),
                                 SpecimenProcessingEntity::fromSpecimenProcessingComponent);
-        
         ent.container = transform(obj.getContainer(), 
                                 SpecimenContainerEntity::fromSpecimenContainerComponent);
-        
         ent.note = BaseAnnotation.fromAnnotationList(obj.getNote());
         
         

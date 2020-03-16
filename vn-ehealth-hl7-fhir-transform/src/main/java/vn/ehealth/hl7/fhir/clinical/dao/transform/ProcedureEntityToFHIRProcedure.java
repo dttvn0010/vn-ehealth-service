@@ -18,7 +18,7 @@ public class ProcedureEntityToFHIRProcedure implements Transformer<ProcedureEnti
     public Procedure transform(ProcedureEntity ent) {
         var obj = ProcedureEntity.toProcedure(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Procedure-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;
     }

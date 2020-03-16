@@ -28,7 +28,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
  * @since 2019
  * @version 1.0
  */
-@Document(collection = "idxPatient")
+@Document(collection = "patient")
 @CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "idx_patient_by_default")
 public class PatientEntity extends BaseResource {
     @Id

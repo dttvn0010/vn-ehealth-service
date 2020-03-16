@@ -8,6 +8,7 @@ import org.hl7.fhir.r4.model.CarePlan;
 import org.hl7.fhir.r4.model.CarePlan.CarePlanIntent;
 import org.hl7.fhir.r4.model.CarePlan.CarePlanStatus;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
@@ -19,6 +20,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "carePlan")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class CarePlanEntity extends BaseResource {
     @Id
     public ObjectId id;
@@ -33,7 +35,7 @@ public class CarePlanEntity extends BaseResource {
     public String title;
     public String description;
     public BaseReference subject;
-    //public BaseReference context;
+    public BaseReference encounter;
     public BasePeriod period;
     public BaseReference author;
     public List<BaseReference> careTeam;
@@ -58,6 +60,7 @@ public class CarePlanEntity extends BaseResource {
         ent.title = obj.getTitle();
         ent.description = obj.getDescription();
         ent.subject = BaseReference.fromReference(obj.getSubject());
+        ent.encounter = BaseReference.fromReference(obj.getEncounter());
         ent.period = BasePeriod.fromPeriod(obj.getPeriod());
         ent.author =  BaseReference.fromReference(obj.getAuthor());
         ent.careTeam = BaseReference.fromReferenceList(obj.getCareTeam());
@@ -85,6 +88,7 @@ public class CarePlanEntity extends BaseResource {
         obj.setTitle(ent.title);
         obj.setDescription(ent.description);
         obj.setSubject(BaseReference.toReference(ent.subject));
+        obj.setEncounter(BaseReference.toReference(ent.encounter));
         obj.setPeriod(BasePeriod.toPeriod(ent.period));
         obj.setAuthor(BaseReference.toReference(ent.author));
         obj.setCareTeam(BaseReference.toReferenceList(ent.careTeam));

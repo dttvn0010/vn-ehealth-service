@@ -9,6 +9,7 @@ import org.hl7.fhir.r4.model.Location.LocationMode;
 import org.hl7.fhir.r4.model.Location.LocationStatus;
 import org.hl7.fhir.r4.model.StringType;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
@@ -22,6 +23,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "location")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class LocationEntity extends BaseResource{
     @Id
     public ObjectId id;

@@ -8,6 +8,7 @@ import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Encounter.DiagnosisComponent;
 import org.hl7.fhir.r4.model.Encounter.EncounterStatus;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
@@ -20,6 +21,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "encounter")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class EncounterEntity extends BaseResource{
     public static class DiagnosisEntity {
         public BaseReference condition;

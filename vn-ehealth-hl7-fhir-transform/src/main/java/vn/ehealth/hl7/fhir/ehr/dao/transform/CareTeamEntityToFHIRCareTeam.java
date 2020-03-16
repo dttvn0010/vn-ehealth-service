@@ -13,7 +13,7 @@ public class CareTeamEntityToFHIRCareTeam implements Transformer<CareTeamEntity,
     public CareTeam transform(CareTeamEntity ent) {
         var obj = CareTeamEntity.toCareTeam(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "CareTeam-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;
     }

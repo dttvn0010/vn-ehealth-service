@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Condition;
 import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,6 +18,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "condition")
+@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
 public class ConditionEntity extends BaseResource {
 
     @Id
@@ -29,7 +31,7 @@ public class ConditionEntity extends BaseResource {
     public BaseCodeableConcept code;
     public List<BaseCodeableConcept> bodySite;
     public BaseReference subject;
-    //public BaseReference context;
+    public BaseReference encounter;
     @JsonIgnore public Type onset;
     @JsonIgnore public Type abatement;
     //public Date assertedDate;
@@ -50,6 +52,7 @@ public class ConditionEntity extends BaseResource {
         ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
         ent.bodySite = BaseCodeableConcept.fromCodeableConcept(obj.getBodySite());
         ent.subject = BaseReference.fromReference(obj.getSubject());
+        ent.encounter = BaseReference.fromReference(obj.getEncounter());
         ent.onset = obj.getOnset();
         ent.abatement = obj.getAbatement();
         ent.asserter = BaseReference.fromReference(obj.getAsserter());
@@ -74,12 +77,14 @@ public class ConditionEntity extends BaseResource {
         obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
         obj.setBodySite(BaseCodeableConcept.toCodeableConcept(ent.bodySite));
         obj.setSubject(BaseReference.toReference(ent.subject));
+        obj.setEncounter(BaseReference.toReference(ent.encounter));
         obj.setOnset(ent.onset);
         obj.setAbatement(ent.abatement);
         obj.setAsserter(BaseReference.toReference(ent.asserter));
         obj.setStage(transform(ent.stage, ConditionStageEntity::toConditionStageComponent));
         obj.setEvidence(transform(ent.evidence, ConditionEvidenceEntity::toConditionEvidenceComponent));
         obj.setNote(BaseAnnotation.toAnnotationList(ent.note));
+        
         
         return obj;
     }

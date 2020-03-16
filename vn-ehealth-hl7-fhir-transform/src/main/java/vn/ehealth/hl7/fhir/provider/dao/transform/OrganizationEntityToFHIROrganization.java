@@ -13,7 +13,7 @@ public class OrganizationEntityToFHIROrganization implements Transformer<Organiz
     public Organization transform(OrganizationEntity ent) {
         var obj = OrganizationEntity.toOrganization(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Organization-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;
     }

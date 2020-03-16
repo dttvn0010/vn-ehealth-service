@@ -14,7 +14,7 @@ public class DiagnosticReportEntityToFHIRDiagnosticReport
     public DiagnosticReport transform(DiagnosticReportEntity ent) {
         var obj = DiagnosticReportEntity.toDiagnosticReport(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "DiagnosticReport-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;
     }

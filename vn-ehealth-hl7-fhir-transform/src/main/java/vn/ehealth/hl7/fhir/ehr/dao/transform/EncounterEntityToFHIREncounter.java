@@ -13,7 +13,7 @@ public class EncounterEntityToFHIREncounter implements Transformer<EncounterEnti
     public Encounter transform(EncounterEntity ent) {
         var obj = EncounterEntity.toEncounter(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Encounter-v1.0"));
-        obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+        DataConvertUtil.getMetaExt(ent, obj);
         obj.setId(ent.fhir_id);
         return obj;
         

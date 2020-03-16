@@ -87,6 +87,23 @@ public class DataConvertUtil {
             }
             
             ent.extension = transform(obj.getExtension(), BaseExtension::fromExtension);
+            ent.modifierExtension = transform(obj.getModifierExtension(), BaseExtension::fromExtension);
+        }
+    }
+    
+    public static void getMetaExt(BaseResource ent, DomainResource obj) {
+        if(obj != null && ent != null) {
+        	if (ent.profile != null && ent.profile.size() > 0) {
+        		// TODO: Set profile
+        	}
+        	if (ent.tag != null && ent.tag.size() > 0) {
+        		// TODO: Set tag
+        	}
+        	if (ent.security != null && ent.security.size() > 0) {
+        		// TODO: Set security
+        	}
+            obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+            obj.setModifierExtension(DataConvertUtil.transform(ent.modifierExtension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
         }
     }
 }
