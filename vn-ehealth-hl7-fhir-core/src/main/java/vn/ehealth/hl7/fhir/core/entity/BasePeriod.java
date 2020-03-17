@@ -11,6 +11,15 @@ public class BasePeriod {
     public Date start;
     public Date end;
     
+    public BasePeriod() {
+        
+    }
+    
+    public BasePeriod(Date start, Date end) {
+        this.start = start;
+        this.end = end;
+    }
+    
     public static BasePeriod fromPeriod(Period period) {        
         if(period == null) return null;
         

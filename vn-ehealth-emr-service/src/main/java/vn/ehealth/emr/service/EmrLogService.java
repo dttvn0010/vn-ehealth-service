@@ -64,18 +64,17 @@ public class EmrLogService {
         var hanhDongId = emrActionRepository.findByMa(maHanhDong).map(x -> x.id).orElse(null);
         
         if(hanhDongId != null && objectId != null) {            
-            var query = new Query(Criteria.where("objectClass").is(objectClass)
-                    .and("objectId").is(objectId)
-                    .and("hanhDongId").is(hanhDongId));
             
             var sortDirection = asc? Sort.Direction.ASC: Sort.Direction.DESC;
             var sort = new Sort(sortDirection, "ngayThucHien");
+                        
+            var query = new Query(Criteria.where("objectClass").is(objectClass)
+                    .and("objectId").is(objectId)
+                    .and("hanhDongId").is(hanhDongId))
+                    .with(sort);
             
-            if(offset >= 0 && limit >= 0) {                
-                var pageable = new OffsetBasedPageRequest(limit, offset, sort);
-                query = query.with(pageable);
-            }else {
-                query = query.with(sort);
+            if(offset >= 0 && limit >= 0) {
+                query = query.skip(offset).limit(limit);
             }
             
             return mongoTemplate.find(query, EmrLog.class);

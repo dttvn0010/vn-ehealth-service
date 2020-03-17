@@ -19,7 +19,7 @@ public class ValueSetEntityToFHIRValueSet implements Transformer<ValueSetEntity,
         var obj = ValueSetEntity.toValueSet(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "CarePlan-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 

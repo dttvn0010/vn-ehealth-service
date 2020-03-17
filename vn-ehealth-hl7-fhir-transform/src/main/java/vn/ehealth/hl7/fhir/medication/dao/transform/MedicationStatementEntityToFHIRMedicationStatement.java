@@ -20,7 +20,7 @@ public class MedicationStatementEntityToFHIRMedicationStatement
         var obj = MedicationStatementEntity.toMedicationStatement(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "MedicationStatement-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;        
     }
 }

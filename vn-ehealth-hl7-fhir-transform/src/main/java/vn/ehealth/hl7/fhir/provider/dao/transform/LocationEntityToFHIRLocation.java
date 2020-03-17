@@ -14,7 +14,7 @@ public class LocationEntityToFHIRLocation implements Transformer<LocationEntity,
         var obj = LocationEntity.toLocation(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Location-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

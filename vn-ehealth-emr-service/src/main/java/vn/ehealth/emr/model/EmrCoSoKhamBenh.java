@@ -12,10 +12,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class EmrCoSoKhamBenh {
 
     @Id    
-    public transient ObjectId id;
+    public ObjectId id;
     
     public String getId() { return id != null? id.toHexString() : null; }
     
+    public int trangThai;
     public EmrDmContent emrDmPhuongXa;
     public EmrDmContent emrDmQuanHuyen;
     public EmrDmContent emrDmTinhThanh;

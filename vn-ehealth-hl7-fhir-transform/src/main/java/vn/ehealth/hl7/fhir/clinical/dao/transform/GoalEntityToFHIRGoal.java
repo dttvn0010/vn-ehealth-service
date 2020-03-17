@@ -19,7 +19,7 @@ public class GoalEntityToFHIRGoal implements Transformer<GoalEntity, Goal> {
         var obj = GoalEntity.toGoal(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Goal-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     
     }

@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import vn.ehealth.emr.service.EmrServiceFactory;
+import vn.ehealth.emr.service.ServiceFactory;
 import vn.ehealth.emr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
@@ -24,6 +24,7 @@ public class User {
     public String username;
     public String password;
     public String fullName;
+    public ObjectId emrPersonId;
     @Transient List<Role> roles;
     
     public List<ObjectId> roleIds;
@@ -41,7 +42,7 @@ public class User {
             roles = new ArrayList<Role>();
             if(roleIds != null) {
                 for(var roleId : roleIds) {
-                    var role = EmrServiceFactory.getRoleService().getById(roleId);
+                    var role = ServiceFactory.getRoleService().getById(roleId);
                     role.ifPresent(x -> roles.add(x));
                 }
             }            

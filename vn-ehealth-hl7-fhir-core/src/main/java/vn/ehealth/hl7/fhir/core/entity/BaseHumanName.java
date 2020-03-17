@@ -17,6 +17,14 @@ public class BaseHumanName {
     public List<String> suffix;
     public BasePeriod period;
 
+    public BaseHumanName() {
+        
+    }
+    
+    public BaseHumanName(String text) {
+        this.text = text;
+    }
+    
     public static BaseHumanName fromHumanName(HumanName obj) {        
         if(obj == null) return null;
         
@@ -57,5 +65,4 @@ public class BaseHumanName {
     public static List<HumanName> toHumanNameList(List<BaseHumanName> entityList) {
         return transform(entityList, x -> toHumanName(x));        
     }
-
 }

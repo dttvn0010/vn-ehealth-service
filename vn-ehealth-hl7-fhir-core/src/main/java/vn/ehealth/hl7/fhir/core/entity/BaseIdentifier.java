@@ -1,5 +1,6 @@
 package vn.ehealth.hl7.fhir.core.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Identifier;
@@ -13,7 +14,7 @@ public class BaseIdentifier {
 
     public String value;
 
-    public Integer order;
+    //public Integer order;
     
     public BaseCodeableConcept type;
     
@@ -25,6 +26,20 @@ public class BaseIdentifier {
 
     public IdentifierUse identifierUse;
     
+    public BaseIdentifier() {
+        
+    }
+    
+    public BaseIdentifier(String value, String system) {
+        this.value = value;
+        this.system = system;
+    }
+    
+    public BaseIdentifier(String value, String system, Date start, Date end) {
+        this.value = value;
+        this.system = system;
+        this.period = new BasePeriod(start, end);
+    }
     
     public static Identifier toIdentifier(BaseIdentifier ent) {
         if(ent == null) return null;

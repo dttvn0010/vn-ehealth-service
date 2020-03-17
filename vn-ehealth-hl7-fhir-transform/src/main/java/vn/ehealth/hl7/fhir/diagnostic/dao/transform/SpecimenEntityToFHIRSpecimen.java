@@ -14,7 +14,7 @@ public class SpecimenEntityToFHIRSpecimen implements Transformer<SpecimenEntity,
         var obj = SpecimenEntity.toSpecimen(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Specimen-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

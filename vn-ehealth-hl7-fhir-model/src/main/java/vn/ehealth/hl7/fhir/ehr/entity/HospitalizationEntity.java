@@ -22,15 +22,15 @@ public class HospitalizationEntity{
     public static HospitalizationEntity fromEncounterHospitalizationComponent(EncounterHospitalizationComponent obj) {
         if(obj == null) return null;
         var ent = new HospitalizationEntity();
-        ent.preAdmissionIdentifier = BaseIdentifier.fromIdentifier(obj.getPreAdmissionIdentifier());
-        ent.origin = BaseReference.fromReference(obj.getOrigin());
-        ent.admitSource = BaseCodeableConcept.fromCodeableConcept(obj.getAdmitSource());
-        ent.reAdmission = BaseCodeableConcept.fromCodeableConcept(obj.getReAdmission());
-        ent.dietPreference = BaseCodeableConcept.fromCodeableConcept(obj.getDietPreference());
-        ent.specialCourtesy = BaseCodeableConcept.fromCodeableConcept(obj.getSpecialCourtesy());
-        ent.specialArrangement = BaseCodeableConcept.fromCodeableConcept(obj.getSpecialArrangement());
-        ent.destination = BaseReference.fromReference(obj.getDestination());
-        ent.dischargeDisposition = BaseCodeableConcept.fromCodeableConcept(obj.getDischargeDisposition());
+        ent.preAdmissionIdentifier = obj.hasPreAdmissionIdentifier()? BaseIdentifier.fromIdentifier(obj.getPreAdmissionIdentifier()) : null;
+        ent.origin = obj.hasOrigin()? BaseReference.fromReference(obj.getOrigin()): null;
+        ent.admitSource = obj.hasAdmitSource()? BaseCodeableConcept.fromCodeableConcept(obj.getAdmitSource()): null;
+        ent.reAdmission = obj.hasReAdmission()? BaseCodeableConcept.fromCodeableConcept(obj.getReAdmission()): null;
+        ent.dietPreference = obj.hasDietPreference()? BaseCodeableConcept.fromCodeableConcept(obj.getDietPreference()): null;
+        ent.specialCourtesy = obj.hasSpecialCourtesy()? BaseCodeableConcept.fromCodeableConcept(obj.getSpecialCourtesy()): null;
+        ent.specialArrangement = obj.hasSpecialArrangement()? BaseCodeableConcept.fromCodeableConcept(obj.getSpecialArrangement()): null;
+        ent.destination = obj.hasDestination()? BaseReference.fromReference(obj.getDestination()): null;
+        ent.dischargeDisposition = obj.hasDischargeDisposition()? BaseCodeableConcept.fromCodeableConcept(obj.getDischargeDisposition()): null;
         return ent;
     }
     

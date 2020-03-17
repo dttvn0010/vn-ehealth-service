@@ -14,7 +14,7 @@ public class EpisodeOfCareEntityToFHIREpisodeOfCare implements Transformer<Episo
         var obj = EpisodeOfCareEntity.toEpisodeOfCare(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "EpisodeOfCare-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
         
     }

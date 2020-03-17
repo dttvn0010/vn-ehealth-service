@@ -53,7 +53,8 @@ public class BaseAttachment {
         }
         
         object.setUrl(entity.url);
-        object.setSize(entity.size);
+        
+        if(entity.size != null) object.setSize(entity.size);
         
         if(entity.hash != null) {
             object.setHash(Base64.decodeBase64(entity.hash.getBytes(ca.uhn.fhir.rest.api.Constants.CHARSET_UTF8)));

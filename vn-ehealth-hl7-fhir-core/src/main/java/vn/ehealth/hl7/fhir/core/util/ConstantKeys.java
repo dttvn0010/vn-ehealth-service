@@ -192,7 +192,7 @@ public class ConstantKeys {
     public static final String SP_IMAGE = "image";
     public static final String SP_ISSUED = "issued";
     public static final String SP_RESULT = "result";
-    public static final String SP_FHIR_ID = "fhir_id";
+    public static final String SP_FHIR_ID = "fhirId";
     public static final String SP_SCHEDULE = "schedule";
     public static final String SP_SLOT_TYPE = "slot-type";
     public static final String SP_CLASS = "class";

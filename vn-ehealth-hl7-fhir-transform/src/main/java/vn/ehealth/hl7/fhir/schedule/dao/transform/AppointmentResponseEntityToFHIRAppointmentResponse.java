@@ -15,7 +15,7 @@ public class AppointmentResponseEntityToFHIRAppointmentResponse
         var obj = AppointmentResponseEntity.toAppointmentResponse(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "AppointmentResponse-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 

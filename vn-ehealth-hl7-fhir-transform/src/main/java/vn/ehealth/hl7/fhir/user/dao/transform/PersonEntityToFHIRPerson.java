@@ -14,7 +14,7 @@ public class PersonEntityToFHIRPerson implements Transformer<PersonEntity, Perso
         var obj = PersonEntity.toPerson(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Person-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;        
     }
 }

@@ -10,4 +10,5 @@ import vn.ehealth.emr.model.EmrBenhNhan;
 public interface EmrBenhNhanRepository extends MongoRepository<EmrBenhNhan, ObjectId> {
 
     public Optional<EmrBenhNhan> findByIddinhdanhchinh(String iddinhdanhchinh);
+    public Optional<EmrBenhNhan> findByIdhis(String idhis);
 }

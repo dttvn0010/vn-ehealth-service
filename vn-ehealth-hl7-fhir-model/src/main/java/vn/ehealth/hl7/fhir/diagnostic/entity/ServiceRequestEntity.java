@@ -13,6 +13,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -20,7 +22,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
 @Document(collection = "serviceRequest")
-@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class ServiceRequestEntity extends BaseResource {
     @Id
     public ObjectId id;
@@ -35,6 +37,8 @@ public class ServiceRequestEntity extends BaseResource {
     public Boolean doNotPerform;
     public List<BaseCodeableConcept> category;
     public BaseCodeableConcept code;
+    public List<BaseCodeableConcept> orderDetail;
+    @JsonIgnore public Type quantity;
     public BaseReference subject;    
     public BaseReference encounter;
     public Type occurrence;
@@ -67,12 +71,14 @@ public class ServiceRequestEntity extends BaseResource {
         ent.doNotPerform = obj.hasDoNotPerform()? obj.getDoNotPerform(): null;
         ent.category = obj.hasCategory()? BaseCodeableConcept.fromCodeableConcept(obj.getCategory()) : null;
         ent.code = obj.hasCode()? BaseCodeableConcept.fromCodeableConcept(obj.getCode()) : null;
+        ent.orderDetail = obj.hasOrderDetail()? BaseCodeableConcept.fromCodeableConcept(obj.getOrderDetail()) : null;
+        ent.quantity = obj.hasQuantity()? obj.getQuantity() : null;
         ent.subject = obj.hasSubject()? BaseReference.fromReference(obj.getSubject()) : null;
         ent.encounter = obj.hasEncounter()? BaseReference.fromReference(obj.getEncounter()) : null;
         ent.occurrence = obj.getOccurrence();        
         ent.asNeeded = obj.getAsNeeded();
         ent.authoredOn = obj.hasAuthoredOn()? obj.getAuthoredOn() : null;
-        ent.requester = BaseReference.fromReference(obj.getRequester());
+        ent.requester = obj.hasRequester()? BaseReference.fromReference(obj.getRequester()) : null;
         ent.performerType = obj.hasPerformerType()? BaseCodeableConcept.fromCodeableConcept(obj.getPerformerType()) : null;
         ent.performer = obj.hasPerformer()? BaseReference.fromReferenceList(obj.getPerformer()) : null;
         ent.reasonCode = obj.hasReasonCode()? BaseCodeableConcept.fromCodeableConcept(obj.getReasonCode()) : null;
@@ -100,6 +106,8 @@ public class ServiceRequestEntity extends BaseResource {
         if(ent.doNotPerform != null) obj.setDoNotPerform(ent.doNotPerform);
         obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
         obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
+        obj.setOrderDetail(BaseCodeableConcept.toCodeableConcept(ent.orderDetail));
+        obj.setQuantity(ent.quantity);
         obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setEncounter(BaseReference.toReference(ent.encounter));
         obj.setOccurrence(ent.occurrence);
@@ -116,5 +124,13 @@ public class ServiceRequestEntity extends BaseResource {
         obj.setRelevantHistory(BaseReference.toReferenceList(ent.relevantHistory));
         return obj;
         
+    }
+    
+    public String getOrderDetail() {
+        String text = "";
+        if(orderDetail != null && orderDetail.size() > 0) {
+            text = orderDetail.get(0).text;
+        }
+        return text;
     }
 }

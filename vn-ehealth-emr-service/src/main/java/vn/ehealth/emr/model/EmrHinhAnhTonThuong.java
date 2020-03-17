@@ -20,6 +20,8 @@ public class EmrHinhAnhTonThuong {
     public ObjectId emrHoSoBenhAnId;    
     public ObjectId emrBenhNhanId;
     public ObjectId emrCoSoKhamBenhId;
+    public int trangThai;
+    public String idhis;
     
     public String anhtonthuong;
     public String motatonthuong;

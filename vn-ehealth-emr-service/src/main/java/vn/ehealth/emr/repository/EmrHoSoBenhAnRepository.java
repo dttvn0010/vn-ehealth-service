@@ -9,6 +9,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import vn.ehealth.emr.model.EmrHoSoBenhAn;
 
 public interface EmrHoSoBenhAnRepository extends MongoRepository<EmrHoSoBenhAn, ObjectId> {
-    List<EmrHoSoBenhAn> findByEmrBenhNhanId(ObjectId emrBenhNhanId);
+    List<EmrHoSoBenhAn> findByEmrBenhNhanIdAndTrangThai(ObjectId emrBenhNhanId, int trangThai);
     Optional<EmrHoSoBenhAn> findByMatraodoi(String matraodoi);
 }

@@ -14,9 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.opencsv.CSVReader;
@@ -24,8 +22,6 @@ import com.opencsv.CSVReader;
 import vn.ehealth.emr.model.EmrDm;
 import vn.ehealth.emr.service.EmrDmService;
 
-@RestController
-@RequestMapping("/api/danhmuc")
 public class EmrDmController {
     
     private Logger logger = LoggerFactory.getLogger(EmrDmController.class);
@@ -34,10 +30,11 @@ public class EmrDmController {
 
     @GetMapping("/count_dm_list")
     public long countDmList(@RequestParam("dm_type") String dmType, 
-                            @RequestParam String keyword,
-                            @RequestParam int level,
-                            @RequestParam String parentCode) {
-        return emrDmService.countEmrDm(dmType, keyword, level, parentCode);
+                            @RequestParam Optional<String> keyword,
+                            @RequestParam Optional<Integer> level,
+                            @RequestParam Optional<String> parentCode) {
+        return emrDmService.countEmrDm(dmType, keyword.orElse(""), 
+                                        level.orElse(-1), parentCode.orElse(""));
     }
     
     @GetMapping("/get_dm_list")
@@ -47,7 +44,9 @@ public class EmrDmController {
                                         @RequestParam Optional<String> parentCode,
                                         @RequestParam Optional<Integer> start, 
                                         @RequestParam Optional<Integer> count) {
-        var lst = emrDmService.getEmrDmList(dmType, keyword, level, parentCode, start, count);
+        var lst = emrDmService.getEmrDmList(dmType, keyword.orElse(""), 
+                                level.orElse(-1), parentCode.orElse(""), 
+                                start.orElse(-1), count.orElse(-1));
         return ResponseEntity.ok(lst);
     }
     

@@ -17,8 +17,8 @@ public class EncounterStatusHistoryEntity{
         
         var ent = new EncounterStatusHistoryEntity();
         
-        ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.period = BasePeriod.fromPeriod(obj.getPeriod());
+        ent.status = obj.hasStatus()? Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null) : null; 
+        ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
         
         return ent;
     }

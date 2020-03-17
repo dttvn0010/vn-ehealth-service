@@ -1,7 +1,10 @@
 package vn.ehealth.hl7.fhir.ehr.entity;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.annotation.Nonnull;
 
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Encounter;
@@ -18,24 +21,26 @@ import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
+
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "encounter")
-@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class EncounterEntity extends BaseResource{
     public static class DiagnosisEntity {
         public BaseReference condition;
         public BaseCodeableConcept use;
-        public int rank;
+        public Integer rank;
         
         public static DiagnosisEntity fromDiagnosisComponent(DiagnosisComponent obj) {
             if(obj == null) return null;
             
             var ent = new DiagnosisEntity();
                     
-            ent.condition = BaseReference.fromReference(obj.getCondition());
-            ent.use = BaseCodeableConcept.fromCodeableConcept(obj.getUse());
-            ent.rank = obj.getRank();
+            ent.condition = obj.hasCondition()? BaseReference.fromReference(obj.getCondition()) : null;
+            ent.use = obj.hasUse()? BaseCodeableConcept.fromCodeableConcept(obj.getUse()) : null;
+            ent.rank = obj.hasRank()? obj.getRank() : null;
                     
             return ent;
         }
@@ -47,7 +52,7 @@ public class EncounterEntity extends BaseResource{
             
             obj.setCondition(BaseReference.toReference(ent.condition));
             obj.setUse(BaseCodeableConcept.toCodeableConcept(ent.use));
-            obj.setRank(ent.rank);
+            if(ent.rank != null) obj.setRank(ent.rank);
             
             return obj;
         }
@@ -80,25 +85,25 @@ public class EncounterEntity extends BaseResource{
         if(obj == null) return null;
         
         var ent = new EncounterEntity();
-        ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.statusHistory = transform(obj.getStatusHistory(), EncounterStatusHistoryEntity::fromStatusHistoryComponent);
-        ent.class_ = BaseCoding.fromCoding(obj.getClass_());
-        ent.classHistory = transform(obj.getClassHistory(), EncounterClassHistoryEntity::fromClassHistoryComponent);        
-        ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
-        ent.priority = BaseCodeableConcept.fromCodeableConcept(obj.getPriority());
-        ent.episodeOfCare = BaseReference.fromReferenceList(obj.getEpisodeOfCare());
-        ent.reasonReference = BaseReference.fromReferenceList(obj.getReasonReference());
-        ent.participant = transform(obj.getParticipant(), EncounterParticipantEntity::fromEncounterParticipantComponent);
-        ent.appointment = BaseReference.fromReferenceList(obj.getAppointment());
-        ent.period = BasePeriod.fromPeriod(obj.getPeriod());
-        ent.length = BaseDuration.fromDuration(obj.getLength());
-        ent.reasonCode = BaseCodeableConcept.fromCodeableConcept(obj.getReasonCode());
-        ent.diagnosis = transform(obj.getDiagnosis(), DiagnosisEntity::fromDiagnosisComponent);
-        ent.hospitalization = HospitalizationEntity.fromEncounterHospitalizationComponent(obj.getHospitalization());
-        ent.location = transform(obj.getLocation(), EncounterLocationEntity::fromEncounterLocationComponent);
-        ent.serviceProvider = BaseReference.fromReference(obj.getServiceProvider());
-        ent.partOf = BaseReference.fromReference(obj.getPartOf());
+        ent.identifier = obj.hasIdentifier()? BaseIdentifier.fromIdentifierList(obj.getIdentifier()) : null;
+        ent.status = obj.hasStatus()? Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null) : null;
+        ent.statusHistory = obj.hasStatusHistory()? transform(obj.getStatusHistory(), EncounterStatusHistoryEntity::fromStatusHistoryComponent) : null;
+        ent.class_ = obj.hasClass_()? BaseCoding.fromCoding(obj.getClass_())  : null;
+        ent.classHistory = obj.hasClassHistory()? transform(obj.getClassHistory(), EncounterClassHistoryEntity::fromClassHistoryComponent) : null;        
+        ent.type = obj.hasType()? BaseCodeableConcept.fromCodeableConcept(obj.getType()) : null;
+        ent.priority = obj.hasPriority()? BaseCodeableConcept.fromCodeableConcept(obj.getPriority()) : null;
+        ent.episodeOfCare = obj.hasEpisodeOfCare()? BaseReference.fromReferenceList(obj.getEpisodeOfCare()) : null;
+        ent.reasonReference = obj.hasReasonReference()? BaseReference.fromReferenceList(obj.getReasonReference()) : null;
+        ent.participant = obj.hasParticipant()? transform(obj.getParticipant(), EncounterParticipantEntity::fromEncounterParticipantComponent) : null;
+        ent.appointment = obj.hasAppointment()? BaseReference.fromReferenceList(obj.getAppointment()) : null;
+        ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
+        ent.length = obj.hasLength()? BaseDuration.fromDuration(obj.getLength()) : null;
+        ent.reasonCode = obj.hasReasonCode()? BaseCodeableConcept.fromCodeableConcept(obj.getReasonCode()) : null;
+        ent.diagnosis = obj.hasDiagnosis()? transform(obj.getDiagnosis(), DiagnosisEntity::fromDiagnosisComponent) : null;
+        ent.hospitalization = obj.hasHospitalization()? HospitalizationEntity.fromEncounterHospitalizationComponent(obj.getHospitalization()) : null;
+        ent.location = obj.hasLocation()? transform(obj.getLocation(), EncounterLocationEntity::fromEncounterLocationComponent) : null;
+        ent.serviceProvider = obj.hasServiceProvider()? BaseReference.fromReference(obj.getServiceProvider()) : null;
+        ent.partOf = obj.hasPartOf()? BaseReference.fromReference(obj.getPartOf()) : null;
         return ent;        
     }
     
@@ -125,7 +130,32 @@ public class EncounterEntity extends BaseResource{
         obj.setLocation(transform(ent.location, EncounterLocationEntity::toEncounterLocationComponent));
         obj.setServiceProvider(BaseReference.toReference(ent.serviceProvider));
         obj.setPartOf(BaseReference.toReference(ent.partOf));
-        return obj;
-        
+        return obj;        
+    }
+    
+    public String getIdentifier() {
+        String value = "";
+        if(identifier != null && identifier.size() > 0) {
+            value = identifier.get(0).value;
+        }
+        return value != null? value : "";
+    }
+    
+    public Date getStart() {
+        return period != null? period.start : null;
+    }
+    
+    public Date getEnd() {
+        return period != null? period.end : null;
+    }
+    
+    public BaseCodeableConcept getTypeBySystem(@Nonnull String system) {
+        if(type != null) {
+            return type.stream()
+                        .filter(x -> FPUtil.anyMatch(x.coding, y -> system.equals(y.system)))
+                        .findFirst()
+                        .orElse(null);
+        }
+        return null;
     }
 }

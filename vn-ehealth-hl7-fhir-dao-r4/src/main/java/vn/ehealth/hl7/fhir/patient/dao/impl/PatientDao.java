@@ -68,7 +68,7 @@ public class PatientDao implements IPatient {
         if (idType != null && idType.hasIdPart()) {
             fhirId = idType.getIdPart();
             Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true)).withHint("idx_by_fhir_id-active");
+                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true)).withHint("idx_by_fhirId-active");
             entityOld = mongo.findOne(query, PatientEntity.class);
         }
         if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
@@ -98,7 +98,7 @@ public class PatientDao implements IPatient {
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
             Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true)).withHint("idx_by_fhir_id-active");
+                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true)).withHint("idx_by_fhirId-active");
             PatientEntity entity = mongo.findOne(query, PatientEntity.class);
             if (entity != null) {
                 Date cal = new Date();
@@ -117,7 +117,7 @@ public class PatientDao implements IPatient {
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
             Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true)).withHint("idx_by_fhir_id-active");
+                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true)).withHint("idx_by_fhirId-active");
             PatientEntity entity = mongo.findOne(query, PatientEntity.class);
             if (entity != null) {
                 entity.active = (false);
@@ -141,7 +141,7 @@ public class PatientDao implements IPatient {
             Integer version = Integer.valueOf(idType.getVersionIdPart());
             if (version != null) {
                 Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version)).withHint("idx_by_fhir_id-version");
+                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version)).withHint("idx_by_fhirId-version");
                 PatientEntity entity = mongo.findOne(query, PatientEntity.class);
                 if (entity != null) {
                     Date cal = new Date();
@@ -362,9 +362,9 @@ public class PatientDao implements IPatient {
         var ent = PatientEntity.fromPatient(obj);
         DataConvertUtil.setMetaExt(obj, ent);
         if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhir_id = (fhirId);
+            ent.fhirId = (fhirId);
         } else {
-            ent.fhir_id = (StringUtil.generateUID());
+            ent.fhirId = (StringUtil.generateUID());
         }
         
         ent.active = (true);
@@ -390,7 +390,7 @@ public class PatientDao implements IPatient {
             criteria.and("resCreated").gte(dateParam).lte(dateNow);
         }
         if (criteria != null) {
-            Query qry = Query.query(criteria).withHint("idx_by_fhir_id-version");
+            Query qry = Query.query(criteria).withHint("idx_by_fhirId-version");
             List<PatientEntity> patientResults = mongo.find(qry, PatientEntity.class);
             Date cal = new Date();
             for (PatientEntity patientEntity : patientResults) {

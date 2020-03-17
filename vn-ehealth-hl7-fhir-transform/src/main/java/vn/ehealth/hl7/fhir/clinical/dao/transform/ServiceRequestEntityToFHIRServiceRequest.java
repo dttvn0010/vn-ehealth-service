@@ -14,7 +14,7 @@ public class ServiceRequestEntityToFHIRServiceRequest implements Transformer<Ser
         var obj = ServiceRequestEntity.toServiceRequest(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "ServiceRequest-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

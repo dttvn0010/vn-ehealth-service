@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,17 +21,33 @@ public class EmrYhctDonThuoc {
     public ObjectId emrHoSoBenhAnId;    
     public ObjectId emrBenhNhanId;
     public ObjectId emrCoSoKhamBenhId;
+    public int trangThai;
+    public String idhis;
     
     public Date ngaykedon;
-    public String bacsikedon;
+    public EmrCanboYte bacsikedon;
     public String sodon;
     public Date ngaybatdau;
     public Date ngayketthuc;
     public Integer soluongthang;
     public String chidan;
     
-    @Transient public List<EmrYhctDonThuocChiTiet> emrYhctDonThuocChiTiets = new ArrayList<>();    
     public List<EmrFileDinhKem> emrFileDinhKemYhctDonThuocs = new ArrayList<>();
+        
+    @JsonInclude(Include.NON_NULL)
+    public static class EmrYhctDonThuocChiTiet {
+        public EmrDmContent emrDmYhctViThuoc;    
+        public EmrDmContent emrDmDuongDungThuoc;
+        public EmrDmContent emrDmChiDanDungThuoc;
+        public EmrDmContent emrDmTanXuatDungThuoc;
+        
+        public Date ngaybatdau;
+        public Date ngayketthuc;
+        public String lieuluongdung;
+        public String chidandungthuoc; 
+    }
+    
+    public List<EmrYhctDonThuocChiTiet> emrYhctDonThuocChiTiets = new ArrayList<>();
     
     public String getId() { 
         return ObjectIdUtil.idToString(id); 

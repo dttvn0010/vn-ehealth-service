@@ -14,7 +14,7 @@ public class ObservationEntityToFHIRObservation implements Transformer<Observati
         var obj = ObservationEntity.toObservation(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Observation-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
         
     }

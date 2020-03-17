@@ -14,7 +14,7 @@ public class OrganizationEntityToFHIROrganization implements Transformer<Organiz
         var obj = OrganizationEntity.toOrganization(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Organization-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

@@ -19,7 +19,7 @@ public class CarePlanEntityToFHIRCarePlan implements Transformer<CarePlanEntity,
         var obj = CarePlanEntity.toCarePlan(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "CarePlan-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

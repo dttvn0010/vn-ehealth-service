@@ -14,7 +14,7 @@ public class ImagingStudyEntityToFHIRImagingStudy implements Transformer<Imaging
         var obj = ImagingStudyEntity.toImagingStudy(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "ImagingStudy-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

@@ -14,7 +14,7 @@ public class EncounterEntityToFHIREncounter implements Transformer<EncounterEnti
         var obj = EncounterEntity.toEncounter(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Encounter-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
         
     }

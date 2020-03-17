@@ -10,6 +10,14 @@ public class BaseReference {
     public String reference;
     public BaseIdentifier identifier;
     public String display;
+    
+    public BaseReference() {
+        
+    }
+    
+    public BaseReference(String fhirId) {
+        this.reference = fhirId;
+    }
  
     public static BaseReference fromReference(Reference ref) {        
         if(ref == null) return null;
@@ -41,4 +49,12 @@ public class BaseReference {
         return transform(entityList, x -> toReference(x));        
     }
     
+    public static BaseReference fromEntity(BaseResource ent) {
+        if(ent == null) {
+            return null;
+        }
+        var ref = new BaseReference();
+        ref.reference = ent.fhirId;
+        return ref;
+    }
 }

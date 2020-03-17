@@ -6,14 +6,12 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import vn.ehealth.emr.service.EmrServiceFactory;
 import vn.ehealth.emr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
@@ -24,27 +22,43 @@ public class EmrXetNghiem {
     public ObjectId emrHoSoBenhAnId;    
     public ObjectId emrBenhNhanId;
     public ObjectId emrCoSoKhamBenhId;
+    public int trangThai;
+    public String idhis;
     
-    public EmrDmContent emrDmXetNghiem;
     public EmrDmContent emrDmLoaiXetNghiem;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayyeucau;
     
-    public String bacsiyeucau;
+    public EmrCanboYte bacsiyeucau;
     public String noidungyeucau;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaythuchien;
     
-    public String bacsixetnghiem;    
-    //public String tailieudinhkem;
+    public EmrCanboYte bacsixetnghiem;    
     public String nhanxet;
-   
-    
-    @Transient public List<EmrXetNghiemDichVu> emrXetNghiemDichVus = null;
     
     public List<EmrFileDinhKem> emrFileDinhKemXetNghiems = new ArrayList<>();
+    
+    @JsonInclude(Include.NON_NULL)
+    public static class EmrXetNghiemDichVu {
+        
+        public EmrDmContent emrDmXetNghiem;
+        public List<EmrXetNghiemKetQua> emrXetNghiemKetQuas = new ArrayList<EmrXetNghiemKetQua>();
+        
+        @JsonInclude(Include.NON_NULL)
+        public static class EmrXetNghiemKetQua {
+            public EmrDmContent emrDmDichKetQuaXetNghiem;
+            
+            public EmrDmContent emrDmChiSoXetNghiem;
+
+            public String giatrido;
+        }
+          
+    }
+    
+    public List<EmrXetNghiemDichVu> emrXetNghiemDichVus = new ArrayList<>();
     
     public String getId() { 
         return ObjectIdUtil.idToString(id); 
@@ -68,13 +82,6 @@ public class EmrXetNghiem {
 
     public void setEmrBenhNhanId(String emrBenhNhanId) {
         this.emrBenhNhanId = ObjectIdUtil.stringToId(emrBenhNhanId);
-    }
-    
-    public List<EmrXetNghiemDichVu> getEmrXetNghiemDichVus() {
-        if(emrXetNghiemDichVus == null && id != null) {
-            emrXetNghiemDichVus = EmrServiceFactory.getEmrXetNghiemDichVuService().getByEmrXetNghiemId(id);
-        }
-        return emrXetNghiemDichVus;
     }
     
     public String getEmrCoSoKhamBenhId() {

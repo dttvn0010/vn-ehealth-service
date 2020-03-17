@@ -25,19 +25,22 @@ public class EmrQuanLyNguoiBenh {
     
     public String sovaovien;
 
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaygiovaovien;
     
     public Integer vaovienlanthu;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
-    public Date ngaygioravien;    
-
-    public String tenbacsikham;    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngaygioravien;
+    
+    //public ObjectId bacsikhamId;
+    
+    public EmrCanboYte bacsikham;    
 
     public Integer tongsongaydieutri;
 
-    public String tenbacsichoravien;
+    //public String tenbacsichoravien;
+    public EmrCanboYte bacsichoravien;
 
     public String noichuyenden;
     

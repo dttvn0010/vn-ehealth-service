@@ -1,73 +1,135 @@
 package vn.ehealth.emr.service;
 
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.LookupOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import vn.ehealth.emr.model.EmrChanDoanHinhAnh;
 import vn.ehealth.emr.model.EmrHoSoBenhAn;
 import vn.ehealth.emr.repository.EmrChanDoanHinhAnhRepository;
-import vn.ehealth.emr.utils.DateUtil;
+import vn.ehealth.emr.repository.EmrHoSoBenhAnRepository;
+import vn.ehealth.emr.utils.EmrUtils;
+import vn.ehealth.emr.utils.JsonUtil;
+import vn.ehealth.emr.utils.Constants.MA_HANH_DONG;
+import vn.ehealth.emr.utils.Constants.TRANGTHAI_DULIEU;
 
 @Service
 public class EmrChanDoanHinhAnhService {
-
-	@Autowired
-    private MongoTemplate mongoTemplate;
 	
-    @Autowired EmrChanDoanHinhAnhRepository emrChanDoanHinhAnhRepository;
+	private SimpleDateFormat sdf = EmrUtils.createSimpleDateFormat("dd/MM/yyyy HH:mm");
+
+    @Autowired 
+    private EmrChanDoanHinhAnhRepository emrChanDoanHinhAnhRepository;
+    
+    @Autowired
+    private EmrHoSoBenhAnRepository emrHoSoBenhAnRepository;
+    
+    @Autowired EmrLogService emrLogService;
+    
+    @Autowired UserService userService;
     
     public List<EmrChanDoanHinhAnh> getByEmrHoSoBenhAnId(ObjectId emrHoSoBenhAnId) {
-        return emrChanDoanHinhAnhRepository.findByEmrHoSoBenhAnId(emrHoSoBenhAnId);
+        return emrChanDoanHinhAnhRepository.findByEmrHoSoBenhAnIdAndTrangThai(emrHoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);
     }
     
-    public void deleteAllByEmrHoSoBenhAnId(ObjectId emrHoSoBenhAnId) {
-        for(var cdha : getByEmrHoSoBenhAnId(emrHoSoBenhAnId)) {
-            emrChanDoanHinhAnhRepository.delete(cdha);
+    public List<EmrChanDoanHinhAnh> getByEmrBenhNhanId(ObjectId emrBenhNhanId) {
+        return emrChanDoanHinhAnhRepository.findByEmrBenhNhanIdAndTrangThai(emrBenhNhanId, TRANGTHAI_DULIEU.DEFAULT);
+    }
+    
+    public EmrChanDoanHinhAnh save(EmrChanDoanHinhAnh cdha, ObjectId userId, String jsonSt) {
+        if(cdha.id == null && cdha.emrHoSoBenhAnId != null) {
+            var hsba = emrHoSoBenhAnRepository.findById(cdha.emrHoSoBenhAnId).orElseThrow();
+            cdha.emrBenhNhanId = hsba.emrBenhNhanId;
+            cdha.emrCoSoKhamBenhId = hsba.emrCoSoKhamBenhId;
         }
-    }    
-    
-    public EmrChanDoanHinhAnh createOrUpdate(EmrChanDoanHinhAnh emrChanDoanHinhAnh) {
-        return emrChanDoanHinhAnhRepository.save(emrChanDoanHinhAnh);
+        if (cdha.id == null) {
+        	emrLogService.logAction(EmrChanDoanHinhAnh.class.getName(), cdha.id, MA_HANH_DONG.TAO_MOI, new Date(), userId, 
+                    JsonUtil.dumpObject(cdha), jsonSt);
+        } else {
+        	emrLogService.logAction(EmrChanDoanHinhAnh.class.getName(), cdha.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+                    JsonUtil.dumpObject(cdha), jsonSt);
+        }
+        
+        return emrChanDoanHinhAnhRepository.save(cdha);
     }
     
-    public void delete(ObjectId id) {
-        emrChanDoanHinhAnhRepository.deleteById(id);
+    public void createOrUpdateFromHIS(ObjectId userId, @Nonnull EmrHoSoBenhAn hsba, @Nonnull List<EmrChanDoanHinhAnh> cdhaList, String jsonSt) {
+        for(int i = 0; i < cdhaList.size(); i++) {
+            var cdha = cdhaList.get(i);
+            if(cdha.idhis != null) {
+                cdha.id = emrChanDoanHinhAnhRepository.findByIdhis(cdha.idhis).map(x -> x.id).orElse(null);
+            }
+            var check = cdha.id;
+            cdha.emrHoSoBenhAnId = hsba.id;
+            cdha.emrBenhNhanId = hsba.emrBenhNhanId;
+            cdha.emrCoSoKhamBenhId = hsba.emrCoSoKhamBenhId;
+            cdha = emrChanDoanHinhAnhRepository.save(cdha);
+            cdhaList.set(i, cdha);
+            if(check == null) {
+                emrLogService.logAction(EmrChanDoanHinhAnh.class.getName(), cdha.id, MA_HANH_DONG.TAO_MOI, new Date(), userId, 
+                		JsonUtil.dumpObject(cdha), "");
+            } else {
+            	emrLogService.logAction(EmrChanDoanHinhAnh.class.getName(), cdha.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+                        JsonUtil.dumpObject(cdha), "");
+            }
+        }
+        emrLogService.logAction(EmrHoSoBenhAn.class.getName() + ".EmrChanDoanHinhAnhList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+                "", jsonSt);
     }
-      
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-	public List<HashMap> getByEmrBenhNhanId(ObjectId emrBenhNhanId) {
-    	var lookupOperation = LookupOperation.newLookup()
-    								.from("emr_ho_so_benh_an")
-    								.localField("emrHoSoBenhAnId")
-    								.foreignField("_id")
-    								.as("emrHoSoBenhAns");
-    	var aggregation = Aggregation.newAggregation(
-    							Aggregation.match(
-    								Criteria.where("emrBenhNhanId")
-    										.is(emrBenhNhanId)
-    								),
-    								lookupOperation
-    						);
     
-    	var lst = mongoTemplate.aggregate(aggregation, "emr_chan_doan_hinh_anh", HashMap.class).getMappedResults();
-    	lst.forEach(x -> {
-    		var emrHoSoBenhAns = (List<EmrHoSoBenhAn>) x.get("emrHoSoBenhAns");
-    		var emrHoSoBenhAn = emrHoSoBenhAns.size() > 0? emrHoSoBenhAns.get(0): null;
-    		if(emrHoSoBenhAn != null) {
-    			x.put("tenCoSoKhamBenh", emrHoSoBenhAn.getEmrCoSoKhamBenh().ten);
-        		x.put("soBenhAn", emrHoSoBenhAn.matraodoi);
-        		x.put("ngayVaoVien", DateUtil.parseDateToString(emrHoSoBenhAn.emrQuanLyNguoiBenh.ngaygiovaovien, "dd/MM/yyyy HH:mm"));
-        		x.put("ngayRaVien", DateUtil.parseDateToString(emrHoSoBenhAn.emrQuanLyNguoiBenh.ngaygioravien, "dd/MM/yyyy HH:mm"));
-    		}
-    		x.put("emrHoSoBenhAns", null);
-    	});
-    	return lst;
+    public void delete(ObjectId id, ObjectId userId) {
+        var cdha = emrChanDoanHinhAnhRepository.findById(id);
+        cdha.ifPresent(x -> {
+        	emrLogService.logAction(EmrChanDoanHinhAnh.class.getName(), id, MA_HANH_DONG.XOA, new Date(), userId, "", "");
+            x.trangThai = TRANGTHAI_DULIEU.DA_XOA;
+            emrChanDoanHinhAnhRepository.save(x);
+        });
+    }
+    
+    public String getHsgoc(ObjectId id) {
+        var logs = emrLogService.getLogs(EmrChanDoanHinhAnh.class.getName(), id, MA_HANH_DONG.CHINH_SUA, false, 0, 1);
+        if(logs.size() > 0) {
+            return logs.get(0).ghiChu;
+        }
+        return "";
+    }
+    
+    public long countHistory(ObjectId id) {
+        return emrLogService.countLogs(EmrChanDoanHinhAnh.class.getName(), id, MA_HANH_DONG.CHINH_SUA, false);   
+    }
+    
+    public List<Object> getHistory(ObjectId id, int offset, int limit) {
+        var logs = emrLogService.getLogs(EmrChanDoanHinhAnh.class.getName(), id, MA_HANH_DONG.CHINH_SUA, false, offset, limit);
+        
+        var result = new ArrayList<>();
+        for(var log : logs) {
+            var cdha = JsonUtil.parseObject(log.noiDung, EmrChanDoanHinhAnh.class);
+            String nguoiThucHien = "", ngayThucHien = "";
+            
+            if(log.nguoiThucHienId != null) {
+                var user = userService.getById(log.nguoiThucHienId);
+                nguoiThucHien = user.map(x -> x.fullName).orElse("");
+            }
+            
+            if(log.ngayThucHien != null) {
+                ngayThucHien = sdf.format(log.ngayThucHien);
+            }            
+                    
+            result.add(Map.of("cdha", cdha, "ngaySua", ngayThucHien, "nguoiSua", nguoiThucHien));
+        }
+        
+        return result;
     }
 }
+
+
+
+

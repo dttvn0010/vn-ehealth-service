@@ -19,7 +19,7 @@ public class ProcedureEntityToFHIRProcedure implements Transformer<ProcedureEnti
         var obj = ProcedureEntity.toProcedure(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Procedure-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

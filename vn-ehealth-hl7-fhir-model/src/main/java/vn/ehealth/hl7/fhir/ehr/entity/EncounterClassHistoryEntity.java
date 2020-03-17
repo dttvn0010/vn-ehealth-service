@@ -14,8 +14,8 @@ public class EncounterClassHistoryEntity{
         
         var ent = new EncounterClassHistoryEntity();
         
-        ent.class_ = obj.getClass_();
-        ent.period = BasePeriod.fromPeriod(obj.getPeriod());
+        ent.class_ = obj.hasClass_()? obj.getClass_() : null;
+        ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
         
         return ent;
     }

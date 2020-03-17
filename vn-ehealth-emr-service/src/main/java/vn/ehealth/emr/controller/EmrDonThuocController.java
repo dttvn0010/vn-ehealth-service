@@ -1,8 +1,8 @@
 package vn.ehealth.emr.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
@@ -18,20 +18,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import vn.ehealth.emr.model.EmrDonThuoc;
 import vn.ehealth.emr.service.EmrDonThuocService;
 import vn.ehealth.emr.service.EmrHoSoBenhAnService;
-import vn.ehealth.emr.utils.DateUtil;
 import vn.ehealth.emr.utils.EmrUtils;
-import vn.ehealth.emr.utils.JsonUtil;
+import vn.ehealth.emr.utils.UserUtil;
+import vn.ehealth.emr.validate.JsonParser;
 
 @RestController
 @RequestMapping("/api/donthuoc")
 public class EmrDonThuocController {
     
     private Logger logger = LoggerFactory.getLogger(EmrDonThuocController.class);
-    @Autowired EmrDonThuocService emrDonThuocService;
+    
+    @Autowired 
+    private EmrDonThuocService emrDonThuocService;
     @Autowired EmrHoSoBenhAnService emrHoSoBenhAnService;
+    
+    private JsonParser jsonParser = new JsonParser();
+    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
     
     @GetMapping("/get_ds_donthuoc")
     public ResponseEntity<?> getDsDonThuoc(@RequestParam("hsba_id") String id) {
@@ -41,26 +48,15 @@ public class EmrDonThuocController {
     
     @GetMapping("/get_ds_donthuoc_by_bn")
     public ResponseEntity<?> getDsDonThuocByBenhNhan(@RequestParam("benhnhan_id") String benhNhanId) {
-        var emrHoSoBenhAns = emrHoSoBenhAnService.getByEmrBenhNhanId(new ObjectId(benhNhanId));
-        var result = new ArrayList<>();
-        for(var emrHoSoBenhAn : emrHoSoBenhAns) {
-        	var donThuocList = emrDonThuocService.getByEmrHoSoBenhAnId(emrHoSoBenhAn.id); 
-        	var lst = donThuocList.stream().map(x -> JsonUtil.objectToMap(x)).collect(Collectors.toList());
-        	lst.forEach(x -> {
-        		x.put("tenCoSoKhamBenh", emrHoSoBenhAn.getEmrCoSoKhamBenh().ten);
-        		x.put("soBenhAn", emrHoSoBenhAn.matraodoi);
-        		x.put("ngayVaoVien", DateUtil.parseDateToString(emrHoSoBenhAn.emrQuanLyNguoiBenh.ngaygiovaovien, "dd/MM/yyyy HH:mm"));
-        		x.put("ngayRaVien", DateUtil.parseDateToString(emrHoSoBenhAn.emrQuanLyNguoiBenh.ngaygioravien, "dd/MM/yyyy HH:mm"));
-        	});        	   	       
-            result.addAll(lst);
-        }
-        return ResponseEntity.ok(result);
+        var donthuocList = emrDonThuocService.getByEmrBenhNhanId(new ObjectId(benhNhanId));
+        return ResponseEntity.ok(donthuocList);
     }
     
     @GetMapping("/delete_donthuoc")
     public ResponseEntity<?> deleteDonthuoc(@RequestParam("donthuoc_id") String id) {
         try {
-            emrDonThuocService.delete(new ObjectId(id));
+        	var user = UserUtil.getCurrentUser();
+            emrDonThuocService.delete(new ObjectId(id), user.get().id);
             var result = Map.of("success" , true);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
@@ -70,13 +66,13 @@ public class EmrDonThuocController {
         }
     }
     
-    @PostMapping("/create_or_update_donthuoc")
-    public ResponseEntity<?> createOrUpdateDonthuoc(@RequestBody String jsonSt) {
+    @PostMapping("/save_donthuoc")
+    public ResponseEntity<?> saveDonthuoc(@RequestBody String jsonSt) {
         
         try {
-            var mapper = EmrUtils.createObjectMapper();            
-            var donthuoc = mapper.readValue(jsonSt, EmrDonThuoc.class);
-            donthuoc = emrDonThuocService.createOrUpdate(donthuoc);
+        	var user = UserUtil.getCurrentUser();
+            var donthuoc = objectMapper.readValue(jsonSt, EmrDonThuoc.class);
+            donthuoc = emrDonThuocService.save(donthuoc, user.get().id, jsonSt);
             
             var result = Map.of(
                 "success" , true,
@@ -92,6 +88,56 @@ public class EmrDonThuocController {
             logger.error("Error save donthuoc:", e);
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    @PostMapping("/create_or_update_don_thuoc")
+    public ResponseEntity<?> createOrUpdateDonThuocFromHIS(@RequestBody String jsonSt) {
+        try {
+            var map = jsonParser.parseJson(jsonSt);
+            var matraodoiHsba = (String) map.get("matraodoiHoSo");
+            var hsba = emrHoSoBenhAnService.getByMatraodoi(matraodoiHsba).orElseThrow();
+            
+            var dtObjList = (List<Object>) map.get("emrDonThuocs");
+            var dtList = dtObjList.stream()
+                                .map(obj -> objectMapper.convertValue(obj, EmrDonThuoc.class))
+                                .collect(Collectors.toList());
+            var user = UserUtil.getCurrentUser();
+            var userId = user.map(x -> x.id).orElse(null);
+            emrDonThuocService.createOrUpdateFromHIS(userId, hsba, dtList, jsonSt);
+            
+            var result = Map.of(
+                "success" , true,
+                "dtList", dtList  
+            );
+            
+            return ResponseEntity.ok(result);
+            
+        }catch(Exception e) {
+            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
+            var result = Map.of(
+                "success" , false,
+                "error", error 
+            );
+            logger.error("Error save donthuoc from HIS:", e);
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @GetMapping("/count_donthuoc_logs")
+    public ResponseEntity<?> countLogs(@RequestParam("donthuoc_id") String id) {        
+        return ResponseEntity.ok(emrDonThuocService.countHistory(new ObjectId(id)));
+    } 
+    
+    @GetMapping("/get_donthuoc_logs")
+    public ResponseEntity<?> getLogs(@RequestParam("donthuoc_id") String id, @RequestParam int start, @RequestParam int count) {        
+        return ResponseEntity.ok(emrDonThuocService.getHistory(new ObjectId(id), start, count));
+    }    
+    
+    
+    @GetMapping("/get_hs_goc")
+    public ResponseEntity<?> getHsGoc(@RequestParam("donthuoc_id") String id) {
+        return ResponseEntity.ok(Map.of("hsGoc", emrDonThuocService.getHsgoc(new ObjectId(id))));
     }
 
 }

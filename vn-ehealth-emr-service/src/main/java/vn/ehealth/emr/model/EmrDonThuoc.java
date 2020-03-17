@@ -6,14 +6,12 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import vn.ehealth.emr.service.EmrServiceFactory;
 import vn.ehealth.emr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
@@ -24,19 +22,35 @@ public class EmrDonThuoc {
     public ObjectId emrHoSoBenhAnId;    
     public ObjectId emrBenhNhanId;
     public ObjectId emrCoSoKhamBenhId;
+    public int trangThai;
+    public String idhis;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaykedon;
-    public String bacsikedon;
+    public EmrCanboYte bacsikedon;
     public String sodon;
-    
-    @Transient public List<EmrDonThuocChiTiet> emrDonThuocChiTiets; 
     
     public List<EmrFileDinhKem> emrFileDinhKemDonThuocs = new ArrayList<>();
     
-    public String getId() { 
-        return ObjectIdUtil.idToString(id); 
+    @JsonInclude(Include.NON_NULL)
+    public static class EmrDonThuocChiTiet {
+        public EmrDmContent emrDmThuoc;
+        public EmrDmContent emrDmDuongDungThuoc;
+        public EmrDmContent emrDmTanXuatDungThuoc;
+        public EmrDmContent emrDmChiDanDungThuoc;
+        
+        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+        public Date ngaybatdau;
+        
+        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+        public Date ngayketthuc;
+        
+        public String lieuluongdung;    
+        public String chidandungthuoc;
+        public String bietduoc;
     }
+    
+    public List<EmrDonThuocChiTiet> emrDonThuocChiTiets = new ArrayList<>();
     
     public void setId(String id) {
         this.id = ObjectIdUtil.stringToId(id);
@@ -64,12 +78,5 @@ public class EmrDonThuoc {
     
     public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
         this.emrCoSoKhamBenhId = ObjectIdUtil.stringToId(emrCoSoKhamBenhId);
-    }
-    
-    public List<EmrDonThuocChiTiet> getEmrDonThuocChiTiets() {
-        if(emrDonThuocChiTiets == null && id != null) {
-            emrDonThuocChiTiets = EmrServiceFactory.getEmrDonThuocChiTietService().getByEmrDonThuocId(id);
-        }
-        return emrDonThuocChiTiets;        
     }
 }

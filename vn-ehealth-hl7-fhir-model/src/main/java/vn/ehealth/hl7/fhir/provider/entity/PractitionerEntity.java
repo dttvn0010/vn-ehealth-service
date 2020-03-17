@@ -22,7 +22,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "practitioner")
-@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class PractitionerEntity extends BaseResource {
     @Id
     public ObjectId id;
@@ -62,5 +62,21 @@ public class PractitionerEntity extends BaseResource {
         obj.setQualification(transform(ent.qualification, QualificationEntity::toPractitionerQualificationComponent));
         obj.setCommunication(BaseCodeableConcept.toCodeableConcept(ent.communication));
         return obj;
+    }
+    
+    public String getName() {
+        String text = "";
+        if(name != null && name.size() > 0) {
+            text = name.get(0).text;
+        }
+        return text != null? text : "";
+    }
+    
+    public String getIdentifier() {
+        String value = "";
+        if(identifier != null && identifier.size() > 0) {
+            value = identifier.get(0).value;
+        }
+        return value != null? value : "";
     }
 }

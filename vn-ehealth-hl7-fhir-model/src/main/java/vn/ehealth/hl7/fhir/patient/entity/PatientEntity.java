@@ -3,6 +3,10 @@ package vn.ehealth.hl7.fhir.patient.entity;
 
 import java.util.Date;
 import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Type;
@@ -22,6 +26,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseHumanName;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 /**
  * @author SONVT24
@@ -29,11 +34,11 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
  * @version 1.0
  */
 @Document(collection = "patient")
-@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "idx_patient_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "idx_patient_by_default")
 public class PatientEntity extends BaseResource {
     @Id
     @Indexed(name = "_id_")
-    public String id;
+    public ObjectId id;
     public List<BaseIdentifier> identifier;
     public List<BaseHumanName> name;
     public List<BaseContactPoint> telecom;
@@ -47,8 +52,11 @@ public class PatientEntity extends BaseResource {
     public List<BaseContactPerson> contact;
     public List<BaseReference> generalPractitioner;    
     public BaseReference managingOrganization;
-    public BaseCodeableConcept ethic;
+    public List<BaseCodeableConcept> category;
+    public BaseCodeableConcept ethnic;
     public BaseCodeableConcept race;
+    public BaseCodeableConcept religion;
+    public BaseCodeableConcept job;
     
     public static PatientEntity fromPatient(Patient obj) {  
         if(obj == null) return null;
@@ -108,9 +116,68 @@ public class PatientEntity extends BaseResource {
         return obj;
     }
     
-    public BaseHumanName getName() {
+    public String getName() {
+        String text = "";
         if(name != null && name.size() > 0) {
-            return name.get(0);
+            text = name.get(0).text;
+        }
+        return text != null? text : "";
+    }
+    
+    public String getIdentifierValueBySystem(@Nonnull String system) {
+        if(identifier != null) {
+            return identifier
+                    .stream()
+                    .filter(x -> system.equals(x.system))
+                    .findFirst().map(x -> x.value)
+                    .orElse("");
+        }
+        return "";
+            
+    }
+    
+    public BaseIdentifier getIdentifierBySystem(@Nonnull String system) {
+        if(identifier != null) {
+            return identifier
+                    .stream()
+                    .filter(x -> system.equals(x.system))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
+            
+    }
+   
+    public String getPhone() {
+        if(telecom != null) {
+            return telecom.stream()
+                            .filter(x -> "phone".equals(x.system))
+                            .findFirst()
+                            .map(x -> x.value)
+                            .orElse("");
+                    
+        }
+        return "";
+    }
+    
+    public String getEmail() {
+        if(telecom != null) {
+            return telecom.stream()
+                            .filter(x -> "email".equals(x.system))
+                            .findFirst()
+                            .map(x -> x.value)
+                            .orElse("");
+                    
+        }
+        return "";
+    }
+    
+    public BaseCodeableConcept getCategoryBySystem(@Nonnull String system) {
+        if(category != null) {
+            return category.stream()
+                        .filter(x ->  FPUtil.anyMatch(x.coding, y -> system.equals(y.system)))
+                        .findFirst()
+                        .orElse(null);
         }
         return null;
     }

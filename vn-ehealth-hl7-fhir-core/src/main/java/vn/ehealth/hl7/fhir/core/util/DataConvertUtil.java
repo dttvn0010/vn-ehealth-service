@@ -1,5 +1,6 @@
 package vn.ehealth.hl7.fhir.core.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -35,6 +36,15 @@ public class DataConvertUtil {
             }
             return null;
         }
+    }
+    
+    @SafeVarargs
+    public static<T> List<T> listOf(T...arr) {
+        var lst = new ArrayList<T>();
+        for(T obj: arr) {
+            if(obj != null) lst.add(obj);
+        }
+        return lst;
     }
     
     public static <T, U> List<U> transform(List<T> lst, Function<T, U> func) {

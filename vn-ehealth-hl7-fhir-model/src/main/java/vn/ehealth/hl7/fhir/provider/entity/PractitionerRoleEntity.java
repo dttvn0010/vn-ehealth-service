@@ -20,7 +20,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
 @Document(collection = "practitionerRole")
-@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class PractitionerRoleEntity extends BaseResource {
     @Id
     public ObjectId id;

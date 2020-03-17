@@ -24,7 +24,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "diagnosticReport")
-@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class DiagnosticReportEntity extends BaseResource {
 
     @Id
@@ -38,7 +38,8 @@ public class DiagnosticReportEntity extends BaseResource {
     public BaseReference encounter;
     @JsonIgnore public Type effective;
     public Date issued;
-    public List<BaseReference> performer;
+    public List<BaseReference> performer;    
+    public List<BaseReference> resultsInterpreter;
     public List<BaseReference> specimen;
     public List<BaseReference> result;
     public List<BaseReference> imagingStudy;
@@ -51,22 +52,23 @@ public class DiagnosticReportEntity extends BaseResource {
         if(obj == null) return null;
         
         var ent = new DiagnosticReportEntity();
-        ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.basedOn = BaseReference.fromReferenceList(obj.getBasedOn());
-        ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
-        ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
-        ent.subject = BaseReference.fromReference(obj.getSubject());
-        ent.encounter = BaseReference.fromReference(obj.getEncounter());
-        ent.effective = obj.getEffective();
-        ent.issued = obj.getIssued();
-        ent.performer = BaseReference.fromReferenceList(obj.getPerformer());
-        ent.specimen = BaseReference.fromReferenceList(obj.getSpecimen());
-        ent.result = BaseReference.fromReferenceList(obj.getResult());
-        ent.imagingStudy = BaseReference.fromReferenceList(obj.getImagingStudy());
-        ent.media = transform(obj.getMedia(), DiagnosticReportMediaEntity::fromDiagnosticReportMediaComponent);                
-        ent.conclusion = obj.getConclusion();
-        ent.presentedForm = BaseAttachment.fromAttachmentList(obj.getPresentedForm());
+        ent.identifier = obj.hasIdentifier()? BaseIdentifier.fromIdentifierList(obj.getIdentifier()) : null;
+        ent.basedOn = obj.hasBasedOn()? BaseReference.fromReferenceList(obj.getBasedOn()) : null;
+        ent.status = obj.hasStatus()? Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null) : null;
+        ent.category = obj.hasCategory()? BaseCodeableConcept.fromCodeableConcept(obj.getCategory()) : null;
+        ent.code = obj.hasCode()? BaseCodeableConcept.fromCodeableConcept(obj.getCode()) : null;
+        ent.subject = obj.hasSubject()? BaseReference.fromReference(obj.getSubject()) : null;
+        ent.encounter = obj.hasEncounter()? BaseReference.fromReference(obj.getEncounter()) : null;
+        ent.effective = obj.hasEffective()? obj.getEffective() : null;
+        ent.issued = obj.hasIssued()? obj.getIssued() : null;
+        ent.performer = obj.hasPerformer()?  BaseReference.fromReferenceList(obj.getPerformer()) : null;
+        ent.resultsInterpreter = obj.hasResultsInterpreter()? BaseReference.fromReferenceList(obj.getResultsInterpreter()) : null;
+        ent.specimen = obj.hasSpecimen()? BaseReference.fromReferenceList(obj.getSpecimen()) : null;
+        ent.result = obj.hasResult()? BaseReference.fromReferenceList(obj.getResult()) : null;
+        ent.imagingStudy = obj.hasImagingStudy()? BaseReference.fromReferenceList(obj.getImagingStudy()) : null;
+        ent.media = obj.hasMedia()? transform(obj.getMedia(), DiagnosticReportMediaEntity::fromDiagnosticReportMediaComponent) : null;                
+        ent.conclusion = obj.hasConclusion()? obj.getConclusion() : null;
+        ent.presentedForm = obj.hasPresentedForm()? BaseAttachment.fromAttachmentList(obj.getPresentedForm()) : null;
          
         return ent;
     }
@@ -85,6 +87,7 @@ public class DiagnosticReportEntity extends BaseResource {
         obj.setEffective(ent.effective);
         obj.setIssued(ent.issued);
         obj.setPerformer(BaseReference.toReferenceList(ent.performer));
+        obj.setResultsInterpreter(BaseReference.toReferenceList(ent.resultsInterpreter));
         obj.setSpecimen(BaseReference.toReferenceList(ent.specimen));
         obj.setResult(BaseReference.toReferenceList(ent.result));
         obj.setImagingStudy(BaseReference.toReferenceList(ent.imagingStudy));
@@ -93,5 +96,19 @@ public class DiagnosticReportEntity extends BaseResource {
         obj.setPresentedForm(BaseAttachment.toAttachmentList(ent.presentedForm));
         
         return obj;
+    }
+    
+    public BaseReference getFirstResultsInterpreter() {
+        if(resultsInterpreter != null && resultsInterpreter.size() > 0) {
+            return resultsInterpreter.get(0);
+        }
+        return null;
+    }
+    
+    public BaseReference getFirstPeformer() {
+        if(performer != null && performer.size() > 0) {
+            return performer.get(0);
+        }
+        return null;
     }
 }

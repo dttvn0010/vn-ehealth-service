@@ -20,7 +20,7 @@ public class PractitionerRoleEntityToFHIRPractitionerRole
         var obj = PractitionerRoleEntity.toPractitionerRole(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "PractitionerRole-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

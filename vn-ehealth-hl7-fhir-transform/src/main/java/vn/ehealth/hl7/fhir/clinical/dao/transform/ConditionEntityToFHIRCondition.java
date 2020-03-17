@@ -19,7 +19,7 @@ public class ConditionEntityToFHIRCondition implements Transformer<ConditionEnti
         var obj = ConditionEntity.toCondition(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Condition-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 

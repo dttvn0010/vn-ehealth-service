@@ -19,7 +19,7 @@ public class ConceptMapEntityToFHIRConceptMap implements Transformer<ConceptMapE
         var obj = ConceptMapEntity.toConceptMap(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "ConceptMap-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

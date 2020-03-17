@@ -1,17 +1,17 @@
 package vn.ehealth.emr.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import vn.ehealth.emr.service.EmrServiceFactory;
 import vn.ehealth.emr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
@@ -19,18 +19,32 @@ import vn.ehealth.emr.utils.ObjectIdUtil;
 public class EmrChucNangSong {
     
     @Id public ObjectId id;        
-    public ObjectId emrVaoKhoaId;
     public ObjectId emrHoSoBenhAnId;    
     public ObjectId emrBenhNhanId;
     public ObjectId emrCoSoKhamBenhId;
+    public int trangThai;
+    public String idhis;
     
-    @Transient public EmrVaoKhoa emrVaoKhoa;
+    public EmrKhoaDieuTri emrKhoaDieuTri;
     
     public String sophieu;
     
-    @Transient public List<EmrChucNangSongChiTiet> emrChucNangSongChiTiets;
-    
     public List<EmrFileDinhKem> emrFileDinhKemChucNangSongs = new ArrayList<>();
+    
+    @JsonInclude(Include.NON_NULL)
+    public static class EmrChucNangSongChiTiet {
+        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+        public Date ngaytheodoi;
+        public Double mach;
+        public Double nhietdo;
+        public Integer huyetapthap;
+        public Integer huyetapcao;
+        public Integer nhiptho;
+        public Double cannang;
+        public EmrCanboYte ytatheodoi;
+    }
+    
+    public List<EmrChucNangSongChiTiet> emrChucNangSongChiTiets = new ArrayList<>();
     
     public String getId() { 
         return ObjectIdUtil.idToString(id); 
@@ -62,21 +76,5 @@ public class EmrChucNangSong {
     
     public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
         this.emrCoSoKhamBenhId = ObjectIdUtil.stringToId(emrCoSoKhamBenhId);
-    }
-    
-    public String getEmrVaoKhoaId() {
-        return ObjectIdUtil.idToString(emrVaoKhoaId);
-    }
-
-    public void setEmrVaoKhoaId(String emrVaoKhoaId) {
-        this.emrVaoKhoaId = ObjectIdUtil.stringToId(emrVaoKhoaId);
-    }
-    
-    public List<EmrChucNangSongChiTiet> getEmrChucNangSongChiTiets() {
-        if(emrChucNangSongChiTiets == null && id != null) {
-            emrChucNangSongChiTiets = EmrServiceFactory.getEmrChucNangSongChiTietService().getByEmrChucNangSongId(id);                    
-        }
-        return emrChucNangSongChiTiets;
-        
     }
 }

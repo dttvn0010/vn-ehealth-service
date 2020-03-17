@@ -20,7 +20,7 @@ public class MedicationDispenseEntityToFHIRMedicationDispense
         var obj = MedicationDispenseEntity.toMedicationDispense(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "MedicationDispense-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 

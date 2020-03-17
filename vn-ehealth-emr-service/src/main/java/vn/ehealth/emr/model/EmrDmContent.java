@@ -1,5 +1,7 @@
 package vn.ehealth.emr.model;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -12,4 +14,6 @@ public class EmrDmContent {
     public String maicd = "";
     public String code = "";
     public String codeSystem = "";
+    
+    public Map<String, Object> extension;
 }

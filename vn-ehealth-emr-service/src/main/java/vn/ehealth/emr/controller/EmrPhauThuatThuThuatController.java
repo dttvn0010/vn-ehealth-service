@@ -1,8 +1,8 @@
 package vn.ehealth.emr.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
@@ -14,25 +14,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vn.ehealth.emr.model.EmrPhauThuatThuThuat;
 import vn.ehealth.emr.service.EmrHoSoBenhAnService;
 import vn.ehealth.emr.service.EmrPhauThuatThuThuatService;
-import vn.ehealth.emr.utils.DateUtil;
 import vn.ehealth.emr.utils.EmrUtils;
-import vn.ehealth.emr.utils.JsonUtil;
+import vn.ehealth.emr.utils.UserUtil;
+import vn.ehealth.emr.validate.JsonParser;
 
-@RestController
-@RequestMapping("/api/pttt")
 public class EmrPhauThuatThuThuatController {
     
     private Logger logger = LoggerFactory.getLogger(EmrPhauThuatThuThuatController.class);
             
-    @Autowired EmrPhauThuatThuThuatService emrPhauThuatThuThuatService;
-    @Autowired EmrHoSoBenhAnService emrHoSoBenhAnService;
+    @Autowired private EmrPhauThuatThuThuatService emrPhauThuatThuThuatService;
+    @Autowired private EmrHoSoBenhAnService emrHoSoBenhAnService;
+    
+    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
+    private JsonParser jsonParser = new JsonParser();    
     
     @GetMapping("/get_ds_pttt")
     public ResponseEntity<?> getDsPhauThuatThuThuat(@RequestParam("hsba_id") String id) {
@@ -41,27 +41,16 @@ public class EmrPhauThuatThuThuatController {
     }
     
     @GetMapping("/get_ds_pttt_by_bn")
-    public ResponseEntity<?> getDsPhauThuatThuThuatByBenhNhan(@RequestParam("benhnhan_id") String benhNhanId) {
-        var emrHoSoBenhAns = emrHoSoBenhAnService.getByEmrBenhNhanId(new ObjectId(benhNhanId));
-        var result = new ArrayList<>();
-        for(var emrHoSoBenhAn : emrHoSoBenhAns) {
-           	var ptttList = emrPhauThuatThuThuatService.getByEmrHoSoBenhAnId(emrHoSoBenhAn.id);
-        	var lst = ptttList.stream().map(x -> JsonUtil.objectToMap(x)).collect(Collectors.toList());
-        	lst.forEach(x -> {
-        		x.put("tenCoSoKhamBenh", emrHoSoBenhAn.getEmrCoSoKhamBenh().ten);
-        		x.put("soBenhAn", emrHoSoBenhAn.matraodoi);
-        		x.put("ngayVaoVien", DateUtil.parseDateToString(emrHoSoBenhAn.emrQuanLyNguoiBenh.ngaygiovaovien, "dd/MM/yyyy HH:mm"));
-        		x.put("ngayRaVien", DateUtil.parseDateToString(emrHoSoBenhAn.emrQuanLyNguoiBenh.ngaygioravien, "dd/MM/yyyy HH:mm"));
-        	});
-            result.addAll(lst);
-        }
+    public ResponseEntity<?> getDsPhauThuatThuThuatByBenhNhan(@RequestParam("benhnhan_id") String benhNhanId) {  	
+    	var result = emrPhauThuatThuThuatService.getByEmrBenhNhanId(new ObjectId(benhNhanId));  
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/delete_pttt")
     public ResponseEntity<?> deletePttt(@RequestParam("pttt_id") String id) {
         try {
-            emrPhauThuatThuThuatService.delete(new ObjectId(id));
+        	var user = UserUtil.getCurrentUser();
+            emrPhauThuatThuThuatService.delete(new ObjectId(id), user.get().id);
             var result = Map.of("success" , true);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
@@ -71,13 +60,13 @@ public class EmrPhauThuatThuThuatController {
         }
     }
     
-    @PostMapping("/create_or_update_pttt")
+    @PostMapping("/save_pttt")
     public ResponseEntity<?> createOrUpdatePttt(@RequestBody String jsonSt) {
         
         try {
-            var mapper = EmrUtils.createObjectMapper();
-            var pttt = mapper.readValue(jsonSt, EmrPhauThuatThuThuat.class);
-            pttt = emrPhauThuatThuThuatService.createOrUpdate(pttt);
+        	var user = UserUtil.getCurrentUser();
+            var pttt = objectMapper.readValue(jsonSt, EmrPhauThuatThuThuat.class);
+            pttt = emrPhauThuatThuThuatService.save(pttt, user.get().id, jsonSt);
             
             var result = Map.of(
                 "success" , true,
@@ -93,5 +82,56 @@ public class EmrPhauThuatThuThuatController {
             logger.error("Error save pttt:", e);
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    @PostMapping("/create_or_update_pttt")
+    public ResponseEntity<?> createOrUpdatePtttFromHIS(@RequestBody String jsonSt) {
+        try {
+            var map = jsonParser.parseJson(jsonSt);
+            var matraodoiHsba = (String) map.get("matraodoiHoSo");
+            var hsba = emrHoSoBenhAnService.getByMatraodoi(matraodoiHsba).orElseThrow();
+            
+            var ptttObjList = (List<Object>) map.get("emrPhauThuatThuThuats");
+            var ptttList = ptttObjList.stream()
+                                .map(obj -> objectMapper.convertValue(obj, EmrPhauThuatThuThuat.class))
+                                .collect(Collectors.toList());
+            var user = UserUtil.getCurrentUser();
+            var userId = user.map(x -> x.id).orElse(null);
+            
+            emrPhauThuatThuThuatService.createOrUpdateFromHIS(userId, hsba, ptttList, jsonSt);
+            
+            var result = Map.of(
+                "success" , true,
+                "ptttList", ptttList  
+            );
+            
+            return ResponseEntity.ok(result);
+            
+        }catch(Exception e) {
+            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
+            var result = Map.of(
+                "success" , false,
+                "error", error 
+            );
+            logger.error("Error save phauthuathuthuat from HIS:", e);
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @GetMapping("/count_pttt_logs")
+    public ResponseEntity<?> countLogs(@RequestParam("pttt_id") String id) {        
+        return ResponseEntity.ok(emrPhauThuatThuThuatService.countHistory(new ObjectId(id)));
+    } 
+    
+    @GetMapping("/get_pttt_logs")
+    public ResponseEntity<?> getLogs(@RequestParam("pttt_id") String id, @RequestParam int start, @RequestParam int count) {        
+        return ResponseEntity.ok(emrPhauThuatThuThuatService.getHistory(new ObjectId(id), start, count));
+    }    
+    
+    
+    @GetMapping("/get_hs_goc")
+    public ResponseEntity<?> getHsGoc(@RequestParam("pttt_id") String id) {
+        return ResponseEntity.ok(Map.of("hsGoc", emrPhauThuatThuThuatService.getHsgoc(new ObjectId(id))));
     }
 }

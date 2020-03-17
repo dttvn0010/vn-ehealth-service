@@ -11,6 +11,14 @@ public class BaseCodeableConcept {
     public List<BaseCoding> coding;
     public String text;
     
+    public BaseCodeableConcept() {
+        
+    }
+    
+    public BaseCodeableConcept(String text) {
+        this.text = text;
+    }
+    
     public static BaseCodeableConcept fromCodeableConcept(CodeableConcept obj) {
                 
         if(obj == null) return null;

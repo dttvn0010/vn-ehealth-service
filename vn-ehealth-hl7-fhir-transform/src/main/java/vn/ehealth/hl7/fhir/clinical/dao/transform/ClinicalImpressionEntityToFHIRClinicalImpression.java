@@ -20,7 +20,7 @@ public class ClinicalImpressionEntityToFHIRClinicalImpression
         var obj = ClinicalImpressionEntity.toClinicalImpression(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "ClinicalImpression-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

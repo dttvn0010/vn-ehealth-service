@@ -22,19 +22,21 @@ public class EmrChanDoanHinhAnh {
     public ObjectId emrHoSoBenhAnId;
     public ObjectId emrBenhNhanId;
     public ObjectId emrCoSoKhamBenhId;
+    public int trangThai;
+    public String idhis;
     
     public EmrDmContent emrDmLoaiChanDoanHinhAnh;    
     public EmrDmContent emrDmChanDoanHinhAnh;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayyeucau;
     
-    public String bacsiyeucau;
+    public EmrCanboYte bacsiyeucau;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaythuchien;
     
-    public String bacsichuyenkhoa;
+    public EmrCanboYte bacsichuyenkhoa;
     public String ketqua;
     public String ketluan;
     public String loidan;

@@ -7,5 +7,5 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class EmrFileDinhKem {
 
     public String url;
-    public String name;
+    public String ten;
 }

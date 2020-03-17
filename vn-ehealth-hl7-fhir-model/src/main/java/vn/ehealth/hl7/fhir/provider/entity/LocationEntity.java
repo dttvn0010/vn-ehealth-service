@@ -3,6 +3,8 @@ package vn.ehealth.hl7.fhir.provider.entity;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Location;
 import org.hl7.fhir.r4.model.Location.LocationMode;
@@ -20,10 +22,12 @@ import vn.ehealth.hl7.fhir.core.entity.BaseGeoLocation;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
+
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "location")
-@CompoundIndex(def = "{'fhir_id':1,'active':1,'version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class LocationEntity extends BaseResource{
     @Id
     public ObjectId id;
@@ -47,20 +51,20 @@ public class LocationEntity extends BaseResource{
         if(obj == null) return null;
         
         var ent = new LocationEntity();
-        ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.status =  Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.operationalStatus = BaseCoding.fromCoding(obj.getOperationalStatus());
-        ent.name =  obj.getName();
-        ent.alias = transform(obj.getAlias(), x -> x.asStringValue());
-        ent.description = obj.getDescription();
-        ent.mode = Optional.ofNullable(obj.getMode()).map(x -> x.toCode()).orElse(null);
-        ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
-        ent.telecom = BaseContactPoint.fromContactPointList(obj.getTelecom());
-        ent.address = BaseAddress.fromAddress(obj.getAddress());
-        ent.physicalType = BaseCodeableConcept.fromCodeableConcept(obj.getPhysicalType());
-        ent.position = BaseGeoLocation.fromLocationPositionComponent(obj.getPosition());
-        ent.managingOrganization = BaseReference.fromReference(obj.getManagingOrganization());
-        ent.partOf = BaseReference.fromReference(obj.getPartOf());
+        ent.identifier = obj.hasIdentifier()? BaseIdentifier.fromIdentifierList(obj.getIdentifier()) : null;
+        ent.status = obj.hasStatus()?  Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null) : null;
+        ent.operationalStatus = obj.hasOperationalStatus()? BaseCoding.fromCoding(obj.getOperationalStatus()) : null;
+        ent.name = obj.hasName()? obj.getName() : null;
+        ent.alias = obj.hasAlias()? transform(obj.getAlias(), x -> x.asStringValue()) : null;
+        ent.description = obj.hasDescription()? obj.getDescription() : null;
+        ent.mode = obj.hasMode()? Optional.ofNullable(obj.getMode()).map(x -> x.toCode()).orElse(null) : null;
+        ent.type = obj.hasType()? BaseCodeableConcept.fromCodeableConcept(obj.getType()) : null;
+        ent.telecom = obj.hasTelecom()? BaseContactPoint.fromContactPointList(obj.getTelecom()) : null;
+        ent.address = obj.hasAddress()? BaseAddress.fromAddress(obj.getAddress()) : null;
+        ent.physicalType = obj.hasPhysicalType()? BaseCodeableConcept.fromCodeableConcept(obj.getPhysicalType()) : null;
+        ent.position = obj.hasPosition()? BaseGeoLocation.fromLocationPositionComponent(obj.getPosition()) : null;
+        ent.managingOrganization = obj.hasManagingOrganization()? BaseReference.fromReference(obj.getManagingOrganization()) : null;
+        ent.partOf = obj.hasPartOf()? BaseReference.fromReference(obj.getPartOf()) : null;
         return ent;
         
     }
@@ -83,6 +87,23 @@ public class LocationEntity extends BaseResource{
         obj.setManagingOrganization(BaseReference.toReference(ent.managingOrganization));
         obj.setPartOf(BaseReference.toReference(ent.partOf));
         return obj;
-        
+    }
+    
+    public String getIdentifier() {
+        String value = "";
+        if(identifier != null && identifier.size() > 0) {
+            value = identifier.get(0).value;
+        }
+        return value != null? value : "";
+    }
+    
+    public BaseCodeableConcept getTypeBySystem(@Nonnull String system) {
+        if(type != null) {
+            return type.stream()
+                        .filter(x -> FPUtil.anyMatch(x.coding, y -> system.equals(y.system)))
+                        .findFirst()
+                        .orElse(null);
+        }
+        return null;
     }
 }

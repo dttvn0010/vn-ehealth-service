@@ -19,7 +19,7 @@ public class DeviceEntityToFHIRDevice implements Transformer<DeviceEntity, Devic
         var obj = DeviceEntity.toDevice(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Device-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
         
     }

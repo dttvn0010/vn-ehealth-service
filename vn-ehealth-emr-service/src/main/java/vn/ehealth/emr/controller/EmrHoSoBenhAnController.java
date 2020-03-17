@@ -13,61 +13,45 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import net.sf.jasperreports.engine.JRException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import vn.ehealth.emr.model.EmrFileDinhKem;
-//import vn.ehealth.emr.cda.CDAExportUtil;
 import vn.ehealth.emr.model.EmrHoSoBenhAn;
 import vn.ehealth.emr.service.EmrBenhNhanService;
 import vn.ehealth.emr.service.EmrCoSoKhamBenhService;
 import vn.ehealth.emr.service.EmrHoSoBenhAnService;
-import vn.ehealth.emr.service.EmrVaoKhoaService;
 import vn.ehealth.emr.service.UserService;
 import vn.ehealth.emr.utils.DateUtil;
 import vn.ehealth.emr.utils.EmrUtils;
-import vn.ehealth.emr.utils.PDFExportUtil;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.utils.Constants.TRANGTHAI_HOSO;
-import vn.ehealth.emr.validate.ErrorMessage;
 import vn.ehealth.emr.validate.JsonParser;
 
 import java.io.*;
 
-@RestController
-@RequestMapping("/api/hsba")
 public class EmrHoSoBenhAnController {
     
     @Value("${server.upload.path}")
     private String uploadPath;
     
-    private static Logger logger = LoggerFactory.getLogger(EmrHoSoBenhAnController.class);
+    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
     
     private JsonParser jsonParser = new JsonParser();
     
-    private static String hsbaSchema = "";
-    
     private static Properties fieldsConvertProp = new Properties();
     
-    
-    static {
-        try {
-            hsbaSchema = new String(new ClassPathResource("static/json/hsba_schema.json").getInputStream().readAllBytes());
-        } catch (IOException e) {
-            logger.error("Cannot read hsba schema", e);
-        }
+    private static Logger logger = LoggerFactory.getLogger(EmrHoSoBenhAnController.class);
         
+    static {
         try {
             fieldsConvertProp.load(new ClassPathResource("fields_convert.properties").getInputStream());
         } catch (IOException e) {
@@ -79,14 +63,13 @@ public class EmrHoSoBenhAnController {
     @Autowired EmrHoSoBenhAnService emrHoSoBenhAnService;    
     @Autowired EmrBenhNhanService emrBenhNhanService;
     @Autowired EmrCoSoKhamBenhService emrCoSoKhamBenhService;
-    @Autowired EmrVaoKhoaService emrVaoKhoaService;    
     @Autowired UserService userService;
 
     @GetMapping("/count_ds_hs")
     public ResponseEntity<?> countHsba(@RequestParam int trangthai, @RequestParam String mayte) {
         try {
             var user = UserUtil.getCurrentUser();
-            var count = emrHoSoBenhAnService.countHoSo(user.get().emrCoSoKhamBenhId, trangthai, mayte);
+            var count = emrHoSoBenhAnService.countHoSo(user.get().id, user.get().emrCoSoKhamBenhId, trangthai, mayte);
             return ResponseEntity.ok(count);
         }catch (Exception e) {
             logger.error("Error countHsba:", e);
@@ -107,8 +90,8 @@ public class EmrHoSoBenhAnController {
                                                 @RequestParam int count) {
         
         try {
-            var user = UserUtil.getCurrentUser();
-            var result = emrHoSoBenhAnService.getDsHoSo(user.get().emrCoSoKhamBenhId, trangthai, mayte, start, count);
+            var user = UserUtil.getCurrentUser();    
+            var result = emrHoSoBenhAnService.getDsHoSo(user.get().id, user.get().emrCoSoKhamBenhId, trangthai, mayte, start, count);
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
@@ -117,9 +100,14 @@ public class EmrHoSoBenhAnController {
         }        
     }
     
+    @GetMapping("/count_hsba_logs")
+    public ResponseEntity<?> countHsbaLogs(@RequestParam("hsba_id") String id) {        
+        return ResponseEntity.ok(emrHoSoBenhAnService.countHistory(new ObjectId(id)));
+    } 
+    
     @GetMapping("/get_hsba_logs")
-    public ResponseEntity<?> getHsbaLogs(@RequestParam("hsba_id") String id) {        
-        return ResponseEntity.ok(emrHoSoBenhAnService.getHistory(new ObjectId(id)));
+    public ResponseEntity<?> getHsbaLogs(@RequestParam("hsba_id") String id, @RequestParam int start, @RequestParam int count) {        
+        return ResponseEntity.ok(emrHoSoBenhAnService.getHistory(new ObjectId(id), start, count));
     }    
     
     
@@ -172,72 +160,12 @@ public class EmrHoSoBenhAnController {
         }
     }
     
-    @GetMapping("/download_cda")
-    public ResponseEntity<?> downloadCDA(@RequestParam("hsba_id") String id) {
-        /*
-        var hsbaOpt = emrHoSoBenhAnService.getById(new ObjectId(id));
-        
-        if(hsbaOpt.isPresent()) {
-            try {
-                var hsba = hsbaOpt.get();
-                hsba.getEmrBenhNhan();
-                hsba.getEmrCoSoKhamBenh();
-                emrHoSoBenhAnService.getEmrHoSoBenhAnDetail(hsba);
-                var data = new byte[0];// CDAExportUtil.exportCDA(hsba);
-                var resource = new ByteArrayResource(data);
-                
-                return ResponseEntity.ok()
-                        .contentLength(data.length)
-                        .contentType(MediaType.parseMediaType("application/xml"))
-                        .header("Content-disposition", "attachment; filename=cda_" + id + ".xml")
-                        .body(resource);
-            }catch(Exception e) {
-                logger.error("Error exporting pdf :", e);
-            }
-        }*/
-        
-        return ResponseEntity.badRequest().build();
-    }
-     
-    @GetMapping("/view_pdf")
-    public ResponseEntity<?> viewPdf(@RequestParam("hsba_id") String id) {
-        
-        var hsba = emrHoSoBenhAnService.getById(new ObjectId(id));
-        
-        if(hsba.isPresent()) {
-            try {
-                emrHoSoBenhAnService.getEmrHoSoBenhAnDetail(hsba.get());
-                var data = PDFExportUtil.exportPdf(hsba.get(), "");
-                var resource = new ByteArrayResource(data);
-                
-                return ResponseEntity.ok()
-                        .contentLength(data.length)
-                        .contentType(MediaType.parseMediaType("application/pdf"))
-                        .body(resource);
-            }catch(JRException | IOException  | NullPointerException e) {
-                logger.error("Error exporting pdf :", e);
-            }
-        }
-        
-        return ResponseEntity.badRequest().build();
-    }
-    
+
     @PostMapping("/update_hsba")
     public ResponseEntity<?> updateHsba(@RequestBody String jsonSt) {
-        var errors = new ArrayList<ErrorMessage>();
-        var objMap = jsonParser.parseJson(jsonSt, hsbaSchema, errors);
-        
-        if(errors.size() > 0) {
-            var result = Map.of(
-                "success" , false,
-                "errors", errors 
-            );
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-        }
         try {
+            var hsba = objectMapper.readValue(jsonSt, EmrHoSoBenhAn.class);
             var user = UserUtil.getCurrentUser();
-            var mapper = EmrUtils.createObjectMapper();
-            var hsba = mapper.convertValue(objMap, EmrHoSoBenhAn.class);
             hsba = emrHoSoBenhAnService.update(hsba, user.get().id);          
             
             var result = Map.of(
@@ -266,27 +194,30 @@ public class EmrHoSoBenhAnController {
         return jsonSt;
     }
     
+    @SuppressWarnings("unchecked")
     @PostMapping("/create_or_update_hsba")
     public ResponseEntity<?> createOrUpdateHsbaHIS(@RequestBody String jsonSt) {        
         
         jsonSt = preprocessJsonFields(jsonSt);
-        var errors = new ArrayList<ErrorMessage>();
-        var objMap = jsonParser.parseJson(jsonSt, hsbaSchema, errors);
-        
-        if(errors.size() > 0) {
-            var result = Map.of(
-                "success" , false,
-                "errors", errors 
-            );
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-        }
         
         try {
+            var map = jsonParser.parseJson(jsonSt);
+            
+            var benhNhan = (Map<String, Object>) map.get("emrBenhNhan");
+            String idhis = (String) benhNhan.get("idhis");
+            var emrBenhNhan = emrBenhNhanService.getByIdhis(idhis);
+            if(emrBenhNhan.isEmpty()) {
+                throw new Exception(String.format("emrBenhNhan with idhis %s not found, please create this patient first", idhis));
+            }
+            
+            var coSoKhamBenh = (Map<String, Object>) map.get("emrCoSoKhamBenh");            
+            var emrCoSoKhamBenh = emrCoSoKhamBenhService.getByMa((String) coSoKhamBenh.get("ma")).orElseThrow();
+            
+        	var hsba = objectMapper.convertValue(map, EmrHoSoBenhAn.class);
             var user = UserUtil.getCurrentUser();
             var userId = user.map(x -> x.id).orElse(null);
-            var mapper = EmrUtils.createObjectMapper();
-            var hsba = mapper.convertValue(objMap, EmrHoSoBenhAn.class);
-            emrHoSoBenhAnService.createOrUpdateHIS(hsba, userId, jsonSt);
+            
+            emrHoSoBenhAnService.createOrUpdateFromHIS(userId, emrBenhNhan.get().id, emrCoSoKhamBenh.id, hsba, jsonSt);
                         
             var result = Map.of(
                 "success" , true,
@@ -299,7 +230,7 @@ public class EmrHoSoBenhAnController {
             var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
             var result = Map.of(
                 "success" , false,
-                "errors", List.of(error) 
+                "error", error 
             );
             logger.error("Error save hsba:", e);
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
@@ -330,7 +261,7 @@ public class EmrHoSoBenhAnController {
         
     }
     
-    private String modifyFilename(String filename) {
+    private String modifyFilename(String filename) {        
         long time = System.currentTimeMillis();
         int pos = filename.lastIndexOf('.');
         if(pos >= 0) {
@@ -352,7 +283,7 @@ public class EmrHoSoBenhAnController {
                 
                 var emrFileDinhKem = new EmrFileDinhKem();
                 emrFileDinhKem.url = "/upload/" + filename;
-                emrFileDinhKem.name = attachedFile.getOriginalFilename();
+                emrFileDinhKem.ten = attachedFile.getOriginalFilename();
                 emrFileDinhKems.add(emrFileDinhKem);
             }
             
@@ -362,5 +293,28 @@ public class EmrHoSoBenhAnController {
             Log.error("Fail to upload giayto:", e);
             return new ResponseEntity<>(Map.of("success", false, "error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
+    }
+    
+    @PostMapping("/add_user_view_hsba")
+    public ResponseEntity<?> addUserViewHSBA(@RequestParam("hsba_id") String id, @RequestParam("userId") String userId) {
+    	try {
+    	 emrHoSoBenhAnService.addUserViewHSBA(new ObjectId(id), new ObjectId(userId));
+    	 return ResponseEntity.ok(Map.of("success", true));
+    	}catch(Exception e) {
+            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
+            return ResponseEntity.ok(Map.of("success", false, "error", error));
+        }
+       
+    }
+    
+    @PostMapping("/delete_user_view_hsba")
+    public ResponseEntity<?> deleteUserViewHSBA(@RequestParam("hsba_id") String id, @RequestParam("userId") String userId) {
+    	 try {
+    		 emrHoSoBenhAnService.deleteUserViewHSBA(new ObjectId(id), new ObjectId(userId));
+             return ResponseEntity.ok(Map.of("success", true));
+         }catch(Exception e) {
+             var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
+             return ResponseEntity.ok(Map.of("success", false, "error", error));
+         }
     }
 }

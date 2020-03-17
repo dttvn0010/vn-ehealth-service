@@ -14,7 +14,7 @@ public class SlotEntityToFHIRSlot implements Transformer<SlotEntity, Slot> {
         var obj = SlotEntity.toSlot(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Slot-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

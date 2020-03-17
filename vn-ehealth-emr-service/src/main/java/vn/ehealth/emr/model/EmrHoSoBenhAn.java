@@ -1,35 +1,33 @@
 package vn.ehealth.emr.model;
 
+import java.time.Year;
+import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import vn.ehealth.emr.service.EmrServiceFactory;
-import vn.ehealth.emr.utils.JasperUtils;
+
+import vn.ehealth.emr.service.ServiceFactory;
 import vn.ehealth.emr.utils.ObjectIdUtil;
-import vn.ehealth.emr.utils.Constants.TRANGTHAI_HOSO;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection="emr_ho_so_benh_an")
 public class EmrHoSoBenhAn {    
     @Id public ObjectId id;
             
-    public EmrDmContent emrDmLoaiBenhAn;
-    
-    public transient ObjectId emrBenhNhanId;
-    @Transient public EmrBenhNhan emrBenhNhan;
-    
-    public transient ObjectId emrCoSoKhamBenhId;
-    @Transient public EmrCoSoKhamBenh emrCoSoKhamBenh;
+    public EmrDmContent emrDmLoaiBenhAn;    
+    public ObjectId emrBenhNhanId;    
+    public ObjectId emrCoSoKhamBenhId;
         
     public int nguonDuLieu;    
     public int trangThai;
@@ -37,73 +35,74 @@ public class EmrHoSoBenhAn {
     public String maluutru;
     public String matraodoi;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaytiepnhan;
     
     public String nguoitiepnhan;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaytao;
     
     public ObjectId nguoitaoId;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaysua;
     
     public ObjectId nguoisuaId;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayluutru;
     
     public ObjectId nguoiluutruId;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaymoluutru;
     
     public ObjectId nguoimoluutruId;    
     
     public EmrQuanLyNguoiBenh emrQuanLyNguoiBenh;
     
-    public EmrTongKetRaVien emrTongKetRaVien;
-    
     public EmrTinhTrangRaVien emrTinhTrangRaVien;
     
-    public EmrTongKetSanKhoa emrTongKetSanKhoa;  //??
+    public Map<String, Object> emrBenhAn;
+        
+    public List<EmrKhoaDieuTri> emrVaoKhoas;
     
-    public EmrBenhAn emrBenhAn;
+    public Map<String, Object> emrChanDoan;
     
-    public EmrYhctBenhAn emrYhctBenhAn;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngaykybenhan;
     
-    public EmrChanDoan emrChanDoan;
+    public EmrCanboYte bacsylambenhan;
     
-    public EmrYhctChanDoan emrYhctChanDoan;
+    public String nguoigiaohoso;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngaygiaohoso;
+
+    public String nguoinhanhoso;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngaynhanhoso;
+
+    public EmrCanboYte bacsydieutri;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngaybacsydieutriky;
+
+    @JsonInclude(Include.NON_NULL)    
+    public static class EmrToDieuTri {
+        public String ma;
+        public String ten;
+        public int soluong;
+    }
     
-    public EmrYhctNhaBa emrYhctNhaBa;
-    
-    public List<EmrYhctNhaBaGhiChu> emrYhctNhaBaGhiChus = new ArrayList<>();
-    
-    public List<EmrQuaTrinhSuDungThuoc> emrQuaTrinhSuDungThuocs = new ArrayList<>();
+    public List<EmrToDieuTri> sotodieutri = new ArrayList<>();
     
     public List<EmrFileDinhKem> emrFileDinhKems = new ArrayList<>();
+    
+    public List<ObjectId> dsNguoiXemIds = new ArrayList<>();
         
-    @Transient public List<EmrVaoKhoa> emrVaoKhoas;
-    
-    @Transient public List<EmrHinhAnhTonThuong> emrHinhAnhTonThuongs;
-    
-    @Transient public List<EmrGiaiPhauBenh> emrGiaiPhauBenhs;
-    
-    @Transient public List<EmrThamDoChucNang> emrThamDoChucNangs;
-    
-    @Transient public List<EmrPhauThuatThuThuat> emrPhauThuatThuThuats;
-    
-    @Transient  public List<EmrChanDoanHinhAnh> emrChanDoanHinhAnhs;
-    
-    @Transient  public List<EmrDonThuoc> emrDonThuocs;
-    
-    @Transient  public List<EmrYhctDonThuoc> emrYhctDonThuocs;
-    
-    @Transient  public List<EmrXetNghiem> emrXetNghiems;
-
     public String getId() {
         return ObjectIdUtil.idToString(id);
     }
@@ -120,30 +119,24 @@ public class EmrHoSoBenhAn {
         return ObjectIdUtil.idToString(emrBenhNhanId);
     }
     
-    public void setEmrBenhNhanId(String emrBenhNhanId) {
-        this.emrBenhNhanId = ObjectIdUtil.stringToId(emrBenhNhanId);
+    public EmrBenhNhan getEmrBenhNhan() {
+        return ServiceFactory.getEmrBenhNhanService().getById(emrBenhNhanId).orElse(null);
     }
     
-    public EmrBenhNhan getEmrBenhNhan() {
-        if(emrBenhNhan == null && emrBenhNhanId != null) {
-            emrBenhNhan = EmrServiceFactory.getEmrBenhNhanService().getById(emrBenhNhanId).orElse(null);
-        }
-        return emrBenhNhan;
+    public void setEmrBenhNhanId(String emrBenhNhanId) {
+        this.emrBenhNhanId = ObjectIdUtil.stringToId(emrBenhNhanId);
     }
     
     public String getEmrCoSoKhamBenhId() {
         return ObjectIdUtil.idToString(emrCoSoKhamBenhId);
     }
     
-    public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
-        this.emrCoSoKhamBenhId = ObjectIdUtil.stringToId(emrCoSoKhamBenhId);
+    public EmrCoSoKhamBenh getEmrCoSoKhamBenh() {
+        return ServiceFactory.getEmrCoSoKhamBenhService().getById(emrCoSoKhamBenhId).orElse(null);
     }
     
-    public EmrCoSoKhamBenh getEmrCoSoKhamBenh() {
-        if(emrCoSoKhamBenh == null && emrCoSoKhamBenhId != null) {
-            emrCoSoKhamBenh = EmrServiceFactory.getEmrCoSoKhamBenhService().getById(emrCoSoKhamBenhId).orElse(null);
-        }
-        return emrCoSoKhamBenh;
+    public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
+        this.emrCoSoKhamBenhId = ObjectIdUtil.stringToId(emrCoSoKhamBenhId);
     }
     
     public String getNguoitaoId() {
@@ -178,152 +171,66 @@ public class EmrHoSoBenhAn {
         this.nguoimoluutruId = ObjectIdUtil.stringToId(nguoimoluutruId);
     }
     
-    
-    public String getMayte() {
-        return mayte;
-    }
-    
-    public String getMaluutru() {
-        return maluutru;
-    }
-    
-    public String getMatraodoi() {
-        return matraodoi;
-    }
-    
-    public String getGiamdocbenhvien() {
-        return emrCoSoKhamBenh != null? emrCoSoKhamBenh.giamdoc : "";
-    }
-    
-    public String getTenbenhvien() {
-        getEmrCoSoKhamBenh();
-        return emrCoSoKhamBenh != null? emrCoSoKhamBenh.ten : "";
-    }
-    
-    public String getDonvichuquan() {
-        return emrCoSoKhamBenh != null? emrCoSoKhamBenh.donvichuquan : "";
-    }
-    
-    public String getTruongphongth() {
-        return emrCoSoKhamBenh != null? emrCoSoKhamBenh.truongphongth : "";
-    }
-    
-    public EmrQuanLyNguoiBenh getEmrQuanLyNguoiBenh() {
-        return emrQuanLyNguoiBenh;
-    }
-    
-    public EmrTongKetRaVien getEmrTongKetRaVien() {
-        return emrTongKetRaVien;
-    }
-    
-    public EmrTinhTrangRaVien getEmrTinhTrangRaVien() {
-        return emrTinhTrangRaVien;
-    }
-    
-    public EmrTongKetSanKhoa getEmrTongKetSanKhoa() {
-        return emrTongKetSanKhoa;
-    }
-    
-    public EmrBenhAn getEmrBenhAn() {
-        return emrBenhAn;
-    }
-    
-    public EmrYhctBenhAn getEmrYhctBenhAn() {
-        return emrYhctBenhAn;
-    }
-    
-    public EmrChanDoan getEmrChanDoan() {
-        return emrChanDoan;
-    }
-    
-    public EmrYhctChanDoan getEmrYhctChanDoan() {
-        return emrYhctChanDoan;
-    }    
-    
-    public EmrYhctNhaBa getEmrYhctNhaBa() {
-        return emrYhctNhaBa;
-    }
-    
-    public List<EmrYhctNhaBaGhiChu> getEmrYhctNhaBaGhiChus() {
-        return emrYhctNhaBaGhiChus;
-    }
-    
-    public List<EmrQuaTrinhSuDungThuoc> getEmrQuaTrinhSuDungThuocs() {
-        return emrQuaTrinhSuDungThuocs;
-    }
-    
-    public List<EmrFileDinhKem> getEmrFileDinhKems() {
-        return emrFileDinhKems;
-    }
-    
-    public EmrVaoKhoa[] getEmrVaoKhoas() {
-        if(emrVaoKhoas == null) {
-            emrVaoKhoas = EmrServiceFactory.getEmrVaoKhoaService().getByEmrHoSoBenhAnId(id);
-        }
-        return emrVaoKhoas.toArray(new EmrVaoKhoa[0]);        
-    }
-    
-    public List<EmrHinhAnhTonThuong> getEmrHinhAnhTonThuongs() {
-        return emrHinhAnhTonThuongs;
-    }
-    
-    public List<EmrGiaiPhauBenh> getEmrGiaiPhauBenhs() {
-        return emrGiaiPhauBenhs;
-    }
-    
-    public List<EmrThamDoChucNang> getEmrThamDoChucNangs() {
-        return emrThamDoChucNangs;
-    }
-    
-    public List<EmrPhauThuatThuThuat> getEmrPhauThuatThuThuats() {
-        return emrPhauThuatThuThuats;
-    }
-    
-    public List<EmrChanDoanHinhAnh> getEmrChanDoanHinhAnhs() {
-        return emrChanDoanHinhAnhs;
-    }
-    
-    public List<EmrDonThuoc> getEmrDonThuocs() {
-        return emrDonThuocs;
-    }
-    
-    public List<EmrYhctDonThuoc> getEmrYhctDonThuocs() {
-        return emrYhctDonThuocs;
-    }
-    
-    public List<EmrXetNghiem> getEmrXetNghiems() {
-        return emrXetNghiems;
-    }
-    
-    public Boolean getCoPhauThuat() {
-        return false;
-    }
-    
-    public Boolean getCoThuThuat() {
-        return false;
-    }    
-    
-    public boolean getDaxoa() {
-        return trangThai == TRANGTHAI_HOSO.DA_XOA;
-    }
-    
-    public String getTuoiBenhNhan() {
-        var tuoi = JasperUtils.getTuoi(this);
-        var arr = tuoi.split(" ");
-        return arr[0];
-    }
-    
-    public String getDonViTuoiBenhNhan() {
-        var tuoi = JasperUtils.getTuoi(this);
-        var arr = tuoi.split(" ");
-        return arr.length > 1? arr[1] : "";        
-    }
-    
-    public String getKhoaRaVien() {
-        var emrVaoKhoas = getEmrVaoKhoas();
+    @JsonInclude(Include.NON_NULL)
+    public static class EmrTuoiBenhNhan {
+        final public static int YEAR = 1;
+        final public static int MONTH = 2;
+        final public static int DAY = 3;
         
-        if(emrVaoKhoas != null && emrVaoKhoas.length > 0) {
-            var emrKhoaRaVien = emrVaoKhoas[emrVaoKhoas.length - 1];
+        public Integer tuoi;
+        public Integer donvi;
+        
+        public EmrTuoiBenhNhan() {
+        }
+        
+        public EmrTuoiBenhNhan(int tuoi, int donvi) {
+            this.tuoi = tuoi;
+            this.donvi = donvi;                
+        }
+    }
+    
+    public EmrTuoiBenhNhan getTuoiBenhNhan() {
+        var emrBenhNhan = ServiceFactory.getEmrBenhNhanService().getById(emrBenhNhanId).orElseThrow();
+        
+        if(emrBenhNhan == null
+            || emrBenhNhan.ngaysinh == null
+            || emrQuanLyNguoiBenh == null 
+            || emrQuanLyNguoiBenh.ngaygioravien == null) {
+            return new EmrTuoiBenhNhan();
+        }
+        
+        var d1 = new java.sql.Date(emrBenhNhan.ngaysinh.getTime()).toLocalDate();
+        var d2 = new java.sql.Date(emrQuanLyNguoiBenh.ngaygioravien.getTime()).toLocalDate();
+        
+        var m1 = YearMonth.from(d1);
+        var m2 = YearMonth.from(d2);
+        
+        var y1 = Year.from(d1);
+        var y2 = Year.from(d2);
+        
+        int days = (int) d1.until(d2, ChronoUnit.DAYS);
+        int months = (int) m1.until(m2, ChronoUnit.MONTHS);
+        int years = (int) y1.until(y2, ChronoUnit.YEARS);
+        
+        if(d1.getDayOfMonth() > d2.getDayOfMonth()) 
+            months -= 1;
+        
+        if(d1.getMonthValue() > d2.getMonthValue() || (d1.getMonthValue() == d2.getMonthValue() && d1.getDayOfMonth() > d2.getDayOfMonth())) 
+            years -= 1;
+        
+        if(months < 1) {
+            return new EmrTuoiBenhNhan(days, EmrTuoiBenhNhan.DAY);
+        }else if(months < 36) {
+            return new EmrTuoiBenhNhan(months, EmrTuoiBenhNhan.MONTH);
+        }else {            
+            return new EmrTuoiBenhNhan(years, EmrTuoiBenhNhan.YEAR);
+        }
+    }
+
+    public String getKhoaRaVien() {
+        
+        if(emrVaoKhoas != null && emrVaoKhoas.size() > 0) {
+            var emrKhoaRaVien = emrVaoKhoas.get(emrVaoKhoas.size() - 1);
             var khoaRaVien = emrKhoaRaVien.tenkhoa;
             if(StringUtils.isEmpty(khoaRaVien) && emrKhoaRaVien.emrDmKhoaDieuTri != null) {
                 khoaRaVien = emrKhoaRaVien.emrDmKhoaDieuTri.ten;
@@ -331,10 +238,6 @@ public class EmrHoSoBenhAn {
             return khoaRaVien;
         }
         
-        return "";
-    }
-    
-    public String getTongketsankhoaCda() {
         return "";
     }
 }

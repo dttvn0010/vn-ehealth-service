@@ -15,7 +15,7 @@ public class DiagnosticReportEntityToFHIRDiagnosticReport
         var obj = DiagnosticReportEntity.toDiagnosticReport(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "DiagnosticReport-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

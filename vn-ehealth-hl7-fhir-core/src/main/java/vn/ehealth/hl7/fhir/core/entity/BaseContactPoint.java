@@ -16,6 +16,15 @@ public class BaseContactPoint {
     public Integer rank;
     public BasePeriod period;
    
+    public BaseContactPoint() {
+        
+    }
+    
+    public BaseContactPoint(String value, String system) {
+        this.value = value;
+        this.system = system;                
+    }
+    
     public static BaseContactPoint fromContactPoint(ContactPoint obj) {        
         if(obj == null) return null;
         

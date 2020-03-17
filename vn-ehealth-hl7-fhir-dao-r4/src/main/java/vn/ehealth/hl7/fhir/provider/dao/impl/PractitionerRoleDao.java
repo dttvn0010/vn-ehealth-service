@@ -190,9 +190,9 @@ public class PractitionerRoleDao implements IPractitionerRole {
         var ent = PractitionerRoleEntity.fromPractitionerRole(obj);
         DataConvertUtil.setMetaExt(obj, ent);
         if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhir_id = (fhirId);
+            ent.fhirId = (fhirId);
         } else {
-            ent.fhir_id = (StringUtil.generateUID());
+            ent.fhirId = (StringUtil.generateUID());
         }
         
         ent.active = (true);

@@ -1,5 +1,6 @@
 package vn.ehealth.hl7.fhir.ehr.entity;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.hl7.fhir.r4.model.Encounter.EncounterLocationComponent;
@@ -19,9 +20,9 @@ public class EncounterLocationEntity {
     public static EncounterLocationEntity fromEncounterLocationComponent(EncounterLocationComponent obj) {
         if(obj == null) return null;
         var ent = new EncounterLocationEntity();
-        ent.location = BaseReference.fromReference(obj.getLocation());
-        ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.period = BasePeriod.fromPeriod(obj.getPeriod());
+        ent.location = obj.hasLocation()? BaseReference.fromReference(obj.getLocation()) : null;
+        ent.status = obj.hasStatus()? Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null) : null;
+        ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
         return ent;
     }
     
@@ -32,6 +33,13 @@ public class EncounterLocationEntity {
         obj.setStatus(EncounterLocationStatus.fromCode(ent.status));
         obj.setPeriod(BasePeriod.toPeriod(ent.period));
         return obj;
-        
+    }
+    
+    public Date getStart() {
+        return period != null? period.start : null;        
+    }
+    
+    public Date getEnd() {
+        return period != null? period.end : null;
     }
 }

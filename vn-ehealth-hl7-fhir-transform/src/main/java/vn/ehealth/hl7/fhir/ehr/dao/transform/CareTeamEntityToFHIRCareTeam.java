@@ -14,7 +14,7 @@ public class CareTeamEntityToFHIRCareTeam implements Transformer<CareTeamEntity,
         var obj = CareTeamEntity.toCareTeam(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "CareTeam-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
     }
 }

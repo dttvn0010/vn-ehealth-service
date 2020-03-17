@@ -20,7 +20,7 @@ public class CodeSystemEntityToFHIRCodeSystem implements Transformer<CodeSystemE
         var obj = CodeSystemEntity.toCodeSystem(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "CodeSystem-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
         
     }

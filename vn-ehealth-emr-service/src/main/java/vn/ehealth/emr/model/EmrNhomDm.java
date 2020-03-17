@@ -15,6 +15,7 @@ public class EmrNhomDm {
     
     public String getId() { return id != null? id.toHexString() : null; }
     
+    public int trangThai;
     public String ten;
     public String ma;
     public String mota;

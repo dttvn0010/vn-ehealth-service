@@ -16,9 +16,9 @@ public class EncounterParticipantEntity {
     public static EncounterParticipantEntity fromEncounterParticipantComponent(EncounterParticipantComponent obj) {
         if(obj == null) return null;
         var ent = new EncounterParticipantEntity();
-        ent.type =BaseCodeableConcept.fromCodeableConcept(obj.getType());
-        ent.period = BasePeriod.fromPeriod(obj.getPeriod());
-        ent.individual = BaseReference.fromReference(obj.getIndividual());
+        ent.type = obj.hasType()? BaseCodeableConcept.fromCodeableConcept(obj.getType()) : null;
+        ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
+        ent.individual = obj.hasIndividual()? BaseReference.fromReference(obj.getIndividual()) : null;
         return ent;
     }
     

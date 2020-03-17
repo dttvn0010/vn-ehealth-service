@@ -1,6 +1,5 @@
 package vn.ehealth.emr.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
@@ -21,9 +20,5 @@ public class EmrCoSoKhamBenhService {
     
     public Optional<EmrCoSoKhamBenh> getByMa(String ma) {
         return emrCoSoKhamBenhRepository.findByMa(ma); 
-    }
-    
-    public List<EmrCoSoKhamBenh> getAll() {
-        return emrCoSoKhamBenhRepository.findAll();
     }
 }

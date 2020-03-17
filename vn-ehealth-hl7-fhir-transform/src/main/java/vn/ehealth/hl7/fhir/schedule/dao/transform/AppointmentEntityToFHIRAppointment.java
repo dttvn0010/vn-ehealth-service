@@ -19,7 +19,7 @@ public class AppointmentEntityToFHIRAppointment implements Transformer<Appointme
         var obj = AppointmentEntity.toAppointment(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Appointment-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
         
         

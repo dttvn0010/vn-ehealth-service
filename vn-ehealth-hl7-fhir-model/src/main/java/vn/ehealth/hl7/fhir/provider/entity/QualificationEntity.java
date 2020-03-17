@@ -14,15 +14,14 @@ public class QualificationEntity {
     public BaseCodeableConcept code;
     public BasePeriod period;
     public BaseReference issuer;
-    public String practitionerEntityID;
     
     public static QualificationEntity fromPractitionerQualificationComponent(PractitionerQualificationComponent obj) {
         if(obj == null) return null;
         var ent = new QualificationEntity();
-        ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
-        ent.period = BasePeriod.fromPeriod(obj.getPeriod());
-        ent.issuer = BaseReference.fromReference(obj.getIssuer());
+        ent.identifier = obj.hasIdentifier()? BaseIdentifier.fromIdentifierList(obj.getIdentifier()) : null;
+        ent.code = obj.hasCode()? BaseCodeableConcept.fromCodeableConcept(obj.getCode()) : null;
+        ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
+        ent.issuer = obj.hasIssuer()? BaseReference.fromReference(obj.getIssuer()) : null;
         return ent;
     }
     

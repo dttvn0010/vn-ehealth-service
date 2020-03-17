@@ -19,7 +19,7 @@ public class ImmunizationEntityToFHIRImmunization implements Transformer<Immuniz
         var obj = ImmunizationEntity.toImmunization(ent);
         obj.setMeta(DataConvertUtil.getMeta(ent, "Immunization-v1.0"));
         DataConvertUtil.getMetaExt(ent, obj);
-        obj.setId(ent.fhir_id);
+        obj.setId(ent.fhirId);
         return obj;
         
     }

@@ -1,9 +1,10 @@
 package vn.ehealth.emr.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import java.util.Optional;
 
 import vn.ehealth.hl7.fhir.patient.entity.PatientEntity;
 
-public interface PatientRepository extends MongoRepository<PatientEntity, String> {
+public interface PatientRepository extends ResourceRepository<PatientEntity> {
 
+    Optional<PatientEntity> findByIdentifierValueAndActive(String identifierValue, boolean active);
 }

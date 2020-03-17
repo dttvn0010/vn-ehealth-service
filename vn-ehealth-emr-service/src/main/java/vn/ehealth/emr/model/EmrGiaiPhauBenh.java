@@ -23,24 +23,28 @@ public class EmrGiaiPhauBenh {
     public ObjectId emrHoSoBenhAnId;    
     public ObjectId emrBenhNhanId;
     public ObjectId emrCoSoKhamBenhId;
+    public int trangThai;
+    public String idhis;
     
     public EmrDmContent emrDmGiaiPhauBenh;        
     public EmrDmContent emrDmLoaiGiaiPhauBenh;
     public EmrDmContent emrDmViTriLayMau;
     public EmrDmContent emrDmKetQuaGiaiPhauBenh;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayyeucau;
     
-    public String bacsiyeucau;
-    public String bacsichuyenkhoa;
+    public EmrCanboYte bacsiyeucau;
+    public EmrCanboYte bacsichuyenkhoa;
     
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaythuchien;
     
     public String nhanxetdaithe;
     public String nhanxetvithe;
     public String motachandoangiaiphau;
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaylaymausinhthiet;
         
     public List<EmrFileDinhKem> emrFileDinhKemGpbs = new ArrayList<>();

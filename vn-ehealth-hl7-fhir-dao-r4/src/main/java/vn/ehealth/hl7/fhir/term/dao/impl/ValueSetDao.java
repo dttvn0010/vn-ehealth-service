@@ -783,9 +783,9 @@ public class ValueSetDao implements IValueSet {
        
         // fhirId
         if (fhirId != null && !fhirId.isEmpty()) {
-            entity.fhir_id = (fhirId);
+            entity.fhirId = (fhirId);
         } else {
-            entity.fhir_id = (StringUtil.generateUID());
+            entity.fhirId = (StringUtil.generateUID());
         }
 
         entity.active = (true);
