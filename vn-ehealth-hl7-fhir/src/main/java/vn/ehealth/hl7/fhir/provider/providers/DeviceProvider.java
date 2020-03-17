@@ -148,7 +148,7 @@ public class DeviceProvider implements IResourceProvider {
 			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
 			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
 			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
@@ -261,7 +261,7 @@ public class DeviceProvider implements IResourceProvider {
 			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
 			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content) {
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = deviceDao.findMatchesAdvancedTotal(fhirContext, deviceName, identifier, location, manufacturer,
 				model, organization, patient, udiCarrier, udiDi, url, status, type, resid, _lastUpdated, _tag, _profile,

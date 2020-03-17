@@ -164,22 +164,23 @@ public class PatientProvider implements IResourceProvider {
 	@Search
 	public IBundleProvider searchPatient(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
-			@OptionalParam(name = "address-use") TokenParam addressUse,
-			@OptionalParam(name = "animal-breed") TokenParam animalBreed,
-			@OptionalParam(name = "animal-species") TokenParam animalSpecies,
-			@OptionalParam(name = "deceased") TokenParam deceased, @OptionalParam(name = "email") TokenParam email,
-			@OptionalParam(name = "gender") TokenParam gender,
+			@OptionalParam(name = ConstantKeys.SP_ADDRESS_USE) TokenParam addressUse,
+			@OptionalParam(name = ConstantKeys.SP_ANIMAL_BREED) TokenParam animalBreed,
+			@OptionalParam(name = ConstantKeys.SP_ANIMAL_SPECIES) TokenParam animalSpecies,
+			@OptionalParam(name = ConstantKeys.SP_DECEASED) TokenParam deceased, 
+			@OptionalParam(name = ConstantKeys.SP_EMAIL) TokenParam email,
+			@OptionalParam(name = ConstantKeys.SP_GENDER) TokenParam gender,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = ConstantKeys.SP_LANGUAGE) TokenParam language,
 			@OptionalParam(name = ConstantKeys.SP_PHONE) TokenParam phone,
 			@OptionalParam(name = ConstantKeys.SP_TELECOM) TokenParam telecom,
 
-			@OptionalParam(name = "general-practitioner") ReferenceParam generalPractitioner,
-			@OptionalParam(name = "link") ReferenceParam link,
-			@OptionalParam(name = "organization") ReferenceParam organization,
+			@OptionalParam(name = ConstantKeys.SP_GENERAL_PRACTITIONER) ReferenceParam generalPractitioner,
+			@OptionalParam(name = ConstantKeys.SP_LINK) ReferenceParam link,
+			@OptionalParam(name = ConstantKeys.SP_ORGANIZATION) ReferenceParam organization,
 
 			@OptionalParam(name = ConstantKeys.SP_BIRTHDATE) DateRangeParam birthDate,
-			@OptionalParam(name = "death-date") DateRangeParam deathDate,
+			@OptionalParam(name = ConstantKeys.SP_DEATH_DATE) DateRangeParam deathDate,
 
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
 			@OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
@@ -192,10 +193,12 @@ public class PatientProvider implements IResourceProvider {
 
 			// Parameters for all resources
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = "_lastUpdated") DateRangeParam _lastUpdated,
-			@OptionalParam(name = "_tag") TokenParam _tag, @OptionalParam(name = "_profile") UriParam _profile,
-			@OptionalParam(name = "_query") TokenParam _query, @OptionalParam(name = "_security") TokenParam _security,
-			@OptionalParam(name = "_content") StringParam _content,
+			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag, 
+			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query, 
+			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
 			// Search result parameters
 			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {

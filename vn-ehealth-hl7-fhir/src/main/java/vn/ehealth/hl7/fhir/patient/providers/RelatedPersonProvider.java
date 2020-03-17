@@ -160,7 +160,7 @@ public class RelatedPersonProvider implements IResourceProvider {
 			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
 			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
 			// Search result parameters
 			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {
@@ -290,7 +290,7 @@ public class RelatedPersonProvider implements IResourceProvider {
 			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
 			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content) {
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = relatedPersonDao.findMatchesAdvancedTotal(fhirContext, active, address, addressCity,
 				addressCountry, addressState, birthDate, email, gender, identifier, name, patient, phone, phonetic,

@@ -164,7 +164,7 @@ public class ObservationProvider implements IResourceProvider {
 			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
 			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
 			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
@@ -306,7 +306,7 @@ public class ObservationProvider implements IResourceProvider {
 			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
 			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content) {
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = observationDao.countMatchesAdvancedTotal(fhirContext, active, basedOn, category, code, comboCode,
 				comboDataAbsentReason, comboValueConcept, componentCode, componentDataAbsentReason,
@@ -353,7 +353,7 @@ public class ObservationProvider implements IResourceProvider {
             @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
             @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
             @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+            @OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
             @OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
             throws OperationOutcomeException {
         if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
