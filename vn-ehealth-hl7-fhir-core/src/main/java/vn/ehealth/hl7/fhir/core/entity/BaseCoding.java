@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.Extension;
 
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 
@@ -13,6 +14,7 @@ public class BaseCoding {
     public String code;
     public String display;
     public Boolean userSelected;
+    public List<Extension> extension;
     
     public static BaseCoding fromCoding(Coding obj) {        
         if(obj == null) return null;
@@ -23,6 +25,7 @@ public class BaseCoding {
         ent.code = obj.hasCode()? obj.getCode() : null;
         ent.display = obj.hasDisplay()? obj.getDisplay(): null;
         ent.userSelected = obj.hasUserSelected()? obj.getUserSelected() : null;
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
         return ent;
     }
     
@@ -38,6 +41,7 @@ public class BaseCoding {
         obj.setCode(ent.code);
         obj.setDisplay(ent.display);
         if(ent.userSelected != null) obj.setUserSelected(ent.userSelected);
+        obj.setExtension(ent.extension);
         return obj;
     }
     

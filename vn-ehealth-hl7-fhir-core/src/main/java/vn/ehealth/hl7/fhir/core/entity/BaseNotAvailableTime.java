@@ -2,6 +2,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.List;
 
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.HealthcareService.HealthcareServiceNotAvailableComponent;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
@@ -9,6 +10,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 public class BaseNotAvailableTime{
     public String description; 
     public BasePeriod during;
+    public List<Extension> extension;
 
     public static BaseNotAvailableTime fromHealthcareServiceNotAvailableComponent(HealthcareServiceNotAvailableComponent obj) {
         if(obj == null) return null;
@@ -16,7 +18,7 @@ public class BaseNotAvailableTime{
         var ent = new BaseNotAvailableTime();
         ent.description = obj.hasDescription()? obj.getDescription() : null;
         ent.during = obj.hasDuring()? BasePeriod.fromPeriod(obj.getDuring()) : null;
-        
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
         return ent;
     }
     
@@ -31,7 +33,7 @@ public class BaseNotAvailableTime{
         var object = new HealthcareServiceNotAvailableComponent();
         object.setDescription(entity.description);
         object.setDuring(BasePeriod.toPeriod(entity.during));
-        
+        object.setExtension(entity.extension);
         return object;
     }
     

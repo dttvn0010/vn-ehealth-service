@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Dosage;
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,7 +26,7 @@ public class BaseDosage {
     public BaseQuantity maxDosePerLifetime;
     //private Type rate;
     List<BaseDosageDoseAndRate> doseAndRate;    
-    public List<BaseExtension> extension;
+    public List<Extension> extension;
   
     
     public static BaseDosage fromDosage(Dosage obj) {
@@ -73,7 +74,7 @@ public class BaseDosage {
             ent.maxDosePerLifetime = BaseQuantity.fromQuantity(obj.getMaxDosePerLifetime());
         
         if(obj.hasExtension())
-            ent.extension = BaseExtension.fromExtensionList(obj.getExtension());
+            ent.extension = obj.getExtension();
                 
         return ent;
     }
@@ -99,7 +100,7 @@ public class BaseDosage {
         object.setMaxDosePerPeriod(BaseRatio.toRatio(entity.maxDosePerPeriod));
         object.setMaxDosePerAdministration(BaseQuantity.toQuantity(entity.maxDosePerAdministration));
         object.setMaxDosePerLifetime(BaseQuantity.toQuantity(entity.maxDosePerLifetime));
-        object.setExtension(BaseExtension.toExtensionList(entity.extension));
+        object.setExtension(entity.extension);
         return object;
     }
     

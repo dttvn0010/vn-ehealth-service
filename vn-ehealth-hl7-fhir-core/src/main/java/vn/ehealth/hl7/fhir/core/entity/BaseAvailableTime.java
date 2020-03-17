@@ -2,6 +2,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.List;
 
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.HealthcareService.DaysOfWeek;
 import org.hl7.fhir.r4.model.HealthcareService.HealthcareServiceAvailableTimeComponent;
 
@@ -12,7 +13,7 @@ public class BaseAvailableTime {
     public Boolean allDay;
     public String availableStartTime;
     public String availableEndTime;
-
+    public List<Extension> extension;
    
     public static BaseAvailableTime fromHealthcareServiceAvailableTimeComponent(HealthcareServiceAvailableTimeComponent obj) {
         if(obj == null) return null;
@@ -22,6 +23,7 @@ public class BaseAvailableTime {
         ent.allDay = obj.hasAllDay()? obj.getAllDay() : null;
         ent.availableStartTime = obj.hasAvailableStartTime()? obj.getAvailableStartTime() : null;
         ent.availableEndTime = obj.hasAvailableStartTime()? obj.getAvailableEndTime() : null;
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
         return ent;
     }
     
@@ -41,6 +43,7 @@ public class BaseAvailableTime {
         if(ent.allDay != null) obj.setAllDay(ent.allDay);
         obj.setAvailableStartTime(ent.availableStartTime);
         obj.setAvailableEndTime(ent.availableEndTime);
+        obj.setExtension(ent.extension);
         return obj;
     }
     

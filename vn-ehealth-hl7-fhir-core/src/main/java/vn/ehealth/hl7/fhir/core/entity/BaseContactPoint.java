@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.ContactPoint;
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.r4.model.ContactPoint.ContactPointUse;
 
@@ -15,15 +16,7 @@ public class BaseContactPoint {
     public String use;
     public Integer rank;
     public BasePeriod period;
-   
-    public BaseContactPoint() {
-        
-    }
-    
-    public BaseContactPoint(String value, String system) {
-        this.value = value;
-        this.system = system;                
-    }
+    public List<Extension> extension;
     
     public static BaseContactPoint fromContactPoint(ContactPoint obj) {        
         if(obj == null) return null;
@@ -34,6 +27,7 @@ public class BaseContactPoint {
         ent.use = obj.hasUse()? obj.getUse().toCode() : null;        
         ent.rank = obj.hasRank()? obj.getRank() : null;
         ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
         return ent;
     }
     
@@ -51,6 +45,7 @@ public class BaseContactPoint {
         object.setUse(ContactPointUse.fromCode(entity.use));
         if(entity.rank != null) object.setRank(entity.rank);
         object.setPeriod(BasePeriod.toPeriod(entity.period));
+        object.setExtension(entity.extension);
         return object;
     }
 

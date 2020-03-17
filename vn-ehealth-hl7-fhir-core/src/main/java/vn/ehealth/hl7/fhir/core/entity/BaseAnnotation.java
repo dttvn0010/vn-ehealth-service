@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Annotation;
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,6 +20,7 @@ public class BaseAnnotation {
     @JsonIgnore public Type author;
     public Date time;
     public String text;
+    public List<Extension> extension;
   
     public static BaseAnnotation fromAnnotation(Annotation obj) {
         if(obj == null) {
@@ -30,6 +32,7 @@ public class BaseAnnotation {
         ent.author = obj.hasAuthor()? obj.getAuthor() : null;
         ent.time = obj.hasTime()? obj.getTime() : null;
         ent.text = obj.hasText()? obj.getText() : null;
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
         
         return ent;
     }
@@ -47,6 +50,7 @@ public class BaseAnnotation {
         object.setAuthor(entity.author);
         object.setTime(entity.time);
         object.setText(entity.text);
+        object.setExtension(entity.extension);        
         return object;
     }
     

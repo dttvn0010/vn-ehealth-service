@@ -6,8 +6,11 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.Address;
 import org.hl7.fhir.r4.model.StringType;
+
 import org.hl7.fhir.r4.model.Address.AddressType;
 import org.hl7.fhir.r4.model.Address.AddressUse;
+import org.hl7.fhir.r4.model.Extension;
+
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 /**
@@ -29,7 +32,7 @@ public class BaseAddress {
     public String postalCode;
     public String text;
     
-    public List<BaseExtension> extension;
+    public List<Extension> extension;
     public BasePeriod period;
     
     public static BaseAddress fromAddress(Address obj) {
@@ -59,7 +62,7 @@ public class BaseAddress {
         ent.addressType = obj.hasType()? obj.getType().toCode() : null;
         ent.postalCode = obj.hasPostalCode()? obj.getPostalCode() : null;
         ent.text = obj.hasText()? obj.getText() : null;
-        ent.extension = obj.hasExtension()? transform(obj.getExtension(), BaseExtension::fromExtension) : null;
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
         ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
         return ent;
     }
@@ -96,7 +99,7 @@ public class BaseAddress {
         object.setType(AddressType.fromCode(entity.addressType));
         object.setPostalCode(entity.postalCode);
         object.setText(entity.text);
-        object.setExtension(transform(entity.extension, BaseExtension::toExtension));
+        object.setExtension(entity.extension);
         object.setPeriod(BasePeriod.toPeriod(entity.period));
       
         return object;

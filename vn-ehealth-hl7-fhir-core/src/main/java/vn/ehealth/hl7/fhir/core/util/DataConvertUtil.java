@@ -10,7 +10,6 @@ import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Meta;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
-import vn.ehealth.hl7.fhir.core.entity.BaseExtension;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
 public class DataConvertUtil {
@@ -96,24 +95,24 @@ public class DataConvertUtil {
                 }
             }
             
-            ent.extension = transform(obj.getExtension(), BaseExtension::fromExtension);
-            ent.modifierExtension = transform(obj.getModifierExtension(), BaseExtension::fromExtension);
+            ent.extension = obj.hasExtension()? obj.getExtension() : null;
+            ent.modifierExtension = obj.hasModifierExtension()? obj.getModifierExtension(): null;
         }
     }
     
     public static void getMetaExt(BaseResource ent, DomainResource obj) {
         if(obj != null && ent != null) {
         	if (ent.profile != null && ent.profile.size() > 0) {
-        		// TODO: Set profile
+        		obj.getMeta().setProfile(transform(ent.profile, x -> new CanonicalType(x)));
         	}
         	if (ent.tag != null && ent.tag.size() > 0) {
-        		// TODO: Set tag
+        		obj.getMeta().setTag(BaseCoding.toCodingList(ent.tag));
         	}
         	if (ent.security != null && ent.security.size() > 0) {
-        		// TODO: Set security
+        		obj.getMeta().setSecurity(BaseCoding.toCodingList(ent.security));
         	}
-            obj.setExtension(DataConvertUtil.transform(ent.extension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
-            obj.setModifierExtension(DataConvertUtil.transform(ent.modifierExtension, vn.ehealth.hl7.fhir.core.entity.BaseExtension::toExtension));
+            obj.setExtension(ent.extension);
+            obj.setModifierExtension(ent.modifierExtension);
         }
     }
 }

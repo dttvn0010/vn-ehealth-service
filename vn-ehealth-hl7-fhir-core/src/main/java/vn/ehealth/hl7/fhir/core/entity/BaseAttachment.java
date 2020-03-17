@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
 import org.hl7.fhir.r4.model.Attachment;
+import org.hl7.fhir.r4.model.Extension;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
@@ -17,7 +18,7 @@ public class BaseAttachment {
     public String hash;
     public String title;
     public Date creation;
-  
+    public List<Extension> extension;  
     
     public static BaseAttachment fromAttachment(Attachment obj) {        
         if(obj == null) return null;
@@ -32,6 +33,7 @@ public class BaseAttachment {
         ent.hash = obj.hasHash()? new String(Base64.encodeBase64(obj.getHash()), ca.uhn.fhir.rest.api.Constants.CHARSET_UTF8) : null;
         ent.title = obj.hasTitle()? obj.getTitle() : null;
         ent.creation = obj.hasCreation()? obj.getCreation() : null;
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
         return ent;
     }
     
@@ -62,6 +64,7 @@ public class BaseAttachment {
         
         object.setTitle(entity.title);
         object.setCreation(entity.creation);
+        object.setExtension(entity.extension);
         return object;
     }
 

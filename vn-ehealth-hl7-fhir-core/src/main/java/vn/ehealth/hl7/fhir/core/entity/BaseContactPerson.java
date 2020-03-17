@@ -2,6 +2,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.List;
 
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Patient.ContactComponent;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
@@ -14,6 +15,7 @@ public class BaseContactPerson {
     public String gender;
     public BaseReference organization;
     public BasePeriod period;
+    public List<Extension> extension;
     
     public static BaseContactPerson fromContactComponent(ContactComponent obj) {        
         if(obj == null) return null;
@@ -26,7 +28,7 @@ public class BaseContactPerson {
         ent.address = obj.hasAddress()? List.of(BaseAddress.fromAddress(obj.getAddress())) : null;
         ent.organization = obj.hasOrganization()? BaseReference.fromReference(obj.getOrganization()) : null;
         ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
-        
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
         return ent;
     }
     
@@ -48,7 +50,7 @@ public class BaseContactPerson {
         
         object.setOrganization(BaseReference.toReference(entity.organization));
         object.setPeriod(BasePeriod.toPeriod(entity.period));
-        
+        object.setExtension(entity.extension);
         return object;
     }
     

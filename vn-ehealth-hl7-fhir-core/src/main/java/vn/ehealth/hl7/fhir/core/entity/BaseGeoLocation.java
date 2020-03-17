@@ -1,5 +1,8 @@
 package vn.ehealth.hl7.fhir.core.entity;
 
+import java.util.List;
+
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Location.LocationPositionComponent;
 
 public class BaseGeoLocation {
@@ -7,6 +10,7 @@ public class BaseGeoLocation {
     public Double longitude;
     public Double latitude;
     public Double altitude;
+    public List<Extension> extension;
    
     public static BaseGeoLocation fromLocationPositionComponent(LocationPositionComponent object) {
         if(object == null) return null;
@@ -21,6 +25,9 @@ public class BaseGeoLocation {
         
         if(object.getAltitude() != null)
             entity.altitude = object.getAltitude().doubleValue();
+        
+        if(object.hasExtension())
+            entity.extension = object.getExtension();
        
         return null;
     }
@@ -38,6 +45,7 @@ public class BaseGeoLocation {
         if(entity.altitude != null) {
             object.setAltitude(entity.altitude.doubleValue());
         }
+        object.setExtension(entity.extension);
         return object;
     }
 

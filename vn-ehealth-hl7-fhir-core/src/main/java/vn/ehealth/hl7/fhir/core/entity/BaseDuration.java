@@ -16,6 +16,7 @@ public class BaseDuration extends BaseQuantity {
         ent.unit = obj.hasUnit()? obj.getUnit() : null;
         ent.system = obj.hasSystem()? obj.getSystem() : null;
         ent.code = obj.hasCode()? obj.getCode() : null;
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
         return ent;
     }
     
@@ -28,7 +29,7 @@ public class BaseDuration extends BaseQuantity {
         object.setUnit(entity.unit);
         object.setSystem(entity.system);
         object.setCode(entity.code);
-        
+        object.setExtension(entity.extension);
         return object;
     }
 }

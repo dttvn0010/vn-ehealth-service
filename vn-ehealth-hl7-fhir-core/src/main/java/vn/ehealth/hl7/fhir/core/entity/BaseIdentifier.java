@@ -1,8 +1,8 @@
 package vn.ehealth.hl7.fhir.core.entity;
 
-import java.util.Date;
 import java.util.List;
 
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Identifier.IdentifierUse;
 
@@ -20,27 +20,12 @@ public class BaseIdentifier {
     
     public BasePeriod period;
     
-    public List<BaseExtension> extension;
-    
     public BaseReference assigner;
 
     public IdentifierUse identifierUse;
     
-    public BaseIdentifier() {
-        
-    }
-    
-    public BaseIdentifier(String value, String system) {
-        this.value = value;
-        this.system = system;
-    }
-    
-    public BaseIdentifier(String value, String system, Date start, Date end) {
-        this.value = value;
-        this.system = system;
-        this.period = new BasePeriod(start, end);
-    }
-    
+    public List<Extension> extension;
+   
     public static Identifier toIdentifier(BaseIdentifier ent) {
         if(ent == null) return null;
         
@@ -48,10 +33,10 @@ public class BaseIdentifier {
         obj.setSystem(ent.system);
         obj.setValue(ent.value);
         obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
-        obj.setExtension(transform(ent.extension, BaseExtension::toExtension));
         obj.setUse(ent.identifierUse);
         obj.setPeriod(BasePeriod.toPeriod(ent.period));
         obj.setAssigner(BaseReference.toReference(ent.assigner));
+        obj.setExtension(ent.extension);
 
         return obj;
     }
@@ -70,10 +55,10 @@ public class BaseIdentifier {
         ent.value = obj.hasValue()? obj.getValue() : null;
         ent.type = obj.hasType()? BaseCodeableConcept.fromCodeableConcept(obj.getType()) : null;
         ent.identifierUse =  obj.hasUse()? obj.getUse() : null;
-        ent.extension = obj.hasExtension()? transform(obj.getExtension(), BaseExtension::fromExtension) : null;
         ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
         ent.assigner = obj.hasAssigner()? BaseReference.fromReference(obj.getAssigner()) : null;
-        
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
+                
         return ent;
     }
     

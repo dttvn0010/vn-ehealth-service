@@ -2,6 +2,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.List;
 
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.HumanName;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.HumanName.NameUse;
@@ -16,14 +17,7 @@ public class BaseHumanName {
     public List<String> prefix;
     public List<String> suffix;
     public BasePeriod period;
-
-    public BaseHumanName() {
-        
-    }
-    
-    public BaseHumanName(String text) {
-        this.text = text;
-    }
+    public List<Extension> extension;
     
     public static BaseHumanName fromHumanName(HumanName obj) {        
         if(obj == null) return null;
@@ -36,6 +30,7 @@ public class BaseHumanName {
         ent.prefix = obj.hasPrefix()? transform(obj.getPrefix(), x -> x.getValue()) : null;
         ent.suffix = obj.hasSuffix()? transform(obj.getSuffix(), x -> x.getValue()) : null;
         ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
         
         return ent;
     }
@@ -58,7 +53,7 @@ public class BaseHumanName {
         object.setPrefix(transform(entity.prefix, x -> new StringType(x)));
         object.setSuffix(transform(entity.suffix, x -> new StringType(x)));
         object.setPeriod(BasePeriod.toPeriod(entity.period));
-        
+        object.setExtension(entity.extension);
         return object;
     }
     

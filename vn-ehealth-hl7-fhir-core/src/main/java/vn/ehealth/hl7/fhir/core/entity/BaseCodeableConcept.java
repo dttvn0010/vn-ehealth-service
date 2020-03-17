@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.Extension;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;;
 
@@ -10,14 +11,7 @@ public class BaseCodeableConcept {
 
     public List<BaseCoding> coding;
     public String text;
-    
-    public BaseCodeableConcept() {
-        
-    }
-    
-    public BaseCodeableConcept(String text) {
-        this.text = text;
-    }
+    public List<Extension> extension;
     
     public static BaseCodeableConcept fromCodeableConcept(CodeableConcept obj) {
                 
@@ -26,6 +20,7 @@ public class BaseCodeableConcept {
         var ent = new BaseCodeableConcept();
         ent.coding = obj.hasCoding()? transform(obj.getCoding(), BaseCoding::fromCoding) : null;
         ent.text = obj.hasText()? obj.getText() : null;
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
         return ent;
     }
     
@@ -38,6 +33,7 @@ public class BaseCodeableConcept {
         var obj = new CodeableConcept();
         obj.setCoding(transform(ent.coding, BaseCoding::toCoding));
         obj.setText(ent.text);
+        obj.setExtension(ent.extension);
         return obj;
     }
     

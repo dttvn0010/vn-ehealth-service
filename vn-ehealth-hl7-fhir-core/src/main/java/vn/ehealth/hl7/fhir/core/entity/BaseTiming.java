@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.DateTimeType;
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.TimeType;
 import org.hl7.fhir.r4.model.Timing;
 import org.hl7.fhir.r4.model.Timing.DayOfWeek;
@@ -35,6 +36,7 @@ public class BaseTiming {
         public String periodUnit;
         public List<String> timeOfDay;
         public List<String> when;
+        public List<Extension> extension;
         
         public static TimingRepeatComponent toTimingRepeatComponent(BaseTimingRepeat ent) {
             if(ent == null) return null;
@@ -64,6 +66,8 @@ public class BaseTiming {
                     obj.addWhen(EventTiming.fromCode(x));
                 });
             }
+            obj.setExtension(ent.extension);
+            
             return obj;
         }
         
@@ -86,7 +90,7 @@ public class BaseTiming {
             ent.periodUnit = obj.hasPeriodUnit()? obj.getPeriodUnit().toCode() : null;
             ent.timeOfDay = obj.hasTimeOfDay()? transform(obj.getTimeOfDay(), x -> x.getValue()) : null;
             ent.when = obj.hasWhen()? transform(obj.getWhen(), x -> x.getValue().toCode()) : null;
-            
+            ent.extension = obj.hasExtension()? obj.getExtension() : null;
             return ent;
         }
     }
@@ -94,6 +98,7 @@ public class BaseTiming {
     public BaseCodeableConcept code;
     public List<Date> event;
     public BaseTimingRepeat repeat;
+    public List<Extension> extension;
     
     public static BaseTiming fromTiming(Timing obj) {
         if(obj == null) return null;
@@ -101,6 +106,7 @@ public class BaseTiming {
         ent.code = obj.hasCode()? BaseCodeableConcept.fromCodeableConcept(obj.getCode()) : null;
         ent.event = obj.hasEvent()? transform(obj.getEvent(), x -> x.getValue()) : null;
         ent.repeat = obj.hasRepeat()? BaseTimingRepeat.fromTimingRepeatComponent(obj.getRepeat()) : null;
+        ent.extension = obj.hasExtension()? obj.getExtension() : null;
         return ent;
     }
     
@@ -108,7 +114,8 @@ public class BaseTiming {
         var obj = new Timing();
         obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
         obj.setEvent(transform(ent.event, x -> new DateTimeType(x)));
-        obj.setRepeat(BaseTimingRepeat.toTimingRepeatComponent(ent.repeat));        
+        obj.setRepeat(BaseTimingRepeat.toTimingRepeatComponent(ent.repeat));
+        obj.setExtension(ent.extension);
         return obj;
     }
 }
