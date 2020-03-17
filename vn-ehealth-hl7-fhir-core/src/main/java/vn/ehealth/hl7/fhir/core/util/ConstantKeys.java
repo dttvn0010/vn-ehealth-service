@@ -31,7 +31,7 @@ public class ConstantKeys {
     public static final String SP_NAME = "name";
     public static final String SP_RES_ID = "_id";
     public static final String SP_CODE = "code";
-    public static final String SP_CONTENT = "content-mode";
+    public static final String SP_CONTENT_MODE = "content-mode";
     public static final String SP_DATE = "date";
     public static final String SP_DESCRIPTION = "description";
     public static final String SP_JURIS = "jurisdiction";
@@ -91,7 +91,7 @@ public class ConstantKeys {
     public static final String SP_PROFILE = "_profile";
     public static final String SP_QUERY = "_query";
     public static final String SP_SECURITY = "_security";
-    public static final String SP_CONTENT_DEFAULT = "_content";
+    public static final String SP_CONTENT = "_content";
     public static final String SP_PAGE = "_getpage";
 
     public static final String SP_ABATEMENT_AGE = "abatement-age";
