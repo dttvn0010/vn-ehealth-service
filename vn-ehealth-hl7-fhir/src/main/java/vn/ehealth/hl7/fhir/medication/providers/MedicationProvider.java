@@ -1,6 +1,7 @@
 package vn.ehealth.hl7.fhir.medication.providers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.instance.model.api.IPrimitiveType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
@@ -43,204 +46,237 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.medication.dao.IMedication;
 
 @Component
 public class MedicationProvider implements IResourceProvider {
-    @Autowired
-    FhirContext fhirContext;
+	@Autowired
+	FhirContext fhirContext;
 
-    @Autowired
-    IMedication medicationDao;
+	@Autowired
+	IMedication medicationDao;
 
-    private static final Logger log = LoggerFactory.getLogger(MedicationProvider.class);
+	private static final Logger log = LoggerFactory.getLogger(MedicationProvider.class);
 
-    @Override
-    public Class<? extends IBaseResource> getResourceType() {
-        return Medication.class;
-    }
+	@Override
+	public Class<? extends IBaseResource> getResourceType() {
+		return Medication.class;
+	}
 
-    @Create
-    public MethodOutcome createMedication(HttpServletRequest theRequest, @ResourceParam Medication obj) {
+	@Create
+	public MethodOutcome createMedication(HttpServletRequest theRequest, @ResourceParam Medication obj) {
 
-        log.debug("Create Medication Provider called");
+		log.debug("Create Medication Provider called");
 
-        MethodOutcome method = new MethodOutcome();
-        method.setCreated(true);
-        OperationOutcome opOutcome = new OperationOutcome();
-        method.setOperationOutcome(opOutcome);
-        Medication mongoMedication = null;
-        try {
-            mongoMedication = medicationDao.create(fhirContext, obj);
-            List<String> myString = new ArrayList<>();
-            myString.add("Medication/" + mongoMedication.getIdElement());
-            method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-                    "urn:uuid: " + mongoMedication.getId(), IssueSeverity.INFORMATION, IssueType.INCOMPLETE, myString));
-            method.setId(mongoMedication.getIdElement());
-            method.setResource(mongoMedication);
-        } catch (Exception ex) {
-            if (ex instanceof OperationOutcomeException) {
-                OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-                method.setOperationOutcome(outcomeException.getOutcome());
-                method.setCreated(false);
-            } else {
-                log.error(ex.getMessage());
-                method.setCreated(false);
-                method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-            }
-        }
-        return method;
-    }
+		MethodOutcome method = new MethodOutcome();
+		method.setCreated(true);
+		OperationOutcome opOutcome = new OperationOutcome();
+		method.setOperationOutcome(opOutcome);
+		Medication mongoMedication = null;
+		try {
+			mongoMedication = medicationDao.create(fhirContext, obj);
+			List<String> myString = new ArrayList<>();
+			myString.add("Medication/" + mongoMedication.getIdElement());
+			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
+					"urn:uuid: " + mongoMedication.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
+			method.setId(mongoMedication.getIdElement());
+			method.setResource(mongoMedication);
+		} catch (Exception ex) {
+			if (ex instanceof OperationOutcomeException) {
+				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
+				method.setOperationOutcome(outcomeException.getOutcome());
+			} else {
+				log.error(ex.getMessage());
+				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
+			}
+		}
+		return method;
+	}
 
-    @Read
-    public Medication readMedication(HttpServletRequest request, @IdParam IdType internalId) {
+	@Read
+	public Medication readMedication(HttpServletRequest request, @IdParam IdType internalId) {
 
-        Medication object = medicationDao.read(fhirContext, internalId);
-        if (object == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No Medication/" + internalId.getIdPart()),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-        }
-        return object;
-    }
+		Medication object = medicationDao.read(fhirContext, internalId);
+		if (object == null) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No Medication/" + internalId.getIdPart()),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		}
+		return object;
+	}
 
-    /**
-     * @author sonvt
-     * @param request
-     * @param idType
-     * @return read object version
-     */
-    @Read(version = true)
-    public Medication readVread(HttpServletRequest request, @IdParam IdType idType) {
-        Medication object = new Medication();
-        if (idType.hasVersionIdPart()) {
-            object = medicationDao.readOrVread(fhirContext, idType);
-        } else {
-            object = medicationDao.read(fhirContext, idType);
-        }
-        if (object == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No Medication/" + idType.getIdPart()),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-        }
-        return object;
-    }
+	/**
+	 * @author sonvt
+	 * @param request
+	 * @param idType
+	 * @return read object version
+	 */
+	@Read(version = true)
+	public Medication readVread(HttpServletRequest request, @IdParam IdType idType) {
+		Medication object = new Medication();
+		if (idType.hasVersionIdPart()) {
+			object = medicationDao.readOrVread(fhirContext, idType);
+		} else {
+			object = medicationDao.read(fhirContext, idType);
+		}
+		if (object == null) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No Medication/" + idType.getIdPart()),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		}
+		return object;
+	}
 
-    @Search
-    public List<Resource> searchMedication(HttpServletRequest request,
-            @OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
-            @OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
-            @OptionalParam(name = ConstantKeys.SP_CONTAINER) TokenParam container,
-            @OptionalParam(name = ConstantKeys.SP_FORM) TokenParam form,
-            @OptionalParam(name = ConstantKeys.SP_INGREDIENT) ReferenceParam ingredient,
-            @OptionalParam(name = ConstantKeys.SP_INGREDIENT_CODE) TokenParam ingredientCode,
-            @OptionalParam(name = ConstantKeys.SP_MANUFACTURER) ReferenceParam manufacturer,
-            @OptionalParam(name = ConstantKeys.SP_OVER_THE_COUNTER) TokenParam overTheCounter,
-            @OptionalParam(name = ConstantKeys.SP_PACKAGE_ITEM) ReferenceParam packageItem,
-            @OptionalParam(name = ConstantKeys.SP_PACKAGE_ITEM_CODE) TokenParam packageItemCode,
-            @OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
-            @OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-            @OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-            @OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-            @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-            @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-            @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
-            @OptionalParam(name = "hospital") TokenParam hospital,
-            @OptionalParam(name = "productName") StringParam productName,
-            @OptionalParam(name = "medicationType") StringParam medicationType,
-            @OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
-            throws OperationOutcomeException {
-        if (count != null && count > 50) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("Total is not gre > 50"), OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.INFORMATIONAL);
-        } else {
-            if (theSort != null) {
-                String sortParam = theSort.getParamName();
-                List<Resource> results = medicationDao.search(fhirContext, active, code, container, form, ingredient,
-                        ingredientCode, manufacturer, overTheCounter, packageItem, packageItemCode, status, resid,
-                        _lastUpdated, _tag, _profile, _query, _security, _content,hospital,productName,medicationType, _page, sortParam, count);
-                return results;
-            }
-            List<Resource> results = medicationDao.search(fhirContext, active, code, container, form, ingredient,
-                    ingredientCode, manufacturer, overTheCounter, packageItem, packageItemCode, status, resid,
-                    _lastUpdated, _tag, _profile, _query, _security, _content,hospital,productName,medicationType, _page, null, count);
-            return results;
-        }
-    }
+	@Search
+	public IBundleProvider searchMedication(HttpServletRequest request,
+			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
+			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
+			@OptionalParam(name = ConstantKeys.SP_CONTAINER) TokenParam container,
+			@OptionalParam(name = ConstantKeys.SP_FORM) TokenParam form,
+			@OptionalParam(name = ConstantKeys.SP_INGREDIENT) ReferenceParam ingredient,
+			@OptionalParam(name = ConstantKeys.SP_INGREDIENT_CODE) TokenParam ingredientCode,
+			@OptionalParam(name = ConstantKeys.SP_MANUFACTURER) ReferenceParam manufacturer,
+			@OptionalParam(name = ConstantKeys.SP_OVER_THE_COUNTER) TokenParam overTheCounter,
+			@OptionalParam(name = ConstantKeys.SP_PACKAGE_ITEM) ReferenceParam packageItem,
+			@OptionalParam(name = ConstantKeys.SP_PACKAGE_ITEM_CODE) TokenParam packageItemCode,
+			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+			@OptionalParam(name = "hospital") TokenParam hospital,
+			@OptionalParam(name = "productName") StringParam productName,
+			@OptionalParam(name = "medicationType") StringParam medicationType,
+			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
+			throws OperationOutcomeException {
+		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
+		} else {
+			List<Resource> results = new ArrayList<Resource>();
+			if (theSort != null) {
+				String sortParam = theSort.getParamName();
+				results = medicationDao.search(fhirContext, active, code, container, form, ingredient, ingredientCode,
+						manufacturer, overTheCounter, packageItem, packageItemCode, status, resid, _lastUpdated, _tag,
+						_profile, _query, _security, _content, hospital, productName, medicationType, _page, sortParam,
+						count);
+			} else
+				results = medicationDao.search(fhirContext, active, code, container, form, ingredient, ingredientCode,
+						manufacturer, overTheCounter, packageItem, packageItemCode, status, resid, _lastUpdated, _tag,
+						_profile, _query, _security, _content, hospital, productName, medicationType, _page, null,
+						count);
+			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
-    @Delete
-    public Medication deleteMedication(HttpServletRequest request, @IdParam IdType internalId) {
-        Medication obj = medicationDao.remove(fhirContext, internalId);
-        if (obj == null) {
-            log.error("Couldn't delete Medication" + internalId);
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("Medication is not exit"), OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.INFORMATIONAL);
-        }
-        return obj;
-    }
+			return new IBundleProvider() {
 
-    @Update
-    public MethodOutcome updateMedication(@IdParam IdType theId, @ResourceParam Medication patient) {
+				@Override
+				public Integer size() {
+					return Integer.parseInt(String.valueOf(medicationDao.countMatchesAdvancedTotal(fhirContext, active,
+							code, container, form, ingredient, ingredientCode, manufacturer, overTheCounter,
+							packageItem, packageItemCode, status, resid, _lastUpdated, _tag, _profile, _query,
+							_security, _content, hospital, productName, medicationType)));
+				}
 
-        log.debug("Update Medication Provider called");
+				@Override
+				public Integer preferredPageSize() {
+					// TODO Auto-generated method stub
+					return null;
+				}
 
-        MethodOutcome method = new MethodOutcome();
-        method.setCreated(true);
-        OperationOutcome opOutcome = new OperationOutcome();
-        method.setOperationOutcome(opOutcome);
-        Medication newMedication = null;
-        try {
-            newMedication = medicationDao.update(fhirContext, patient, theId);
-        } catch (Exception ex) {
-            if (ex instanceof OperationOutcomeException) {
-                OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-                method.setOperationOutcome(outcomeException.getOutcome());
-                method.setCreated(false);
-            } else {
-                log.error(ex.getMessage());
-                method.setCreated(false);
-                method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-            }
-        }
-        method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-                "urn:uuid: " + newMedication.getId(), IssueSeverity.INFORMATION, IssueType.INCOMPLETE));
-        method.setId(newMedication.getIdElement());
-        method.setResource(newMedication);
-        return method;
-    }
+				@Override
+				public String getUuid() {
+					// TODO Auto-generated method stub
+					return null;
+				}
 
-    @Operation(name = "$total", idempotent = true)
-    public Parameters getTotal(HttpServletRequest request,
-            @OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
-            @OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
-            @OptionalParam(name = ConstantKeys.SP_CONTAINER) TokenParam container,
-            @OptionalParam(name = ConstantKeys.SP_FORM) TokenParam form,
-            @OptionalParam(name = ConstantKeys.SP_INGREDIENT) ReferenceParam ingredient,
-            @OptionalParam(name = ConstantKeys.SP_INGREDIENT_CODE) TokenParam ingredientCode,
-            @OptionalParam(name = ConstantKeys.SP_MANUFACTURER) ReferenceParam manufacturer,
-            @OptionalParam(name = ConstantKeys.SP_OVER_THE_COUNTER) TokenParam overTheCounter,
-            @OptionalParam(name = ConstantKeys.SP_PACKAGE_ITEM) ReferenceParam packageItem,
-            @OptionalParam(name = ConstantKeys.SP_PACKAGE_ITEM_CODE) TokenParam packageItemCode,
-            @OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
-            // dung chung
-            @OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-            @OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-            @OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-            @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-            @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-            @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
-            @OptionalParam(name = "hospital") TokenParam hospital,
-            @OptionalParam(name = "productName") StringParam productName,
-            @OptionalParam(name = "medicationType") StringParam medicationType) {
-        Parameters retVal = new Parameters();
-        long total = medicationDao.countMatchesAdvancedTotal(fhirContext, active, code, container, form, ingredient,
-                ingredientCode, manufacturer, overTheCounter, packageItem, packageItemCode, status, resid, _lastUpdated,
-                _tag, _profile, _query, _security, _content,hospital,productName,medicationType);
-        retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
-        return retVal;
-    }
+				@Override
+				public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
+					return finalResults;
+				}
+
+				@Override
+				public IPrimitiveType<Date> getPublished() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+			};
+		}
+	}
+
+	@Delete
+	public Medication deleteMedication(HttpServletRequest request, @IdParam IdType internalId) {
+		Medication obj = medicationDao.remove(fhirContext, internalId);
+		if (obj == null) {
+			log.error("Couldn't delete Medication" + internalId);
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("Medication is not exit"), OperationOutcome.IssueSeverity.ERROR,
+					OperationOutcome.IssueType.NOTFOUND);
+		}
+		return obj;
+	}
+
+	@Update
+	public MethodOutcome updateMedication(@IdParam IdType theId, @ResourceParam Medication patient) {
+
+		log.debug("Update Medication Provider called");
+
+		MethodOutcome method = new MethodOutcome();
+		method.setCreated(false);
+		OperationOutcome opOutcome = new OperationOutcome();
+		method.setOperationOutcome(opOutcome);
+		Medication newMedication = null;
+		try {
+			newMedication = medicationDao.update(fhirContext, patient, theId);
+		} catch (Exception ex) {
+			if (ex instanceof OperationOutcomeException) {
+				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
+				method.setOperationOutcome(outcomeException.getOutcome());
+			} else {
+				log.error(ex.getMessage());
+				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
+			}
+		}
+		method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
+				"urn:uuid: " + newMedication.getId(), IssueSeverity.INFORMATION, IssueType.INCOMPLETE));
+		method.setId(newMedication.getIdElement());
+		method.setResource(newMedication);
+		return method;
+	}
+
+	@Operation(name = "$total", idempotent = true)
+	public Parameters getTotal(HttpServletRequest request,
+			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
+			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
+			@OptionalParam(name = ConstantKeys.SP_CONTAINER) TokenParam container,
+			@OptionalParam(name = ConstantKeys.SP_FORM) TokenParam form,
+			@OptionalParam(name = ConstantKeys.SP_INGREDIENT) ReferenceParam ingredient,
+			@OptionalParam(name = ConstantKeys.SP_INGREDIENT_CODE) TokenParam ingredientCode,
+			@OptionalParam(name = ConstantKeys.SP_MANUFACTURER) ReferenceParam manufacturer,
+			@OptionalParam(name = ConstantKeys.SP_OVER_THE_COUNTER) TokenParam overTheCounter,
+			@OptionalParam(name = ConstantKeys.SP_PACKAGE_ITEM) ReferenceParam packageItem,
+			@OptionalParam(name = ConstantKeys.SP_PACKAGE_ITEM_CODE) TokenParam packageItemCode,
+			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+			// dung chung
+			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+			@OptionalParam(name = "hospital") TokenParam hospital,
+			@OptionalParam(name = "productName") StringParam productName,
+			@OptionalParam(name = "medicationType") StringParam medicationType) {
+		Parameters retVal = new Parameters();
+		long total = medicationDao.countMatchesAdvancedTotal(fhirContext, active, code, container, form, ingredient,
+				ingredientCode, manufacturer, overTheCounter, packageItem, packageItemCode, status, resid, _lastUpdated,
+				_tag, _profile, _query, _security, _content, hospital, productName, medicationType);
+		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
+		return retVal;
+	}
 }
