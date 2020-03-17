@@ -47,7 +47,7 @@ public interface IPerson {
             @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
             @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
             @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+            @OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
             @OptionalParam(name = "organization") ReferenceParam managingOrg,
             // Search result parameters
             @OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, String sortParam, Integer count);
@@ -72,6 +72,6 @@ public interface IPerson {
             @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
             @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
             @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+            @OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
             @OptionalParam(name = "organization") ReferenceParam managingOrg);
 }

@@ -32,7 +32,8 @@ public interface ICarePlan {
 
     CarePlan readOrVread(FhirContext fhirContext, IdType idType);
 
-    List<Resource> search(FhirContext fhirContext, @OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
+    List<Resource> search(FhirContext fhirContext, 
+    		@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
             @OptionalParam(name = ConstantKeys.SP_ACTIVITY_CODE) TokenParam activityCode,
             @OptionalParam(name = ConstantKeys.SP_ACTIVITY_DATE) DateRangeParam activityDate,
             @OptionalParam(name = ConstantKeys.SP_ACTIVITY_REFERENCE) ReferenceParam activityReference,
@@ -59,7 +60,7 @@ public interface ICarePlan {
             @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
             @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
             @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+            @OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
             @OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, String sortParam, Integer count);
 
     long countMatchesAdvancedTotal(FhirContext fhirContext,
@@ -90,5 +91,5 @@ public interface ICarePlan {
             @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
             @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
             @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content);
+            @OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content);
 }

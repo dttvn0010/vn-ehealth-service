@@ -39,7 +39,7 @@ public interface ISlot {
             @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
             @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
             @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+            @OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
             @OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, String sortParam, Integer count);
 
     long findMatchesAdvancedTotal(FhirContext fhirContext,
@@ -55,5 +55,5 @@ public interface ISlot {
             @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
             @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
             @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content);
+            @OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content);
 }

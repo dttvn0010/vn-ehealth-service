@@ -49,7 +49,7 @@ public interface IMedication {
             @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
             @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
             @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+            @OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
             @OptionalParam(name = "hospital") TokenParam hospital,
             @OptionalParam(name = "productName") StringParam productName,
             @OptionalParam(name = "medicationType") StringParam medicationType,
@@ -73,7 +73,7 @@ public interface IMedication {
             @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
             @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
             @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+            @OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
             @OptionalParam(name = "hospital") TokenParam hospital,
             @OptionalParam(name = "productName") StringParam productName,
             @OptionalParam(name = "medicationType") StringParam medicationType);
