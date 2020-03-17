@@ -35,6 +35,7 @@ import vn.ehealth.hl7.fhir.clinical.providers.ConditionProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.DetectedIssueProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.GoalProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.ProcedureProvider;
+import vn.ehealth.hl7.fhir.clinical.providers.ServiceRequestProvider;
 //import vn.ehealth.hl7.fhir.clinical.providers.ServiceRequestProvider;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 //import vn.ehealth.hl7.fhir.core.oauth2.ServerInterceptor;
@@ -133,9 +134,8 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 				(IResourceProvider) applicationContext.getBean(CodeSystemProvider.class),
 				(IResourceProvider) applicationContext.getBean(ConceptMapProvider.class),
 				(IResourceProvider) applicationContext.getBean(ValueSetProvider.class),
-				(IResourceProvider) applicationContext.getBean(PersonProvider.class)
-		// (IResourceProvider) applicationContext.getBean(ServiceRequestProvider.class)
-		));
+				(IResourceProvider) applicationContext.getBean(PersonProvider.class),
+				(IResourceProvider) applicationContext.getBean(ServiceRequestProvider.class)));
 		setServerConformanceProvider(new Hl7FhirServerConformanceProvider());
 		// ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
 		// registerInterceptor(loggingInterceptor);
