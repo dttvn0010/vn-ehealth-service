@@ -27,40 +27,16 @@ public interface IDevice {
     
     Device readOrVread(FhirContext fhirContext, IdType idType);
 
-    List<Resource> search(FhirContext ctx, StringParam deviceName,
-            TokenParam identifier,
-            ReferenceParam location,
-            StringParam manufacturer,
-            StringParam model,
-            ReferenceParam organization,
-            ReferenceParam patient,
-            StringParam udiCarrier,
-            UriParam url,
-            TokenParam type,
-            TokenParam resid,
-            DateRangeParam _lastUpdated,
-            TokenParam _tag,
-            UriParam _profile,
-            TokenParam _query,
-            TokenParam _security,
-            StringParam _content,
-            StringParam _page, String sortParam, Integer count);
+    List<Resource> search(FhirContext ctx, StringParam deviceName, TokenParam identifier,
+            ReferenceParam location, StringParam manufacturer, StringParam model, ReferenceParam organization,
+            ReferenceParam patient, StringParam udiCarrier, StringParam udiDi, UriParam url, TokenParam status,
+            TokenParam type, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
+            TokenParam _query, TokenParam _security, StringParam _content, StringParam _page, String sortParam,
+            Integer count);
 
-    long findMatchesAdvancedTotal(FhirContext ctx, StringParam deviceName,
-            TokenParam identifier,
-            ReferenceParam location,
-            StringParam manufacturer,
-            StringParam model,
-            ReferenceParam organization,
-            ReferenceParam patient,
-            StringParam udiCarrier,
-            UriParam url,
-            TokenParam type,
-            TokenParam resid,
-            DateRangeParam _lastUpdated,
-            TokenParam _tag,
-            UriParam _profile,
-            TokenParam _query,
-            TokenParam _security,
-            StringParam _content);
+    long findMatchesAdvancedTotal(FhirContext ctx, StringParam deviceName, TokenParam identifier,
+            ReferenceParam location, StringParam manufacturer, StringParam model, ReferenceParam organization,
+            ReferenceParam patient, StringParam udiCarrier, StringParam udiDi, UriParam url, TokenParam status,
+            TokenParam type, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
+			TokenParam _query, TokenParam _security, StringParam _content);
 }

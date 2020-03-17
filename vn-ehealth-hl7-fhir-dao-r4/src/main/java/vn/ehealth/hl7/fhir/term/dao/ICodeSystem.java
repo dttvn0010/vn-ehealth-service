@@ -24,73 +24,31 @@ import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
  */
 public interface ICodeSystem {
 
-    CodeSystem create(FhirContext fhirContext, CodeSystem object);
+	CodeSystem create(FhirContext fhirContext, CodeSystem object);
 
-    CodeSystem update(FhirContext fhirContext, CodeSystem object, IdType idType);
+	CodeSystem update(FhirContext fhirContext, CodeSystem object, IdType idType);
 
-    CodeSystem read(FhirContext fhirContext, IdType idType);
+	CodeSystem read(FhirContext fhirContext, IdType idType);
 
-    CodeSystem remove(FhirContext fhirContext, IdType idType);
-    
-    CodeSystem readOrVread(FhirContext fhirContext, IdType idType);
+	CodeSystem remove(FhirContext fhirContext, IdType idType);
 
-    List<Resource> search(FhirContext fhirContext, TokenParam active,
-            DateRangeParam date,
-            TokenParam identifier,
-            StringParam name,
-            TokenParam code,
-            TokenParam contentMode,
-            StringParam description,
-            TokenParam jurisdiction,
-            TokenParam language,
-            StringParam publisher,
-            TokenParam status,
-            UriParam system,
-            StringParam title,
-            UriParam url,
-            TokenParam version,
-            TokenParam resid,
-            DateRangeParam _lastUpdated,
-            TokenParam _tag,
-            UriParam _profile,
-            TokenParam _query,
-            TokenParam _security,
-            StringParam _content,
-            StringParam _page, String theSort, Integer count);
+	CodeSystem readOrVread(FhirContext fhirContext, IdType idType);
 
-    Parameters getLookupParams(@OperationParam(name = "code") TokenParam code,
-            @OperationParam(name = "system") UriParam system, @OperationParam(name = "version") StringParam version,
-            @OperationParam(name = "coding") Coding coding, @OperationParam(name = "date") DateRangeParam date,
-            @OperationParam(name = "displayLanguage") TokenParam displayLanguage,
-            @OperationParam(name = "property") TokenParam property,
-            // Parameters for all resources
-            TokenParam resid,
-            DateRangeParam _lastUpdated,
-            UriParam _profile,
-            TokenParam _security,
-            StringParam _content,
-            // Search result parameters
-            StringParam _page);
+	List<Resource> search(FhirContext fhirContext, TokenParam active, DateRangeParam date, TokenParam identifier,
+			StringParam name, TokenParam code, TokenParam contentMode, StringParam description, TokenParam jurisdiction,
+			TokenParam language, StringParam publisher, TokenParam status, UriParam system, StringParam title,
+			UriParam url, TokenParam version, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
+			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content, StringParam _page,
+			String theSort, Integer count);
 
-    long findMatchesAdvancedTotal(FhirContext fhirContext, DateRangeParam date,
-            TokenParam identifier,
-            StringParam name,
-            TokenParam code,
-            TokenParam contentMode,
-            StringParam description,
-            TokenParam jurisdiction,
-            TokenParam language,
-            StringParam publisher,
-            TokenParam status,
-            UriParam system,
-            StringParam title,
-            UriParam url,
-            TokenParam version,
-            TokenParam resid,
-            DateRangeParam _lastUpdated,
-            TokenParam _tag,
-            UriParam _profile,
-            TokenParam _query,
-            TokenParam _security,
-            StringParam _content);
+	Parameters getLookupParams(TokenParam code, UriParam system, StringParam version, Coding coding,
+			DateRangeParam date, TokenParam displayLanguage, TokenParam property, TokenParam resid,
+			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
+			StringParam _content, StringParam _page);
+
+	long findMatchesAdvancedTotal(FhirContext fhirContext, DateRangeParam date, TokenParam identifier, StringParam name,
+			TokenParam code, TokenParam contentMode, StringParam description, TokenParam jurisdiction,
+			TokenParam language, StringParam publisher, TokenParam status, UriParam system, StringParam title,
+			UriParam url, TokenParam version, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
+			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content);
 }
