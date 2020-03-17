@@ -1,20 +1,22 @@
 package vn.ehealth.emr.model.dto;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+
+import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
+import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Reference;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.emr.service.ServiceFactory;
-import vn.ehealth.emr.utils.Constants.CodeSystem;
-import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
-import vn.ehealth.hl7.fhir.core.entity.BaseHumanName;
-import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
-import vn.ehealth.hl7.fhir.core.entity.BaseReference;
+import vn.ehealth.emr.utils.Constants.CodeSystemValue;
+
+import static vn.ehealth.emr.utils.FhirUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
-import vn.ehealth.hl7.fhir.patient.entity.PatientEntity;
 
 public class BenhNhan  extends BaseModelDTO {
     public String tenDayDu;
@@ -47,69 +49,90 @@ public class BenhNhan  extends BaseModelDTO {
         super();
     }
     
-    public BenhNhan(PatientEntity ent) {
-        super(ent);
-        if(ent == null) return;
+    public BenhNhan(Patient obj) {
+        super(obj);
+        if(obj == null) return;
         
-        this.tenDayDu = ent.getName();
-        this.ngaySinh = ent.birthDate;
+        this.tenDayDu = obj.hasName()? obj.getName().get(0).getText(): "";
+        this.ngaySinh = obj.getBirthDate();
         
-        var bhyt = ent.getIdentifierBySystem(CodeSystem.SO_THE_BHYT);
+        var bhyt = FPUtil.findFirst(obj.getIdentifier(), x -> CodeSystemValue.SO_THE_BHYT.equals(x.getSystem()));
         if(bhyt != null) {
-            this.soTheBhyt = bhyt.value;
-            this.ngayHetHanTheBhyt = bhyt.period != null? bhyt.period.end : null;
+            this.soTheBhyt = bhyt.getValue();
+            this.ngayHetHanTheBhyt = bhyt.hasPeriod()? bhyt.getPeriod().getEnd() : null;
         }
         
-        this.idHis = ent.getIdentifierValueBySystem(CodeSystem.ID_HIS);
-        if(ent.address != null && ent.address.size() > 0) {
-            this.diaChi = DiaChi.fromEntity(ent.address.get(0));
+        var idHis = FPUtil.findFirst(obj.getIdentifier(), x -> CodeSystemValue.ID_HIS.equals(x.getSystem()));
+        this.idHis = idHis != null? idHis.getValue() : "";
+        
+        if(obj.hasAddress()) {
+            this.diaChi = DiaChi.fromFhirModel(obj.getAddressFirstRep());
         }
-        this.dmGioiTinh = new DanhMuc(ent.gender, gioiTinhMap.getOrDefault(ent.gender, ""), CodeSystem.GIOI_TINH);
-        this.soDienThoai = ent.getPhone();
-        this.email = ent.getEmail();
-        this.dmTonGiao = new DanhMuc(ent.religion);
-        this.dmDanToc = new DanhMuc(ent.ethnic);
-        this.dmNgheNghiep = new DanhMuc(ent.job);        
-        this.dmLoaiDoiTuongTaiChinh = new DanhMuc(ent.getCategoryBySystem(CodeSystem.DOI_TUONG_TAI_CHINH));
+        
+        if(obj.hasGender()) {
+            var gender = obj.getGender().toCode();
+            this.dmGioiTinh = new DanhMuc(gender, gioiTinhMap.getOrDefault(gender, ""), CodeSystemValue.GIOI_TINH);
+        }
+        
+        if(obj.hasTelecom()) {
+            var phone = FPUtil.findFirst(obj.getTelecom(), 
+                                    x -> x.hasSystem() && CodeSystemValue.PHONE.equals(x.getSystem().toCode())); 
+            if(phone != null) {
+                this.soDienThoai = phone.getValue();
+            }
+            
+            var email = FPUtil.findFirst(obj.getTelecom(), 
+                                    x -> x.hasSystem() && CodeSystemValue.EMAIL.equals(x.getSystem().toCode()));
+            if(email != null) {
+                this.email = email.getValue();
+            }
+        }
+        
+        // TODO
+        //this.dmTonGiao = ?
+        //this.dmDanToc = ?
+        //this.dmNgheNghiep = /        
+        //this.dmLoaiDoiTuongTaiChinh = ?
     }
 
-    public static BenhNhan fromEntity(PatientEntity ent) {
-        if(ent == null) return null;
-        return new BenhNhan(ent);
+    public static BenhNhan fromFhir(Patient obj) {
+        if(obj == null) return null;
+        return new BenhNhan(obj);
     }
     
-    public static BenhNhan fromReference(BaseReference ref) {
-        if(ref != null && ref.reference != null) {
-            var ent = ServiceFactory.getPatientService().getByFhirId(ref.reference).orElseThrow();
-            return fromEntity(ent);
+    public static BenhNhan fromReference(Reference ref) {
+        if(ref != null && ref.hasReference()) {
+            
+        }
+        if(ref != null && ref.hasReference()) {
+            var obj = ServiceFactory.getPatientService().getById(ref.getReference());
+            return fromFhir(obj);
         }
         return null;
     }
     
-    public static PatientEntity toEntity(BenhNhan dto) {
+    public static Patient toFhir(BenhNhan dto) {
         if(dto == null) return null;
-        var ent = ServiceFactory.getPatientService().getByFhirId(dto.fhirId).orElse(null);
+        var obj = ServiceFactory.getPatientService().getById(dto.id);
         
-        if(ent == null) {
-            ent = new PatientEntity();
-            ent.fhirId = StringUtil.generateUID();
+        if(obj == null) {
+            obj = new Patient();
+            obj.setId(StringUtil.generateUID());
         }
         
-        ent.name = listOf(new BaseHumanName(dto.tenDayDu));
-        ent.birthDate = dto.ngaySinh;        
+        obj.addName(createHumanName(dto.tenDayDu));        
+        obj.setBirthDate(dto.ngaySinh);
+        obj.addIdentifier(createIdentifier(dto.soTheBhyt, CodeSystemValue.SO_THE_BHYT));
+        obj.addIdentifier(createIdentifier(dto.idHis, CodeSystemValue.ID_HIS, null, dto.ngayHetHanTheBhyt));
         
-        ent.identifier = listOf(
-                            new BaseIdentifier(dto.soTheBhyt, CodeSystem.SO_THE_BHYT, null, dto.ngayHetHanTheBhyt),
-                            new BaseIdentifier(dto.idHis, CodeSystem.ID_HIS)
-                        );
+        if(dto.dmGioiTinh != null)
+            obj.setGender(AdministrativeGender.fromCode(dto.dmGioiTinh.ma));
         
-        ent.gender = dto.dmGioiTinh != null? dto.dmGioiTinh.ma : null;
-        ent.address = dto.diaChi != null? listOf(DiaChi.toEntity(dto.diaChi)) : new ArrayList<>();        
-        ent.telecom = listOf(new BaseContactPoint(dto.soDienThoai, "phone"), new BaseContactPoint(dto.email, "email"));
-        ent.ethnic = DanhMuc.toBaseCodeableConcept(dto.dmDanToc, CodeSystem.DAN_TOC);
-        ent.religion = DanhMuc.toBaseCodeableConcept(dto.dmTonGiao, CodeSystem.TON_GIAO);
-        ent.job = DanhMuc.toBaseCodeableConcept(dto.dmNgheNghiep, CodeSystem.NGHE_NGHIEP);
-        ent.category = listOf(DanhMuc.toBaseCodeableConcept(dto.dmLoaiDoiTuongTaiChinh,CodeSystem.DOI_TUONG_TAI_CHINH));
-        return ent;
+        obj.setAddress(listOf(DiaChi.toFhirModel(dto.diaChi)));
+        obj.setTelecom(listOf(createContactPoint(dto.soDienThoai, CodeSystemValue.PHONE),
+                              createContactPoint(dto.email, CodeSystemValue.EMAIL)
+                ));
+        
+        return obj;
     }
 }

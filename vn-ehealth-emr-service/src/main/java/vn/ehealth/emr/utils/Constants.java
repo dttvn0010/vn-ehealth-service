@@ -67,7 +67,10 @@ public class Constants {
         return codeSystems != null? codeSystems.getProperty(property, "") : "";
     }
     
-    public static interface CodeSystem {
+    public static interface CodeSystemValue {
+        final public static String PHONE = "phone";
+        final public static String EMAIL = "email";
+        
         final public static String SO_THE_BHYT = codeSystems.getProperty("so_the_bhyt");
         final public static String ID_HIS = codeSystems.getProperty("id_his");
         

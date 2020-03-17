@@ -1,8 +1,7 @@
 package vn.ehealth.emr.model.dto;
 
-import java.util.ArrayList;
-import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
-import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
+import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.Coding;
 
 public class DanhMuc {
 
@@ -21,44 +20,46 @@ public class DanhMuc {
         this.maNhom = maNhom;
     }
     
-    public DanhMuc(BaseCoding code) {
+    public DanhMuc(Coding code) {
         if(code == null) return;
         
-        this.ma = code.code;
-        this.ten = code.display;
-        this.maNhom = code.system;                
+        this.ma = code.getCode();
+        this.ten = code.getDisplay();
+        this.maNhom = code.getSystem();                
     }
     
-    public DanhMuc(BaseCodeableConcept codeConcept) {
-        if(codeConcept == null) return;
+    public DanhMuc(CodeableConcept concept) {
+        if(concept == null) return;
         
-        this.ten = codeConcept.text;
-        if(codeConcept.coding != null && codeConcept.coding.size() > 0) {
-            var code = codeConcept.coding.get(0);
-            this.ma = code.code;
-            this.ten = code.display;
-            this.maNhom = code.system;
+        this.ten = concept.hasText()? concept.getText() : "";
+        if(concept.hasCoding()) {
+            var code = concept.getCodingFirstRep();
+            this.ma = code.getCode();
+            this.ten = code.getDisplay();
+            this.maNhom = code.getSystem();
         }
     }
     
-    public static BaseCoding toBaseCoding(DanhMuc dto, String maNhom) {
-        if(dto == null) return null;
-        var ent = new BaseCoding();
-        ent.code = dto.ma;
-        ent.display = dto.ten;
-        ent.system = maNhom != null? maNhom : dto.maNhom;
-        return ent;
+    public static DanhMuc fromConcept(CodeableConcept concept) {
+        if(concept == null) return null;
+        return new DanhMuc(concept);
     }
     
-    public static BaseCodeableConcept toBaseCodeableConcept(DanhMuc dto, String maNhom) {
+    public static Coding toCoding(DanhMuc dto, String maNhom) {
         if(dto == null) return null;
-        var ent = new BaseCodeableConcept();
-        ent.text = dto.ten;
+        var obj = new Coding();
+        obj.setCode(dto.ma);
+        obj.setDisplay(dto.ten);
+        obj.setSystem(maNhom != null? maNhom : dto.maNhom);
+        return obj;
+    }
+    
+    public static CodeableConcept toConcept(DanhMuc dto, String maNhom) {
+        if(dto == null) return null;
+        var obj = new CodeableConcept();
+        obj.setText(dto.ten);
+        obj.addCoding(toCoding(dto, maNhom));
         
-        ent.coding = new ArrayList<>();
-        var code = toBaseCoding(dto, maNhom);
-        if(code != null) ent.coding.add(code);
-        
-        return ent;
+        return obj;
     }
 }

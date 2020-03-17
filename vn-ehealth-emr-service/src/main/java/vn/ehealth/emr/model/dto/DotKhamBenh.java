@@ -4,17 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.hl7.fhir.r4.model.Encounter;
+import org.hl7.fhir.r4.model.Reference;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.emr.service.ServiceFactory;
-import vn.ehealth.emr.utils.Constants.CodeSystem;
-import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
-import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
-import vn.ehealth.hl7.fhir.core.entity.BaseReference;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
-import vn.ehealth.hl7.fhir.ehr.entity.EncounterEntity;
+import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+import static vn.ehealth.emr.utils.FhirUtil.*;
 
 public class DotKhamBenh extends BaseModelDTO {    
     public BenhNhan benhNhan;
@@ -34,50 +33,61 @@ public class DotKhamBenh extends BaseModelDTO {
         super();
     }
     
-    public DotKhamBenh(EncounterEntity ent) {
-        super(ent);
+    public DotKhamBenh(Encounter obj) {
+        super(obj);
         
-        if(ent == null) return;
-        this.maYte = ent.getIdentifier();
-        this.dmLoaiKham = new DanhMuc(ent.getTypeBySystem(CodeSystem.LOAI_KHAM_BENH));
-        this.benhNhan = BenhNhan.fromReference(ent.subject);
-        this.coSoKhamBenh = CoSoKhamBenh.fromReference(ent.serviceProvider);
-        this.ngayGioVao = ent.getStart();
-        this.ngayGioKetThucDieuTri = ent.getEnd();
-        this.dsVaoKhoa = DataConvertUtil.transform(ent.location, x -> VaoKhoa.fromEntity(x));        
-    }
-    
-    public static DotKhamBenh fromEntity(EncounterEntity ent) {
-        if(ent == null) return null;
-        return new DotKhamBenh(ent);
-    }
-    
-    public static DotKhamBenh fromFhirId(String fhirId) {
-        if(fhirId == null) return null;
-        var ent = ServiceFactory.getEncounterService().getByFhirId(fhirId).orElseThrow();
-        return fromEntity(ent);
-    }
-    
-    public static DotKhamBenh fromReference(BaseReference ref) {
-        if(ref == null) return null;
-        return fromFhirId(ref.reference);
-    }
-    
-    public static EncounterEntity toEntity(DotKhamBenh dto) {
-        if(dto == null) return null;
-        var ent = ServiceFactory.getEncounterService().getByFhirId(dto.fhirId).orElse(null);
+        if(obj == null) return;
+        this.maYte = obj.hasIdentifier()? obj.getIdentifierFirstRep().getValue(): "";
         
-        if(ent == null) {
-            ent = new EncounterEntity();
-            ent.fhirId = ent.fhirId = StringUtil.generateUID();
+        if(obj.hasType()) {
+            var concept = findConceptBySystem(obj.getType(), CodeSystemValue.LOAI_KHAM_BENH);
+            this.dmLoaiKham = new DanhMuc(concept);
         }
         
-        ent.identifier = listOf(new BaseIdentifier(dto.maYte, CodeSystem.DOT_KHAM_BENH));
-        ent.type = listOf(DanhMuc.toBaseCodeableConcept(dto.dmLoaiKham, CodeSystem.LOAI_KHAM_BENH));
-        ent.subject = BaseModelDTO.toReference(dto.benhNhan);
-        ent.serviceProvider = BaseModelDTO.toReference(dto.coSoKhamBenh);
-        ent.period = new BasePeriod(dto.ngayGioVao, dto.ngayGioKetThucDieuTri);
-        ent.location = DataConvertUtil.transform(dto.dsVaoKhoa, x -> VaoKhoa.toEntity(x));
+        if(obj.hasSubject())
+            this.benhNhan = BenhNhan.fromReference(obj.getSubject());
+        
+        if(obj.hasServiceProvider())
+            this.coSoKhamBenh = CoSoKhamBenh.fromReference(obj.getServiceProvider());
+        
+        if(obj.hasPeriod()) {
+            this.ngayGioVao = obj.getPeriod().getStart();
+            this.ngayGioKetThucDieuTri = obj.getPeriod().getEnd();
+        }
+        this.dsVaoKhoa = transform(obj.getLocation(), x -> VaoKhoa.fromFhir(x));        
+    }
+    
+    public static DotKhamBenh fromFhir(Encounter obj) {
+        if(obj == null) return null;
+        return new DotKhamBenh(obj);
+    }
+    
+    public static DotKhamBenh fromFhirId(String id) {
+        if(id == null) return null;
+        var ent = ServiceFactory.getEncounterService().getById(id);
+        return fromFhir(ent);
+    }
+    
+    public static DotKhamBenh fromReference(Reference ref) {
+        if(ref == null) return null;
+        return fromFhirId(ref.getReference());
+    }
+    
+    public static Encounter toFhir(DotKhamBenh dto) {
+        if(dto == null) return null;
+        var ent = ServiceFactory.getEncounterService().getById(dto.id);
+        
+        if(ent == null) {
+            ent = new Encounter();
+            ent.setId(StringUtil.generateUID());
+        }
+        
+        ent.setIdentifier(listOf(createIdentifier(dto.maYte, CodeSystemValue.DOT_KHAM_BENH)));
+        ent.setType(listOf(DanhMuc.toConcept(dto.dmLoaiKham, CodeSystemValue.LOAI_KHAM_BENH)));
+        ent.setSubject(BaseModelDTO.toReference(dto.benhNhan));
+        ent.setServiceProvider(BaseModelDTO.toReference(dto.coSoKhamBenh));
+        ent.setPeriod(createPeriod(dto.ngayGioVao, dto.ngayGioKetThucDieuTri));
+        ent.setLocation(transform(dto.dsVaoKhoa, x -> VaoKhoa.toFhir(x)));
         return ent;
     }
 }

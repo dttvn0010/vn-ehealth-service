@@ -1,6 +1,5 @@
 package vn.ehealth.emr.dto.controller;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,25 +30,24 @@ public class CanBoYteController {
     
     @GetMapping("/get_by_id")
     public ResponseEntity<?> getById(@RequestParam String id) {
-        var ent = practitionerService.getById(id).get();
-        var dto = CanboYte.fromEntity(ent);
+        var obj = practitionerService.getById(id);
+        var dto = CanboYte.fromFhir(obj);
         return ResponseEntity.ok(dto);
     }
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAllDto() {
-        var lst = DataConvertUtil.transform(practitionerService.getAll(), x -> CanboYte.fromEntity(x));
+        var lst = DataConvertUtil.transform(practitionerService.getAll(), x -> CanboYte.fromFhir(x));
         return ResponseEntity.ok(lst);
     }
     
     @PostMapping("/create_or_update")
     public ResponseEntity<?> createOrUpdate(@RequestBody CanboYte dto) {
         try {
-            var ent = CanboYte.toEntity(dto);
-            ent.active = true;
-            ent.resCreated = new Date();
-            ent = practitionerService.save(ent);
-            var result = Map.of("success", true, "entity", ent);
+            var obj = CanboYte.toFhir(dto);
+            obj = practitionerService.save(obj);
+            dto = CanboYte.fromFhir(obj);
+            var result = Map.of("success", true, "dto", dto);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save entity: ", e);

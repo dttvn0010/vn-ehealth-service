@@ -1,9 +1,12 @@
 package vn.ehealth.emr.dto.controller;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
+import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.Procedure;
+import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ServiceRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +23,7 @@ import vn.ehealth.emr.model.dto.ChanDoanHinhAnh;
 import vn.ehealth.emr.service.DiagnosticReportService;
 import vn.ehealth.emr.service.ProcedureService;
 import vn.ehealth.emr.service.ServiceRequestService;
-import vn.ehealth.hl7.fhir.clinical.entity.ProcedureEntity;
-import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.diagnostic.entity.DiagnosticReportEntity;
-import vn.ehealth.hl7.fhir.diagnostic.entity.ServiceRequestEntity;
 
 @RestController
 @RequestMapping("/api/chan_doan_hinh_anh")
@@ -37,49 +36,43 @@ public class ChanDoanHinhAnhController {
     @Autowired private ServiceRequestService serviceRequestService;
         
     @GetMapping("/get_by_id")
-    public ResponseEntity<?> getById(@RequestParam String fhirId) {
-        var ent = procedureService.getByFhirId(fhirId).get();
-        var dto = ChanDoanHinhAnh.fromEntity(ent);
+    public ResponseEntity<?> getById(@RequestParam String id) {
+        var obj = procedureService.getById(id);
+        var dto = ChanDoanHinhAnh.fromFhir(obj);
         return ResponseEntity.ok(dto);
     }
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
-        var lst = DataConvertUtil.transform(procedureService.getAll(), x -> ChanDoanHinhAnh.fromEntity(x));
+        var lst = DataConvertUtil.transform(procedureService.getAll(), x -> ChanDoanHinhAnh.fromFhir(x));
         return ResponseEntity.ok(lst);
     }
     
-    private DiagnosticReportEntity saveDiagnosticReportEntity(DiagnosticReportEntity ent) {
-        ent.active = true;
-        ent.resCreated = new Date();
-        return diagnosticReportService.save(ent);
+    private DiagnosticReport saveDiagnosticReport(DiagnosticReport obj) {
+        return diagnosticReportService.save(obj);
     }
     
-    private ServiceRequestEntity saveServiceRequestEntity(ServiceRequestEntity ent) {
-        ent.active = true;
-        ent.resCreated = new Date();
-        return serviceRequestService.save(ent);
+    private ServiceRequest saveServiceRequest(ServiceRequest obj) {
+        return serviceRequestService.save(obj);
     }
     
-    private ProcedureEntity saveProcedureEntity(ProcedureEntity ent) {
-        ent.active = true;
-        ent.resCreated = new Date();
+    private Procedure saveProcedure(Procedure ent) {
         return procedureService.save(ent);
     }
     
     @PostMapping("/create_or_update")
     public ResponseEntity<?> createOrUpdate(@RequestBody ChanDoanHinhAnh dto) {
         try {
-            Map<String, BaseResource> entities = ChanDoanHinhAnh.toEntity(dto);
+            Map<String, Resource> entities = ChanDoanHinhAnh.toFhir(dto);
             
             if(entities != null) {
-                var procedure = (ProcedureEntity) entities.get("procedure");
-                var serviceRequest = (ServiceRequestEntity) entities.get("serviceRequest");
-                var diagnosticReport = (DiagnosticReportEntity) entities.get("diagnosticReport");
+                var procedure = (Procedure) entities.get("procedure");
+                var serviceRequest = (ServiceRequest) entities.get("serviceRequest");
+                var diagnosticReport = (DiagnosticReport) entities.get("diagnosticReport");
                                 
-                diagnosticReport = saveDiagnosticReportEntity(diagnosticReport);
-                serviceRequest = saveServiceRequestEntity(serviceRequest);
-                procedure = saveProcedureEntity(procedure);
+                diagnosticReport = saveDiagnosticReport(diagnosticReport);
+                serviceRequest = saveServiceRequest(serviceRequest);
+                procedure = saveProcedure(procedure);
                 
                 var result = Map.of(
                                     "success", true, 

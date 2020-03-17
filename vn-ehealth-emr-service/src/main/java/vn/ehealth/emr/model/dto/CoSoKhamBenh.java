@@ -1,12 +1,13 @@
 package vn.ehealth.emr.model.dto;
 
 import vn.ehealth.emr.service.ServiceFactory;
-import vn.ehealth.emr.utils.Constants.CodeSystem;
-import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
-import vn.ehealth.hl7.fhir.core.entity.BaseReference;
+import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
-import vn.ehealth.hl7.fhir.provider.entity.LocationEntity;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+import static vn.ehealth.emr.utils.FhirUtil.*;
+
+import org.hl7.fhir.r4.model.Location;
+import org.hl7.fhir.r4.model.Reference;
 
 public class CoSoKhamBenh extends BaseModelDTO {
     
@@ -17,38 +18,37 @@ public class CoSoKhamBenh extends BaseModelDTO {
         super();
     }
     
-    public CoSoKhamBenh(LocationEntity ent) {
-        super(ent);
-        if(ent == null) return;
-        
-        this.ma = ent.getIdentifier();
-        this.ten = ent.name;
+    public CoSoKhamBenh(Location obj) {
+        super(obj);
+        if(obj == null) return;        
+        this.ma = obj.hasIdentifier()? obj.getIdentifierFirstRep().getValue() : "";
+        this.ten = obj.hasName() ? obj.getName() : "";
     }
     
-    public static CoSoKhamBenh fromEntity(LocationEntity ent) {
+    public static CoSoKhamBenh fromFhir(Location ent) {
         if(ent == null) return null;
         return new CoSoKhamBenh(ent);        
     }
     
-    public static CoSoKhamBenh fromReference(BaseReference ref) {
-        if(ref != null && ref.reference != null) {
-            var ent = ServiceFactory.getLocationService().getByFhirId(ref.reference).orElseThrow();
-            return fromEntity(ent);
+    public static CoSoKhamBenh fromReference(Reference ref) {
+        if(ref != null && ref.hasReference()) {
+            var ent = ServiceFactory.getLocationService().getById(ref.getReference());
+            return fromFhir(ent);
         }
         return null;        
     }
     
-    public static LocationEntity toEntity(CoSoKhamBenh dto) {
+    public static Location toFhir(CoSoKhamBenh dto) {
         if(dto == null) return null;
-        var ent = ServiceFactory.getLocationService().getByFhirId(dto.fhirId).orElse(null);
+        var obj = ServiceFactory.getLocationService().getById(dto.id);
         
-        if(ent == null) {
-            ent = new LocationEntity();
-            ent.fhirId = ent.fhirId = StringUtil.generateUID();
+        if(obj == null) {
+            obj = new Location();
+            obj.setId(StringUtil.generateUID());
         }
         
-        ent.identifier = listOf(new BaseIdentifier(dto.ma, CodeSystem.CO_SO_KHAM_BENH));
-        ent.name = dto.ten;
-        return ent;
+        obj.setIdentifier(listOf(createIdentifier(dto.ma, CodeSystemValue.CO_SO_KHAM_BENH)));
+        obj.setName(dto.ten);
+        return obj;
     }
 }

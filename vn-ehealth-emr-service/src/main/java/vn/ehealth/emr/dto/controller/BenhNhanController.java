@@ -1,6 +1,5 @@
 package vn.ehealth.emr.dto.controller;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,26 +28,25 @@ public class BenhNhanController {
     @Autowired private PatientService patientService;
         
     @GetMapping("/get_by_id")
-    public ResponseEntity<?> getById(@RequestParam String fhirId) {
-        var ent = patientService.getByFhirId(fhirId).get();
-        var dto = BenhNhan.fromEntity(ent);
+    public ResponseEntity<?> getById(@RequestParam String id) {
+        var obj = patientService.getById(id);
+        var dto = BenhNhan.fromFhir(obj);
         return ResponseEntity.ok(dto);
     }
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
-        var lst = DataConvertUtil.transform(patientService.getAll(), x -> BenhNhan.fromEntity(x));
+        var lst = DataConvertUtil.transform(patientService.getAll(), x -> BenhNhan.fromFhir(x));
         return ResponseEntity.ok(lst);
     }
     
     @PostMapping("/create_or_update")
     public ResponseEntity<?> createOrUpdate(@RequestBody BenhNhan dto) {
         try {
-            var ent = BenhNhan.toEntity(dto);
-            ent.active = true;
-            ent.resCreated = new Date();
-            ent = patientService.save(ent);
-            var result = Map.of("success", true, "entity", ent);
+            var obj = BenhNhan.toFhir(dto);
+            obj = patientService.save(obj);
+            dto = BenhNhan.fromFhir(obj);
+            var result = Map.of("success", true, "dto", dto);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save entity: ", e);

@@ -1,6 +1,5 @@
 package vn.ehealth.emr.dto.controller;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,25 +29,24 @@ public class KhoaDieuTriController {
     
     @GetMapping("/get_by_id")
     public ResponseEntity<?> getById(@RequestParam String id) {
-        var ent = locationService.getById(id).get();
-        var dto = KhoaDieuTri.fromEntity(ent);
+        var ent = locationService.getById(id);
+        var dto = KhoaDieuTri.fromFhir(ent);
         return ResponseEntity.ok(dto);
     }
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAllDto() {
-        var lst = DataConvertUtil.transform(locationService.getAll(), x -> KhoaDieuTri.fromEntity(x));
+        var lst = DataConvertUtil.transform(locationService.getAll(), x -> KhoaDieuTri.fromFhir(x));
         return ResponseEntity.ok(lst);
     }
     
     @PostMapping("/create_or_update")
     public ResponseEntity<?> createOrUpdate(@RequestBody KhoaDieuTri dto) {
         try {
-            var ent = KhoaDieuTri.toEntity(dto);
-            ent.active = true;
-            ent.resCreated = new Date();
-            ent = locationService.save(ent);
-            var result = Map.of("success", true, "entity", ent);
+            var obj = KhoaDieuTri.toFhir(dto);
+            obj = locationService.save(obj);
+            dto = KhoaDieuTri.fromFhir(obj);
+            var result = Map.of("success", true, "dto", dto);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save entity: ", e);

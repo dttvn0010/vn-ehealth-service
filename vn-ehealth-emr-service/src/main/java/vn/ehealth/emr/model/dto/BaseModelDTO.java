@@ -1,26 +1,25 @@
 package vn.ehealth.emr.model.dto;
 
-import vn.ehealth.hl7.fhir.core.entity.BaseReference;
-import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.Resource;
 
 public class BaseModelDTO {
 
-    public String fhirId;
+    public String id;
     
     public BaseModelDTO() {
         
     }
     
-    public BaseModelDTO(BaseResource ent) {
+    public BaseModelDTO(Resource ent) {
         if(ent != null) {
-            this.fhirId = ent.fhirId;
+            this.id = ent.getId();
         }
     }
     
-    public static BaseReference toReference(BaseModelDTO dto) {
+    public static Reference toReference(BaseModelDTO dto) {
         if(dto == null) return null;
-        var ref = new BaseReference();
-        ref.reference = dto.fhirId;
+        var ref = new Reference(dto.id);
         return ref;
     }
 }

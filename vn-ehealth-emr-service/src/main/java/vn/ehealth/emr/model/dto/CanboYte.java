@@ -1,13 +1,13 @@
 package vn.ehealth.emr.model.dto;
 
 import vn.ehealth.emr.service.ServiceFactory;
-import vn.ehealth.emr.utils.Constants.CodeSystem;
-import vn.ehealth.hl7.fhir.core.entity.BaseHumanName;
-import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
-import vn.ehealth.hl7.fhir.core.entity.BaseReference;
+import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
-import vn.ehealth.hl7.fhir.provider.entity.PractitionerEntity;
+import static vn.ehealth.emr.utils.FhirUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+
+import org.hl7.fhir.r4.model.Practitioner;
+import org.hl7.fhir.r4.model.Reference;
 
 public class CanboYte extends BaseModelDTO {
     public String ten;
@@ -17,39 +17,39 @@ public class CanboYte extends BaseModelDTO {
         super();
     }
     
-    public CanboYte(PractitionerEntity ent) {
-        super(ent);
-        if(ent == null) return;
+    public CanboYte(Practitioner obj) {
+        super(obj);
+        if(obj == null) return;
         
-        this.ten = ent.getName();        
-        this.chungChiHanhNghe = ent.getIdentifier();
+        this.ten = obj.hasName()? obj.getNameFirstRep().getText() : "";        
+        this.chungChiHanhNghe = obj.hasIdentifier()? obj.getIdentifierFirstRep().getValue() : "";
     }
         
-    public static CanboYte fromEntity(PractitionerEntity ent) {
-        if(ent == null) return null;
-        return new CanboYte(ent);
+    public static CanboYte fromFhir(Practitioner obj) {
+        if(obj == null) return null;
+        return new CanboYte(obj);
     }
     
-    public static CanboYte fromReference(BaseReference ref) {
-        if(ref != null && ref.reference != null) {
-            var ent = ServiceFactory.getPractitionerService().getByFhirId(ref.reference).orElseThrow();
-            return fromEntity(ent);
+    public static CanboYte fromReference(Reference ref) {
+        if(ref != null && ref.hasReference()) {
+            var ent = ServiceFactory.getPractitionerService().getById(ref.getReference());
+            return fromFhir(ent);
         }
         
         return null;
     }
     
-    public static PractitionerEntity toEntity(CanboYte dto) {
+    public static Practitioner toFhir(CanboYte dto) {
         if(dto == null) return null;
         
-        var ent = ServiceFactory.getPractitionerService().getByFhirId(dto.fhirId).orElse(null);
+        var ent = ServiceFactory.getPractitionerService().getById(dto.id);
         if(ent == null) {
-            ent = new PractitionerEntity();
-            ent.fhirId = StringUtil.generateUID(); 
+            ent = new Practitioner();
+            ent.setId(StringUtil.generateUID()); 
         }
         
-        ent.name = listOf(new BaseHumanName(dto.ten));
-        ent.identifier = listOf(new BaseIdentifier(dto.chungChiHanhNghe, CodeSystem.CHUNG_CHI_HANH_NGHE));
+        ent.addName(createHumanName(dto.ten));
+        ent.setIdentifier(listOf(createIdentifier(dto.chungChiHanhNghe, CodeSystemValue.CHUNG_CHI_HANH_NGHE)));
         
         return ent;
     }

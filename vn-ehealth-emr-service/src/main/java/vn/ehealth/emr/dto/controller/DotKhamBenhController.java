@@ -1,6 +1,5 @@
 package vn.ehealth.emr.dto.controller;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,26 +28,25 @@ public class DotKhamBenhController {
     @Autowired private EncounterService encounterService;
         
     @GetMapping("/get_by_id")
-    public ResponseEntity<?> getById(@RequestParam String fhirId) {
-        var ent = encounterService.getByFhirId(fhirId).get();
-        var dto = DotKhamBenh.fromEntity(ent);
+    public ResponseEntity<?> getById(@RequestParam String id) {
+        var obj = encounterService.getById(id);
+        var dto = DotKhamBenh.fromFhir(obj);
         return ResponseEntity.ok(dto);
     }
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
-        var lst = DataConvertUtil.transform(encounterService.getAll(), x -> DotKhamBenh.fromEntity(x));
+        var lst = DataConvertUtil.transform(encounterService.getAll(), x -> DotKhamBenh.fromFhir(x));
         return ResponseEntity.ok(lst);
     }
     
     @PostMapping("/create_or_update")
     public ResponseEntity<?> createOrUpdate(@RequestBody DotKhamBenh dto) {
         try {
-            var ent = DotKhamBenh.toEntity(dto);
-            ent.active = true;
-            ent.resCreated = new Date();
-            ent = encounterService.save(ent);
-            var result = Map.of("success", true, "entity", ent);
+            var obj = DotKhamBenh.toFhir(dto);
+            obj = encounterService.save(obj);
+            dto = DotKhamBenh.fromFhir(obj);
+            var result = Map.of("success", true, "dto", dto);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save entity: ", e);

@@ -1,12 +1,13 @@
 package vn.ehealth.emr.model.dto;
 
 import vn.ehealth.emr.service.ServiceFactory;
-import vn.ehealth.emr.utils.Constants.CodeSystem;
-import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
-import vn.ehealth.hl7.fhir.core.entity.BaseReference;
+import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
-import vn.ehealth.hl7.fhir.provider.entity.LocationEntity;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+import static vn.ehealth.emr.utils.FhirUtil.*;
+
+import org.hl7.fhir.r4.model.Location;
+import org.hl7.fhir.r4.model.Reference;
 
 public class KhoaDieuTri extends BaseModelDTO {
 
@@ -18,40 +19,40 @@ public class KhoaDieuTri extends BaseModelDTO {
         super();
     }
     
-    public KhoaDieuTri(LocationEntity ent) {
+    public KhoaDieuTri(Location ent) {
         super(ent);
         if(ent == null) return;
         
-        this.ma = ent.getIdentifier();
-        this.ten = ent.name;
-        this.dmLoaiKhoa = new DanhMuc(ent.getTypeBySystem(CodeSystem.KHOA_DIEU_TRI));
+        this.ma = ent.hasIdentifier()? ent.getIdentifierFirstRep().getValue() : "";
+        this.ten = ent.hasName()? ent.getName() : "";
+        this.dmLoaiKhoa = new DanhMuc(findConceptBySystem(ent.getType(), CodeSystemValue.KHOA_DIEU_TRI));
     }
     
-    public static KhoaDieuTri fromEntity(LocationEntity ent) {
+    public static KhoaDieuTri fromFhir(Location ent) {
         if(ent == null) return null;
         return new KhoaDieuTri(ent);        
     }
     
-    public static KhoaDieuTri fromReference(BaseReference ref) {
-        if(ref != null && ref.reference != null) {
-            var ent = ServiceFactory.getLocationService().getByFhirId(ref.reference).orElseThrow();
-            return fromEntity(ent);
+    public static KhoaDieuTri fromReference(Reference ref) {
+        if(ref != null && ref.hasReference()) {
+            var ent = ServiceFactory.getLocationService().getById(ref.getReference());
+            return fromFhir(ent);
         }
         return null;        
     }
     
-    public static LocationEntity toEntity(KhoaDieuTri dto) {
+    public static Location toFhir(KhoaDieuTri dto) {
         if(dto == null) return null;
-        var ent = ServiceFactory.getLocationService().getByFhirId(dto.fhirId).orElse(null);
+        var ent = ServiceFactory.getLocationService().getById(dto.id);
         
         if(ent == null) {
-            ent = new LocationEntity();
-            ent.fhirId = ent.fhirId = StringUtil.generateUID();
+            ent = new Location();
+            ent.setId(StringUtil.generateUID());
         }
         
-        ent.identifier = listOf(new BaseIdentifier(dto.ma, CodeSystem.CO_SO_KHAM_BENH));
-        ent.name = dto.ten;
-        ent.type = listOf(DanhMuc.toBaseCodeableConcept(dto.dmLoaiKhoa, CodeSystem.KHOA_DIEU_TRI));
+        ent.setIdentifier(listOf(createIdentifier(dto.ma, CodeSystemValue.CO_SO_KHAM_BENH)));
+        ent.setName(dto.ten);
+        ent.setType(listOf(DanhMuc.toConcept(dto.dmLoaiKhoa, CodeSystemValue.KHOA_DIEU_TRI)));
         return ent;
     }
 }
