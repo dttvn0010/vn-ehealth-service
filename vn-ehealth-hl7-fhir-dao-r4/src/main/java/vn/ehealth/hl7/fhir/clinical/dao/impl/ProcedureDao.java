@@ -1,17 +1,13 @@
 package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -22,112 +18,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
-import vn.ehealth.hl7.fhir.clinical.dao.IProcedure;
-import vn.ehealth.hl7.fhir.clinical.dao.transform.ProcedureEntityToFHIRProcedure;
 import vn.ehealth.hl7.fhir.clinical.entity.ProcedureEntity;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 
 @Repository
-public class ProcedureDao implements IProcedure {
+public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    ProcedureEntityToFHIRProcedure procedureEntityToFHIRProcedure;
-
-    @Override
-    public Procedure create(FhirContext fhirContext, Procedure object) {
-        ProcedureEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewProcedureEntity(object, version, null);
-            // save ProcedureEntity database
-            mongo.save(entity);
-            return procedureEntityToFHIRProcedure.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    public Procedure update(FhirContext fhirContext, Procedure object, IdType idType) {
-        ProcedureEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, ProcedureEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove ProcedureEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save ProcedureEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                ProcedureEntity entity = createNewProcedureEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return procedureEntityToFHIRProcedure.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Procedure read(FhirContext fhirContext, IdType idType) {
-        if (idType != null) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ProcedureEntity entity = mongo.findOne(query, ProcedureEntity.class);
-            if (entity != null) {
-                return procedureEntityToFHIRProcedure.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Procedure remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ProcedureEntity entity = mongo.findOne(query, ProcedureEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return procedureEntityToFHIRProcedure.transform(entity);
-            }
-        }
-        return null;
-    }
-    
-    @Override
-    public Procedure readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query
-                        .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                ProcedureEntity entity = mongo.findOne(query, ProcedureEntity.class);
-                if (entity != null) {
-                    return procedureEntityToFHIRProcedure.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
             TokenParam category, TokenParam code, ReferenceParam context, DateRangeParam date,
             ReferenceParam definition, ReferenceParam encounter, TokenParam identifier, ReferenceParam location,
@@ -153,14 +53,13 @@ public class ProcedureDao implements IProcedure {
         List<ProcedureEntity> procedureEntitys = mongo.find(query, ProcedureEntity.class);
         if (procedureEntitys != null) {
             for (ProcedureEntity item : procedureEntitys) {
-                Procedure procedure = procedureEntityToFHIRProcedure.transform(item);
+                Procedure procedure = transform(item);
                 resources.add(procedure);
             }
         }
         return resources;
     }
 
-    @Override
     public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
             TokenParam category, TokenParam code, ReferenceParam context, DateRangeParam date,
             ReferenceParam definition, ReferenceParam encounter, TokenParam identifier, ReferenceParam location,
@@ -179,20 +78,6 @@ public class ProcedureDao implements IProcedure {
         return total;
     }
 
-    private ProcedureEntity createNewProcedureEntity(Procedure obj, int version, String fhirId) {
-        var ent = ProcedureEntity.fromProcedure(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
-    }
 
     private Criteria setParamToCriteria(TokenParam active, ReferenceParam bassedOn, TokenParam category,
             TokenParam code, ReferenceParam context, DateRangeParam date, ReferenceParam definition,
@@ -317,6 +202,26 @@ public class ProcedureDao implements IProcedure {
             }
         }
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "Procedure-v1.0";
+    }
+
+    @Override
+    protected ProcedureEntity fromFhir(Procedure obj) {
+        return ProcedureEntity.fromProcedure(obj);
+    }
+
+    @Override
+    protected Procedure toFhir(ProcedureEntity ent) {
+        return ProcedureEntity.toProcedure(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return ProcedureEntity.class;
     }
 
 }

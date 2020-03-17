@@ -7,33 +7,20 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.r4.model.Appointment;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -43,89 +30,23 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import vn.ehealth.hl7.fhir.providers.BaseController;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.schedule.dao.IAppointment;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.schedule.dao.impl.AppointmentDao;
+import vn.ehealth.hl7.fhir.schedule.entity.AppointmentEntity;
 
 @Component
-public class AppointmentProvider implements IResourceProvider {
+public class AppointmentProvider extends BaseController<AppointmentEntity, Appointment> implements IResourceProvider {
 	@Autowired
-	FhirContext fhirContext;
-
-	@Autowired
-	IAppointment appointmentDao;
-
-	private static final Logger log = LoggerFactory.getLogger(AppointmentProvider.class);
+	AppointmentDao appointmentDao;
 
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return Appointment.class;
-	}
-
-	@Create
-	public MethodOutcome createDevice(HttpServletRequest theRequest, @ResourceParam Appointment object) {
-
-		log.debug("Create Appointment Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(true);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		Appointment mongoAppointment = null;
-		try {
-			mongoAppointment = appointmentDao.create(fhirContext, object);
-			List<String> myString = new ArrayList<>();
-			myString.add("Appointment/" + mongoAppointment.getIdElement());
-			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-					"urn:uuid: " + mongoAppointment.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-			method.setId(mongoAppointment.getIdElement());
-			method.setResource(mongoAppointment);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		return method;
-	}
-
-	@Read
-	public Appointment readAppointment(HttpServletRequest request, @IdParam IdType internalId) {
-
-		Appointment object = appointmentDao.read(fhirContext, internalId);
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Appointment/" + internalId.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
-	}
-
-	/**
-	 * @author sonvt
-	 * @param request
-	 * @param idType
-	 * @return read object version
-	 */
-	@Read(version = true)
-	public Appointment readVread(HttpServletRequest request, @IdParam IdType idType) {
-		Appointment object = new Appointment();
-		if (idType.hasVersionIdPart()) {
-			object = appointmentDao.readOrVread(fhirContext, idType);
-		} else {
-			object = appointmentDao.read(fhirContext, idType);
-		}
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Appointment/" + idType.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
 	}
 
 	@Search
@@ -204,46 +125,6 @@ public class AppointmentProvider implements IResourceProvider {
 		}
 	}
 
-	@Delete
-	public Appointment delete(HttpServletRequest request, @IdParam IdType internalId) {
-		Appointment obj = appointmentDao.remove(fhirContext, internalId);
-		if (obj == null) {
-			log.error("Couldn't delete Appointment" + internalId);
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("Appointment is not exit"), OperationOutcome.IssueSeverity.ERROR,
-					OperationOutcome.IssueType.NOTFOUND);
-		}
-		return obj;
-	}
-
-	@Update
-	public MethodOutcome update(@IdParam IdType theId, @ResourceParam Appointment obj) {
-
-		log.debug("Update Appointment Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(false);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		Appointment newAppointment = null;
-		try {
-			newAppointment = appointmentDao.update(fhirContext, obj, theId);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-				"urn:uuid: " + newAppointment.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
-		method.setId(newAppointment.getIdElement());
-		method.setResource(newAppointment);
-		return method;
-	}
-
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
@@ -272,4 +153,9 @@ public class AppointmentProvider implements IResourceProvider {
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
+
+    @Override
+    protected BaseDao<AppointmentEntity, Appointment> getDao() {
+        return appointmentDao;
+    }
 }

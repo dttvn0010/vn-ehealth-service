@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.patient.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.RelatedPerson;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,115 +18,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.patient.dao.IRelatedPerson;
-import vn.ehealth.hl7.fhir.patient.dao.transform.RelatedPersonEntityToFHIRRelatedPerson;
 import vn.ehealth.hl7.fhir.patient.entity.RelatedPersonEntity;
 
 @Repository
-public class RelatedPersonDao implements IRelatedPerson {
+public class RelatedPersonDao extends BaseDao<RelatedPersonEntity, RelatedPerson>{
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    RelatedPersonEntityToFHIRRelatedPerson relatedPersonEntityToFHIRRelatedPerson;
-
-    @Override
-    public RelatedPerson create(FhirContext fhirContext, RelatedPerson object) {
-        RelatedPersonEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewRelatedPersonEntity(object, version, null);
-            // save RelatedPersonEntity database
-            mongo.save(entity);
-            return relatedPersonEntityToFHIRRelatedPerson.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "relatedPerson", key = "#idType")
-    public RelatedPerson update(FhirContext fhirContext, RelatedPerson object, IdType idType) {
-        RelatedPersonEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, RelatedPersonEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove RelatedPersonEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save RelatedPersonEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                RelatedPersonEntity entity = createNewRelatedPersonEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return relatedPersonEntityToFHIRRelatedPerson.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "relatedPerson", key = "#idType")
-    public RelatedPerson read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            RelatedPersonEntity entity = mongo.findOne(query, RelatedPersonEntity.class);
-            if (entity != null) {
-                return relatedPersonEntityToFHIRRelatedPerson.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "relatedPerson", key = "#idType")
-    public RelatedPerson remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            RelatedPersonEntity entity = mongo.findOne(query, RelatedPersonEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return relatedPersonEntityToFHIRRelatedPerson.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public RelatedPerson readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                RelatedPersonEntity entity = mongo.findOne(query, RelatedPersonEntity.class);
-                if (entity != null) {
-                    return relatedPersonEntityToFHIRRelatedPerson.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext ctx, TokenParam active, StringParam address, StringParam addressCity,
             StringParam addressCountry, StringParam addressState, DateRangeParam birthDate, TokenParam email,
             StringParam gender, TokenParam identifier, StringParam name, ReferenceParam patient, TokenParam phone,
@@ -158,14 +52,13 @@ public class RelatedPersonDao implements IRelatedPerson {
             List<RelatedPersonEntity> objResults = mongo.find(qry, RelatedPersonEntity.class);
 
             for (RelatedPersonEntity objEntity : objResults) {
-                resources.add(relatedPersonEntityToFHIRRelatedPerson.transform(objEntity));
+                resources.add(transform(objEntity));
             }
         }
 
         return resources;
     }
 
-    @Override
     public long findMatchesAdvancedTotal(FhirContext ctx, TokenParam active, StringParam address,
             StringParam addressCity, StringParam addressCountry, StringParam addressState, DateRangeParam birthDate,
             TokenParam email, StringParam gender, TokenParam identifier, StringParam name, ReferenceParam patient,
@@ -239,18 +132,23 @@ public class RelatedPersonDao implements IRelatedPerson {
         return criteria;
     }
 
-    private RelatedPersonEntity createNewRelatedPersonEntity(RelatedPerson obj, int version, String fhirId) {
-        var ent = RelatedPersonEntity.fromRelatedPerson(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
+    @Override
+    protected String getProfile() {
+        return "RelatedPerson-v1.0";
+    }
+
+    @Override
+    protected RelatedPersonEntity fromFhir(RelatedPerson obj) {
+        return RelatedPersonEntity.fromRelatedPerson(obj);
+    }
+
+    @Override
+    protected RelatedPerson toFhir(RelatedPersonEntity ent) {
+        return RelatedPersonEntity.toRelatedPerson(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return RelatedPersonEntity.class;
     }
 }

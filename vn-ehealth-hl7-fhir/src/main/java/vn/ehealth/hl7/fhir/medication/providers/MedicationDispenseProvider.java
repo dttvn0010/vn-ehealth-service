@@ -6,34 +6,21 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.MedicationDispense;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -43,91 +30,24 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import vn.ehealth.hl7.fhir.providers.BaseController;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.medication.dao.IMedicationDispense;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.medication.dao.impl.MedicationDispenseDao;
+import vn.ehealth.hl7.fhir.medication.entity.MedicationDispenseEntity;
 
 @Component
-public class MedicationDispenseProvider implements IResourceProvider {
-    @Autowired
-    FhirContext fhirContext;
+public class MedicationDispenseProvider extends BaseController<MedicationDispenseEntity, MedicationDispense> implements IResourceProvider {
 
     @Autowired
-    IMedicationDispense medicationDispenseDao;
-
-    private static final Logger log = LoggerFactory.getLogger(MedicationDispenseProvider.class);
+    MedicationDispenseDao medicationDispenseDao;
 
     @Override
     public Class<? extends IBaseResource> getResourceType() {
         return MedicationDispense.class;
-    }
-
-    @Create
-    public MethodOutcome createMedicationDispense(HttpServletRequest theRequest,
-            @ResourceParam MedicationDispense obj) {
-
-        log.debug("Create MedicationDispense Provider called");
-
-        MethodOutcome method = new MethodOutcome();
-        method.setCreated(true);
-        OperationOutcome opOutcome = new OperationOutcome();
-        method.setOperationOutcome(opOutcome);
-        MedicationDispense mongoMedicationDispense = null;
-        try {
-            mongoMedicationDispense = medicationDispenseDao.create(fhirContext, obj);
-            List<String> myString = new ArrayList<>();
-            myString.add("MedicationDispense/" + mongoMedicationDispense.getIdElement());
-            method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-                    "urn:uuid: " + mongoMedicationDispense.getId(), IssueSeverity.INFORMATION, IssueType.VALUE,
-                    myString));
-            method.setId(mongoMedicationDispense.getIdElement());
-            method.setResource(mongoMedicationDispense);
-        } catch (Exception ex) {
-            if (ex instanceof OperationOutcomeException) {
-                OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-                method.setOperationOutcome(outcomeException.getOutcome());
-            } else {
-                log.error(ex.getMessage());
-                method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-            }
-        }
-        return method;
-    }
-
-    @Read
-    public MedicationDispense readMedicationDispense(HttpServletRequest request, @IdParam IdType internalId) {
-
-        MedicationDispense object = medicationDispenseDao.read(fhirContext, internalId);
-        if (object == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No MedicationDispense/" + internalId.getIdPart()),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-        }
-        return object;
-    }
-
-    /**
-     * @author sonvt
-     * @param request
-     * @param idType
-     * @return read object version
-     */
-    @Read(version = true)
-    public MedicationDispense readVread(HttpServletRequest request, @IdParam IdType idType) {
-        MedicationDispense object = new MedicationDispense();
-        if (idType.hasVersionIdPart()) {
-            object = medicationDispenseDao.readOrVread(fhirContext, idType);
-        } else {
-            object = medicationDispenseDao.read(fhirContext, idType);
-        }
-        if (object == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No MedicationDispense/" + idType.getIdPart()),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-        }
-        return object;
     }
 
     @Search
@@ -213,46 +133,6 @@ public class MedicationDispenseProvider implements IResourceProvider {
         }
     }
 
-    @Delete
-    public MedicationDispense deleteMedicationDispense(HttpServletRequest request, @IdParam IdType internalId) {
-        MedicationDispense obj = medicationDispenseDao.remove(fhirContext, internalId);
-        if (obj == null) {
-            log.error("Couldn't delete MedicationDispense" + internalId);
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("MedicationDispense is not exit"),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-        }
-        return obj;
-    }
-
-    @Update
-    public MethodOutcome updateMedicationDispense(@IdParam IdType theId, @ResourceParam MedicationDispense patient) {
-
-        log.debug("Update MedicationDispense Provider called");
-
-        MethodOutcome method = new MethodOutcome();
-        method.setCreated(false);
-        OperationOutcome opOutcome = new OperationOutcome();
-        method.setOperationOutcome(opOutcome);
-        MedicationDispense newMedicationDispense = null;
-        try {
-            newMedicationDispense = medicationDispenseDao.update(fhirContext, patient, theId);
-        } catch (Exception ex) {
-            if (ex instanceof OperationOutcomeException) {
-                OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-                method.setOperationOutcome(outcomeException.getOutcome());
-            } else {
-                log.error(ex.getMessage());
-                method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-            }
-        }
-        method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-                "urn:uuid: " + newMedicationDispense.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
-        method.setId(newMedicationDispense.getIdElement());
-        method.setResource(newMedicationDispense);
-        return method;
-    }
-
     @Operation(name = "$total", idempotent = true)
     public Parameters getTotal(HttpServletRequest request,
             @OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
@@ -285,5 +165,10 @@ public class MedicationDispenseProvider implements IResourceProvider {
                 _security, _content);
         retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
         return retVal;
+    }
+
+    @Override
+    protected BaseDao<MedicationDispenseEntity, MedicationDispense> getDao() {
+        return medicationDispenseDao;
     }
 }

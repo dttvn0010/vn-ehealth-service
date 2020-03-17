@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.medication.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.MedicationAdministration;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,116 +18,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.medication.dao.IMedicationAdministration;
-import vn.ehealth.hl7.fhir.medication.dao.transform.MedicationAdministrationEntityToFHIRMedicationAdministration;
 import vn.ehealth.hl7.fhir.medication.entity.MedicationAdministrationEntity;
 
 @Repository
-public class MedicationAdministrationDao implements IMedicationAdministration {
+public class MedicationAdministrationDao extends BaseDao<MedicationAdministrationEntity, MedicationAdministration> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    MedicationAdministrationEntityToFHIRMedicationAdministration medicationAdministrationEntityToFHIRMedicationAdministration;
-
-    @Override
-    public MedicationAdministration create(FhirContext fhirContext, MedicationAdministration object) {
-        MedicationAdministrationEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewMedicationAdministrationEntity(object, version, null);
-            // save MedicationAdministrationEntity database
-            mongo.save(entity);
-            return medicationAdministrationEntityToFHIRMedicationAdministration.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "medicationAdministration", key = "#idType")
-    public MedicationAdministration update(FhirContext fhirContext, MedicationAdministration object, IdType idType) {
-        MedicationAdministrationEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, MedicationAdministrationEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove MedicationAdministrationEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save MedicationAdministrationEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                MedicationAdministrationEntity entity = createNewMedicationAdministrationEntity(object, version,
-                        fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return medicationAdministrationEntityToFHIRMedicationAdministration.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "medicationAdministration", key = "#idType")
-    public MedicationAdministration read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            MedicationAdministrationEntity entity = mongo.findOne(query, MedicationAdministrationEntity.class);
-            if (entity != null) {
-                return medicationAdministrationEntityToFHIRMedicationAdministration.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "medicationAdministration", key = "#idType")
-    public MedicationAdministration remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            MedicationAdministrationEntity entity = mongo.findOne(query, MedicationAdministrationEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return medicationAdministrationEntityToFHIRMedicationAdministration.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public MedicationAdministration readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                MedicationAdministrationEntity entity = mongo.findOne(query, MedicationAdministrationEntity.class);
-                if (entity != null) {
-                    return medicationAdministrationEntityToFHIRMedicationAdministration.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, TokenParam code, ReferenceParam context,
             ReferenceParam device, DateRangeParam effectiveTime, TokenParam identifier, ReferenceParam medication,
             TokenParam notGiven, ReferenceParam patient, ReferenceParam performer, ReferenceParam prescription,
@@ -160,15 +53,13 @@ public class MedicationAdministrationDao implements IMedicationAdministration {
                 MedicationAdministrationEntity.class);
         if (medicationAdministrationEntitys != null) {
             for (MedicationAdministrationEntity item : medicationAdministrationEntitys) {
-                MedicationAdministration medicationAdministration = medicationAdministrationEntityToFHIRMedicationAdministration
-                        .transform(item);
+                MedicationAdministration medicationAdministration = transform(item);
                 resources.add(medicationAdministration);
             }
         }
         return resources;
     }
 
-    @Override
     public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, TokenParam code,
             ReferenceParam context, ReferenceParam device, DateRangeParam effectiveTime, TokenParam identifier,
             ReferenceParam medication, TokenParam notGiven, ReferenceParam patient, ReferenceParam performer,
@@ -187,21 +78,6 @@ public class MedicationAdministrationDao implements IMedicationAdministration {
         return total;
     }
 
-    private MedicationAdministrationEntity createNewMedicationAdministrationEntity(MedicationAdministration obj,
-            int version, String fhirId) {
-        var ent = MedicationAdministrationEntity.fromMedicationAdministration(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
-    }
 
     private Criteria setParamToCriteria(TokenParam active, TokenParam code, ReferenceParam context,
             ReferenceParam device, DateRangeParam effectiveTime, TokenParam identifier, ReferenceParam medication,
@@ -314,6 +190,26 @@ public class MedicationAdministrationDao implements IMedicationAdministration {
             }
         }
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "MedicationAdministration-v1.0";
+    }
+
+    @Override
+    protected MedicationAdministrationEntity fromFhir(MedicationAdministration obj) {
+        return MedicationAdministrationEntity.fromMedicationAdministration(obj);
+    }
+
+    @Override
+    protected MedicationAdministration toFhir(MedicationAdministrationEntity ent) {
+        return MedicationAdministrationEntity.toMedicationAdministration(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return MedicationAdministrationEntity.class;
     }
 
 }

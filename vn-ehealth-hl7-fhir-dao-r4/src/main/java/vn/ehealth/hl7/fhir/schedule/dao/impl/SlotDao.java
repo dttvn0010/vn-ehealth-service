@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.schedule.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.Slot;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,115 +18,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.schedule.dao.ISlot;
-import vn.ehealth.hl7.fhir.schedule.dao.transform.SlotEntityToFHIRSlot;
 import vn.ehealth.hl7.fhir.schedule.entity.SlotEntity;
 
 @Repository
-public class SlotDao implements ISlot {
+public class SlotDao extends BaseDao<SlotEntity, Slot> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    SlotEntityToFHIRSlot slotEntityToFHIRSlot;
-
-    @Override
-    public Slot create(FhirContext fhirContext, Slot object) {
-        SlotEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewSlotEntity(object, version, null);
-            // save SlotEntity database
-            mongo.save(entity);
-            return slotEntityToFHIRSlot.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "slot", key = "#idType")
-    public Slot update(FhirContext fhirContext, Slot object, IdType idType) {
-        SlotEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, SlotEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove SlotEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save SlotEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                SlotEntity entity = createNewSlotEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return slotEntityToFHIRSlot.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "slot", key = "#idType")
-    public Slot read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            SlotEntity entity = mongo.findOne(query, SlotEntity.class);
-            if (entity != null) {
-                return slotEntityToFHIRSlot.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "slot", key = "#idType")
-    public Slot remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            SlotEntity entity = mongo.findOne(query, SlotEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return slotEntityToFHIRSlot.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Slot readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                SlotEntity entity = mongo.findOne(query, SlotEntity.class);
-                if (entity != null) {
-                    return slotEntityToFHIRSlot.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, TokenParam status, TokenParam identifier,
             ReferenceParam schedule, DateRangeParam date, TokenParam slotType, TokenParam resid,
             DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
@@ -156,14 +50,13 @@ public class SlotDao implements ISlot {
         List<SlotEntity> slotEntitys = mongo.find(query, SlotEntity.class);
         if (slotEntitys != null) {
             for (SlotEntity item : slotEntitys) {
-                Slot slot = slotEntityToFHIRSlot.transform(item);
+                Slot slot = transform(item);
                 resources.add(slot);
             }
         }
         return resources;
     }
 
-    @Override
     public long findMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, TokenParam status,
             TokenParam identifier, ReferenceParam schedule, DateRangeParam date, TokenParam slotType, TokenParam resid,
             DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
@@ -210,18 +103,23 @@ public class SlotDao implements ISlot {
         return criteria;
     }
 
-    private SlotEntity createNewSlotEntity(Slot obj, int version, String fhirId) {
-        var ent = SlotEntity.fromSlot(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
+    @Override
+    protected String getProfile() {
+        return "Slot-v1.0";
+    }
+
+    @Override
+    protected SlotEntity fromFhir(Slot obj) {
+        return SlotEntity.fromSlot(obj);
+    }
+
+    @Override
+    protected Slot toFhir(SlotEntity ent) {
+        return SlotEntity.toSlot(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return SlotEntity.class;
     }
 }

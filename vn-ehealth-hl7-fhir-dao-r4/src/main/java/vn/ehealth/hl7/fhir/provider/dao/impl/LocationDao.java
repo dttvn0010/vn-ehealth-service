@@ -1,21 +1,13 @@
 package vn.ehealth.hl7.fhir.provider.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Location;
-import org.hl7.fhir.r4.model.Location.LocationStatus;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -27,117 +19,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.provider.dao.ILocation;
-import vn.ehealth.hl7.fhir.provider.dao.transform.LocationEntityToFHIRLocation;
 import vn.ehealth.hl7.fhir.provider.entity.LocationEntity;
 
 @Repository
-public class LocationDao implements ILocation {
-
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    LocationEntityToFHIRLocation locationEntityToFHIRLocation;
-
-    @Override
-    public Location create(FhirContext fhirContext, Location object) {
-        LocationEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewLocationEntity(object, version, null);
-            // save LocationEntity database
-            mongo.save(entity);
-            return locationEntityToFHIRLocation.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "location", key = "#idType")
-    public Location update(FhirContext fhirContext, Location object, IdType idType) {
-        LocationEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, LocationEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove LocationEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            entityOld.status = (LocationStatus.INACTIVE.toCode());
-            mongo.save(entityOld);
-            // save LocationEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                LocationEntity entity = createNewLocationEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return locationEntityToFHIRLocation.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "location", key = "#idType")
-    public Location read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            LocationEntity entity = mongo.findOne(query, LocationEntity.class);
-            if (entity != null) {
-                return locationEntityToFHIRLocation.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Location readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                LocationEntity entity = mongo.findOne(query, LocationEntity.class);
-                if (entity != null) {
-                    return locationEntityToFHIRLocation.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "location", key = "#idType")
-    public Location remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            LocationEntity entity = mongo.findOne(query, LocationEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                entity.status = (LocationStatus.INACTIVE.toCode());
-                mongo.save(entity);
-                return locationEntityToFHIRLocation.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
+public class LocationDao extends BaseDao<LocationEntity, Location> {
+      
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext ctx, StringParam address, StringParam addressCity,
             StringParam addressCountry, StringParam addressState, ReferenceParam endpoint, TokenParam identifier,
             StringParam name, TokenParam near, QuantityParam nearDistance, TokenParam operationalStatus,
@@ -219,13 +110,12 @@ public class LocationDao implements ILocation {
             }
             List<LocationEntity> locationResults = mongo.find(qry, LocationEntity.class);
             for (LocationEntity locationEntity : locationResults) {
-                resources.add(locationEntityToFHIRLocation.transform(locationEntity));
+                resources.add(transform(locationEntity));
             }
         }
         return resources;
     }
 
-    @Override
     public long findMatchesAdvancedTotal(FhirContext ctx, StringParam address, StringParam addressCity,
             StringParam addressCountry, StringParam addressState, ReferenceParam endpoint, TokenParam identifier,
             StringParam name, TokenParam near, QuantityParam nearDistance, TokenParam operationalStatus,
@@ -305,18 +195,23 @@ public class LocationDao implements ILocation {
         return count;
     }
 
-    private LocationEntity createNewLocationEntity(Location obj, int version, String fhirId) {
-        var ent = LocationEntity.fromLocation(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
+    @Override
+    protected String getProfile() {
+        return "Location-v1.0";
+    }
+
+    @Override
+    protected LocationEntity fromFhir(Location obj) {
+        return LocationEntity.fromLocation(obj);
+    }
+
+    @Override
+    protected Location toFhir(LocationEntity ent) {
+        return LocationEntity.toLocation(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return LocationEntity.class;
     }
 }

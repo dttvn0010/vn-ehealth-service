@@ -6,10 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Organization;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
@@ -21,18 +18,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -42,94 +32,26 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import vn.ehealth.hl7.fhir.providers.BaseController;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.provider.dao.IOrganization;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.provider.dao.impl.OrganizationDao;
+import vn.ehealth.hl7.fhir.provider.entity.OrganizationEntity;
 
 @Component
-public class OrganizationProvider implements IResourceProvider {
-	@Autowired
-	FhirContext fhirContext;
+public class OrganizationProvider extends BaseController<OrganizationEntity, Organization> implements IResourceProvider {
 
 	@Autowired
-	IOrganization organizationDao;
+	OrganizationDao organizationDao;
 
 	private static final Logger log = LoggerFactory.getLogger(OrganizationProvider.class);
 
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return Organization.class;
-	}
-
-	@Create
-	public MethodOutcome create(HttpServletRequest theRequest, @ResourceParam Organization obj) {
-		log.debug("Create Organization Provider called");
-		// String permissionAccept =
-		// TerminologyOauth2Keys.CodeSystemOauth2.CODESYSTEM_ADD;
-		// OAuth2Util.checkOauth2(theRequest, permissionAccept);
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(true);
-		OperationOutcome opOutcome = new OperationOutcome();
-
-		method.setOperationOutcome(opOutcome);
-		Organization mongoObj = null;
-		try {
-			mongoObj = organizationDao.create(fhirContext, obj);
-			List<String> myString = new ArrayList<>();
-			myString.add("Organization/" + mongoObj.getIdElement());
-			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-					"urn:uuid: " + mongoObj.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-			method.setId(mongoObj.getIdElement());
-			method.setResource(mongoObj);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		return method;
-	}
-
-	@Read
-	public Organization readOrganization(HttpServletRequest request, @IdParam IdType internalId) {
-		log.debug("Read Organization Provider called");
-		// String permissionAccept =
-		// TerminologyOauth2Keys.CodeSystemOauth2.CODESYSTEM_VIEW;
-		// OAuth2Util.checkOauth2(request, permissionAccept);
-		Organization object = organizationDao.read(fhirContext, internalId);
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Location/" + internalId.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
-	}
-
-	/**
-	 * @author sonvt
-	 * @param request
-	 * @param idType
-	 * @return read object version
-	 */
-	@Read(version = true)
-	public Organization readVread(HttpServletRequest request, @IdParam IdType idType) {
-		Organization object = new Organization();
-		if (idType.hasVersionIdPart()) {
-			object = organizationDao.readOrVread(fhirContext, idType);
-		} else {
-			object = organizationDao.read(fhirContext, idType);
-		}
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Organization/" + idType.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
 	}
 
 	@Search
@@ -211,22 +133,6 @@ public class OrganizationProvider implements IResourceProvider {
 		}
 	}
 
-	@Delete
-	public Organization removeOrganization(HttpServletRequest request, @IdParam IdType internalId) {
-		log.debug("delete Organization Provider called");
-		// String permissionAccept =
-		// TerminologyOauth2Keys.CodeSystemOauth2.CODESYSTEM_DELETE;
-		// OAuth2Util.checkOauth2(request, permissionAccept);
-		Organization organization = organizationDao.remove(fhirContext, internalId);
-		if (organization == null) {
-			log.error("Couldn't remove Organization" + internalId);
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("Organization is not exit"), OperationOutcome.IssueSeverity.ERROR,
-					OperationOutcome.IssueType.NOTFOUND);
-		}
-		return organization;
-	}
-
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
@@ -256,4 +162,9 @@ public class OrganizationProvider implements IResourceProvider {
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
+
+    @Override
+    protected BaseDao<OrganizationEntity, Organization> getDao() {
+        return organizationDao;
+    }
 }

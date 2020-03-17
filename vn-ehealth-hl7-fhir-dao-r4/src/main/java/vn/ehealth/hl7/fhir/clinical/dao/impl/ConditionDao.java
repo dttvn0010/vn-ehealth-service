@@ -1,17 +1,13 @@
 package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Condition;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -23,112 +19,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
-import vn.ehealth.hl7.fhir.clinical.dao.ICondition;
-import vn.ehealth.hl7.fhir.clinical.dao.transform.ConditionEntityToFHIRCondition;
 import vn.ehealth.hl7.fhir.clinical.entity.ConditionEntity;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 
 @Repository
-public class ConditionDao implements ICondition {
+public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    ConditionEntityToFHIRCondition conditionEntityToFHIRCondition;
-
-    @Override
-    public Condition create(FhirContext fhirContext, Condition object) {
-        ConditionEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewConditionEntity(object, version, null);
-            // save ConditionEntity database
-            mongo.save(entity);
-            return conditionEntityToFHIRCondition.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    public Condition update(FhirContext fhirContext, Condition object, IdType idType) {
-        ConditionEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, ConditionEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove ConditionEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save ConditionEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                ConditionEntity entity = createNewConditionEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return conditionEntityToFHIRCondition.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Condition read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ConditionEntity entity = mongo.findOne(query, ConditionEntity.class);
-            if (entity != null) {
-                return conditionEntityToFHIRCondition.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Condition remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ConditionEntity entity = mongo.findOne(query, ConditionEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return conditionEntityToFHIRCondition.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Condition readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                ConditionEntity entity = mongo.findOne(query, ConditionEntity.class);
-                if (entity != null) {
-                    return conditionEntityToFHIRCondition.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, QuantityParam abatementAge,
             TokenParam abatementBoolean, DateRangeParam abatementDate, TokenParam abatementString,
             DateRangeParam assertedDate, ReferenceParam asserter, TokenParam bodySite, TokenParam category,
@@ -157,14 +57,13 @@ public class ConditionDao implements ICondition {
         List<ConditionEntity> conditionEntitys = mongo.find(query, ConditionEntity.class);
         if (conditionEntitys != null) {
             for (ConditionEntity item : conditionEntitys) {
-                Condition condition = conditionEntityToFHIRCondition.transform(item);
+                Condition condition = transform(item);
                 resources.add(condition);
             }
         }
         return resources;
     }
 
-    @Override
     public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, QuantityParam abatementAge,
             TokenParam abatementBoolean, DateRangeParam abatementDate, TokenParam abatementString,
             DateRangeParam assertedDate, ReferenceParam asserter, TokenParam bodySite, TokenParam category,
@@ -185,21 +84,6 @@ public class ConditionDao implements ICondition {
         }
         total = mongo.count(query, ConditionEntity.class);
         return total;
-    }
-
-    private ConditionEntity createNewConditionEntity(Condition obj, int version, String fhirId) {
-        var ent = ConditionEntity.fromCondition(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;        
     }
 
     private Criteria setParamToCriteria(TokenParam active, QuantityParam abatementAge, TokenParam abatementBoolean,
@@ -346,5 +230,25 @@ public class ConditionDao implements ICondition {
             criteria.and("verificationStatus").is(verificationStatus.getValue());
         }
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "Condition-v1.0";
+    }
+
+    @Override
+    protected ConditionEntity fromFhir(Condition obj) {
+        return ConditionEntity.fromCondition(obj);
+    }
+
+    @Override
+    protected Condition toFhir(ConditionEntity ent) {
+        return ConditionEntity.toCondition(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return ConditionEntity.class;
     }
 }

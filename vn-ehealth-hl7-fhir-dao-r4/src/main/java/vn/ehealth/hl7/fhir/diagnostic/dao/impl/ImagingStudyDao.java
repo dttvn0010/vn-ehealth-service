@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.diagnostic.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.ImagingStudy;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -24,115 +17,16 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
-import vn.ehealth.hl7.fhir.diagnostic.dao.IImagingStudy;
-import vn.ehealth.hl7.fhir.diagnostic.dao.transform.ImagingStudyEntityToFHIRImagingStudy;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.diagnostic.entity.ImagingStudyEntity;
 
 @Repository
-public class ImagingStudyDao implements IImagingStudy {
+public class ImagingStudyDao extends BaseDao<ImagingStudyEntity, ImagingStudy> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    ImagingStudyEntityToFHIRImagingStudy imagingStudyEntityToFHIRImagingStudy;
-
-    @Override
-    public ImagingStudy create(FhirContext fhirContext, ImagingStudy object) {
-        ImagingStudyEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewImagingStudyEntity(object, version, null);
-            // save ImagingStudyEntity database
-            mongo.save(entity);
-            return imagingStudyEntityToFHIRImagingStudy.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "imagingStudy", key = "#idType")
-    public ImagingStudy update(FhirContext fhirContext, ImagingStudy object, IdType idType) {
-        ImagingStudyEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, ImagingStudyEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove ImagingStudyEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save ImagingStudyEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                ImagingStudyEntity entity = createNewImagingStudyEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return imagingStudyEntityToFHIRImagingStudy.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "imagingStudy", key = "#idType")
-    public ImagingStudy read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ImagingStudyEntity entity = mongo.findOne(query, ImagingStudyEntity.class);
-            if (entity != null) {
-                return imagingStudyEntityToFHIRImagingStudy.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "imagingStudy", key = "#idType")
-    public ImagingStudy remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ImagingStudyEntity entity = mongo.findOne(query, ImagingStudyEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return imagingStudyEntityToFHIRImagingStudy.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public ImagingStudy readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                ImagingStudyEntity entity = mongo.findOne(query, ImagingStudyEntity.class);
-                if (entity != null) {
-                    return imagingStudyEntityToFHIRImagingStudy.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public List<Resource> search(FhirContext fhirContext, TokenParam active, TokenParam resid,
+   @SuppressWarnings("deprecation")
+   public List<Resource> search(FhirContext fhirContext, TokenParam active, TokenParam resid,
             DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
             StringParam _content, StringParam _page, String sortParam, Integer count) {
         List<Resource> resources = new ArrayList<>();
@@ -152,14 +46,13 @@ public class ImagingStudyDao implements IImagingStudy {
         List<ImagingStudyEntity> ImagingStudyEntitys = mongo.find(query, ImagingStudyEntity.class);
         if (ImagingStudyEntitys != null) {
             for (ImagingStudyEntity item : ImagingStudyEntitys) {
-                ImagingStudy ImagingStudy = imagingStudyEntityToFHIRImagingStudy.transform(item);
+                ImagingStudy ImagingStudy = transform(item);
                 resources.add(ImagingStudy);
             }
         }
         return resources;
     }
 
-    @Override
     public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, TokenParam resid,
             DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
             StringParam _content) {
@@ -174,21 +67,6 @@ public class ImagingStudyDao implements IImagingStudy {
         return total;
     }
 
-    private ImagingStudyEntity createNewImagingStudyEntity(ImagingStudy obj, int version, String fhirId) {
-        var ent = ImagingStudyEntity.fromImagingStudy(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
-    }
-
     private Criteria setParamToCriteria(TokenParam active, TokenParam resid, DateRangeParam _lastUpdated,
             TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
         Criteria criteria = null;
@@ -200,5 +78,25 @@ public class ImagingStudyDao implements IImagingStudy {
         }
 
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "ImagingStudy-v1.0";
+    }
+
+    @Override
+    protected ImagingStudyEntity fromFhir(ImagingStudy obj) {
+        return ImagingStudyEntity.fromImagingStudy(obj);
+    }
+
+    @Override
+    protected ImagingStudy toFhir(ImagingStudyEntity ent) {
+        return ImagingStudyEntity.toImagingStudy(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return ImagingStudyEntity.class;
     }
 }

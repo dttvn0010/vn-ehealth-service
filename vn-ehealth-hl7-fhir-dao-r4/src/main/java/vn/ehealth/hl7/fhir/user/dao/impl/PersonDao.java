@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.user.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Person;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,115 +18,17 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.user.dao.IPerson;
-import vn.ehealth.hl7.fhir.user.dao.transform.PersonEntityToFHIRPerson;
 import vn.ehealth.hl7.fhir.user.entity.PersonEntity;
 
 @Repository
-public class PersonDao implements IPerson {
+public class PersonDao extends BaseDao<PersonEntity, Person> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    PersonEntityToFHIRPerson personEntityToFHIRPerson;
-
-    @Override
-    public Person create(FhirContext fhirContext, Person object) {
-        PersonEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewPersonEntity(object, version, null);
-            // save PersonEntity database
-            mongo.save(entity);
-            return personEntityToFHIRPerson.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "person", key = "#idType")
-    public Person update(FhirContext fhirContext, Person object, IdType idType) {
-        PersonEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, PersonEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove PersonEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save PersonEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                PersonEntity entity = createNewPersonEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return personEntityToFHIRPerson.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "person", key = "#idType")
-    public Person read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            PersonEntity entity = mongo.findOne(query, PersonEntity.class);
-            if (entity != null) {
-                return personEntityToFHIRPerson.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "person", key = "#idType")
-    public Person remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            PersonEntity entity = mongo.findOne(query, PersonEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return personEntityToFHIRPerson.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Person readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                PersonEntity entity = mongo.findOne(query, PersonEntity.class);
-                if (entity != null) {
-                    return personEntityToFHIRPerson.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+  
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext ctx, TokenParam active, StringParam address, StringParam addressCity,
             StringParam addressCountry, StringParam addressState, DateRangeParam birthDate, TokenParam email,
             StringParam gender, TokenParam identifier, StringParam name, ReferenceParam patient, TokenParam phone,
@@ -158,14 +53,13 @@ public class PersonDao implements IPerson {
             List<PersonEntity> objResults = mongo.find(qry, PersonEntity.class);
 
             for (PersonEntity objEntity : objResults) {
-                resources.add(personEntityToFHIRPerson.transform(objEntity));
+                resources.add(transform(objEntity));
             }
         }
 
         return resources;
     }
 
-    @Override
     public long findMatchesAdvancedTotal(FhirContext ctx, TokenParam active, StringParam address,
             StringParam addressCity, StringParam addressCountry, StringParam addressState, DateRangeParam birthDate,
             TokenParam email, StringParam gender, TokenParam identifier, StringParam name, ReferenceParam patient,
@@ -241,18 +135,23 @@ public class PersonDao implements IPerson {
         return criteria;
     }
 
-    private PersonEntity createNewPersonEntity(Person obj, int version, String fhirId) {
-        var ent = PersonEntity.fromPerson(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
+    @Override
+    protected String getProfile() {
+        return "Person-v1.0";
+    }
+
+    @Override
+    protected PersonEntity fromFhir(Person obj) {
+        return PersonEntity.fromPerson(obj);
+    }
+
+    @Override
+    protected Person toFhir(PersonEntity ent) {
+        return PersonEntity.toPerson(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return PersonEntity.class;
     }
 }

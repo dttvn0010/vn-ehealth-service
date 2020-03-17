@@ -6,34 +6,21 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Person;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -43,89 +30,24 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import vn.ehealth.hl7.fhir.providers.BaseController;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.user.dao.IPerson;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.user.dao.impl.PersonDao;
+import vn.ehealth.hl7.fhir.user.entity.PersonEntity;
 
 @Component
-public class PersonProvider implements IResourceProvider {
-	@Autowired
-	FhirContext fhirContext;
+public class PersonProvider extends BaseController<PersonEntity, Person> implements IResourceProvider {
 
 	@Autowired
-	IPerson personDao;
-
-	private static final Logger log = LoggerFactory.getLogger(PersonProvider.class);
+	PersonDao personDao;
 
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return Person.class;
-	}
-
-	@Create
-	public MethodOutcome createPerson(HttpServletRequest theRequest, @ResourceParam Person obj) {
-
-		log.debug("Create Person Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(true);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		Person mongoPerson = null;
-		try {
-			mongoPerson = personDao.create(fhirContext, obj);
-			List<String> myString = new ArrayList<>();
-			myString.add("Person/" + mongoPerson.getIdElement());
-			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-					"urn:uuid: " + mongoPerson.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-			method.setId(mongoPerson.getIdElement());
-			method.setResource(mongoPerson);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		return method;
-	}
-
-	@Read
-	public Person readPerson(HttpServletRequest request, @IdParam IdType internalId) {
-
-		Person object = personDao.read(fhirContext, internalId);
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Person/" + internalId.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
-	}
-
-	/**
-	 * @author sonvt
-	 * @param request
-	 * @param idType
-	 * @return read object version
-	 */
-	@Read(version = true)
-	public Person readVread(HttpServletRequest request, @IdParam IdType idType) {
-		Person object = new Person();
-		if (idType.hasVersionIdPart()) {
-			object = personDao.readOrVread(fhirContext, idType);
-		} else {
-			object = personDao.read(fhirContext, idType);
-		}
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Person/" + idType.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
 	}
 
 	@Search
@@ -207,46 +129,6 @@ public class PersonProvider implements IResourceProvider {
 		}
 	}
 
-	@Delete
-	public Person delete(HttpServletRequest request, @IdParam IdType internalId) {
-		Person obj = personDao.remove(fhirContext, internalId);
-		if (obj == null) {
-			log.error("Couldn't delete Person" + internalId);
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("Person is not exit"), OperationOutcome.IssueSeverity.ERROR,
-					OperationOutcome.IssueType.NOTFOUND);
-		}
-		return obj;
-	}
-
-	@Update
-	public MethodOutcome update(@IdParam IdType theId, @ResourceParam Person obj) {
-
-		log.debug("Update Person Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(false);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		Person newPerson = null;
-		try {
-			newPerson = personDao.update(fhirContext, obj, theId);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-				"urn:uuid: " + newPerson.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
-		method.setId(newPerson.getIdElement());
-		method.setResource(newPerson);
-		return method;
-	}
-
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
 			@OptionalParam(name = "active") TokenParam active,
@@ -277,4 +159,9 @@ public class PersonProvider implements IResourceProvider {
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
+
+    @Override
+    protected BaseDao<PersonEntity, Person> getDao() {
+        return personDao;
+    }
 }

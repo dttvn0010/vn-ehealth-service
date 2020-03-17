@@ -7,33 +7,20 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.r4.model.CarePlan;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -43,67 +30,24 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import vn.ehealth.hl7.fhir.clinical.dao.ICarePlan;
+import vn.ehealth.hl7.fhir.providers.BaseController;
+import vn.ehealth.hl7.fhir.clinical.dao.impl.CarePlanDao;
+import vn.ehealth.hl7.fhir.clinical.entity.CarePlanEntity;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 
 @Component
-public class CarePlanProvider implements IResourceProvider {
+public class CarePlanProvider extends BaseController<CarePlanEntity, CarePlan> implements IResourceProvider {
+    
     @Autowired
-    FhirContext fhirContext;
-
-    @Autowired
-    ICarePlan carePlanDao;
-
-    private static final Logger log = LoggerFactory.getLogger(CarePlanProvider.class);
+    CarePlanDao carePlanDao;
 
     @Override
     public Class<? extends IBaseResource> getResourceType() {
         return CarePlan.class;
-    }
-
-    @Create
-    public MethodOutcome createCarePlan(HttpServletRequest theRequest, @ResourceParam CarePlan obj) {
-
-        log.debug("Create CarePlan Provider called");
-
-        MethodOutcome method = new MethodOutcome();
-        method.setCreated(true);
-        CarePlan mongoCarePlan = null;
-        try {
-            mongoCarePlan = carePlanDao.create(fhirContext, obj);
-            List<String> myString = new ArrayList<>();
-            myString.add("CarePlan/" + mongoCarePlan.getIdElement());
-            method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-                    "urn:uuid: " + mongoCarePlan.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-            method.setId(mongoCarePlan.getIdElement());
-            method.setResource(mongoCarePlan);
-        } catch (Exception ex) {
-            if (ex instanceof OperationOutcomeException) {
-                OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-                method.setOperationOutcome(outcomeException.getOutcome());
-                method.setCreated(false);
-            } else {
-                log.error(ex.getMessage());
-                method.setCreated(false);
-                method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-            }
-        }
-        return method;
-    }
-
-    @Read
-    public CarePlan readCarePlan(HttpServletRequest request, @IdParam IdType internalId) {
-
-        CarePlan object = carePlanDao.read(fhirContext, internalId);
-        if (object == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No CarePlan/" + internalId.getIdPart()),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-        }
-        return object;
     }
 
     @Search
@@ -196,69 +140,6 @@ public class CarePlanProvider implements IResourceProvider {
         }
     }
 
-    @Delete
-    public CarePlan deleteCarePlan(HttpServletRequest request, @IdParam IdType internalId) {
-        CarePlan obj = carePlanDao.remove(fhirContext, internalId);
-        if (obj == null) {
-            log.error("Couldn't delete CarePlan" + internalId);
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("CarePlan is not exit"), OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.NOTFOUND);
-        }
-        return obj;
-    }
-
-    @Update
-    public MethodOutcome updateCarePlan(@IdParam IdType theId, @ResourceParam CarePlan patient) {
-
-        log.debug("Update CarePlan Provider called");
-
-        MethodOutcome method = new MethodOutcome();
-        method.setCreated(false);
-        OperationOutcome opOutcome = new OperationOutcome();
-        method.setOperationOutcome(opOutcome);
-        CarePlan newCarePlan = null;
-        try {
-            newCarePlan = carePlanDao.update(fhirContext, patient, theId);
-        } catch (Exception ex) {
-            if (ex instanceof OperationOutcomeException) {
-                OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-                method.setOperationOutcome(outcomeException.getOutcome());
-                method.setCreated(false);
-            } else {
-                log.error(ex.getMessage());
-                method.setCreated(false);
-                method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-            }
-        }
-        method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-                "urn:uuid: " + newCarePlan.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
-        method.setId(newCarePlan.getIdElement());
-        method.setResource(newCarePlan);
-        return method;
-    }
-
-    /**
-     * @author sonvt
-     * @param request
-     * @param idType
-     * @return read object version
-     */
-    @Read(version = true)
-    public CarePlan readVread(HttpServletRequest request, @IdParam IdType idType) {
-        CarePlan object = new CarePlan();
-        if (idType.hasVersionIdPart()) {
-            object = carePlanDao.readOrVread(fhirContext, idType);
-        } else {
-            object = carePlanDao.read(fhirContext, idType);
-        }
-        if (object == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No CarePlan/" + idType.getIdPart()),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-        }
-        return object;
-    }
 
     @Operation(name = "$total", idempotent = true)
     public Parameters getTotal(HttpServletRequest request,
@@ -297,5 +178,10 @@ public class CarePlanProvider implements IResourceProvider {
                 _profile, _query, _security, _content);
         retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
         return retVal;
+    }
+
+    @Override
+    protected BaseDao<CarePlanEntity, CarePlan> getDao() {
+        return carePlanDao;
     }
 }

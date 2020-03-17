@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.provider.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Device;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,117 +18,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.provider.dao.IDevice;
-import vn.ehealth.hl7.fhir.provider.dao.transform.DeviceEntityToFHIRDevice;
 import vn.ehealth.hl7.fhir.provider.entity.DeviceEntity;
 
 @Repository
-public class DeviceDao implements IDevice {
-
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    DeviceEntityToFHIRDevice deviceEntityToFHIRDevice;
-
-    @Override
-    public Device create(FhirContext fhirContext, Device object) {
-        DeviceEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewDeviceEntity(object, version, null);
-            // save DeviceEntity database
-            mongo.save(entity);
-            return deviceEntityToFHIRDevice.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "device", key = "#idType")
-    public Device update(FhirContext fhirContext, Device object, IdType idType) {
-        DeviceEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, DeviceEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove DeviceEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            entityOld.status = ("inactive");
-            mongo.save(entityOld);
-            // save DeviceEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                DeviceEntity entity = createNewDeviceEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return deviceEntityToFHIRDevice.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "device", key = "#idType")
-    public Device read(FhirContext fhirContext, IdType idType) {
-        if (idType != null&& idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            DeviceEntity entity = mongo.findOne(query, DeviceEntity.class);
-            if (entity != null) {
-                return deviceEntityToFHIRDevice.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "device", key = "#idType")
-    public Device remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null&& idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            DeviceEntity entity = mongo.findOne(query, DeviceEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                entity.status = ("inactive");
-                mongo.save(entity);
-                return deviceEntityToFHIRDevice.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Device readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query
-                        .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                DeviceEntity entity = mongo.findOne(query, DeviceEntity.class);
-                if (entity != null) {
-                    return deviceEntityToFHIRDevice.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-    
-    @Override
+public class DeviceDao extends BaseDao<DeviceEntity, Device> {
+  
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext ctx, StringParam deviceName, TokenParam identifier,
             ReferenceParam location, StringParam manufacturer, StringParam model, ReferenceParam organization,
             ReferenceParam patient, StringParam udiCarrier, StringParam udiDi, UriParam url, TokenParam status,
@@ -161,14 +53,13 @@ public class DeviceDao implements IDevice {
         List<DeviceEntity> deviceEntitys = mongo.find(query, DeviceEntity.class);
         if (deviceEntitys != null) {
             for (DeviceEntity item : deviceEntitys) {
-                Device device = deviceEntityToFHIRDevice.transform(item);
+                Device device = transform(item);
                 resources.add(device);
             }
         }
         return resources;
     }
 
-    @Override
 	public long findMatchesAdvancedTotal(FhirContext ctx, StringParam deviceName, TokenParam identifier,
 			ReferenceParam location, StringParam manufacturer, StringParam model, ReferenceParam organization,
 			ReferenceParam patient, StringParam udiCarrier, StringParam udiDi, UriParam url, TokenParam status,
@@ -185,21 +76,6 @@ public class DeviceDao implements IDevice {
         }
         total = mongo.count(query, DeviceEntity.class);
         return total;
-    }
-
-    private DeviceEntity createNewDeviceEntity(Device obj, int version, String fhirId) {
-        var ent = DeviceEntity.fromDevice(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
     }
 
     private Criteria setParamToCriteria(StringParam deviceName, TokenParam identifier, ReferenceParam location,
@@ -270,5 +146,25 @@ public class DeviceDao implements IDevice {
             criteria.and("device.url").regex(url.getValue());
         }
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "Device-v1.0";
+    }
+
+    @Override
+    protected DeviceEntity fromFhir(Device obj) {
+        return DeviceEntity.fromDevice(obj);
+    }
+
+    @Override
+    protected Device toFhir(DeviceEntity ent) {
+        return DeviceEntity.toDevice(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return DeviceEntity.class;
     }
 }

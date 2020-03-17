@@ -6,35 +6,22 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -46,87 +33,23 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import vn.ehealth.hl7.fhir.providers.BaseController;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.diagnostic.dao.IObservation;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ObservationDao;
+import vn.ehealth.hl7.fhir.diagnostic.entity.ObservationEntity;
 
 @Component
-public class ObservationProvider implements IResourceProvider {
+public class ObservationProvider extends BaseController<ObservationEntity, Observation> implements IResourceProvider {
 	@Autowired
-	FhirContext fhirContext;
-
-	@Autowired
-	IObservation observationDao;
-
-	private static final Logger log = LoggerFactory.getLogger(ObservationProvider.class);
+	ObservationDao observationDao;
 
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return Observation.class;
-	}
-
-	@Create
-	public MethodOutcome createObservation(HttpServletRequest theRequest, @ResourceParam Observation obj) {
-
-		log.debug("Create Observation Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(true);
-		Observation mongoObservation = null;
-		try {
-			mongoObservation = observationDao.create(fhirContext, obj);
-			List<String> myString = new ArrayList<>();
-			myString.add("Observation/" + mongoObservation.getIdElement());
-			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-					"urn:uuid: " + mongoObservation.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-			method.setId(mongoObservation.getIdElement());
-			method.setResource(mongoObservation);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		return method;
-	}
-
-	@Read
-	public Observation readObservation(HttpServletRequest request, @IdParam IdType internalId) {
-
-		Observation object = observationDao.read(fhirContext, internalId);
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Observation/" + internalId.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
-	}
-
-	/**
-	 * @author sonvt
-	 * @param request
-	 * @param idType
-	 * @return read object version
-	 */
-	@Read(version = true)
-	public Observation readVread(HttpServletRequest request, @IdParam IdType idType) {
-		Observation object = new Observation();
-		if (idType.hasVersionIdPart()) {
-			object = observationDao.readOrVread(fhirContext, idType);
-		} else {
-			object = observationDao.read(fhirContext, idType);
-		}
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Observation/" + idType.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
 	}
 
 	@Search
@@ -229,46 +152,6 @@ public class ObservationProvider implements IResourceProvider {
 				}
 			};
 		}
-	}
-
-	@Delete
-	public Observation deleteObservation(HttpServletRequest request, @IdParam IdType internalId) {
-		Observation obj = observationDao.remove(fhirContext, internalId);
-		if (obj == null) {
-			log.error("Couldn't delete Observation" + internalId);
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("Observation is not exit"), OperationOutcome.IssueSeverity.ERROR,
-					OperationOutcome.IssueType.NOTFOUND);
-		}
-		return obj;
-	}
-
-	@Update
-	public MethodOutcome updateObservation(@IdParam IdType theId, @ResourceParam Observation patient) {
-
-		log.debug("Update Observation Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(false);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		Observation newObservation = null;
-		try {
-			newObservation = observationDao.update(fhirContext, patient, theId);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-				"urn:uuid: " + newObservation.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
-		method.setId(newObservation.getIdElement());
-		method.setResource(newObservation);
-		return method;
 	}
 
 	@Operation(name = "$total", idempotent = true)
@@ -385,5 +268,10 @@ public class ObservationProvider implements IResourceProvider {
             }
             return results;
         }
+    }
+
+    @Override
+    protected BaseDao<ObservationEntity, Observation> getDao() {
+        return observationDao;
     }
 }

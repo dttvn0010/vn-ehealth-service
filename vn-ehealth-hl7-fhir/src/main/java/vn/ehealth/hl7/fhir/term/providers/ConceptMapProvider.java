@@ -22,15 +22,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
 import ca.uhn.fhir.rest.annotation.Delete;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -44,11 +41,14 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import vn.ehealth.hl7.fhir.providers.BaseController;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.term.dao.IConceptMap;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.term.dao.impl.ConceptMapDao;
+import vn.ehealth.hl7.fhir.term.entity.ConceptMapEntity;
 
 /**
  * @author SONVT24
@@ -56,87 +56,17 @@ import vn.ehealth.hl7.fhir.term.dao.IConceptMap;
  * @version 1.0
  */
 @Component
-public class ConceptMapProvider implements IResourceProvider {
-	@Autowired
-	FhirContext fhirContext;
-
+public class ConceptMapProvider extends BaseController<ConceptMapEntity, ConceptMap> implements IResourceProvider {
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return ConceptMap.class;
 	}
 
 	@Autowired
-	IConceptMap conceptMapDao;
+	ConceptMapDao conceptMapDao;
 
 	private static final Logger log = LoggerFactory.getLogger(ConceptMapProvider.class);
 
-	@Create
-	public MethodOutcome create(HttpServletRequest theRequest, @ResourceParam ConceptMap object) {
-		log.debug("Create ConceptMap Provider called");
-		// String permissionAccept = TerminologyOauth2Keys.ConceptMapOauth2.C_MAP_ADD;
-		// OAuth2Util.checkOauth2(theRequest, permissionAccept);
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(true);
-		OperationOutcome opOutcome = new OperationOutcome();
-
-		method.setOperationOutcome(opOutcome);
-		ConceptMap mongoObj = null;
-		try {
-			mongoObj = conceptMapDao.create(fhirContext, object);
-			List<String> myString = new ArrayList<>();
-			myString.add("ConceptMap/" + mongoObj.getIdElement());
-			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-					"urn:uuid: " + mongoObj.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-			method.setId(mongoObj.getIdElement());
-			method.setResource(mongoObj);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		return method;
-	}
-
-	@Read
-	public ConceptMap readConceptMap(HttpServletRequest request, @IdParam IdType internalId) {
-		log.debug("Read ConceptMap Provider called");
-		// String permissionAccept = TerminologyOauth2Keys.ConceptMapOauth2.C_MAP_VIEW;
-		// OAuth2Util.checkOauth2(request, permissionAccept);
-		ConceptMap object = conceptMapDao.read(fhirContext, internalId);
-
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No ConceptMap/" + internalId.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
-	}
-
-	/**
-	 * @author sonvt
-	 * @param request
-	 * @param idType
-	 * @return read object version
-	 */
-	@Read(version = true)
-	public ConceptMap readVread(HttpServletRequest request, @IdParam IdType idType) {
-		ConceptMap object = new ConceptMap();
-		if (idType.hasVersionIdPart()) {
-			object = conceptMapDao.readOrVread(fhirContext, idType);
-		} else {
-			object = conceptMapDao.read(fhirContext, idType);
-		}
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No ConceptMap/" + idType.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
-	}
 
 	@Search
 	public IBundleProvider searchConceptMap(HttpServletRequest request,
@@ -317,4 +247,9 @@ public class ConceptMapProvider implements IResourceProvider {
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
+
+    @Override
+    protected BaseDao<ConceptMapEntity, ConceptMap> getDao() {
+        return conceptMapDao;
+    }
 }

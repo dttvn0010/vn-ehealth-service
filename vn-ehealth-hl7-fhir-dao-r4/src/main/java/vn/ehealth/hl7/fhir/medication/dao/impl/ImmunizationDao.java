@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.medication.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Immunization;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -26,115 +19,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.medication.dao.IImmunization;
-import vn.ehealth.hl7.fhir.medication.dao.transform.ImmunizationEntityToFHIRImmunization;
 import vn.ehealth.hl7.fhir.medication.entity.ImmunizationEntity;
 
 @Repository
-public class ImmunizationDao implements IImmunization {
+public class ImmunizationDao extends BaseDao<ImmunizationEntity, Immunization> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    ImmunizationEntityToFHIRImmunization immunizationEntityToFHIRImmunization;
-
-    @Override
-    public Immunization create(FhirContext fhirContext, Immunization object) {
-        ImmunizationEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewImmunizationEntity(object, version, null);
-            // save ImmunizationEntity database
-            mongo.save(entity);
-            return immunizationEntityToFHIRImmunization.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "immunization", key = "#idType")
-    public Immunization update(FhirContext fhirContext, Immunization object, IdType idType) {
-        ImmunizationEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, ImmunizationEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove ImmunizationEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save ImmunizationEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                ImmunizationEntity entity = createNewImmunizationEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return immunizationEntityToFHIRImmunization.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "immunization", key = "#idType")
-    public Immunization read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ImmunizationEntity entity = mongo.findOne(query, ImmunizationEntity.class);
-            if (entity != null) {
-                return immunizationEntityToFHIRImmunization.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "immunization", key = "#idType")
-    public Immunization remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ImmunizationEntity entity = mongo.findOne(query, ImmunizationEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return immunizationEntityToFHIRImmunization.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Immunization readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                ImmunizationEntity entity = mongo.findOne(query, ImmunizationEntity.class);
-                if (entity != null) {
-                    return immunizationEntityToFHIRImmunization.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, DateRangeParam date,
             NumberParam doseSequence, TokenParam identifier, ReferenceParam location, StringParam lotNumber,
             ReferenceParam manufacturer, TokenParam notgiven, ReferenceParam patient, ReferenceParam practitioner,
@@ -160,14 +54,13 @@ public class ImmunizationDao implements IImmunization {
         List<ImmunizationEntity> immunizationEntitys = mongo.find(query, ImmunizationEntity.class);
         if (immunizationEntitys != null) {
             for (ImmunizationEntity item : immunizationEntitys) {
-                Immunization immunization = immunizationEntityToFHIRImmunization.transform(item);
+                Immunization immunization = transform(item);
                 resources.add(immunization);
             }
         }
         return resources;
     }
 
-    @Override
     public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, DateRangeParam date,
             NumberParam doseSequence, TokenParam identifier, ReferenceParam location, StringParam lotNumber,
             ReferenceParam manufacturer, TokenParam notgiven, ReferenceParam patient, ReferenceParam practitioner,
@@ -184,21 +77,6 @@ public class ImmunizationDao implements IImmunization {
         }
         total = mongo.count(query, ImmunizationEntity.class);
         return total;
-    }
-
-    private ImmunizationEntity createNewImmunizationEntity(Immunization obj, int version, String fhirId) {
-        var ent = ImmunizationEntity.fromImmunization(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
     }
 
     private Criteria setParamToCriteria(TokenParam active, DateRangeParam date, NumberParam doseSequence,
@@ -307,5 +185,25 @@ public class ImmunizationDao implements IImmunization {
                     .is(vaccineCode.getValue());
         }
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "Immunization-v1.0";
+    }
+
+    @Override
+    protected ImmunizationEntity fromFhir(Immunization obj) {
+        return ImmunizationEntity.fromImmunization(obj);
+    }
+
+    @Override
+    protected Immunization toFhir(ImmunizationEntity ent) {
+        return ImmunizationEntity.toImmunization(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return ImmunizationEntity.class;
     }
 }

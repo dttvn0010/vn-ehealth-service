@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.ehr.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.EpisodeOfCare;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,12 +18,10 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.ehr.dao.IEpisodeOfCare;
-import vn.ehealth.hl7.fhir.ehr.dao.transform.EpisodeOfCareEntityToFHIREpisodeOfCare;
 import vn.ehealth.hl7.fhir.ehr.entity.EpisodeOfCareEntity;
 
 /**
@@ -39,106 +30,9 @@ import vn.ehealth.hl7.fhir.ehr.entity.EpisodeOfCareEntity;
  * @since 2019
  */
 @Repository
-public class EpisodeOfCareDao implements IEpisodeOfCare {
-
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    EpisodeOfCareEntityToFHIREpisodeOfCare episodeOfCareEntityToFHIREpisodeOfCare;
-
-    @Override
-    public EpisodeOfCare create(FhirContext fhirContext, EpisodeOfCare object) {
-        EpisodeOfCareEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewEpisodeOfCareEntity(object, version, null);
-            // save EpisodeOfCareEntity database
-            mongo.save(entity);
-            return episodeOfCareEntityToFHIREpisodeOfCare.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "episodeOfCare", key = "#idType")
-    public EpisodeOfCare update(FhirContext fhirContext, EpisodeOfCare object, IdType idType) {
-        EpisodeOfCareEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, EpisodeOfCareEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove EpisodeOfCareEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save EpisodeOfCareEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                EpisodeOfCareEntity entity = createNewEpisodeOfCareEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return episodeOfCareEntityToFHIREpisodeOfCare.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "episodeOfCare", key = "#idType")
-    public EpisodeOfCare read(FhirContext fhirContext, IdType idType) {
-        if (idType != null) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            EpisodeOfCareEntity entity = mongo.findOne(query, EpisodeOfCareEntity.class);
-            if (entity != null) {
-                return episodeOfCareEntityToFHIREpisodeOfCare.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "episodeOfCare", key = "#idType")
-    public EpisodeOfCare remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            EpisodeOfCareEntity entity = mongo.findOne(query, EpisodeOfCareEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return episodeOfCareEntityToFHIREpisodeOfCare.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public EpisodeOfCare readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                EpisodeOfCareEntity entity = mongo.findOne(query, EpisodeOfCareEntity.class);
-                if (entity != null) {
-                    return episodeOfCareEntityToFHIREpisodeOfCare.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+public class EpisodeOfCareDao extends BaseDao<EpisodeOfCareEntity, EpisodeOfCare> {
+         
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, ReferenceParam careManager,
             ReferenceParam condition, DateRangeParam date, TokenParam identifier, ReferenceParam incomingreferral,
             ReferenceParam organization, ReferenceParam patient, TokenParam status, TokenParam type, TokenParam resid,
@@ -163,14 +57,13 @@ public class EpisodeOfCareDao implements IEpisodeOfCare {
         List<EpisodeOfCareEntity> episodeOfCareEntitys = mongo.find(query, EpisodeOfCareEntity.class);
         if (episodeOfCareEntitys != null) {
             for (EpisodeOfCareEntity item : episodeOfCareEntitys) {
-                EpisodeOfCare episodeOfCare = episodeOfCareEntityToFHIREpisodeOfCare.transform(item);
+                EpisodeOfCare episodeOfCare = transform(item);
                 resources.add(episodeOfCare);
             }
         }
         return resources;
     }
 
-    @Override
     public long getTotal(FhirContext fhirContext, TokenParam active, ReferenceParam careManager,
             ReferenceParam condition, DateRangeParam date, TokenParam identifier, ReferenceParam incomingreferral,
             ReferenceParam organization, ReferenceParam patient, TokenParam status, TokenParam type, TokenParam resid,
@@ -186,21 +79,6 @@ public class EpisodeOfCareDao implements IEpisodeOfCare {
         }
         total = mongo.count(query, EpisodeOfCareEntity.class);
         return total;
-    }
-
-    private EpisodeOfCareEntity createNewEpisodeOfCareEntity(EpisodeOfCare obj, int version, String fhirId) {
-        var ent = EpisodeOfCareEntity.fromEpisodeOfCare(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
     }
 
     private Criteria setParamToCriteria(FhirContext fhirContext, TokenParam active, ReferenceParam careManager,
@@ -281,5 +159,25 @@ public class EpisodeOfCareDao implements IEpisodeOfCare {
             criteria.and("type.coding.code.myStringValue").is(type.getValue());
         }
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "EpisodeOfCare-v1.0";
+    }
+
+    @Override
+    protected EpisodeOfCareEntity fromFhir(EpisodeOfCare obj) {
+        return EpisodeOfCareEntity.fromEpisodeOfCare(obj);
+    }
+
+    @Override
+    protected EpisodeOfCare toFhir(EpisodeOfCareEntity ent) {
+        return EpisodeOfCareEntity.toEpisodeOfCare(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return EpisodeOfCareEntity.class;
     }
 }

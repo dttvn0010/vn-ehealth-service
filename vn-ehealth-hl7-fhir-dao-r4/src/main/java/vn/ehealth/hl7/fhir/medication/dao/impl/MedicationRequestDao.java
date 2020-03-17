@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.medication.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.MedicationRequest;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,112 +18,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.medication.dao.IMedicationRequest;
-import vn.ehealth.hl7.fhir.medication.dao.transform.MedicationRequestEntityToFHIRMedicationRequest;
 import vn.ehealth.hl7.fhir.medication.entity.MedicationRequestEntity;
 
 @Repository
-public class MedicationRequestDao implements IMedicationRequest {
+public class MedicationRequestDao extends BaseDao<MedicationRequestEntity, MedicationRequest> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    MedicationRequestEntityToFHIRMedicationRequest medicationRequestEntityToFHIRMedicationRequest;
-
-    @Override
-    public MedicationRequest create(FhirContext fhirContext, MedicationRequest object) {
-        MedicationRequestEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewMedicationRequestEntity(object, version, null);
-            mongo.save(entity);
-            return medicationRequestEntityToFHIRMedicationRequest.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "medicationRequest", key = "#idType")
-    public MedicationRequest update(FhirContext fhirContext, MedicationRequest object, IdType idType) {
-        MedicationRequestEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, MedicationRequestEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            int version = entityOld.version + 1;
-            if (object != null) {
-                MedicationRequestEntity entity = createNewMedicationRequestEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return medicationRequestEntityToFHIRMedicationRequest.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "medicationRequest", key = "#idType")
-    public MedicationRequest read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            MedicationRequestEntity entity = mongo.findOne(query, MedicationRequestEntity.class);
-            if (entity != null) {
-                return medicationRequestEntityToFHIRMedicationRequest.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "medicationRequest", key = "#idType")
-    public MedicationRequest remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            MedicationRequestEntity entity = mongo.findOne(query, MedicationRequestEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return medicationRequestEntityToFHIRMedicationRequest.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public MedicationRequest readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                MedicationRequestEntity entity = mongo.findOne(query, MedicationRequestEntity.class);
-                if (entity != null) {
-                    return medicationRequestEntityToFHIRMedicationRequest.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, TokenParam code, TokenParam category,
             TokenParam identifier, TokenParam intent, TokenParam priority, TokenParam status, ReferenceParam subject,
             ReferenceParam requester, ReferenceParam patient, ReferenceParam medication, ReferenceParam context,
@@ -154,14 +51,13 @@ public class MedicationRequestDao implements IMedicationRequest {
         List<MedicationRequestEntity> MedicationRequestEntitys = mongo.find(query, MedicationRequestEntity.class);
         if (MedicationRequestEntitys != null) {
             for (MedicationRequestEntity item : MedicationRequestEntitys) {
-                MedicationRequest MedicationRequest = medicationRequestEntityToFHIRMedicationRequest.transform(item);
+                MedicationRequest MedicationRequest = transform(item);
                 resources.add(MedicationRequest);
             }
         }
         return resources;
     }
 
-    @Override
     public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, TokenParam code,
             TokenParam category, TokenParam identifier, TokenParam intent, TokenParam priority, TokenParam status,
             ReferenceParam subject, ReferenceParam requester, ReferenceParam patient, ReferenceParam medication,
@@ -177,21 +73,6 @@ public class MedicationRequestDao implements IMedicationRequest {
         }
         total = mongo.count(query, MedicationRequestEntity.class);
         return total;
-    }
-
-    private MedicationRequestEntity createNewMedicationRequestEntity(MedicationRequest obj, int version, String fhirId) {
-        var ent = MedicationRequestEntity.fromMedicationRequest(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
     }
 
     private Criteria setParamToCriteria(TokenParam active, TokenParam code,
@@ -295,5 +176,25 @@ public class MedicationRequestDao implements IMedicationRequest {
         }
         
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "MedicationRequest-v1.0";
+    }
+
+    @Override
+    protected MedicationRequestEntity fromFhir(MedicationRequest obj) {
+        return MedicationRequestEntity.fromMedicationRequest(obj);
+    }
+
+    @Override
+    protected MedicationRequest toFhir(MedicationRequestEntity ent) {
+        return MedicationRequestEntity.toMedicationRequest(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return MedicationRequestEntity.class;
     }
 }

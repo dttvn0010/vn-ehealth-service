@@ -1,4 +1,4 @@
-package vn.ehealth.hl7.fhir;
+package vn.ehealth.hl7.fhir.providers;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +32,7 @@ import ca.uhn.fhir.rest.api.PatchTypeEnum;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import vn.ehealth.hl7.fhir.ProviderResponseLibrary;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;

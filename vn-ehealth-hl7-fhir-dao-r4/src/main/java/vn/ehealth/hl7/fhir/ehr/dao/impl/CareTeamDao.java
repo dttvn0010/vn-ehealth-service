@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.ehr.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.CareTeam;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,12 +18,10 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.ehr.dao.ICareTeam;
-import vn.ehealth.hl7.fhir.ehr.dao.transform.CareTeamEntityToFHIRCareTeam;
 import vn.ehealth.hl7.fhir.ehr.entity.CareTeamEntity;
 
 /**
@@ -39,89 +30,9 @@ import vn.ehealth.hl7.fhir.ehr.entity.CareTeamEntity;
  * @since 2019
  */
 @Repository
-public class CareTeamDao implements ICareTeam {
-
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    CareTeamEntityToFHIRCareTeam careTeamEntityToFHIRCareTeam;
-
-    @Override
-    public CareTeam create(FhirContext fhirContext, CareTeam object) {
-        CareTeamEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewCareTeamEntity(object, version, null);
-            // save CareTeamEntity database
-            mongo.save(entity);
-            return careTeamEntityToFHIRCareTeam.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "careTeam", key = "#idType")
-    public CareTeam update(FhirContext fhirContext, CareTeam object, IdType idType) {
-        CareTeamEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, CareTeamEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove CareTeamEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save CareTeamEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                CareTeamEntity entity = createNewCareTeamEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return careTeamEntityToFHIRCareTeam.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "careTeam", key = "#idType")
-    public CareTeam read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            CareTeamEntity entity = mongo.findOne(query, CareTeamEntity.class);
-            if (entity != null) {
-                return careTeamEntityToFHIRCareTeam.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "careTeam", key = "#idType")
-    public CareTeam remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            CareTeamEntity entity = mongo.findOne(query, CareTeamEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return careTeamEntityToFHIRCareTeam.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
+public class CareTeamDao extends BaseDao<CareTeamEntity, CareTeam> {
+  
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, TokenParam category,
             ReferenceParam context, DateRangeParam date, ReferenceParam encounter, TokenParam identifier,
             ReferenceParam participant, ReferenceParam patient, TokenParam status, ReferenceParam subject,
@@ -144,31 +55,13 @@ public class CareTeamDao implements ICareTeam {
         List<CareTeamEntity> careTeamEntitys = mongo.find(query, CareTeamEntity.class);
         if (careTeamEntitys != null) {
             for (CareTeamEntity item : careTeamEntitys) {
-                CareTeam careTeam = careTeamEntityToFHIRCareTeam.transform(item);
+                CareTeam careTeam = transform(item);
                 resources.add(careTeam);
             }
         }
         return resources;
     }
 
-    @Override
-    public CareTeam readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                CareTeamEntity entity = mongo.findOne(query, CareTeamEntity.class);
-                if (entity != null) {
-                    return careTeamEntityToFHIRCareTeam.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
     public long getTotal(FhirContext fhirContext, TokenParam active, TokenParam category, ReferenceParam context,
             DateRangeParam date, ReferenceParam encounter, TokenParam identifier, ReferenceParam participant,
             ReferenceParam patient, TokenParam status, ReferenceParam subject, TokenParam resid,
@@ -183,21 +76,6 @@ public class CareTeamDao implements ICareTeam {
         }
         total = mongo.count(query, CareTeamEntity.class);
         return total;
-    }
-
-    private CareTeamEntity createNewCareTeamEntity(CareTeam obj, int version, String fhirId) {
-        var ent = CareTeamEntity.fromCareTeam(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;        
     }
 
     private Criteria setParamToCriteria(TokenParam active, TokenParam category, ReferenceParam context,
@@ -268,5 +146,25 @@ public class CareTeamDao implements ICareTeam {
             }
         }
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "CareTeam-v1.0";
+    }
+
+    @Override
+    protected CareTeamEntity fromFhir(CareTeam obj) {
+        return CareTeamEntity.fromCareTeam(obj);
+    }
+
+    @Override
+    protected CareTeam toFhir(CareTeamEntity ent) {
+        return CareTeamEntity.toCareTeam(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return CareTeamEntity.class;
     }
 }

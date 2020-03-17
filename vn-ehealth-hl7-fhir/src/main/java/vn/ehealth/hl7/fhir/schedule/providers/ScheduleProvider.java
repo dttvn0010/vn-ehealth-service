@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
 import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
@@ -21,18 +20,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
@@ -43,19 +37,20 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import vn.ehealth.hl7.fhir.providers.BaseController;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.schedule.dao.ISchedule;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.schedule.dao.impl.ScheduleDao;
+import vn.ehealth.hl7.fhir.schedule.entity.ScheduleEntity;
 
 @Component
-public class ScheduleProvider implements IResourceProvider {
-	@Autowired
-	FhirContext fhirContext;
+public class ScheduleProvider extends BaseController<ScheduleEntity, Schedule> implements IResourceProvider {
 
 	@Autowired
-	ISchedule scheduleDao;
+	ScheduleDao scheduleDao;
 
 	private static final Logger log = LoggerFactory.getLogger(ScheduleProvider.class);
 
@@ -92,18 +87,6 @@ public class ScheduleProvider implements IResourceProvider {
 			}
 		}
 		return method;
-	}
-
-	@Read
-	public Schedule readSchedule(HttpServletRequest request, @IdParam IdType internalId) {
-
-		Schedule object = scheduleDao.read(fhirContext, internalId);
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Schedule/" + internalId.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
 	}
 
 	@Search
@@ -172,68 +155,6 @@ public class ScheduleProvider implements IResourceProvider {
 		}
 	}
 
-	@Delete
-	public Schedule deleteSchedule(HttpServletRequest request, @IdParam IdType internalId) {
-		Schedule obj = scheduleDao.remove(fhirContext, internalId);
-		if (obj == null) {
-			log.error("Couldn't delete Schedule" + internalId);
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("Schedule is not exit"), OperationOutcome.IssueSeverity.ERROR,
-					OperationOutcome.IssueType.NOTFOUND);
-		}
-		return obj;
-	}
-
-	/**
-	 * @author sonvt
-	 * @param request
-	 * @param idType
-	 * @return read object version
-	 */
-	@Read(version = true)
-	public Schedule readVread(HttpServletRequest request, @IdParam IdType idType) {
-		Schedule object = new Schedule();
-		if (idType.hasVersionIdPart()) {
-			object = scheduleDao.readOrVread(fhirContext, idType);
-		} else {
-			object = scheduleDao.read(fhirContext, idType);
-		}
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Schedule/" + idType.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
-	}
-
-	@Update
-	public MethodOutcome update(@IdParam IdType theId, @ResourceParam Schedule patient) {
-
-		log.debug("Update Schedule Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(false);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		Schedule newSchedule = null;
-		try {
-			newSchedule = scheduleDao.update(fhirContext, patient, theId);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-				"urn:uuid: " + newSchedule.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
-		method.setId(newSchedule.getIdElement());
-		method.setResource(newSchedule);
-		return method;
-	}
-
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
@@ -254,4 +175,9 @@ public class ScheduleProvider implements IResourceProvider {
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
+
+    @Override
+    protected BaseDao<ScheduleEntity, Schedule> getDao() {
+        return scheduleDao;
+    }
 }

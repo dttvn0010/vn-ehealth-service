@@ -7,33 +7,20 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.r4.model.Condition;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -44,131 +31,24 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import vn.ehealth.hl7.fhir.clinical.dao.ICondition;
+import vn.ehealth.hl7.fhir.providers.BaseController;
+import vn.ehealth.hl7.fhir.clinical.dao.impl.ConditionDao;
+import vn.ehealth.hl7.fhir.clinical.entity.ConditionEntity;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 
 @Component
-public class ConditionProvider implements IResourceProvider {
-    @Autowired
-    FhirContext fhirContext;
+public class ConditionProvider extends BaseController<ConditionEntity, Condition> implements IResourceProvider {
 
     @Autowired
-    ICondition conditionDao;
-
-    private static final Logger log = LoggerFactory.getLogger(ConditionProvider.class);
+    ConditionDao conditionDao;
 
     @Override
     public Class<? extends IBaseResource> getResourceType() {
         return Condition.class;
-    }
-
-    @Create
-    public MethodOutcome createCondition(HttpServletRequest theRequest, @ResourceParam Condition obj) {
-
-        log.debug("Create Condition Provider called");
-
-        MethodOutcome method = new MethodOutcome();
-        method.setCreated(true);
-        Condition mongoCondition = null;
-        try {
-            mongoCondition = conditionDao.create(fhirContext, obj);
-            List<String> myString = new ArrayList<>();
-            myString.add("Condition/" + mongoCondition.getIdElement());
-            method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-                    "urn:uuid: " + mongoCondition.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-            method.setId(mongoCondition.getIdElement());
-            method.setResource(mongoCondition);
-        } catch (Exception ex) {
-            if (ex instanceof OperationOutcomeException) {
-                OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-                method.setOperationOutcome(outcomeException.getOutcome());
-                method.setCreated(false);
-            } else {
-                log.error(ex.getMessage());
-                method.setCreated(false);
-                method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-            }
-        }
-        return method;
-    }
-
-    @Read
-    public Condition readCondition(HttpServletRequest request, @IdParam IdType internalId) {
-
-        Condition object = conditionDao.read(fhirContext, internalId);
-        if (object == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No Condition/" + internalId.getIdPart()),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-        }
-        return object;
-    }
-
-    @Delete
-    public Condition deleteCondition(HttpServletRequest request, @IdParam IdType internalId) {
-        Condition object = conditionDao.remove(fhirContext, internalId);
-        if (object == null) {
-            log.error("Couldn't delete Condition" + internalId);
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("Condition is not exit"), OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.NOTFOUND);
-        }
-        return object;
-    }
-
-    @Update
-    public MethodOutcome updateCondition(@IdParam IdType theId, @ResourceParam Condition patient) {
-
-        log.debug("Update Condition Provider called");
-
-        MethodOutcome method = new MethodOutcome();
-        method.setCreated(false);
-        OperationOutcome opOutcome = new OperationOutcome();
-        method.setOperationOutcome(opOutcome);
-        Condition newCondition = null;
-        try {
-            newCondition = conditionDao.update(fhirContext, patient, theId);
-        } catch (Exception ex) {
-            if (ex instanceof OperationOutcomeException) {
-                OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-                method.setOperationOutcome(outcomeException.getOutcome());
-                //method.setCreated(false);
-            } else {
-                log.error(ex.getMessage());
-                //method.setCreated(false);
-                method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-            }
-        }
-        method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-                "urn:uuid: " + newCondition.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
-        method.setId(newCondition.getIdElement());
-        method.setResource(newCondition);
-        return method;
-    }
-
-    /**
-     * @author sonvt
-     * @param request
-     * @param idType
-     * @return read object version
-     */
-    @Read(version = true)
-    public Condition readVread(HttpServletRequest request, @IdParam IdType idType) {
-        Condition object = new Condition();
-        if (idType.hasVersionIdPart()) {
-            object = conditionDao.readOrVread(fhirContext, idType);
-        } else {
-            object = conditionDao.read(fhirContext, idType);
-        }
-        if (object == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No Condition/" + idType.getIdPart()),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-        }
-        return object;
     }
 
     @Search
@@ -309,5 +189,10 @@ public class ConditionProvider implements IResourceProvider {
                 _content);
         retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
         return retVal;
+    }
+
+    @Override
+    protected BaseDao<ConditionEntity, Condition> getDao() {
+        return conditionDao;
     }
 }

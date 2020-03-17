@@ -8,32 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.StringType;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -43,68 +30,24 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import vn.ehealth.hl7.fhir.clinical.dao.IServiceRequest;
+import vn.ehealth.hl7.fhir.providers.BaseController;
+import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.diagnostic.entity.ServiceRequestEntity;
 
 @Component
-public class ServiceRequestProvider implements IResourceProvider {
+public class ServiceRequestProvider extends BaseController<ServiceRequestEntity, ServiceRequest> implements IResourceProvider {
 
 	@Autowired
-	FhirContext fhirContext;
-
-	@Autowired
-	IServiceRequest baseDao;
-
-	private static final Logger log = LoggerFactory.getLogger(ServiceRequest.class);
+	ServiceRequestDao baseDao;
 
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return ServiceRequest.class;
-	}
-
-	@Create
-	public MethodOutcome create(HttpServletRequest theRequest, @ResourceParam ServiceRequest obj) {
-
-		log.debug("Create ServiceRequest Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(true);
-		ServiceRequest mongo = null;
-		try {
-			mongo = baseDao.create(fhirContext, obj);
-			List<String> myString = new ArrayList<>();
-			myString.add("ServiceRequest/" + mongo.getIdElement());
-			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-					"urn:uuid: " + mongo.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-			method.setId(mongo.getIdElement());
-			method.setResource(mongo);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-				// method.setCreated(false);
-			} else {
-				log.error(ex.getMessage());
-				// method.setCreated(false);
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		return method;
-	}
-
-	@Read
-	public ServiceRequest read(HttpServletRequest request, @IdParam IdType internalId) {
-
-		ServiceRequest object = baseDao.read(fhirContext, internalId);
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No ServiceRequest/" + internalId.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
 	}
 
 	@Search
@@ -187,48 +130,6 @@ public class ServiceRequestProvider implements IResourceProvider {
 		}
 	}
 
-	@Delete
-	public ServiceRequest delete(HttpServletRequest request, @IdParam IdType internalId) {
-		ServiceRequest obj = baseDao.remove(fhirContext, internalId);
-		if (obj == null) {
-			log.error("Couldn't delete Procedure" + internalId);
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("Object is not exit"), OperationOutcome.IssueSeverity.ERROR,
-					OperationOutcome.IssueType.NOTFOUND);
-		}
-		return obj;
-	}
-
-	@Update
-	public MethodOutcome update(@IdParam IdType theId, @ResourceParam ServiceRequest input) {
-
-		log.debug("Update Procedure Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(false);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		ServiceRequest newObj = null;
-		try {
-			newObj = baseDao.update(fhirContext, input, theId);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-				// method.setCreated(false);
-			} else {
-				log.error(ex.getMessage());
-				// method.setCreated(false);
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-				"urn:uuid: " + newObj.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
-		method.setId(newObj.getIdElement());
-		method.setResource(newObj);
-		return method;
-	}
-
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
@@ -261,25 +162,8 @@ public class ServiceRequestProvider implements IResourceProvider {
 		return retVal;
 	}
 
-	/**
-	 * @author sonvt
-	 * @param request
-	 * @param idType
-	 * @return read object version
-	 */
-	@Read(version = true)
-	public ServiceRequest readVread(HttpServletRequest request, @IdParam IdType idType) {
-		ServiceRequest object = new ServiceRequest();
-		if (idType.hasVersionIdPart()) {
-			object = baseDao.readOrVread(fhirContext, idType);
-		} else {
-			object = baseDao.read(fhirContext, idType);
-		}
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No ServiceRequest/" + idType.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
-	}
+    @Override
+    protected BaseDao<ServiceRequestEntity, ServiceRequest> getDao() {
+        return baseDao;
+    }
 }

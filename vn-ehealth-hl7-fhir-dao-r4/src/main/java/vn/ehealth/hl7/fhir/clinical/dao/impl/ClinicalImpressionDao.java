@@ -1,19 +1,15 @@
 package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.ClinicalImpression;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -24,113 +20,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
-import vn.ehealth.hl7.fhir.clinical.dao.IClinicalImpression;
-import vn.ehealth.hl7.fhir.clinical.dao.transform.ClinicalImpressionEntityToFHIRClinicalImpression;
 import vn.ehealth.hl7.fhir.clinical.entity.ClinicalImpressionEntity;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 
 @Repository
-public class ClinicalImpressionDao implements IClinicalImpression {
+public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, ClinicalImpression> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    ClinicalImpressionEntityToFHIRClinicalImpression clinicalImpressionEntityToFHIRClinicalImpression;
-
-    @Override
-    public ClinicalImpression create(FhirContext fhirContext, ClinicalImpression object) {
-        ClinicalImpressionEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewClinicalImpressionEntity(object, version, null);
-            // save ClinicalImpressionEntity database
-            mongo.save(entity);
-            return clinicalImpressionEntityToFHIRClinicalImpression.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    public ClinicalImpression update(FhirContext fhirContext, ClinicalImpression object, IdType idType) {
-        ClinicalImpressionEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, ClinicalImpressionEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove ClinicalImpressionEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save ClinicalImpressionEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                ClinicalImpressionEntity entity = createNewClinicalImpressionEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return clinicalImpressionEntityToFHIRClinicalImpression.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public ClinicalImpression read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ClinicalImpressionEntity entity = mongo.findOne(query, ClinicalImpressionEntity.class);
-            if (entity != null) {
-                return clinicalImpressionEntityToFHIRClinicalImpression.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "clinicalImpression", key = "#idType")
-    public ClinicalImpression remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ClinicalImpressionEntity entity = mongo.findOne(query, ClinicalImpressionEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return clinicalImpressionEntityToFHIRClinicalImpression.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public ClinicalImpression readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                ClinicalImpressionEntity entity = mongo.findOne(query, ClinicalImpressionEntity.class);
-                if (entity != null) {
-                    return clinicalImpressionEntityToFHIRClinicalImpression.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, ReferenceParam action,
             ReferenceParam assessor, ReferenceParam context, DateRangeParam date, TokenParam findingCode,
             ReferenceParam findingRef, TokenParam identifier, ReferenceParam investigation, ReferenceParam patient,
@@ -155,15 +54,13 @@ public class ClinicalImpressionDao implements IClinicalImpression {
         List<ClinicalImpressionEntity> clinicalImpressionEntitys = mongo.find(query, ClinicalImpressionEntity.class);
         if (clinicalImpressionEntitys != null) {
             for (ClinicalImpressionEntity item : clinicalImpressionEntitys) {
-                ClinicalImpression clinicalImpression = clinicalImpressionEntityToFHIRClinicalImpression
-                        .transform(item);
+                ClinicalImpression clinicalImpression = transform(item);
                 resources.add(clinicalImpression);
             }
         }
         return resources;
     }
 
-    @Override
     public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam action,
             ReferenceParam assessor, ReferenceParam context, DateRangeParam date, TokenParam findingCode,
             ReferenceParam findingRef, TokenParam identifier, ReferenceParam investigation, ReferenceParam patient,
@@ -180,21 +77,6 @@ public class ClinicalImpressionDao implements IClinicalImpression {
         }
         total = mongo.count(query, ClinicalImpressionEntity.class);
         return total;
-    }
-
-    private ClinicalImpressionEntity createNewClinicalImpressionEntity(ClinicalImpression obj, int version,
-            String fhirId) {
-        var ent = ClinicalImpressionEntity.fromClinicalImpression(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
     }
 
     private Criteria setParamToCriteria(TokenParam active, ReferenceParam action, ReferenceParam assessor,
@@ -320,17 +202,36 @@ public class ClinicalImpressionDao implements IClinicalImpression {
         return criteria;
     }
 
-    @Override
     public ClinicalImpression findNotCache(FhirContext fhirContext, IdType idType) {
         if (idType != null) {
             ObjectId objectId = new ObjectId(idType.getIdPart());
             Query query = Query.query(Criteria.where("_id").is(objectId));
             ClinicalImpressionEntity entity = mongo.findOne(query, ClinicalImpressionEntity.class);
             if (entity != null) {
-                return clinicalImpressionEntityToFHIRClinicalImpression.transform(entity);
+                return transform(entity);
             }
         }
         return null;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "ClinicalImpression-v1.0";
+    }
+
+    @Override
+    protected ClinicalImpressionEntity fromFhir(ClinicalImpression obj) {
+        return ClinicalImpressionEntity.fromClinicalImpression(obj);
+    }
+
+    @Override
+    protected ClinicalImpression toFhir(ClinicalImpressionEntity ent) {
+        return ClinicalImpressionEntity.toClinicalImpression(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return ClinicalImpressionEntity.class;
     }
 
 }

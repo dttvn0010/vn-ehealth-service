@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.schedule.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.AppointmentResponse;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,115 +18,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.schedule.dao.IAppointmentResponse;
-import vn.ehealth.hl7.fhir.schedule.dao.transform.AppointmentResponseEntityToFHIRAppointmentResponse;
 import vn.ehealth.hl7.fhir.schedule.entity.AppointmentResponseEntity;
 
 @Repository
-public class AppointmentResponseDao implements IAppointmentResponse {
+public class AppointmentResponseDao extends BaseDao<AppointmentResponseEntity, AppointmentResponse> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    AppointmentResponseEntityToFHIRAppointmentResponse appointmentResponseEntityToFHIRAppointmentResponse;
-
-    @Override
-    public AppointmentResponse create(FhirContext fhirContext, AppointmentResponse object) {
-        AppointmentResponseEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewAppointmentResponseEntity(object, version, null);
-            // save AppointmentResponseEntity database
-            mongo.save(entity);
-            return appointmentResponseEntityToFHIRAppointmentResponse.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "appointmentResponse", key = "#idType")
-    public AppointmentResponse update(FhirContext fhirContext, AppointmentResponse object, IdType idType) {
-        AppointmentResponseEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, AppointmentResponseEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove AppointmentResponseEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save AppointmentResponseEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                AppointmentResponseEntity entity = createNewAppointmentResponseEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return appointmentResponseEntityToFHIRAppointmentResponse.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "appointmentResponse", key = "#idType")
-    public AppointmentResponse read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            AppointmentResponseEntity entity = mongo.findOne(query, AppointmentResponseEntity.class);
-            if (entity != null) {
-                return appointmentResponseEntityToFHIRAppointmentResponse.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "appointmentResponse", key = "#idType")
-    public AppointmentResponse remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            AppointmentResponseEntity entity = mongo.findOne(query, AppointmentResponseEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return appointmentResponseEntityToFHIRAppointmentResponse.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public AppointmentResponse readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                AppointmentResponseEntity entity = mongo.findOne(query, AppointmentResponseEntity.class);
-                if (entity != null) {
-                    return appointmentResponseEntityToFHIRAppointmentResponse.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, ReferenceParam actor,
             TokenParam identifier, ReferenceParam appointment, ReferenceParam location, ReferenceParam patient,
             ReferenceParam practitioner, TokenParam partStatus, TokenParam resid, DateRangeParam _lastUpdated,
@@ -158,15 +52,13 @@ public class AppointmentResponseDao implements IAppointmentResponse {
         List<AppointmentResponseEntity> appointmentResponseEntitys = mongo.find(query, AppointmentResponseEntity.class);
         if (appointmentResponseEntitys != null) {
             for (AppointmentResponseEntity item : appointmentResponseEntitys) {
-                AppointmentResponse appointmentResponse = appointmentResponseEntityToFHIRAppointmentResponse
-                        .transform(item);
+                AppointmentResponse appointmentResponse = transform(item);
                 resources.add(appointmentResponse);
             }
         }
         return resources;
     }
 
-    @Override
     public long findMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam actor,
             TokenParam identifier, ReferenceParam appointment, ReferenceParam location, ReferenceParam patient,
             ReferenceParam practitioner, TokenParam partStatus, TokenParam resid, DateRangeParam _lastUpdated,
@@ -248,20 +140,24 @@ public class AppointmentResponseDao implements IAppointmentResponse {
         }
         return criteria;
     }
+  
+    @Override
+    protected String getProfile() {
+        return "AppointmentResponse-v1.0";
+    }
 
-    private AppointmentResponseEntity createNewAppointmentResponseEntity(AppointmentResponse obj, int version,
-            String fhirId) {
-        var ent = AppointmentResponseEntity.from(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
+    @Override
+    protected AppointmentResponseEntity fromFhir(AppointmentResponse obj) {
+        return AppointmentResponseEntity.from(obj);
+    }
+
+    @Override
+    protected AppointmentResponse toFhir(AppointmentResponseEntity ent) {
+        return AppointmentResponseEntity.toAppointmentResponse(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return AppointmentResponseEntity.class;
     }
 }

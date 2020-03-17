@@ -6,34 +6,21 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.MedicationStatement;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -43,91 +30,24 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import vn.ehealth.hl7.fhir.providers.BaseController;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.medication.dao.IMedicationStatement;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.medication.dao.impl.MedicationStatementDao;
+import vn.ehealth.hl7.fhir.medication.entity.MedicationStatementEntity;
 
 @Component
-public class MedicationStatementProvider implements IResourceProvider {
-	@Autowired
-	FhirContext fhirContext;
+public class MedicationStatementProvider extends BaseController<MedicationStatementEntity, MedicationStatement> implements IResourceProvider {
 
 	@Autowired
-	IMedicationStatement medicationStatementDao;
-
-	private static final Logger log = LoggerFactory.getLogger(MedicationStatementProvider.class);
+	MedicationStatementDao medicationStatementDao;
 
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return MedicationStatement.class;
-	}
-
-	@Create
-	public MethodOutcome createMedicationStatement(HttpServletRequest theRequest,
-			@ResourceParam MedicationStatement obj) {
-
-		log.debug("Create MedicationStatement Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(true);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		MedicationStatement mongoMedicationStatement = null;
-		try {
-			mongoMedicationStatement = medicationStatementDao.create(fhirContext, obj);
-			List<String> myString = new ArrayList<>();
-			myString.add("MedicationStatement/" + mongoMedicationStatement.getIdElement());
-			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-					"urn:uuid: " + mongoMedicationStatement.getId(), IssueSeverity.INFORMATION, IssueType.VALUE,
-					myString));
-			method.setId(mongoMedicationStatement.getIdElement());
-			method.setResource(mongoMedicationStatement);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		return method;
-	}
-
-	@Read
-	public MedicationStatement readMedicationStatement(HttpServletRequest request, @IdParam IdType internalId) {
-
-		MedicationStatement object = medicationStatementDao.read(fhirContext, internalId);
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No MedicationStatement/" + internalId.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
-	}
-
-	/**
-	 * @author sonvt
-	 * @param request
-	 * @param idType
-	 * @return read object version
-	 */
-	@Read(version = true)
-	public MedicationStatement readVread(HttpServletRequest request, @IdParam IdType idType) {
-		MedicationStatement object = new MedicationStatement();
-		if (idType.hasVersionIdPart()) {
-			object = medicationStatementDao.readOrVread(fhirContext, idType);
-		} else {
-			object = medicationStatementDao.read(fhirContext, idType);
-		}
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No MedicationStatement/" + idType.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
 	}
 
 	@Search
@@ -205,46 +125,6 @@ public class MedicationStatementProvider implements IResourceProvider {
 		}
 	}
 
-	@Delete
-	public MedicationStatement deleteMedicationStatement(HttpServletRequest request, @IdParam IdType internalId) {
-		MedicationStatement obj = medicationStatementDao.remove(fhirContext, internalId);
-		if (obj == null) {
-			log.error("Couldn't delete MedicationStatement" + internalId);
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("MedicationStatement is not exit"),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return obj;
-	}
-
-	@Update
-	public MethodOutcome updateMedicationStatement(@IdParam IdType theId, @ResourceParam MedicationStatement updater) {
-
-		log.debug("Update MedicationStatement Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(false);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		MedicationStatement newMedicationStatement = null;
-		try {
-			newMedicationStatement = medicationStatementDao.update(fhirContext, updater, theId);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-				"urn:uuid: " + newMedicationStatement.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
-		method.setId(newMedicationStatement.getIdElement());
-		method.setResource(newMedicationStatement);
-		return method;
-	}
-
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
@@ -273,4 +153,9 @@ public class MedicationStatementProvider implements IResourceProvider {
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
+
+    @Override
+    protected BaseDao<MedicationStatementEntity, MedicationStatement> getDao() {
+        return medicationStatementDao;
+    }
 }

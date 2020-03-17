@@ -1,19 +1,13 @@
 package vn.ehealth.hl7.fhir.schedule.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Appointment;
-import org.hl7.fhir.r4.model.Appointment.AppointmentParticipantComponent;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -24,161 +18,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.schedule.dao.IAppointment;
-import vn.ehealth.hl7.fhir.schedule.dao.transform.AppointmentEntityToFHIRAppointment;
 import vn.ehealth.hl7.fhir.schedule.entity.AppointmentEntity;
-import vn.ehealth.hl7.fhir.schedule.entity.ParticipantEntity;
 
 @Repository
-public class AppointmentDao implements IAppointment {
+public class AppointmentDao extends BaseDao<AppointmentEntity, Appointment> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    AppointmentEntityToFHIRAppointment appointmentEntityToFHIRAppointment;
-
-    @Override
-    public Appointment create(FhirContext fhirContext, Appointment object) {
-        AppointmentEntity objEntity = null;
-        int version = ConstantKeys.VERSION_1;
-        objEntity = createNewAppointmentEntity(object, version, null);
-        // save AppointmentEntity database
-        mongo.save(objEntity);
-
-        //
-        List<ParticipantEntity> participantEntitys = new ArrayList<>();
-        ObjectId appointmentEntityId = objEntity.id;
-        if (appointmentEntityId != null && object.hasParticipant()) {
-            participantEntitys = saveListParticipantEntity(appointmentEntityId, object.getParticipant(), version);
-        }
-        // set List ParticipantEntity to AppointmentEntity
-        objEntity.participant = (participantEntitys);
-        return appointmentEntityToFHIRAppointment.transform(objEntity);
-    }
-
-    @Override
-    public Appointment update(FhirContext fhirContext, Appointment object, IdType idType) {
-        AppointmentEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, AppointmentEntity.class);
-        }
-        if (entityOld != null && !fhirId.isEmpty()) {
-            // remove AppointmentEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-
-            // remove ParticipantEntity old
-            List<ParticipantEntity> participantEntityOlds = new ArrayList<>();
-            Query query = Query.query(Criteria.where("appointmentEntityID").is(entityOld.id));
-            participantEntityOlds = mongo.find(query, ParticipantEntity.class);
-            if (participantEntityOlds != null) {
-                for (ParticipantEntity item : participantEntityOlds) {
-                    item.resDeleted = (new Date());
-                    item.active = (false);
-                    mongo.save(item);
-                }
-            }
-            int version = entityOld.version + 1;
-            if (object != null) {
-                // create new Appointment
-                AppointmentEntity entity = createNewAppointmentEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                // save PractitionerEntity database
-                mongo.save(entity);
-
-                List<ParticipantEntity> participantEntitys = new ArrayList<>();
-                ObjectId appointmentEntityId = entity.id;
-                if (appointmentEntityId != null && object.hasParticipant()) {
-                    if (appointmentEntityId != null && object.hasParticipant()) {
-                        participantEntitys = saveListParticipantEntity(appointmentEntityId, object.getParticipant(),
-                                version);
-                    }
-                }
-                // set List ParticipantEntity to AppointmentEntity
-                entity.participant = (participantEntitys);
-                return appointmentEntityToFHIRAppointment.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Appointment remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            AppointmentEntity entity = mongo.findOne(query, AppointmentEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                // remove database AppointmentEntity
-                mongo.save(entity);
-
-                List<ParticipantEntity> participantEntitys = new ArrayList<>();
-                Query queryParticipant = Query.query(Criteria.where("appointmentEntityID").is(entity.id));
-                participantEntitys = mongo.find(queryParticipant, ParticipantEntity.class);
-                if (participantEntitys != null) {
-                    for (ParticipantEntity item : participantEntitys) {
-                        item.active = (false);
-                        item.resDeleted = (new Date());
-                        mongo.save(item);
-                    }
-                    entity.participant = (participantEntitys);
-                }
-                return appointmentEntityToFHIRAppointment.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Appointment read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            AppointmentEntity entity = mongo.findOne(query, AppointmentEntity.class);
-            if (entity != null) {
-                List<ParticipantEntity> participantEntitys = new ArrayList<>();
-                Query queryParticipant = Query.query(
-                        Criteria.where("appointmentEntityID").is(entity.id).and(ConstantKeys.SP_ACTIVE).is(true));
-                participantEntitys = mongo.find(queryParticipant, ParticipantEntity.class);
-                entity.participant = (participantEntitys);
-                return appointmentEntityToFHIRAppointment.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Appointment readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                AppointmentEntity entity = mongo.findOne(query, AppointmentEntity.class);
-                if (entity != null) {
-                    return appointmentEntityToFHIRAppointment.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, ReferenceParam actor,
             TokenParam appointmentType, DateRangeParam date, TokenParam identifier, ReferenceParam incomingreferral,
             ReferenceParam location, TokenParam partStatus, ReferenceParam patient, ReferenceParam practitioner,
@@ -203,12 +52,11 @@ public class AppointmentDao implements IAppointment {
         }
         List<AppointmentEntity> appointmentResults = mongo.find(qry, AppointmentEntity.class);
         for (AppointmentEntity appointmentEntity : appointmentResults) {
-            resources.add(appointmentEntityToFHIRAppointment.transform(appointmentEntity));
+            resources.add(transform(appointmentEntity));
         }
         return resources;
     }
 
-    @Override
     public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam actor,
             TokenParam appointmentType, DateRangeParam date, TokenParam identifier, ReferenceParam incomingreferral,
             ReferenceParam location, TokenParam partStatus, ReferenceParam patient, ReferenceParam practitioner,
@@ -229,48 +77,6 @@ public class AppointmentDao implements IAppointment {
         return count;
     }
 
-    private List<ParticipantEntity> saveListParticipantEntity(ObjectId appointmentEntityId,
-            List<AppointmentParticipantComponent> appointmentParticipantComponents, int version) {
-
-        List<ParticipantEntity> participantEntitys = new ArrayList<>();
-        for (AppointmentParticipantComponent item : appointmentParticipantComponents) {
-            // cretae new ParticipantEntity
-            ParticipantEntity participantEntity = createNewParticipantEntity(appointmentEntityId, item, version);
-            // save ParticipantEntity to database
-            mongo.save(participantEntity);
-            participantEntitys.add(participantEntity);
-        }
-        return participantEntitys;
-    }
-
-    private ParticipantEntity createNewParticipantEntity(ObjectId appointmentEntityId,
-            AppointmentParticipantComponent object, int version) {
-        var participantEntity = ParticipantEntity.fromAppointmentParticipantComponent(object);
-        // appointmentEntityID
-        participantEntity.appointmentEntityID = appointmentEntityId.toString();
-        // active
-        participantEntity.active = (true);
-        // version
-        participantEntity.version = (version);
-        // ResCreated
-        participantEntity.resCreated = (new Date());
-        return participantEntity;
-    }
-
-    private AppointmentEntity createNewAppointmentEntity(Appointment obj, int version, String fhirId) {
-        var ent = AppointmentEntity.fromAppointment(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
-    }
 
     private Criteria setParamToCriteria(TokenParam active, ReferenceParam actor, TokenParam appointmentType,
             DateRangeParam date, TokenParam identifier, ReferenceParam incomingreferral, ReferenceParam location,
@@ -364,5 +170,25 @@ public class AppointmentDao implements IAppointment {
             criteria.and("status").is(status.getValue());
         }
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "Appointment-v1.0";
+    }
+
+    @Override
+    protected AppointmentEntity fromFhir(Appointment obj) {
+        return AppointmentEntity.fromAppointment(obj);
+    }
+
+    @Override
+    protected Appointment toFhir(AppointmentEntity ent) {
+        return AppointmentEntity.toAppointment(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return AppointmentEntity.class;
     }
 }

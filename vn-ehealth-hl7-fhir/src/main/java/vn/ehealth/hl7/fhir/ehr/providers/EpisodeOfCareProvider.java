@@ -7,33 +7,20 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.r4.model.EpisodeOfCare;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -43,89 +30,24 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import vn.ehealth.hl7.fhir.providers.BaseController;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.ehr.dao.IEpisodeOfCare;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.ehr.dao.impl.EpisodeOfCareDao;
+import vn.ehealth.hl7.fhir.ehr.entity.EpisodeOfCareEntity;
 
 @Component
-public class EpisodeOfCareProvider implements IResourceProvider {
+public class EpisodeOfCareProvider extends BaseController<EpisodeOfCareEntity, EpisodeOfCare> implements IResourceProvider {
+	
 	@Autowired
-	FhirContext fhirContext;
-
-	@Autowired
-	IEpisodeOfCare episodeOfCareDao;
-
-	private static final Logger log = LoggerFactory.getLogger(EpisodeOfCareProvider.class);
+	EpisodeOfCareDao episodeOfCareDao;
 
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return EpisodeOfCare.class;
-	}
-
-	@Create
-	public MethodOutcome createEpisodeOfCare(HttpServletRequest theRequest, @ResourceParam EpisodeOfCare obj) {
-
-		log.debug("Create EpisodeOfCare Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(true);
-		EpisodeOfCare mongoEpisodeOfCare = null;
-		try {
-			mongoEpisodeOfCare = episodeOfCareDao.create(fhirContext, obj);
-			List<String> myString = new ArrayList<>();
-			myString.add("EpisodeOfCare/" + mongoEpisodeOfCare.getIdElement());
-			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-					"urn:uuid: " + mongoEpisodeOfCare.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-			method.setId(mongoEpisodeOfCare.getIdElement());
-			method.setResource(mongoEpisodeOfCare);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-				method.setCreated(false);
-			} else {
-				log.error(ex.getMessage());
-				method.setCreated(false);
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		return method;
-	}
-
-	@Read
-	public EpisodeOfCare readEpisodeOfCare(HttpServletRequest request, @IdParam IdType internalId) {
-
-		EpisodeOfCare object = episodeOfCareDao.read(fhirContext, internalId);
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No EpisodeOfCare/" + internalId.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
-	}
-
-	/**
-	 * @author sonvt
-	 * @param request
-	 * @param idType
-	 * @return read object version
-	 */
-	@Read(version = true)
-	public EpisodeOfCare readVread(HttpServletRequest request, @IdParam IdType idType) {
-		EpisodeOfCare object = new EpisodeOfCare();
-		if (idType.hasVersionIdPart()) {
-			object = episodeOfCareDao.readOrVread(fhirContext, idType);
-		} else {
-			object = episodeOfCareDao.read(fhirContext, idType);
-		}
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No EpisodeOfCare/" + idType.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
 	}
 
 	@Search
@@ -201,46 +123,6 @@ public class EpisodeOfCareProvider implements IResourceProvider {
 		}
 	}
 
-	@Delete
-	public EpisodeOfCare deleteEpisodeOfCare(HttpServletRequest request, @IdParam IdType internalId) {
-		EpisodeOfCare obj = episodeOfCareDao.remove(fhirContext, internalId);
-		if (obj == null) {
-			log.error("Couldn't delete EpisodeOfCare" + internalId);
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("EpisodeOfCare is not exit"), OperationOutcome.IssueSeverity.ERROR,
-					OperationOutcome.IssueType.NOTFOUND);
-		}
-		return obj;
-	}
-
-	@Update
-	public MethodOutcome updateEpisodeOfCare(@IdParam IdType theId, @ResourceParam EpisodeOfCare patient) {
-
-		log.debug("Update EpisodeOfCare Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(false);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		EpisodeOfCare newEpisodeOfCare = null;
-		try {
-			newEpisodeOfCare = episodeOfCareDao.update(fhirContext, patient, theId);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-				"urn:uuid: " + newEpisodeOfCare.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
-		method.setId(newEpisodeOfCare.getIdElement());
-		method.setResource(newEpisodeOfCare);
-		return method;
-	}
-
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
@@ -268,4 +150,9 @@ public class EpisodeOfCareProvider implements IResourceProvider {
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
+
+    @Override
+    protected BaseDao<EpisodeOfCareEntity, EpisodeOfCare> getDao() {
+        return episodeOfCareDao;
+    }
 }

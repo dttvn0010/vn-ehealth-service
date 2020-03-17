@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.diagnostic.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,115 +18,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.diagnostic.dao.IDiagnosticReport;
-import vn.ehealth.hl7.fhir.diagnostic.dao.transform.DiagnosticReportEntityToFHIRDiagnosticReport;
 import vn.ehealth.hl7.fhir.diagnostic.entity.DiagnosticReportEntity;
 
 @Repository
-public class DiagnosticReportDao implements IDiagnosticReport {
+public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, DiagnosticReport> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    DiagnosticReportEntityToFHIRDiagnosticReport diagnosticReportEntityToFHIRDiagnosticReport;
-
-    @Override
-    public DiagnosticReport create(FhirContext fhirContext, DiagnosticReport object) {
-        DiagnosticReportEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewDiagnosticReportEntity(object, version, null);
-            // save DiagnosticReportEntity database
-            mongo.save(entity);
-            return diagnosticReportEntityToFHIRDiagnosticReport.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "diagnosticReport", key = "#idType")
-    public DiagnosticReport update(FhirContext fhirContext, DiagnosticReport object, IdType idType) {
-        DiagnosticReportEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, DiagnosticReportEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove DiagnosticReportEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save DiagnosticReportEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                DiagnosticReportEntity entity = createNewDiagnosticReportEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return diagnosticReportEntityToFHIRDiagnosticReport.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "diagnosticReport", key = "#idType")
-    public DiagnosticReport read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            DiagnosticReportEntity entity = mongo.findOne(query, DiagnosticReportEntity.class);
-            if (entity != null) {
-                return diagnosticReportEntityToFHIRDiagnosticReport.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "diagnosticReport", key = "#idType")
-    public DiagnosticReport remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            DiagnosticReportEntity entity = mongo.findOne(query, DiagnosticReportEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return diagnosticReportEntityToFHIRDiagnosticReport.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public DiagnosticReport readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                DiagnosticReportEntity entity = mongo.findOne(query, DiagnosticReportEntity.class);
-                if (entity != null) {
-                    return diagnosticReportEntityToFHIRDiagnosticReport.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
             TokenParam category, TokenParam code, ReferenceParam conetext, DateRangeParam date, TokenParam diagnosis,
             ReferenceParam encounter, TokenParam identifier, ReferenceParam image, DateRangeParam issued,
@@ -159,14 +53,13 @@ public class DiagnosticReportDao implements IDiagnosticReport {
         List<DiagnosticReportEntity> DiagnosticReportEntitys = mongo.find(query, DiagnosticReportEntity.class);
         if (DiagnosticReportEntitys != null) {
             for (DiagnosticReportEntity item : DiagnosticReportEntitys) {
-                DiagnosticReport DiagnosticReport = diagnosticReportEntityToFHIRDiagnosticReport.transform(item);
+                DiagnosticReport DiagnosticReport = transform(item);
                 resources.add(DiagnosticReport);
             }
         }
         return resources;
     }
 
-    @Override
     public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
             TokenParam category, TokenParam code, ReferenceParam conetext, DateRangeParam date, TokenParam diagnosis,
             ReferenceParam encounter, TokenParam identifier, ReferenceParam image, DateRangeParam issued,
@@ -183,23 +76,6 @@ public class DiagnosticReportDao implements IDiagnosticReport {
         }
         total = mongo.count(query, DiagnosticReportEntity.class);
         return total;
-    }
-
-    private DiagnosticReportEntity createNewDiagnosticReportEntity(DiagnosticReport obj, int version,
-            String fhirId) {
-        var ent = DiagnosticReportEntity.fromDiagnosticReport(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
-        
     }
 
     private Criteria setParamToCriteria(TokenParam active, ReferenceParam basedOn, TokenParam category, TokenParam code,
@@ -220,6 +96,26 @@ public class DiagnosticReportDao implements IDiagnosticReport {
                 identifier);
 
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "DiagnosticReport-v1.0";
+    }
+
+    @Override
+    protected DiagnosticReportEntity fromFhir(DiagnosticReport obj) {
+        return DiagnosticReportEntity.fromDiagnosticReport(obj);
+    }
+
+    @Override
+    protected DiagnosticReport toFhir(DiagnosticReportEntity ent) {
+        return DiagnosticReportEntity.toDiagnosticReport(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return DiagnosticReportEntity.class;
     }
 
 }

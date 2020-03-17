@@ -6,10 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.PractitionerRole;
 import org.hl7.fhir.r4.model.Resource;
@@ -21,18 +18,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -42,11 +32,14 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import vn.ehealth.hl7.fhir.providers.BaseController;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.provider.dao.IPractitionerRole;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.provider.dao.impl.PractitionerRoleDao;
+import vn.ehealth.hl7.fhir.provider.entity.PractitionerRoleEntity;
 
 /**
  * 
@@ -55,12 +48,9 @@ import vn.ehealth.hl7.fhir.provider.dao.IPractitionerRole;
  * @version 1.0
  */
 @Component
-public class PractitionerRoleProvider implements IResourceProvider {
+public class PractitionerRoleProvider extends BaseController<PractitionerRoleEntity, PractitionerRole> implements IResourceProvider {
 	@Autowired
-	FhirContext fhirContext;
-
-	@Autowired
-	IPractitionerRole practitionerRoleDao;
+	PractitionerRoleDao practitionerRoleDao;
 
 	private static final Logger log = LoggerFactory.getLogger(PractitionerRoleProvider.class);
 
@@ -69,76 +59,6 @@ public class PractitionerRoleProvider implements IResourceProvider {
 		return PractitionerRole.class;
 	}
 
-	@Create
-	public MethodOutcome create(HttpServletRequest theRequest, @ResourceParam PractitionerRole obj) {
-		log.debug("Create PractitionerRole Provider called");
-		// String permissionAccept =
-		// TerminologyOauth2Keys.CodeSystemOauth2.CODESYSTEM_ADD;
-		// OAuth2Util.checkOauth2(theRequest, permissionAccept);
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(true);
-		OperationOutcome opOutcome = new OperationOutcome();
-
-		method.setOperationOutcome(opOutcome);
-		PractitionerRole mongoObj = null;
-		try {
-			mongoObj = practitionerRoleDao.create(fhirContext, obj);
-			List<String> myString = new ArrayList<>();
-			myString.add("PractitionerRole/" + mongoObj.getIdElement());
-			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-					"urn:uuid: " + mongoObj.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-			method.setId(mongoObj.getIdElement());
-			method.setResource(mongoObj);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-				method.setCreated(false);
-			} else {
-				log.error(ex.getMessage());
-				method.setCreated(false);
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		return method;
-	}
-
-	@Read
-	public PractitionerRole readPractitioner(HttpServletRequest request, @IdParam IdType internalId) {
-		log.debug("Read Practitioner Provider called");
-		// String permissionAccept =
-		// TerminologyOauth2Keys.CodeSystemOauth2.CODESYSTEM_VIEW;
-		// OAuth2Util.checkOauth2(request, permissionAccept);
-		PractitionerRole object = practitionerRoleDao.read(fhirContext, internalId);
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No PractitionerRole/" + internalId.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
-	}
-
-	/**
-	 * @author sonvt
-	 * @param request
-	 * @param idType
-	 * @return read object version
-	 */
-	@Read(version = true)
-	public PractitionerRole readVread(HttpServletRequest request, @IdParam IdType idType) {
-		PractitionerRole object = new PractitionerRole();
-		if (idType.hasVersionIdPart()) {
-			object = practitionerRoleDao.readOrVread(fhirContext, idType);
-		} else {
-			object = practitionerRoleDao.read(fhirContext, idType);
-		}
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No PractitionerRole/" + idType.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		return object;
-	}
 
 	@Search
 	public IBundleProvider searchPractitioner(HttpServletRequest request,
@@ -219,22 +139,6 @@ public class PractitionerRoleProvider implements IResourceProvider {
 		}
 	}
 
-	@Delete
-	public PractitionerRole delete(HttpServletRequest request, @IdParam IdType internalId) {
-		log.debug("delete PractitionerRole Provider called");
-		// String permissionAccept =
-		// TerminologyOauth2Keys.CodeSystemOauth2.CODESYSTEM_DELETE;
-		// OAuth2Util.checkOauth2(request, permissionAccept);
-		PractitionerRole organization = practitionerRoleDao.remove(fhirContext, internalId);
-		if (organization == null) {
-			log.error("Couldn't remove PractitionerRole" + internalId);
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("PractitionerRole is not exit"), OperationOutcome.IssueSeverity.ERROR,
-					OperationOutcome.IssueType.NOTFOUND);
-		}
-		return organization;
-	}
-
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
@@ -264,4 +168,10 @@ public class PractitionerRoleProvider implements IResourceProvider {
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
+
+
+    @Override
+    protected BaseDao<PractitionerRoleEntity, PractitionerRole> getDao() {
+        return practitionerRoleDao;
+    }
 }

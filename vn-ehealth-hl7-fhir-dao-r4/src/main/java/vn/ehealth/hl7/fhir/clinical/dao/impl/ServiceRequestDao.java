@@ -1,18 +1,13 @@
 package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ServiceRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -23,129 +18,18 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
-import vn.ehealth.hl7.fhir.clinical.dao.IServiceRequest;
-import vn.ehealth.hl7.fhir.clinical.dao.transform.ServiceRequestEntityToFHIRServiceRequest;
 import vn.ehealth.hl7.fhir.clinical.entity.ProcedureEntity;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.diagnostic.entity.ServiceRequestEntity;
 
 @Repository
-public class ServiceRequestDao implements IServiceRequest {
+public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequest>{
 
-	@Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    ServiceRequestEntityToFHIRServiceRequest serviceRequestEntityToFHIRServiceRequest;
-    
-	@Override
-	public ServiceRequest create(FhirContext fhirContext, ServiceRequest object) {
-		ServiceRequestEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewServiceRequestEntity(object, version, null);
-            // save ServiceRequestEntity database
-            mongo.save(entity);
-            return serviceRequestEntityToFHIRServiceRequest.transform(entity);
-        }
-		return null;
-	}
-	
-	private ServiceRequestEntity createNewServiceRequestEntity(ServiceRequest obj, int version, String fhirId) {
-        var ent = ServiceRequestEntity.fromServiceRequest(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
-    }
-
-	@Override
-	public ServiceRequest update(FhirContext fhirContext, ServiceRequest object, IdType idType) {
-		ServiceRequestEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, ServiceRequestEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove ProcedureEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save ProcedureEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-            	ServiceRequestEntity entity = createNewServiceRequestEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return serviceRequestEntityToFHIRServiceRequest.transform(entity);
-            }
-        }
-		return null;
-	}
-
-	@Override
-	public ServiceRequest read(FhirContext fhirContext, IdType idType) {
-		if (idType != null) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ServiceRequestEntity entity = mongo.findOne(query, ServiceRequestEntity.class);
-            if (entity != null) {
-                return serviceRequestEntityToFHIRServiceRequest.transform(entity);
-            }
-        }
-		return null;
-	}
-
-	@Override
-	public ServiceRequest remove(FhirContext fhirContext, IdType idType) {
-		if (idType != null) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ServiceRequestEntity entity = mongo.findOne(query, ServiceRequestEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return serviceRequestEntityToFHIRServiceRequest.transform(entity);
-            }
-        }
-		return null;
-	}
-
-	@Override
-	public ServiceRequest readOrVread(FhirContext fhirContext, IdType idType) {
-		if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query
-                        .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                ServiceRequestEntity entity = mongo.findOne(query, ServiceRequestEntity.class);
-                if (entity != null) {
-                    return serviceRequestEntityToFHIRServiceRequest.transform(entity);
-                }
-            }
-        }
-		return null;
-	}
-
-	@Override
-	public List<Resource> search(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
+	@SuppressWarnings("deprecation")
+    public List<Resource> search(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
 			TokenParam category, TokenParam code, ReferenceParam context, DateRangeParam date,
 			ReferenceParam definition, ReferenceParam encounter, TokenParam identifier, ReferenceParam location,
 			ReferenceParam partOf, ReferenceParam patient, ReferenceParam performer, TokenParam status,
@@ -170,14 +54,13 @@ public class ServiceRequestDao implements IServiceRequest {
         List<ServiceRequestEntity> entitys = mongo.find(query, ServiceRequestEntity.class);
         if (entitys != null) {
             for (ServiceRequestEntity item : entitys) {
-            	ServiceRequest obj = serviceRequestEntityToFHIRServiceRequest.transform(item);
+            	ServiceRequest obj = transform(item);
                 resources.add(obj);
             }
         }
         return resources;
 	}
 
-	@Override
 	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
 			TokenParam category, TokenParam code, ReferenceParam context, DateRangeParam date,
 			ReferenceParam definition, ReferenceParam encounter, TokenParam identifier, ReferenceParam location,
@@ -317,5 +200,25 @@ public class ServiceRequestDao implements IServiceRequest {
             }
         }
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "ServiceRequest-v1.0";
+    }
+
+    @Override
+    protected ServiceRequestEntity fromFhir(ServiceRequest obj) {
+        return ServiceRequestEntity.fromServiceRequest(obj);
+    }
+
+    @Override
+    protected ServiceRequest toFhir(ServiceRequestEntity ent) {
+        return ServiceRequestEntity.toServiceRequest(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return ServiceRequestEntity.class;
     }
 }

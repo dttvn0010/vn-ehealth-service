@@ -1,17 +1,13 @@
 package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Goal;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -22,112 +18,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
-import vn.ehealth.hl7.fhir.clinical.dao.IGoal;
-import vn.ehealth.hl7.fhir.clinical.dao.transform.GoalEntityToFHIRGoal;
 import vn.ehealth.hl7.fhir.clinical.entity.GoalEntity;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 
 @Repository
-public class GoalDao implements IGoal {
+public class GoalDao extends BaseDao<GoalEntity, Goal> {
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    GoalEntityToFHIRGoal goalEntityToFHIRGoal;
-
-    @Override
-    public Goal create(FhirContext fhirContext, Goal object) {
-        GoalEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewGoalEntity(object, version, null);
-            // save GoalEntity database
-            mongo.save(entity);
-            return goalEntityToFHIRGoal.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    public Goal update(FhirContext fhirContext, Goal object, IdType idType) {
-        GoalEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, GoalEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove GoalEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save GoalEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                GoalEntity entity = createNewGoalEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return goalEntityToFHIRGoal.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Goal read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            GoalEntity entity = mongo.findOne(query, GoalEntity.class);
-            if (entity != null) {
-                return goalEntityToFHIRGoal.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Goal remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            GoalEntity entity = mongo.findOne(query, GoalEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return goalEntityToFHIRGoal.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Goal readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                GoalEntity entity = mongo.findOne(query, GoalEntity.class);
-                if (entity != null) {
-                    return goalEntityToFHIRGoal.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, TokenParam category, TokenParam identifier,
             ReferenceParam patient, DateRangeParam startDate, TokenParam status, ReferenceParam subject,
             DateRangeParam targetDate, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
@@ -150,14 +50,13 @@ public class GoalDao implements IGoal {
         List<GoalEntity> goalEntitys = mongo.find(query, GoalEntity.class);
         if (goalEntitys != null) {
             for (GoalEntity item : goalEntitys) {
-                Goal goal = goalEntityToFHIRGoal.transform(item);
+                Goal goal = transform(item);
                 resources.add(goal);
             }
         }
         return resources;
     }
 
-    @Override
     public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, TokenParam category,
             TokenParam identifier, ReferenceParam patient, DateRangeParam startDate, TokenParam status,
             ReferenceParam subject, DateRangeParam targetDate, TokenParam resid, DateRangeParam _lastUpdated,
@@ -171,21 +70,6 @@ public class GoalDao implements IGoal {
         }
         total = mongo.count(query, GoalEntity.class);
         return total;
-    }
-
-    private GoalEntity createNewGoalEntity(Goal obj, int version, String fhirId) {
-        var ent = GoalEntity.fromGoalEntity(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
     }
 
     private Criteria setParamToCriteria(TokenParam active, TokenParam category, TokenParam identifier,
@@ -241,6 +125,26 @@ public class GoalDao implements IGoal {
             criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "target.due", targetDate);
         }
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "Goal-v1.0";
+    }
+
+    @Override
+    protected GoalEntity fromFhir(Goal obj) {
+        return GoalEntity.fromGoalEntity(obj);
+    }
+
+    @Override
+    protected Goal toFhir(GoalEntity ent) {
+        return GoalEntity.toGoal(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return GoalEntity.class;
     }
 
 }

@@ -1,20 +1,13 @@
 package vn.ehealth.hl7.fhir.diagnostic.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -25,115 +18,16 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.diagnostic.dao.IObservation;
-import vn.ehealth.hl7.fhir.diagnostic.dao.transform.ObservationEntityToFHIRObservation;
 import vn.ehealth.hl7.fhir.diagnostic.entity.ObservationEntity;
 
 @Repository
-public class ObservationDao implements IObservation {
+public class ObservationDao extends BaseDao<ObservationEntity, Observation>{
 
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    ObservationEntityToFHIRObservation observationEntityToFHIRObservation;
-
-    @Override
-    public Observation create(FhirContext fhirContext, Observation object) {
-        ObservationEntity entity = null;
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            entity = createNewObservationEntity(object, version, null);
-            // save ObservationEntity database
-            mongo.save(entity);
-            return observationEntityToFHIRObservation.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "observation", key = "#idType")
-    public Observation update(FhirContext fhirContext, Observation object, IdType idType) {
-        ObservationEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null && idType.hasIdPart()) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, ObservationEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove ObservationEntity old
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
-            mongo.save(entityOld);
-            // save ObservationEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                ObservationEntity entity = createNewObservationEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
-                mongo.save(entity);
-                return observationEntityToFHIRObservation.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "observation", key = "#idType")
-    public Observation read(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ObservationEntity entity = mongo.findOne(query, ObservationEntity.class);
-            if (entity != null) {
-                return observationEntityToFHIRObservation.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "observation", key = "#idType")
-    public Observation remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            ObservationEntity entity = mongo.findOne(query, ObservationEntity.class);
-            if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
-                mongo.save(entity);
-                return observationEntityToFHIRObservation.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Observation readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query.query(
-                        Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                ObservationEntity entity = mongo.findOne(query, ObservationEntity.class);
-                if (entity != null) {
-                    return observationEntityToFHIRObservation.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
             TokenParam category, TokenParam code, TokenParam comboCode, TokenParam comboDataAbsentReason,
             TokenParam comboValueConcept, TokenParam componentCode, TokenParam componentDataAbsentReason,
@@ -164,14 +58,13 @@ public class ObservationDao implements IObservation {
         List<ObservationEntity> ObservationEntitys = mongo.find(query, ObservationEntity.class);
         if (ObservationEntitys != null) {
             for (ObservationEntity item : ObservationEntitys) {
-                Observation Observation = observationEntityToFHIRObservation.transform(item);
+                Observation Observation = transform(item);
                 resources.add(Observation);
             }
         }
         return resources;
     }
 
-    @Override
     public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
             TokenParam category, TokenParam code, TokenParam comboCode, TokenParam comboDataAbsentReason,
             TokenParam comboValueConcept, TokenParam componentCode, TokenParam componentDataAbsentReason,
@@ -193,22 +86,6 @@ public class ObservationDao implements IObservation {
         }
         total = mongo.count(query, ObservationEntity.class);
         return total;
-    }
-
-    private ObservationEntity createNewObservationEntity(Observation obj, int version, String fhirId) {
-        var ent = ObservationEntity.fromObservation(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
-        
     }
 
     private Criteria setParamToCriteria(TokenParam active, ReferenceParam basedOn, TokenParam category, TokenParam code,
@@ -262,6 +139,26 @@ public class ObservationDao implements IObservation {
                 identifier);
 
         return criteria;
+    }
+
+    @Override
+    protected String getProfile() {
+        return "Observation-v1.0";
+    }
+
+    @Override
+    protected ObservationEntity fromFhir(Observation obj) {
+        return ObservationEntity.fromObservation(obj);
+    }
+
+    @Override
+    protected Observation toFhir(ObservationEntity ent) {
+        return ObservationEntity.toObservation(ent);
+    }
+
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return ObservationEntity.class;
     }
 
 

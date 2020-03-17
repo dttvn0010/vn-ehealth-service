@@ -1,28 +1,20 @@
 package vn.ehealth.hl7.fhir.term.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.CodeSystem;
 import org.hl7.fhir.r4.model.CodeSystem.ConceptDefinitionComponent;
 import org.hl7.fhir.r4.model.CodeSystem.ConceptDefinitionDesignationComponent;
 import org.hl7.fhir.r4.model.CodeSystem.ConceptPropertyComponent;
 import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -33,12 +25,10 @@ import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.term.dao.ICodeSystem;
-import vn.ehealth.hl7.fhir.term.dao.transform.CodeSystemEntityToFHIRCodeSystem;
 import vn.ehealth.hl7.fhir.term.entity.CodeSystemEntity;
 import vn.ehealth.hl7.fhir.term.entity.ConceptDesignationEntity;
 import vn.ehealth.hl7.fhir.term.entity.ConceptEntity;
@@ -50,117 +40,9 @@ import vn.ehealth.hl7.fhir.term.entity.ConceptPropertyEntity;
  * @version 1.0
  */
 @Repository
-public class CodeSystemDao implements ICodeSystem {
-    @Autowired
-    MongoOperations mongo;
-
-    @Autowired
-    CodeSystemEntityToFHIRCodeSystem codeSystemEntityToFHIRCodeSystem;
-
-    @Override
-    public CodeSystem create(FhirContext fhirContext, CodeSystem object) {
-        CodeSystemEntity entity = new CodeSystemEntity();
-        int version = ConstantKeys.VERSION_1;
-        if (object != null) {
-            // save CodeSystemEntity
-            entity = saveCodeSystemEntity(object, version, entity, null);
-            return codeSystemEntityToFHIRCodeSystem.transform(entity);
-        }
-        return null;
-    }
-
-    @Override
-    @CachePut(value = "codeSystem", key = "#idType")
-    public CodeSystem update(FhirContext fhirContext, CodeSystem object, IdType idType) {
-        CodeSystemEntity entityOld = null;
-        String fhirId = "";
-        if (idType != null) {
-            fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            entityOld = mongo.findOne(query, CodeSystemEntity.class);
-        }
-        if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-            // remove CodeSystemEntity old
-            removeCodeSystemEntity(entityOld);
-            // save CodeSystemEntity
-            int version = entityOld.version + 1;
-            if (object != null) {
-                CodeSystemEntity entity = new CodeSystemEntity();
-                entity = saveCodeSystemEntity(object, version, entity, fhirId);
-                return codeSystemEntityToFHIRCodeSystem.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @Cacheable(value = "codeSystem", key = "#idType")
-    public CodeSystem read(FhirContext fhirContext, IdType idType) {
-        if (idType != null) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            CodeSystemEntity entity = mongo.findOne(query, CodeSystemEntity.class);
-            if (entity != null) {
-                ObjectId codeSystemId = entity.id;
-                if (codeSystemId != null && !codeSystemId.toString().isEmpty()) {
-                    List<ConceptEntity> concepts = new ArrayList<>();
-                    concepts = readConcepts(codeSystemId.toString(), null);
-                    if (concepts != null) {
-                        entity.concept = (concepts);
-                    }
-                }
-                return codeSystemEntityToFHIRCodeSystem.transform(entity);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    @CacheEvict(value = "codeSystem", key = "#idType")
-    public CodeSystem remove(FhirContext fhirContext, IdType idType) {
-        if (idType != null) {
-            String fhirId = idType.getIdPart();
-            Query query = Query
-                    .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true));
-            CodeSystemEntity entity = mongo.findOne(query, CodeSystemEntity.class);
-            if (entity != null) {
-                // remove CodeSystemEntity old
-                removeCodeSystemEntity(entity);
-                return codeSystemEntityToFHIRCodeSystem.transform(entity);
-            }
-        }
-        return null;
-    }
-    
-    @Override
-    public CodeSystem readOrVread(FhirContext fhirContext, IdType idType) {
-        if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-            String fhirId = idType.getIdPart();
-            Integer version = Integer.valueOf(idType.getVersionIdPart());
-            if (version != null) {
-                Query query = Query
-                        .query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version));
-                CodeSystemEntity entity = mongo.findOne(query, CodeSystemEntity.class);
-                if (entity != null) {
-                    ObjectId codeSystemId = entity.id;
-                    if (codeSystemId != null && !codeSystemId.toString().isEmpty()) {
-                        List<ConceptEntity> concepts = new ArrayList<>();
-                        concepts = readConcepts(codeSystemId.toString(), null, version);
-                        if (concepts != null) {
-                            entity.concept = (concepts);
-                        }
-                    }
-                    return codeSystemEntityToFHIRCodeSystem.transform(entity);
-                }
-            }
-        }
-        return null;
-    }
-    
-    
-    @Override
+public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
+   
+    @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, DateRangeParam date, TokenParam identifier,
             StringParam name, TokenParam code, TokenParam contentMode, StringParam description, TokenParam jurisdiction,
             TokenParam language, StringParam publisher, TokenParam status, UriParam system, StringParam title,
@@ -231,13 +113,13 @@ public class CodeSystemDao implements ICodeSystem {
                     Query qry1 = Query.query(criteria1);
                     List<ConceptEntity> conceptresults = mongo.find(qry1, ConceptEntity.class);
                     if (conceptresults != null && conceptresults.size() > 0) {
-                        CodeSystem codeSystem = codeSystemEntityToFHIRCodeSystem.transform(codeSystemEntity);
+                        CodeSystem codeSystem = transform(codeSystemEntity);
                         resources.add(codeSystem);
                     }
                 }
             } else {
                 for (CodeSystemEntity codeSystemEntity : results) {
-                    CodeSystem codeSystem = codeSystemEntityToFHIRCodeSystem.transform(codeSystemEntity);
+                    CodeSystem codeSystem = transform(codeSystemEntity);
                     resources.add(codeSystem);
                 }
             }
@@ -334,7 +216,6 @@ public class CodeSystemDao implements ICodeSystem {
         return conceptmps;
     }
 
-    @Override
     public Parameters getLookupParams(TokenParam code, UriParam system, StringParam version, Coding coding,
             DateRangeParam date, TokenParam displayLanguage, TokenParam property, TokenParam resid,
             DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
@@ -440,7 +321,6 @@ public class CodeSystemDao implements ICodeSystem {
         return retVal;
     }
 
-    @Override
     public long findMatchesAdvancedTotal(FhirContext ctx, DateRangeParam date, TokenParam identifier, StringParam name,
             TokenParam code, TokenParam contentMode, StringParam description, TokenParam jurisdiction,
             TokenParam language, StringParam publisher, TokenParam status, UriParam system, StringParam title,
@@ -502,13 +382,13 @@ public class CodeSystemDao implements ICodeSystem {
                     Query qry1 = Query.query(criteria1);
                     List<ConceptEntity> conceptresults = mongo.find(qry1, ConceptEntity.class);
                     if (conceptresults != null && conceptresults.size() > 0) {
-                        CodeSystem codeSystem = codeSystemEntityToFHIRCodeSystem.transform(codeSystemEntity);
+                        CodeSystem codeSystem = transform(codeSystemEntity);
                         resources.add(codeSystem);
                     }
                 }
             } else {
                 for (CodeSystemEntity codeSystemEntity : results) {
-                    CodeSystem codeSystem = codeSystemEntityToFHIRCodeSystem.transform(codeSystemEntity);
+                    CodeSystem codeSystem = transform(codeSystemEntity);
                     resources.add(codeSystem);
                 }
             }
@@ -516,156 +396,23 @@ public class CodeSystemDao implements ICodeSystem {
         return resources.size();
     }
 
-    private List<ConceptEntity> readConcepts(String codeSystemId, String parentConceptId) {
-        List<ConceptEntity> conceptParents = new ArrayList<>();
-        Criteria criteria = new Criteria();
-        if (codeSystemId != null && !codeSystemId.isEmpty()) {
-            criteria.and(ConstantKeys.SP_CODE_SYSTEM_ID).is(codeSystemId).and(ConstantKeys.SP_ACTIVE).is(true);
-            if (parentConceptId != null && !parentConceptId.isEmpty()) {
-                criteria.and(ConstantKeys.SP_PARENT_CONCEPT_ID).is(parentConceptId);
-            } else {
-                criteria.orOperator(new Criteria(ConstantKeys.SP_PARENT_CONCEPT_ID).is(null),
-                        new Criteria(ConstantKeys.SP_PARENT_CONCEPT_ID).is(""));
-            }
-        }
-        Query query = new Query(criteria);
-        if (query != null) {
-            conceptParents = mongo.find(query, ConceptEntity.class);
-        }
-        if (conceptParents != null) {
-            for (ConceptEntity item : conceptParents) {
-                List<ConceptEntity> concepts = new ArrayList<>();
-                concepts = readConcepts(codeSystemId, item.id.toString());
-                if (concepts != null) {
-                    item.concept = (concepts);
-                }
-            }
-        }
-        return conceptParents;
-    }
-    
-    private List<ConceptEntity> readConcepts(String codeSystemId, String parentConceptId, int version) {
-        List<ConceptEntity> conceptParents = new ArrayList<>();
-        Criteria criteria = new Criteria();
-        if (codeSystemId != null && !codeSystemId.isEmpty()) {
-            criteria.and(ConstantKeys.SP_CODE_SYSTEM_ID).is(codeSystemId).and(ConstantKeys.SP_VERSION).is(version);
-            if (parentConceptId != null && !parentConceptId.isEmpty()) {
-                criteria.and(ConstantKeys.SP_PARENT_CONCEPT_ID).is(parentConceptId);
-            } else {
-                criteria.orOperator(new Criteria(ConstantKeys.SP_PARENT_CONCEPT_ID).is(null),
-                        new Criteria(ConstantKeys.SP_PARENT_CONCEPT_ID).is(""));
-            }
-        }
-        Query query = new Query(criteria);
-        if (query != null) {
-            conceptParents = mongo.find(query, ConceptEntity.class);
-        }
-        if (conceptParents != null) {
-            for (ConceptEntity item : conceptParents) {
-                List<ConceptEntity> concepts = new ArrayList<>();
-                concepts = readConcepts(codeSystemId, item.id.toString());
-                if (concepts != null) {
-                    item.concept = (concepts);
-                }
-            }
-        }
-        return conceptParents;
+    @Override
+    protected String getProfile() {
+        return "CodeSystem-v1.0";
     }
 
-    private CodeSystemEntity saveCodeSystemEntity(CodeSystem object, int version, CodeSystemEntity entity,
-            String fhirId) {
-        entity = createNewCodeSystemEntity(object, version, fhirId);
-        // save CodeSystemEntity database
-        mongo.save(entity);
-        ObjectId codeSystemId = entity.id;
-        if (codeSystemId != null && object.hasConcept()) {
-            // save concept
-            List<ConceptEntity> concepts = new ArrayList<>();
-            concepts = saveConcepts(object.getConcept(), version, codeSystemId.toString(), null, fhirId);
-            entity.concept = (concepts);
-        }
-        return entity;
+    @Override
+    protected CodeSystemEntity fromFhir(CodeSystem obj) {
+        return CodeSystemEntity.fromCodeSystem(obj);
     }
 
-    private List<ConceptEntity> saveConcepts(List<ConceptDefinitionComponent> objectConcepts, int version,
-            String codeSystemId, String parentId, String fhirId) {
-        List<ConceptEntity> conceptParents = new ArrayList<>();
-        for (ConceptDefinitionComponent item : objectConcepts) {
-            ConceptEntity conceptParent = createNewConceptEntity(item, codeSystemId, parentId, version);
-            if (fhirId != null && !fhirId.isEmpty()) {
-                conceptParent.resUpdated = (new Date());
-            }
-            mongo.save(conceptParent);
-            if (item.hasConcept() && conceptParent.id != null && !conceptParent.id.toString().isEmpty()) {
-                List<ConceptEntity> concepts = new ArrayList<>();
-                concepts = saveConcepts(item.getConcept(), version, codeSystemId, conceptParent.id.toString(),
-                        fhirId);
-                if (concepts != null) {
-                    conceptParent.concept = (concepts);
-                }
-            }
-            conceptParents.add(conceptParent);
-
-        }
-        return conceptParents;
+    @Override
+    protected CodeSystem toFhir(CodeSystemEntity ent) {
+        return CodeSystemEntity.toCodeSystem(ent);
     }
 
-    private void removeCodeSystemEntity(CodeSystemEntity entity) {
-        // remove CodeSystemEntity old
-        entity.resDeleted = (new Date());
-        entity.active = (false);
-        mongo.save(entity);
-        ObjectId codeSystemId = entity.id;
-        if (codeSystemId != null) {
-            // remove concept by codeSystemId
-            List<ConceptEntity> conceptCodeSystems = new ArrayList<>();
-            Query queryConceptCodeSystem = Query.query(Criteria.where(ConstantKeys.SP_CODE_SYSTEM_ID)
-                    .is(codeSystemId.toString()).and(ConstantKeys.SP_ACTIVE).is(true));
-            conceptCodeSystems = mongo.find(queryConceptCodeSystem, ConceptEntity.class);
-            if (conceptCodeSystems != null) {
-                for (ConceptEntity item : conceptCodeSystems) {
-                    item.resDeleted = (new Date());
-                    item.active = (false);
-                    mongo.save(item);
-                }
-            }
-
-        }
-    }
-
-    private CodeSystemEntity createNewCodeSystemEntity(CodeSystem obj, int version, String fhirId) {
-        var ent = CodeSystemEntity.fromCodeSystem(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
-        if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
-        } else {
-            ent.fhirId = (StringUtil.generateUID());
-        }
-        
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        return ent;
-    }
-
-
-    private ConceptEntity createNewConceptEntity(ConceptDefinitionComponent object, String codeSystemId,
-            String parentId, int version) {
-        var entity = ConceptEntity.fromConceptDefinitionComponent(object);
-        // codeSystemId
-        if (codeSystemId != null && !codeSystemId.isEmpty()) {
-            entity.codeSystemId = (codeSystemId);
-        }
-        // parentConceptId
-        if (parentId != null && !parentId.isEmpty()) {
-            entity.parentConceptId = (parentId);
-        }
-        // active
-        entity.active = (true);
-        // version
-        entity.version = (version);
-        // ResCreated
-        entity.resCreated = (new Date());
-        return entity;
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return CodeSystemEntity.class;
     }
 }
