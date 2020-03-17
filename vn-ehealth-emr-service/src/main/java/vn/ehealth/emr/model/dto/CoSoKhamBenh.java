@@ -40,12 +40,8 @@ public class CoSoKhamBenh extends BaseModelDTO {
     
     public static Location toFhir(CoSoKhamBenh dto) {
         if(dto == null) return null;
-        var obj = DbUtils.getLocationDao().read(new IdType(dto.id));
-        
-        if(obj == null) {
-            obj = new Location();
-        }
-        
+        var obj = new Location();
+        obj.setId(dto.id);
         obj.setIdentifier(listOf(createIdentifier(dto.ma, CodeSystemValue.CO_SO_KHAM_BENH)));
         obj.setName(dto.ten);
         return obj;

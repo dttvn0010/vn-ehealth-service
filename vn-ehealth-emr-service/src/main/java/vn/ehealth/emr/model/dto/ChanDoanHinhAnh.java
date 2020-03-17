@@ -9,19 +9,18 @@ import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Procedure;
+import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ServiceRequest;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.emr.utils.DbUtils;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.emr.utils.FhirUtil.*;
 
 public class ChanDoanHinhAnh extends BaseModelDTO {
-    @JsonIgnore public DotKhamBenh dotKham;
+    public String encounterId;
+    
     public DanhMuc dmCdha;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -43,11 +42,7 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayGioBaoCao;    
-    
-    public String getEncounterId() {
-        return dotKham != null? dotKham.id : null;
-    }
-    
+     
     public ChanDoanHinhAnh() {
         super();
     }
@@ -58,7 +53,7 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
         if(procedure == null) return;
         
         // Procedure
-        this.dotKham = DotKhamBenh.fromReference(procedure.getEncounter());
+        this.encounterId = procedure.getEncounter().getReference();
         this.dmCdha = new DanhMuc(procedure.getCode());
         this.ngayThucHien = procedure.hasPerformedDateTimeType()? procedure.getPerformedDateTimeType().getValue() : null;
         this.bacSiChuyenKhoa = CanboYte.fromReference(procedure.getAsserter());
@@ -108,10 +103,9 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
     }
     
     public static Map<String, Resource> toFhir(ChanDoanHinhAnh cdha) {
-        if(cdha == null || cdha.dotKham == null) return null;
-        cdha.dotKham = DotKhamBenh.fromFhirId(cdha.dotKham.id);
-        
-        if(cdha.dotKham == null || cdha.dotKham.benhNhan == null) return null;
+        if(cdha == null) return null;
+        var dotKhamBenh = DotKhamBenh.fromFhirId(cdha.encounterId);
+        if(dotKhamBenh == null || dotKhamBenh.benhNhan == null) return null;
         
         // Procedure
         var procedure = DbUtils.getProcedureDao().read(new IdType(cdha.id));
@@ -119,8 +113,8 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
             procedure = new Procedure();
         }
         
-        procedure.setSubject(BaseModelDTO.toReference(cdha.dotKham.benhNhan));
-        procedure.setEncounter(BaseModelDTO.toReference(cdha.dotKham));
+        procedure.setSubject(BaseModelDTO.toReference(dotKhamBenh.benhNhan));
+        procedure.setEncounter(new Reference(cdha.encounterId));
         procedure.setAsserter(BaseModelDTO.toReference(cdha.bacSiChuyenKhoa));
         if(cdha.ngayThucHien != null) procedure.setPerformed(new DateTimeType(cdha.ngayThucHien));
         procedure.setCode(DanhMuc.toConcept(cdha.dmCdha, CodeSystemValue.CHAN_DOAN_HINH_ANH));
@@ -128,27 +122,20 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
         procedure.setFollowUp(listOf(createCodeableConcept(cdha.loiDan)));
         
         //ServiceRequest
-        var serviceRequest = getServiceRequest(procedure);
-        if(serviceRequest == null) {
-            serviceRequest = new ServiceRequest();
-        }
-        
-        serviceRequest.setSubject(BaseModelDTO.toReference(cdha.dotKham.benhNhan));
-        serviceRequest.setEncounter(BaseModelDTO.toReference(cdha.dotKham));
+        var serviceRequest = new ServiceRequest();
+        serviceRequest.setId(procedure.hasBasedOn()? procedure.getBasedOnFirstRep().getReference() : null);
+        serviceRequest.setSubject(procedure.getSubject());
+        serviceRequest.setEncounter(procedure.getEncounter());
         serviceRequest.setRequester(CanboYte.toReference(cdha.bacSiYeuCau));
         serviceRequest.setAuthoredOn(cdha.ngayYeuCau);
         serviceRequest.setCode(procedure.getCode());
         serviceRequest.setOrderDetail(listOf(createCodeableConcept(cdha.noiDungYeuCau)));
-        
-        
+                
         // DiagnosticReport
-        var diagnosticReport = getDiagnosticReport(procedure);
-        if(diagnosticReport == null) {
-            diagnosticReport = new DiagnosticReport();
-        }
-        
-        diagnosticReport.setSubject(BaseModelDTO.toReference(cdha.dotKham.benhNhan));
-        diagnosticReport.setEncounter(BaseModelDTO.toReference(cdha.dotKham));
+        var diagnosticReport = new DiagnosticReport();
+        diagnosticReport.setId(procedure.hasReport()? procedure.getReportFirstRep().getReference() : null);
+        diagnosticReport.setSubject(procedure.getSubject());
+        diagnosticReport.setEncounter(procedure.getEncounter());
         
         diagnosticReport.setPerformer(listOf(BaseModelDTO.toReference(cdha.nguoiVietBaoCao)));
         diagnosticReport.setResultsInterpreter(listOf(BaseModelDTO.toReference(cdha.nguoiDanhGiaKetQua)));
@@ -156,8 +143,11 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
         diagnosticReport.setIssued(cdha.ngayGioBaoCao);
         diagnosticReport.setCode(procedure.getCode());
         diagnosticReport.setConclusion(cdha.ketLuan);
-                                
-        
-        return Map.of("procedure", procedure, "serviceRequest", serviceRequest, "diagnosticReport", diagnosticReport);        
+                     
+        return Map.of( 
+                    "procedure", procedure, 
+                    "serviceRequest", serviceRequest, 
+                    "diagnosticReport", diagnosticReport
+                 );        
     }    
 }

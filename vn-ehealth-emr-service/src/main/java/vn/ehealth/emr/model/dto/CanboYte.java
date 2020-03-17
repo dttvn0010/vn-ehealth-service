@@ -47,7 +47,7 @@ public class CanboYte extends BaseModelDTO {
             obj = new Practitioner();
         }
         
-        obj.addName(createHumanName(dto.ten));
+        obj.setName(listOf(createHumanName(dto.ten)));
         obj.setIdentifier(listOf(createIdentifier(dto.chungChiHanhNghe, CodeSystemValue.CHUNG_CHI_HANH_NGHE)));
         
         return obj;

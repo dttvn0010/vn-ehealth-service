@@ -92,6 +92,7 @@ public class EncounterEntity extends BaseResource{
         ent.classHistory = obj.hasClassHistory()? transform(obj.getClassHistory(), EncounterClassHistoryEntity::fromClassHistoryComponent) : null;        
         ent.type = obj.hasType()? BaseCodeableConcept.fromCodeableConcept(obj.getType()) : null;
         ent.priority = obj.hasPriority()? BaseCodeableConcept.fromCodeableConcept(obj.getPriority()) : null;
+        ent.subject = obj.hasSubject()? BaseReference.fromReference(obj.getSubject()) : null;
         ent.episodeOfCare = obj.hasEpisodeOfCare()? BaseReference.fromReferenceList(obj.getEpisodeOfCare()) : null;
         ent.reasonReference = obj.hasReasonReference()? BaseReference.fromReferenceList(obj.getReasonReference()) : null;
         ent.participant = obj.hasParticipant()? transform(obj.getParticipant(), EncounterParticipantEntity::fromEncounterParticipantComponent) : null;
@@ -118,6 +119,7 @@ public class EncounterEntity extends BaseResource{
         obj.setClassHistory(transform(ent.classHistory, EncounterClassHistoryEntity::toClassHistoryComponent));
         obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
         obj.setPriority(BaseCodeableConcept.toCodeableConcept(ent.priority));
+        obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setEpisodeOfCare(BaseReference.toReferenceList(ent.episodeOfCare));
         obj.setReasonReference(BaseReference.toReferenceList(ent.reasonReference));
         obj.setParticipant(transform(ent.participant, EncounterParticipantEntity::toEncounterParticipantComponent));

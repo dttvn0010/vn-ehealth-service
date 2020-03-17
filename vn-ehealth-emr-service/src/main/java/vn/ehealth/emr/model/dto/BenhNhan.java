@@ -119,10 +119,11 @@ public class BenhNhan  extends BaseModelDTO {
             obj = new Patient();
         }
         
-        obj.addName(createHumanName(dto.tenDayDu));        
+        obj.setName(listOf(createHumanName(dto.tenDayDu)));        
         obj.setBirthDate(dto.ngaySinh);
-        obj.addIdentifier(createIdentifier(dto.soTheBhyt, CodeSystemValue.SO_THE_BHYT));
-        obj.addIdentifier(createIdentifier(dto.idHis, CodeSystemValue.ID_HIS, null, dto.ngayHetHanTheBhyt));
+        obj.setIdentifier(listOf(createIdentifier(dto.soTheBhyt, CodeSystemValue.SO_THE_BHYT),
+                                createIdentifier(dto.idHis, CodeSystemValue.ID_HIS, null, dto.ngayHetHanTheBhyt)
+                          ));
         
         if(dto.dmGioiTinh != null)
             obj.setGender(AdministrativeGender.fromCode(dto.dmGioiTinh.ma));

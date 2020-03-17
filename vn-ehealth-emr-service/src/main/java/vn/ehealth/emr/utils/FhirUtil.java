@@ -33,7 +33,7 @@ public class FhirUtil {
     public static Identifier createIdentifier(String value, String system) {
         var identifier = new Identifier();
         identifier.setValue(value);
-        identifier.setSystem(value);
+        identifier.setSystem(system);
         return identifier;
     }
     

@@ -1,5 +1,6 @@
 package vn.ehealth.emr.dto.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -74,7 +75,7 @@ public class ChanDoanHinhAnhController {
         }
     }
     
-    @PostMapping("/create_or_update")
+    @PostMapping("/save")
     public ResponseEntity<?> createOrUpdate(@RequestBody ChanDoanHinhAnh dto) {
         try {
             Map<String, Resource> entities = ChanDoanHinhAnh.toFhir(dto);
@@ -86,12 +87,12 @@ public class ChanDoanHinhAnhController {
                                 
                 diagnosticReport = saveDiagnosticReport(diagnosticReport);
                 if(diagnosticReport != null) {
-                    procedure.addReport(new Reference(diagnosticReport.getId()));
+                    procedure.setReport(List.of(new Reference(diagnosticReport.getId())));
                 }
                 
                 serviceRequest = saveServiceRequest(serviceRequest);
                 if(serviceRequest != null) {
-                    procedure.addBasedOn(new Reference(serviceRequest.getId()));
+                    procedure.setBasedOn(List.of(new Reference(serviceRequest.getId())));
                 }
                 
                 procedure = saveProcedure(procedure);

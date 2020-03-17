@@ -44,12 +44,8 @@ public class KhoaDieuTri extends BaseModelDTO {
     
     public static Location toFhir(KhoaDieuTri dto) {
         if(dto == null) return null;
-        var ent = DbUtils.getLocationDao().read(new IdType(dto.id));
-        
-        if(ent == null) {
-            ent = new Location();
-        }
-        
+        var ent = new Location();
+        ent.setId(dto.id);
         ent.setIdentifier(listOf(createIdentifier(dto.ma, CodeSystemValue.CO_SO_KHAM_BENH)));
         ent.setName(dto.ten);
         ent.setType(listOf(DanhMuc.toConcept(dto.dmLoaiKhoa, CodeSystemValue.KHOA_DIEU_TRI)));

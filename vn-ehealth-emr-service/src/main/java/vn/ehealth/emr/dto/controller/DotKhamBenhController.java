@@ -41,7 +41,7 @@ public class DotKhamBenhController {
         return ResponseEntity.ok(lst);
     }
     
-    @PostMapping("/create_or_update")
+    @PostMapping("/save")
     public ResponseEntity<?> createOrUpdate(@RequestBody DotKhamBenh dto) {
         try {
             var obj = DotKhamBenh.toFhir(dto);

@@ -10,7 +10,6 @@ import org.hl7.fhir.r4.model.Reference;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.DbUtils;
 
@@ -77,13 +76,8 @@ public class DotKhamBenh extends BaseModelDTO {
     
     public static Encounter toFhir(DotKhamBenh dto) {
         if(dto == null) return null;
-        var ent = DbUtils.getEncounterDao().read(new IdType(dto.id));
-        
-        if(ent == null) {
-            ent = new Encounter();
-            ent.setId(StringUtil.generateUID());
-        }
-        
+        var ent = new Encounter();
+        ent.setId(dto.id);
         ent.setIdentifier(listOf(createIdentifier(dto.maYte, CodeSystemValue.DOT_KHAM_BENH)));
         ent.setType(listOf(DanhMuc.toConcept(dto.dmLoaiKham, CodeSystemValue.LOAI_KHAM_BENH)));
         ent.setSubject(BaseModelDTO.toReference(dto.benhNhan));

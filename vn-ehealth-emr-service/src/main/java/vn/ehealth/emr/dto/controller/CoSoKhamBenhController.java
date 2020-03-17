@@ -40,7 +40,7 @@ public class CoSoKhamBenhController {
         return ResponseEntity.ok(lst);
     }
     
-    @PostMapping("/create_or_update")
+    @PostMapping("/save")
     public ResponseEntity<?> createOrUpdate(@RequestBody CoSoKhamBenh dto) {
         try {
             var obj = CoSoKhamBenh.toFhir(dto);
