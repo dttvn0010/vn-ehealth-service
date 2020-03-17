@@ -15,6 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;
+import ca.uhn.fhir.narrative.DefaultThymeleafNarrativeGenerator;
+import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.server.ETagSupportEnum;
 import ca.uhn.fhir.rest.server.FifoMemoryPagingProvider;
@@ -143,8 +145,8 @@ public class Hl7FhirRestfulServer extends RestfulServer {
          * but can be useful as it causes HAPI to generate narratives for
          * resources which don't otherwise have one.
          */
-        //INarrativeGenerator narrativeGen = new DefaultThymeleafNarrativeGenerator();
-        //getFhirContext().setNarrativeGenerator(narrativeGen);
+        INarrativeGenerator narrativeGen = new DefaultThymeleafNarrativeGenerator();
+        getFhirContext().setNarrativeGenerator(narrativeGen);
         
         registerInterceptor(new ResponseHighlighterInterceptor());
         
