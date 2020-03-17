@@ -1,6 +1,7 @@
 package vn.ehealth.hl7.fhir.medication.providers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.instance.model.api.IPrimitiveType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
@@ -43,6 +46,7 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.medication.dao.IMedicationDispense;
 
 @Component
@@ -76,7 +80,7 @@ public class MedicationDispenseProvider implements IResourceProvider {
             List<String> myString = new ArrayList<>();
             myString.add("MedicationDispense/" + mongoMedicationDispense.getIdElement());
             method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-                    "urn:uuid: " + mongoMedicationDispense.getId(), IssueSeverity.INFORMATION, IssueType.INCOMPLETE,
+                    "urn:uuid: " + mongoMedicationDispense.getId(), IssueSeverity.INFORMATION, IssueType.VALUE,
                     myString));
             method.setId(mongoMedicationDispense.getIdElement());
             method.setResource(mongoMedicationDispense);
@@ -84,10 +88,8 @@ public class MedicationDispenseProvider implements IResourceProvider {
             if (ex instanceof OperationOutcomeException) {
                 OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
                 method.setOperationOutcome(outcomeException.getOutcome());
-                method.setCreated(false);
             } else {
                 log.error(ex.getMessage());
-                method.setCreated(false);
                 method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
             }
         }
@@ -129,7 +131,7 @@ public class MedicationDispenseProvider implements IResourceProvider {
     }
 
     @Search
-    public List<Resource> searchMedicationDispense(HttpServletRequest request,
+    public IBundleProvider searchMedicationDispense(HttpServletRequest request,
             @OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
             @OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
             @OptionalParam(name = ConstantKeys.SP_TYPE) TokenParam type,
@@ -155,24 +157,59 @@ public class MedicationDispenseProvider implements IResourceProvider {
             @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
             @OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
             throws OperationOutcomeException {
-        if (count != null && count > 50) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("Total is not gre > 50"), OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.INFORMATIONAL);
+    	if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
         } else {
+        	List<Resource> results = new ArrayList<Resource>();
             if (theSort != null) {
                 String sortParam = theSort.getParamName();
-                List<Resource> results = medicationDispenseDao.search(fhirContext, active, code, type, status,
+                results = medicationDispenseDao.search(fhirContext, active, code, type, status,
                         identifier, context, destination, medication, patient, performer, prescription, receiver,
                         responsibleparty, subject, whenhandedover, whenprepared, resid, _lastUpdated, _tag, _profile,
                         _query, _security, _content, _page, sortParam, count);
-                return results;
-            }
-            List<Resource> results = medicationDispenseDao.search(fhirContext, active, code, type, status, identifier,
+            } else
+            	results = medicationDispenseDao.search(fhirContext, active, code, type, status, identifier,
                     context, destination, medication, patient, performer, prescription, receiver, responsibleparty,
                     subject, whenhandedover, whenprepared, resid, _lastUpdated, _tag, _profile, _query, _security,
                     _content, _page, null, count);
-            return results;
+            final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
+
+			return new IBundleProvider() {
+
+				@Override
+				public Integer size() {
+					return Integer
+							.parseInt(String.valueOf(medicationDispenseDao.countMatchesAdvancedTotal(fhirContext, active, code, type, status,
+					                identifier, context, destination, medication, patient, performer, prescription, receiver,
+					                responsibleparty, subject, whenhandedover, whenprepared, resid, _lastUpdated, _tag, _profile, _query,
+					                _security, _content)));
+				}
+
+				@Override
+				public Integer preferredPageSize() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+
+				@Override
+				public String getUuid() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+
+				@Override
+				public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
+					return finalResults;
+				}
+
+				@Override
+				public IPrimitiveType<Date> getPublished() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+			};
         }
     }
 
@@ -183,7 +220,7 @@ public class MedicationDispenseProvider implements IResourceProvider {
             log.error("Couldn't delete MedicationDispense" + internalId);
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("MedicationDispense is not exit"),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.INFORMATIONAL);
+                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
         }
         return obj;
     }
@@ -194,7 +231,7 @@ public class MedicationDispenseProvider implements IResourceProvider {
         log.debug("Update MedicationDispense Provider called");
 
         MethodOutcome method = new MethodOutcome();
-        method.setCreated(true);
+        method.setCreated(false);
         OperationOutcome opOutcome = new OperationOutcome();
         method.setOperationOutcome(opOutcome);
         MedicationDispense newMedicationDispense = null;
@@ -204,15 +241,13 @@ public class MedicationDispenseProvider implements IResourceProvider {
             if (ex instanceof OperationOutcomeException) {
                 OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
                 method.setOperationOutcome(outcomeException.getOutcome());
-                method.setCreated(false);
             } else {
                 log.error(ex.getMessage());
-                method.setCreated(false);
                 method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
             }
         }
         method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-                "urn:uuid: " + newMedicationDispense.getId(), IssueSeverity.INFORMATION, IssueType.INCOMPLETE));
+                "urn:uuid: " + newMedicationDispense.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
         method.setId(newMedicationDispense.getIdElement());
         method.setResource(newMedicationDispense);
         return method;

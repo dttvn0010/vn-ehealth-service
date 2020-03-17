@@ -167,10 +167,10 @@ public class RelatedPersonProvider implements IResourceProvider {
 		log.debug("Search RelatedPerson Provider called");
 		// String permissionAccept = PatientOauth2Keys.RelatedPersonOauth2.RELATED_LIST;
 		// OAuth2Util.checkOauth2(request, permissionAccept);
-		if (count != null && count > 50) {
+		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
 					new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.BUSINESSRULE);
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
 		} else {
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
@@ -269,7 +269,7 @@ public class RelatedPersonProvider implements IResourceProvider {
 	}
 
 	@Operation(name = "$total", idempotent = true)
-	public Parameters countTotal(HttpServletRequest request,
+	public Parameters getTotal(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
 			@OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,

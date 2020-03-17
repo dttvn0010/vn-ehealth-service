@@ -168,7 +168,7 @@ public class PatientProvider implements IResourceProvider {
             @OptionalParam(name = "deceased") TokenParam deceased, @OptionalParam(name = "email") TokenParam email,
             @OptionalParam(name = "gender") TokenParam gender,
             @OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-            @OptionalParam(name = "language") TokenParam language,
+            @OptionalParam(name = ConstantKeys.SP_LANGUAGE) TokenParam language,
             @OptionalParam(name = ConstantKeys.SP_PHONE) TokenParam phone,
             @OptionalParam(name = ConstantKeys.SP_TELECOM) TokenParam telecom,
 
@@ -200,11 +200,11 @@ public class PatientProvider implements IResourceProvider {
         log.debug("Search Patient Provider called");
         // String permissionAccept = PatientOauth2Keys.PatientOauth2.PATIENT_LIST;
         // OAuth2Util.checkOauth2(request, permissionAccept);
-        if (count != null && count > 50) {
+        if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE), 
                     OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.BUSINESSRULE);
+                    OperationOutcome.IssueType.NOTSUPPORTED);
         } else {
             List<IBaseResource> results = new ArrayList<IBaseResource>();
             Date cal = new Date();

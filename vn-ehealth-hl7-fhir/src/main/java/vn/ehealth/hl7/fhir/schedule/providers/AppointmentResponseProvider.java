@@ -1,6 +1,7 @@
 package vn.ehealth.hl7.fhir.schedule.providers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.instance.model.api.IPrimitiveType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
@@ -43,193 +46,223 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.schedule.dao.IAppointmentResponse;
 
 @Component
 public class AppointmentResponseProvider implements IResourceProvider {
-    @Autowired
-    FhirContext fhirContext;
+	@Autowired
+	FhirContext fhirContext;
 
-    @Autowired
-    IAppointmentResponse appointmentResponseDao;
+	@Autowired
+	IAppointmentResponse appointmentResponseDao;
 
-    private static final Logger log = LoggerFactory.getLogger(AppointmentResponseProvider.class);
+	private static final Logger log = LoggerFactory.getLogger(AppointmentResponseProvider.class);
 
-    @Override
-    public Class<? extends IBaseResource> getResourceType() {
-        return AppointmentResponse.class;
-    }
+	@Override
+	public Class<? extends IBaseResource> getResourceType() {
+		return AppointmentResponse.class;
+	}
 
-    @Create
-    public MethodOutcome createAppointmentResponse(HttpServletRequest theRequest,
-            @ResourceParam AppointmentResponse obj) {
+	@Create
+	public MethodOutcome createAppointmentResponse(HttpServletRequest theRequest,
+			@ResourceParam AppointmentResponse obj) {
 
-        log.debug("Create AppointmentResponse Provider called");
+		log.debug("Create AppointmentResponse Provider called");
 
-        MethodOutcome method = new MethodOutcome();
-        method.setCreated(true);
-        OperationOutcome opOutcome = new OperationOutcome();
-        method.setOperationOutcome(opOutcome);
-        AppointmentResponse mongoAppointmentResponse = null;
-        try {
-            mongoAppointmentResponse = appointmentResponseDao.create(fhirContext, obj);
-            List<String> myString = new ArrayList<>();
-            myString.add("AppointmentResponse/" + mongoAppointmentResponse.getIdElement());
-            method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-                    "urn:uuid: " + mongoAppointmentResponse.getId(), IssueSeverity.INFORMATION, IssueType.INCOMPLETE,
-                    myString));
-            method.setId(mongoAppointmentResponse.getIdElement());
-            method.setResource(mongoAppointmentResponse);
-        } catch (Exception ex) {
-            if (ex instanceof OperationOutcomeException) {
-                OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-                method.setOperationOutcome(outcomeException.getOutcome());
-                method.setCreated(false);
-            } else {
-                log.error(ex.getMessage());
-                method.setCreated(false);
-                method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-            }
-        }
-        return method;
-    }
+		MethodOutcome method = new MethodOutcome();
+		method.setCreated(true);
+		OperationOutcome opOutcome = new OperationOutcome();
+		method.setOperationOutcome(opOutcome);
+		AppointmentResponse mongoAppointmentResponse = null;
+		try {
+			mongoAppointmentResponse = appointmentResponseDao.create(fhirContext, obj);
+			List<String> myString = new ArrayList<>();
+			myString.add("AppointmentResponse/" + mongoAppointmentResponse.getIdElement());
+			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
+					"urn:uuid: " + mongoAppointmentResponse.getId(), IssueSeverity.INFORMATION, IssueType.VALUE,
+					myString));
+			method.setId(mongoAppointmentResponse.getIdElement());
+			method.setResource(mongoAppointmentResponse);
+		} catch (Exception ex) {
+			if (ex instanceof OperationOutcomeException) {
+				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
+				method.setOperationOutcome(outcomeException.getOutcome());
+			} else {
+				log.error(ex.getMessage());
+				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
+			}
+		}
+		return method;
+	}
 
-    @Read
-    public AppointmentResponse readAppointmentResponse(HttpServletRequest request, @IdParam IdType internalId) {
+	@Read
+	public AppointmentResponse readAppointmentResponse(HttpServletRequest request, @IdParam IdType internalId) {
 
-        AppointmentResponse object = appointmentResponseDao.read(fhirContext, internalId);
-        if (object == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No AppointmentResponse/" + internalId.getIdPart()),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-        }
-        return object;
-    }
+		AppointmentResponse object = appointmentResponseDao.read(fhirContext, internalId);
+		if (object == null) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No AppointmentResponse/" + internalId.getIdPart()),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		}
+		return object;
+	}
 
-    @Search
-    public List<Resource> searchSlot(HttpServletRequest request,
-            @OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
-            @OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
-            @OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-            @OptionalParam(name = ConstantKeys.SP_APPOINTMENT) ReferenceParam appointment,
-            @OptionalParam(name = ConstantKeys.SP_LOCALTION) ReferenceParam location,
-            @OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
-            @OptionalParam(name = ConstantKeys.SP_PRACTITIONER) ReferenceParam practitioner,
-            @OptionalParam(name = ConstantKeys.SP_PART_STATUS) TokenParam partStatus,
-            @OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-            @OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-            @OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-            @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-            @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-            @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
-            @OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
-            throws OperationOutcomeException {
-        if (count != null && count > 50) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("Total is not gre > 50"), OperationOutcome.IssueSeverity.ERROR,
-                    OperationOutcome.IssueType.INFORMATIONAL);
-        } else {
-            if (theSort != null) {
-                String sortParam = theSort.getParamName();
-                List<Resource> results = appointmentResponseDao.search(fhirContext, active, actor, identifier,
-                        appointment, location, patient, practitioner, partStatus, resid, _lastUpdated, _tag, _profile,
-                        _query, _security, _content, _page, sortParam, count);
-                return results;
-            }
-            List<Resource> results = appointmentResponseDao.search(fhirContext, active, actor, identifier, appointment,
-                    location, patient, practitioner, partStatus, resid, _lastUpdated, _tag, _profile, _query, _security,
-                    _content, _page, null, count);
-            return results;
-        }
-    }
+	@Search
+	public IBundleProvider searchSlot(HttpServletRequest request,
+			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
+			@OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
+			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OptionalParam(name = ConstantKeys.SP_APPOINTMENT) ReferenceParam appointment,
+			@OptionalParam(name = ConstantKeys.SP_LOCALTION) ReferenceParam location,
+			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OptionalParam(name = ConstantKeys.SP_PRACTITIONER) ReferenceParam practitioner,
+			@OptionalParam(name = ConstantKeys.SP_PART_STATUS) TokenParam partStatus,
+			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content,
+			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
+			throws OperationOutcomeException {
+		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
+		} else {
+			List<Resource> results = new ArrayList<Resource>();
+			if (theSort != null) {
+				String sortParam = theSort.getParamName();
+				results = appointmentResponseDao.search(fhirContext, active, actor, identifier, appointment, location,
+						patient, practitioner, partStatus, resid, _lastUpdated, _tag, _profile, _query, _security,
+						_content, _page, sortParam, count);
+			} else
+				results = appointmentResponseDao.search(fhirContext, active, actor, identifier, appointment, location,
+						patient, practitioner, partStatus, resid, _lastUpdated, _tag, _profile, _query, _security,
+						_content, _page, null, count);
+			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
-    @Delete
-    public AppointmentResponse deleteAppointmentResponse(HttpServletRequest request, @IdParam IdType internalId) {
-        AppointmentResponse obj = appointmentResponseDao.remove(fhirContext, internalId);
-        if (obj == null) {
-            log.error("Couldn't delete AppointmentResponse" + internalId);
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("AppointmentResponse is not exit"),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.INFORMATIONAL);
-        }
-        return obj;
-    }
+			return new IBundleProvider() {
 
-    /**
-     * @author sonvt
-     * @param request
-     * @param idType
-     * @return read object version
-     */
-    @Read(version = true)
-    public AppointmentResponse readVread(HttpServletRequest request, @IdParam IdType idType) {
-        AppointmentResponse object = new AppointmentResponse();
-        if (idType.hasVersionIdPart()) {
-            object = appointmentResponseDao.readOrVread(fhirContext, idType);
-        } else {
-            object = appointmentResponseDao.read(fhirContext, idType);
-        }
-        if (object == null) {
-            throw OperationOutcomeFactory.buildOperationOutcomeException(
-                    new ResourceNotFoundException("No AppointmentResponse/" + idType.getIdPart()),
-                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-        }
-        return object;
-    }
+				@Override
+				public Integer size() {
+					return Integer.parseInt(String.valueOf(appointmentResponseDao.findMatchesAdvancedTotal(fhirContext,
+							active, actor, identifier, appointment, location, patient, practitioner, partStatus, resid,
+							_lastUpdated, _tag, _profile, _query, _security, _content)));
+				}
 
-    @Update
-    public MethodOutcome updateAppointmentResponse(@IdParam IdType theId, @ResourceParam AppointmentResponse object) {
+				@Override
+				public Integer preferredPageSize() {
+					// TODO Auto-generated method stub
+					return null;
+				}
 
-        log.debug("Update AppointmentResponse Provider called");
+				@Override
+				public String getUuid() {
+					// TODO Auto-generated method stub
+					return null;
+				}
 
-        MethodOutcome method = new MethodOutcome();
-        method.setCreated(true);
-        OperationOutcome opOutcome = new OperationOutcome();
-        method.setOperationOutcome(opOutcome);
-        AppointmentResponse newAppointmentResponse = null;
-        try {
-            newAppointmentResponse = appointmentResponseDao.update(fhirContext, object, theId);
-        } catch (Exception ex) {
-            if (ex instanceof OperationOutcomeException) {
-                OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-                method.setOperationOutcome(outcomeException.getOutcome());
-                method.setCreated(false);
-            } else {
-                log.error(ex.getMessage());
-                method.setCreated(false);
-                method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-            }
-        }
-        method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-                "urn:uuid: " + newAppointmentResponse.getId(), IssueSeverity.INFORMATION, IssueType.INCOMPLETE));
-        method.setId(newAppointmentResponse.getIdElement());
-        method.setResource(newAppointmentResponse);
-        return method;
-    }
+				@Override
+				public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
+					return finalResults;
+				}
 
-    @Operation(name = "$total", idempotent = true)
-    public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-            @OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
-            @OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
-            @OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-            @OptionalParam(name = ConstantKeys.SP_APPOINTMENT) ReferenceParam appointment,
-            @OptionalParam(name = ConstantKeys.SP_LOCALTION) ReferenceParam location,
-            @OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
-            @OptionalParam(name = ConstantKeys.SP_PRACTITIONER) ReferenceParam practitioner,
-            @OptionalParam(name = ConstantKeys.SP_PART_STATUS) TokenParam partStatus,
-            @OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-            @OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-            @OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-            @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-            @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-            @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content) {
-        Parameters retVal = new Parameters();
-        long total = appointmentResponseDao.findMatchesAdvancedTotal(fhirContext, active, actor, identifier,
-                appointment, location, patient, practitioner, partStatus, resid, _lastUpdated, _tag, _profile, _query,
-                _security, _content);
-        retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
-        return retVal;
-    }
+				@Override
+				public IPrimitiveType<Date> getPublished() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+			};
+		}
+	}
+
+	@Delete
+	public AppointmentResponse delete(HttpServletRequest request, @IdParam IdType internalId) {
+		AppointmentResponse obj = appointmentResponseDao.remove(fhirContext, internalId);
+		if (obj == null) {
+			log.error("Couldn't delete AppointmentResponse" + internalId);
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("AppointmentResponse is not exit"),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		}
+		return obj;
+	}
+
+	/**
+	 * @author sonvt
+	 * @param request
+	 * @param idType
+	 * @return read object version
+	 */
+	@Read(version = true)
+	public AppointmentResponse readVread(HttpServletRequest request, @IdParam IdType idType) {
+		AppointmentResponse object = new AppointmentResponse();
+		if (idType.hasVersionIdPart()) {
+			object = appointmentResponseDao.readOrVread(fhirContext, idType);
+		} else {
+			object = appointmentResponseDao.read(fhirContext, idType);
+		}
+		if (object == null) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No AppointmentResponse/" + idType.getIdPart()),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		}
+		return object;
+	}
+
+	@Update
+	public MethodOutcome update(@IdParam IdType theId, @ResourceParam AppointmentResponse object) {
+
+		log.debug("Update AppointmentResponse Provider called");
+
+		MethodOutcome method = new MethodOutcome();
+		method.setCreated(false);
+		OperationOutcome opOutcome = new OperationOutcome();
+		method.setOperationOutcome(opOutcome);
+		AppointmentResponse newAppointmentResponse = null;
+		try {
+			newAppointmentResponse = appointmentResponseDao.update(fhirContext, object, theId);
+		} catch (Exception ex) {
+			if (ex instanceof OperationOutcomeException) {
+				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
+				method.setOperationOutcome(outcomeException.getOutcome());
+			} else {
+				log.error(ex.getMessage());
+				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
+			}
+		}
+		method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
+				"urn:uuid: " + newAppointmentResponse.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
+		method.setId(newAppointmentResponse.getIdElement());
+		method.setResource(newAppointmentResponse);
+		return method;
+	}
+
+	@Operation(name = "$total", idempotent = true)
+	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
+			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
+			@OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
+			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OptionalParam(name = ConstantKeys.SP_APPOINTMENT) ReferenceParam appointment,
+			@OptionalParam(name = ConstantKeys.SP_LOCALTION) ReferenceParam location,
+			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OptionalParam(name = ConstantKeys.SP_PRACTITIONER) ReferenceParam practitioner,
+			@OptionalParam(name = ConstantKeys.SP_PART_STATUS) TokenParam partStatus,
+			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT_DEFAULT) StringParam _content) {
+		Parameters retVal = new Parameters();
+		long total = appointmentResponseDao.findMatchesAdvancedTotal(fhirContext, active, actor, identifier,
+				appointment, location, patient, practitioner, partStatus, resid, _lastUpdated, _tag, _profile, _query,
+				_security, _content);
+		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
+		return retVal;
+	}
 }
