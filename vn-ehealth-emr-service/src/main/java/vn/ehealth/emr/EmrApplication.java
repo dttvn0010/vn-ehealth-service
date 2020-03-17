@@ -7,9 +7,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
-@EnableMongoRepositories("vn.ehealth.emr.repository")
-@EntityScan("vn.ehealth.emr.model")
-@ComponentScan("vn.ehealth.emr")
+@EnableMongoRepositories("vn.ehealth")
+@EntityScan("vn.ehealth")
+@ComponentScan("vn.ehealth")
 public class EmrApplication {
 
 	public static void main(String[] args) {

@@ -7,17 +7,16 @@ import javax.annotation.Nonnull;
 
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Procedure;
-import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ServiceRequest;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import vn.ehealth.emr.service.ServiceFactory;
+import vn.ehealth.emr.utils.DbUtils;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.emr.utils.FhirUtil.*;
 
@@ -89,17 +88,16 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
     
     private static DiagnosticReport getDiagnosticReport(@Nonnull Procedure procedure) {
         if(procedure.hasReport()) {
-            return ServiceFactory.getDiagnosticReportService()
-                                .getById(procedure.getReportFirstRep().getReference());
+            String diagnosticReportId = procedure.getReportFirstRep().getReference();
+            return DbUtils.getDiagnosticReportDao().read(new IdType(diagnosticReportId));
         }
         return null;
     }
     
     private static ServiceRequest getServiceRequest(@Nonnull  Procedure procedure) {
         if(procedure.hasBasedOn()) {
-            return ServiceFactory.getServiceRequestService()
-                                .getById(procedure.getBasedOnFirstRep().getReference());
-                                                                   
+            var serviceRequestId = procedure.getBasedOnFirstRep().getReference();
+            return DbUtils.getServiceRequestDao().read(new IdType(serviceRequestId));                                                                   
         }
         return null;
     }
@@ -116,10 +114,9 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
         if(cdha.dotKham == null || cdha.dotKham.benhNhan == null) return null;
         
         // Procedure
-        var procedure = ServiceFactory.getProcedureService().getById(cdha.id);
+        var procedure = DbUtils.getProcedureDao().read(new IdType(cdha.id));
         if(procedure == null) {
             procedure = new Procedure();
-            procedure.setId(StringUtil.generateUID());
         }
         
         procedure.setSubject(BaseModelDTO.toReference(cdha.dotKham.benhNhan));
@@ -134,8 +131,6 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
         var serviceRequest = getServiceRequest(procedure);
         if(serviceRequest == null) {
             serviceRequest = new ServiceRequest();
-            serviceRequest.setId(StringUtil.generateUID());
-            procedure.setBasedOn(listOf(new Reference(serviceRequest)));
         }
         
         serviceRequest.setSubject(BaseModelDTO.toReference(cdha.dotKham.benhNhan));
@@ -150,8 +145,6 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
         var diagnosticReport = getDiagnosticReport(procedure);
         if(diagnosticReport == null) {
             diagnosticReport = new DiagnosticReport();
-            diagnosticReport.setId(StringUtil.generateUID());
-            procedure.setReport(listOf(createReference(diagnosticReport)));
         }
         
         diagnosticReport.setSubject(BaseModelDTO.toReference(cdha.dotKham.benhNhan));

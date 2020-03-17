@@ -56,7 +56,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
         method.setOperationOutcome(opOutcome);
         FHIR mongoObject = null;
         try {
-            mongoObject = getDao().create(fhirContext, object);
+            mongoObject = getDao().create(object);
             Date cal2 = new Date();
             System.out
                     .println("-------------------dao end------------------" + (cal2.getTime() - cal.getTime()) + " ms");
@@ -86,7 +86,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
     @Read
     public FHIR read(HttpServletRequest request, @IdParam IdType internalId) {
         Date cal = new Date();
-        var object = getDao().read(fhirContext, internalId);
+        var object = getDao().read(internalId);
         if (object == null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No Entity/" + internalId.getIdPart()),
@@ -109,9 +109,9 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
 
         FHIR object = null;
         if (idType.hasVersionIdPart()) {
-            object = getDao().readOrVread(fhirContext, idType);
+            object = getDao().readOrVread(idType);
         } else {
-            object = getDao().read(fhirContext, idType);
+            object = getDao().read(idType);
         }
         if (object == null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -128,7 +128,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
     public FHIR delete(HttpServletRequest request, @IdParam IdType internalId) {
         Date cal = new Date();
         log.debug("Delete Entity called");
-        var object = getDao().remove(fhirContext, internalId);
+        var object = getDao().remove(internalId);
         if (object == null) {
             log.error("Couldn't delete object" + internalId);
             throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -152,7 +152,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
         method.setOperationOutcome(opOutcome);
         FHIR newObject = null;
         try {
-            newObject = getDao().update(fhirContext, object, theId);
+            newObject = getDao().update(object, theId);
         } catch (Exception ex) {
             ProviderResponseLibrary.handleException(method, ex);
         }

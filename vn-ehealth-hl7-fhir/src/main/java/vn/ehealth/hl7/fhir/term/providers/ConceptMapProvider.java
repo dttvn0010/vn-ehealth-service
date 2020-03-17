@@ -8,10 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.ConceptMap;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
@@ -23,16 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -149,51 +141,6 @@ public class ConceptMapProvider extends BaseController<ConceptMapEntity, Concept
 				}
 			};
 		}
-	}
-
-	@Delete
-	public ConceptMap delete(HttpServletRequest request, @IdParam IdType internalId) {
-		log.debug("delete ConceptMap Provider called");
-		// String permissionAccept =
-		// TerminologyOauth2Keys.ConceptMapOauth2.C_MAP_DELETE;
-		// OAuth2Util.checkOauth2(request, permissionAccept);
-		ConceptMap conceptMap = conceptMapDao.remove(fhirContext, internalId);
-		if (conceptMap == null) {
-			log.error("Couldn't delete ConceptMap" + internalId);
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("ConceptMap is not exit"), OperationOutcome.IssueSeverity.ERROR,
-					OperationOutcome.IssueType.NOTFOUND);
-		}
-		return conceptMap;
-	}
-
-	@Update
-	public MethodOutcome update(HttpServletRequest request, @IdParam IdType idType, @ResourceParam ConceptMap object) {
-
-		log.debug("update ConceptMap Provider called");
-		// String permissionAccept = TerminologyOauth2Keys.ConceptMapOauth2.C_MAP_ADD;
-		// OAuth2Util.checkOauth2(request, permissionAccept);
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(false);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		ConceptMap newConceptMap = null;
-		try {
-			newConceptMap = conceptMapDao.update(fhirContext, object, idType);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
-				"urn:uuid:" + newConceptMap.getId(), IssueSeverity.INFORMATION, IssueType.VALUE));
-		method.setId(newConceptMap.getIdElement());
-		method.setResource(newConceptMap);
-		return method;
 	}
 
 	@Operation(name = "$translate", idempotent = true)

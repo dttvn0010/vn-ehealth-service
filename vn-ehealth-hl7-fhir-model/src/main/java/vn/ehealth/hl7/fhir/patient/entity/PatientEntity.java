@@ -69,7 +69,10 @@ public class PatientEntity extends BaseResource {
             ent.name = BaseHumanName.fromHumanNameList(obj.getName());
         
         if(obj.hasGender())
-            ent.gender = obj.getGender().toCode();            
+            ent.gender = obj.getGender().toCode(); 
+        
+        if(obj.hasBirthDate())
+            ent.birthDate = obj.getBirthDate();
         
         if(obj.hasDeceased())
             ent.deceased = obj.getDeceased();
@@ -105,6 +108,7 @@ public class PatientEntity extends BaseResource {
         obj.setName(BaseHumanName.toHumanNameList(ent.name));
         obj.setTelecom(BaseContactPoint.toContactPointList(ent.telecom));
         obj.setGender(AdministrativeGender.fromCode(ent.gender));
+        obj.setBirthDate(ent.birthDate);
         obj.setDeceased(ent.deceased);
         obj.setAddress(BaseAddress.toAddressList(ent.address));
         obj.setMaritalStatus(BaseCodeableConcept.toCodeableConcept(ent.maritalStatus));

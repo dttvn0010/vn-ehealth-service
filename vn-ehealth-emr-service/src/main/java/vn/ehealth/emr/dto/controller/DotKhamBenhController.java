@@ -3,6 +3,7 @@ package vn.ehealth.emr.dto.controller;
 import java.util.Map;
 import java.util.Optional;
 
+import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.DotKhamBenh;
-import vn.ehealth.emr.service.EncounterService;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 
 @RestController
 @RequestMapping("/api/dot_kham_benh")
@@ -25,18 +26,18 @@ public class DotKhamBenhController {
 
     private static Logger logger = LoggerFactory.getLogger(BenhNhanController.class);
     
-    @Autowired private EncounterService encounterService;
+    @Autowired private EncounterDao encounterDao;
         
     @GetMapping("/get_by_id")
     public ResponseEntity<?> getById(@RequestParam String id) {
-        var obj = encounterService.getById(id);
+        var obj = encounterDao.read(new IdType(id));
         var dto = DotKhamBenh.fromFhir(obj);
         return ResponseEntity.ok(dto);
     }
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
-        var lst = DataConvertUtil.transform(encounterService.getAll(), x -> DotKhamBenh.fromFhir(x));
+        var lst = DataConvertUtil.transform(encounterDao.getAll(), x -> DotKhamBenh.fromFhir(x));
         return ResponseEntity.ok(lst);
     }
     
@@ -44,7 +45,11 @@ public class DotKhamBenhController {
     public ResponseEntity<?> createOrUpdate(@RequestBody DotKhamBenh dto) {
         try {
             var obj = DotKhamBenh.toFhir(dto);
-            obj = encounterService.save(obj);
+            if(obj.hasId()) {
+                obj = encounterDao.update(obj, new IdType(obj.getId()));
+            }else {
+                obj = encounterDao.create(obj);
+            }
             dto = DotKhamBenh.fromFhir(obj);
             var result = Map.of("success", true, "dto", dto);
             return ResponseEntity.ok(result);

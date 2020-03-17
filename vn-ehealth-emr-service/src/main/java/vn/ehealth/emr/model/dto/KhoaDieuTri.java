@@ -1,11 +1,11 @@
 package vn.ehealth.emr.model.dto;
 
-import vn.ehealth.emr.service.ServiceFactory;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.emr.utils.DbUtils;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.emr.utils.FhirUtil.*;
 
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Location;
 import org.hl7.fhir.r4.model.Reference;
 
@@ -35,7 +35,8 @@ public class KhoaDieuTri extends BaseModelDTO {
     
     public static KhoaDieuTri fromReference(Reference ref) {
         if(ref != null && ref.hasReference()) {
-            var ent = ServiceFactory.getLocationService().getById(ref.getReference());
+            var id = ref.getReference();
+            var ent = DbUtils.getLocationDao().read(new IdType(id));
             return fromFhir(ent);
         }
         return null;        
@@ -43,11 +44,10 @@ public class KhoaDieuTri extends BaseModelDTO {
     
     public static Location toFhir(KhoaDieuTri dto) {
         if(dto == null) return null;
-        var ent = ServiceFactory.getLocationService().getById(dto.id);
+        var ent = DbUtils.getLocationDao().read(new IdType(dto.id));
         
         if(ent == null) {
             ent = new Location();
-            ent.setId(StringUtil.generateUID());
         }
         
         ent.setIdentifier(listOf(createIdentifier(dto.ma, CodeSystemValue.CO_SO_KHAM_BENH)));

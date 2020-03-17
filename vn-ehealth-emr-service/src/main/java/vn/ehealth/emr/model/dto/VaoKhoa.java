@@ -3,11 +3,13 @@ package vn.ehealth.emr.model.dto;
 import java.util.Date;
 
 import org.hl7.fhir.r4.model.Encounter.EncounterLocationComponent;
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import vn.ehealth.emr.service.ServiceFactory;
+import vn.ehealth.emr.utils.DbUtils;
+
 import static vn.ehealth.emr.utils.FhirUtil.*;
 
 public class VaoKhoa {
@@ -26,10 +28,9 @@ public class VaoKhoa {
     
     public VaoKhoa(EncounterLocationComponent ent) {
         if(ent == null || !ent.hasLocation()) return;
-        
-        var locationEnt =  ServiceFactory.getLocationService().getById(ent.getLocation().getReference());
-        this.locationId = locationEnt.getId();
-        var khoaDieuTri = KhoaDieuTri.fromFhir(locationEnt);
+        this.locationId = ent.getLocation().getReference();
+        var location =  DbUtils.getLocationDao().read(new IdType(this.locationId));
+        var khoaDieuTri = KhoaDieuTri.fromFhir(location);
         if(khoaDieuTri != null) {
             this.dmKhoaDieuTri = khoaDieuTri.dmLoaiKhoa;
         }

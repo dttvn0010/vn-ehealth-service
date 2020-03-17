@@ -25,14 +25,6 @@ public class ServiceFactory implements ApplicationContextAware  {
     private static UserService userService;
     private static RoleService roleService;
     
-    private static PatientService patientService;
-    private static PractitionerService practitionerService;
-    private static LocationService locationService;
-    private static EncounterService encounterService;
-    private static DiagnosticReportService diagnosticReportService;
-    private static ServiceRequestService serviceRequestService;
-    private static ProcedureService procedureService;
-
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         ServiceFactory.applicationContext = applicationContext;        
@@ -89,52 +81,4 @@ public class ServiceFactory implements ApplicationContextAware  {
         return roleService;
     }
     
-    public static PatientService getPatientService() {
-        if(patientService == null) {
-            patientService = applicationContext.getBean(PatientService.class);
-        }
-        return patientService;
-    }
-    
-    public static PractitionerService getPractitionerService() {
-        if(practitionerService == null) {
-            practitionerService = applicationContext.getBean(PractitionerService.class);
-        }
-        return practitionerService;
-    }
-    
-    public static EncounterService getEncounterService() {
-        if(encounterService == null) {
-            encounterService = applicationContext.getBean(EncounterService.class);
-        }
-        return encounterService;
-    }
-    
-    public static LocationService getLocationService() {
-        if(locationService == null) {
-            locationService = applicationContext.getBean(LocationService.class);
-        }
-        return locationService;
-    }
-    
-    public static DiagnosticReportService getDiagnosticReportService() {
-        if(diagnosticReportService == null) {
-            diagnosticReportService = applicationContext.getBean(DiagnosticReportService.class);
-        }
-        return diagnosticReportService;
-    }
-    
-    public static ServiceRequestService getServiceRequestService() {
-        if(serviceRequestService == null) {
-            serviceRequestService = applicationContext.getBean(ServiceRequestService.class);
-        }
-        return serviceRequestService;
-    }
-    
-    public static ProcedureService getProcedureService() {
-        if(procedureService == null) {
-            procedureService = applicationContext.getBean(ProcedureService.class);
-        }
-        return procedureService;
-    }
 }

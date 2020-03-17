@@ -70,7 +70,7 @@ public class ScheduleProvider extends BaseController<ScheduleEntity, Schedule> i
 		method.setOperationOutcome(opOutcome);
 		Schedule mongoSchedule = null;
 		try {
-			mongoSchedule = scheduleDao.create(fhirContext, obj);
+			mongoSchedule = scheduleDao.create(obj);
 			List<String> myString = new ArrayList<>();
 			myString.add("Schedule/" + mongoSchedule.getIdElement());
 			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",

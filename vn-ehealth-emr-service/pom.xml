@@ -49,7 +49,7 @@
 		
 		<dependency>
             <groupId>vn.ehealth</groupId>
-            <artifactId>vn-ehealth-hl7-fhir-model</artifactId>
+            <artifactId>vn-ehealth-hl7-fhir-dao-r4</artifactId>
             <version>1.0</version>
         </dependency>        
         

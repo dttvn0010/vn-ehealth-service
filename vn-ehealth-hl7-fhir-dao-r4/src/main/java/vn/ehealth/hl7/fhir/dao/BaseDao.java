@@ -18,7 +18,6 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -58,12 +57,17 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         ent.resCreated = (new Date());
         return ent;
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<FHIR> getAll() {
+        var lst = mongo.findAll(getEntityClass());
+        return DataConvertUtil.transform(lst, x -> transform((ENT) x));
+    }
 
-    public FHIR create(FhirContext fhirContext, FHIR object) {
-        ENT entity = null;
+    public FHIR create(FHIR object) {
         int version = ConstantKeys.VERSION_1;
         if (object != null) {
-            entity = createNewEntity(object, version, null);
+            var entity = createNewEntity(object, version, null);
             mongo.save(entity);
             return transform(entity);
         }
@@ -72,7 +76,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     
     @SuppressWarnings("unchecked")
     @CachePut(value = "patient", key = "#idType")
-    public FHIR update(FhirContext fhirContext, FHIR object, IdType idType) {
+    public FHIR update(FHIR object, IdType idType) {
         ENT entityOld = null;
         String fhirId = "";
         if (idType != null && idType.hasIdPart()) {
@@ -104,7 +108,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     
     @SuppressWarnings("unchecked")
     @Cacheable(value = "patient", key = "#idType")
-    public FHIR read(FhirContext fhirContext, IdType idType) {
+    public FHIR read(IdType idType) {
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
             Query query = Query.query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId)
@@ -120,7 +124,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     
     @SuppressWarnings("unchecked")
     @CacheEvict(value = "patient", key = "#idType")
-    public FHIR remove(FhirContext fhirContext, IdType idType) {
+    public FHIR remove(IdType idType) {
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
             Query query = Query.query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId)
@@ -139,7 +143,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
         
     @SuppressWarnings("unchecked")
-    public FHIR readOrVread(FhirContext fhirContext, IdType idType) {
+    public FHIR readOrVread(IdType idType) {
         if (idType.hasVersionIdPart() && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
             Integer version = Integer.valueOf(idType.getVersionIdPart());
