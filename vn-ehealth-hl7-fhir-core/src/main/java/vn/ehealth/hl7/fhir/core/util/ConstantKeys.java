@@ -229,6 +229,8 @@ public class ConstantKeys {
     public static final String SP_ROOT_CONCEPT = "rootconcept";
     public static final String SP_TABLE_NAME = "tableName";
     
+    public static final String SP_OBSERVATION_MAX = "max";
+    
     public static class PatientStaus {
         public static String getTen(int trangThai) {
             String[] tens = { "", "acitve", "remove" };
