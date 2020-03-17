@@ -8,13 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
@@ -23,25 +19,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.rest.annotation.At;
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
-import ca.uhn.fhir.rest.annotation.Delete;
-import ca.uhn.fhir.rest.annotation.History;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Patch;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.annotation.Since;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.annotation.Update;
-import ca.uhn.fhir.rest.api.MethodOutcome;
-import ca.uhn.fhir.rest.api.PatchTypeEnum;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateParam;
@@ -52,113 +36,30 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import vn.ehealth.hl7.fhir.ProviderResponseLibrary;
+import vn.ehealth.hl7.fhir.BaseController;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.patient.dao.IPatient;
-import vn.ehealth.hl7.fhir.user.entity.PermissionEntity;
-import vn.ehealth.hl7.fhir.util.PermissionUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
+import vn.ehealth.hl7.fhir.patient.entity.PatientEntity;
 
 @Component
-public class PatientProvider implements IResourceProvider {
+public class PatientProvider extends BaseController<PatientEntity, Patient> implements IResourceProvider {
 	static Logger logger = LoggerFactory.getLogger(PatientProvider.class);
-	@Autowired
-	FhirContext fhirContext;
 
-	@Autowired
-	IPatient patientDao;
+	@Autowired PatientDao patientDao;
 
 	private static final Logger log = LoggerFactory.getLogger(PatientProvider.class);
 
 	@Override
+    protected BaseDao<PatientEntity, Patient> getDao() {
+        return patientDao;
+    }
+	
+	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return Patient.class;
-	}
-
-	@Create
-	public MethodOutcome createPatient(HttpServletRequest theRequest, @ResourceParam Patient patient) {
-		log.debug("Create Patient Provider called");
-		Date cal = new Date();
-		// OAuth2Util.checkOauth2(theRequest, PermissionEntity.Values.PATIENT_ADD);
-		// PermissionUtil.checkPermission(PermissionEntity.Values.PATIENT_ADD);
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(true);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		Patient mongoPatient = null;
-		try {
-			mongoPatient = patientDao.create(fhirContext, patient);
-			Date cal2 = new Date();
-			System.out
-					.println("-------------------dao end------------------" + (cal2.getTime() - cal.getTime()) + " ms");
-			List<String> myString = new ArrayList<>();
-			myString.add("Patient/" + mongoPatient.getIdElement());
-			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-					"urn:uuid: " + mongoPatient.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-			method.setId(mongoPatient.getIdElement());
-			method.setResource(mongoPatient);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-				method.setCreated(false);
-			} else {
-				log.error(ex.getMessage());
-				method.setCreated(false);
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		Date cal1 = new Date();
-		System.out
-				.println("-------------------create end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
-		return method;
-	}
-
-	@Read
-	public Patient readPatient(HttpServletRequest request, @IdParam IdType internalId) {
-		log.debug("Read Patient Provider called");
-		Date cal = new Date();
-		// String permissionAccept = PatientOauth2Keys.PatientOauth2.PATIENT_VIEW;
-		// OAuth2Util.checkOauth2(request, permissionAccept);
-		Patient patient = patientDao.read(fhirContext, internalId);
-		if (patient == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Patient/" + internalId.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		Date cal1 = new Date();
-		System.out.println("-------------------read end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
-		return patient;
-	}
-
-	/**
-	 * @author sonvt
-	 * @param request
-	 * @param idType
-	 * @return read object version
-	 */
-	@Read(version = true)
-	public Patient readVread(HttpServletRequest request, @IdParam IdType idType) {
-		Date cal = new Date();
-		// PermissionUtil.checkPermission(PermissionEntity.Values.PATIENT_VIEW);
-
-		Patient object = new Patient();
-		if (idType.hasVersionIdPart()) {
-			object = patientDao.readOrVread(fhirContext, idType);
-		} else {
-			object = patientDao.read(fhirContext, idType);
-		}
-		if (object == null) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Patient/" + idType.getIdPart()),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
-		}
-		Date cal1 = new Date();
-		System.out.println(
-				"-------------------readVread end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
-		return object;
 	}
 
 	@Search
@@ -269,49 +170,7 @@ public class PatientProvider implements IResourceProvider {
 		}
 	}
 
-	@Delete
-	public Patient delete(HttpServletRequest request, @IdParam IdType internalId) {
-		Date cal = new Date();
-		log.debug("Delete Patient Provider called");
-		// String permissionAccept = PatientOauth2Keys.PatientOauth2.PATIENT_DELETE;
-		// OAuth2Util.checkOauth2(request, permissionAccept);
-		Patient patient = patientDao.remove(fhirContext, internalId);
-		if (patient == null) {
-			log.error("Couldn't delete patient" + internalId);
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("patient is not exit"), OperationOutcome.IssueSeverity.ERROR,
-					OperationOutcome.IssueType.NOTFOUND);
-
-		}
-		Date cal1 = new Date();
-		System.out
-				.println("-------------------delete end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
-		return patient;
-	}
-
-	@Update
-	public MethodOutcome update(HttpServletRequest theRequest, @IdParam IdType theId, @ResourceParam Patient patient) {
-		Date cal = new Date();
-		log.debug("Update Patient Provider called");
-		// String permissionAccept = PatientOauth2Keys.PatientOauth2.PATIENT_ADD;
-		// OAuth2Util.checkOauth2(theRequest, permissionAccept);
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(false);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		Patient newPatient = null;
-		try {
-			newPatient = patientDao.update(fhirContext, patient, theId);
-		} catch (Exception ex) {
-			ProviderResponseLibrary.handleException(method, ex);
-		}
-		method.setId(newPatient.getIdElement());
-		method.setResource(newPatient);
-		Date cal1 = new Date();
-		System.out
-				.println("-------------------update end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
-		return method;
-	}
+	
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
@@ -362,47 +221,6 @@ public class PatientProvider implements IResourceProvider {
 		return retVal;
 	}
 
-	@History
-	public List<Patient> getInstanceHistory(@IdParam IdType theId, @OptionalParam(name = "_since") InstantType theSince,
-			@OptionalParam(name = "_at") DateRangeParam theAt,
-			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Count Integer count) {
-		Date cal = new Date();
-		List<Patient> retVal = new ArrayList<Patient>();
-		retVal = patientDao.getHistory(theId, theSince, theAt, _page, count);
-		Date cal1 = new Date();
-		System.out
-				.println("-------------------history end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
-		return retVal;
-	}
-
-	@History
-	public List<Patient> getResourceHistory(@OptionalParam(name = "_since") InstantType theSince,
-			@OptionalParam(name = "_at") DateRangeParam theAt,
-			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Count Integer count) {
-		Date cal = new Date();
-		List<Patient> retVal = new ArrayList<Patient>();
-		retVal = patientDao.getHistory(null, theSince, theAt, _page, count);
-		Date cal1 = new Date();
-		System.out
-				.println("-------------------history end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
-		return retVal;
-	}
-
-	@Patch
-	public OperationOutcome patch(@IdParam IdType theId, PatchTypeEnum thePatchType, @ResourceParam String theBody) {
-		// Dummy Operations
-		if (thePatchType == PatchTypeEnum.JSON_PATCH) {
-			// do something
-		}
-		if (thePatchType == PatchTypeEnum.XML_PATCH) {
-			// do something
-		}
-
-		OperationOutcome retVal = new OperationOutcome();
-		retVal.getText().setDivAsString("<div>OK</div>");
-		return retVal;
-	}
-
 	@Operation(name = "$everything", idempotent = true)
 	public Bundle getEverything(@IdParam IdType thePatientId, @OperationParam(name = "start") DateParam theStart,
 			@OperationParam(name = "end") DateParam theEnd) {
@@ -410,5 +228,5 @@ public class PatientProvider implements IResourceProvider {
 		Bundle retVal = new Bundle();
 		// Populate bundle with matching resources
 		return retVal;
-	}
+	}    
 }

@@ -4,18 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -26,146 +19,17 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.patient.dao.IPatient;
-import vn.ehealth.hl7.fhir.patient.dao.transform.PatientEntityToFHIRPatient;
 import vn.ehealth.hl7.fhir.patient.entity.PatientEntity;
 
 @Repository
-public class PatientDao implements IPatient {
+public class PatientDao extends BaseDao<PatientEntity, Patient> {
 
-	@Autowired
-	MongoOperations mongo;
-
-	@Autowired
-	PatientEntityToFHIRPatient patientEntityToFHIRPatient;
-
-	@Override
-	public Patient create(FhirContext fhirContext, Patient object) {
-		PatientEntity entity = null;
-		int version = ConstantKeys.VERSION_1;
-		if (object != null) {
-			entity = createNewPatientEntity(object, version, null);
-			// save PatientEntity database
-			mongo.save(entity);
-			Date cal = new Date();
-			Patient patient = patientEntityToFHIRPatient.transform(entity);
-			Date cal1 = new Date();
-			System.out.println("-------------------create tranform end------------------"
-					+ (cal1.getTime() - cal.getTime()) + " ms");
-			return patient;
-		}
-		return null;
-	}
-
-	@Override
-	@CachePut(value = "patient", key = "#idType")
-	public Patient update(FhirContext fhirContext, Patient object, IdType idType) {
-		PatientEntity entityOld = null;
-		String fhirId = "";
-		if (idType != null && idType.hasIdPart()) {
-			fhirId = idType.getIdPart();
-			Query query = Query
-					.query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true))
-					.withHint("idx_by_fhirId-active");
-			entityOld = mongo.findOne(query, PatientEntity.class);
-		}
-		if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
-			// remove PatientEntity old
-			entityOld.resDeleted = (new Date());
-			entityOld.active = (false);
-			mongo.save(entityOld);
-			// save PatientEntity
-			int version = entityOld.version + 1;
-			if (object != null) {
-				PatientEntity entity = createNewPatientEntity(object, version, fhirId);
-				entity.resUpdated = (new Date());
-				mongo.save(entity);
-				Date cal = new Date();
-				Patient patient = patientEntityToFHIRPatient.transform(entity);
-				Date cal1 = new Date();
-				System.out.println("-------------------update tranform end------------------"
-						+ (cal1.getTime() - cal.getTime()) + " ms");
-				return patient;
-			}
-		}
-		return null;
-	}
-
-	@Override
-	@Cacheable(value = "patient", key = "#idType")
-	public Patient read(FhirContext fhirContext, IdType idType) {
-		if (idType != null && idType.hasIdPart()) {
-			String fhirId = idType.getIdPart();
-			Query query = Query
-					.query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true))
-					.withHint("idx_by_fhirId-active");
-			PatientEntity entity = mongo.findOne(query, PatientEntity.class);
-			if (entity != null) {
-				Date cal = new Date();
-				Patient patient = patientEntityToFHIRPatient.transform(entity);
-				Date cal1 = new Date();
-				System.out.println("-------------------read tranform end------------------"
-						+ (cal1.getTime() - cal.getTime()) + " ms");
-				return patient;
-			}
-		}
-		return null;
-	}
-
-	@Override
-	@CacheEvict(value = "patient", key = "#idType")
-	public Patient remove(FhirContext fhirContext, IdType idType) {
-		if (idType != null && idType.hasIdPart()) {
-			String fhirId = idType.getIdPart();
-			Query query = Query
-					.query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_ACTIVE).is(true))
-					.withHint("idx_by_fhirId-active");
-			PatientEntity entity = mongo.findOne(query, PatientEntity.class);
-			if (entity != null) {
-				entity.active = (false);
-				entity.resDeleted = (new Date());
-				mongo.save(entity);
-				Date cal = new Date();
-				Patient patient = patientEntityToFHIRPatient.transform(entity);
-				Date cal1 = new Date();
-				System.out.println("-------------------remove tranform end------------------"
-						+ (cal1.getTime() - cal.getTime()) + " ms");
-				return patient;
-
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public Patient readOrVread(FhirContext fhirContext, IdType idType) {
-		if (idType.hasVersionIdPart() && idType.hasIdPart()) {
-			String fhirId = idType.getIdPart();
-			Integer version = Integer.valueOf(idType.getVersionIdPart());
-			if (version != null) {
-				Query query = Query.query(
-						Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId).and(ConstantKeys.SP_VERSION).is(version))
-						.withHint("idx_by_fhirId-version");
-				PatientEntity entity = mongo.findOne(query, PatientEntity.class);
-				if (entity != null) {
-					Date cal = new Date();
-					Patient patient = patientEntityToFHIRPatient.transform(entity);
-					Date cal1 = new Date();
-					System.out.println("-------------------readvread tranform end------------------"
-							+ (cal1.getTime() - cal.getTime()) + " ms");
-					return patient;
-				}
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public List<IBaseResource> search(FhirContext ctx, TokenParam active, TokenParam addressUse, TokenParam animalBreed,
+	@SuppressWarnings("deprecation")
+    public List<IBaseResource> search(FhirContext ctx, TokenParam active, TokenParam addressUse, TokenParam animalBreed,
 			TokenParam animalSpecies, TokenParam deceased, TokenParam email, TokenParam gender, TokenParam identifier,
 			TokenParam language, TokenParam phone, TokenParam telecom, ReferenceParam generalPractitioner,
 			ReferenceParam link, ReferenceParam organization, DateRangeParam birthDate, DateRangeParam deathDate,
@@ -196,7 +60,7 @@ public class PatientDao implements IPatient {
 			List<PatientEntity> patientResults = mongo.find(qry, PatientEntity.class);
 			Date cal = new Date();
 			for (PatientEntity patientEntity : patientResults) {
-				resources.add(patientEntityToFHIRPatient.transform(patientEntity));
+				resources.add(transform(patientEntity));
 			}
 			Date cal1 = new Date();
 			System.out.println("-------------------search tranform end------------------"
@@ -216,7 +80,6 @@ public class PatientDao implements IPatient {
 //        return resources;
 //    }
 
-	@Override
 	public long findMatchesAdvancedTotal(FhirContext ctx, TokenParam active, TokenParam addressUse,
 			TokenParam animalBreed, TokenParam animalSpecies, TokenParam deceased, TokenParam email, TokenParam gender,
 			TokenParam identifier, TokenParam language, TokenParam phone, TokenParam telecom,
@@ -371,58 +234,24 @@ public class PatientDao implements IPatient {
 		return criteria;
 	}
 
-	private PatientEntity createNewPatientEntity(Patient obj, int version, String fhirId) {
-		var ent = PatientEntity.fromPatient(obj);
-		DataConvertUtil.setMetaExt(obj, ent);
-		if (fhirId != null && !fhirId.isEmpty()) {
-			ent.fhirId = (fhirId);
-		} else {
-			ent.fhirId = (StringUtil.generateUID());
-		}
+    @Override
+    protected String getProfile() {
+        return "Patient-v1.0";
+    }
 
-		ent.active = (true);
-		ent.version = (version);
-		ent.resCreated = (new Date());
-		return ent;
-	}
+    @Override
+    protected PatientEntity fromFhir(Patient obj) {
+        return PatientEntity.fromPatient(obj);
+    }
 
-	public List<Patient> getHistory(IdType theId, InstantType theSince, DateRangeParam theAt, StringParam _page,
-			Integer count) {
-		List<Patient> retVal = new ArrayList<Patient>();
-		Criteria criteria = null;
-		criteria = Criteria.where("$where").is("1==1");
-		if (theId != null && theId.hasIdPart()) {
-			String fhirId = theId.getIdPart();
-			criteria.and(ConstantKeys.SP_FHIR_ID).is(fhirId);
-		}
-		if (theAt != null) {
-			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "resUpdated", theAt);
-		}
-		if (theSince != null) {
-			Date dateNow = new Date();
-			Date dateParam = theSince.getValue();
-			// criteria.and("resCreated").gte(dateParam).lte(dateNow);
-			criteria.and("resCreated").gte(dateParam);
-		}
-		if (criteria != null) {
-			Query qry = Query.query(criteria);
-			Pageable pageableRequest;
-			pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-					count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
-			qry.with(pageableRequest);
-			qry.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-			qry.with(new Sort(Sort.Direction.DESC, "resCreated"));
+    @Override
+    protected Patient toFhir(PatientEntity ent) {
+        return PatientEntity.toPatient(ent);
+    }
 
-			List<PatientEntity> patientResults = mongo.find(qry, PatientEntity.class);
-			Date cal = new Date();
-			for (PatientEntity patientEntity : patientResults) {
-				retVal.add(patientEntityToFHIRPatient.transform(patientEntity));
-			}
-			Date cal1 = new Date();
-			System.out.println("-------------------history tranform end------------------"
-					+ (cal1.getTime() - cal.getTime()) + " ms");
-		}
-		return retVal;
-	}
+    @Override
+    protected Class<? extends BaseResource> getEntityClass() {
+        return PatientEntity.class;
+    }
 
 }
