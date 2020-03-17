@@ -82,6 +82,21 @@
             <version>1.0</version>
         </dependency>
         
+        <dependency>
+	        <groupId>ca.uhn.hapi.fhir</groupId>
+	        <artifactId>hapi-fhir-testpage-overlay</artifactId>
+	        <version>${hapi-fhir-version}</version>
+	        <type>war</type>
+	        <scope>provided</scope>		
+	    </dependency>
+	    <dependency>
+	        <groupId>ca.uhn.hapi.fhir</groupId>
+	        <artifactId>hapi-fhir-testpage-overlay</artifactId>
+	        <version>${hapi-fhir-version}</version>
+	        <classifier>classes</classifier>
+	        <scope>provided</scope>		
+	    </dependency>
+        
     </dependencies>
 
     <build>
@@ -90,6 +105,18 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-war-plugin</artifactId>
+	            <configuration>
+	                <overlays>
+	                    <overlay>
+	                        <groupId>ca.uhn.hapi.fhir</groupId>
+	                        <artifactId>hapi-fhir-testpage-overlay</artifactId>
+	                    </overlay>
+	                </overlays>
+	            </configuration>
+	        </plugin>
 		</plugins>
 	</build>
 </project>
