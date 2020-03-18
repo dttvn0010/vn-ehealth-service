@@ -96,8 +96,9 @@ public class ChanDoanHinhAnhController {
                 }
                 
                 procedure = saveProcedure(procedure);
+                dto = ChanDoanHinhAnh.fromFhir(procedure);
                 
-                var result = Map.of("success", true);
+                var result = Map.of("success", true, "chanDoanHinhAnh", dto);
                 
                 return ResponseEntity.ok(result);
             }

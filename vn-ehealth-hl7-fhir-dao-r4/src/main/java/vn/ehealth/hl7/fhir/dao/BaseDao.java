@@ -60,7 +60,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     
     @SuppressWarnings("unchecked")
     public List<FHIR> getAll() {
-        var lst = mongo.findAll(getEntityClass());
+        Query query = Query.query(Criteria.where(ConstantKeys.SP_ACTIVE).is(true));
+        var lst = mongo.find(query, getEntityClass());
         return DataConvertUtil.transform(lst, x -> transform((ENT) x));
     }
 
