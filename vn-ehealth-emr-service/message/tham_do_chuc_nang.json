@@ -1,0 +1,30 @@
+{
+    "encounterId": "1333dae7-6de5-4e13-a29b-df0149ad5b17",
+    "dmTdcn": {
+        "ma": "01",
+        "ten": "Điện tim đồ"
+    },
+    "ngayYeuCau": "2018-06-28 00:00:00",
+    "bacSiYeuCau": {
+        "fhirId": "79829711-14ee-40a5-ad92-16552e825467",
+        "ten": "Bác sĩ A"
+    },
+    "noiDungYeuCau": "Nội dung yêu cầu",
+    "ngayThucHien": "2018-06-29 00:00:00",
+    "bacSiChuyenKhoa": {
+        "fhirId": "e8d4abdf-b814-415f-a849-c535a35feda2",
+        "ten": "Bác sĩ B"
+    },
+    "ketQua": "Kết quả chẩn đoán",
+    "ketLuan": "Kết luận chẩn đoán",
+    "loiDan": "Lời dặn chẩn đoán",
+    "nguoiVietBaoCao": {
+        "fhirId": "5aabe31b-577a-489d-a176-ba209c63b114",
+        "ten": "Bác sĩ C"
+    },
+    "nguoiDanhGiaKetQua": {
+        "fhirId": "21ea2960-3155-4951-bf70-77ff97fefa72",
+        "ten": "Bác sĩ D"
+    },
+    "ngayGioBaoCao": "2018-06-30 00:00:00"
+}

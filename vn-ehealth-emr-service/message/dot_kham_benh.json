@@ -1,0 +1,30 @@
+{
+	"id": "1333dae7-6de5-4e13-a29b-df0149ad5b17",
+    "benhNhan": {
+        "id": "187dc142-6843-41f0-94c3-df87343dace3",
+        "tendaydu": "LÊ HỒNG PHÚC"
+    },
+    "coSoKhamBenh": {
+        "id": "0326f6f7-8875-4b27-9746-a81be078b55d",
+        "ten": "Bệnh viện 1"
+    },
+    "maYte": "180034027",
+    "dmLoaiKham" : {"ma":"01","ten":"Bệnh án nội khoa"},
+    "ngayGioVao": "2018-06-28 05:06:00",
+    "ngayGioKetThucDieuTri": "2018-06-30 04:06:00",
+    
+    "dsVaoKhoa": [
+      { 
+		  "locationId": "ec8c58eb-d9be-4b3a-afa1-4f251bef504a",
+		  "dmKhoaDieuTri": {"ma": "01", "ten": "Khoa khám bệnh"},
+		  "ngayGioVao": "2018-06-28 05:06:00",
+		  "ngayGioKetThucDieuTri": "2018-06-29 09:00:00"	  
+	  },
+	  { 
+		  "locationId": "f68b7509-9fb4-4435-9d50-99a00f1869b5",
+		  "dmKhoaDieuTri": {"ma": "02", "ten": "Khoa S1"},
+		  "ngayGioVao": "2018-06-29 10:00:00",
+		  "ngayGioKetThucDieuTri": "2018-06-30 04:06:00"		  
+	  }
+    ]
+}

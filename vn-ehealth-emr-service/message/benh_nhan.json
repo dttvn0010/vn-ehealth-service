@@ -1,0 +1,49 @@
+{
+	
+    "tenDayDu": "Lê Hồng Phúc",
+    "ngaySinh": "2018-06-13 00:00:00",
+    "soTheBhyt": "TE137010004002437000",
+    "ngayHetHanTheBhyt": "2024-12-31 00:00:00",
+    "idHis": "5400525",
+    "diaChi": {
+        "diaChiChiTiet": "Ngõ 1, xóm 2, thôn 3",
+        "dmXaPhuong": {
+            "ma": "14698",
+            "ten": "Xã Kim Đông"
+        },
+        "dmQuanHuyen": {
+            "ma": "376",
+            "ten": "Huyện Kim Sơn"
+        },
+        "dmTinhThanh": {
+            "ma": "37",
+            "ten": "Tỉnh Ninh Bình"
+        },
+        "dmQuocGia": {
+            "ma": "VIE",
+            "ten": "Việt Nam"
+        }
+    },
+    "dmGioiTinh": {
+        "ma": "male",
+        "ten": "Nam"
+    },
+    "dmDanToc": {
+        "ma": "DT01",
+        "ten": "Kinh"
+    },
+    "dmTonGiao": {
+        "ma": "01",
+        "ten": "Lương"
+    },
+    "dmNgheNghiep": {
+        "ma": "679",
+        "ten": "Trẻ <6 tuổi đi học, < 15 t không đi học"
+    },
+    "dmLoaiDoiTuongTaiChinh": {
+        "ma": "01",
+        "ten": "BHYT"
+    },
+    "email": "lehongphuc@gmail.com",
+    "soDienThoai": "098756454"
+}
