@@ -18,6 +18,7 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
+import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 
 public class DatabaseUtil {
 	private static final Logger log = LoggerFactory.getLogger(DatabaseUtil.class);
@@ -361,15 +362,15 @@ public class DatabaseUtil {
 			Resource retVal = null;
 			switch (StringUtil.getType(ref.getReference())) {
 			case ConstantKeys.RES_CAREPLAN: {
-				retVal = DaoFactory.getCarePlanDao().read(createIdTypeFromReference(ref));
+				retVal = DaoFactory.getCarePlanDao().read(FhirUtil.createIdType(ref));
 				break;
 			}
 			case ConstantKeys.RES_PATIENT: {
-				retVal = DaoFactory.getPatientDao().read(createIdTypeFromReference(ref));
+				retVal = DaoFactory.getPatientDao().read(FhirUtil.createIdType(ref));
 				break;
 			}
 			case ConstantKeys.RES_ENCOUNTER: {
-				retVal = DaoFactory.getEncounterDao().read(createIdTypeFromReference(ref));
+				retVal = DaoFactory.getEncounterDao().read(FhirUtil.createIdType(ref));
 				break;
 			}
 			default:
@@ -379,13 +380,6 @@ public class DatabaseUtil {
 			return retVal;
 		}
 
-		return null;
-	}
-
-	public static IdType createIdTypeFromReference(Reference ref) {
-		if ((ref != null && ref.hasReference())) {
-			return new IdType(StringUtil.getId(ref.getReference()));
-		}
 		return null;
 	}
 }

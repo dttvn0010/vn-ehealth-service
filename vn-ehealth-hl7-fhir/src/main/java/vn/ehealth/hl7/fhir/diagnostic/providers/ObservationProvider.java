@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Parameters;
-import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
@@ -92,7 +91,7 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
 			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count,
-			@IncludeParam(allow = { "Observation.related", "*" }) Set<Include> includes)
+			@IncludeParam(allow = { "Observation.related", "Observation:encounter", "*" }) Set<Include> includes)
 			throws OperationOutcomeException {
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -107,19 +106,21 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 						componentValueConcept, conetext, dataAbsentReason, date, device, encounter, identifier, method,
 						patient, performer, relatedTarget, relatedType, specimen, status, subject, valueConcept,
 						valueDate, valueString, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
-						sortParam, count);
+						sortParam, count, includes);
 			} else
 				results = observationDao.search(fhirContext, active, basedOn, category, code, comboCode,
 						comboDataAbsentReason, comboValueConcept, componentCode, componentDataAbsentReason,
 						componentValueConcept, conetext, dataAbsentReason, date, device, encounter, identifier, method,
 						patient, performer, relatedTarget, relatedType, specimen, status, subject, valueConcept,
 						valueDate, valueString, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
-						null, count);
+						null, count, includes);
 			final List<IBaseResource> finalResults = results;
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
+					if (includes != null)
+						return null;
 					return Integer.parseInt(String.valueOf(observationDao.countMatchesAdvancedTotal(fhirContext, active,
 							basedOn, category, code, comboCode, comboDataAbsentReason, comboValueConcept, componentCode,
 							componentDataAbsentReason, componentValueConcept, conetext, dataAbsentReason, date, device,
@@ -236,7 +237,8 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
 			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content)
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
+			@IncludeParam(allow = { "Observation:subject", "Observation:encounter", "*" }) Set<Include> includes)
 			throws OperationOutcomeException {
 		if (code == null) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -248,13 +250,13 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 				for (TokenParam codeitem : code.getValuesAsQueryTokens()) {
 					TokenOrListParam subList = new TokenOrListParam();
 					subList.add(codeitem);
-					List<IBaseResource> subResults = observationDao.search(fhirContext, active, basedOn, category, subList,
-							comboCode, comboDataAbsentReason, comboValueConcept, componentCode,
+					List<IBaseResource> subResults = observationDao.search(fhirContext, active, basedOn, category,
+							subList, comboCode, comboDataAbsentReason, comboValueConcept, componentCode,
 							componentDataAbsentReason, componentValueConcept, conetext, dataAbsentReason, date, device,
 							encounter, identifier, method, patient, performer, relatedTarget, relatedType, specimen,
 							status, subject, valueConcept, valueDate, valueString, resid, _lastUpdated, _tag, _profile,
 							_query, _security, _content, null, null,
-							maxItem != null ? maxItem.getValue().intValue() : 1);
+							maxItem != null ? maxItem.getValue().intValue() : 1, includes);
 					if (subResults != null && subResults.size() > 0)
 						results.addAll(subResults);
 				}

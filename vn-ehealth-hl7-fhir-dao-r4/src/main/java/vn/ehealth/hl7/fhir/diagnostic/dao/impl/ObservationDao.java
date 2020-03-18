@@ -2,11 +2,13 @@ package vn.ehealth.hl7.fhir.diagnostic.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Observation;
+import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
@@ -42,7 +45,7 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 			ReferenceParam specimen, TokenParam status, ReferenceParam subject, TokenParam valueConcept,
 			DateRangeParam valueDate, StringParam valueString, TokenParam resid, DateRangeParam _lastUpdated,
 			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content,
-			StringParam _page, String sortParam, Integer count) {
+			StringParam _page, String sortParam, Integer count, Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
 
 		Criteria criteria = setParamToCriteria(active, basedOn, category, code, comboCode, comboDataAbsentReason,
@@ -69,20 +72,78 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 			for (ObservationEntity item : ObservationEntitys) {
 				Observation obs = transform(item);
 				// add more Resource as it's references
-				if (obs.getSubject() != null) {
-					Resource nested = DatabaseUtil.getResourceFromReference(obs.getSubject());
-					if (nested != null) {
-						//obs.getSubject().setResource(nested);
-						if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-							resources.add(nested);
+				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
+					if (obs.getSubject() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obs.getSubject());
+						if (nested != null) {
+							obs.getSubject().setResource(nested);
+							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+								resources.add(nested);
+						}
 					}
-				}
-				if (obs.getEncounter() != null) {
-					Resource nested = DatabaseUtil.getResourceFromReference(obs.getEncounter());
-					if (nested != null) {
-						//obs.getEncounter().setResource(nested);
-						if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-							resources.add(nested);
+					if (obs.getEncounter() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obs.getEncounter());
+						if (nested != null) {
+							obs.getEncounter().setResource(nested);
+							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+								resources.add(nested);
+						}
+					}
+					if (obs.getBasedOn() != null && obs.getBasedOn().size() > 0) {
+						for (Reference ref : obs.getBasedOn()) {
+							Resource nested = DatabaseUtil.getResourceFromReference(ref);
+							if (nested != null) {
+								ref.setResource(nested);
+								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+									resources.add(nested);
+							}
+						}
+					}
+					if (obs.getDevice() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obs.getDevice());
+						if (nested != null) {
+							obs.getDevice().setResource(nested);
+							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+								resources.add(nested);
+						}
+					}
+					if (obs.getHasMember() != null && obs.getHasMember().size() > 0) {
+						for (Reference ref : obs.getHasMember()) {
+							Resource nested = DatabaseUtil.getResourceFromReference(ref);
+							if (nested != null) {
+								ref.setResource(nested);
+								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+									resources.add(nested);
+							}
+						}
+					}
+					if (obs.getSpecimen() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obs.getSpecimen());
+						if (nested != null) {
+							obs.getDevice().setResource(nested);
+							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+								resources.add(nested);
+						}
+					}
+
+				} else {
+					if (includes != null && includes.size() > 0 && includes.contains(new Include("Observation:subject"))
+							&& obs.getSubject() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obs.getSubject());
+						if (nested != null) {
+							obs.getSubject().setResource(nested);
+							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+								resources.add(nested);
+						}
+					}
+					if (includes != null && includes.size() > 0
+							&& includes.contains(new Include("Observation:encounter")) && obs.getEncounter() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obs.getEncounter());
+						if (nested != null) {
+							obs.getEncounter().setResource(nested);
+							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+								resources.add(nested);
+						}
 					}
 				}
 				resources.add(obs);
