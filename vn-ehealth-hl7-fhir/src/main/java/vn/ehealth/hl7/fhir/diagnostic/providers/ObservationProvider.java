@@ -99,7 +99,7 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 					new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
 		} else {
-			List<Resource> results = new ArrayList<Resource>();
+			List<IBaseResource> results = new ArrayList<IBaseResource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
 				results = observationDao.search(fhirContext, active, basedOn, category, code, comboCode,
@@ -115,7 +115,7 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 						patient, performer, relatedTarget, relatedType, specimen, status, subject, valueConcept,
 						valueDate, valueString, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
 						null, count);
-			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
+			final List<IBaseResource> finalResults = results;
 			return new IBundleProvider() {
 
 				@Override
@@ -243,12 +243,12 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 					new ResourceNotFoundException("Code Param is required!"), OperationOutcome.IssueSeverity.ERROR,
 					OperationOutcome.IssueType.PROCESSING);
 		} else {
-			List<Resource> results = new ArrayList<>();
+			List<IBaseResource> results = new ArrayList<IBaseResource>();
 			if (code != null && code.getValuesAsQueryTokens().size() > 0) {
 				for (TokenParam codeitem : code.getValuesAsQueryTokens()) {
 					TokenOrListParam subList = new TokenOrListParam();
 					subList.add(codeitem);
-					List<Resource> subResults = observationDao.search(fhirContext, active, basedOn, category, subList,
+					List<IBaseResource> subResults = observationDao.search(fhirContext, active, basedOn, category, subList,
 							comboCode, comboDataAbsentReason, comboValueConcept, componentCode,
 							componentDataAbsentReason, componentValueConcept, conetext, dataAbsentReason, date, device,
 							encounter, identifier, method, patient, performer, relatedTarget, relatedType, specimen,

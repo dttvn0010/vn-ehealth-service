@@ -3,6 +3,9 @@ package vn.ehealth.hl7.fhir.dao.util;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -14,6 +17,7 @@ import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
+import vn.ehealth.hl7.fhir.core.util.StringUtil;
 
 public class DatabaseUtil {
 	private static final Logger log = LoggerFactory.getLogger(DatabaseUtil.class);
@@ -336,22 +340,52 @@ public class DatabaseUtil {
 		}
 		return criteria;
 	}
-	
+
 	public static Criteria setCodeListToCriteria(Criteria criteria, TokenOrListParam codelist) {
 		var lst = new ArrayList<Criteria>();
-    	for (TokenParam codeitem : codelist.getValuesAsQueryTokens()) {
-    		if(!StringUtils.isBlank(codeitem.getSystem()) && !StringUtils.isBlank(codeitem.getValue())) {
-    			lst.add(new Criteria().andOperator(
-    								Criteria.where("code.coding.system").is(codeitem.getSystem()),
-    								Criteria.where("code.coding.code").is(codeitem.getValue())));
-            }else if(!StringUtils.isBlank(codeitem.getSystem()) && StringUtils.isBlank(codeitem.getValue())) {
-            	lst.add(new Criteria().andOperator(
-						Criteria.where("code.coding.system").is(codeitem.getSystem())));
-            }else if(StringUtils.isBlank(codeitem.getSystem()) && !StringUtils.isBlank(codeitem.getValue())) {
-            	lst.add(new Criteria().andOperator(
+		for (TokenParam codeitem : codelist.getValuesAsQueryTokens()) {
+			if (!StringUtils.isBlank(codeitem.getSystem()) && !StringUtils.isBlank(codeitem.getValue())) {
+				lst.add(new Criteria().andOperator(Criteria.where("code.coding.system").is(codeitem.getSystem()),
 						Criteria.where("code.coding.code").is(codeitem.getValue())));
-            }
-    	}
+			} else if (!StringUtils.isBlank(codeitem.getSystem()) && StringUtils.isBlank(codeitem.getValue())) {
+				lst.add(new Criteria().andOperator(Criteria.where("code.coding.system").is(codeitem.getSystem())));
+			} else if (StringUtils.isBlank(codeitem.getSystem()) && !StringUtils.isBlank(codeitem.getValue())) {
+				lst.add(new Criteria().andOperator(Criteria.where("code.coding.code").is(codeitem.getValue())));
+			}
+		}
 		return criteria.orOperator(lst.toArray(new Criteria[0]));
+	}
+
+	public static Resource getResourceFromReference(Reference ref) {
+		if (ref != null && ref.hasReference()) {
+			Resource retVal = null;
+			switch (StringUtil.getType(ref.getReference())) {
+			case ConstantKeys.RES_CAREPLAN: {
+				retVal = DaoFactory.getCarePlanDao().read(createIdTypeFromReference(ref));
+				break;
+			}
+			case ConstantKeys.RES_PATIENT: {
+				retVal = DaoFactory.getPatientDao().read(createIdTypeFromReference(ref));
+				break;
+			}
+			case ConstantKeys.RES_ENCOUNTER: {
+				retVal = DaoFactory.getEncounterDao().read(createIdTypeFromReference(ref));
+				break;
+			}
+			default:
+				return null;
+
+			}
+			return retVal;
+		}
+
+		return null;
+	}
+
+	public static IdType createIdTypeFromReference(Reference ref) {
+		if ((ref != null && ref.hasReference())) {
+			return new IdType(StringUtil.getId(ref.getReference()));
+		}
+		return null;
 	}
 }
