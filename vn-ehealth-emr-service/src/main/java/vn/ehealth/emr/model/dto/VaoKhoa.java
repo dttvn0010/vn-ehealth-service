@@ -8,7 +8,7 @@ import org.hl7.fhir.r4.model.Reference;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import vn.ehealth.emr.utils.DbUtils;
+import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 import static vn.ehealth.emr.utils.FhirUtil.*;
 
@@ -29,7 +29,7 @@ public class VaoKhoa {
     public VaoKhoa(EncounterLocationComponent ent) {
         if(ent == null || !ent.hasLocation()) return;
         this.locationId = ent.getLocation().getReference();
-        var location =  DbUtils.getLocationDao().read(new IdType(this.locationId));
+        var location =  DaoFactory.getLocationDao().read(new IdType(this.locationId));
         var khoaDieuTri = KhoaDieuTri.fromFhir(location);
         if(khoaDieuTri != null) {
             this.dmKhoaDieuTri = khoaDieuTri.dmLoaiKhoa;

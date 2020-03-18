@@ -3,14 +3,12 @@ package vn.ehealth.hl7.fhir.dao;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.InstantType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -58,13 +56,6 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         return ent;
     }
     
-    @SuppressWarnings("unchecked")
-    public List<FHIR> getAll() {
-        Query query = Query.query(Criteria.where(ConstantKeys.SP_ACTIVE).is(true));
-        var lst = mongo.find(query, getEntityClass());
-        return DataConvertUtil.transform(lst, x -> transform((ENT) x));
-    }
-
     public FHIR create(FHIR object) {
         int version = ConstantKeys.VERSION_1;
         if (object != null) {
@@ -76,7 +67,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings("unchecked")
-    @CachePut(value = "patient", key = "#idType")
+    //@CachePut(value = "patient", key = "#idType")
     public FHIR update(FHIR object, IdType idType) {
         ENT entityOld = null;
         String fhirId = "";
@@ -108,7 +99,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings("unchecked")
-    @Cacheable(value = "patient", key = "#idType")
+    //@Cacheable(value = "patient", key = "#idType")
     public FHIR read(IdType idType) {
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
@@ -124,7 +115,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings("unchecked")
-    @CacheEvict(value = "patient", key = "#idType")
+    //@CacheEvict(value = "patient", key = "#idType")
     public FHIR remove(IdType idType) {
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
@@ -197,5 +188,37 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
                     + (cal1.getTime() - cal.getTime()) + " ms");
         }
         return retVal;
+    }
+    
+    private Criteria createCriteria(Map<String, Object> params) {
+        var criteria = Criteria.where(ConstantKeys.SP_ACTIVE).is(true);
+        for(var item : params.entrySet()) {
+            criteria.and(item.getKey()).is(item.getValue());
+        }
+        return criteria;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<FHIR> getAll() {
+        Query query = Query.query(Criteria.where(ConstantKeys.SP_ACTIVE).is(true));
+        var lst = mongo.find(query, getEntityClass());
+        return DataConvertUtil.transform(lst, x -> transform((ENT) x));
+    }
+    
+    @SuppressWarnings("unchecked")
+    public FHIR findOne(Map<String, Object> params) {        
+        var query = Query.query(createCriteria(params));        
+        var entity = (ENT) mongo.findOne(query, getEntityClass());
+        if (entity != null) {
+            return transform(entity);
+        }
+        return null;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<FHIR> find(Map<String, Object> params) {        
+        var query = Query.query(createCriteria(params));        
+        var lst = mongo.find(query, getEntityClass());
+        return DataConvertUtil.transform(lst, x -> transform((ENT)x));
     }
 }

@@ -1,7 +1,8 @@
 package vn.ehealth.emr.model.dto;
 
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
-import vn.ehealth.emr.utils.DbUtils;
+import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
+
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.emr.utils.FhirUtil.*;
 
@@ -36,7 +37,7 @@ public class KhoaDieuTri extends BaseModelDTO {
     public static KhoaDieuTri fromReference(Reference ref) {
         if(ref != null && ref.hasReference()) {
             var id = ref.getReference();
-            var ent = DbUtils.getLocationDao().read(new IdType(id));
+            var ent = DaoFactory.getLocationDao().read(new IdType(id));
             return fromFhir(ent);
         }
         return null;        

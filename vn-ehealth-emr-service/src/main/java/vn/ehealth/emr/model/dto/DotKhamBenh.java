@@ -11,7 +11,7 @@ import org.hl7.fhir.r4.model.Reference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
-import vn.ehealth.emr.utils.DbUtils;
+import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.emr.utils.FhirUtil.*;
@@ -65,7 +65,7 @@ public class DotKhamBenh extends BaseModelDTO {
     
     public static DotKhamBenh fromFhirId(String id) {
         if(id == null) return null;
-        var ent = DbUtils.getEncounterDao().read(new IdType(id));
+        var ent = DaoFactory.getEncounterDao().read(new IdType(id));
         return fromFhir(ent);
     }
     

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,26 +17,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.CanboYte;
-import vn.ehealth.emr.utils.DbUtils;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.provider.dao.impl.PractitionerDao;
 
 @RestController
 @RequestMapping("/api/can_bo_y_te")
 public class CanBoYteController {
 
+    @Autowired private PractitionerDao practitionerDao;
     private static Logger logger = LoggerFactory.getLogger(CanBoYteController.class);
     
 
     @GetMapping("/get_by_id")
     public ResponseEntity<?> getById(@RequestParam String id) {
-        var obj = DbUtils.getPractitionerDao().read(new IdType(id));
+        var obj = practitionerDao.read(new IdType(id));
         var dto = CanboYte.fromFhir(obj);
         return ResponseEntity.ok(dto);
     }
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAllDto() {
-        var lst = DataConvertUtil.transform(DbUtils.getPractitionerDao().getAll(), x -> CanboYte.fromFhir(x));
+        var lst = DataConvertUtil.transform(practitionerDao.getAll(), x -> CanboYte.fromFhir(x));
         return ResponseEntity.ok(lst);
     }
     
@@ -44,9 +46,9 @@ public class CanBoYteController {
         try {
             var obj = CanboYte.toFhir(dto);
             if(obj.hasId()) {
-                obj = DbUtils.getPractitionerDao().update(obj, new IdType(obj.getId()));
+                obj = practitionerDao.update(obj, new IdType(obj.getId()));
             }else {
-                obj = DbUtils.getPractitionerDao().create(obj);
+                obj = practitionerDao.create(obj);
             }
             dto = CanboYte.fromFhir(obj);
             var result = Map.of("success", true, "dto", dto);

@@ -11,12 +11,12 @@ import org.hl7.fhir.r4.model.Reference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
-import vn.ehealth.emr.utils.DbUtils;
 
 import static vn.ehealth.emr.utils.FhirUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
+import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 public class BenhNhan  extends BaseModelDTO {
     public String tenDayDu;
@@ -105,7 +105,7 @@ public class BenhNhan  extends BaseModelDTO {
             
         }
         if(ref != null && ref.hasReference()) {
-            var obj = DbUtils.getPatientDao().read(new IdType(ref.getReference()));
+            var obj = DaoFactory.getPatientDao().read(new IdType(ref.getReference()));
             return fromFhir(obj);
         }
         return null;
@@ -113,7 +113,7 @@ public class BenhNhan  extends BaseModelDTO {
     
     public static Patient toFhir(BenhNhan dto) {
         if(dto == null) return null;
-        var obj = DbUtils.getPatientDao().read(new IdType(dto.id));
+        var obj = DaoFactory.getPatientDao().read(new IdType(dto.id));
         
         if(obj == null) {
             obj = new Patient();

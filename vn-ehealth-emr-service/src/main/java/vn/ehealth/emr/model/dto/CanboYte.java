@@ -1,7 +1,8 @@
 package vn.ehealth.emr.model.dto;
 
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
-import vn.ehealth.emr.utils.DbUtils;
+import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
+
 import static vn.ehealth.emr.utils.FhirUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
@@ -32,7 +33,7 @@ public class CanboYte extends BaseModelDTO {
     
     public static CanboYte fromReference(Reference ref) {
         if(ref != null && ref.hasReference()) {
-            var ent = DbUtils.getPractitionerDao().read(new IdType(ref.getReference()));
+            var ent = DaoFactory.getPractitionerDao().read(new IdType(ref.getReference()));
             return fromFhir(ent);
         }
         
@@ -42,7 +43,7 @@ public class CanboYte extends BaseModelDTO {
     public static Practitioner toFhir(CanboYte dto) {
         if(dto == null) return null;
         
-        var obj = DbUtils.getPractitionerDao().read(new IdType(dto.id));
+        var obj = DaoFactory.getPractitionerDao().read(new IdType(dto.id));
         if(obj == null) {
             obj = new Practitioner();
         }

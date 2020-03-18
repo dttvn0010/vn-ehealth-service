@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Procedure;
-import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
@@ -81,15 +80,15 @@ public class ProcedureProvider extends BaseController<ProcedureEntity, Procedure
             		new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
         } else {
-        	List<Resource> results = new ArrayList<Resource>();
+        	List<Procedure> results = new ArrayList<Procedure>();
             if (theSort != null) {
                 String sortParam = theSort.getParamName();
-                results = procedureDao.search(fhirContext, active, bassedOn, category, code, context,
+                results = procedureDao.search(active, bassedOn, category, code, context,
                         date, definition, encounter, identifier, location, partOf, patient, performer, status, subject,
                         resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count);
                 //return results;
             } else
-            	results = procedureDao.search(fhirContext, active, bassedOn, category, code, context, date,
+            	results = procedureDao.search(active, bassedOn, category, code, context, date,
                     definition, encounter, identifier, location, partOf, patient, performer, status, subject, resid,
                     _lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count);
             final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);

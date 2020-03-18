@@ -1,11 +1,19 @@
 package vn.ehealth.emr.model.dto;
 
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BaseModelDTO {
 
     public String id;
+    
+    @JsonIgnore
+    public IdType getIdPart() {
+        return new IdType(id);
+    }
     
     public BaseModelDTO() {
         

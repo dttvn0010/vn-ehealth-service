@@ -2,9 +2,10 @@ package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Procedure;
-import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,14 +29,14 @@ import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
 
     @SuppressWarnings("deprecation")
-    public List<Resource> search(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
+    public List<Procedure> search(TokenParam active, ReferenceParam bassedOn,
             TokenParam category, TokenParam code, ReferenceParam context, DateRangeParam date,
             ReferenceParam definition, ReferenceParam encounter, TokenParam identifier, ReferenceParam location,
             ReferenceParam partOf, ReferenceParam patient, ReferenceParam performer, TokenParam status,
             ReferenceParam subject, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
             TokenParam _query, TokenParam _security, StringParam _content, StringParam _page, String sortParam,
             Integer count) {
-        List<Resource> resources = new ArrayList<>();
+        List<Procedure> resources = new ArrayList<>();
         Criteria criteria = setParamToCriteria(active, bassedOn, category, code, context, date, definition, encounter,
                 identifier, location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag, _profile,
                 _query, _security, _content);
@@ -203,8 +204,14 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
         }
         return criteria;
     }
-
-    @Override
+    
+    public Procedure getByReport(IdType reportIdType) {
+        if (reportIdType != null && reportIdType.hasIdPart()) {
+            return findOne(Map.of("report.reference", reportIdType.getIdPart()));
+        }
+        return null;
+    }
+                    
     protected String getProfile() {
         return "Procedure-v1.0";
     }
