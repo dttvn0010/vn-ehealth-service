@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.diagnostic.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -29,7 +31,7 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation>{
 
     @SuppressWarnings("deprecation")
     public List<Resource> search(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
-            TokenParam category, TokenParam code, TokenParam comboCode, TokenParam comboDataAbsentReason,
+            TokenParam category, TokenOrListParam code, TokenParam comboCode, TokenParam comboDataAbsentReason,
             TokenParam comboValueConcept, TokenParam componentCode, TokenParam componentDataAbsentReason,
             TokenParam componentValueConcept, ReferenceParam conetext, TokenParam dataAbsentReason, DateRangeParam date,
             ReferenceParam device, ReferenceParam encounter, TokenParam identifier, TokenParam method,
@@ -44,18 +46,21 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation>{
                 dataAbsentReason, date, device, encounter, identifier, method, patient, performer, relatedTarget,
                 relatedType, specimen, status, subject, valueConcept, valueDate, valueString, resid, _lastUpdated, _tag,
                 _profile, _query, _security, _content);
-        Query query = new Query();
+        Query qry = new Query();
         if (criteria != null) {
-            query = Query.query(criteria);
+        	qry = Query.query(criteria);
         }
         Pageable pageableRequest;
         pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
                 count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
-        query.with(pageableRequest);
+        qry.with(pageableRequest);
         if (sortParam != null && !sortParam.equals("")) {
-            query.with(new Sort(Sort.Direction.ASC, sortParam));
-        }
-        List<ObservationEntity> ObservationEntitys = mongo.find(query, ObservationEntity.class);
+        	qry.with(new Sort(Sort.Direction.DESC, sortParam));
+        }  else {
+			qry.with(new Sort(Sort.Direction.DESC, "resUpdated"));
+			qry.with(new Sort(Sort.Direction.DESC, "resCreated"));
+		}
+        List<ObservationEntity> ObservationEntitys = mongo.find(qry, ObservationEntity.class);
         if (ObservationEntitys != null) {
             for (ObservationEntity item : ObservationEntitys) {
                 Observation Observation = transform(item);
@@ -66,7 +71,7 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation>{
     }
 
     public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
-            TokenParam category, TokenParam code, TokenParam comboCode, TokenParam comboDataAbsentReason,
+            TokenParam category, TokenOrListParam code, TokenParam comboCode, TokenParam comboDataAbsentReason,
             TokenParam comboValueConcept, TokenParam componentCode, TokenParam componentDataAbsentReason,
             TokenParam componentValueConcept, ReferenceParam conetext, TokenParam dataAbsentReason, DateRangeParam date,
             ReferenceParam device, ReferenceParam encounter, TokenParam identifier, TokenParam method,
@@ -88,7 +93,7 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation>{
         return total;
     }
 
-    private Criteria setParamToCriteria(TokenParam active, ReferenceParam basedOn, TokenParam category, TokenParam code,
+    private Criteria setParamToCriteria(TokenParam active, ReferenceParam basedOn, TokenParam category, TokenOrListParam codeList,
             TokenParam comboCode, TokenParam comboDataAbsentReason, TokenParam comboValueConcept,
             TokenParam componentCode, TokenParam componentDataAbsentReason, TokenParam componentValueConcept,
             ReferenceParam conetext, TokenParam dataAbsentReason, DateRangeParam date, ReferenceParam device,
@@ -133,6 +138,20 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation>{
                 String[] ref= encounter.getValue().split("\\|");
                 criteria.and("context.identifier.system").is(ref[0]).and("context.identifier.value").is(ref[1]);
             }
+        }
+        // category
+        if (category != null) {
+        	if(!StringUtils.isBlank(category.getSystem()) && !StringUtils.isBlank(category.getValue())) {
+                criteria.and("category.coding.system").is(category.getSystem())
+                	.and("category.coding.code").is(category.getValue());
+            }else if(!StringUtils.isBlank(category.getSystem()) && StringUtils.isBlank(category.getValue())) {
+                criteria.and("category.coding.system").is(category.getSystem());
+            }else if(StringUtils.isBlank(category.getSystem()) && !StringUtils.isBlank(category.getValue())) {
+                criteria.and("category.coding.code").is(category.getValue());
+            }
+        }
+        if (codeList != null) {
+        	DatabaseUtil.setCodeListToCriteria(criteria, codeList);
         }
         // set param default
         criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,

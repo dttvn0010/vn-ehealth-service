@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.ChanDoanHinhAnh;
+import vn.ehealth.emr.utils.Constants.CodeSystemValue;
+import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ProcedureDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
@@ -40,15 +42,21 @@ public class ChanDoanHinhAnhController {
         
     @GetMapping("/get_by_id")
     public ResponseEntity<?> getById(@RequestParam String id) {
-        var obj = procedureDao.read(new IdType(id));
+        var obj = diagnosticReportDao.read(new IdType(id));
         var dto = ChanDoanHinhAnh.fromFhir(obj);
         return ResponseEntity.ok(dto);
     }
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
-        var lst = DataConvertUtil.transform(procedureDao.getAll(), x -> ChanDoanHinhAnh.fromFhir(x));
-        return ResponseEntity.ok(lst);
+        Map<String, Object> params = Map.of(
+                    "category.coding.code", LoaiDichVuKT.CHAN_DOAN_HINH_ANH,
+                    "category.coding.system", CodeSystemValue.DICH_VU_KY_THUAT
+                );
+        
+        var lst = diagnosticReportDao.find(params);
+        var result = DataConvertUtil.transform(lst, x -> ChanDoanHinhAnh.fromFhir(x));
+        return ResponseEntity.ok(result);
     }
     
     private DiagnosticReport saveDiagnosticReport(DiagnosticReport obj) {
@@ -87,7 +95,9 @@ public class ChanDoanHinhAnhController {
                                 
                 diagnosticReport = saveDiagnosticReport(diagnosticReport);
                 if(diagnosticReport != null) {
-                    procedure.setReport(List.of(new Reference(diagnosticReport.getId())));
+                    var ref = new Reference(diagnosticReport.getId());
+                    serviceRequest.setBasedOn(List.of(ref));
+                    procedure.setReport(List.of(ref));
                 }
                 
                 serviceRequest = saveServiceRequest(serviceRequest);
@@ -96,7 +106,8 @@ public class ChanDoanHinhAnhController {
                 }
                 
                 procedure = saveProcedure(procedure);
-                dto = ChanDoanHinhAnh.fromFhir(procedure);
+                
+                dto = ChanDoanHinhAnh.fromFhir(diagnosticReport);
                 
                 var result = Map.of("success", true, "chanDoanHinhAnh", dto);
                 

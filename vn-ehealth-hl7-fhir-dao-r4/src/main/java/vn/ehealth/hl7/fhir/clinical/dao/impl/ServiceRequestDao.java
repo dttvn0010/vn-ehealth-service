@@ -2,7 +2,9 @@ package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.springframework.data.domain.PageRequest;
@@ -201,6 +203,13 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
         }
         return criteria;
     }
+	
+	public ServiceRequest getByReport(IdType reportIdType) {
+	    if(reportIdType != null && reportIdType.hasIdPart()) {
+	        return findOne(Map.of("basedOn.reference", reportIdType.getIdPart()));	        
+	    }
+	    return null;
+	}
 
     @Override
     protected String getProfile() {

@@ -93,8 +93,16 @@ public class Constants {
         final public static String KHOA_DIEU_TRI = codeSystems.getProperty("khoa_dieu_tri");
         
         
-        final public static String LOAI_CHAN_DOAN_HINH_ANH = codeSystems.getProperty("loai_chandoan_hinhanh");
+        final public static String DICH_VU_KY_THUAT = codeSystems.getProperty("dich_vu_ky_thuat");
         final public static String CHAN_DOAN_HINH_ANH = codeSystems.getProperty("chandoan_hinhanh");
+    }
+    
+    public static interface LoaiDichVuKT {
+        final public static String PHAU_THUAT_THU_THUAT = "SUR";
+        final public static String XET_NGHIEM = "LAB";
+        final public static String GIAI_PHAI_BENH = "SP";
+        final public static String CHAN_DOAN_HINH_ANH = "CA";        
+        final public static String THAM_DO_CHUC_NANG = "XRC";
     }
     
 }

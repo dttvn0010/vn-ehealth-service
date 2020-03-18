@@ -1,4 +1,4 @@
-package vn.ehealth.emr.utils;
+package vn.ehealth.hl7.fhir.dao.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -14,7 +14,7 @@ import vn.ehealth.hl7.fhir.provider.dao.impl.LocationDao;
 import vn.ehealth.hl7.fhir.provider.dao.impl.PractitionerDao;
 
 @Component
-public class DbUtils implements ApplicationContextAware {
+public class DaoFactory implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
     private static PatientDao patientDao;
@@ -27,7 +27,7 @@ public class DbUtils implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        DbUtils.applicationContext = applicationContext;        
+        DaoFactory.applicationContext = applicationContext;        
     }
     
     public static PatientDao getPatientDao() {
@@ -78,5 +78,4 @@ public class DbUtils implements ApplicationContextAware {
         }
         return serviceRequestDao;
     }
-    
 }

@@ -5,16 +5,15 @@ import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Encounter;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
-import vn.ehealth.emr.utils.DbUtils;
+import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
-import static vn.ehealth.emr.utils.FhirUtil.*;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 public class DotKhamBenh extends BaseModelDTO {    
     public BenhNhan benhNhan;
@@ -65,7 +64,7 @@ public class DotKhamBenh extends BaseModelDTO {
     
     public static DotKhamBenh fromFhirId(String id) {
         if(id == null) return null;
-        var ent = DbUtils.getEncounterDao().read(new IdType(id));
+        var ent = DaoFactory.getEncounterDao().read(createIdType(id));
         return fromFhir(ent);
     }
     

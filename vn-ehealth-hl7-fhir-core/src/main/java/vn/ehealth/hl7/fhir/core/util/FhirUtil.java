@@ -1,4 +1,4 @@
-package vn.ehealth.emr.utils;
+package vn.ehealth.hl7.fhir.core.util;
 
 import java.util.Date;
 import java.util.List;
@@ -7,15 +7,15 @@ import javax.annotation.Nonnull;
 
 import org.hl7.fhir.r4.model.Address;
 import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.ContactPoint;
 import org.hl7.fhir.r4.model.HumanName;
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Period;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
-
-import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 public class FhirUtil {
 
@@ -81,8 +81,30 @@ public class FhirUtil {
         return concept;
     }
     
+    public static CodeableConcept createCodeableConcept(String code, String name, String system) {
+        var concept = new CodeableConcept();
+        concept.setText(name);
+        var coding = new Coding();
+        coding.setCode(code);
+        coding.setDisplay(name);
+        coding.setSystem(system);
+        concept.addCoding(coding);
+        return concept;
+    }
+    
     public static Reference createReference(Resource resource) {
         if(resource == null) return null;
         return new Reference(resource.getId());
+    }
+    
+    public static IdType createIdType(String id) {
+        return new IdType(id);
+    }
+    
+    public static IdType createIdType(Reference ref) {
+        if((ref != null && ref.hasReference())) {
+            return new IdType(ref.getReference());
+        }
+        return null;
     }
 }

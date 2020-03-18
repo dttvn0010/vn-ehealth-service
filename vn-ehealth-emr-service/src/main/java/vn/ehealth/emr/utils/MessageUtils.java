@@ -17,14 +17,14 @@ public class MessageUtils {
             
     static {
         try {
-            var input = new ClassPathResource("code_systems.properties").getInputStream();
+            var input = new ClassPathResource("messages.properties").getInputStream();
             messages.load(new InputStreamReader(input, Charset.forName("UTF-8")));
         } catch (IOException e) {
-            logger.error("Cannot read user.properties", e);
+            logger.error("Cannot read messages.properties", e);
         }
     }
     
-    public static String getText(String property) {
+    public static String get(String property) {
         return messages.getProperty(property, property);
     }
 }

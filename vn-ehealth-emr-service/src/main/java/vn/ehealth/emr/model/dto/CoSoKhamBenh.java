@@ -1,11 +1,11 @@
 package vn.ehealth.emr.model.dto;
 
-import vn.ehealth.emr.utils.DbUtils;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
-import static vn.ehealth.emr.utils.FhirUtil.*;
+import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
-import org.hl7.fhir.r4.model.IdType;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
+
 import org.hl7.fhir.r4.model.Location;
 import org.hl7.fhir.r4.model.Reference;
 
@@ -32,7 +32,7 @@ public class CoSoKhamBenh extends BaseModelDTO {
     
     public static CoSoKhamBenh fromReference(Reference ref) {
         if(ref != null && ref.hasReference()) {
-            var ent = DbUtils.getLocationDao().read(new IdType(ref.getReference()));
+            var ent = DaoFactory.getLocationDao().read(createIdType(ref));
             return fromFhir(ent);
         }
         return null;        
