@@ -96,32 +96,28 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
 		} else {
 			List<Resource> results = new ArrayList<Resource>();
-			var codeitem = new TokenParam();
-			if (code != null && code.getValuesAsQueryTokens().size() > 0)
-				codeitem = code.getValuesAsQueryTokens().get(0);
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = observationDao.search(fhirContext, active, basedOn, category, codeitem, comboCode,
+				results = observationDao.search(fhirContext, active, basedOn, category, code, comboCode,
 						comboDataAbsentReason, comboValueConcept, componentCode, componentDataAbsentReason,
 						componentValueConcept, conetext, dataAbsentReason, date, device, encounter, identifier, method,
 						patient, performer, relatedTarget, relatedType, specimen, status, subject, valueConcept,
 						valueDate, valueString, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
 						sortParam, count);
 			} else
-				results = observationDao.search(fhirContext, active, basedOn, category, codeitem, comboCode,
+				results = observationDao.search(fhirContext, active, basedOn, category, code, comboCode,
 						comboDataAbsentReason, comboValueConcept, componentCode, componentDataAbsentReason,
 						componentValueConcept, conetext, dataAbsentReason, date, device, encounter, identifier, method,
 						patient, performer, relatedTarget, relatedType, specimen, status, subject, valueConcept,
 						valueDate, valueString, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
 						null, count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
-			final var codeToSearch = codeitem;
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
 					return Integer.parseInt(String.valueOf(observationDao.countMatchesAdvancedTotal(fhirContext, active,
-							basedOn, category, codeToSearch, comboCode, comboDataAbsentReason, comboValueConcept,
+							basedOn, category, code, comboCode, comboDataAbsentReason, comboValueConcept,
 							componentCode, componentDataAbsentReason, componentValueConcept, conetext, dataAbsentReason,
 							date, device, encounter, identifier, method, patient, performer, relatedTarget, relatedType,
 							specimen, status, subject, valueConcept, valueDate, valueString, resid, _lastUpdated, _tag,
@@ -159,7 +155,7 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
-			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
+			@OptionalParam(name = ConstantKeys.SP_CODE) TokenOrListParam code,
 			@OptionalParam(name = ConstantKeys.SP_COMBO_CODE) TokenParam comboCode,
 			@OptionalParam(name = ConstantKeys.SP_COMBO_DATA_ABSENT_REASON) TokenParam comboDataAbsentReason,
 			@OptionalParam(name = ConstantKeys.SP_COMBO_CODE_VALUE_CONCEPT) TokenParam comboValueConcept,
@@ -255,8 +251,10 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
         else {
         	List<Resource> results = new ArrayList<>();
             if (code !=null && code.getValuesAsQueryTokens().size() > 0) {
-            	for (TokenParam codeitem : code.getValuesAsQueryTokens()) {            		
-            		List<Resource> subResults = observationDao.search(fhirContext, active, basedOn, category, codeitem, comboCode,
+            	for (TokenParam codeitem : code.getValuesAsQueryTokens()) {  
+            		TokenOrListParam subList = new TokenOrListParam();
+            		subList.add(codeitem);
+            		List<Resource> subResults = observationDao.search(fhirContext, active, basedOn, category, subList, comboCode,
                             comboDataAbsentReason, comboValueConcept, componentCode, componentDataAbsentReason,
                             componentValueConcept, conetext, dataAbsentReason, date, device, encounter, identifier, method,
                             patient, performer, relatedTarget, relatedType, specimen, status, subject, valueConcept, valueDate,
