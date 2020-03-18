@@ -1,7 +1,6 @@
 package vn.ehealth.hl7.fhir.providers;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
