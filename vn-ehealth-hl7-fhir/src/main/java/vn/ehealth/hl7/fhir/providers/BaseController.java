@@ -48,8 +48,6 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
     
     @Create
     public MethodOutcome create(HttpServletRequest theRequest, @ResourceParam FHIR object) {
-        Date cal = new Date();
-
         MethodOutcome method = new MethodOutcome();
         method.setCreated(true);
         OperationOutcome opOutcome = new OperationOutcome();
@@ -57,43 +55,32 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
         FHIR mongoObject = null;
         try {
             mongoObject = getDao().create(object);
-            Date cal2 = new Date();
-            System.out
-                    .println("-------------------dao end------------------" + (cal2.getTime() - cal.getTime()) + " ms");
             List<String> myString = new ArrayList<>();
             myString.add("urn:uuid/" + mongoObject.getIdElement());
             method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-                    "urn:uuid: " + mongoObject.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
+                    "urn:uuid:" + mongoObject.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
             method.setId(mongoObject.getIdElement());
             method.setResource(mongoObject);
         } catch (Exception ex) {
             if (ex instanceof OperationOutcomeException) {
                 OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
                 method.setOperationOutcome(outcomeException.getOutcome());
-                method.setCreated(false);
             } else {
                 log.error(ex.getMessage());
-                method.setCreated(false);
                 method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
             }
         }
-        Date cal1 = new Date();
-        System.out
-                .println("-------------------create end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
         return method;
     }
     
     @Read
     public FHIR read(HttpServletRequest request, @IdParam IdType internalId) {
-        Date cal = new Date();
         var object = getDao().read(internalId);
         if (object == null) {
             throw OperationOutcomeFactory.buildOperationOutcomeException(
                     new ResourceNotFoundException("No Entity/" + internalId.getIdPart()),
                     OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
         }
-        Date cal1 = new Date();
-        System.out.println("-------------------read end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
         return object;
     }
     
@@ -105,8 +92,6 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
      */
     @Read(version = true)
     public FHIR readVread(HttpServletRequest request, @IdParam IdType idType) {
-        Date cal = new Date();
-
         FHIR object = null;
         if (idType.hasVersionIdPart()) {
             object = getDao().readOrVread(idType);
@@ -118,15 +103,11 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
                     new ResourceNotFoundException("No Entity/" + idType.getIdPart()),
                     OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
         }
-        Date cal1 = new Date();
-        System.out.println(
-                "-------------------readVread end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
         return object;
     }
     
     @Delete
     public FHIR delete(HttpServletRequest request, @IdParam IdType internalId) {
-        Date cal = new Date();
         log.debug("Delete Entity called");
         var object = getDao().remove(internalId);
         if (object == null) {
@@ -136,15 +117,11 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
                     OperationOutcome.IssueType.NOTFOUND);
 
         }
-        Date cal1 = new Date();
-        System.out
-                .println("-------------------delete end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
         return object;
     }
 
     @Update
     public MethodOutcome update(HttpServletRequest theRequest, @IdParam IdType theId, @ResourceParam FHIR object) {
-        Date cal = new Date();
         log.debug("Update Object called");
         MethodOutcome method = new MethodOutcome();
         method.setCreated(false);
@@ -158,9 +135,6 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
         }
         method.setId(newObject.getIdElement());
         method.setResource(newObject);
-        Date cal1 = new Date();
-        System.out
-                .println("-------------------update end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
         return method;
     }
     
@@ -185,11 +159,8 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
     public List<FHIR> getInstanceHistory(@IdParam IdType theId, @OptionalParam(name = "_since") InstantType theSince,
             @OptionalParam(name = "_at") DateRangeParam theAt,
             @OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Count Integer count) {
-        Date cal = new Date();
         List<FHIR> retVal = new ArrayList<FHIR>();
         retVal = getDao().getHistory(theId, theSince, theAt, _page, count);
-        Date cal1 = new Date();
-        System.out.println("---------------history end--------------" + (cal1.getTime() - cal.getTime()) + " ms");
         return retVal;
     }
 
@@ -197,11 +168,8 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
     public List<FHIR> getResourceHistory(@OptionalParam(name = "_since") InstantType theSince,
             @OptionalParam(name = "_at") DateRangeParam theAt,
             @OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Count Integer count) {
-        Date cal = new Date();
         List<FHIR> retVal = new ArrayList<FHIR>();
         retVal = getDao().getHistory(null, theSince, theAt, _page, count);
-        Date cal1 = new Date();
-        System.out.println("--------------history end-------------" + (cal1.getTime() - cal.getTime()) + " ms");
         return retVal;
     }
 }

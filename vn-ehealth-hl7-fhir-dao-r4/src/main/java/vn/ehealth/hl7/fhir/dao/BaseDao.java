@@ -104,7 +104,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
             Query query = Query.query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId)
-                                .and(ConstantKeys.SP_ACTIVE).is(true)).withHint("idx_by_fhirId-active");
+                                .and(ConstantKeys.SP_ACTIVE).is(true));
             
             var entity = (ENT) mongo.findOne(query, getEntityClass());
             if (entity != null) {
@@ -120,7 +120,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
             Query query = Query.query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId)
-                                .and(ConstantKeys.SP_ACTIVE).is(true)).withHint("idx_by_fhirId-active");
+                                .and(ConstantKeys.SP_ACTIVE).is(true));
             
             var entity = (ENT) mongo.findOne(query, getEntityClass());
             if (entity != null) {
@@ -141,7 +141,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
             Integer version = Integer.valueOf(idType.getVersionIdPart());
             if (version != null) {
                 Query query = Query.query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId)
-                                    .and(ConstantKeys.SP_VERSION).is(version)).withHint("idx_by_fhirId-version");
+                                    .and(ConstantKeys.SP_VERSION).is(version));
                 var entity = (ENT) mongo.findOne(query, getEntityClass());
                 if (entity != null) {
                     return transform(entity);
