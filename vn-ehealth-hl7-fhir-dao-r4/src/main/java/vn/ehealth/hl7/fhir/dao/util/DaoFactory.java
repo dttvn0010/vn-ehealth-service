@@ -141,7 +141,7 @@ public class DaoFactory implements ApplicationContextAware {
     }
     
     public static ServiceRequestDao getServiceRequestDao() {
-        if(diagnosticReportDao == null) {
+        if(serviceRequestDao == null) {
             serviceRequestDao = applicationContext.getBean(ServiceRequestDao.class);
         }
         return serviceRequestDao;

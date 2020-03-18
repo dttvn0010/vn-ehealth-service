@@ -3,7 +3,6 @@ package vn.ehealth.hl7.fhir.dao.util;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.slf4j.Logger;
