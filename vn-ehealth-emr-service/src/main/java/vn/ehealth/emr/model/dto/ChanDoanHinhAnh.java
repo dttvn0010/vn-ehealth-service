@@ -16,7 +16,7 @@ import vn.ehealth.emr.utils.MessageUtils;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
-import static vn.ehealth.emr.utils.FhirUtil.*;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 public class ChanDoanHinhAnh extends BaseModelDTO {
     public String encounterId;

@@ -13,7 +13,7 @@ import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
-import static vn.ehealth.emr.utils.FhirUtil.*;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 public class DotKhamBenh extends BaseModelDTO {    
     public BenhNhan benhNhan;

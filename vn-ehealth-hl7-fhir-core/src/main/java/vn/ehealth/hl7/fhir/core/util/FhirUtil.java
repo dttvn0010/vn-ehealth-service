@@ -1,4 +1,4 @@
-package vn.ehealth.emr.utils;
+package vn.ehealth.hl7.fhir.core.util;
 
 import java.util.Date;
 import java.util.List;
@@ -16,8 +16,6 @@ import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Period;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
-
-import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 public class FhirUtil {
 

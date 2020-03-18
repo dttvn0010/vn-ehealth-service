@@ -1,5 +1,7 @@
 package vn.ehealth.emr.model.dto;
 
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
+
 import java.util.Date;
 
 import org.hl7.fhir.r4.model.Encounter.EncounterLocationComponent;
@@ -8,8 +10,6 @@ import org.hl7.fhir.r4.model.Reference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
-
-import static vn.ehealth.emr.utils.FhirUtil.*;
 
 public class VaoKhoa {
     public String locationId;
