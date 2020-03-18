@@ -76,7 +76,7 @@ public class ChanDoanHinhAnhController {
     }
     
     @PostMapping("/save")
-    public ResponseEntity<?> createOrUpdate(@RequestBody ChanDoanHinhAnh dto) {
+    public ResponseEntity<?> save(@RequestBody ChanDoanHinhAnh dto) {
         try {
             Map<String, Resource> entities = ChanDoanHinhAnh.toFhir(dto);
             
