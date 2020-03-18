@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 
 import org.hl7.fhir.r4.model.Address;
 import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.ContactPoint;
 import org.hl7.fhir.r4.model.HumanName;
 import org.hl7.fhir.r4.model.IdType;
@@ -82,6 +83,17 @@ public class FhirUtil {
         return concept;
     }
     
+    public static CodeableConcept createCodeableConcept(String code, String name, String system) {
+        var concept = new CodeableConcept();
+        concept.setText(name);
+        var coding = new Coding();
+        coding.setCode(code);
+        coding.setDisplay(name);
+        coding.setSystem(system);
+        concept.addCoding(coding);
+        return concept;
+    }
+    
     public static Reference createReference(Resource resource) {
         if(resource == null) return null;
         return new Reference(resource.getId());
@@ -93,7 +105,7 @@ public class FhirUtil {
     
     public static IdType createIdType(Reference ref) {
         if((ref != null && ref.hasReference())) {
-            return new IdType(ref.getId());
+            return new IdType(ref.getReference());
         }
         return null;
     }

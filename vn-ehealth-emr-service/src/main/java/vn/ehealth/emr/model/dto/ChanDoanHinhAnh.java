@@ -11,6 +11,8 @@ import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
+import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
+import vn.ehealth.emr.utils.MessageUtils;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -98,7 +100,11 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
             diagnosticReport = new DiagnosticReport();
         }
         
-        diagnosticReport.setId(cdha.id);
+        var cdhaConcept = createCodeableConcept(LoaiDichVuKT.CHAN_DOAN_HINH_ANH, 
+                                            MessageUtils.get("text.CT"), 
+                                            CodeSystemValue.DICH_VU_KY_THUAT);
+                                            
+        diagnosticReport.setCategory(listOf(cdhaConcept));
         diagnosticReport.setSubject(BaseModelDTO.toReference(dotKhamBenh.benhNhan));
         diagnosticReport.setEncounter(new Reference(cdha.encounterId));
         

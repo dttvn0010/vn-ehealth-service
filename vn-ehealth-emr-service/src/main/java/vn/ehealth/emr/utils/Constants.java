@@ -97,4 +97,12 @@ public class Constants {
         final public static String CHAN_DOAN_HINH_ANH = codeSystems.getProperty("chandoan_hinhanh");
     }
     
+    public static interface LoaiDichVuKT {
+        final public static String PHAU_THUAT_THU_THUAT = "SUR";
+        final public static String XET_NGHIEM = "LAB";
+        final public static String GIAI_PHAI_BENH = "SP";
+        final public static String CHAN_DOAN_HINH_ANH = "CA";        
+        final public static String THAM_DO_CHUC_NANG = "XRC";
+    }
+    
 }

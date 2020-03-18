@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.ChanDoanHinhAnh;
+import vn.ehealth.emr.utils.Constants.CodeSystemValue;
+import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ProcedureDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
@@ -47,8 +49,14 @@ public class ChanDoanHinhAnhController {
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
-        var lst = DataConvertUtil.transform(diagnosticReportDao.getAll(), x -> ChanDoanHinhAnh.fromFhir(x));
-        return ResponseEntity.ok(lst);
+        Map<String, Object> params = Map.of(
+                    "category.coding.code", LoaiDichVuKT.CHAN_DOAN_HINH_ANH,
+                    "category.coding.system", CodeSystemValue.DICH_VU_KY_THUAT
+                );
+        
+        var lst = diagnosticReportDao.find(params);
+        var result = DataConvertUtil.transform(lst, x -> ChanDoanHinhAnh.fromFhir(x));
+        return ResponseEntity.ok(result);
     }
     
     private DiagnosticReport saveDiagnosticReport(DiagnosticReport obj) {

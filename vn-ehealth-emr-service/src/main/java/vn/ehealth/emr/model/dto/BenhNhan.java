@@ -100,14 +100,8 @@ public class BenhNhan  extends BaseModelDTO {
     }
     
     public static BenhNhan fromReference(Reference ref) {
-        if(ref != null && ref.hasReference()) {
-            
-        }
-        if(ref != null && ref.hasReference()) {
-            var obj = DaoFactory.getPatientDao().read(createIdType(ref));
-            return fromFhir(obj);
-        }
-        return null;
+        var obj = DaoFactory.getPatientDao().read(createIdType(ref));
+        return fromFhir(obj);
     }
     
     public static Patient toFhir(BenhNhan dto) {
