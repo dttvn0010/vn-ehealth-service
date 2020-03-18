@@ -46,18 +46,21 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation>{
                 dataAbsentReason, date, device, encounter, identifier, method, patient, performer, relatedTarget,
                 relatedType, specimen, status, subject, valueConcept, valueDate, valueString, resid, _lastUpdated, _tag,
                 _profile, _query, _security, _content);
-        Query query = new Query();
+        Query qry = new Query();
         if (criteria != null) {
-            query = Query.query(criteria);
+        	qry = Query.query(criteria);
         }
         Pageable pageableRequest;
         pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
                 count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
-        query.with(pageableRequest);
+        qry.with(pageableRequest);
         if (sortParam != null && !sortParam.equals("")) {
-            query.with(new Sort(Sort.Direction.ASC, sortParam));
-        }
-        List<ObservationEntity> ObservationEntitys = mongo.find(query, ObservationEntity.class);
+        	qry.with(new Sort(Sort.Direction.DESC, sortParam));
+        }  else {
+			qry.with(new Sort(Sort.Direction.DESC, "resUpdated"));
+			qry.with(new Sort(Sort.Direction.DESC, "resCreated"));
+		}
+        List<ObservationEntity> ObservationEntitys = mongo.find(qry, ObservationEntity.class);
         if (ObservationEntitys != null) {
             for (ObservationEntity item : ObservationEntitys) {
                 Observation Observation = transform(item);
