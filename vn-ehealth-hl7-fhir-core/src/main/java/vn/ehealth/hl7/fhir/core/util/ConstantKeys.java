@@ -39,6 +39,8 @@ public class ConstantKeys {
     public static final String RES_CARETEAM = "CareTeam";
     public static final String RES_ENCOUNTER = "Encounter";
     public static final String RES_EPISODEOFCARE = "EpisodeOfCare";
+    
+    public static final String RES_IMMUNIZATION = "Immunization";
     public static final String RES_MEDICATION_ADMINISTRATION = "MedicationAdministration";
     public static final String RES_MEDICATION = "Medication";
     public static final String RES_MEDICATION_DISPENSE = "MedicationDispense";
