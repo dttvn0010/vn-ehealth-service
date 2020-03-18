@@ -61,6 +61,14 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
                                 
         this.ketLuan = diagnosticReport.getConclusion();
         
+        // ServiceRequest
+        var serviceRequest = DaoFactory.getServiceRequestDao().getByReport(diagnosticReport.getIdElement());
+        if(serviceRequest != null) {
+            this.ngayYeuCau = serviceRequest.getAuthoredOn();
+            this.bacSiYeuCau = CanboYte.fromReference(serviceRequest.getRequester());
+            this.noiDungYeuCau = serviceRequest.hasOrderDetail()? serviceRequest.getOrderDetailFirstRep().getText() : "";
+        }
+        
         // Procedure
         var procedure = DaoFactory.getProcedureDao().getByReport(diagnosticReport.getIdElement());
         if(procedure != null) {
@@ -70,15 +78,7 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
             this.bacSiChuyenKhoa = CanboYte.fromReference(procedure.getAsserter());
             this.ketQua = procedure.hasOutcome()? procedure.getOutcome().getText() : "";
             this.loiDan = procedure.hasFollowUp()? procedure.getFollowUpFirstRep().getText() : "";
-        }
-        
-        // ServiceRequest
-        var serviceRequest = DaoFactory.getServiceRequestDao().getByReport(diagnosticReport.getIdElement());
-        if(serviceRequest != null) {
-            this.ngayYeuCau = serviceRequest.getAuthoredOn();
-            this.bacSiYeuCau = CanboYte.fromReference(serviceRequest.getRequester());
-            this.noiDungYeuCau = serviceRequest.hasOrderDetail()? serviceRequest.getOrderDetailFirstRep().getText() : "";
-        }
+        }        
     }
     
     public static ChanDoanHinhAnh fromFhir(DiagnosticReport diagnosticReport) {        
