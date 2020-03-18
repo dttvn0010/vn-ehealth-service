@@ -6,7 +6,6 @@ import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.emr.utils.FhirUtil.*;
 
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Location;
 import org.hl7.fhir.r4.model.Reference;
 
@@ -33,7 +32,7 @@ public class CoSoKhamBenh extends BaseModelDTO {
     
     public static CoSoKhamBenh fromReference(Reference ref) {
         if(ref != null && ref.hasReference()) {
-            var ent = DaoFactory.getLocationDao().read(new IdType(ref.getReference()));
+            var ent = DaoFactory.getLocationDao().read(createIdType(ref));
             return fromFhir(ent);
         }
         return null;        

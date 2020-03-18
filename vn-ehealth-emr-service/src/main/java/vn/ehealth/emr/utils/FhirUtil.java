@@ -9,6 +9,7 @@ import org.hl7.fhir.r4.model.Address;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.ContactPoint;
 import org.hl7.fhir.r4.model.HumanName;
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Period;
@@ -84,5 +85,16 @@ public class FhirUtil {
     public static Reference createReference(Resource resource) {
         if(resource == null) return null;
         return new Reference(resource.getId());
+    }
+    
+    public static IdType createIdType(String id) {
+        return new IdType(id);
+    }
+    
+    public static IdType createIdType(Reference ref) {
+        if((ref != null && ref.hasReference())) {
+            return new IdType(ref.getId());
+        }
+        return null;
     }
 }

@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Map;
 
 import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Reference;
 
@@ -105,7 +104,7 @@ public class BenhNhan  extends BaseModelDTO {
             
         }
         if(ref != null && ref.hasReference()) {
-            var obj = DaoFactory.getPatientDao().read(new IdType(ref.getReference()));
+            var obj = DaoFactory.getPatientDao().read(createIdType(ref));
             return fromFhir(obj);
         }
         return null;
@@ -113,7 +112,7 @@ public class BenhNhan  extends BaseModelDTO {
     
     public static Patient toFhir(BenhNhan dto) {
         if(dto == null) return null;
-        var obj = DaoFactory.getPatientDao().read(new IdType(dto.id));
+        var obj = DaoFactory.getPatientDao().read(dto.getIdPart());
         
         if(obj == null) {
             obj = new Patient();

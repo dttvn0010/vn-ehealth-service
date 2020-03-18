@@ -93,7 +93,7 @@ public class Constants {
         final public static String KHOA_DIEU_TRI = codeSystems.getProperty("khoa_dieu_tri");
         
         
-        final public static String LOAI_CHAN_DOAN_HINH_ANH = codeSystems.getProperty("loai_chandoan_hinhanh");
+        final public static String DICH_VU_KY_THUAT = codeSystems.getProperty("dich_vu_ky_thuat");
         final public static String CHAN_DOAN_HINH_ANH = codeSystems.getProperty("chandoan_hinhanh");
     }
     

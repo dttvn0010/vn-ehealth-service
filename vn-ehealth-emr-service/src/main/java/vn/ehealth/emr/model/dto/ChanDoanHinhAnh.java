@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
@@ -93,7 +92,7 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
         // DiagnosticReport
         DiagnosticReport diagnosticReport = null;
         if(cdha.id != null) {
-            diagnosticReport = DaoFactory.getDiagnosticReportDao().read(new IdType(cdha.id));
+            diagnosticReport = DaoFactory.getDiagnosticReportDao().read(cdha.getIdPart());
             if(diagnosticReport == null) throw new RuntimeException("Null diagnosticReport:" + cdha.id);
         }else {
             diagnosticReport = new DiagnosticReport();

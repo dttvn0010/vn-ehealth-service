@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Encounter;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -65,7 +64,7 @@ public class DotKhamBenh extends BaseModelDTO {
     
     public static DotKhamBenh fromFhirId(String id) {
         if(id == null) return null;
-        var ent = DaoFactory.getEncounterDao().read(new IdType(id));
+        var ent = DaoFactory.getEncounterDao().read(createIdType(id));
         return fromFhir(ent);
     }
     
