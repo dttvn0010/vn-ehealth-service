@@ -94,7 +94,7 @@ public class FhirUtil {
     
     public static Reference createReference(Resource resource) {
         if(resource == null) return null;
-        return new Reference(resource.getId());
+        return new Reference(resource.getResourceType() + "/" + resource.getId());
     }
     
     public static IdType createIdType(String id) {
@@ -103,7 +103,10 @@ public class FhirUtil {
     
     public static IdType createIdType(Reference ref) {
         if((ref != null && ref.hasReference())) {
-            return new IdType(ref.getReference());
+            var arr = ref.getReference().split("/");
+            if(arr.length == 2) {
+                return new IdType(arr[1]);
+            }
         }
         return null;
     }
