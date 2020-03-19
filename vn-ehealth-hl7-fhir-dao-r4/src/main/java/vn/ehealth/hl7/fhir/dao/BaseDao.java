@@ -176,7 +176,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
             Query qry = Query.query(criteria);
             Pageable pageableRequest;
             pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                    count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
+                    count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
             qry.with(pageableRequest);
             qry.with(new Sort(Sort.Direction.DESC, "resUpdated"));
             qry.with(new Sort(Sort.Direction.DESC, "resCreated"));

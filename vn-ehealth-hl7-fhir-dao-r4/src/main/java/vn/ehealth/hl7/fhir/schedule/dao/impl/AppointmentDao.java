@@ -39,18 +39,21 @@ public class AppointmentDao extends BaseDao<AppointmentEntity, Appointment> {
         criteria = setParamToCriteria(active, actor, appointmentType, date, identifier, incomingreferral, location,
                 partStatus, patient, practitioner, serviceType, status, resid, _lastUpdated, _tag, _profile, _query,
                 _security, _content);
-        Query qry = new Query();
+        Query query = new Query();
         if (criteria != null) {
-            qry = Query.query(criteria);
+        	query = Query.query(criteria);
         }
         Pageable pageableRequest;
         pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
-        qry.with(pageableRequest);
-        if (!sortParam.equals("")) {
-            qry.with(new Sort(Sort.Direction.ASC, sortParam));
-        }
-        List<AppointmentEntity> appointmentResults = mongo.find(qry, AppointmentEntity.class);
+                count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
+        query.with(pageableRequest);
+		if (sortParam != null && !sortParam.equals("")) {
+			query.with(new Sort(Sort.Direction.DESC, sortParam));
+		} else {
+			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
+			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+		}
+        List<AppointmentEntity> appointmentResults = mongo.find(query, AppointmentEntity.class);
         for (AppointmentEntity appointmentEntity : appointmentResults) {
             resources.add(transform(appointmentEntity));
         }

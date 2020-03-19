@@ -3,8 +3,11 @@ package vn.ehealth.hl7.fhir.clinical.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +18,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
@@ -31,14 +35,14 @@ import vn.ehealth.hl7.fhir.diagnostic.entity.ServiceRequestEntity;
 public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequest>{
 
 	@SuppressWarnings("deprecation")
-    public List<Resource> search(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
+    public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
 			TokenParam category, TokenParam code, ReferenceParam context, DateRangeParam date,
 			ReferenceParam definition, ReferenceParam encounter, TokenParam identifier, ReferenceParam location,
 			ReferenceParam partOf, ReferenceParam patient, ReferenceParam performer, TokenParam status,
 			ReferenceParam subject, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
 			TokenParam _query, TokenParam _security, StringParam _content, StringParam _page, String sortParam,
-			Integer count) {
-		List<Resource> resources = new ArrayList<>();
+			Integer count, Set<Include> includes) {
+		List<IBaseResource> resources = new ArrayList<IBaseResource>();
         Criteria criteria = setParamToCriteria(active, bassedOn, category, code, context, date, definition, encounter,
                 identifier, location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag, _profile,
                 _query, _security, _content);
@@ -48,15 +52,105 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
         }
         Pageable pageableRequest;
         pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
+                count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
         query.with(pageableRequest);
         if (sortParam != null && !sortParam.equals("")) {
-            query.with(new Sort(Sort.Direction.ASC, sortParam));
-        }
+            query.with(new Sort(Sort.Direction.DESC, sortParam));
+        }else {
+        	query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
+        	query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+		}
         List<ServiceRequestEntity> entitys = mongo.find(query, ServiceRequestEntity.class);
         if (entitys != null) {
             for (ServiceRequestEntity item : entitys) {
             	ServiceRequest obj = transform(item);
+
+                // add more Resource as it's references
+				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
+					if (obj.getSubject() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
+						if (nested != null) {
+							obj.getSubject().setResource(nested);
+//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//								resources.add(nested);
+						}
+					}
+					if (obj.getEncounter() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
+						if (nested != null) {
+							obj.getEncounter().setResource(nested);
+//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//								resources.add(nested);
+						}
+					}
+					if (obj.getBasedOn() != null && obj.getBasedOn().size() > 0) {
+						for (Reference ref : obj.getBasedOn()) {
+							Resource nested = DatabaseUtil.getResourceFromReference(ref);
+							if (nested != null) {
+								ref.setResource(nested);
+//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//									resources.add(nested);
+							}
+						}
+					}
+					if (obj.getRequester() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obj.getRequester());
+						if (nested != null) {
+							obj.getRequester().setResource(nested);
+//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//								resources.add(nested);
+						}
+					}
+					if (obj.getPerformer() != null && obj.getPerformer().size() > 0) {
+						for (Reference ref : obj.getPerformer()) {
+							Resource nested = DatabaseUtil.getResourceFromReference(ref);
+							if (nested != null) {
+								ref.setResource(nested);
+//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//									resources.add(nested);
+							}
+						}
+					}
+					if (obj.getLocationReference() != null && obj.getLocationReference().size() > 0) {
+						for (Reference ref : obj.getLocationReference()) {
+							Resource nested = DatabaseUtil.getResourceFromReference(ref);
+							if (nested != null) {
+								ref.setResource(nested);
+//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//									resources.add(nested);
+							}
+						}
+					}
+					if (obj.getSpecimen() != null && obj.getSpecimen().size() > 0) {
+						for (Reference ref : obj.getSpecimen()) {
+							Resource nested = DatabaseUtil.getResourceFromReference(ref);
+							if (nested != null) {
+								ref.setResource(nested);
+//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//									resources.add(nested);
+							}
+						}
+					}
+				} else {
+					if (includes != null && includes.size() > 0 && includes.contains(new Include("ServiceRequest:subject"))
+							&& obj.getSubject() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
+						if (nested != null) {
+							obj.getSubject().setResource(nested);
+//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//								resources.add(nested);
+						}
+					}
+					if (includes != null && includes.size() > 0
+							&& includes.contains(new Include("ServiceRequest:encounter")) && obj.getEncounter() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
+						if (nested != null) {
+							obj.getEncounter().setResource(nested);
+//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//								resources.add(nested);
+						}
+					}
+				}
                 resources.add(obj);
             }
         }

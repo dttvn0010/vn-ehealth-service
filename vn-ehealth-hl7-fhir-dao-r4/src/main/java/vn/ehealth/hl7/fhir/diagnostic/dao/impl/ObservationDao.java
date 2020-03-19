@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
@@ -27,7 +26,6 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.diagnostic.entity.ObservationEntity;
@@ -53,100 +51,100 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 				dataAbsentReason, date, device, encounter, identifier, method, patient, performer, relatedTarget,
 				relatedType, specimen, status, subject, valueConcept, valueDate, valueString, resid, _lastUpdated, _tag,
 				_profile, _query, _security, _content);
-		Query qry = new Query();
+		Query query = new Query();
 		if (criteria != null) {
-			qry = Query.query(criteria);
+			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
 		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-				count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
-		qry.with(pageableRequest);
+				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
+		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
-			qry.with(new Sort(Sort.Direction.DESC, sortParam));
+			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
-			qry.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-			qry.with(new Sort(Sort.Direction.DESC, "resCreated"));
+			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
+			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
-		List<ObservationEntity> ObservationEntitys = mongo.find(qry, ObservationEntity.class);
+		List<ObservationEntity> ObservationEntitys = mongo.find(query, ObservationEntity.class);
 		if (ObservationEntitys != null) {
 			for (ObservationEntity item : ObservationEntitys) {
-				Observation obs = transform(item);
+				Observation obj = transform(item);
 				// add more Resource as it's references
 				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obs.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obs.getSubject());
+					if (obj.getSubject() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
 						if (nested != null) {
-							obs.getSubject().setResource(nested);
-							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-								resources.add(nested);
+							obj.getSubject().setResource(nested);
+//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//								resources.add(nested);
 						}
 					}
-					if (obs.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obs.getEncounter());
+					if (obj.getEncounter() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
 						if (nested != null) {
-							obs.getEncounter().setResource(nested);
-							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-								resources.add(nested);
+							obj.getEncounter().setResource(nested);
+//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//								resources.add(nested);
 						}
 					}
-					if (obs.getBasedOn() != null && obs.getBasedOn().size() > 0) {
-						for (Reference ref : obs.getBasedOn()) {
+					if (obj.getBasedOn() != null && obj.getBasedOn().size() > 0) {
+						for (Reference ref : obj.getBasedOn()) {
 							Resource nested = DatabaseUtil.getResourceFromReference(ref);
 							if (nested != null) {
 								ref.setResource(nested);
-								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-									resources.add(nested);
+//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//									resources.add(nested);
 							}
 						}
 					}
-					if (obs.getDevice() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obs.getDevice());
+					if (obj.getDevice() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obj.getDevice());
 						if (nested != null) {
-							obs.getDevice().setResource(nested);
-							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-								resources.add(nested);
+							obj.getDevice().setResource(nested);
+//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//								resources.add(nested);
 						}
 					}
-					if (obs.getHasMember() != null && obs.getHasMember().size() > 0) {
-						for (Reference ref : obs.getHasMember()) {
+					if (obj.getHasMember() != null && obj.getHasMember().size() > 0) {
+						for (Reference ref : obj.getHasMember()) {
 							Resource nested = DatabaseUtil.getResourceFromReference(ref);
 							if (nested != null) {
 								ref.setResource(nested);
-								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-									resources.add(nested);
+//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//									resources.add(nested);
 							}
 						}
 					}
-					if (obs.getSpecimen() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obs.getSpecimen());
+					if (obj.getSpecimen() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSpecimen());
 						if (nested != null) {
-							obs.getDevice().setResource(nested);
-							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-								resources.add(nested);
+							obj.getSpecimen().setResource(nested);
+//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//								resources.add(nested);
 						}
 					}
 
 				} else {
 					if (includes != null && includes.size() > 0 && includes.contains(new Include("Observation:subject"))
-							&& obs.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obs.getSubject());
+							&& obj.getSubject() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
 						if (nested != null) {
-							obs.getSubject().setResource(nested);
-							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-								resources.add(nested);
+							obj.getSubject().setResource(nested);
+//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//								resources.add(nested);
 						}
 					}
 					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("Observation:encounter")) && obs.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obs.getEncounter());
+							&& includes.contains(new Include("Observation:encounter")) && obj.getEncounter() != null) {
+						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
 						if (nested != null) {
-							obs.getEncounter().setResource(nested);
-							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-								resources.add(nested);
+							obj.getEncounter().setResource(nested);
+//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
+//								resources.add(nested);
 						}
 					}
 				}
-				resources.add(obs);
+				resources.add(obj);
 			}
 		}
 		return resources;

@@ -46,11 +46,14 @@ public class ImmunizationDao extends BaseDao<ImmunizationEntity, Immunization> {
         }
         Pageable pageableRequest;
         pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
+                count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
         query.with(pageableRequest);
-        if (sortParam != null && !sortParam.equals("")) {
-            query.with(new Sort(Sort.Direction.ASC, sortParam));
-        }
+		if (sortParam != null && !sortParam.equals("")) {
+			query.with(new Sort(Sort.Direction.DESC, sortParam));
+		} else {
+			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
+			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+		}
         List<ImmunizationEntity> immunizationEntitys = mongo.find(query, ImmunizationEntity.class);
         if (immunizationEntitys != null) {
             for (ImmunizationEntity item : immunizationEntitys) {

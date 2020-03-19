@@ -91,7 +91,7 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
 			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count,
-			@IncludeParam(allow = { "Observation.related", "Observation:encounter", "*" }) Set<Include> includes)
+			@IncludeParam(allow = { "Observation:subject", "Observation:encounter", "*" }) Set<Include> includes)
 			throws OperationOutcomeException {
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -119,8 +119,6 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 
 				@Override
 				public Integer size() {
-					if (includes != null)
-						return null;
 					return Integer.parseInt(String.valueOf(observationDao.countMatchesAdvancedTotal(fhirContext, active,
 							basedOn, category, code, comboCode, comboDataAbsentReason, comboValueConcept, componentCode,
 							componentDataAbsentReason, componentValueConcept, conetext, dataAbsentReason, date, device,
