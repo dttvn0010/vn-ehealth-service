@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -206,7 +207,7 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
 	
 	public ServiceRequest getByReport(IdType reportIdType) {
 	    if(reportIdType != null && reportIdType.hasIdPart()) {
-	        return findOne(Map.of("basedOn.reference", reportIdType.getIdPart()));	        
+	        return findOne(Map.of("basedOn.reference", ResourceType.DiagnosticReport + "/" + reportIdType.getIdPart()));	        
 	    }
 	    return null;
 	}

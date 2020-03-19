@@ -1,8 +1,5 @@
 package vn.ehealth.emr.model.dto;
 
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.listOf;
-import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createCodeableConcept;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -179,7 +176,11 @@ public class PhauThuatThuThuat extends BaseModelDTO {
         procedure.setNote(listOf(createAnnotation(pttt.ghiChu)));
         procedure.setExtension(listOf(createExtension(ExtensionURL.TRINH_TU_PTTT, pttt.trinhTuPttt)));
         procedure.setPerformer(transform(pttt.hoiDongPttt, x -> ThanhVienPttt.toPerformer(x)));
-        return mapOf(entry("diagnosticReport", diagnosticReport), entry("procedure", procedure));
+        
+        return mapOf(
+                    entry("diagnosticReport", diagnosticReport), 
+                    entry("procedure", procedure)
+                );
     }
 
     @Override

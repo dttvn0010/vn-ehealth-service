@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Procedure;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -207,7 +208,7 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
     
     public Procedure getByReport(IdType reportIdType) {
         if (reportIdType != null && reportIdType.hasIdPart()) {
-            return findOne(Map.of("report.reference", reportIdType.getIdPart()));
+            return findOne(Map.of("report.reference", ResourceType.DiagnosticReport + "/" + reportIdType.getIdPart()));
         }
         return null;
     }
