@@ -1,8 +1,5 @@
 package vn.ehealth.emr.dto.controller;
 
-import java.util.Map;
-import java.util.Optional;
-
 import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.BenhNhan;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
 
 @RestController
@@ -37,7 +34,7 @@ public class BenhNhanController {
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
-        var lst = DataConvertUtil.transform(patientDao.getAll(), x -> BenhNhan.fromFhir(x));
+        var lst = transform(patientDao.getAll(), x -> BenhNhan.fromFhir(x));
         return ResponseEntity.ok(lst);
     }
     
@@ -46,17 +43,16 @@ public class BenhNhanController {
         try {
             var obj = BenhNhan.toFhir(dto);
             if(obj.hasId()) {
-                obj = patientDao.update(obj, new IdType(obj.getId()));
+                obj = patientDao.update(obj, obj.getIdElement());
             }else {
                 obj = patientDao.create(obj);
             }
             dto = BenhNhan.fromFhir(obj);
-            var result = Map.of("success", true, "dto", dto);
+            var result =  mapOf(entry("success", true), entry("dto", dto));
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save entity: ", e);
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of("success", false, "error", error);
+            var result = mapOf(entry("success", false), entry("error", e.getMessage()));
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }

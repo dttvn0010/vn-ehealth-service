@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import vn.ehealth.emr.service.ServiceFactory;
-import vn.ehealth.emr.utils.ObjectIdUtil;
+import vn.ehealth.emr.utils.MongoUtils;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection="emr_ho_so_benh_an")
@@ -104,11 +104,11 @@ public class EmrHoSoBenhAn {
     public List<ObjectId> dsNguoiXemIds = new ArrayList<>();
         
     public String getId() {
-        return ObjectIdUtil.idToString(id);
+        return MongoUtils.idToString(id);
     }
     
     public void setId(String id) { 
-        this.id = ObjectIdUtil.stringToId(id);
+        this.id = MongoUtils.stringToId(id);
     }
     
     public EmrDmContent getEmrDmLoaiBenhAn() {
@@ -116,7 +116,7 @@ public class EmrHoSoBenhAn {
     }
     
     public String getEmrBenhNhanId() {
-        return ObjectIdUtil.idToString(emrBenhNhanId);
+        return MongoUtils.idToString(emrBenhNhanId);
     }
     
     public EmrBenhNhan getEmrBenhNhan() {
@@ -124,11 +124,11 @@ public class EmrHoSoBenhAn {
     }
     
     public void setEmrBenhNhanId(String emrBenhNhanId) {
-        this.emrBenhNhanId = ObjectIdUtil.stringToId(emrBenhNhanId);
+        this.emrBenhNhanId = MongoUtils.stringToId(emrBenhNhanId);
     }
     
     public String getEmrCoSoKhamBenhId() {
-        return ObjectIdUtil.idToString(emrCoSoKhamBenhId);
+        return MongoUtils.idToString(emrCoSoKhamBenhId);
     }
     
     public EmrCoSoKhamBenh getEmrCoSoKhamBenh() {
@@ -136,39 +136,39 @@ public class EmrHoSoBenhAn {
     }
     
     public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
-        this.emrCoSoKhamBenhId = ObjectIdUtil.stringToId(emrCoSoKhamBenhId);
+        this.emrCoSoKhamBenhId = MongoUtils.stringToId(emrCoSoKhamBenhId);
     }
     
     public String getNguoitaoId() {
-        return ObjectIdUtil.idToString(nguoitaoId);
+        return MongoUtils.idToString(nguoitaoId);
     }
     
     public void setNguoitaoId(String nguoitaoId) {
-        this.nguoitaoId = ObjectIdUtil.stringToId(nguoitaoId);
+        this.nguoitaoId = MongoUtils.stringToId(nguoitaoId);
     }
     
     public String getNguoisuaId() {
-        return ObjectIdUtil.idToString(nguoisuaId);
+        return MongoUtils.idToString(nguoisuaId);
     }
     
     public void setNguoisuaId(String nguoisuaId) {
-        this.nguoitaoId = ObjectIdUtil.stringToId(nguoisuaId);
+        this.nguoitaoId = MongoUtils.stringToId(nguoisuaId);
     }
     
     public String getNguoiluutruId() {
-        return ObjectIdUtil.idToString(nguoiluutruId);
+        return MongoUtils.idToString(nguoiluutruId);
     }
     
     public void setNguoiluutruId(String nguoiluutruId) {
-        this.nguoiluutruId = ObjectIdUtil.stringToId(nguoiluutruId);
+        this.nguoiluutruId = MongoUtils.stringToId(nguoiluutruId);
     }
     
     public String getNguoimoluutruId() {
-        return ObjectIdUtil.idToString(nguoimoluutruId);
+        return MongoUtils.idToString(nguoimoluutruId);
     }
     
     public void setNguoimoluutruId(String nguoimoluutruId) {
-        this.nguoimoluutruId = ObjectIdUtil.stringToId(nguoimoluutruId);
+        this.nguoimoluutruId = MongoUtils.stringToId(nguoimoluutruId);
     }
     
     @JsonInclude(Include.NON_NULL)

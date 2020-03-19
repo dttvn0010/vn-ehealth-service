@@ -8,6 +8,7 @@ import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.ResourceType;
 
 public class CanboYte extends BaseModelDTO {
     public String ten;
@@ -51,5 +52,10 @@ public class CanboYte extends BaseModelDTO {
         obj.setIdentifier(listOf(createIdentifier(dto.chungChiHanhNghe, CodeSystemValue.CHUNG_CHI_HANH_NGHE)));
         
         return obj;
+    }
+
+    @Override
+    public ResourceType getType() {
+        return ResourceType.Practitioner;
     }
 }

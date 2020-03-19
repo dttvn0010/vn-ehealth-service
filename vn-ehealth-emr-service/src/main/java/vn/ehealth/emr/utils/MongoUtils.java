@@ -2,7 +2,7 @@ package vn.ehealth.emr.utils;
 
 import org.bson.types.ObjectId;
 
-public class ObjectIdUtil {
+public class MongoUtils {
 
     public static String idToString(ObjectId id) {
         return id != null? id.toHexString() : null;

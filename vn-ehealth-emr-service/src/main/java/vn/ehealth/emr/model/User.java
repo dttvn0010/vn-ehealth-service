@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import vn.ehealth.emr.service.ServiceFactory;
-import vn.ehealth.emr.utils.ObjectIdUtil;
+import vn.ehealth.emr.utils.MongoUtils;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "user")
@@ -30,11 +30,11 @@ public class User {
     public List<ObjectId> roleIds;
     
     public String getId() {
-        return ObjectIdUtil.idToString(id);
+        return MongoUtils.idToString(id);
     }
     
     public void setId(String id) {
-        this.id = ObjectIdUtil.stringToId(id);
+        this.id = MongoUtils.stringToId(id);
     }
     
     public List<Role> getRoles() {
