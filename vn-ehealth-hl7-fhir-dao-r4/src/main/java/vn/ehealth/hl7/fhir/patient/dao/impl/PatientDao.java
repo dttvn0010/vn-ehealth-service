@@ -49,7 +49,7 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 			Query qry = Query.query(criteria);
 			Pageable pageableRequest;
 			pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-					count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
+					count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 			qry.with(pageableRequest);
 			if (!sortParam.equals("")) {
 				qry.with(new Sort(Sort.Direction.DESC, sortParam));

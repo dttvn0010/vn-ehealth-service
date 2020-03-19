@@ -70,7 +70,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings("unchecked")
-    @CachePut(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType")
+    @CachePut(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType", condition="#idType!=null")
     public FHIR update(FHIR object, IdType idType) {
         ENT entityOld = null;
         String fhirId = "";
@@ -102,7 +102,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings("unchecked")
-    @Cacheable(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType")
+    @Cacheable(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType", condition="#idType!=null")
     public FHIR read(IdType idType) {
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
@@ -118,7 +118,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings("unchecked")
-    @CacheEvict(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType")
+    @CacheEvict(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType", condition="#idType!=null")
     public FHIR remove(IdType idType) {
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
@@ -176,7 +176,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
             Query qry = Query.query(criteria);
             Pageable pageableRequest;
             pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                    count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
+                    count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
             qry.with(pageableRequest);
             qry.with(new Sort(Sort.Direction.DESC, "resUpdated"));
             qry.with(new Sort(Sort.Direction.DESC, "resCreated"));

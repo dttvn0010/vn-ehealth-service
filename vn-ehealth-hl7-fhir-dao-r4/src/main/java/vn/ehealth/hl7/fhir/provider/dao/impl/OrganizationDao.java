@@ -44,15 +44,18 @@ public class OrganizationDao extends BaseDao<OrganizationEntity, Organization> {
                 addressState, addressUse, endpoint, identifier, name, partof, phonetic, type, resid, _lastUpdated, _tag,
                 _profile, _query, _security, _content);
         if (criteria != null) {
-            Query qry = Query.query(criteria);
+            Query query = Query.query(criteria);
             Pageable pageableRequest;
             pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                    count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
-            qry.with(pageableRequest);
-            if (!sortParam.equals("")) {
-                qry.with(new Sort(Sort.Direction.ASC, sortParam));
-            }
-            List<OrganizationEntity> organizationResults = mongo.find(qry, OrganizationEntity.class);
+                    count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
+            query.with(pageableRequest);
+    		if (sortParam != null && !sortParam.equals("")) {
+    			query.with(new Sort(Sort.Direction.DESC, sortParam));
+    		} else {
+    			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
+    			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+    		}
+            List<OrganizationEntity> organizationResults = mongo.find(query, OrganizationEntity.class);
             for (OrganizationEntity organizationEntity : organizationResults) {
                 resources.add(transform(organizationEntity));
             }

@@ -88,15 +88,18 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
         }
 
         if (criteria != null) {
-            Query qry = Query.query(criteria);
+            Query query = Query.query(criteria);
             Pageable pageableRequest;
             pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                    count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
-            qry.with(pageableRequest);
-            if (sortParam != null && !sortParam.equals("")) {
-                qry.with(new Sort(Sort.Direction.ASC, sortParam));
-            }
-            List<ValueSetEntity> results = mongo.find(qry, ValueSetEntity.class);
+                    count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
+            query.with(pageableRequest);
+    		if (sortParam != null && !sortParam.equals("")) {
+    			query.with(new Sort(Sort.Direction.DESC, sortParam));
+    		} else {
+    			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
+    			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+    		}
+            List<ValueSetEntity> results = mongo.find(query, ValueSetEntity.class);
             if (results != null && results.size() > 0) {
                 if (reference != null || expansion != null) {
                     if (reference != null && expansion != null) {
