@@ -49,12 +49,6 @@ public class PhauThuatThuThuat extends BaseModelDTO {
     
     public String encounterId;
     public DanhMuc dmPttt;
-    
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngayYeuCau;
-    
-    public CanboYte bacSiYeuCau;
-    public String noiDungYeuCau;
         
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayThucHien;
@@ -158,6 +152,9 @@ public class PhauThuatThuThuat extends BaseModelDTO {
         diagnosticReport.setIssued(pttt.ngayGioBaoCao);
         diagnosticReport.setCode(DanhMuc.toConcept(pttt.dmPttt, CodeSystemValue.CHAN_DOAN_HINH_ANH));
         diagnosticReport.setConclusion(pttt.ketLuan);
+        if(pttt.chiDinhPttt != null) {
+            diagnosticReport.setBasedOn(listOf(new Reference(pttt.chiDinhPttt)));
+        }
         
         // Procedure
         Procedure procedure;
@@ -171,6 +168,7 @@ public class PhauThuatThuThuat extends BaseModelDTO {
         procedure.setSubject(diagnosticReport.getSubject());
         procedure.setEncounter(diagnosticReport.getEncounter());
         procedure.setAsserter(BaseModelDTO.toReference(pttt.chuTichHoiDong));
+        procedure.setRecorder(BaseModelDTO.toReference(pttt.thuKyGhiChep));
         if(pttt.ngayThucHien != null) procedure.setPerformed(new DateTimeType(pttt.ngayThucHien));
         procedure.setCode(diagnosticReport.getCode());        
         procedure.setNote(listOf(createAnnotation(pttt.ghiChu)));
