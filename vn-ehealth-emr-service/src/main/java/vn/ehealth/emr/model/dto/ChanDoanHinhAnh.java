@@ -55,7 +55,7 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
         
         // DiagnosticReport        
         this.dmCdha = new DanhMuc(diagnosticReport.getCode());
-        this.encounterId = diagnosticReport.getEncounter().getReference();
+        this.encounterId = idFromRef(diagnosticReport.getEncounter());
         this.nguoiVietBaoCao = diagnosticReport.hasPerformer()?
                                 CanboYte.fromReference(diagnosticReport.getPerformerFirstRep()) : null;
         this.ngayGioBaoCao = diagnosticReport.getIssued();
