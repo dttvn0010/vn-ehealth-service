@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.clinical.providers;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,13 +11,14 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Parameters;
-import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.Count;
+import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
@@ -35,7 +37,6 @@ import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.diagnostic.entity.ServiceRequestEntity;
 
@@ -74,25 +75,26 @@ public class ServiceRequestProvider extends BaseController<ServiceRequestEntity,
 			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
-			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
+			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count,
+			@IncludeParam(allow = { "ServiceRequest:subject", "ServiceRequest:encounter", "*" }) Set<Include> includes)
 			throws OperationOutcomeException {
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
 					new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
 		} else {
-			List<Resource> results = new ArrayList<Resource>();
+			List<IBaseResource> results = new ArrayList<IBaseResource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
 				results = baseDao.search(fhirContext, active, bassedOn, category, code, context, date, definition,
 						encounter, identifier, location, partOf, patient, performer, status, subject, resid,
-						_lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count);
+						_lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count, includes);
 				// return results;
 			} else
 				results = baseDao.search(fhirContext, active, bassedOn, category, code, context, date, definition,
 						encounter, identifier, location, partOf, patient, performer, status, subject, resid,
-						_lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count);
-			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
+						_lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count, includes);
+			final List<IBaseResource> finalResults = results;
 
 			return new IBundleProvider() {
 

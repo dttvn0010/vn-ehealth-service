@@ -44,11 +44,14 @@ public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, Healt
         }
         Pageable pageableRequest;
         pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
+                count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
         query.with(pageableRequest);
-        if (!sortParam.equals("")) {
-            query.with(new Sort(Sort.Direction.ASC, sortParam));
-        }
+		if (sortParam != null && !sortParam.equals("")) {
+			query.with(new Sort(Sort.Direction.DESC, sortParam));
+		} else {
+			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
+			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+		}
         List<HealthcareServiceEntity> healthcareServiceResults = mongo.find(query, HealthcareServiceEntity.class);
         for (HealthcareServiceEntity healthcareServiceEntity : healthcareServiceResults) {
             resources.add(transform(healthcareServiceEntity));

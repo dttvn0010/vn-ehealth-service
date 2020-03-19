@@ -112,7 +112,6 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
 		} else {
 			List<IBaseResource> results = new ArrayList<IBaseResource>();
-			Date cal = new Date();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
 				results = patientDao.search(fhirContext, active, addressUse, animalBreed, animalSpecies, deceased,
@@ -127,9 +126,7 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 						birthDate, deathDate, address, addressCity, addressCountry, addressState, familyName, givenName,
 						name, phonetic, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, "",
 						count);
-			Date cal1 = new Date();
-			System.out.println(
-					"-------------------search end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
+			//final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 			final List<IBaseResource> finalResults = results;
 
 			return new IBundleProvider() {

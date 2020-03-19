@@ -24,7 +24,8 @@ public class Hl7FhirServerConformanceProvider extends ServerCapabilityStatementP
     private boolean myCache = true;
     private volatile CapabilityStatement myCapabilityStatement;
 
-    private RestfulServerConfiguration serverConfiguration;
+    @SuppressWarnings("unused")
+	private RestfulServerConfiguration serverConfiguration;
 
     private RestfulServer restfulServer;
 
