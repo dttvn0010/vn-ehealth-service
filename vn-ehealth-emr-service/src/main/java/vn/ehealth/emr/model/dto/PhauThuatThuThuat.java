@@ -77,7 +77,7 @@ public class PhauThuatThuThuat extends BaseModelDTO {
         if(diagnosticReport == null) return;
         
         // DiagnosticReport
-        this.encounterId = diagnosticReport.getEncounter().getReference();
+        this.encounterId = idFromRef(diagnosticReport.getEncounter());
         this.dmPttt = new DanhMuc(diagnosticReport.getCode());        
         this.nguoiVietBaoCao = diagnosticReport.hasPerformer()?
                                 CanboYte.fromReference(diagnosticReport.getPerformerFirstRep()) : null;

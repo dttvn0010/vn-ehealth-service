@@ -129,6 +129,16 @@ public class FhirUtil {
         return new IdType(id);
     }
     
+    public static String idFromRef(Reference ref) {
+        if((ref != null && ref.hasReference())) {
+            var arr = ref.getReference().split("/");
+            if(arr.length == 2) {
+                return arr[1];
+            }
+        }
+        return "";
+    }
+    
     public static IdType createIdType(Reference ref) {
         if((ref != null && ref.hasReference())) {
             var arr = ref.getReference().split("/");
