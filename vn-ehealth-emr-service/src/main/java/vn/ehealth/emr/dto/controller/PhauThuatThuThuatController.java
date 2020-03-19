@@ -57,7 +57,7 @@ public class PhauThuatThuThuatController {
     
     private DiagnosticReport saveDiagnosticReport(DiagnosticReport obj) {
         if(obj.hasId()) {
-            return diagnosticReportDao.update(obj, new IdType(obj.getId()));
+            return diagnosticReportDao.update(obj, obj.getIdElement());
         }else {
             return diagnosticReportDao.create(obj);
         }        
@@ -65,7 +65,7 @@ public class PhauThuatThuThuatController {
     
     private Procedure saveProcedure(Procedure obj) {
         if(obj.hasId()) {
-            return procedureDao.update(obj, new IdType(obj.getId()));
+            return procedureDao.update(obj, obj.getIdElement());
         }else {
             return procedureDao.create(obj);
         }
