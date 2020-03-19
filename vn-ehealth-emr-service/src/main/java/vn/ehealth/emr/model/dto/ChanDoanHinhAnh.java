@@ -8,6 +8,7 @@ import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
@@ -52,7 +53,9 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
         
         if(diagnosticReport == null) return;
         
-        // DiagnosticReport
+        // DiagnosticReport        
+        this.dmCdha = new DanhMuc(diagnosticReport.getCode());
+        this.encounterId = diagnosticReport.getEncounter().getReference();
         this.nguoiVietBaoCao = diagnosticReport.hasPerformer()?
                                 CanboYte.fromReference(diagnosticReport.getPerformerFirstRep()) : null;
         this.ngayGioBaoCao = diagnosticReport.getIssued();
@@ -71,9 +74,7 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
         
         // Procedure
         var procedure = DaoFactory.getProcedureDao().getByReport(diagnosticReport.getIdElement());
-        if(procedure != null) {
-            this.encounterId = procedure.getEncounter().getReference();
-            this.dmCdha = new DanhMuc(procedure.getCode());
+        if(procedure != null) {                        
             this.ngayThucHien = procedure.hasPerformedDateTimeType()? procedure.getPerformedDateTimeType().getValue() : null;
             this.bacSiChuyenKhoa = CanboYte.fromReference(procedure.getAsserter());
             this.ketQua = procedure.hasOutcome()? procedure.getOutcome().getText() : "";
@@ -143,7 +144,9 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
         procedure.setSubject(diagnosticReport.getSubject());
         procedure.setEncounter(diagnosticReport.getEncounter());
         procedure.setAsserter(BaseModelDTO.toReference(cdha.bacSiChuyenKhoa));
+        
         if(cdha.ngayThucHien != null) procedure.setPerformed(new DateTimeType(cdha.ngayThucHien));
+        
         procedure.setCode(diagnosticReport.getCode());
         procedure.setOutcome(createCodeableConcept(cdha.ketQua));
         procedure.setFollowUp(listOf(createCodeableConcept(cdha.loiDan)));
@@ -154,5 +157,10 @@ public class ChanDoanHinhAnh extends BaseModelDTO {
                     "diagnosticReport", diagnosticReport
                  );
         
+    }
+
+    @Override
+    public ResourceType getType() {
+        return ResourceType.DiagnosticReport;
     }
 }

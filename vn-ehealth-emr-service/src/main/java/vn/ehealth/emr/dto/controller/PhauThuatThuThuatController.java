@@ -1,9 +1,14 @@
 package vn.ehealth.emr.dto.controller;
 
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.entry;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.listOf;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createReference;
+
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Procedure;
-import org.hl7.fhir.r4.model.ServiceRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,42 +21,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import vn.ehealth.emr.model.dto.ChanDoanHinhAnh;
+import vn.ehealth.emr.model.dto.PhauThuatThuThuat;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ProcedureDao;
-import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.DiagnosticReportDao;
 
-import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
-
 @RestController
-@RequestMapping("/api/chan_doan_hinh_anh")
-public class ChanDoanHinhAnhController {
+@RequestMapping("/api/phau_thuat_thu_thuat")
+public class PhauThuatThuThuatController {
 
-    private static Logger logger = LoggerFactory.getLogger(ChanDoanHinhAnhController.class);
+    private static Logger logger = LoggerFactory.getLogger(PhauThuatThuThuatController.class);
     
     @Autowired private ProcedureDao procedureDao;
-    @Autowired private DiagnosticReportDao  diagnosticReportDao;
-    @Autowired private ServiceRequestDao serviceRequestDao;
+    @Autowired private DiagnosticReportDao diagnosticReportDao;
         
     @GetMapping("/get_by_id")
     public ResponseEntity<?> getById(@RequestParam String id) {
         var obj = diagnosticReportDao.read(new IdType(id));
-        var dto = ChanDoanHinhAnh.fromFhir(obj);
+        var dto = PhauThuatThuThuat.fromFhir(obj);
         return ResponseEntity.ok(dto);
     }
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
         var params = mapOf(
-                    entry("category.coding.code", (Object) LoaiDichVuKT.CHAN_DOAN_HINH_ANH),
+                    entry("category.coding.code", (Object) LoaiDichVuKT.PHAU_THUAT_THU_THUAT),
                     entry("category.coding.system", CodeSystemValue.DICH_VU_KY_THUAT)
                 );
         
         var lst = diagnosticReportDao.find(params);
-        var result = transform(lst, x -> ChanDoanHinhAnh.fromFhir(x));
+        var result = transform(lst, x -> PhauThuatThuThuat.fromFhir(x));
         return ResponseEntity.ok(result);
     }
     
@@ -63,14 +63,6 @@ public class ChanDoanHinhAnhController {
         }        
     }
     
-    private ServiceRequest saveServiceRequest(ServiceRequest obj) {
-        if(obj.hasId()) {
-            return serviceRequestDao.update(obj, obj.getIdElement());
-        }else {
-            return serviceRequestDao.create(obj);
-        }
-    }
-    
     private Procedure saveProcedure(Procedure obj) {
         if(obj.hasId()) {
             return procedureDao.update(obj, new IdType(obj.getId()));
@@ -80,32 +72,24 @@ public class ChanDoanHinhAnhController {
     }
     
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody ChanDoanHinhAnh dto) {
+    public ResponseEntity<?> save(@RequestBody PhauThuatThuThuat dto) {
         try {
-            var entities = ChanDoanHinhAnh.toFhir(dto);
+            var entities = PhauThuatThuThuat.toFhir(dto);
             
             if(entities != null) {
                 var procedure = (Procedure) entities.get("procedure");
-                var serviceRequest = (ServiceRequest) entities.get("serviceRequest");
                 var diagnosticReport = (DiagnosticReport) entities.get("diagnosticReport");
                                 
                 diagnosticReport = saveDiagnosticReport(diagnosticReport);
                 if(diagnosticReport != null) {
-                    var ref = createReference(diagnosticReport);
-                    serviceRequest.setBasedOn(listOf(ref));
-                    procedure.setReport(listOf(ref));
-                }
-                
-                serviceRequest = saveServiceRequest(serviceRequest);
-                if(serviceRequest != null) {
-                    procedure.setBasedOn(listOf(createReference(serviceRequest)));
+                    procedure.setReport(listOf(createReference(diagnosticReport)));
                 }
                 
                 procedure = saveProcedure(procedure);
                 
-                dto = ChanDoanHinhAnh.fromFhir(diagnosticReport);
+                dto = PhauThuatThuThuat.fromFhir(diagnosticReport);
                 
-                var result = mapOf(entry("success", true), entry("chanDoanHinhAnh", dto));
+                var result = mapOf(entry("success", true), entry("phauThuatThuThuat", dto));
                 
                 return ResponseEntity.ok(result);
             }

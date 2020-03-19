@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.ResourceType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -84,5 +85,10 @@ public class DotKhamBenh extends BaseModelDTO {
         ent.setPeriod(createPeriod(dto.ngayGioVao, dto.ngayGioKetThucDieuTri));
         ent.setLocation(transform(dto.dsVaoKhoa, x -> VaoKhoa.toFhir(x)));
         return ent;
+    }
+
+    @Override
+    public ResourceType getType() {
+        return ResourceType.Encounter;
     }
 }

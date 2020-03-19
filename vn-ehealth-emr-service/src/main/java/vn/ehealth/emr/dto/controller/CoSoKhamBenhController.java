@@ -1,8 +1,5 @@
 package vn.ehealth.emr.dto.controller;
 
-import java.util.Map;
-import java.util.Optional;
-
 import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.CoSoKhamBenh;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import vn.ehealth.hl7.fhir.provider.dao.impl.LocationDao;
 
 @RestController
@@ -36,7 +33,7 @@ public class CoSoKhamBenhController {
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAllDto() {
-        var lst = DataConvertUtil.transform(locationDao.getAll(), x -> CoSoKhamBenh.fromFhir(x));
+        var lst = transform(locationDao.getAll(), x -> CoSoKhamBenh.fromFhir(x));
         return ResponseEntity.ok(lst);
     }
     
@@ -45,17 +42,16 @@ public class CoSoKhamBenhController {
         try {
             var obj = CoSoKhamBenh.toFhir(dto);
             if(obj.hasId()) {
-                obj = locationDao.update(obj, new IdType(obj.getId()));
+                obj = locationDao.update(obj, obj.getIdElement());
             }else {
                 obj = locationDao.create(obj);
             }
             dto = CoSoKhamBenh.fromFhir(obj);
-            var result = Map.of("success", true, "dto", dto);
+            var result = mapOf(entry("success", true), entry("dto", dto));
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save entity: ", e);
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of("success", false, "error", error);
+            var result = mapOf(entry("success", false), entry("error", e.getMessage()));
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }

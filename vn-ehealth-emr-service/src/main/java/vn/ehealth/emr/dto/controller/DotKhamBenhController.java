@@ -1,6 +1,5 @@
 package vn.ehealth.emr.dto.controller;
 
-import java.util.Map;
 import java.util.Optional;
 
 import org.hl7.fhir.r4.model.IdType;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.DotKhamBenh;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 
 @RestController
@@ -37,7 +36,7 @@ public class DotKhamBenhController {
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
-        var lst = DataConvertUtil.transform(encounterDao.getAll(), x -> DotKhamBenh.fromFhir(x));
+        var lst = transform(encounterDao.getAll(), x -> DotKhamBenh.fromFhir(x));
         return ResponseEntity.ok(lst);
     }
     
@@ -46,17 +45,17 @@ public class DotKhamBenhController {
         try {
             var obj = DotKhamBenh.toFhir(dto);
             if(obj.hasId()) {
-                obj = encounterDao.update(obj, new IdType(obj.getId()));
+                obj = encounterDao.update(obj, obj.getIdElement());
             }else {
                 obj = encounterDao.create(obj);
             }
             dto = DotKhamBenh.fromFhir(obj);
-            var result = Map.of("success", true, "dto", dto);
+            var result = mapOf(entry("success", true), entry("dto", dto));
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save entity: ", e);
             var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of("success", false, "error", error);
+            var result = mapOf(entry("success", false), entry("error", error));
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }

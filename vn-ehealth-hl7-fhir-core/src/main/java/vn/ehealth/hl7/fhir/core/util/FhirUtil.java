@@ -6,16 +6,20 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.hl7.fhir.r4.model.Address;
+import org.hl7.fhir.r4.model.Annotation;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.ContactPoint;
 import org.hl7.fhir.r4.model.HumanName;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.ContactPoint.ContactPointSystem;
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Period;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
+import org.hl7.fhir.r4.model.StringType;
 
 public class FhirUtil {
 
@@ -28,6 +32,10 @@ public class FhirUtil {
             };
         }
         return null;
+    }
+    
+    public static Extension findExtensionByURL(List<Extension> lst, @Nonnull String url) {
+        return FPUtil.findFirst(lst, x -> url.equals(x.getUrl()));
     }
     
     public static Identifier createIdentifier(String value, String system) {
@@ -81,6 +89,21 @@ public class FhirUtil {
         return concept;
     }
     
+    public static Annotation createAnnotation(String text) {
+        if(text == null) return null;
+        var annotation = new Annotation();
+        annotation.setText(text);
+        return annotation;
+    }
+    
+    public static Extension createExtension(String url, String value) {
+        if(value == null) return null;
+        var extension = new Extension();
+        extension.setUrl(url);
+        extension.setValue(new StringType(value));
+        return extension;
+    }
+    
     public static CodeableConcept createCodeableConcept(String code, String name, String system) {
         var concept = new CodeableConcept();
         concept.setText(name);
@@ -95,6 +118,11 @@ public class FhirUtil {
     public static Reference createReference(Resource resource) {
         if(resource == null) return null;
         return new Reference(resource.getResourceType() + "/" + resource.getId());
+    }
+    
+    public static Reference createReference(ResourceType type, String id) {
+        if(type == null || id == null) return null;
+        return new Reference(type + "/" + id);
     }
     
     public static IdType createIdType(String id) {

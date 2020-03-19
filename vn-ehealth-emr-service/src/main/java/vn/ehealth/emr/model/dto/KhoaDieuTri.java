@@ -8,6 +8,7 @@ import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 import org.hl7.fhir.r4.model.Location;
 import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.ResourceType;
 
 public class KhoaDieuTri extends BaseModelDTO {
 
@@ -49,5 +50,10 @@ public class KhoaDieuTri extends BaseModelDTO {
         ent.setName(dto.ten);
         ent.setType(listOf(DanhMuc.toConcept(dto.dmLoaiKhoa, CodeSystemValue.KHOA_DIEU_TRI)));
         return ent;
+    }
+
+    @Override
+    public ResourceType getType() {
+        return ResourceType.DiagnosticReport;
     }
 }

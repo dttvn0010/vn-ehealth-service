@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import vn.ehealth.emr.utils.ObjectIdUtil;
+import vn.ehealth.emr.utils.MongoUtils;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "emr_dm")
@@ -27,18 +27,18 @@ public class EmrDm {
     public Map<String, Object> extension;
     
     public String getId() { 
-        return ObjectIdUtil.idToString(id);
+        return MongoUtils.idToString(id);
     }
     
     public void setId(String id) {
-        this.id = ObjectIdUtil.stringToId(id);
+        this.id = MongoUtils.stringToId(id);
     }
     
     public String getEmrNhomDmId() {
-        return ObjectIdUtil.idToString(emrNhomDmId);
+        return MongoUtils.idToString(emrNhomDmId);
     }
     
     public String getEmrDmChaId() {
-        return ObjectIdUtil.idToString(emrDmChaId);
+        return MongoUtils.idToString(emrDmChaId);
     }
 }

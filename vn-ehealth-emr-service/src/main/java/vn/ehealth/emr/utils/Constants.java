@@ -14,13 +14,21 @@ public class Constants {
     private static Logger logger = LoggerFactory.getLogger(Constants.class);
             
     public static Properties codeSystems = new Properties();
+    public static Properties extensionURLs = new Properties();
     
     static {
         try {
             var input = new ClassPathResource("code_systems.properties").getInputStream();
             codeSystems.load(new InputStreamReader(input, Charset.forName("UTF-8")));
         } catch (IOException e) {
-            logger.error("Cannot read user.properties", e);
+            logger.error("Cannot read code_systems.properties", e);
+        }
+        
+        try {
+            var input = new ClassPathResource("extension_urls.properties").getInputStream();
+            extensionURLs.load(new InputStreamReader(input, Charset.forName("UTF-8")));
+        } catch (IOException e) {
+            logger.error("Cannot read extension_urls.properties", e);
         }
     }
     
@@ -95,6 +103,13 @@ public class Constants {
         
         final public static String DICH_VU_KY_THUAT = codeSystems.getProperty("dich_vu_ky_thuat");
         final public static String CHAN_DOAN_HINH_ANH = codeSystems.getProperty("chandoan_hinhanh");
+
+        final public static String VAI_TRO_PTT = codeSystems.getProperty("vaitro_pttt");
+    }
+    
+    
+    public static interface ExtensionURL {
+        final public static String TRINH_TU_PTTT = extensionURLs.getProperty("pttt.trinhtu");
     }
     
     public static interface LoaiDichVuKT {

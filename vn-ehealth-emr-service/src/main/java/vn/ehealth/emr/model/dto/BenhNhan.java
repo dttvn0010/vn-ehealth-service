@@ -6,10 +6,12 @@ import java.util.Map;
 import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.ResourceType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
+import vn.ehealth.emr.utils.MessageUtils;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
@@ -38,10 +40,11 @@ public class BenhNhan  extends BaseModelDTO {
     public String email;
     public String soDienThoai;
     
-    static Map<String, String> gioiTinhMap = Map.of(
-                "M", "Nam",
-                "F", "Nữ",
-                "U", "Không xác định"
+    static Map<String, String> gioiTinhMap = mapOf(
+                entry("male", MessageUtils.get("gioitinh.nam")),
+                entry("female", MessageUtils.get("gioitinh.nu")),
+                entry("other", MessageUtils.get("gioitinh.khac")),
+                entry("unknown", MessageUtils.get("gioitinh.khongxacdinh"))
             );
     
     public BenhNhan() {
@@ -127,5 +130,10 @@ public class BenhNhan  extends BaseModelDTO {
                         ));
         
         return obj;
+    }
+
+    @Override
+    public ResourceType getType() {
+        return ResourceType.Patient;
     }
 }

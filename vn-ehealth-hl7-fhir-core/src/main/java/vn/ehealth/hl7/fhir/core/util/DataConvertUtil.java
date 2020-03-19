@@ -1,7 +1,9 @@
 package vn.ehealth.hl7.fhir.core.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -14,29 +16,6 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
 public class DataConvertUtil {
     
-    public static class ObjectWrapper<T> {
-        private T obj;
-        
-        public ObjectWrapper(T obj) {
-            this.obj = obj;
-        }
-        
-        public <U> U evalIf(boolean cond, Function<T, U> f) {
-            if(cond && obj != null) {
-                return f.apply(obj);
-            }
-            return null;
-        }
-        
-        public <U,V> V evalIf(boolean cond, Function<T, U> f1, Function<U, V> f2) {
-            if(cond && obj != null) {
-                var u = f1.apply(obj);
-                if(u != null) return f2.apply(u);
-            }
-            return null;
-        }
-    }
-    
     @SafeVarargs
     public static<T> List<T> listOf(T...arr) {
         var lst = new ArrayList<T>();
@@ -44,6 +23,29 @@ public class DataConvertUtil {
             if(obj != null) lst.add(obj);
         }
         return lst;
+    }
+    
+    public static class Entry<K, V> {
+        public K key;
+        public V value;
+    }
+    
+    public static <K,V> Entry<K, V> entry(K key, V value) {
+        var it = new Entry<K, V>();
+        it.key = key;
+        it.value = value;
+        return it;
+    }
+    
+    @SafeVarargs
+    public static <K,V> Map<K, V> mapOf(Entry<K,V> ...items) {
+        var m = new HashMap<K, V>();
+        for(var item : items) {
+            if(item.key != null) {
+                m.put(item.key, item.value);
+            }
+        }
+        return m;
     }
     
     public static <T, U> List<U> transform(List<T> lst, Function<T, U> func) {

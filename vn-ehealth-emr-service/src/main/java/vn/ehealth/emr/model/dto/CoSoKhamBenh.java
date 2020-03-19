@@ -8,6 +8,7 @@ import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 import org.hl7.fhir.r4.model.Location;
 import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.ResourceType;
 
 public class CoSoKhamBenh extends BaseModelDTO {
     
@@ -45,5 +46,10 @@ public class CoSoKhamBenh extends BaseModelDTO {
         obj.setIdentifier(listOf(createIdentifier(dto.ma, CodeSystemValue.CO_SO_KHAM_BENH)));
         obj.setName(dto.ten);
         return obj;
+    }
+
+    @Override
+    public ResourceType getType() {
+        return ResourceType.Location;
     }
 }

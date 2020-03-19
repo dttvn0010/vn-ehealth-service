@@ -9,6 +9,9 @@ import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.InstantType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -67,7 +70,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings("unchecked")
-    //@CachePut(value = "patient", key = "#idType")
+    @CachePut(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType")
     public FHIR update(FHIR object, IdType idType) {
         ENT entityOld = null;
         String fhirId = "";
@@ -99,7 +102,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings("unchecked")
-    //@Cacheable(value = "patient", key = "#idType")
+    @Cacheable(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType")
     public FHIR read(IdType idType) {
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
@@ -115,7 +118,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings("unchecked")
-    //@CacheEvict(value = "patient", key = "#idType")
+    @CacheEvict(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType")
     public FHIR remove(IdType idType) {
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
