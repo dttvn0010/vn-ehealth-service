@@ -3,8 +3,13 @@ package vn.ehealth.emr.model.dto;
 import java.util.Optional;
 
 import org.hl7.fhir.r4.model.Address;
+import org.hl7.fhir.r4.model.CodeableConcept;
 
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
+import vn.ehealth.emr.utils.Constants.ExtensionURL;
+
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 public class DiaChi {
 
@@ -12,39 +17,53 @@ public class DiaChi {
     public DanhMuc dmXaPhuong;
     public DanhMuc dmQuanHuyen;
     public DanhMuc dmTinhThanh;
-    public DanhMuc dmQuocGia;
     
     public static DiaChi fromFhirModel(Address obj) {
         if(obj == null) return null;
         var dto = new DiaChi();
         
         if(obj.getLine() != null && obj.getLine().size() > 0) {
-            dto.diaChiChiTiet = obj.getLine().get(0).getValue();
+            dto.diaChiChiTiet = obj.getText();
         }
         
-        if(obj.getLine() != null && obj.getLine().size() > 1) {
-            String xaPhuong = obj.getLine().get(1).getValue();
-            dto.dmXaPhuong = new DanhMuc("", xaPhuong, CodeSystemValue.DVHC_XA_PHUONG);
+        if(obj.hasExtension()) {
+            var ext = findExtensionByURL(obj.getExtension(), ExtensionURL.DVHC + "/city");
+            if(ext != null && ext.getValue() instanceof CodeableConcept) {
+                dto.dmTinhThanh = DanhMuc.fromConcept((CodeableConcept) ext.getValue());
+            }
+            
+            ext = findExtensionByURL(obj.getExtension(), ExtensionURL.DVHC + "/district");
+            if(ext != null && ext.getValue() instanceof CodeableConcept) {
+                dto.dmQuanHuyen = DanhMuc.fromConcept((CodeableConcept) ext.getValue());
+            }
+            
+            ext = findExtensionByURL(obj.getExtension(), ExtensionURL.DVHC + "/ward");
+            if(ext != null && ext.getValue() instanceof CodeableConcept) {
+                dto.dmXaPhuong = DanhMuc.fromConcept((CodeableConcept) ext.getValue());
+            }
         }
-        
-        if(obj.hasDistrict()) {
-            dto.dmQuanHuyen = new DanhMuc("", obj.getDistrict(), CodeSystemValue.DVHC_QUAN_HUYEN);
-        }
-        
-        dto.dmQuanHuyen = new DanhMuc("", obj.getDistrict(), CodeSystemValue.DVHC_QUAN_HUYEN);
-        dto.dmTinhThanh = new DanhMuc("", obj.getCity(), CodeSystemValue.DVHC_TINH_THANH);
-        dto.dmQuocGia = new DanhMuc("", obj.getCountry(), CodeSystemValue.DVHC_QUOC_GIA);
         return dto;
     }
     
     public static Address toFhirModel(DiaChi dto) {
         if(dto == null) return null;
         var obj = new Address();
-        obj.addLine(dto.diaChiChiTiet != null? dto.diaChiChiTiet : "");
-        obj.addLine(Optional.ofNullable(dto.dmXaPhuong).map(x -> x.ten).orElse(""));
+        obj.setText(dto.diaChiChiTiet != null? dto.diaChiChiTiet : "");
+        obj.addLine(dto.diaChiChiTiet != null? dto.diaChiChiTiet : "");        
         obj.setDistrict(Optional.ofNullable(dto.dmQuanHuyen).map(x -> x.ten).orElse(""));
         obj.setCity(Optional.ofNullable(dto.dmTinhThanh).map(x -> x.ten).orElse(""));
-        obj.setCountry(Optional.ofNullable(dto.dmQuocGia).map(x -> x.ten).orElse(""));
+        
+        var tinhThanhExt = createExtension(ExtensionURL.DVHC + "/city", 
+                DanhMuc.toConcept(dto.dmTinhThanh, CodeSystemValue.DVHC));
+        
+        var quanHuyenExt = createExtension(ExtensionURL.DVHC + "/district", 
+                DanhMuc.toConcept(dto.dmQuanHuyen, CodeSystemValue.DVHC));
+        
+        var xaPhuongExt = createExtension(ExtensionURL.DVHC + "/ward", 
+                DanhMuc.toConcept(dto.dmXaPhuong, CodeSystemValue.DVHC));
+        
+        //obj.setExtension(listOf(tinhThanhExt, quanHuyenExt, xaPhuongExt));
+        
         return obj;
     }
 }

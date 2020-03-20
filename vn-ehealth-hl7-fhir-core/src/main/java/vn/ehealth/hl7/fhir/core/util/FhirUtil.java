@@ -55,7 +55,7 @@ public class FhirUtil {
     public static Identifier createIdentifier(String value, String system, Date start, Date end) {
         var identifier = new Identifier();
         identifier.setValue(value);
-        identifier.setSystem(value);
+        identifier.setSystem(system);
         identifier.setPeriod(createPeriod(start, end));
         return identifier;
     }
@@ -96,11 +96,19 @@ public class FhirUtil {
         return annotation;
     }
     
-    public static Extension createExtension(String url, String value) {
-        if(value == null) return null;
+    public static Extension createExtension(String url, String text) {
+        if(text == null) return null;
         var extension = new Extension();
         extension.setUrl(url);
-        extension.setValue(new StringType(value));
+        extension.setValue(new StringType(text));
+        return extension;
+    }
+    
+    public static Extension createExtension(String url, CodeableConcept concept) {
+        if(concept == null) return null;
+        var extension = new Extension();
+        extension.setUrl(url);
+        extension.setValue(concept);
         return extension;
     }
     

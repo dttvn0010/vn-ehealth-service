@@ -79,15 +79,12 @@ public class Constants {
         final public static String PHONE = "phone";
         final public static String EMAIL = "email";
         
-        final public static String SO_THE_BHYT = codeSystems.getProperty("so_the_bhyt");
-        final public static String ID_HIS = codeSystems.getProperty("id_his");
+        final public static String CMND = codeSystems.getProperty("cmnd");
+        final public static String THE_BHYT = codeSystems.getProperty("the_bhyt");
         
-        final public static String DVHC_XA_PHUONG = codeSystems.getProperty("dvhc_xa_phuong");
-        final public static String DVHC_QUAN_HUYEN = codeSystems.getProperty("dvhc_quan_huyen");
-        final public static String DVHC_TINH_THANH = codeSystems.getProperty("dvhc_tinh_thanh");
-        final public static String DVHC_QUOC_GIA = codeSystems.getProperty("quoc_gia");
+        final public static String DVHC = codeSystems.getProperty("dvhc");
+        final public static String QUOC_GIA = codeSystems.getProperty("quoc_gia");
         
-        final public static String GIOI_TINH = codeSystems.getProperty("gioi_tinh");
         final public static String DAN_TOC = codeSystems.getProperty("dantoc");
         final public static String TON_GIAO = codeSystems.getProperty("tongiao");
         final public static String NGHE_NGHIEP = codeSystems.getProperty("nghe_nghiep");
@@ -109,6 +106,12 @@ public class Constants {
     
     
     public static interface ExtensionURL {
+        final public static String DVHC = extensionURLs.getProperty("dvhc");
+        final public static String DAN_TOC = extensionURLs.getProperty("dantoc");
+        final public static String TON_GIAO = extensionURLs.getProperty("tongiao");
+        final public static String NGHE_NGHIEP = extensionURLs.getProperty("nghe_nghiep");
+        final public static String QUOC_TICH = extensionURLs.getProperty("quoctich");
+        
         final public static String TRINH_TU_PTTT = extensionURLs.getProperty("pttt.trinhtu");
     }
     
