@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -202,8 +203,8 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         return ResponseEntity.ok(result);
     }
     
-    @GetMapping("/get_cdha_by_id")
-    public ResponseEntity<?> getChanDoanHinhAnhById(@RequestParam String id) {
+    @GetMapping("/get_cdha_by_id/{id}")
+    public ResponseEntity<?> getChanDoanHinhAnhById(@PathVariable String id) {
         var obj = serviceRequestDao.read(new IdType(id));
         if(isChanDoanHinhAnh(obj)) {
             return ResponseEntity.ok(new ChanDoanHinhAnh(obj));
@@ -254,8 +255,8 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         return ResponseEntity.ok(result);
     }
     
-    @GetMapping("/get_pttt_by_id")
-    public ResponseEntity<?> getPhauThuatThuThuatById(@RequestParam String id) {
+    @GetMapping("/get_pttt_by_id/{id}")
+    public ResponseEntity<?> getPhauThuatThuThuatById(@PathVariable String id) {
         var obj = serviceRequestDao.read(new IdType(id));
         if(isPhauThuatThuThuat(obj)) {
             return ResponseEntity.ok(new PhauThuatThuThuat(obj));
