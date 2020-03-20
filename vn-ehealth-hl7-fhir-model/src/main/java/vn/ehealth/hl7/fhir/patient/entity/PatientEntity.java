@@ -68,6 +68,9 @@ public class PatientEntity extends BaseResource {
         if(obj.hasName())
             ent.name = BaseHumanName.fromHumanNameList(obj.getName());
         
+        if(obj.hasTelecom())
+            ent.telecom = BaseContactPoint.fromContactPointList(obj.getTelecom());
+        
         if(obj.hasGender())
             ent.gender = obj.getGender().toCode(); 
         

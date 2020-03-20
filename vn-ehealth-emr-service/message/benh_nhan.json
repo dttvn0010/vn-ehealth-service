@@ -1,49 +1,45 @@
-{
-	
+
+  {
     "tenDayDu": "Lê Hồng Phúc",
-    "ngaySinh": "2018-06-13 00:00:00",
-    "soTheBhyt": "TE137010004002437000",
+    "ngaySinh": "1998-03-19 07:00:00",
+    "cmnd": "000000000001",
+    "soTheBhyt": "5400525",
     "ngayHetHanTheBhyt": "2024-12-31 00:00:00",
-    "idHis": "5400525",
     "diaChi": {
-        "diaChiChiTiet": "Ngõ 1, xóm 2, thôn 3",
-        "dmXaPhuong": {
-            "ma": "14698",
-            "ten": "Xã Kim Đông"
-        },
-        "dmQuanHuyen": {
-            "ma": "376",
-            "ten": "Huyện Kim Sơn"
-        },
-        "dmTinhThanh": {
-            "ma": "37",
-            "ten": "Tỉnh Ninh Bình"
-        },
-        "dmQuocGia": {
-            "ma": "VIE",
-            "ten": "Việt Nam"
-        }
+      "diaChiChiTiet": "Ngõ 1, xóm 2, thôn 3, Xã Kim Đông, Huyện Kim Sơn, Tỉnh Ninh Bình",
+      "dmXaPhuong": {
+        "ma": "1011105",
+        "ten": "Xã Kim Đông"
+      },
+      "dmQuanHuyen": {
+        "ma": "10111",
+        "ten": "Huyện Kim Sơn"
+      },
+      "dmTinhThanh": {
+        "ma": "101",
+        "ten": "Tỉnh Ninh Bình"
+      }
     },
     "dmGioiTinh": {
-        "ma": "male",
-        "ten": "Nam"
+      "ma": "male",
+      "ten": "Nam"
     },
     "dmDanToc": {
-        "ma": "DT01",
-        "ten": "Kinh"
+      "ma": "01",
+      "ten": "Kinh"
     },
     "dmTonGiao": {
-        "ma": "01",
-        "ten": "Lương"
+      "ma": "00",
+      "ten": "Không"
     },
     "dmNgheNghiep": {
-        "ma": "679",
-        "ten": "Trẻ <6 tuổi đi học, < 15 t không đi học"
+      "ma": "01",
+      "ten": "Nông dân"
     },
-    "dmLoaiDoiTuongTaiChinh": {
-        "ma": "01",
-        "ten": "BHYT"
+    "dmQuocTich": {
+      "ma": "01",
+      "ten": "Việt Nam"
     },
     "email": "lehongphuc@gmail.com",
-    "soDienThoai": "098756454"
-}
+    "soDienThoai": "098432432"
+  }
