@@ -4,8 +4,6 @@ import java.util.Date;
 
 
 import java.util.List;
-import java.util.Optional;
-
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Observation.ObservationStatus;
@@ -23,12 +21,13 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "observation")
-@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1, 'partOf.reference':1, 'basedOn.reference':1, 'subject.reference':1, 'encounter.reference':1}", name = "index_by_default")
 public class ObservationEntity extends BaseResource {
     @Id
     public ObjectId id;
     public List<BaseIdentifier> identifier;
     public List<BaseReference> basedOn;
+    public List<BaseReference> partOf;
     public String status;
     public List<BaseCodeableConcept> category;
     public BaseCodeableConcept code;
@@ -52,30 +51,30 @@ public class ObservationEntity extends BaseResource {
     public static ObservationEntity fromObservation(Observation obj) {
         if(obj == null) return null;
         
-        var ent = new ObservationEntity();
+        var ent = new ObservationEntity();        
+        ent.identifier = obj.hasIdentifier()? BaseIdentifier.fromIdentifierList(obj.getIdentifier()) : null;
+        ent.basedOn = obj.hasBasedOn()? BaseReference.fromReferenceList(obj.getBasedOn()) : null;
+        ent.partOf = obj.hasPartOf()? BaseReference.fromReferenceList(obj.getPartOf()) : null;
+        ent.status = obj.hasStatus()? obj.getStatus().toCode()  : null;
+        ent.category = obj.hasCategory()? BaseCodeableConcept.fromCodeableConcept(obj.getCategory()) : null;
+        ent.code = obj.hasCode()? BaseCodeableConcept.fromCodeableConcept(obj.getCode()) : null;
+        ent.subject = obj.hasSubject()? BaseReference.fromReference(obj.getSubject()) : null;
+        ent.encounter = obj.hasEncounter()? BaseReference.fromReference(obj.getSubject()) : null;
+        ent.effective = obj.hasEffective()? obj.getEffective() : null;
+        ent.issued = obj.hasIssued()? obj.getIssued() : null;
+        ent.performer = obj.hasPerformer()? BaseReference.fromReferenceList(obj.getPerformer()) : null;
+        ent.value = obj.hasValue()? obj.getValue() : null;
+        ent.dataAbsentReason = obj.hasDataAbsentReason()? BaseCodeableConcept.fromCodeableConcept(obj.getDataAbsentReason()) : null;
+        ent.interpretation = obj.hasInterpretation()? BaseCodeableConcept.fromCodeableConcept(obj.getInterpretation()) : null;
+        ent.bodySite = obj.hasBodySite()? BaseCodeableConcept.fromCodeableConcept(obj.getBodySite()) : null;
+        ent.method = obj.hasMethod()? BaseCodeableConcept.fromCodeableConcept(obj.getMethod()) : null;
+        ent.specimen = obj.hasSpecimen()? BaseReference.fromReference(obj.getSpecimen()) : null;
+        ent.device = obj.hasDevice()? BaseReference.fromReference(obj.getDevice()) : null;
+        ent.referenceRange = obj.hasReferenceRange()? transform(obj.getReferenceRange(),
+                                ObservationReferenceRangeEntity::fromObservationReferenceRangeComponent) : null;
         
-        ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.basedOn = BaseReference.fromReferenceList(obj.getBasedOn());
-        ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.category = BaseCodeableConcept.fromCodeableConcept(obj.getCategory());
-        ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
-        ent.subject = BaseReference.fromReference(obj.getSubject());
-        ent.encounter = BaseReference.fromReference(obj.getSubject());
-        ent.effective = obj.getEffective();
-        ent.issued = obj.getIssued();
-        ent.performer = BaseReference.fromReferenceList(obj.getPerformer());
-        ent.value = obj.getValue();
-        ent.dataAbsentReason = BaseCodeableConcept.fromCodeableConcept(obj.getDataAbsentReason());
-        ent.interpretation = BaseCodeableConcept.fromCodeableConcept(obj.getInterpretation());
-        ent.bodySite = BaseCodeableConcept.fromCodeableConcept(obj.getBodySite());
-        ent.method = BaseCodeableConcept.fromCodeableConcept(obj.getMethod());
-        ent.specimen = BaseReference.fromReference(obj.getSpecimen());
-        ent.device = BaseReference.fromReference(obj.getDevice());
-        ent.referenceRange = transform(obj.getReferenceRange(),
-                                ObservationReferenceRangeEntity::fromObservationReferenceRangeComponent);
-        
-        ent.component = transform(obj.getComponent(), 
-                                ObservationComponentEntity::fromObservationComponentComponent);
+        ent.component = obj.hasComponent()? transform(obj.getComponent(), 
+                                ObservationComponentEntity::fromObservationComponentComponent) : null;
         
         return ent;
     }
@@ -87,6 +86,7 @@ public class ObservationEntity extends BaseResource {
         
         obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier ));
         obj.setBasedOn(BaseReference.toReferenceList(ent.basedOn));
+        obj.setPartOf(BaseReference.toReferenceList(ent.partOf));
         obj.setStatus(ObservationStatus.fromCode(ent.status));
         obj.setCategory(BaseCodeableConcept.toCodeableConcept(ent.category));
         obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));

@@ -4,6 +4,12 @@
         "ma": "01",
         "ten": "Test phẫu thuật thủ thuật 1"
     },
+    "ngayYeuCau": "2018-06-28 00:00:00",
+    "bacSiYeuCau": {
+        "id": "bb41d74e-3e9e-4c71-ab6e-626e3a98cb93",
+        "ten": "Bác sĩ A"
+    },
+    "noiDungYeuCau": "Mổ mắt cá chân",
     "ngayThucHien": "2018-06-29 00:00:00",
     "chiDinhPttt": "Chỉ định pttt",
     "ketLuan": "Kết luận pttt",

@@ -41,7 +41,7 @@ public class DataConvertUtil {
     public static <K,V> Map<K, V> mapOf(Entry<K,V> ...items) {
         var m = new HashMap<K, V>();
         for(var item : items) {
-            if(item.key != null) {
+            if(item.key != null && item.value != null) {
                 m.put(item.key, item.value);
             }
         }

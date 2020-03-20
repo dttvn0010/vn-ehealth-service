@@ -21,12 +21,12 @@ public class ObservationReferenceRangeEntity {
         if(obj == null) return null;
         
         var ent = new ObservationReferenceRangeEntity();
-        ent.low = BaseQuantity.fromQuantity(obj.getLow());
-        ent.high = BaseQuantity.fromQuantity(obj.getHigh());
-        ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
-        ent.appliesTo = BaseCodeableConcept.fromCodeableConcept(obj.getAppliesTo());
-        ent.age = BaseRange.fromRange(obj.getAge());
-        ent.text = obj.getText();
+        ent.low = obj.hasLow()? BaseQuantity.fromQuantity(obj.getLow()) : null;
+        ent.high = obj.hasHigh()? BaseQuantity.fromQuantity(obj.getHigh()) : null;
+        ent.type = obj.hasType()? BaseCodeableConcept.fromCodeableConcept(obj.getType()) : null;
+        ent.appliesTo = obj.hasAppliesTo()? BaseCodeableConcept.fromCodeableConcept(obj.getAppliesTo()) : null;
+        ent.age = obj.hasAge()? BaseRange.fromRange(obj.getAge()) : null;
+        ent.text = obj.hasText()? obj.getText() : null;
         
         return ent;
     }

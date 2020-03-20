@@ -148,4 +148,12 @@ public class FhirUtil {
         }
         return null;
     }
+    
+    public static boolean conceptHasCode(CodeableConcept concept, String code, String system) {
+        if(concept != null && concept.hasCoding()) {
+            return FPUtil.anyMatch(concept.getCoding(), 
+                    x -> code.equals(x.getCode()) && system.equals(x.getSystem()));
+        }
+        return false;
+    }
 }

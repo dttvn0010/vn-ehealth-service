@@ -22,7 +22,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
 @Document(collection = "serviceRequest")
-@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1, 'basedOn.reference':1, 'subject.reference':1, 'encounter.reference':1}", name = "index_by_default")
 public class ServiceRequestEntity extends BaseResource {
     @Id
     public ObjectId id;

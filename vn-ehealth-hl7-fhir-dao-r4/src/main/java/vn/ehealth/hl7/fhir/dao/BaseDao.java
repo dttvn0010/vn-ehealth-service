@@ -219,9 +219,20 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings("unchecked")
-    public List<FHIR> find(Map<String, Object> params) {        
-        var query = Query.query(createCriteria(params));        
+    public List<FHIR> find(Map<String, Object> params, int start, int count) {        
+        var query = Query.query(createCriteria(params));
+        if(start >= 0) {
+            query.skip(start);
+        }
+        if(count >= 0) {
+            query.limit(count);
+        }
         var lst = mongo.find(query, getEntityClass());
         return DataConvertUtil.transform(lst, x -> transform((ENT)x));
+    }
+    
+    public long count(Map<String, Object> params) {        
+        var query = Query.query(createCriteria(params));
+        return mongo.count(query, getEntityClass());
     }
 }
