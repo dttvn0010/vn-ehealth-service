@@ -4,8 +4,6 @@ import java.util.Date;
 
 
 import java.util.List;
-import java.util.Optional;
-
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Specimen;
 import org.hl7.fhir.r4.model.Specimen.SpecimenStatus;
@@ -21,7 +19,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "specimen")
-@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1', 'request.reference':1, 'basedOn.reference':1, 'subject.reference':1}", name = "index_by_default")
 public class SpecimenEntity extends BaseResource {
     @Id
     public ObjectId id;
@@ -43,20 +41,20 @@ public class SpecimenEntity extends BaseResource {
         
         var ent = new SpecimenEntity();
         
-        ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.accessionIdentifier = BaseIdentifier.fromIdentifier(obj.getAccessionIdentifier());
-        ent.status =  Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
-        ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
-        ent.subject = BaseReference.fromReference(obj.getSubject());
-        ent.receivedTime = obj.getReceivedTime();
-        ent.parent = BaseReference.fromReferenceList(obj.getParent());
-        ent.request = BaseReference.fromReferenceList(obj.getRequest());
-        ent.collection = SpecimenCollectionEntity.fromSpecimenCollectionComponent(obj.getCollection());
-        ent.processing = transform(obj.getProcessing(),
-                                SpecimenProcessingEntity::fromSpecimenProcessingComponent);
-        ent.container = transform(obj.getContainer(), 
-                                SpecimenContainerEntity::fromSpecimenContainerComponent);
-        ent.note = BaseAnnotation.fromAnnotationList(obj.getNote());
+        ent.identifier = obj.hasIdentifier()?  BaseIdentifier.fromIdentifierList(obj.getIdentifier()) : null;
+        ent.accessionIdentifier = obj.hasAccessionIdentifier()? BaseIdentifier.fromIdentifier(obj.getAccessionIdentifier()) : null;
+        ent.status = obj.hasStatus()?  obj.getStatus().toCode() : null;
+        ent.type = obj.hasType()? BaseCodeableConcept.fromCodeableConcept(obj.getType()) : null;
+        ent.subject = obj.hasSubject()? BaseReference.fromReference(obj.getSubject()) : null;
+        ent.receivedTime = obj.hasReceivedTime()? obj.getReceivedTime() : null;
+        ent.parent = obj.hasParent()? BaseReference.fromReferenceList(obj.getParent()) : null;
+        ent.request = obj.hasRequest()? BaseReference.fromReferenceList(obj.getRequest()) : null;
+        ent.collection = obj.hasCollection()? SpecimenCollectionEntity.fromSpecimenCollectionComponent(obj.getCollection()) : null;
+        ent.processing = obj.hasProcessing()? transform(obj.getProcessing(),
+                                SpecimenProcessingEntity::fromSpecimenProcessingComponent) : null;
+        ent.container = obj.hasContainer()? transform(obj.getContainer(), 
+                                SpecimenContainerEntity::fromSpecimenContainerComponent) : null;
+        ent.note = obj.hasNote()? BaseAnnotation.fromAnnotationList(obj.getNote()) : null;
         
         
         return ent;

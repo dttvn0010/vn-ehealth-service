@@ -23,11 +23,12 @@ public class ObservationComponentEntity {
         if(obj == null) return null;
         
         var ent = new ObservationComponentEntity();
-        ent.code = BaseCodeableConcept.fromCodeableConcept(obj.getCode());
-        ent.value = obj.getValue();
-        ent.dataAbsentReason = BaseCodeableConcept.fromCodeableConcept(obj.getDataAbsentReason());
-        ent.interpretation = BaseCodeableConcept.fromCodeableConcept(obj.getInterpretation());
-        ent.referenceRange = transform(obj.getReferenceRange(), ObservationReferenceRangeEntity::fromObservationReferenceRangeComponent);
+        ent.code = obj.hasCode()? BaseCodeableConcept.fromCodeableConcept(obj.getCode()) : null;
+        ent.value = obj.hasValue()? obj.getValue() : null;
+        ent.dataAbsentReason = obj.hasDataAbsentReason()? BaseCodeableConcept.fromCodeableConcept(obj.getDataAbsentReason()) : null;
+        ent.interpretation = obj.hasInterpretation()? BaseCodeableConcept.fromCodeableConcept(obj.getInterpretation()) : null;
+        ent.referenceRange = obj.hasReferenceRange()? transform(obj.getReferenceRange(), 
+                                    ObservationReferenceRangeEntity::fromObservationReferenceRangeComponent) : null;
         return ent;
     }
     

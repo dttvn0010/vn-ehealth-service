@@ -2,13 +2,16 @@ package vn.ehealth.hl7.fhir.diagnostic.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.DiagnosticReport.DiagnosticReportMediaComponent;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -203,6 +206,13 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
                 identifier);
 
         return criteria;
+    }
+    
+    public DiagnosticReport getByRequest(IdType requestIdType) {
+        if(requestIdType != null && requestIdType.hasIdPart()) {
+            return findOne(Map.of("basedOn.reference", ResourceType.ServiceRequest + "/" + requestIdType.getIdPart()));            
+        }
+        return null;
     }
 
     @Override

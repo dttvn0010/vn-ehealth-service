@@ -102,7 +102,7 @@ public class Constants {
         
         
         final public static String DICH_VU_KY_THUAT = codeSystems.getProperty("dich_vu_ky_thuat");
-        final public static String CHAN_DOAN_HINH_ANH = codeSystems.getProperty("chandoan_hinhanh");
+        final public static String LOAI_DICH_VU_KY_THUAT = codeSystems.getProperty("loai_dich_vu_ky_thuat");
 
         final public static String VAI_TRO_PTT = codeSystems.getProperty("vaitro_pttt");
     }
