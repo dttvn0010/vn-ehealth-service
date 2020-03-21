@@ -62,7 +62,7 @@ public class DiaChi {
         var xaPhuongExt = createExtension(ExtensionURL.DVHC + "/ward", 
                 DanhMuc.toConcept(dto.dmXaPhuong, CodeSystemValue.DVHC));
         
-        //obj.setExtension(listOf(tinhThanhExt, quanHuyenExt, xaPhuongExt));
+        obj.setExtension(listOf(tinhThanhExt, quanHuyenExt, xaPhuongExt));
         
         return obj;
     }
