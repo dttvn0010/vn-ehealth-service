@@ -4,17 +4,15 @@ import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 import java.util.Date;
 
-import org.hl7.fhir.r4.model.Encounter.EncounterLocationComponent;
-import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.Encounter;
+import org.hl7.fhir.r4.model.ResourceType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
-
-public class VaoKhoa {
-    public String locationId;
-    public DanhMuc dmKhoaDieuTri;
-    
+public class VaoKhoa extends BaseModelDTO {
+    public String patientId;
+    public String falcultyId;
+        
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayGioVao;
     
@@ -25,30 +23,36 @@ public class VaoKhoa {
         super();
     }
     
-    public VaoKhoa(EncounterLocationComponent ent) {
-        if(ent == null || !ent.hasLocation()) return;
-        this.locationId = ent.getLocation().getReference();
-        var location =  DaoFactory.getLocationDao().read(createIdType(this.locationId));
-        var khoaDieuTri = KhoaDieuTri.fromFhir(location);
-        if(khoaDieuTri != null) {
-            this.dmKhoaDieuTri = khoaDieuTri.dmLoaiKhoa;
-        }
+    public VaoKhoa(Encounter obj) {
+        super(obj);
+        if(obj == null) return;
         
-        this.ngayGioVao = ent.hasPeriod()? ent.getPeriod().getStart() : null;
-        this.ngayGioKetThucDieuTri = ent.hasPeriod()? ent.getPeriod().getEnd() : null;        
+        this.patientId = idFromRef(obj.getSubject());
+        this.falcultyId = idFromRef(obj.getServiceProvider());
+        
+        this.ngayGioVao = obj.hasPeriod()? obj.getPeriod().getStart() : null;
+        this.ngayGioKetThucDieuTri = obj.hasPeriod()? obj.getPeriod().getEnd() : null;
     }
     
-    public static VaoKhoa fromFhir(EncounterLocationComponent ent) {
-        if(ent == null) return null;
-        return new VaoKhoa(ent);
+    public static VaoKhoa fromFhir(Encounter obj) {
+        if(obj == null) return null;
+        return new VaoKhoa(obj);
     }
     
-    public static EncounterLocationComponent toFhir(VaoKhoa dto) {
+    public static Encounter toFhir(VaoKhoa dto) {
         if(dto == null) return null;
-        var ent = new EncounterLocationComponent();
-        ent.setLocation(new Reference(dto.locationId));
+        var ent = new Encounter();
+        
+        ent.setSubject(createReference(ResourceType.Patient, dto.patientId));
+        ent.setServiceProvider(createReference(ResourceType.Organization, dto.falcultyId));
         ent.setPeriod(createPeriod(dto.ngayGioVao, dto.ngayGioKetThucDieuTri));
+        
         return ent;
+    }
+
+    @Override
+    public ResourceType getType() {
+        return ResourceType.Encounter;
     }
     
 }

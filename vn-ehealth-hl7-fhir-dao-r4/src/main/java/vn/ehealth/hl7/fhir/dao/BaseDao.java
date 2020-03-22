@@ -8,6 +8,7 @@ import java.util.Map;
 import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.InstantType;
+import org.hl7.fhir.r4.model.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -24,6 +25,7 @@ import ca.uhn.fhir.rest.param.StringParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 
@@ -234,5 +236,18 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     public long count(Map<String, Object> params) {        
         var query = Query.query(createCriteria(params));
         return mongo.count(query, getEntityClass());
+    }
+    
+    public FHIR readRef(Reference ref) {
+        if(ref == null || ref.getReference() == null) return null;
+        var obj = read(FhirUtil.idTypeFromRef(ref));
+        
+        if(obj != null) {
+            if(!ref.getReference().startsWith(obj.getResourceType() + "/")) {
+                return null;
+            }
+        }
+        
+        return obj;
     }
 }

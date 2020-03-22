@@ -2,14 +2,17 @@ package vn.ehealth.hl7.fhir.ehr.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Encounter.DiagnosisComponent;
 import org.hl7.fhir.r4.model.Encounter.EncounterLocationComponent;
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -369,6 +372,15 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 			criteria.and("type.coding.code.myStringValue").is(type.getValue());
 		}
 		return criteria;
+	}
+	
+	public List<Encounter> getByEpisode(IdType episodeIdType) {
+	    if(episodeIdType != null && episodeIdType.hasIdPart()) {
+	        return find(Map.of("episodeOfCare.reference",
+	                            ResourceType.EpisodeOfCare + "/" + episodeIdType.getIdPart()), 
+	                    -1, -1);
+	    }
+	    return new ArrayList<>();
 	}
 
 	@Override

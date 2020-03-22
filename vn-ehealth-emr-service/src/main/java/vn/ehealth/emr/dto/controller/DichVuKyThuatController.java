@@ -45,6 +45,7 @@ import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.DiagnosticReportDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ObservationDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.SpecimenDao;
+import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
@@ -54,6 +55,7 @@ public class DichVuKyThuatController {
 
 private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.class);
     
+    @Autowired private EncounterDao enCounterDao;
     @Autowired private ServiceRequestDao serviceRequestDao;
     @Autowired private ProcedureDao procedureDao;
     @Autowired private DiagnosticReportDao  diagnosticReportDao;
@@ -136,6 +138,11 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     
     @SuppressWarnings("unchecked")
     private ServiceRequest saveDichVuKT(@Nonnull DichVuKyThuat dto) {
+        if(dto.encounterId != null && dto.patientId == null) {
+            var enc = enCounterDao.read(createIdType(dto.encounterId));
+            dto.patientId = enc != null? idFromRef(enc.getSubject()) : null;
+        }
+        
         var entities = dto.toFhir();
         if(entities != null) {
             var serviceRequest = (ServiceRequest) entities.get("serviceRequest");
@@ -167,9 +174,11 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
             
             specimen = saveSpecimen(specimen);
             
-            var oldObservations = observationDao.getByRequest(serviceRequest.getIdElement());
-            oldObservations.forEach(x -> observationDao.remove(x.getIdElement()));
-            observations.forEach(x -> observationDao.create(x));
+            if(serviceRequest != null) {            
+                var oldObservations = observationDao.getByRequest(serviceRequest.getIdElement());
+                oldObservations.forEach(x -> observationDao.remove(x.getIdElement()));
+                observations.forEach(x -> observationDao.create(x));
+            }
                                     
             return serviceRequest;
         }
@@ -344,13 +353,13 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         return false;
     }
     
-    @GetMapping("/count_xetnghiem")
+    @GetMapping("/count_xet_nghiem")
     public long countXetNgheim(@RequestParam Optional<String> patientId, 
                                                     @RequestParam Optional<String> encounterId) {
         return countDichVuKT(LoaiDichVuKT.XET_NGHIEM, patientId, encounterId);
     }
     
-    @GetMapping("/get_xetnghiem_list")
+    @GetMapping("/get_xet_nghiem_list")
     public ResponseEntity<?> getXetNghiemList(@RequestParam Optional<String> patientId, 
                                                     @RequestParam Optional<String> encounterId,
                                                     @RequestParam Optional<Integer> start,
@@ -361,7 +370,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         return ResponseEntity.ok(result);
     }
     
-    @GetMapping("/get_xetnghiem_by_id/{id}")
+    @GetMapping("/get_xet_nghiem_by_id/{id}")
     public ResponseEntity<?> getXetNghiemById(@PathVariable String id) {
         var obj = serviceRequestDao.read(new IdType(id));
         if(isXetNghiem(obj)) {
@@ -370,7 +379,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         return new ResponseEntity<>("No xetNghiem with id:" + id, HttpStatus.BAD_REQUEST);
     }
     
-    @PostMapping("/save_xetnghiem")
+    @PostMapping("/save_xet_nghiem")
     public ResponseEntity<?> saveXetNghiem(@RequestBody XetNghiem dto) {
         try {
             var serviceRequest = saveDichVuKT(dto);

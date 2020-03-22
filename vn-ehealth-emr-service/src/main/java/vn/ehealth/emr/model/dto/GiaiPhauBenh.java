@@ -21,8 +21,6 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 public class GiaiPhauBenh extends DichVuKyThuat {
-    public String encounterId;
-    
     public DanhMuc dmGpb;
     public DanhMuc dmViTriLayMau;
     
@@ -63,9 +61,6 @@ public class GiaiPhauBenh extends DichVuKyThuat {
     
     @Override
     public Map<String, Object> toFhir() {
-        var dotKhamBenh = DotKhamBenh.fromFhirId(this.encounterId);
-        if(dotKhamBenh == null || dotKhamBenh.benhNhan == null) return null;
-        
         //ServiceRequest
         ServiceRequest serviceRequest;
         if(this.id != null) {
@@ -81,7 +76,7 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         
         serviceRequest.setCategory(listOf(gpbConcept));
         serviceRequest.setCode(DanhMuc.toConcept(this.dmGpb, CodeSystemValue.DICH_VU_KY_THUAT));
-        serviceRequest.setSubject(BaseModelDTO.toReference(dotKhamBenh.benhNhan));
+        serviceRequest.setSubject(createReference(ResourceType.Patient, this.patientId));
         serviceRequest.setEncounter(createReference(ResourceType.Encounter, this.encounterId));
         serviceRequest.setRequester(CanboYte.toReference(this.bacSiYeuCau));
         serviceRequest.setAuthoredOn(this.ngayYeuCau);
@@ -122,9 +117,11 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         diagnosticReport.setResultsInterpreter(listOf(BaseModelDTO.toReference(this.nguoiDanhGiaKetQua)));
         diagnosticReport.setIssued(this.ngayGioBaoCao);
         diagnosticReport.setCategory(listOf(gpbConcept));
-        diagnosticReport.getConclusionCode().add(createCodeableConcept(this.maChanDoanGpb, this.moTaChanDoanGpb, null));
+        diagnosticReport.setCode(serviceRequest.getCode());
         
-        diagnosticReport.setCode(serviceRequest.getCode());        
+        var conclusionCode = createCodeableConcept(this.maChanDoanGpb, this.moTaChanDoanGpb, CodeSystemValue.ICD10);
+        diagnosticReport.getConclusionCode().add(conclusionCode);
+                
         diagnosticReport.setConclusion(this.ketLuan);
         
         return mapOf(
@@ -139,7 +136,6 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         if(serviceRequest == null) return;
         
         // ServiceRequest        
-        this.encounterId = idFromRef(serviceRequest.getEncounter());
         this.ngayYeuCau = serviceRequest.getAuthoredOn();
         this.bacSiYeuCau = CanboYte.fromReference(serviceRequest.getRequester());
         this.dmGpb = new DanhMuc(serviceRequest.getCode());
@@ -159,7 +155,7 @@ public class GiaiPhauBenh extends DichVuKyThuat {
                 }
                 var extViThe = findExtensionByURL(specimen.getExtension(), ExtensionURL.VI_THE_GPB);
                 if(extViThe != null && extViThe.getValue() instanceof StringType) {
-                    this.nhanXetViThe = ((StringType) extDaiThe.getValue()).getValue();
+                    this.nhanXetViThe = ((StringType) extViThe.getValue()).getValue();
                 }
             }
         }
@@ -173,8 +169,16 @@ public class GiaiPhauBenh extends DichVuKyThuat {
             this.ngayGioBaoCao = diagnosticReport.getIssued();
             this.nguoiDanhGiaKetQua = diagnosticReport.hasResultsInterpreter()?
                                     CanboYte.fromReference(diagnosticReport.getResultsInterpreterFirstRep()) : null;
-            this.maChanDoanGpb = diagnosticReport.hasConclusionCode() ? diagnosticReport.getConclusionCodeFirstRep().getCodingFirstRep().getCode() : null;
-            this.moTaChanDoanGpb = diagnosticReport.hasConclusionCode() ? diagnosticReport.getConclusionCodeFirstRep().getText() : null;                           
+            
+            if(diagnosticReport.hasConclusionCode()) {
+                var conclusionCode = diagnosticReport.getConclusionCodeFirstRep();
+                if(conclusionCode.hasCoding()) {
+                    var coding = conclusionCode.getCodingFirstRep();
+                    this.maChanDoanGpb = coding.getCode();
+                    this.moTaChanDoanGpb = coding.getDisplay();
+                }
+            }
+            
             this.ketLuan = diagnosticReport.getConclusion();
         }
         

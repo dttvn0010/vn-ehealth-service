@@ -19,7 +19,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "episodeOfCare")
-@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1, 'patient.reference':1, 'managingOrganization.reference':1, 'careManager.reference':1, 'team.reference':1}", name = "index_by_default")
 public class EpisodeOfCareEntity extends BaseResource{
     
     public static class DiagnosisEntity {
@@ -72,22 +72,28 @@ public class EpisodeOfCareEntity extends BaseResource{
         
         var ent = new EpisodeOfCareEntity();
         
-        ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.status = Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null);
+        ent.identifier = obj.hasIdentifier()? BaseIdentifier.fromIdentifierList(obj.getIdentifier()) : null;
+        ent.status = obj.hasStatus()? Optional.ofNullable(obj.getStatus()).map(x -> x.toCode()).orElse(null) : null;
         
-        ent.statusHistory = transform(obj.getStatusHistory(), 
-                EOCStatusHistoryEntity::fromEpisodeOfCareStatusHistoryComponent);
+        ent.statusHistory = obj.hasStatusHistory()? transform(obj.getStatusHistory(), 
+                                EOCStatusHistoryEntity::fromEpisodeOfCareStatusHistoryComponent) : null;
+                
+        ent.type = obj.hasType()? BaseCodeableConcept.fromCodeableConcept(obj.getType()) : null;
         
+        ent.diagnosis = obj.hasDiagnosis()? transform(obj.getDiagnosis(), DiagnosisEntity::fromDiagnosisComponent) : null;
         
-        ent.type = BaseCodeableConcept.fromCodeableConcept(obj.getType());
+        ent.patient = obj.hasPatient()? BaseReference.fromReference(obj.getPatient()) : null;
         
-        ent.diagnosis = transform(obj.getDiagnosis(), DiagnosisEntity::fromDiagnosisComponent);
+        ent.managingOrganization = obj.hasManagingOrganization()? 
+                                    BaseReference.fromReference(obj.getManagingOrganization()) : null;
+                                    
+        ent.period = obj.hasPeriod()? BasePeriod.fromPeriod(obj.getPeriod()) : null;
+                                    
+        ent.referralRequest = obj.hasReferralRequest()? BaseReference.fromReferenceList(obj.getReferralRequest()) : null;
         
-        ent.patient = BaseReference.fromReference(obj.getPatient());
-        ent.managingOrganization = BaseReference.fromReference(obj.getManagingOrganization());
-        ent.referralRequest = BaseReference.fromReferenceList(obj.getReferralRequest());
-        ent.careManager = BaseReference.fromReference(obj.getCareManager());
-        ent.team = BaseReference.fromReferenceList(obj.getTeam());
+        ent.careManager = obj.hasCareManager()? BaseReference.fromReference(obj.getCareManager()) : null;
+        
+        ent.team = obj.hasTeam()? BaseReference.fromReferenceList(obj.getTeam()) : null;
         
         return ent;
     }
@@ -106,6 +112,7 @@ public class EpisodeOfCareEntity extends BaseResource{
         obj.setType(BaseCodeableConcept.toCodeableConcept(ent.type));
         obj.setDiagnosis(transform(ent.diagnosis, DiagnosisEntity::toDiagnosisComponent));
         obj.setPatient(BaseReference.toReference(ent.patient));
+        obj.setPeriod(BasePeriod.toPeriod(ent.period));
         obj.setManagingOrganization(BaseReference.toReference(ent.managingOrganization));
         obj.setReferralRequest(BaseReference.toReferenceList(ent.referralRequest));
         obj.setCareManager(BaseReference.toReference(ent.careManager));

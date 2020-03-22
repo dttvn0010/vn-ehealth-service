@@ -26,7 +26,7 @@ import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "encounter")
-@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1, 'serviceProvider.reference':1, 'partOf.reference':1, 'episodeOfCare.reference':1, 'subject.reference':1}", name = "index_by_default")
 public class EncounterEntity extends BaseResource{
     public static class DiagnosisEntity {
         public BaseReference condition;
