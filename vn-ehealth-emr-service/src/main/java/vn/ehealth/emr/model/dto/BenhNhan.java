@@ -43,10 +43,10 @@ public class BenhNhan  extends BaseModelDTO {
     public String soDienThoai;
     
     static Map<String, String> gioiTinhMap = mapOf(
-                entry("male", MessageUtils.get("gioitinh.nam")),
-                entry("female", MessageUtils.get("gioitinh.nu")),
-                entry("other", MessageUtils.get("gioitinh.khac")),
-                entry("unknown", MessageUtils.get("gioitinh.khongxacdinh"))
+                "male", MessageUtils.get("gioitinh.nam"),
+                "female", MessageUtils.get("gioitinh.nu"),
+                "other", MessageUtils.get("gioitinh.khac"),
+                "unknown", MessageUtils.get("gioitinh.khongxacdinh")
             );
     
     public BenhNhan() {

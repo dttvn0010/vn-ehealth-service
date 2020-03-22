@@ -14,7 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.opencsv.CSVReader;
@@ -22,6 +24,8 @@ import com.opencsv.CSVReader;
 import vn.ehealth.emr.model.EmrDm;
 import vn.ehealth.emr.service.EmrDmService;
 
+@RestController
+@RequestMapping("/api/dm")
 public class EmrDmController {
     
     private Logger logger = LoggerFactory.getLogger(EmrDmController.class);

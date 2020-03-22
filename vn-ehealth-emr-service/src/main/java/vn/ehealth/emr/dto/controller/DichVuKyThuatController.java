@@ -1,11 +1,5 @@
 package vn.ehealth.emr.dto.controller;
 
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.entry;
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.listOf;
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
-import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createReference;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +41,9 @@ import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ObservationDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.SpecimenDao;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
+
 
 @RestController
 @RequestMapping("/api/dich_vu_ky_thuat")
@@ -64,8 +60,8 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     
     private Map<String, Object> makeParams(String maDv, Optional<String> patientId, Optional<String> encounterId) {
         var params = mapOf(
-            entry("category.coding.code", (Object) maDv),
-            entry("category.coding.system", CodeSystemValue.LOAI_DICH_VU_KY_THUAT)
+            "category.coding.code", (Object) maDv,
+            "category.coding.system", CodeSystemValue.LOAI_DICH_VU_KY_THUAT
         );
         
         patientId.ifPresent(x -> params.put("subject.reference", ResourceType.Patient + "/" + x));
@@ -228,11 +224,11 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         try {
             var serviceRequest = saveDichVuKT(dto);
             var cdha = new ChanDoanHinhAnh(serviceRequest);
-            var result = mapOf(entry("success", true), entry("chanDoanHinhAnh", cdha));
+            var result = mapOf("success", true, "chanDoanHinhAnh", cdha);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save chanDoanHinhAnh: ", e);
-            var result = mapOf(entry("success", false), entry("error", e.getMessage()));
+            var result = mapOf("success", false, "error", e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }
@@ -280,11 +276,11 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         try {
             var serviceRequest = saveDichVuKT(dto);
             var pttt = new PhauThuatThuThuat(serviceRequest);
-            var result = mapOf(entry("success", true), entry("phauThuatThuThuat", pttt));
+            var result = mapOf("success", true, "phauThuatThuThuat", pttt);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save phauThuatThuThuat: ", e);
-            var result = mapOf(entry("success", false), entry("error", e.getMessage()));
+            var result = mapOf("success", false, "error", e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }
@@ -332,11 +328,11 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         try {
             var serviceRequest = saveDichVuKT(dto);
             var gpb = new GiaiPhauBenh(serviceRequest);
-            var result = mapOf(entry("success", true), entry("giaiPhauBenh", gpb));
+            var result = mapOf("success", true, "giaiPhauBenh", gpb);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save giaiPhauBenh: ", e);
-            var result = mapOf(entry("success", false), entry("error", e.getMessage()));
+            var result = mapOf("success", false, "error", e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }
@@ -384,11 +380,11 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         try {
             var serviceRequest = saveDichVuKT(dto);
             var xetNghiem = new XetNghiem(serviceRequest);
-            var result = mapOf(entry("success", true), entry("xetNghiem", xetNghiem));
+            var result = mapOf("success", true, "xetNghiem", xetNghiem);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save xetNghiem: ", e);
-            var result = mapOf(entry("success", false), entry("error", e.getMessage()));
+            var result = mapOf("success", false, "error", e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }

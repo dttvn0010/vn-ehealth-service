@@ -125,9 +125,9 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         diagnosticReport.setConclusion(this.ketLuan);
         
         return mapOf(
-                    entry("serviceRequest", serviceRequest),
-                    entry("specimen", specimen),
-                    entry("diagnosticReport", diagnosticReport)
+                    "serviceRequest", serviceRequest,
+                    "specimen", specimen,
+                    "diagnosticReport", diagnosticReport
                  );
     }
 

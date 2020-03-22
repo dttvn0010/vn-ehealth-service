@@ -53,12 +53,12 @@ private static Logger logger = LoggerFactory.getLogger(BenhNhanController.class)
                 obj = encounterDao.create(obj);
             }
             dto = VaoKhoa.fromFhir(obj);
-            var result = mapOf(entry("success", true), entry("dto", dto));
+            var result = mapOf("success", true, "dto", dto);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save entity: ", e);
             var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = mapOf(entry("success", false), entry("error", error));
+            var result = mapOf("success", false, "error", error);
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }

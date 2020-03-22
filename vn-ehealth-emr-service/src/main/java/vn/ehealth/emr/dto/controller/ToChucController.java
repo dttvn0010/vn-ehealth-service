@@ -35,9 +35,10 @@ public class ToChucController {
     
     private List<Organization> getOrganizations(String maLoaiToChuc, String parentId) {
         var params = mapOf(
-                        entry("type.coding.code", (Object) maLoaiToChuc),
-                        entry("type.coding.system", CodeSystemValue.LOAI_TO_CHUC)                        
+                        "type.coding.code", (Object) maLoaiToChuc,
+                        "type.coding.system", CodeSystemValue.LOAI_TO_CHUC                        
                      );
+        
         if(parentId != null) {
             params.put("partOf.reference", ResourceType.Organization + "/" + parentId);
         }
@@ -90,11 +91,11 @@ public class ToChucController {
         try {
             var obj = saveToChuc(dto);
             var cskb = new CoSoKhamBenh(obj);
-            var result = mapOf(entry("success", true), entry("coSoKhamBenh", cskb));
+            var result = mapOf("success", true, "coSoKhamBenh", cskb);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save coSoKhamBenh: ", e);
-            var result = mapOf(entry("success", false), entry("error", e.getMessage()));
+            var result = mapOf("success", false, "error", e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }
@@ -133,11 +134,11 @@ public class ToChucController {
         try {
             var obj = saveToChuc(dto);
             var khoa = new KhoaDieuTri(obj);
-            var result = mapOf(entry("success", true), entry("khoaDieuTri", khoa));
+            var result = mapOf("success", true, "khoaDieuTri", khoa);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save khoaDieuTri: ", e);
-            var result = mapOf(entry("success", false), entry("error", e.getMessage()));
+            var result = mapOf("success", false, "error", e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }

@@ -1,7 +1,9 @@
 package vn.ehealth.emr.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -12,10 +14,13 @@ import org.springframework.util.StringUtils;
 import vn.ehealth.emr.model.EmrDm;
 import vn.ehealth.emr.model.EmrDmContent;
 import vn.ehealth.emr.repository.EmrDmRepository;
+import vn.ehealth.utils.MongoUtils;
+
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @Service
 public class EmrDmService {
-
+    
     @Autowired MongoTemplate mongoTemplate;
     @Autowired EmrDmRepository emrDmRepository;
     @Autowired EmrNhomDmService emrNhomDmService;
@@ -59,31 +64,34 @@ public class EmrDmService {
         return 0;
     }
     
+    
+    
     public List<EmrDm> getEmrDmList(String maNhom, String keyword, int capdo, 
                                         String maCha, int offset, int limit) {
+        
         var nhomId = emrNhomDmService.getByMa(maNhom).map(x -> x.id).orElse(null);
+        var params = new HashMap<String, Object>();
+        
         if(nhomId != null) {
+            params.put("emrNhomDmId", nhomId);            
             
-            var criteria = Criteria.where("emrNhomDmId").is(nhomId);
             if(!StringUtils.isEmpty(keyword)) {
-                criteria = criteria.andOperator(
-                    new Criteria().orOperator(
-                        Criteria.where("ten").regex(keyword),
-                        Criteria.where("ma").regex(keyword)
-                     )
-                );
+                params.put("$or", listOf(
+                                mapOf3("ten", "$regex", keyword),
+                                mapOf3("ma", "$regex", keyword)
+                            )); 
             }
            
             if(!StringUtils.isEmpty(maCha)) {
                 var chaId = emrDmRepository.findByEmrNhomDmIdAndMa(nhomId, maCha).map(x -> x.id).orElse(null);
-                criteria = criteria.and("emrDmChaId").is(chaId);
+                params.put("emrDmChaId", chaId);
             }
             
             if(capdo > 0) {
-                criteria = criteria.and("capdo").is(capdo);
+                params.put("capdo", capdo);
             }
             
-            var query = new Query(criteria);
+            var query = new Query(MongoUtils.createCriteria(params));
             
             if(offset >= 0 && limit >= 0) {
                 query = query.skip(offset).limit(limit);

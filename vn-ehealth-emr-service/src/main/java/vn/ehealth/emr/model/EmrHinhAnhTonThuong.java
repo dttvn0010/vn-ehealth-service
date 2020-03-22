@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import vn.ehealth.emr.utils.MongoUtils;
+import vn.ehealth.utils.MongoUtils;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "emr_hinh_anh_ton_thuong")

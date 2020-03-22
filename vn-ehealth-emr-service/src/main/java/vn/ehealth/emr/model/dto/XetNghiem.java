@@ -1,6 +1,5 @@
 package vn.ehealth.emr.model.dto;
 
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.entry;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.listOf;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createCodeableConcept;
@@ -139,10 +138,10 @@ public class XetNghiem extends DichVuKyThuat {
         diagnosticReport.setCode(serviceRequest.getCode());        
         
         return mapOf(
-                    entry("serviceRequest", serviceRequest),
-                    entry("procedure", procedure),
-                    entry("observations", observations),
-                    entry("diagnosticReport", diagnosticReport)
+                    "serviceRequest", serviceRequest,
+                    "procedure", procedure,
+                    "observations", observations,
+                    "diagnosticReport", diagnosticReport
                  );
     }
 

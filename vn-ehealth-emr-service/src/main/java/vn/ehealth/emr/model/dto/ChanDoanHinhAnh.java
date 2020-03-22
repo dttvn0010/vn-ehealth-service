@@ -112,9 +112,9 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
         diagnosticReport.setConclusion(this.ketLuan);
         
         return mapOf(
-                    entry("serviceRequest", serviceRequest),
-                    entry("procedure", procedure),
-                    entry("diagnosticReport", diagnosticReport)
+                    "serviceRequest", serviceRequest,
+                    "procedure", procedure,
+                    "diagnosticReport", diagnosticReport
                  );
     }
 

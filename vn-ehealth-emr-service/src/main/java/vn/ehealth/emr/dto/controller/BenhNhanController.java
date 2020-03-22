@@ -48,11 +48,11 @@ public class BenhNhanController {
                 obj = patientDao.create(obj);
             }
             dto = BenhNhan.fromFhir(obj);
-            var result =  mapOf(entry("success", true), entry("dto", dto));
+            var result =  mapOf("success", true, "dto", dto);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save entity: ", e);
-            var result = mapOf(entry("success", false), entry("error", e.getMessage()));
+            var result = mapOf("success", false, "error", e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
     }

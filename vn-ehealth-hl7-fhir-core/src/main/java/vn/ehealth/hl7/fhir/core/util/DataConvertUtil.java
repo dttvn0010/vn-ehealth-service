@@ -25,27 +25,43 @@ public class DataConvertUtil {
         return lst;
     }
     
-    public static class Entry<K, V> {
-        public K key;
-        public V value;
-    }
-    
-    public static <K,V> Entry<K, V> entry(K key, V value) {
-        var it = new Entry<K, V>();
-        it.key = key;
-        it.value = value;
-        return it;
-    }
-    
-    @SafeVarargs
-    public static <K,V> Map<K, V> mapOf(Entry<K,V> ...items) {
-        var m = new HashMap<K, V>();
-        for(var item : items) {
-            if(item.key != null && item.value != null) {
-                m.put(item.key, item.value);
+    public static  Map<String, String> mapOf(String ...obj) {
+        var m = new HashMap<String, String>();
+        if(obj.length % 2 != 0) {
+            throw new RuntimeException("Number of map items must be even");
+        }
+        int n = obj.length / 2;
+        for(int i = 0; i < n; i++) {
+            String key = obj[2*i];
+            String value = obj[2*i + 1];
+            if(key != null && value != null) {
+                m.put(key, value);
             }
         }
         return m;
+    }
+    
+    public static Map<String, Object> mapOf(Object ...obj) {
+        var m = new HashMap<String, Object>();
+        if(obj.length % 2 != 0) {
+            throw new RuntimeException("Number of map items must be even");
+        }
+        int n = obj.length / 2;
+        for(int i = 0; i < n; i++) {
+            Object key = obj[2*i];
+            Object value = obj[2*i + 1];
+            if(key != null && value != null) {
+                m.put(key.toString(), value);
+            }
+        }
+        return m;
+    }
+    
+    public static <T> Map<String, Map<String, T>> mapOf3(String keyLevel1, String keyLevel2, T value) {
+        if(value != null) {
+            return Map.of(keyLevel1, Map.of(keyLevel2, value));
+        }
+        return new HashMap<>();
     }
     
     public static <T, U> List<U> transform(List<T> lst, Function<T, U> func) {

@@ -28,6 +28,7 @@ import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
+import vn.ehealth.utils.MongoUtils;
 
 public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResource> {
     @Autowired
@@ -195,14 +196,6 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         return retVal;
     }
     
-    private Criteria createCriteria(Map<String, Object> params) {
-        var criteria = Criteria.where(ConstantKeys.SP_ACTIVE).is(true);
-        for(var item : params.entrySet()) {
-            criteria.and(item.getKey()).is(item.getValue());
-        }
-        return criteria;
-    }
-    
     @SuppressWarnings("unchecked")
     public List<FHIR> getAll() {
         Query query = Query.query(Criteria.where(ConstantKeys.SP_ACTIVE).is(true));
@@ -211,8 +204,9 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings("unchecked")
-    public FHIR findOne(Map<String, Object> params) {        
-        var query = Query.query(createCriteria(params));        
+    public FHIR findOne(Map<String, Object> params) {     
+        var criteria = MongoUtils.createCriteria(params).and(ConstantKeys.SP_ACTIVE).is(true);
+        var query = Query.query(criteria);        
         var entity = (ENT) mongo.findOne(query, getEntityClass());
         if (entity != null) {
             return transform(entity);
@@ -221,8 +215,9 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings("unchecked")
-    public List<FHIR> find(Map<String, Object> params, int start, int count) {        
-        var query = Query.query(createCriteria(params));
+    public List<FHIR> find(Map<String, Object> params, int start, int count) {
+        var criteria = MongoUtils.createCriteria(params).and(ConstantKeys.SP_ACTIVE).is(true);
+        var query = Query.query(criteria);
         if(start >= 0) {
             query.skip(start);
         }
@@ -233,8 +228,9 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         return DataConvertUtil.transform(lst, x -> transform((ENT)x));
     }
     
-    public long count(Map<String, Object> params) {        
-        var query = Query.query(createCriteria(params));
+    public long count(Map<String, Object> params) {
+        var criteria = MongoUtils.createCriteria(params).and(ConstantKeys.SP_ACTIVE).is(true);
+        var query = Query.query(criteria);
         return mongo.count(query, getEntityClass());
     }
     
