@@ -102,6 +102,7 @@ public class Constants {
         final public static String LOAI_DICH_VU_KY_THUAT = codeSystems.getProperty("loai_dich_vu_ky_thuat");
 
         final public static String VAI_TRO_PTT = codeSystems.getProperty("vaitro_pttt");
+        final public static String VI_TRI_MAU_SINH_THIET = codeSystems.getProperty("vi_tri_mau_sinh_thiet");
     }
     
     
@@ -113,12 +114,14 @@ public class Constants {
         final public static String QUOC_TICH = extensionURLs.getProperty("quoctich");
         
         final public static String TRINH_TU_PTTT = extensionURLs.getProperty("pttt.trinhtu");
+        final public static String DAI_THE_GPB = extensionURLs.getProperty("gpb.daithe");
+        final public static String VI_THE_GPB = extensionURLs.getProperty("gpb.vithe");
     }
     
     public static interface LoaiDichVuKT {
         final public static String PHAU_THUAT_THU_THUAT = "SUR";
         final public static String XET_NGHIEM = "LAB";
-        final public static String GIAI_PHAI_BENH = "SP";
+        final public static String GIAI_PHAU_BENH = "SP";
         final public static String CHAN_DOAN_HINH_ANH = "CA";        
         final public static String THAM_DO_CHUC_NANG = "XRC";
     }
