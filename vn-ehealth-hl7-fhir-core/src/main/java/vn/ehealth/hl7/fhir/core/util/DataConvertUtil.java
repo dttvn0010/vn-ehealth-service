@@ -50,8 +50,10 @@ public class DataConvertUtil {
     
     public static <T, U> List<U> transform(List<T> lst, Function<T, U> func) {
         if(lst != null) {
-            return lst.stream().map(x -> func.apply(x))
-                    .collect(Collectors.toList());
+            return lst.stream()
+                      .filter(x -> x != null) 
+                      .map(x -> func.apply(x))
+                      .collect(Collectors.toList());
         }
         return null;
     }

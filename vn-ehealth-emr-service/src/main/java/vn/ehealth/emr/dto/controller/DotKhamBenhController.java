@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.DotKhamBenh;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
-import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
+import vn.ehealth.hl7.fhir.ehr.dao.impl.EpisodeOfCareDao;
 
 @RestController
 @RequestMapping("/api/dot_kham_benh")
@@ -25,29 +25,30 @@ public class DotKhamBenhController {
 
     private static Logger logger = LoggerFactory.getLogger(BenhNhanController.class);
     
-    @Autowired private EncounterDao encounterDao;
+    @Autowired private EpisodeOfCareDao episodeOfCareDao;
         
     @GetMapping("/get_by_id")
     public ResponseEntity<?> getById(@RequestParam String id) {
-        var obj = encounterDao.read(new IdType(id));
+        var obj = episodeOfCareDao.read(new IdType(id));
         var dto = DotKhamBenh.fromFhir(obj);
         return ResponseEntity.ok(dto);
     }
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
-        var lst = transform(encounterDao.getAll(), x -> DotKhamBenh.fromFhir(x));
+        var lst = transform(episodeOfCareDao.getAll(), x -> DotKhamBenh.fromFhir(x));
         return ResponseEntity.ok(lst);
     }
     
     @PostMapping("/save")
-    public ResponseEntity<?> createOrUpdate(@RequestBody DotKhamBenh dto) {
+    public ResponseEntity<?> save(@RequestBody DotKhamBenh dto) {
         try {
-            var obj = DotKhamBenh.toFhir(dto);
+            var obj = DotKhamBenh.toFhir(dto);            
+            
             if(obj.hasId()) {
-                obj = encounterDao.update(obj, obj.getIdElement());
+                obj = episodeOfCareDao.update(obj, obj.getIdElement());
             }else {
-                obj = encounterDao.create(obj);
+                obj = episodeOfCareDao.create(obj);
             }
             dto = DotKhamBenh.fromFhir(obj);
             var result = mapOf(entry("success", true), entry("dto", dto));

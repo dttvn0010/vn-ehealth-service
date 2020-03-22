@@ -53,7 +53,6 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
         super(serviceRequest);
     }
     
-    public String encounterId;
     public DanhMuc dmPttt;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -82,9 +81,6 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
     
     @Override
     public Map<String, Object> toFhir() {
-        var dotKhamBenh = DotKhamBenh.fromFhirId(this.encounterId);
-        if(dotKhamBenh == null || dotKhamBenh.benhNhan == null) return null;
-        
         //ServiceRequest
         ServiceRequest serviceRequest;
         if(this.id != null) {
@@ -99,7 +95,7 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
                                 CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
         
         serviceRequest.setCategory(listOf(ptttConcept));
-        serviceRequest.setSubject(BaseModelDTO.toReference(dotKhamBenh.benhNhan));
+        serviceRequest.setSubject(createReference(ResourceType.Patient, this.patientId));
         serviceRequest.setEncounter(createReference(ResourceType.Encounter, this.encounterId));
         serviceRequest.setRequester(CanboYte.toReference(this.bacSiYeuCau));
         serviceRequest.setAuthoredOn(this.ngayYeuCau);
@@ -158,7 +154,6 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
         if(serviceRequest == null) return;
         
         // ServiceRequest
-        this.encounterId = idFromRef(serviceRequest.getEncounter());
         this.ngayYeuCau = serviceRequest.getAuthoredOn();
         this.bacSiYeuCau = CanboYte.fromReference(serviceRequest.getRequester());
         this.noiDungYeuCau = serviceRequest.hasOrderDetail()? serviceRequest.getOrderDetailFirstRep().getText() : "";

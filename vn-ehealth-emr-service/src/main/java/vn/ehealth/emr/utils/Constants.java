@@ -12,11 +12,19 @@ import org.springframework.core.io.ClassPathResource;
 public class Constants {
     
     private static Logger logger = LoggerFactory.getLogger(Constants.class);
-            
+    
+    public static Properties identifierSystems = new Properties();
     public static Properties codeSystems = new Properties();
     public static Properties extensionURLs = new Properties();
     
     static {
+        try {
+            var input = new ClassPathResource("identifier_systems.properties").getInputStream();
+            identifierSystems.load(new InputStreamReader(input, Charset.forName("UTF-8")));
+        } catch (IOException e) {
+            logger.error("Cannot read identifier_systems.properties", e);
+        }
+        
         try {
             var input = new ClassPathResource("code_systems.properties").getInputStream();
             codeSystems.load(new InputStreamReader(input, Charset.forName("UTF-8")));
@@ -70,18 +78,17 @@ public class Constants {
     public static interface NGUON_DU_LIEU {
         final public static int TU_HIS = 1;
     }
-    
-    public static String getProperty(String property) {
-        return codeSystems != null? codeSystems.getProperty(property, "") : "";
+
+    public static interface IdentifierSystem{
+        final public static String CMND = identifierSystems.getProperty("cmnd");
+        final public static String THE_BHYT = identifierSystems.getProperty("the_bhyt");
+        final public static String CO_SO_KHAM_BENH = identifierSystems.getProperty("co_so_kham_benh");
+        final public static String CHUNG_CHI_HANH_NGHE = identifierSystems.getProperty("chung_chi_hanh_nghe");        
+        final public static String MA_HO_SO = identifierSystems.getProperty("ma_ho_so");
     }
     
     public static interface CodeSystemValue {
-        final public static String PHONE = "phone";
-        final public static String EMAIL = "email";
-        
-        final public static String CMND = codeSystems.getProperty("cmnd");
-        final public static String THE_BHYT = codeSystems.getProperty("the_bhyt");
-        
+        final public static String ICD10 = "http://hl7.org/fhir/sid/icd-10";
         final public static String DVHC = codeSystems.getProperty("dvhc");
         final public static String QUOC_GIA = codeSystems.getProperty("quoc_gia");
         
@@ -89,21 +96,18 @@ public class Constants {
         final public static String TON_GIAO = codeSystems.getProperty("tongiao");
         final public static String NGHE_NGHIEP = codeSystems.getProperty("nghe_nghiep");
         final public static String DOI_TUONG_TAI_CHINH = codeSystems.getProperty("doituong_taichinh");
+        final public static String LOAI_TO_CHUC = codeSystems.getProperty("loai_to_chuc");
         
-        final public static String CHUNG_CHI_HANH_NGHE = codeSystems.getProperty("chung_chi_hanh_nghe");
-        
-        final public static String CO_SO_KHAM_BENH = codeSystems.getProperty("co_so_kham_benh");
-        final public static String DOT_KHAM_BENH = codeSystems.getProperty("dot_kham_benh");
         final public static String LOAI_KHAM_BENH = codeSystems.getProperty("loai_kham_benh");
         final public static String KHOA_DIEU_TRI = codeSystems.getProperty("khoa_dieu_tri");
-        
-        
+                
         final public static String DICH_VU_KY_THUAT = codeSystems.getProperty("dich_vu_ky_thuat");
         final public static String LOAI_DICH_VU_KY_THUAT = codeSystems.getProperty("loai_dich_vu_ky_thuat");
 
         final public static String VAI_TRO_PTTT = codeSystems.getProperty("vaitro_pttt");
         final public static String CHI_SO_XET_NGHIEM = codeSystems.getProperty("chiso_xetnghiem");
         final public static String VI_TRI_MAU_SINH_THIET = codeSystems.getProperty("vi_tri_mau_sinh_thiet");
+        
     }
     
     
@@ -117,6 +121,11 @@ public class Constants {
         final public static String TRINH_TU_PTTT = extensionURLs.getProperty("pttt.trinhtu");
         final public static String DAI_THE_GPB = extensionURLs.getProperty("gpb.daithe");
         final public static String VI_THE_GPB = extensionURLs.getProperty("gpb.vithe");
+    }
+    
+    public static interface LoaiToChuc {
+        final public static String CO_SO_KHAM_BENH = "HOS";
+        final public static String KHOA_DIEU_TRI = "FAL";
     }
     
     public static interface LoaiDichVuKT {

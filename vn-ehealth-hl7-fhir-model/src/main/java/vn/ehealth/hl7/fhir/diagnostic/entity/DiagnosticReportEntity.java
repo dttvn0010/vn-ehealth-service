@@ -45,7 +45,7 @@ public class DiagnosticReportEntity extends BaseResource {
     public List<BaseReference> imagingStudy;
     public List<DiagnosticReportMediaEntity> media;
     public String conclusion;
-    //public List<CodeableConcept> codedDiagnosis;
+    public List<BaseCodeableConcept> conclusionCode;
     public List<BaseAttachment> presentedForm;
     
     public static DiagnosticReportEntity fromDiagnosticReport(DiagnosticReport obj) {
@@ -68,6 +68,7 @@ public class DiagnosticReportEntity extends BaseResource {
         ent.imagingStudy = obj.hasImagingStudy()? BaseReference.fromReferenceList(obj.getImagingStudy()) : null;
         ent.media = obj.hasMedia()? transform(obj.getMedia(), DiagnosticReportMediaEntity::fromDiagnosticReportMediaComponent) : null;                
         ent.conclusion = obj.hasConclusion()? obj.getConclusion() : null;
+        ent.conclusionCode = obj.hasConclusionCode()? BaseCodeableConcept.fromCodeableConcept(obj.getConclusionCode()) : null;
         ent.presentedForm = obj.hasPresentedForm()? BaseAttachment.fromAttachmentList(obj.getPresentedForm()) : null;
          
         return ent;
@@ -93,6 +94,7 @@ public class DiagnosticReportEntity extends BaseResource {
         obj.setImagingStudy(BaseReference.toReferenceList(ent.imagingStudy));
         obj.setMedia(transform(ent.media, DiagnosticReportMediaEntity::toDiagnosticReportMediaComponent));
         obj.setConclusion(ent.conclusion);
+        obj.setConclusionCode(BaseCodeableConcept.toCodeableConcept(ent.conclusionCode));
         obj.setPresentedForm(BaseAttachment.toAttachmentList(ent.presentedForm));
         
         return obj;

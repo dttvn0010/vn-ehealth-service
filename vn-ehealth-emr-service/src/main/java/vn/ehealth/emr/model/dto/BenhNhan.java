@@ -5,20 +5,20 @@ import java.util.Map;
 
 import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.ExtensionURL;
+import vn.ehealth.emr.utils.Constants.IdentifierSystem;
 import vn.ehealth.emr.utils.MessageUtils;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
-import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 public class BenhNhan  extends BaseModelDTO {
     public String tenDayDu;
@@ -62,14 +62,14 @@ public class BenhNhan  extends BaseModelDTO {
         
         if(obj.hasIdentifier()) {
             var nationalIdentifier = FPUtil.findFirst(obj.getIdentifier(), 
-                    x -> CodeSystemValue.CMND.equals(x.getSystem()));
+                    x -> IdentifierSystem.CMND.equals(x.getSystem()));
             
             if(nationalIdentifier != null) {
                 this.cmnd = nationalIdentifier.getValue();
             }
             
             var mohIdentifier = FPUtil.findFirst(obj.getIdentifier(), 
-                    x -> CodeSystemValue.THE_BHYT.equals(x.getSystem()));
+                    x -> IdentifierSystem.THE_BHYT.equals(x.getSystem()));
             
             if(mohIdentifier != null) {
                 this.soTheBhyt = mohIdentifier.getValue();
@@ -88,13 +88,13 @@ public class BenhNhan  extends BaseModelDTO {
         
         if(obj.hasTelecom()) {
             var phone = FPUtil.findFirst(obj.getTelecom(), 
-                                    x -> x.hasSystem() && CodeSystemValue.PHONE.equals(x.getSystem().toCode())); 
+                                    x -> x.hasSystem() && ContactPointSystem.PHONE.equals(x.getSystem())); 
             if(phone != null) {
                 this.soDienThoai = phone.getValue();
             }
             
             var email = FPUtil.findFirst(obj.getTelecom(), 
-                                    x -> x.hasSystem() && CodeSystemValue.EMAIL.equals(x.getSystem().toCode()));
+                                    x -> x.hasSystem() && ContactPointSystem.EMAIL.equals(x.getSystem()));
             if(email != null) {
                 this.email = email.getValue();
             }
@@ -133,24 +133,17 @@ public class BenhNhan  extends BaseModelDTO {
         return new BenhNhan(obj);
     }
     
-    public static BenhNhan fromReference(Reference ref) {
-        var obj = DaoFactory.getPatientDao().read(createIdType(ref));
-        return fromFhir(obj);
-    }
-    
     public static Patient toFhir(BenhNhan dto) {
         if(dto == null) return null;
-        var obj = DaoFactory.getPatientDao().read(dto.getIdPart());
         
-        if(obj == null) {
-            obj = new Patient();
-        }
+        var obj = new Patient();
         
+        obj.setId(dto.id);        
         obj.setName(listOf(createHumanName(dto.tenDayDu)));        
         obj.setBirthDate(dto.ngaySinh);
         
-        var nationalIdentifier = createIdentifier(dto.cmnd, CodeSystemValue.CMND);
-        var mohIdentifier = createIdentifier(dto.soTheBhyt, CodeSystemValue.THE_BHYT, null, dto.ngayHetHanTheBhyt);
+        var nationalIdentifier = createIdentifier(dto.cmnd, IdentifierSystem.CMND);
+        var mohIdentifier = createIdentifier(dto.soTheBhyt, IdentifierSystem.THE_BHYT, null, dto.ngayHetHanTheBhyt);
         
         obj.setIdentifier(listOf(nationalIdentifier, mohIdentifier));
         
@@ -158,8 +151,8 @@ public class BenhNhan  extends BaseModelDTO {
             obj.setGender(AdministrativeGender.fromCode(dto.dmGioiTinh.ma));
         
         obj.setAddress(listOf(DiaChi.toFhirModel(dto.diaChi)));
-        obj.setTelecom(listOf(createContactPoint(dto.soDienThoai, CodeSystemValue.PHONE),
-                              createContactPoint(dto.email, CodeSystemValue.EMAIL)
+        obj.setTelecom(listOf(createContactPoint(dto.soDienThoai, ContactPointSystem.PHONE),
+                              createContactPoint(dto.email, ContactPointSystem.EMAIL)
                         ));
         
         var danTocExt = createExtension(ExtensionURL.DAN_TOC, DanhMuc.toConcept(dto.dmDanToc, CodeSystemValue.DAN_TOC));

@@ -1,0 +1,5 @@
+cmnd = vn:nation:ids:national_id
+the_bhyt = https://www.moh.gov.vn/PatientRegistry/Patient-identifier
+co_so_kham_benh = https://fhir.emr.vn.com/Provider-v1.0
+chung_chi_hanh_nghe = "https://www.moh.gov.vn/ProviderRegistry/Provider-identifier"
+ma_ho_so = https://fhir.emr.vn.com/HSBA-v1.0

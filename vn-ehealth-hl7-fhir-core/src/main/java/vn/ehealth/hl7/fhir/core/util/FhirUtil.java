@@ -75,10 +75,10 @@ public class FhirUtil {
     }
     
     
-    public static ContactPoint createContactPoint(String value, String system) {
+    public static ContactPoint createContactPoint(String value, ContactPointSystem system) {
         var contactPoint = new ContactPoint();
         contactPoint.setValue(value);
-        contactPoint.setSystem(ContactPointSystem.fromCode(system));
+        contactPoint.setSystem(system);
         return contactPoint;
     }
     
@@ -137,6 +137,11 @@ public class FhirUtil {
         return new IdType(id);
     }
     
+    public static IdType idTypeFromRef(Reference ref) {
+        var id = idFromRef(ref);
+        return id != null? new IdType(id) : null;
+    }
+    
     public static String idFromRef(Reference ref) {
         if((ref != null && ref.hasReference())) {
             var arr = ref.getReference().split("/");
@@ -144,7 +149,7 @@ public class FhirUtil {
                 return arr[1];
             }
         }
-        return "";
+        return null;
     }
     
     public static IdType createIdType(Reference ref) {
