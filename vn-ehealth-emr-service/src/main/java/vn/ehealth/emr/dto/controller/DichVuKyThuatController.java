@@ -37,6 +37,7 @@ import vn.ehealth.emr.model.dto.ChanDoanHinhAnh;
 import vn.ehealth.emr.model.dto.DichVuKyThuat;
 import vn.ehealth.emr.model.dto.GiaiPhauBenh;
 import vn.ehealth.emr.model.dto.PhauThuatThuThuat;
+import vn.ehealth.emr.model.dto.XetNghiem;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ProcedureDao;
@@ -279,7 +280,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         }
     }
     
- // ========================================  GiaiPhauBenh ===============================
+    // ========================================  GiaiPhauBenh ===============================
     private boolean isGiaiPhauBenh(ServiceRequest obj) {
         if(obj != null && obj.hasCategory()) {
             for(var concept : obj.getCategory()) {
@@ -326,6 +327,58 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save giaiPhauBenh: ", e);
+            var result = mapOf(entry("success", false), entry("error", e.getMessage()));
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    // ========================================  XetNghiem ===============================
+    private boolean isXetNghiem(ServiceRequest obj) {
+        if(obj != null && obj.hasCategory()) {
+            for(var concept : obj.getCategory()) {
+                boolean isPttt = conceptHasCode(concept, LoaiDichVuKT.XET_NGHIEM, 
+                                                CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
+                if(isPttt) return true;
+            }
+        }
+        return false;
+    }
+    
+    @GetMapping("/count_xetnghiem")
+    public long countXetNgheim(@RequestParam Optional<String> patientId, 
+                                                    @RequestParam Optional<String> encounterId) {
+        return countDichVuKT(LoaiDichVuKT.XET_NGHIEM, patientId, encounterId);
+    }
+    
+    @GetMapping("/get_xetnghiem_list")
+    public ResponseEntity<?> getXetNghiemList(@RequestParam Optional<String> patientId, 
+                                                    @RequestParam Optional<String> encounterId,
+                                                    @RequestParam Optional<Integer> start,
+                                                    @RequestParam Optional<Integer> end) {
+        
+        var lst = getDichVuKTList(LoaiDichVuKT.XET_NGHIEM, patientId, encounterId, start, end);
+        var result = transform(lst, x -> new XetNghiem(x));
+        return ResponseEntity.ok(result);
+    }
+    
+    @GetMapping("/get_xetnghiem_by_id/{id}")
+    public ResponseEntity<?> getXetNghiemById(@PathVariable String id) {
+        var obj = serviceRequestDao.read(new IdType(id));
+        if(isXetNghiem(obj)) {
+            return ResponseEntity.ok(new XetNghiem(obj));
+        }
+        return new ResponseEntity<>("No xetNghiem with id:" + id, HttpStatus.BAD_REQUEST);
+    }
+    
+    @PostMapping("/save_xetnghiem")
+    public ResponseEntity<?> saveXetNghiem(@RequestBody XetNghiem dto) {
+        try {
+            var serviceRequest = saveDichVuKT(dto);
+            var xetNghiem = new XetNghiem(serviceRequest);
+            var result = mapOf(entry("success", true), entry("xetNghiem", xetNghiem));
+            return ResponseEntity.ok(result);
+        }catch(Exception e) {
+            logger.error("Can not save xetNghiem: ", e);
             var result = mapOf(entry("success", false), entry("error", e.getMessage()));
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }

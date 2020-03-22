@@ -76,7 +76,7 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         }
         
         var gpbConcept = createCodeableConcept(LoaiDichVuKT.GIAI_PHAU_BENH, 
-                MessageUtils.get("text.SP"), 
+                MessageUtils.get("text.XRC"), 
                 CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
         
         serviceRequest.setCategory(listOf(gpbConcept));
@@ -124,7 +124,7 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         diagnosticReport.setCategory(listOf(gpbConcept));
         diagnosticReport.getConclusionCode().add(createCodeableConcept(this.maChanDoanGpb, this.moTaChanDoanGpb, null));
         
-//        diagnosticReport.setCode(serviceRequest.getCode());        
+        diagnosticReport.setCode(serviceRequest.getCode());        
         diagnosticReport.setConclusion(this.ketLuan);
         
         return mapOf(

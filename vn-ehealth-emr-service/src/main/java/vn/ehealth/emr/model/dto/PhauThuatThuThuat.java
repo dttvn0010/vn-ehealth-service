@@ -39,7 +39,7 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
         public static ProcedurePerformerComponent toPerformer(ThanhVienPttt dto) {
             if(dto == null) return null;
             var performer = new ProcedurePerformerComponent();
-            performer.setFunction(DanhMuc.toConcept(dto.dmVaiTro, CodeSystemValue.VAI_TRO_PTT));
+            performer.setFunction(DanhMuc.toConcept(dto.dmVaiTro, CodeSystemValue.VAI_TRO_PTTT));
             performer.setActor(BaseModelDTO.toReference(dto.bacsi));
             return performer;
         }
