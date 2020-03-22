@@ -118,7 +118,7 @@ public class XetNghiem extends DichVuKyThuat {
                 obs.setSubject(serviceRequest.getSubject());
                 obs.setEncounter(serviceRequest.getEncounter());
                 
-                //obs.setCode(DanhMuc.toConcept(ketQuaXetNghiem.dmChiSoXetNghiem, CodeSystemValue.CHI_SO_XET_NGHIEM));
+                obs.setCode(DanhMuc.toConcept(ketQuaXetNghiem.dmChiSoXetNghiem, CodeSystemValue.CHI_SO_XET_NGHIEM));
                 obs.setValue(new StringType(ketQuaXetNghiem.giaTri));
                 observations.add(obs);
             }

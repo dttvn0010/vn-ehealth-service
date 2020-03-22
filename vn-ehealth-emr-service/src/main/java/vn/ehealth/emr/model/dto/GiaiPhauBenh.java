@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.Specimen;
@@ -77,7 +76,7 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         }
         
         var gpbConcept = createCodeableConcept(LoaiDichVuKT.GIAI_PHAU_BENH, 
-                MessageUtils.get("text.SP"), 
+                MessageUtils.get("text.XRC"), 
                 CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
         
         serviceRequest.setCategory(listOf(gpbConcept));
@@ -125,7 +124,7 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         diagnosticReport.setCategory(listOf(gpbConcept));
         diagnosticReport.getConclusionCode().add(createCodeableConcept(this.maChanDoanGpb, this.moTaChanDoanGpb, null));
         
-//        diagnosticReport.setCode(serviceRequest.getCode());        
+        diagnosticReport.setCode(serviceRequest.getCode());        
         diagnosticReport.setConclusion(this.ketLuan);
         
         return mapOf(

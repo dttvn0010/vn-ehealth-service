@@ -101,7 +101,8 @@ public class Constants {
         final public static String DICH_VU_KY_THUAT = codeSystems.getProperty("dich_vu_ky_thuat");
         final public static String LOAI_DICH_VU_KY_THUAT = codeSystems.getProperty("loai_dich_vu_ky_thuat");
 
-        final public static String VAI_TRO_PTT = codeSystems.getProperty("vaitro_pttt");
+        final public static String VAI_TRO_PTTT = codeSystems.getProperty("vaitro_pttt");
+        final public static String CHI_SO_XET_NGHIEM = codeSystems.getProperty("chiso_xetnghiem");
         final public static String VI_TRI_MAU_SINH_THIET = codeSystems.getProperty("vi_tri_mau_sinh_thiet");
     }
     
