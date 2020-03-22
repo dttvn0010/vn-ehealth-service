@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.ChanDoanHinhAnh;
 import vn.ehealth.emr.model.dto.DichVuKyThuat;
+import vn.ehealth.emr.model.dto.GiaiPhauBenh;
 import vn.ehealth.emr.model.dto.PhauThuatThuThuat;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
@@ -273,6 +274,58 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             logger.error("Can not save phauThuatThuThuat: ", e);
+            var result = mapOf(entry("success", false), entry("error", e.getMessage()));
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+ // ========================================  GiaiPhauBenh ===============================
+    private boolean isGiaiPhauBenh(ServiceRequest obj) {
+        if(obj != null && obj.hasCategory()) {
+            for(var concept : obj.getCategory()) {
+                boolean isGpb = conceptHasCode(concept, LoaiDichVuKT.GIAI_PHAU_BENH, 
+                                                CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
+                if(isGpb) return true;
+            }
+        }
+        return false;
+    }
+    
+    @GetMapping("/count_gpb")
+    public long countGiaiPhauBenh(@RequestParam Optional<String> patientId, 
+                                                    @RequestParam Optional<String> encounterId) {
+        return countDichVuKT(LoaiDichVuKT.GIAI_PHAU_BENH, patientId, encounterId);
+    }
+    
+    @GetMapping("/get_gpb_list")
+    public ResponseEntity<?> getGiaiPhauBenhList(@RequestParam Optional<String> patientId, 
+                                                    @RequestParam Optional<String> encounterId,
+                                                    @RequestParam Optional<Integer> start,
+                                                    @RequestParam Optional<Integer> count) {
+        
+        var lst = getDichVuKTList(LoaiDichVuKT.GIAI_PHAU_BENH, patientId, encounterId, start, count);
+        var result = transform(lst, x -> new GiaiPhauBenh(x));
+        return ResponseEntity.ok(result);
+    }
+    
+    @GetMapping("/get_gpb_by_id/{id}")
+    public ResponseEntity<?> getGiaiPhauBenhById(@PathVariable String id) {
+        var obj = serviceRequestDao.read(new IdType(id));
+        if(isGiaiPhauBenh(obj)) {
+            return ResponseEntity.ok(new GiaiPhauBenh(obj));
+        }
+        return new ResponseEntity<>("No giaiPhauBenh with id:" + id, HttpStatus.BAD_REQUEST);
+    }
+    
+    @PostMapping("/save_gpb")
+    public ResponseEntity<?> saveGiaiPhauBenh(@RequestBody GiaiPhauBenh dto) {
+        try {
+            var serviceRequest = saveDichVuKT(dto);
+            var gpb = new GiaiPhauBenh(serviceRequest);
+            var result = mapOf(entry("success", true), entry("giaiPhauBenh", gpb));
+            return ResponseEntity.ok(result);
+        }catch(Exception e) {
+            logger.error("Can not save giaiPhauBenh: ", e);
             var result = mapOf(entry("success", false), entry("error", e.getMessage()));
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
