@@ -29,7 +29,10 @@ public class VaoKhoa {
         if(ent == null || !ent.hasLocation()) return;
         this.locationId = ent.getLocation().getReference();
         var location =  DaoFactory.getLocationDao().read(createIdType(this.locationId));
-        var khoaDieuTri = KhoaDieuTri.fromFhir(location);
+        
+        var orgRef = location.getManagingOrganization();
+        var org = DaoFactory.getOrganizationDao().read(createIdType(orgRef));
+        var khoaDieuTri = KhoaDieuTri.fromFhir(org);
         if(khoaDieuTri != null) {
             this.dmKhoaDieuTri = khoaDieuTri.dmLoaiKhoa;
         }

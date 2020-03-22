@@ -6,7 +6,7 @@ import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
-import org.hl7.fhir.r4.model.Location;
+import org.hl7.fhir.r4.model.Organization;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 
@@ -20,7 +20,7 @@ public class KhoaDieuTri extends BaseModelDTO {
         super();
     }
     
-    public KhoaDieuTri(Location ent) {
+    public KhoaDieuTri(Organization ent) {
         super(ent);
         if(ent == null) return;
         
@@ -29,22 +29,22 @@ public class KhoaDieuTri extends BaseModelDTO {
         this.dmLoaiKhoa = new DanhMuc(findConceptBySystem(ent.getType(), CodeSystemValue.KHOA_DIEU_TRI));
     }
     
-    public static KhoaDieuTri fromFhir(Location ent) {
-        if(ent == null) return null;
-        return new KhoaDieuTri(ent);        
+    public static KhoaDieuTri fromFhir(Organization obj) {
+        if(obj == null) return null;
+        return new KhoaDieuTri(obj);        
     }
     
     public static KhoaDieuTri fromReference(Reference ref) {
         if(ref != null) {
-            var ent = DaoFactory.getLocationDao().read(createIdType(ref));
-            return fromFhir(ent);
+            var obj = DaoFactory.getOrganizationDao().read(createIdType(ref));
+            return fromFhir(obj);
         }
         return null;        
     }
     
-    public static Location toFhir(KhoaDieuTri dto) {
+    public static Organization toFhir(KhoaDieuTri dto) {
         if(dto == null) return null;
-        var ent = new Location();
+        var ent = new Organization();
         ent.setId(dto.id);
         ent.setIdentifier(listOf(createIdentifier(dto.ma, CodeSystemValue.CO_SO_KHAM_BENH)));
         ent.setName(dto.ten);
