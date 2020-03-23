@@ -1,0 +1,32 @@
+{
+    "encounterId": "17986862-6547-4f7f-98f9-21bacf60480f",
+    "ngayKeDon": "2018-06-29 00:00:00",
+    "bacSiKeDon": {
+        "id": "bb41d74e-3e9e-4c71-ab6e-626e3a98cb93",
+        "ten": "Bác sĩ A"
+    },
+    "soDon": "10001011",
+    "dsDonThuocChiTiet": [
+        {
+            "dmThuoc": {
+                "ma": "001",
+                "ten": "Ampicillin-200mg"
+            },
+            "dmDuongDungThuoc": {
+                "ma": "01",
+                "ten": "Uống"
+            },
+            "tanXuatDungThuoc": {
+                "soLan": 2,
+                "donViThoiGian": "ngày"
+            },
+            "ngayBatDau": "2018-06-29 00:00:00",
+            "ngayKetThuc": "2018-07-09 00:00:00",
+            "lieuLuong": {
+                "soLuong": 20,
+                "donVi": "viên"
+            },
+            "chiDan": "Chỉ dẫn dùng thuốc"
+        }
+    ]
+}
