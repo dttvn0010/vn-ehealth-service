@@ -2,6 +2,8 @@ package vn.ehealth.hl7.fhir.patient.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hl7.fhir.r4.model.AllergyIntolerance;
 import org.hl7.fhir.r4.model.CarePlan;
 import org.hl7.fhir.r4.model.CareTeam;
 import org.hl7.fhir.r4.model.Condition;
@@ -9,6 +11,7 @@ import org.hl7.fhir.r4.model.DetectedIssue;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.EpisodeOfCare;
+import org.hl7.fhir.r4.model.FamilyMemberHistory;
 import org.hl7.fhir.r4.model.Goal;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.ImagingStudy;
@@ -370,7 +373,16 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 				if (observations != null && observations.size() > 0) {
 					resources.addAll(observations);
 				}
-
+				// FamilyMemberHistory
+				List<FamilyMemberHistory> familyMemberHistorys = DaoFactory.getFamilyMemberHistoryDao().findByCriteria(criteria);
+				if (familyMemberHistorys != null && familyMemberHistorys.size() > 0) {
+					resources.addAll(familyMemberHistorys);
+				}
+				// AllergyIntolerance
+				List<AllergyIntolerance> allergyIntolerances = DaoFactory.getAllergyIntoleranceDao().findByCriteria(criteria);
+				if (allergyIntolerances != null && allergyIntolerances.size() > 0) {
+					resources.addAll(allergyIntolerances);
+				}
 			}
 		}
 

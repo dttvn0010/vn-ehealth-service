@@ -6,7 +6,6 @@ import java.util.TimeZone;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hl7.fhir.r4.hapi.validation.FhirInstanceValidator;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -25,9 +24,7 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.CorsInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.ResponseHighlighterInterceptor;
-import ca.uhn.fhir.rest.server.interceptor.ResponseValidatingInterceptor;
 import ca.uhn.fhir.util.VersionUtil;
-import ca.uhn.fhir.validation.ResultSeverityEnum;
 import vn.ehealth.hl7.fhir.clinical.providers.AllergyIntoleranceProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.CarePlanProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.ClinicalImpressionProvider;
