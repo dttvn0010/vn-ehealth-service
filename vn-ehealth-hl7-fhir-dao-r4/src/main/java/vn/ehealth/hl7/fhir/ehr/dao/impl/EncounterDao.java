@@ -58,7 +58,7 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 		}
 		Pageable pageableRequest;
 		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-				count != null ? count : ConstantKeys.DEFAULT_PAGE_MAX_SIZE);
+				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));

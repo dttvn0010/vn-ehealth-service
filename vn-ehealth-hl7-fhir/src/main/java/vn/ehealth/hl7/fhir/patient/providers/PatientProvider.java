@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Parameters;
@@ -48,15 +47,16 @@ import vn.ehealth.hl7.fhir.patient.entity.PatientEntity;
 public class PatientProvider extends BaseController<PatientEntity, Patient> implements IResourceProvider {
 	static Logger logger = LoggerFactory.getLogger(PatientProvider.class);
 
-	@Autowired PatientDao patientDao;
+	@Autowired
+	PatientDao patientDao;
 
 	private static final Logger log = LoggerFactory.getLogger(PatientProvider.class);
 
 	@Override
-    protected BaseDao<PatientEntity, Patient> getDao() {
-        return patientDao;
-    }
-	
+	protected BaseDao<PatientEntity, Patient> getDao() {
+		return patientDao;
+	}
+
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return Patient.class;
@@ -68,7 +68,7 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS_USE) TokenParam addressUse,
 			@OptionalParam(name = ConstantKeys.SP_ANIMAL_BREED) TokenParam animalBreed,
 			@OptionalParam(name = ConstantKeys.SP_ANIMAL_SPECIES) TokenParam animalSpecies,
-			@OptionalParam(name = ConstantKeys.SP_DECEASED) TokenParam deceased, 
+			@OptionalParam(name = ConstantKeys.SP_DECEASED) TokenParam deceased,
 			@OptionalParam(name = ConstantKeys.SP_EMAIL) TokenParam email,
 			@OptionalParam(name = ConstantKeys.SP_GENDER) TokenParam gender,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
@@ -95,9 +95,9 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 			// Parameters for all resources
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag, 
+			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
 			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query, 
+			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
 			// Search result parameters
@@ -126,7 +126,8 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 						birthDate, deathDate, address, addressCity, addressCountry, addressState, familyName, givenName,
 						name, phonetic, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, "",
 						count);
-			//final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
+			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x
+			// -> x);
 			final List<IBaseResource> finalResults = results;
 
 			return new IBundleProvider() {
@@ -167,8 +168,6 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 		}
 	}
 
-	
-
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
@@ -206,24 +205,57 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 			@OptionalParam(name = "_content") StringParam _content
 	// Search result parameters
 	) {
-		Date cal = new Date();
 		Parameters retVal = new Parameters();
 		long total = patientDao.findMatchesAdvancedTotal(fhirContext, active, addressUse, animalBreed, animalSpecies,
 				deceased, email, gender, identifier, language, phone, telecom, generalPractitioner, link, organization,
 				birthDate, deathDate, address, addressCity, addressCountry, addressState, familyName, givenName, name,
 				phonetic, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
-		Date cal1 = new Date();
-		System.out.println("-------------------total end------------------" + (cal1.getTime() - cal.getTime()) + " ms");
 		return retVal;
 	}
 
 	@Operation(name = "$everything", idempotent = true)
-	public Bundle getEverything(@IdParam IdType thePatientId, @OperationParam(name = "start") DateParam theStart,
+	public IBundleProvider getEverything(@IdParam IdType thePatientId, @OperationParam(name = "start") DateParam theStart,
 			@OperationParam(name = "end") DateParam theEnd) {
 
-		Bundle retVal = new Bundle();
+		List<IBaseResource> results = new ArrayList<IBaseResource>();
 		// Populate bundle with matching resources
-		return retVal;
-	}    
+		
+		results = patientDao.getEverything(thePatientId, theStart, theEnd);
+		
+		// return list
+		final List<IBaseResource> finalResults = results;
+
+		return new IBundleProvider() {
+
+			@Override
+			public Integer size() {
+				return finalResults.size();
+			}
+
+			@Override
+			public Integer preferredPageSize() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String getUuid() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
+				// TODO Auto-generated method stub
+				return finalResults;
+			}
+
+			@Override
+			public IPrimitiveType<Date> getPublished() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+	}
 }
