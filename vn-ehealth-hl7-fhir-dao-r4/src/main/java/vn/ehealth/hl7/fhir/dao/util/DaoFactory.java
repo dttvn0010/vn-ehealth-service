@@ -5,15 +5,18 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import vn.ehealth.hl7.fhir.clinical.dao.impl.AllergyIntoleranceDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.CarePlanDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ClinicalImpressionDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ConditionDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.DetectedIssueDao;
+import vn.ehealth.hl7.fhir.clinical.dao.impl.FamilyMemberHistoryDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.GoalDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ProcedureDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.DiagnosticReportDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ImagingStudyDao;
+import vn.ehealth.hl7.fhir.diagnostic.dao.impl.MediaDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ObservationDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.SpecimenDao;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.CareTeamDao;
@@ -90,7 +93,11 @@ public class DaoFactory implements ApplicationContextAware {
     private static ConceptMapDao conceptMapDao;
     private static ValueSetDao valueSetDao;
     
-    private static PersonDao personDao;   
+    private static PersonDao personDao;
+    
+    private static AllergyIntoleranceDao allergyIntoleranceDao;
+    private static FamilyMemberHistoryDao familyMemberHistoryDao;
+    private static MediaDao mediaDao;
     
 
     @Override
@@ -348,5 +355,26 @@ public class DaoFactory implements ApplicationContextAware {
         	personDao = applicationContext.getBean(PersonDao.class);
         }
         return personDao;
+    }
+    
+    public static FamilyMemberHistoryDao getFamilyMemberHistoryDao() {
+        if(familyMemberHistoryDao == null) {
+        	familyMemberHistoryDao = applicationContext.getBean(FamilyMemberHistoryDao.class);
+        }
+        return familyMemberHistoryDao;
+    }
+    
+    public static AllergyIntoleranceDao getAllergyIntoleranceDao() {
+        if(allergyIntoleranceDao == null) {
+        	allergyIntoleranceDao = applicationContext.getBean(AllergyIntoleranceDao.class);
+        }
+        return allergyIntoleranceDao;
+    }
+    
+    public static MediaDao getMediaDao() {
+        if(mediaDao == null) {
+        	mediaDao = applicationContext.getBean(MediaDao.class);
+        }
+        return mediaDao;
     }
 }

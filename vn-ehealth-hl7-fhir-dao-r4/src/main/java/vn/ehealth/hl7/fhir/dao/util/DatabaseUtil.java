@@ -503,6 +503,18 @@ public class DatabaseUtil {
 				retVal = DaoFactory.getPersonDao().read(FhirUtil.createIdType(ref));
 				break;
 			}
+			case ConstantKeys.RES_ALLERGY_INTORANCE: {
+				retVal = DaoFactory.getAllergyIntoleranceDao().read(FhirUtil.createIdType(ref));
+				break;
+			}
+			case ConstantKeys.RES_FAMILY_MEMBER_HISTORY: {
+				retVal = DaoFactory.getFamilyMemberHistoryDao().read(FhirUtil.createIdType(ref));
+				break;
+			}
+			case ConstantKeys.RES_MEDIA: {
+				retVal = DaoFactory.getMediaDao().read(FhirUtil.createIdType(ref));
+				break;
+			}
 			default:
 				return null;
 

@@ -33,7 +33,7 @@ import vn.ehealth.hl7.fhir.diagnostic.entity.ServiceRequestEntity;
 public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequest>{
 
 	@SuppressWarnings("deprecation")
-    public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
+    public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
 			TokenParam category, TokenParam code, ReferenceParam context, DateRangeParam date,
 			ReferenceParam definition, ReferenceParam encounter, TokenParam identifier, ReferenceParam location,
 			ReferenceParam partOf, ReferenceParam patient, ReferenceParam performer, TokenParam status,
@@ -41,7 +41,7 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
 			TokenParam _query, TokenParam _security, StringParam _content, StringParam _page, String sortParam,
 			Integer count, Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
-        Criteria criteria = setParamToCriteria(active, bassedOn, category, code, context, date, definition, encounter,
+        Criteria criteria = setParamToCriteria(active, basedOn, category, code, context, date, definition, encounter,
                 identifier, location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag, _profile,
                 _query, _security, _content);
         Query query = new Query();
@@ -155,14 +155,14 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
         return resources;
 	}
 
-	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
+	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
 			TokenParam category, TokenParam code, ReferenceParam context, DateRangeParam date,
 			ReferenceParam definition, ReferenceParam encounter, TokenParam identifier, ReferenceParam location,
 			ReferenceParam partOf, ReferenceParam patient, ReferenceParam performer, TokenParam status,
 			ReferenceParam subject, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
 			TokenParam _query, TokenParam _security, StringParam _content) {
 		long total = 0;
-        Criteria criteria = setParamToCriteria(active, bassedOn, category, code, context, date, definition, encounter,
+        Criteria criteria = setParamToCriteria(active, basedOn, category, code, context, date, definition, encounter,
                 identifier, location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag, _profile,
                 _query, _security, _content);
         Query query = new Query();
@@ -173,7 +173,7 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
         return total;
 	}
 	
-	private Criteria setParamToCriteria(TokenParam active, ReferenceParam bassedOn, TokenParam category,
+	private Criteria setParamToCriteria(TokenParam active, ReferenceParam basedOn, TokenParam category,
             TokenParam code, ReferenceParam context, DateRangeParam date, ReferenceParam definition,
             ReferenceParam encounter, TokenParam identifier, ReferenceParam location, ReferenceParam partOf,
             ReferenceParam patient, ReferenceParam performer, TokenParam status, ReferenceParam subject,
@@ -190,12 +190,12 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
         criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
                 identifier);
         // based-on
-        if (bassedOn != null) {
-            if(bassedOn.getValue().indexOf("|")==-1) {
-                criteria.orOperator(Criteria.where("bassedOn.reference").is(bassedOn.getValue()),
-                        Criteria.where("bassedOn.display").is(bassedOn.getValue()));
+        if (basedOn != null) {
+            if(basedOn.getValue().indexOf("|")==-1) {
+                criteria.orOperator(Criteria.where("bassedOn.reference").is(basedOn.getValue()),
+                        Criteria.where("bassedOn.display").is(basedOn.getValue()));
             }else {
-                String[] ref= bassedOn.getValue().split("\\|");
+                String[] ref= basedOn.getValue().split("\\|");
                 criteria.and("bassedOn.identifier.system").is(ref[0]).and("bassedOn.identifier.value").is(ref[1]);
             }
         }

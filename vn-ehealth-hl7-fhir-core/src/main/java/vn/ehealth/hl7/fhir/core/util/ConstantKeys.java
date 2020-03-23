@@ -62,6 +62,9 @@ public class ConstantKeys {
     public static final String RES_CONCEPTMAP = "ConceptMap";
     public static final String RES_VALUESET = "ValueSet";
     public static final String RES_PERSON = "Person";
+    public static final String RES_ALLERGY_INTORANCE = "AllergyIntorance";
+    public static final String RES_FAMILY_MEMBER_HISTORY = "FamilyMemberHistory";
+    public static final String RES_MEDIA = "Media";
     
     // Param list
     public static final String SP_BIRTHDATE = "birthdate";
