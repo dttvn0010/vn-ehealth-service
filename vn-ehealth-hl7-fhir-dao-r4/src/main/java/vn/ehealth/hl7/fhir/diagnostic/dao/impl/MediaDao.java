@@ -25,7 +25,6 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.hl7.fhir.diagnostic.entity.DiagnosticReportEntity;
 import vn.ehealth.hl7.fhir.diagnostic.entity.MediaEntity;
 
 @Repository
@@ -80,7 +79,7 @@ public class MediaDao extends BaseDao<MediaEntity, Media> {
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
 		List<MediaEntity> lst = mongo.find(query, MediaEntity.class);
-		if (lst != null) {
+		if (lst != null && lst.size() > 0) {
 			for (MediaEntity item : lst) {
 				Media obj = transform(item);
 				// add more Resource as it's references
@@ -161,7 +160,7 @@ public class MediaDao extends BaseDao<MediaEntity, Media> {
 				resources.add(obj);
 			}
 		}
-		return resources;
+		return null;
 	}
 
 	public long countMatchesAdvancedTotal(TokenParam active, ReferenceParam basedOn, DateRangeParam created,
@@ -180,7 +179,7 @@ public class MediaDao extends BaseDao<MediaEntity, Media> {
 		if (criteria != null) {
 			query = Query.query(criteria);
 		}
-		total = mongo.count(query, DiagnosticReportEntity.class);
+		total = mongo.count(query, MediaEntity.class);
 		return total;
 	}
 

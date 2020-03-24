@@ -7,27 +7,20 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
-import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.Schedule;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.Create;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -52,42 +45,42 @@ public class ScheduleProvider extends BaseController<ScheduleEntity, Schedule> i
 	@Autowired
 	ScheduleDao scheduleDao;
 
-	private static final Logger log = LoggerFactory.getLogger(ScheduleProvider.class);
+//	private static final Logger log = LoggerFactory.getLogger(ScheduleProvider.class);
 
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return Schedule.class;
 	}
 
-	@Create
-	public MethodOutcome create(HttpServletRequest theRequest, @ResourceParam Schedule obj) {
-
-		log.debug("Create Schedule Provider called");
-
-		MethodOutcome method = new MethodOutcome();
-		method.setCreated(true);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		Schedule mongoSchedule = null;
-		try {
-			mongoSchedule = scheduleDao.create(obj);
-			List<String> myString = new ArrayList<>();
-			myString.add("Schedule/" + mongoSchedule.getIdElement());
-			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-					"urn:uuid: " + mongoSchedule.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-			method.setId(mongoSchedule.getIdElement());
-			method.setResource(mongoSchedule);
-		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
-		}
-		return method;
-	}
+//	@Create
+//	public MethodOutcome create(HttpServletRequest theRequest, @ResourceParam Schedule obj) {
+//
+//		log.debug("Create Schedule Provider called");
+//
+//		MethodOutcome method = new MethodOutcome();
+//		method.setCreated(true);
+//		OperationOutcome opOutcome = new OperationOutcome();
+//		method.setOperationOutcome(opOutcome);
+//		Schedule mongoSchedule = null;
+//		try {
+//			mongoSchedule = scheduleDao.create(obj);
+//			List<String> myString = new ArrayList<>();
+//			myString.add("Schedule/" + mongoSchedule.getIdElement());
+//			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
+//					"urn:uuid: " + mongoSchedule.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
+//			method.setId(mongoSchedule.getIdElement());
+//			method.setResource(mongoSchedule);
+//		} catch (Exception ex) {
+//			if (ex instanceof OperationOutcomeException) {
+//				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
+//				method.setOperationOutcome(outcomeException.getOutcome());
+//			} else {
+//				log.error(ex.getMessage());
+//				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
+//			}
+//		}
+//		return method;
+//	}
 
 	@Search
 	public IBundleProvider search(HttpServletRequest request,

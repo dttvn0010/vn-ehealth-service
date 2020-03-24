@@ -21,7 +21,6 @@ import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.clinical.entity.AllergyIntoleranceEntity;
-import vn.ehealth.hl7.fhir.clinical.entity.ProcedureEntity;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
@@ -81,7 +80,7 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
 		List<AllergyIntoleranceEntity> entitys = mongo.find(query, AllergyIntoleranceEntity.class);
-		if (entitys != null) {
+		if (entitys != null && entitys.size() > 0) {
 			for (AllergyIntoleranceEntity item : entitys) {
 				AllergyIntolerance obj = transform(item);
 
@@ -142,8 +141,8 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 				}
 				resources.add(obj);
 			}
-		}
-		return resources;
+		} 
+		return null;
 	}
 
 	public long countMatchesAdvancedTotal(TokenParam active, TokenParam encounter, ReferenceParam asserter,
@@ -164,7 +163,7 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 		if (criteria != null) {
 			query = Query.query(criteria);
 		}
-		total = mongo.count(query, ProcedureEntity.class);
+		total = mongo.count(query, AllergyIntoleranceEntity.class);
 		return total;
 	}
 

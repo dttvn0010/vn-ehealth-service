@@ -22,7 +22,6 @@ import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.clinical.entity.FamilyMemberHistoryEntity;
-import vn.ehealth.hl7.fhir.clinical.entity.ProcedureEntity;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
@@ -77,7 +76,7 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
 		List<FamilyMemberHistoryEntity> entitys = mongo.find(query, FamilyMemberHistoryEntity.class);
-		if (entitys != null) {
+		if (entitys != null && entitys.size() > 0) {
 			for (FamilyMemberHistoryEntity item : entitys) {
 				FamilyMemberHistory obj = transform(item);
 
@@ -116,7 +115,7 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 				resources.add(obj);
 			}
 		}
-		return resources;
+		return null;
 	}
 
 	public long countMatchesAdvancedTotal(TokenParam active, TokenParam code, DateRangeParam date,
@@ -132,7 +131,7 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 		if (criteria != null) {
 			query = Query.query(criteria);
 		}
-		total = mongo.count(query, ProcedureEntity.class);
+		total = mongo.count(query, FamilyMemberHistoryEntity.class);
 		return total;
 	}
 
