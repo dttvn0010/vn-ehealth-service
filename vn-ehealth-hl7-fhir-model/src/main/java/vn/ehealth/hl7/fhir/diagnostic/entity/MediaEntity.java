@@ -101,9 +101,9 @@ public class MediaEntity extends BaseResource {
 		obj.setBodySite(BaseCodeableConcept.toCodeableConcept(ent.bodySite));
 		obj.setDeviceName(ent.deviceName);
 		obj.setDevice(BaseReference.toReference(ent.device));
-		obj.setHeight(ent.height);
-		obj.setWidth(ent.width);
-		obj.setFrames(ent.frames);
+		if(ent.height != null) obj.setHeight(ent.height);
+		if(ent.width != null) obj.setWidth(ent.width);
+		if(ent.frames != null) obj.setFrames(ent.frames);
 		obj.setDuration(ent.duration);
 		obj.setContent(BaseAttachment.toAttachment(ent.content));
 		obj.setNote(BaseAnnotation.toAnnotationList(ent.note));
