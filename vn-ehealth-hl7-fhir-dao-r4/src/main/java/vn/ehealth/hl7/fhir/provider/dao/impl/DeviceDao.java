@@ -28,7 +28,7 @@ import vn.ehealth.hl7.fhir.provider.entity.DeviceEntity;
 public class DeviceDao extends BaseDao<DeviceEntity, Device> {
   
     @SuppressWarnings("deprecation")
-    public List<Resource> search(FhirContext ctx, StringParam deviceName, TokenParam identifier,
+    public List<Resource> search(FhirContext ctx, TokenParam active, StringParam deviceName, TokenParam identifier,
             ReferenceParam location, StringParam manufacturer, StringParam model, ReferenceParam organization,
             ReferenceParam patient, StringParam udiCarrier, StringParam udiDi, UriParam url, TokenParam status,
             TokenParam type, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
@@ -36,7 +36,7 @@ public class DeviceDao extends BaseDao<DeviceEntity, Device> {
             Integer count) {
 
         List<Resource> resources = new ArrayList<>();
-        Criteria criteria = setParamToCriteria(deviceName, identifier, location, manufacturer, model, organization,
+        Criteria criteria = setParamToCriteria(active, deviceName, identifier, location, manufacturer, model, organization,
                 patient, udiCarrier, udiDi, url, status, type, resid, _lastUpdated, _tag, _profile, _query, _security,
                 _content);
         Query query = new Query();
@@ -63,14 +63,14 @@ public class DeviceDao extends BaseDao<DeviceEntity, Device> {
         return resources;
     }
 
-	public long findMatchesAdvancedTotal(FhirContext ctx, StringParam deviceName, TokenParam identifier,
+	public long findMatchesAdvancedTotal(FhirContext ctx, TokenParam active, StringParam deviceName, TokenParam identifier,
 			ReferenceParam location, StringParam manufacturer, StringParam model, ReferenceParam organization,
 			ReferenceParam patient, StringParam udiCarrier, StringParam udiDi, UriParam url, TokenParam status,
 			TokenParam type, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
 			TokenParam _query, TokenParam _security, StringParam _content) {
 
         long total = 0;
-        Criteria criteria = setParamToCriteria(deviceName, identifier, location, manufacturer, model, organization,
+        Criteria criteria = setParamToCriteria(active, deviceName, identifier, location, manufacturer, model, organization,
                 patient, udiCarrier, udiDi, url, status, type, resid, _lastUpdated, _tag, _profile, _query, _security,
                 _content);
         Query query = new Query();
@@ -81,13 +81,19 @@ public class DeviceDao extends BaseDao<DeviceEntity, Device> {
         return total;
     }
 
-    private Criteria setParamToCriteria(StringParam deviceName, TokenParam identifier, ReferenceParam location,
+    private Criteria setParamToCriteria(TokenParam active, StringParam deviceName, TokenParam identifier, ReferenceParam location,
             StringParam manufacturer, StringParam model, ReferenceParam organization, ReferenceParam patient,
             StringParam udiCarrier, StringParam udiDi, UriParam url, TokenParam status, TokenParam type,
             TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
             TokenParam _security, StringParam _content) {
         Criteria criteria = null;
         criteria = Criteria.where("$where").is("1==1");
+		// active
+		if (active != null) {
+			criteria = Criteria.where("active").is(active);
+		} else {
+			criteria = Criteria.where("active").is(true);
+		}
 
         if (status != null) {
             criteria.and("status").is(status.getValue());
