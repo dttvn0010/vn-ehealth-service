@@ -87,7 +87,7 @@ public class BaseDosage {
         if(entity == null) return null;
                 
         var object = new Dosage();
-        object.setSequence(entity.sequence);
+        if(entity.sequence != null) object.setSequence(entity.sequence);
         object.setText(entity.text);
         object.setAdditionalInstruction(BaseCodeableConcept.toCodeableConcept(entity.additionalInstruction));
         object.setPatientInstruction(entity.patientInstruction);
