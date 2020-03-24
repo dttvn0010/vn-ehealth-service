@@ -106,7 +106,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
     }
     
     @Delete
-    public FHIR delete(HttpServletRequest request, @IdParam IdType internalId) {
+    public void delete(HttpServletRequest request, @IdParam IdType internalId) {
         log.debug("Delete Entity called");
         var object = getDao().remove(internalId);
         if (object == null) {
@@ -116,7 +116,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
                     OperationOutcome.IssueType.NOTFOUND);
 
         }
-        return object;
+        return;
     }
 
     @Update

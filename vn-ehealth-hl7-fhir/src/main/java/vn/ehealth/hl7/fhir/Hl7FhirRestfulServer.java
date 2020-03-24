@@ -6,6 +6,7 @@ import java.util.TimeZone;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hl7.fhir.r4.hapi.validation.FhirInstanceValidator;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -23,8 +24,10 @@ import ca.uhn.fhir.rest.server.HardcodedServerAddressStrategy;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.CorsInterceptor;
+import ca.uhn.fhir.rest.server.interceptor.RequestValidatingInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.ResponseHighlighterInterceptor;
 import ca.uhn.fhir.util.VersionUtil;
+import ca.uhn.fhir.validation.ResultSeverityEnum;
 import vn.ehealth.hl7.fhir.clinical.providers.AllergyIntoleranceProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.CarePlanProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.ClinicalImpressionProvider;
@@ -151,23 +154,19 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 
 		registerInterceptor(new ResponseHighlighterInterceptor());
 
-		/*
-		 * // Create an interceptor to validate incoming requests
-		 * RequestValidatingInterceptor requestInterceptor = new
-		 * RequestValidatingInterceptor();
-		 * 
-		 * // Register a validator module (you could also use SchemaBaseValidator and/or
-		 * SchematronBaseValidator) requestInterceptor.addValidatorModule(new
-		 * FhirInstanceValidator());
-		 * requestInterceptor.setFailOnSeverity(ResultSeverityEnum.ERROR);
-		 * requestInterceptor.setAddResponseHeaderOnSeverity(ResultSeverityEnum.
-		 * INFORMATION); requestInterceptor.
-		 * setResponseHeaderValue("Validation on ${line}: ${message} ${severity}");
-		 * requestInterceptor.setResponseHeaderValueNoIssues("No issues detected");
-		 * 
-		 * // Now register the validating interceptor
-		 * registerInterceptor(requestInterceptor);
-		 */
+		// Create an interceptor to validate incoming requests
+		RequestValidatingInterceptor requestInterceptor = new RequestValidatingInterceptor();
+
+		// Register a validator module (you could also use SchemaBaseValidator and/or
+		// SchematronBaseValidator)
+		requestInterceptor.addValidatorModule(new FhirInstanceValidator());
+		requestInterceptor.setFailOnSeverity(ResultSeverityEnum.ERROR);
+		requestInterceptor.setAddResponseHeaderOnSeverity(ResultSeverityEnum.INFORMATION);
+		requestInterceptor.setResponseHeaderValue("Validation on ${line}: ${message} ${severity}");
+		requestInterceptor.setResponseHeaderValueNoIssues("No issues detected");
+
+		// Now register the validating interceptor
+		registerInterceptor(requestInterceptor);
 
 		// Create an interceptor to validate responses
 		// This is configured in the same way as above
