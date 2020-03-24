@@ -143,8 +143,7 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 
 				@Override
 				public Integer preferredPageSize() {
-					// TODO Auto-generated method stub
-					return null;
+					return finalResults.size();
 				}
 
 				@Override
