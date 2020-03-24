@@ -152,21 +152,21 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 		INarrativeGenerator narrativeGen = new DefaultThymeleafNarrativeGenerator();
 		getFhirContext().setNarrativeGenerator(narrativeGen);
 
-		registerInterceptor(new ResponseHighlighterInterceptor());
+//		registerInterceptor(new ResponseHighlighterInterceptor());
+//
+//		// Create an interceptor to validate incoming requests
+//		RequestValidatingInterceptor requestInterceptor = new RequestValidatingInterceptor();
+//
+//		// Register a validator module (you could also use SchemaBaseValidator and/or
+//		// SchematronBaseValidator)
+//		requestInterceptor.addValidatorModule(new FhirInstanceValidator());
+//		requestInterceptor.setFailOnSeverity(ResultSeverityEnum.ERROR);
+//		requestInterceptor.setAddResponseHeaderOnSeverity(ResultSeverityEnum.INFORMATION);
+//		requestInterceptor.setResponseHeaderValue("Validation on ${line}: ${message} ${severity}");
+//		requestInterceptor.setResponseHeaderValueNoIssues("No issues detected");
 
-		// Create an interceptor to validate incoming requests
-		RequestValidatingInterceptor requestInterceptor = new RequestValidatingInterceptor();
-
-		// Register a validator module (you could also use SchemaBaseValidator and/or
-		// SchematronBaseValidator)
-		requestInterceptor.addValidatorModule(new FhirInstanceValidator());
-		requestInterceptor.setFailOnSeverity(ResultSeverityEnum.ERROR);
-		requestInterceptor.setAddResponseHeaderOnSeverity(ResultSeverityEnum.INFORMATION);
-		requestInterceptor.setResponseHeaderValue("Validation on ${line}: ${message} ${severity}");
-		requestInterceptor.setResponseHeaderValueNoIssues("No issues detected");
-
-		// Now register the validating interceptor
-		registerInterceptor(requestInterceptor);
+//		// Now register the validating interceptor
+//		registerInterceptor(requestInterceptor);
 
 		// Create an interceptor to validate responses
 		// This is configured in the same way as above
