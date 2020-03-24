@@ -67,7 +67,7 @@ public class FamilyMemberHistoryProvider extends BaseController<FamilyMemberHist
 			@OptionalParam(name = FamilyMemberHistory.SP_INSTANTIATES_URI) UriParam instantiatesUri,
 			@OptionalParam(name = FamilyMemberHistory.SP_PATIENT) ReferenceParam patient,
 			@OptionalParam(name = FamilyMemberHistory.SP_RELATIONSHIP) TokenParam relationship,
-			@OptionalParam(name = FamilyMemberHistory.SP_GENDER) TokenParam gender,
+			@OptionalParam(name = ConstantKeys.SP_SEX) TokenParam gender,
 			@OptionalParam(name = FamilyMemberHistory.SP_STATUS) TokenParam status,
 
 			// Common

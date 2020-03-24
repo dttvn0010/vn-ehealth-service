@@ -272,6 +272,7 @@ public class ConstantKeys {
     public static final String SP_ISROOT = "isroot";
     public static final String SP_ROOT_CONCEPT = "rootconcept";
     public static final String SP_TABLE_NAME = "tableName";
+    public static final String SP_SEX = "sex";
     
     public static final String SP_OBSERVATION_MAX = "max";
     
