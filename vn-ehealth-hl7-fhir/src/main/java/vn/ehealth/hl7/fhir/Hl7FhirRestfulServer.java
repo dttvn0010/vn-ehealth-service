@@ -74,8 +74,7 @@ import vn.ehealth.hl7.fhir.user.providers.PersonProvider;
 
 public class Hl7FhirRestfulServer extends RestfulServer {
 	private static final long serialVersionUID = 1L;
-	// private static final org.slf4j.Logger ourLog =
-	// org.slf4j.LoggerFactory.getLogger(Hl7FhirRestfulServer.class);
+	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(Hl7FhirRestfulServer.class);
 	private ApplicationContext applicationContext;
 
 	public Hl7FhirRestfulServer(ApplicationContext context) {
@@ -142,8 +141,8 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 				(IResourceProvider) applicationContext.getBean(AllergyIntoleranceProvider.class),
 				(IResourceProvider) applicationContext.getBean(MediaProvider.class)));
 		setServerConformanceProvider(new Hl7FhirServerConformanceProvider());
-		// ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
-		// registerInterceptor(loggingInterceptor);
+		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
+		registerInterceptor(loggingInterceptor);
 		/*
 		 * Use a narrative generator. This is a completely optional step, but can be
 		 * useful as it causes HAPI to generate narratives for resources which don't
