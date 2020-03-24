@@ -111,6 +111,7 @@ public class BaseTiming {
     }
     
     public static Timing toTiming(BaseTiming ent) {
+    	if(ent == null) return null;
         var obj = new Timing();
         obj.setCode(BaseCodeableConcept.toCodeableConcept(ent.code));
         obj.setEvent(transform(ent.event, x -> new DateTimeType(x)));

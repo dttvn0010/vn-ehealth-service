@@ -22,6 +22,8 @@ public class DatabaseUtil {
 	private static final Logger log = LoggerFactory.getLogger(DatabaseUtil.class);
 
 	public static Criteria setTypeDateToCriteria(Criteria criteria, String keySearch, DateRangeParam dateValueParam) {
+		if(dateValueParam == null) return criteria;
+		
 		DateParam dateLowerParam = dateValueParam.getLowerBound();
 		DateParam dateUpperParam = dateValueParam.getUpperBound();
 

@@ -159,7 +159,7 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 			criteria.and("telecom.system").is("EMAIL").and("telecom.value").is(email.getValue());
 		}
 //                gender,
-		if (gender != null) {
+		if (gender != null && gender.getValue() != null) {
 			criteria.and("gender").is(gender.getValue().toLowerCase());
 		}
 //                language,
