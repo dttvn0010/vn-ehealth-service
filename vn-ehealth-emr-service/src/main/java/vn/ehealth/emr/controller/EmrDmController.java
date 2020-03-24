@@ -25,7 +25,7 @@ import vn.ehealth.emr.model.EmrDm;
 import vn.ehealth.emr.service.EmrDmService;
 
 @RestController
-@RequestMapping("/api/dm")
+@RequestMapping("/api/danhmuc")
 public class EmrDmController {
     
     private Logger logger = LoggerFactory.getLogger(EmrDmController.class);

@@ -14,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vn.ehealth.emr.model.EmrDieuTri;
@@ -24,6 +27,8 @@ import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
 
+@RestController
+@RequestMapping("/api/dieutri")
 public class EmrDieuTriController {
     
     private Logger logger = LoggerFactory.getLogger(EmrDieuTriController.class);

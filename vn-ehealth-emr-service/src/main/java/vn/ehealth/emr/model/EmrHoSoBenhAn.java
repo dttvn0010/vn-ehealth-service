@@ -17,8 +17,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import vn.ehealth.emr.service.ServiceFactory;
-import vn.ehealth.utils.MongoUtils;
+import vn.ehealth.emr.service.EmrServiceFactory;
+import vn.ehealth.emr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection="emr_ho_so_benh_an")
@@ -104,11 +104,11 @@ public class EmrHoSoBenhAn {
     public List<ObjectId> dsNguoiXemIds = new ArrayList<>();
         
     public String getId() {
-        return MongoUtils.idToString(id);
+        return ObjectIdUtil.idToString(id);
     }
     
     public void setId(String id) { 
-        this.id = MongoUtils.stringToId(id);
+        this.id = ObjectIdUtil.stringToId(id);
     }
     
     public EmrDmContent getEmrDmLoaiBenhAn() {
@@ -116,59 +116,59 @@ public class EmrHoSoBenhAn {
     }
     
     public String getEmrBenhNhanId() {
-        return MongoUtils.idToString(emrBenhNhanId);
+        return ObjectIdUtil.idToString(emrBenhNhanId);
     }
     
     public EmrBenhNhan getEmrBenhNhan() {
-        return ServiceFactory.getEmrBenhNhanService().getById(emrBenhNhanId).orElse(null);
+        return EmrServiceFactory.getEmrBenhNhanService().getById(emrBenhNhanId).orElse(null);
     }
     
     public void setEmrBenhNhanId(String emrBenhNhanId) {
-        this.emrBenhNhanId = MongoUtils.stringToId(emrBenhNhanId);
+        this.emrBenhNhanId = ObjectIdUtil.stringToId(emrBenhNhanId);
     }
     
     public String getEmrCoSoKhamBenhId() {
-        return MongoUtils.idToString(emrCoSoKhamBenhId);
+        return ObjectIdUtil.idToString(emrCoSoKhamBenhId);
     }
     
     public EmrCoSoKhamBenh getEmrCoSoKhamBenh() {
-        return ServiceFactory.getEmrCoSoKhamBenhService().getById(emrCoSoKhamBenhId).orElse(null);
+        return EmrServiceFactory.getEmrCoSoKhamBenhService().getById(emrCoSoKhamBenhId).orElse(null);
     }
     
     public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
-        this.emrCoSoKhamBenhId = MongoUtils.stringToId(emrCoSoKhamBenhId);
+        this.emrCoSoKhamBenhId = ObjectIdUtil.stringToId(emrCoSoKhamBenhId);
     }
     
     public String getNguoitaoId() {
-        return MongoUtils.idToString(nguoitaoId);
+        return ObjectIdUtil.idToString(nguoitaoId);
     }
     
     public void setNguoitaoId(String nguoitaoId) {
-        this.nguoitaoId = MongoUtils.stringToId(nguoitaoId);
+        this.nguoitaoId = ObjectIdUtil.stringToId(nguoitaoId);
     }
     
     public String getNguoisuaId() {
-        return MongoUtils.idToString(nguoisuaId);
+        return ObjectIdUtil.idToString(nguoisuaId);
     }
     
     public void setNguoisuaId(String nguoisuaId) {
-        this.nguoitaoId = MongoUtils.stringToId(nguoisuaId);
+        this.nguoitaoId = ObjectIdUtil.stringToId(nguoisuaId);
     }
     
     public String getNguoiluutruId() {
-        return MongoUtils.idToString(nguoiluutruId);
+        return ObjectIdUtil.idToString(nguoiluutruId);
     }
     
     public void setNguoiluutruId(String nguoiluutruId) {
-        this.nguoiluutruId = MongoUtils.stringToId(nguoiluutruId);
+        this.nguoiluutruId = ObjectIdUtil.stringToId(nguoiluutruId);
     }
     
     public String getNguoimoluutruId() {
-        return MongoUtils.idToString(nguoimoluutruId);
+        return ObjectIdUtil.idToString(nguoimoluutruId);
     }
     
     public void setNguoimoluutruId(String nguoimoluutruId) {
-        this.nguoimoluutruId = MongoUtils.stringToId(nguoimoluutruId);
+        this.nguoimoluutruId = ObjectIdUtil.stringToId(nguoimoluutruId);
     }
     
     @JsonInclude(Include.NON_NULL)
@@ -190,7 +190,7 @@ public class EmrHoSoBenhAn {
     }
     
     public EmrTuoiBenhNhan getTuoiBenhNhan() {
-        var emrBenhNhan = ServiceFactory.getEmrBenhNhanService().getById(emrBenhNhanId).orElseThrow();
+        var emrBenhNhan = EmrServiceFactory.getEmrBenhNhanService().getById(emrBenhNhanId).orElseThrow();
         
         if(emrBenhNhan == null
             || emrBenhNhan.ngaysinh == null

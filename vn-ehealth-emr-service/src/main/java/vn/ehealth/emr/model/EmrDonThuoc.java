@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import vn.ehealth.utils.MongoUtils;
+import vn.ehealth.emr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "emr_don_thuoc")
@@ -53,30 +53,30 @@ public class EmrDonThuoc {
     public List<EmrDonThuocChiTiet> emrDonThuocChiTiets = new ArrayList<>();
     
     public void setId(String id) {
-        this.id = MongoUtils.stringToId(id);
+        this.id = ObjectIdUtil.stringToId(id);
     }
 
     public String getEmrHoSoBenhAnId() {
-        return MongoUtils.idToString(emrHoSoBenhAnId);
+        return ObjectIdUtil.idToString(emrHoSoBenhAnId);
     }
     
     public void setEmrHoSoBenhAnId(String emrHoSoBenhAnId) {
-        this.emrHoSoBenhAnId = MongoUtils.stringToId(emrHoSoBenhAnId);            
+        this.emrHoSoBenhAnId = ObjectIdUtil.stringToId(emrHoSoBenhAnId);            
     }
 
     public String getEmrBenhNhanId() {
-        return MongoUtils.idToString(emrBenhNhanId);
+        return ObjectIdUtil.idToString(emrBenhNhanId);
     }
 
     public void setEmrBenhNhanId(String emrBenhNhanId) {
-        this.emrBenhNhanId = MongoUtils.stringToId(emrBenhNhanId);
+        this.emrBenhNhanId = ObjectIdUtil.stringToId(emrBenhNhanId);
     }    
     
     public String getEmrCoSoKhamBenhId() {
-        return MongoUtils.idToString(emrCoSoKhamBenhId);
+        return ObjectIdUtil.idToString(emrCoSoKhamBenhId);
     }
     
     public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
-        this.emrCoSoKhamBenhId = MongoUtils.stringToId(emrCoSoKhamBenhId);
+        this.emrCoSoKhamBenhId = ObjectIdUtil.stringToId(emrCoSoKhamBenhId);
     }
 }
