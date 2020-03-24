@@ -93,7 +93,8 @@ public class FamilyMemberHistoryEntity extends BaseResource {
 		obj.setSex(BaseCodeableConcept.toCodeableConcept(ent.sex));
 		obj.setBorn(ent.born);
 		obj.setAge(ent.age);
-		obj.setEstimatedAge(ent.estimatedAge != null ? ent.estimatedAge : null);
+		if(ent.estimatedAge != null)
+			obj.setEstimatedAge(ent.estimatedAge);
 		obj.setDeceased(ent.deceased);
 		obj.setReasonCode(BaseCodeableConcept.toCodeableConcept(ent.reasonCode));
 		obj.setReasonReference(BaseReference.toReferenceList(ent.reasonReference));
