@@ -151,7 +151,7 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 		INarrativeGenerator narrativeGen = new DefaultThymeleafNarrativeGenerator();
 		getFhirContext().setNarrativeGenerator(narrativeGen);
 
-//		registerInterceptor(new ResponseHighlighterInterceptor());
+		registerInterceptor(new ResponseHighlighterInterceptor());
 //
 //		// Create an interceptor to validate incoming requests
 //		RequestValidatingInterceptor requestInterceptor = new RequestValidatingInterceptor();
