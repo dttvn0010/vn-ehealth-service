@@ -28,9 +28,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.ChanDoanHinhAnh;
+import vn.ehealth.emr.model.dto.CoSoKhamBenh;
 import vn.ehealth.emr.model.dto.DichVuKyThuat;
 import vn.ehealth.emr.model.dto.GiaiPhauBenh;
 import vn.ehealth.emr.model.dto.PhauThuatThuThuat;
+import vn.ehealth.emr.model.dto.VaoKhoa;
 import vn.ehealth.emr.model.dto.XetNghiem;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
@@ -184,26 +186,37 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         throw new RuntimeException("No data found for DichVuKyThuat with id:" + dto.id);
     }
     
-    private String getCoSoKhamBenh(@Nonnull DichVuKyThuat dto) {
+    private CoSoKhamBenh getCoSoKhamBenh(@Nonnull DichVuKyThuat dto) {
     	var enc = enCounterDao.read(createIdType(dto.encounterId));
     	if(enc != null) {
     		var falculty = organizationDao.readRef(enc.getServiceProvider());
     		if(falculty != null) {
     			var serviceProvider = organizationDao.readRef(falculty.getPartOf());
-    			return serviceProvider != null? serviceProvider.getName() : "";
+    			return new CoSoKhamBenh(serviceProvider);
     		}
     	}
-    	return "";
+    	return null;
     }
     
-    private Map<String, Object> convertToRaw(DichVuKyThuat dto, boolean includeServiceProvider) {
+    private Map<String, Object> convertToRaw(DichVuKyThuat dto, 
+    								Optional<Boolean> includeServiceProvider, 
+    								Optional<Boolean> includeEncounter) {
+    	
     	if(dto == null) return null;
     	
     	var item = JsonUtil.objectToMap(dto);
     	
-    	if(includeServiceProvider) {
+    	if(includeServiceProvider.orElse(false)) {
     		var coSoKhamBenh = getCoSoKhamBenh(dto);
     		item.put("coSoKhamBenh", coSoKhamBenh);
+    	}
+    	
+    	if(includeEncounter.orElse(false)) {
+    		var encounter = enCounterDao.read(createIdType(dto.encounterId));
+    		if(encounter != null) {
+    			var vaoKhoa = VaoKhoa.fromFhir(encounter);
+    			item.put("vaoKhoa", vaoKhoa);
+    		}
     	}
     	
     	return item;
@@ -228,17 +241,19 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     }
     
     @GetMapping("/get_cdha_list")
-    public ResponseEntity<?> getChanDoanHinhAnhList(@RequestParam Optional<String> patientId, 
-                                                    @RequestParam Optional<String> encounterId,
-                                                    @RequestParam Optional<Boolean> includeServiceProvider,
-                                                    @RequestParam Optional<Integer> start,
-                                                    @RequestParam Optional<Integer> count) {
+    public ResponseEntity<?> getChanDoanHinhAnhList(
+    							@RequestParam Optional<String> patientId, 
+                                @RequestParam Optional<String> encounterId,
+                                @RequestParam Optional<Boolean> includeServiceProvider,
+                                @RequestParam Optional<Boolean> includeEncounter,
+                                @RequestParam Optional<Integer> start,
+                                @RequestParam Optional<Integer> count) {
         
         var lst = getDichVuKTList(LoaiDichVuKT.CHAN_DOAN_HINH_ANH, patientId, encounterId, start, count);
         
         var result = transform(lst, x -> {
         	var cdha = new ChanDoanHinhAnh(x);        	
-        	return convertToRaw(cdha, includeServiceProvider.orElse(false));
+        	return convertToRaw(cdha, includeServiceProvider, includeEncounter);
         });
         
         return ResponseEntity.ok(result);
@@ -246,11 +261,12 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     
     @GetMapping("/get_cdha_by_id/{id}")
     public ResponseEntity<?> getChanDoanHinhAnhById(@PathVariable String id, 
-								@RequestParam Optional<Boolean> includeServiceProvider) {
+								@RequestParam Optional<Boolean> includeServiceProvider,
+								@RequestParam Optional<Boolean> includeEncounter) {
         var obj = serviceRequestDao.read(new IdType(id));
         if(isChanDoanHinhAnh(obj)) {
         	var cdha = new ChanDoanHinhAnh(obj);
-        	var result = convertToRaw(cdha, includeServiceProvider.orElse(false));
+        	var result = convertToRaw(cdha, includeServiceProvider, includeEncounter);
             return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No chanDoanHinhAnh with id:" + id, HttpStatus.BAD_REQUEST);
@@ -291,17 +307,19 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     }
     
     @GetMapping("/get_pttt_list")
-    public ResponseEntity<?> getPhauThuatThuThuatList(@RequestParam Optional<String> patientId, 
-                                                    @RequestParam Optional<String> encounterId,
-                                                    @RequestParam Optional<Boolean> includeServiceProvider,
-                                                    @RequestParam Optional<Integer> start,
-                                                    @RequestParam Optional<Integer> end) {
+    public ResponseEntity<?> getPhauThuatThuThuatList(
+    							@RequestParam Optional<String> patientId, 
+                                @RequestParam Optional<String> encounterId,
+                                @RequestParam Optional<Boolean> includeServiceProvider,
+                                @RequestParam Optional<Boolean> includeEncounter,
+                                @RequestParam Optional<Integer> start,
+                                @RequestParam Optional<Integer> end) {
         
         var lst = getDichVuKTList(LoaiDichVuKT.PHAU_THUAT_THU_THUAT, patientId, encounterId, start, end);
 
         var result = transform(lst, x -> {
         	var pttt = new PhauThuatThuThuat(x);        	
-        	return convertToRaw(pttt, includeServiceProvider.orElse(false));
+        	return convertToRaw(pttt, includeServiceProvider, includeEncounter);
         });
         
         return ResponseEntity.ok(result);
@@ -309,12 +327,13 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     
     @GetMapping("/get_pttt_by_id/{id}")
     public ResponseEntity<?> getPhauThuatThuThuatById(@PathVariable String id,
-    							@RequestParam Optional<Boolean> includeServiceProvider) {
+    							@RequestParam Optional<Boolean> includeServiceProvider,
+    							@RequestParam Optional<Boolean> includeEncounter) {
     	
         var obj = serviceRequestDao.read(new IdType(id));
         if(isPhauThuatThuThuat(obj)) {
         	var pttt = new PhauThuatThuThuat(obj);
-        	var result = convertToRaw(pttt, includeServiceProvider.orElse(false));
+        	var result = convertToRaw(pttt, includeServiceProvider, includeEncounter);
             return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No phauThuatThuThuat with id:" + id, HttpStatus.BAD_REQUEST);
@@ -353,17 +372,19 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     }
     
     @GetMapping("/get_gpb_list")
-    public ResponseEntity<?> getGiaiPhauBenhList(@RequestParam Optional<String> patientId, 
-                                                    @RequestParam Optional<String> encounterId,
-                                                    @RequestParam Optional<Boolean> includeServiceProvider,
-                                                    @RequestParam Optional<Integer> start,
-                                                    @RequestParam Optional<Integer> count) {
+    public ResponseEntity<?> getGiaiPhauBenhList(
+    							@RequestParam Optional<String> patientId, 
+                                @RequestParam Optional<String> encounterId,
+                                @RequestParam Optional<Boolean> includeServiceProvider,
+                                @RequestParam Optional<Boolean> includeEncounter,
+                                @RequestParam Optional<Integer> start,
+                                @RequestParam Optional<Integer> count) {
         
         var lst = getDichVuKTList(LoaiDichVuKT.GIAI_PHAU_BENH, patientId, encounterId, start, count);
         
         var result = transform(lst, x -> {
         	var gpb = new GiaiPhauBenh(x);        	
-        	return convertToRaw(gpb, includeServiceProvider.orElse(false));
+        	return convertToRaw(gpb, includeServiceProvider, includeEncounter);
         });
         
         return ResponseEntity.ok(result);
@@ -371,12 +392,13 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     
     @GetMapping("/get_gpb_by_id/{id}")
     public ResponseEntity<?> getGiaiPhauBenhById(@PathVariable String id,
-    						  	@RequestParam Optional<Boolean> includeServiceProvider) {
+    						  	@RequestParam Optional<Boolean> includeServiceProvider,
+    						  	@RequestParam Optional<Boolean> includeEncounter) {
     	
         var obj = serviceRequestDao.read(new IdType(id));
         if(isGiaiPhauBenh(obj)) {
         	var gpb = new GiaiPhauBenh(obj);
-        	var result = convertToRaw(gpb, includeServiceProvider.orElse(false));
+        	var result = convertToRaw(gpb, includeServiceProvider, includeEncounter);
             return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No giaiPhauBenh with id:" + id, HttpStatus.BAD_REQUEST);
@@ -415,17 +437,19 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     }
     
     @GetMapping("/get_xet_nghiem_list")
-    public ResponseEntity<?> getXetNghiemList(@RequestParam Optional<String> patientId, 
-                                                    @RequestParam Optional<String> encounterId,
-                                                    @RequestParam Optional<Boolean> includeServiceProvider,
-                                                    @RequestParam Optional<Integer> start,
-                                                    @RequestParam Optional<Integer> end) {
+    public ResponseEntity<?> getXetNghiemList(
+    							@RequestParam Optional<String> patientId, 
+                                @RequestParam Optional<String> encounterId,
+                                @RequestParam Optional<Boolean> includeServiceProvider,
+                                @RequestParam Optional<Boolean> includeEncounter,
+                                @RequestParam Optional<Integer> start,
+                                @RequestParam Optional<Integer> end) {
         
         var lst = getDichVuKTList(LoaiDichVuKT.XET_NGHIEM, patientId, encounterId, start, end);
 
         var result = transform(lst, x -> {
         	var xetNghiem = new XetNghiem(x);        	
-        	return convertToRaw(xetNghiem, includeServiceProvider.orElse(false));
+        	return convertToRaw(xetNghiem, includeServiceProvider, includeEncounter);
         });
         
         return ResponseEntity.ok(result);
@@ -433,12 +457,13 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     
     @GetMapping("/get_xet_nghiem_by_id/{id}")
     public ResponseEntity<?> getXetNghiemById(@PathVariable String id,
-    							@RequestParam Optional<Boolean> includeServiceProvider) {
+    							@RequestParam Optional<Boolean> includeServiceProvider,
+    							@RequestParam Optional<Boolean> includeEncounter) {
     	
         var obj = serviceRequestDao.read(new IdType(id));
         if(isXetNghiem(obj)) {
         	var xetNghiem = new XetNghiem(obj);
-        	var result = convertToRaw(xetNghiem, includeServiceProvider.orElse(false));
+        	var result = convertToRaw(xetNghiem, includeServiceProvider, includeEncounter);
             return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No xetNghiem with id:" + id, HttpStatus.BAD_REQUEST);

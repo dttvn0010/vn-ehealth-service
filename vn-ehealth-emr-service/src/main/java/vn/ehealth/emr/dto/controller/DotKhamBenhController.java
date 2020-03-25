@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.BenhNhan;
+import vn.ehealth.emr.model.dto.CoSoKhamBenh;
 import vn.ehealth.emr.model.dto.DotKhamBenh;
 import vn.ehealth.emr.utils.JsonUtil;
 
@@ -46,12 +47,12 @@ public class DotKhamBenhController {
     	var item = JsonUtil.objectToMap(dto);
     	var serviceProvider = organizationDao.read(createIdType(dto.serviceProviderId));
     	if(serviceProvider != null) {
-    		item.put("coSoKhamBenh", serviceProvider.getName());
-    		if(includePatient) {
-    			var patient = patientDao.read(createIdType(dto.patientId));
-    			item.put("benhNhan", BenhNhan.fromFhir(patient));
-    		}
+    		item.put("coSoKhamBenh", new CoSoKhamBenh(serviceProvider));    		
     	}
+    	if(includePatient) {
+			var patient = patientDao.read(createIdType(dto.patientId));
+			item.put("benhNhan", BenhNhan.fromFhir(patient));
+		}
     	return item;
     }
     
