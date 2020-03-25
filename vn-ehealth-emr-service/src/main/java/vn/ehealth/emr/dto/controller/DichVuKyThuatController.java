@@ -250,7 +250,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         var obj = serviceRequestDao.read(new IdType(id));
         if(isChanDoanHinhAnh(obj)) {
         	var cdha = new ChanDoanHinhAnh(obj);
-        	var result = convertToRaw(cdha, includeServiceProvider.orElse(false))
+        	var result = convertToRaw(cdha, includeServiceProvider.orElse(false));
             return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No chanDoanHinhAnh with id:" + id, HttpStatus.BAD_REQUEST);
