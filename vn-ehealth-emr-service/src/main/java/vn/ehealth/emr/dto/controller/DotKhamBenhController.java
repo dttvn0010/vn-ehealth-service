@@ -3,8 +3,6 @@ package vn.ehealth.emr.dto.controller;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
-
 import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
