@@ -16,6 +16,7 @@ import org.hl7.fhir.r4.model.Goal;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.ImagingStudy;
 import org.hl7.fhir.r4.model.Immunization;
+import org.hl7.fhir.r4.model.Media;
 import org.hl7.fhir.r4.model.MedicationAdministration;
 import org.hl7.fhir.r4.model.MedicationDispense;
 import org.hl7.fhir.r4.model.MedicationRequest;
@@ -272,7 +273,7 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 					criteria.and("resUpdated").gte(theStart.getValue());
 				}
 				if (theEnd != null) {
-					criteria.and("resUpdated").lte(theStart.getValue());
+					criteria.and("resUpdated").lte(theEnd.getValue());
 				}
 				// Encounter
 				List<Encounter> enconters = DaoFactory.getEncounterDao().findByCriteria(criteria);
@@ -382,6 +383,11 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 				List<AllergyIntolerance> allergyIntolerances = DaoFactory.getAllergyIntoleranceDao().findByCriteria(criteria);
 				if (allergyIntolerances != null && allergyIntolerances.size() > 0) {
 					resources.addAll(allergyIntolerances);
+				}
+				// Media
+				List<Media> medias = DaoFactory.getMediaDao().findByCriteria(criteria);
+				if (medias != null && medias.size() > 0) {
+					resources.addAll(medias);
 				}
 			}
 		}
