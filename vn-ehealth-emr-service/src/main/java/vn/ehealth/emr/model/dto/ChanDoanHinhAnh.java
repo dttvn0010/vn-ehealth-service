@@ -74,7 +74,8 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
         // Procedure
         Procedure procedure;
         if(this.id != null) {
-            procedure = DaoFactory.getProcedureDao().getByRequest(serviceRequest.getIdElement());
+            var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + this.id);
+            procedure = DaoFactory.getProcedureDao().searchOne(params);
             if(procedure == null) throw new RuntimeException("No procedure with requestId:" + this.id);
         }else {
             procedure = new Procedure();
@@ -94,7 +95,8 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
         // DiagnosticReport
         DiagnosticReport diagnosticReport = null;
         if(this.id != null) {
-            diagnosticReport = DaoFactory.getDiagnosticReportDao().getByRequest(serviceRequest.getIdElement());
+            var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + this.id);
+            diagnosticReport = DaoFactory.getDiagnosticReportDao().searchOne(params);
             if(diagnosticReport == null) throw new RuntimeException("No diagnosticReport with requestId:" + this.id);
         }else {
             diagnosticReport = new DiagnosticReport();
@@ -127,8 +129,10 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
         this.bacSiYeuCau = CanboYte.fromReference(serviceRequest.getRequester());
         this.noiDungYeuCau = serviceRequest.hasOrderDetail()? serviceRequest.getOrderDetailFirstRep().getText() : "";
         
-        // Procedure
-        var procedure = DaoFactory.getProcedureDao().getByRequest(serviceRequest.getIdElement());
+        var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
+        
+        // Procedure        
+        var procedure = DaoFactory.getProcedureDao().searchOne(params);
         if(procedure != null) {
             this.ngayThucHien = procedure.hasPerformedDateTimeType()? procedure.getPerformedDateTimeType().getValue() : null;
             this.bacSiChuyenKhoa = CanboYte.fromReference(procedure.getAsserter());
@@ -137,7 +141,7 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
         }
         
         // DiagnosticReport
-        var diagnosticReport = DaoFactory.getDiagnosticReportDao().getByRequest(serviceRequest.getIdElement());
+        var diagnosticReport = DaoFactory.getDiagnosticReportDao().searchOne(params);
         if(diagnosticReport != null) {
             this.dmCdha = new DanhMuc(diagnosticReport.getCode());
             this.nguoiVietBaoCao = diagnosticReport.hasPerformer()?

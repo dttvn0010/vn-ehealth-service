@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.ChanDoanHinhAnh;
-import vn.ehealth.emr.model.dto.CoSoKhamBenh;
 import vn.ehealth.emr.model.dto.DichVuKyThuat;
 import vn.ehealth.emr.model.dto.GiaiPhauBenh;
 import vn.ehealth.emr.model.dto.KhoaDieuTri;
@@ -45,6 +44,7 @@ import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ObservationDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.SpecimenDao;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 import vn.ehealth.hl7.fhir.provider.dao.impl.OrganizationDao;
+import vn.ehealth.utils.MongoUtils;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
@@ -81,7 +81,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
                 Optional<String> encounterId) {
         
         var params = makeParams(maDv, patientId, encounterId);
-        return serviceRequestDao.count(params);
+        return serviceRequestDao.countByCriteria(MongoUtils.createCriteria(params));
     }
         
     private List<ServiceRequest> getDichVuKTList(String maDv, 
@@ -91,7 +91,8 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
                                     Optional<Integer> count) {
         
         var params = makeParams(maDv, patientId, encounterId);        
-        return serviceRequestDao.find(params, start.orElse(-1), count.orElse(-1));
+        return serviceRequestDao.findByCriteria(MongoUtils.createCriteria(params),
+                                    start.orElse(-1), count.orElse(-1));
     }
     
     private DiagnosticReport saveDiagnosticReport(DiagnosticReport obj) {
@@ -176,8 +177,9 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
             
             specimen = saveSpecimen(specimen);
             
-            if(serviceRequest != null) {            
-                var oldObservations = observationDao.getByRequest(serviceRequest.getIdElement());
+            if(serviceRequest != null) {
+                var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
+                var oldObservations = observationDao.search(params);
                 oldObservations.forEach(x -> observationDao.remove(x.getIdElement()));
                 observations.forEach(x -> observationDao.create(x));
             }

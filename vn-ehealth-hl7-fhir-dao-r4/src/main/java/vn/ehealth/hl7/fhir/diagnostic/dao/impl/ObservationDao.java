@@ -2,16 +2,13 @@ package vn.ehealth.hl7.fhir.diagnostic.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
-import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -243,13 +240,6 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 		return criteria;
 	}
 	
-    public List<Observation> getByRequest(IdType requestIdType) {
-        if(requestIdType != null && requestIdType.hasIdPart()) {
-            return find(Map.of("basedOn.reference", ResourceType.ServiceRequest + "/" + requestIdType.getIdPart()), -1, -1);            
-        }
-        return new ArrayList<>();
-    }
-
 	@Override
 	protected String getProfile() {
 		return "Observation-v1.0";

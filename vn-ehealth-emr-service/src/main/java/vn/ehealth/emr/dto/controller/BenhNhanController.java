@@ -25,6 +25,7 @@ import java.time.Year;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.HashMap;
 
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -47,8 +48,9 @@ public class BenhNhanController {
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
-        var lst = transform(patientDao.getAll(), x -> BenhNhan.fromFhir(x));
-        return ResponseEntity.ok(lst);
+        var lst = patientDao.search(new HashMap<>());
+        var result = transform(lst, x -> BenhNhan.fromFhir(x));
+        return ResponseEntity.ok(result);
     }
     
     @PostMapping("/save")

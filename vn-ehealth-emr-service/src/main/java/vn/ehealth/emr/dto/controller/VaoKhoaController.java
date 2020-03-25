@@ -1,5 +1,6 @@
 package vn.ehealth.emr.dto.controller;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 import org.hl7.fhir.r4.model.IdType;
@@ -38,8 +39,9 @@ private static Logger logger = LoggerFactory.getLogger(BenhNhanController.class)
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
-        var lst = transform(encounterDao.getAll(), x -> VaoKhoa.fromFhir(x));
-        return ResponseEntity.ok(lst);
+        var lst = encounterDao.search(new HashMap<>());
+        var result = transform(lst, x -> VaoKhoa.fromFhir(x));
+        return ResponseEntity.ok(result);
     }
     
     @PostMapping("/save")

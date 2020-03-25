@@ -2,14 +2,11 @@ package vn.ehealth.hl7.fhir.diagnostic.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
-import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.Specimen;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -136,13 +133,6 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 		return criteria;
 	}
 	
-	public Specimen getByRequest(IdType requestIdType) {
-        if(requestIdType != null && requestIdType.hasIdPart()) {
-            return findOne(Map.of("request.reference", ResourceType.ServiceRequest + "/" + requestIdType.getIdPart()));            
-        }
-        return null;
-    }
-
 	@Override
 	protected String getProfile() {
 		return "Specimen-v1.0";

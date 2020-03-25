@@ -192,11 +192,11 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
         // based-on
         if (basedOn != null) {
             if(basedOn.getValue().indexOf("|")==-1) {
-                criteria.orOperator(Criteria.where("bassedOn.reference").is(basedOn.getValue()),
-                        Criteria.where("bassedOn.display").is(basedOn.getValue()));
+                criteria.orOperator(Criteria.where("basedOn.reference").is(basedOn.getValue()),
+                        Criteria.where("basedOn.display").is(basedOn.getValue()));
             }else {
                 String[] ref= basedOn.getValue().split("\\|");
-                criteria.and("bassedOn.identifier.system").is(ref[0]).and("bassedOn.identifier.value").is(ref[1]);
+                criteria.and("basedOn.identifier.system").is(ref[0]).and("basedOn.identifier.value").is(ref[1]);
             }
         }
         // category

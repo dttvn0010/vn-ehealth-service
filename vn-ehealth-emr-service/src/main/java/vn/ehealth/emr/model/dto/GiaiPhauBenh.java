@@ -16,6 +16,7 @@ import vn.ehealth.emr.utils.Constants.ExtensionURL;
 import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
 import vn.ehealth.emr.utils.MessageUtils;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
+import vn.ehealth.utils.MongoUtils;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
@@ -59,6 +60,13 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         super(serviceRequest);
     }
     
+    private Specimen getSpecimentByRequest(String serviceRequestId) {
+        Object ref = ResourceType.ServiceRequest + "/" + serviceRequestId;
+        var criteria = MongoUtils.createCriteria(mapOf("request.reference", ref));               
+        var specimens = DaoFactory.getSpecimenDao().findByCriteria(criteria, 0, 1);
+        return specimens.size() > 0? specimens.get(0) : null;
+    }
+    
     @Override
     public Map<String, Object> toFhir() {
         //ServiceRequest
@@ -85,7 +93,7 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         // Specimen
         Specimen specimen;
         if(this.id != null) {
-        	specimen = DaoFactory.getSpecimenDao().getByRequest(serviceRequest.getIdElement());
+        	specimen = getSpecimentByRequest(serviceRequest.getId());
             if(specimen == null) throw new RuntimeException("No specimen with requestId:" + this.id);
         }else {
         	specimen = new Specimen();
@@ -103,7 +111,8 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         // DiagnosticReport
         DiagnosticReport diagnosticReport = null;
         if(this.id != null) {
-            diagnosticReport = DaoFactory.getDiagnosticReportDao().getByRequest(serviceRequest.getIdElement());
+            var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + this.id);
+            diagnosticReport = DaoFactory.getDiagnosticReportDao().searchOne(params);
             if(diagnosticReport == null) throw new RuntimeException("No diagnosticReport with requestId:" + this.id);
         }else {
             diagnosticReport = new DiagnosticReport();
@@ -140,8 +149,8 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         this.bacSiYeuCau = CanboYte.fromReference(serviceRequest.getRequester());
         this.dmGpb = new DanhMuc(serviceRequest.getCode());
        
-        // Specimen
-        var specimen = DaoFactory.getSpecimenDao().getByRequest(serviceRequest.getIdElement());
+        // Specimen                       
+        var specimen = getSpecimentByRequest(serviceRequest.getId());
         if(specimen != null) {
             this.ngayThucHien =  specimen.getReceivedTime();
             this.bacSiChuyenKhoa = CanboYte.fromReference(specimen.getCollection().getCollector());
@@ -161,7 +170,8 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         }
         
         // DiagnosticReport
-        var diagnosticReport = DaoFactory.getDiagnosticReportDao().getByRequest(serviceRequest.getIdElement());
+        var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
+        var diagnosticReport = DaoFactory.getDiagnosticReportDao().searchOne(params);
         if(diagnosticReport != null) {
           
             this.nguoiVietBaoCao = diagnosticReport.hasPerformer()?

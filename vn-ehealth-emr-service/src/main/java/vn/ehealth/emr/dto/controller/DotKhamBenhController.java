@@ -64,26 +64,21 @@ public class DotKhamBenhController {
         return ResponseEntity.ok(result);
     }
     
-    private Map<String, Object> makeParams(@RequestParam Optional<String> patientId) {
-    	var params = new HashMap<String, Object>();
-    	patientId.ifPresent(x -> params.put("patient.reference", ResourceType.Patient + "/" + x));
-    	return params;
-    }
-    
     @GetMapping("/count")
     public long count(@RequestParam Optional<String> patientId) {
-    	var params = makeParams(patientId);
+        var params = new HashMap<String, Object>();
+        patientId.ifPresent(x -> params.put("patient", ResourceType.Patient + "/" +  x));
     	return episodeOfCareDao.count(params);
     }
     
     @GetMapping("/get_list")
     public ResponseEntity<?> getList(@RequestParam Optional<String> patientId, 
-    									@RequestParam Optional<Boolean> includePatient,
-    									@RequestParam Optional<Integer> start,
-                                        @RequestParam Optional<Integer> count) {
+    									@RequestParam Optional<Boolean> includePatient) {
     	
-    	var params = makeParams(patientId); 
-    	var lst = episodeOfCareDao.find(params, start.orElse(-1), count.orElse(-1));
+        var params = new HashMap<String, Object>();
+        patientId.ifPresent(x -> params.put("patient", ResourceType.Patient + "/" + x));
+    	var lst = episodeOfCareDao.search(params);
+    	
     	var result = transform(lst, x -> {
     		var dto = DotKhamBenh.fromFhir(x);
     		return convertToRaw(dto, includePatient.orElse(false));

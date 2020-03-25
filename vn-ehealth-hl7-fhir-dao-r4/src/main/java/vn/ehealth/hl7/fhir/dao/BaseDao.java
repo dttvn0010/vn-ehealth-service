@@ -1,7 +1,9 @@
 package vn.ehealth.hl7.fhir.dao;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +30,6 @@ import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
-import vn.ehealth.utils.MongoUtils;
 
 public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResource> {
     @Autowired
@@ -196,27 +197,17 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         return retVal;
     }
     
-    @SuppressWarnings("unchecked")
-    public List<FHIR> getAll() {
-        Query query = Query.query(Criteria.where(ConstantKeys.SP_ACTIVE).is(true));
-        var lst = mongo.find(query, getEntityClass());
-        return DataConvertUtil.transform(lst, x -> transform((ENT) x));
+    public long countByCriteria(Criteria criteria) {
+        var query = Query.query(criteria);
+        return mongo.count(query, getEntityClass());
+    }
+    
+    public List<FHIR> findByCriteria(Criteria criteria) {
+        return findByCriteria(criteria, -1, -1);
     }
     
     @SuppressWarnings("unchecked")
-    public FHIR findOne(Map<String, Object> params) {     
-        var criteria = MongoUtils.createCriteria(params).and(ConstantKeys.SP_ACTIVE).is(true);
-        var query = Query.query(criteria);        
-        var entity = (ENT) mongo.findOne(query, getEntityClass());
-        if (entity != null) {
-            return transform(entity);
-        }
-        return null;
-    }
-    
-    @SuppressWarnings("unchecked")
-    public List<FHIR> find(Map<String, Object> params, int start, int count) {
-        var criteria = MongoUtils.createCriteria(params).and(ConstantKeys.SP_ACTIVE).is(true);
+    public List<FHIR> findByCriteria(Criteria criteria, int start, int count) {
         var query = Query.query(criteria);
         if(start >= 0) {
             query.skip(start);
@@ -227,21 +218,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         var lst = mongo.find(query, getEntityClass());
         return DataConvertUtil.transform(lst, x -> transform((ENT)x));
     }
-    
-
-    @SuppressWarnings("unchecked")
-    public List<FHIR> findByCriteria(Criteria criteria) {
-        var query = Query.query(criteria);
-        var lst = mongo.find(query, getEntityClass());
-        return DataConvertUtil.transform(lst, x -> transform((ENT)x));
-    }
-    
-    public long count(Map<String, Object> params) {
-        var criteria = MongoUtils.createCriteria(params).and(ConstantKeys.SP_ACTIVE).is(true);
-        var query = Query.query(criteria);
-        return mongo.count(query, getEntityClass());
-    }
-    
+        
     public FHIR readRef(Reference ref) {
         if(ref == null || ref.getReference() == null) return null;
         var obj = read(FhirUtil.idTypeFromRef(ref));
@@ -254,4 +231,86 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         
         return obj;
     }
+    
+
+    @SuppressWarnings("rawtypes")
+    public long count(Map params) {
+        Method method = null;
+        for(var m : this.getClass().getMethods()) {
+            if("count".equals(m.getName())) {
+                method = m;
+                break;
+            }
+        }
+        if(method != null) {
+            try {
+                var lstParam = new ArrayList<Object>();
+                for(var p : method.getParameters()) {
+                    var value = params.get(p.getName());
+                    if(value != null && String.class.equals(value.getClass()) 
+                                    && !String.class.equals(p.getType())) {
+                        
+                        var constructor = p.getType().getConstructor(String.class);
+                        lstParam.add(constructor.newInstance(value));                            
+                    }else {
+                        lstParam.add(value);
+                    }
+                }    
+                
+                return (Long) method.invoke(this, lstParam.toArray());
+            }catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public List<FHIR> search(Map params) {
+        Method method = null;
+        for(var m : this.getClass().getMethods()) {
+            if("search".equals(m.getName())) {
+                method = m;
+                break;
+            }
+        }
+        if(method != null) {
+            try {
+                var newParams = new HashMap<>(params);
+                if(!newParams.containsKey("sortParam")) {
+                    newParams.put("sortParam", "");
+                }
+                var lstParam = new ArrayList<Object>();
+                for(var p : method.getParameters()) {
+                    var value = newParams.get(p.getName());
+                    if(value != null && String.class.equals(value.getClass()) 
+                                    && !String.class.equals(p.getType())) {
+                        
+                        var constructor = p.getType().getConstructor(String.class);
+                        lstParam.add(constructor.newInstance(value));                            
+                    }else {
+                        lstParam.add(value);
+                    }
+                }    
+                
+                var lst = (List<Object>) method.invoke(this, lstParam.toArray());
+                var result = new ArrayList<FHIR>();
+                for(var item : lst) {
+                    result.add((FHIR) item);
+                }
+                return result;
+            }catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return new ArrayList<>();
+    }
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public FHIR searchOne(Map params) {
+        var newParams = new HashMap<>(params);
+        newParams.put("count", 1);
+        var lst = search(newParams);
+        return lst.size() > 0? lst.get(0) : null;
+    }  
 }

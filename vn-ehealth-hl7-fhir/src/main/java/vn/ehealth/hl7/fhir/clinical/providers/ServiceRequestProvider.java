@@ -54,7 +54,7 @@ public class ServiceRequestProvider extends BaseController<ServiceRequestEntity,
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
-			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam bassedOn,
+			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
 			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
@@ -86,12 +86,12 @@ public class ServiceRequestProvider extends BaseController<ServiceRequestEntity,
 			List<IBaseResource> results = new ArrayList<IBaseResource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = baseDao.search(fhirContext, active, bassedOn, category, code, context, date, definition,
+				results = baseDao.search(fhirContext, active, basedOn, category, code, context, date, definition,
 						encounter, identifier, location, partOf, patient, performer, status, subject, resid,
 						_lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count, includes);
 				// return results;
 			} else
-				results = baseDao.search(fhirContext, active, bassedOn, category, code, context, date, definition,
+				results = baseDao.search(fhirContext, active, basedOn, category, code, context, date, definition,
 						encounter, identifier, location, partOf, patient, performer, status, subject, resid,
 						_lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count, includes);
 			final List<IBaseResource> finalResults = results;
@@ -101,7 +101,7 @@ public class ServiceRequestProvider extends BaseController<ServiceRequestEntity,
 				@Override
 				public Integer size() {
 					return Integer.parseInt(String.valueOf(baseDao.countMatchesAdvancedTotal(fhirContext, active,
-							bassedOn, category, code, context, date, definition, encounter, identifier, location,
+							basedOn, category, code, context, date, definition, encounter, identifier, location,
 							partOf, patient, performer, status, subject, resid, _lastUpdated, _tag, _profile, _query,
 							_security, _content)));
 				}
@@ -135,7 +135,7 @@ public class ServiceRequestProvider extends BaseController<ServiceRequestEntity,
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
-			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam bassedOn,
+			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
 			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
@@ -157,7 +157,7 @@ public class ServiceRequestProvider extends BaseController<ServiceRequestEntity,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = baseDao.countMatchesAdvancedTotal(fhirContext, active, bassedOn, category, code, context, date,
+		long total = baseDao.countMatchesAdvancedTotal(fhirContext, active, basedOn, category, code, context, date,
 				definition, encounter, identifier, location, partOf, patient, performer, status, subject, resid,
 				_lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));

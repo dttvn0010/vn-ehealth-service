@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.CanboYte;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+
+import java.util.HashMap;
+
 import vn.ehealth.hl7.fhir.provider.dao.impl.PractitionerDao;
 
 @RestController
@@ -34,8 +37,9 @@ public class CanBoYteController {
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAllDto() {
-        var lst = transform(practitionerDao.getAll(), x -> CanboYte.fromFhir(x));
-        return ResponseEntity.ok(lst);
+        var lst = practitionerDao.search(new HashMap<>());
+        var result = transform(lst, x -> CanboYte.fromFhir(x));
+        return ResponseEntity.ok(result);
     }
     
     @PostMapping("/save")

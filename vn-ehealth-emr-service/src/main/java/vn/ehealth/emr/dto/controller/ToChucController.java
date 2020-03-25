@@ -22,6 +22,7 @@ import vn.ehealth.emr.model.dto.ToChuc;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.LoaiToChuc;
 import vn.ehealth.hl7.fhir.provider.dao.impl.OrganizationDao;
+import vn.ehealth.utils.MongoUtils;
 
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -42,7 +43,7 @@ public class ToChucController {
         if(parentId != null) {
             params.put("partOf.reference", ResourceType.Organization + "/" + parentId);
         }
-        return organizationDao.find(params, -1, -1);
+        return organizationDao.findByCriteria(MongoUtils.createCriteria(params));
     }
     
     private Organization saveToChuc(ToChuc dto) {

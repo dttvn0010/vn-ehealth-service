@@ -105,7 +105,8 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
         // Procedure
         Procedure procedure;
         if(this.id != null) {
-            procedure = DaoFactory.getProcedureDao().getByRequest(serviceRequest.getIdElement());
+            var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + this.id);
+            procedure = DaoFactory.getProcedureDao().searchOne(params);
             if(procedure == null) throw new RuntimeException("No procedure with requestId:" + this.id);
         }else {
             procedure = new Procedure();
@@ -158,8 +159,10 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
         this.bacSiYeuCau = CanboYte.fromReference(serviceRequest.getRequester());
         this.noiDungYeuCau = serviceRequest.hasOrderDetail()? serviceRequest.getOrderDetailFirstRep().getText() : "";
         
-        // Procedure
-        var procedure = DaoFactory.getProcedureDao().getByRequest(serviceRequest.getIdElement());
+        var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
+        
+        // Procedure        
+        var procedure = DaoFactory.getProcedureDao().searchOne(params);
         if(procedure != null) {
             this.ngayThucHien = procedure.hasPerformedDateTimeType()? procedure.getPerformedDateTimeType().getValue() : null;
             
@@ -183,7 +186,7 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
         }
         
         // DiagnosticReport
-        var diagnosticReport = DaoFactory.getDiagnosticReportDao().getByRequest(serviceRequest.getIdElement());
+        var diagnosticReport = DaoFactory.getDiagnosticReportDao().searchOne(params);
         if(diagnosticReport != null) {
             this.dmPttt = new DanhMuc(diagnosticReport.getCode());        
             this.nguoiVietBaoCao = diagnosticReport.hasPerformer()?

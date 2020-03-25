@@ -2,16 +2,13 @@ package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.Procedure.ProcedurePerformerComponent;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
-import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -36,7 +33,7 @@ import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
 
     @SuppressWarnings("deprecation")
-    public List<IBaseResource> search(TokenParam active, ReferenceParam bassedOn,
+    public List<IBaseResource> search(TokenParam active, ReferenceParam basedOn,
             TokenParam category, TokenParam code, ReferenceParam context, DateRangeParam date,
             ReferenceParam definition, ReferenceParam encounter, TokenParam identifier, ReferenceParam location,
             ReferenceParam partOf, ReferenceParam patient, ReferenceParam performer, TokenParam status,
@@ -44,7 +41,7 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
             TokenParam _query, TokenParam _security, StringParam _content, StringParam _page, String sortParam,
             Integer count, Set<Include> includes) {
     	List<IBaseResource> resources = new ArrayList<IBaseResource>();
-        Criteria criteria = setParamToCriteria(active, bassedOn, category, code, context, date, definition, encounter,
+        Criteria criteria = setParamToCriteria(active, basedOn, category, code, context, date, definition, encounter,
                 identifier, location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag, _profile,
                 _query, _security, _content);
         Query query = new Query();
@@ -209,14 +206,14 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
         return resources;
     }
 
-    public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
+    public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
             TokenParam category, TokenParam code, ReferenceParam context, DateRangeParam date,
             ReferenceParam definition, ReferenceParam encounter, TokenParam identifier, ReferenceParam location,
             ReferenceParam partOf, ReferenceParam patient, ReferenceParam performer, TokenParam status,
             ReferenceParam subject, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
             TokenParam _query, TokenParam _security, StringParam _content) {
         long total = 0;
-        Criteria criteria = setParamToCriteria(active, bassedOn, category, code, context, date, definition, encounter,
+        Criteria criteria = setParamToCriteria(active, basedOn, category, code, context, date, definition, encounter,
                 identifier, location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag, _profile,
                 _query, _security, _content);
         Query query = new Query();
@@ -228,7 +225,7 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
     }
 
 
-    private Criteria setParamToCriteria(TokenParam active, ReferenceParam bassedOn, TokenParam category,
+    private Criteria setParamToCriteria(TokenParam active, ReferenceParam basedOn, TokenParam category,
             TokenParam code, ReferenceParam context, DateRangeParam date, ReferenceParam definition,
             ReferenceParam encounter, TokenParam identifier, ReferenceParam location, ReferenceParam partOf,
             ReferenceParam patient, ReferenceParam performer, TokenParam status, ReferenceParam subject,
@@ -245,13 +242,13 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
         criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
                 identifier);
         // based-on
-        if (bassedOn != null) {
-            if(bassedOn.getValue().indexOf("|")==-1) {
-                criteria.orOperator(Criteria.where("bassedOn.reference").is(bassedOn.getValue()),
-                        Criteria.where("bassedOn.display").is(bassedOn.getValue()));
+        if (basedOn != null) {
+            if(basedOn.getValue().indexOf("|")==-1) {
+                criteria.orOperator(Criteria.where("basedOn.reference").is(basedOn.getValue()),
+                        Criteria.where("basedOn.display").is(basedOn.getValue()));
             }else {
-                String[] ref= bassedOn.getValue().split("\\|");
-                criteria.and("bassedOn.identifier.system").is(ref[0]).and("bassedOn.identifier.value").is(ref[1]);
+                String[] ref= basedOn.getValue().split("\\|");
+                criteria.and("basedOn.identifier.system").is(ref[0]).and("basedOn.identifier.value").is(ref[1]);
             }
         }
         // category
@@ -351,13 +348,6 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
             }
         }
         return criteria;
-    }
-    
-    public Procedure getByRequest(IdType requestIdType) {
-        if(requestIdType != null && requestIdType.hasIdPart()) {
-            return findOne(Map.of("basedOn.reference", ResourceType.ServiceRequest + "/" + requestIdType.getIdPart()));            
-        }
-        return null;
     }
                     
     protected String getProfile() {
