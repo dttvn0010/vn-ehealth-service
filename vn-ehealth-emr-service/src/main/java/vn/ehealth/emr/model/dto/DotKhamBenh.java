@@ -5,10 +5,8 @@ import org.hl7.fhir.r4.model.EpisodeOfCare;
 import org.hl7.fhir.r4.model.ResourceType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.IdentifierSystem;
-
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
