@@ -246,7 +246,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     
     @GetMapping("/get_cdha_by_id/{id}")
     public ResponseEntity<?> getChanDoanHinhAnhById(@PathVariable String id, 
-							@RequestParam Optional<Boolean> includeServiceProvider) {
+								@RequestParam Optional<Boolean> includeServiceProvider) {
         var obj = serviceRequestDao.read(new IdType(id));
         if(isChanDoanHinhAnh(obj)) {
         	var cdha = new ChanDoanHinhAnh(obj);
@@ -410,7 +410,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     
     @GetMapping("/count_xet_nghiem")
     public long countXetNgheim(@RequestParam Optional<String> patientId, 
-                                                    @RequestParam Optional<String> encounterId) {
+                                @RequestParam Optional<String> encounterId) {
         return countDichVuKT(LoaiDichVuKT.XET_NGHIEM, patientId, encounterId);
     }
     
