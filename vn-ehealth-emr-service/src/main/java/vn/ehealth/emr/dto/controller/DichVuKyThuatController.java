@@ -28,18 +28,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.ChanDoanHinhAnh;
+import vn.ehealth.emr.model.dto.CoSoKhamBenh;
 import vn.ehealth.emr.model.dto.DichVuKyThuat;
 import vn.ehealth.emr.model.dto.GiaiPhauBenh;
 import vn.ehealth.emr.model.dto.PhauThuatThuThuat;
 import vn.ehealth.emr.model.dto.XetNghiem;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
+import vn.ehealth.emr.utils.JsonUtil;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ProcedureDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.DiagnosticReportDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ObservationDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.SpecimenDao;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
+import vn.ehealth.hl7.fhir.provider.dao.impl.OrganizationDao;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
@@ -52,6 +55,7 @@ public class DichVuKyThuatController {
 private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.class);
     
     @Autowired private EncounterDao enCounterDao;
+    @Autowired private OrganizationDao organizationDao;
     @Autowired private ServiceRequestDao serviceRequestDao;
     @Autowired private ProcedureDao procedureDao;
     @Autowired private DiagnosticReportDao  diagnosticReportDao;
@@ -69,7 +73,19 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         
         return params;
     }
-        
+    
+    private CoSoKhamBenh getCoSoKhamBenh(@Nonnull DichVuKyThuat dto) {
+    	var enc = enCounterDao.read(createIdType(dto.encounterId));
+    	if(enc != null) {
+    		var falculty = organizationDao.readRef(enc.getServiceProvider());
+    		if(falculty != null) {
+    			var serviceProvider = organizationDao.readRef(falculty.getPartOf());
+    			return new CoSoKhamBenh(serviceProvider);
+    		}
+    	}
+    	return null;
+    }
+    
     private long countDichVuKT(String maDv, 
                 Optional<String> patientId, 
                 Optional<String> encounterId) {
@@ -202,11 +218,26 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     @GetMapping("/get_cdha_list")
     public ResponseEntity<?> getChanDoanHinhAnhList(@RequestParam Optional<String> patientId, 
                                                     @RequestParam Optional<String> encounterId,
+                                                    @RequestParam Optional<Boolean> includeServiceProvider,
                                                     @RequestParam Optional<Integer> start,
                                                     @RequestParam Optional<Integer> count) {
         
         var lst = getDichVuKTList(LoaiDichVuKT.CHAN_DOAN_HINH_ANH, patientId, encounterId, start, count);
-        var result = transform(lst, x -> new ChanDoanHinhAnh(x));
+        
+        var result = transform(lst, x -> {
+        	var cdha = new ChanDoanHinhAnh(x);        	
+        	var item = JsonUtil.objectToMap(cdha);
+        	
+        	if(includeServiceProvider.orElse(false)) {
+        		var coSoKhamBenh = getCoSoKhamBenh(cdha);
+	        	if(coSoKhamBenh != null) {
+	        		item.put("coSoKhamBenh", coSoKhamBenh.ten);
+	        	}
+        	}
+        	
+        	return item;
+        });
+        
         return ResponseEntity.ok(result);
     }
     
@@ -254,11 +285,26 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     @GetMapping("/get_pttt_list")
     public ResponseEntity<?> getPhauThuatThuThuatList(@RequestParam Optional<String> patientId, 
                                                     @RequestParam Optional<String> encounterId,
+                                                    @RequestParam Optional<Boolean> includeServiceProvider,
                                                     @RequestParam Optional<Integer> start,
                                                     @RequestParam Optional<Integer> end) {
         
         var lst = getDichVuKTList(LoaiDichVuKT.PHAU_THUAT_THU_THUAT, patientId, encounterId, start, end);
-        var result = transform(lst, x -> new PhauThuatThuThuat(x));
+
+        var result = transform(lst, x -> {
+        	var pttt = new PhauThuatThuThuat(x);        	
+        	var item = JsonUtil.objectToMap(pttt);
+        	
+        	if(includeServiceProvider.orElse(false)) {
+        		var coSoKhamBenh = getCoSoKhamBenh(pttt);
+	        	if(coSoKhamBenh != null) {
+	        		item.put("coSoKhamBenh", coSoKhamBenh.ten);
+	        	}
+        	}
+        	
+        	return item;
+        });
+        
         return ResponseEntity.ok(result);
     }
     
@@ -306,11 +352,26 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     @GetMapping("/get_gpb_list")
     public ResponseEntity<?> getGiaiPhauBenhList(@RequestParam Optional<String> patientId, 
                                                     @RequestParam Optional<String> encounterId,
+                                                    @RequestParam Optional<Boolean> includeServiceProvider,
                                                     @RequestParam Optional<Integer> start,
                                                     @RequestParam Optional<Integer> count) {
         
         var lst = getDichVuKTList(LoaiDichVuKT.GIAI_PHAU_BENH, patientId, encounterId, start, count);
-        var result = transform(lst, x -> new GiaiPhauBenh(x));
+        
+        var result = transform(lst, x -> {
+        	var gpb = new GiaiPhauBenh(x);        	
+        	var item = JsonUtil.objectToMap(gpb);
+        	
+        	if(includeServiceProvider.orElse(false)) {
+        		var coSoKhamBenh = getCoSoKhamBenh(gpb);
+	        	if(coSoKhamBenh != null) {
+	        		item.put("coSoKhamBenh", coSoKhamBenh.ten);
+	        	}
+        	}
+        	
+        	return item;
+        });
+        
         return ResponseEntity.ok(result);
     }
     
@@ -341,9 +402,9 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     private boolean isXetNghiem(ServiceRequest obj) {
         if(obj != null && obj.hasCategory()) {
             for(var concept : obj.getCategory()) {
-                boolean isPttt = conceptHasCode(concept, LoaiDichVuKT.XET_NGHIEM, 
+                boolean isXetNghiem = conceptHasCode(concept, LoaiDichVuKT.XET_NGHIEM, 
                                                 CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
-                if(isPttt) return true;
+                if(isXetNghiem) return true;
             }
         }
         return false;
@@ -358,11 +419,26 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     @GetMapping("/get_xet_nghiem_list")
     public ResponseEntity<?> getXetNghiemList(@RequestParam Optional<String> patientId, 
                                                     @RequestParam Optional<String> encounterId,
+                                                    @RequestParam Optional<Boolean> includeServiceProvider,
                                                     @RequestParam Optional<Integer> start,
                                                     @RequestParam Optional<Integer> end) {
         
         var lst = getDichVuKTList(LoaiDichVuKT.XET_NGHIEM, patientId, encounterId, start, end);
-        var result = transform(lst, x -> new XetNghiem(x));
+
+        var result = transform(lst, x -> {
+        	var xetNghiem = new XetNghiem(x);        	
+        	var item = JsonUtil.objectToMap(xetNghiem);
+        	
+        	if(includeServiceProvider.orElse(false)) {
+        		var coSoKhamBenh = getCoSoKhamBenh(xetNghiem);
+	        	if(coSoKhamBenh != null) {
+	        		item.put("coSoKhamBenh", coSoKhamBenh.ten);
+	        	}
+        	}
+        	
+        	return item;
+        });
+        
         return ResponseEntity.ok(result);
     }
     

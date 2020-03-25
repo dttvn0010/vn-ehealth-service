@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.Properties;
 
 import org.bson.types.ObjectId;
-import org.jfree.util.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -294,7 +293,7 @@ public class EmrHoSoBenhAnController {
             emrHoSoBenhAnService.addEmrFileDinhKems(new ObjectId(id), emrFileDinhKems);
             return ResponseEntity.ok(Map.of("success", true));
         }catch(Exception e) {
-            Log.error("Fail to upload giayto:", e);
+            logger.error("Fail to upload giayto:", e);
             return new ResponseEntity<>(Map.of("success", false, "error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }

@@ -29,7 +29,7 @@ public class JsonUtil {
         return "";
     }
     
-     public static <T> T parseObject(String jsonSt, Class<T> cl) {
+    public static <T> T parseObject(String jsonSt, Class<T> cl) {
         mapper.setDateFormat(sdf);
         try {
             return mapper.readValue(jsonSt, cl);
@@ -39,8 +39,8 @@ public class JsonUtil {
         return null;
     }
      
-     @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
 	public static Map<String, Object> objectToMap(Object obj) {
          return mapper.convertValue(obj, Map.class);
-     }
+    }
 }
