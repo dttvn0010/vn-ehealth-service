@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.ChanDoanHinhAnh;
-import vn.ehealth.emr.model.dto.CoSoKhamBenh;
 import vn.ehealth.emr.model.dto.DichVuKyThuat;
 import vn.ehealth.emr.model.dto.GiaiPhauBenh;
 import vn.ehealth.emr.model.dto.PhauThuatThuThuat;
@@ -72,18 +71,6 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         encounterId.ifPresent(x -> params.put("encounter.reference", ResourceType.Encounter + "/" + x));
         
         return params;
-    }
-    
-    private CoSoKhamBenh getCoSoKhamBenh(@Nonnull DichVuKyThuat dto) {
-    	var enc = enCounterDao.read(createIdType(dto.encounterId));
-    	if(enc != null) {
-    		var falculty = organizationDao.readRef(enc.getServiceProvider());
-    		if(falculty != null) {
-    			var serviceProvider = organizationDao.readRef(falculty.getPartOf());
-    			return new CoSoKhamBenh(serviceProvider);
-    		}
-    	}
-    	return null;
     }
     
     private long countDichVuKT(String maDv, 
@@ -197,6 +184,31 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         throw new RuntimeException("No data found for DichVuKyThuat with id:" + dto.id);
     }
     
+    private String getCoSoKhamBenh(@Nonnull DichVuKyThuat dto) {
+    	var enc = enCounterDao.read(createIdType(dto.encounterId));
+    	if(enc != null) {
+    		var falculty = organizationDao.readRef(enc.getServiceProvider());
+    		if(falculty != null) {
+    			var serviceProvider = organizationDao.readRef(falculty.getPartOf());
+    			return serviceProvider != null? serviceProvider.getName() : "";
+    		}
+    	}
+    	return "";
+    }
+    
+    private Map<String, Object> convertToRaw(DichVuKyThuat dto, boolean includeServiceProvider) {
+    	if(dto == null) return null;
+    	
+    	var item = JsonUtil.objectToMap(dto);
+    	
+    	if(includeServiceProvider) {
+    		var coSoKhamBenh = getCoSoKhamBenh(dto);
+    		item.put("coSoKhamBenh", coSoKhamBenh);
+    	}
+    	
+    	return item;
+    }
+    
     // ========================================  ChanDoanHinhAnh ===============================
     private boolean isChanDoanHinhAnh(ServiceRequest obj) {
         if(obj != null && obj.hasCategory()) {
@@ -211,7 +223,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     
     @GetMapping("/count_cdha")
     public long countChanDoanHinhAnh(@RequestParam Optional<String> patientId, 
-                                                    @RequestParam Optional<String> encounterId) {
+                                    @RequestParam Optional<String> encounterId) {
         return countDichVuKT(LoaiDichVuKT.CHAN_DOAN_HINH_ANH, patientId, encounterId);
     }
     
@@ -226,26 +238,19 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         
         var result = transform(lst, x -> {
         	var cdha = new ChanDoanHinhAnh(x);        	
-        	var item = JsonUtil.objectToMap(cdha);
-        	
-        	if(includeServiceProvider.orElse(false)) {
-        		var coSoKhamBenh = getCoSoKhamBenh(cdha);
-	        	if(coSoKhamBenh != null) {
-	        		item.put("coSoKhamBenh", coSoKhamBenh.ten);
-	        	}
-        	}
-        	
-        	return item;
+        	return convertToRaw(cdha, includeServiceProvider.orElse(false));
         });
         
         return ResponseEntity.ok(result);
     }
     
     @GetMapping("/get_cdha_by_id/{id}")
-    public ResponseEntity<?> getChanDoanHinhAnhById(@PathVariable String id) {
+    public ResponseEntity<?> getChanDoanHinhAnhById(@PathVariable String id, 
+							@RequestParam Optional<Boolean> includeServiceProvider) {
         var obj = serviceRequestDao.read(new IdType(id));
         if(isChanDoanHinhAnh(obj)) {
-            return ResponseEntity.ok(new ChanDoanHinhAnh(obj));
+        	var cdha = new ChanDoanHinhAnh(obj);
+            return ResponseEntity.ok(convertToRaw(cdha, includeServiceProvider.orElse(false)));
         }
         return new ResponseEntity<>("No chanDoanHinhAnh with id:" + id, HttpStatus.BAD_REQUEST);
     }
@@ -276,9 +281,11 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         return false;
     }
     
+   
+    
     @GetMapping("/count_pttt")
     public long countPhauThuatThuThuat(@RequestParam Optional<String> patientId, 
-                                                    @RequestParam Optional<String> encounterId) {
+                                        @RequestParam Optional<String> encounterId) {
         return countDichVuKT(LoaiDichVuKT.PHAU_THUAT_THU_THUAT, patientId, encounterId);
     }
     
@@ -293,26 +300,20 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
 
         var result = transform(lst, x -> {
         	var pttt = new PhauThuatThuThuat(x);        	
-        	var item = JsonUtil.objectToMap(pttt);
-        	
-        	if(includeServiceProvider.orElse(false)) {
-        		var coSoKhamBenh = getCoSoKhamBenh(pttt);
-	        	if(coSoKhamBenh != null) {
-	        		item.put("coSoKhamBenh", coSoKhamBenh.ten);
-	        	}
-        	}
-        	
-        	return item;
+        	return convertToRaw(pttt, includeServiceProvider.orElse(false));
         });
         
         return ResponseEntity.ok(result);
     }
     
     @GetMapping("/get_pttt_by_id/{id}")
-    public ResponseEntity<?> getPhauThuatThuThuatById(@PathVariable String id) {
+    public ResponseEntity<?> getPhauThuatThuThuatById(@PathVariable String id,
+    							@RequestParam Optional<Boolean> includeServiceProvider) {
+    	
         var obj = serviceRequestDao.read(new IdType(id));
         if(isPhauThuatThuThuat(obj)) {
-            return ResponseEntity.ok(new PhauThuatThuThuat(obj));
+        	var pttt = new PhauThuatThuThuat(obj);
+            return ResponseEntity.ok(convertToRaw(pttt, includeServiceProvider.orElse(false)));
         }
         return new ResponseEntity<>("No phauThuatThuThuat with id:" + id, HttpStatus.BAD_REQUEST);
     }
@@ -345,7 +346,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     
     @GetMapping("/count_gpb")
     public long countGiaiPhauBenh(@RequestParam Optional<String> patientId, 
-                                                    @RequestParam Optional<String> encounterId) {
+                                  @RequestParam Optional<String> encounterId) {
         return countDichVuKT(LoaiDichVuKT.GIAI_PHAU_BENH, patientId, encounterId);
     }
     
@@ -360,26 +361,20 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         
         var result = transform(lst, x -> {
         	var gpb = new GiaiPhauBenh(x);        	
-        	var item = JsonUtil.objectToMap(gpb);
-        	
-        	if(includeServiceProvider.orElse(false)) {
-        		var coSoKhamBenh = getCoSoKhamBenh(gpb);
-	        	if(coSoKhamBenh != null) {
-	        		item.put("coSoKhamBenh", coSoKhamBenh.ten);
-	        	}
-        	}
-        	
-        	return item;
+        	return convertToRaw(gpb, includeServiceProvider.orElse(false));
         });
         
         return ResponseEntity.ok(result);
     }
     
     @GetMapping("/get_gpb_by_id/{id}")
-    public ResponseEntity<?> getGiaiPhauBenhById(@PathVariable String id) {
+    public ResponseEntity<?> getGiaiPhauBenhById(@PathVariable String id,
+    						  	@RequestParam Optional<Boolean> includeServiceProvider) {
+    	
         var obj = serviceRequestDao.read(new IdType(id));
         if(isGiaiPhauBenh(obj)) {
-            return ResponseEntity.ok(new GiaiPhauBenh(obj));
+        	var gpb = new GiaiPhauBenh(obj);
+            return ResponseEntity.ok(convertToRaw(gpb, includeServiceProvider.orElse(false)));
         }
         return new ResponseEntity<>("No giaiPhauBenh with id:" + id, HttpStatus.BAD_REQUEST);
     }
@@ -427,26 +422,20 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
 
         var result = transform(lst, x -> {
         	var xetNghiem = new XetNghiem(x);        	
-        	var item = JsonUtil.objectToMap(xetNghiem);
-        	
-        	if(includeServiceProvider.orElse(false)) {
-        		var coSoKhamBenh = getCoSoKhamBenh(xetNghiem);
-	        	if(coSoKhamBenh != null) {
-	        		item.put("coSoKhamBenh", coSoKhamBenh.ten);
-	        	}
-        	}
-        	
-        	return item;
+        	return convertToRaw(xetNghiem, includeServiceProvider.orElse(false));
         });
         
         return ResponseEntity.ok(result);
     }
     
     @GetMapping("/get_xet_nghiem_by_id/{id}")
-    public ResponseEntity<?> getXetNghiemById(@PathVariable String id) {
+    public ResponseEntity<?> getXetNghiemById(@PathVariable String id,
+    							@RequestParam Optional<Boolean> includeServiceProvider) {
+    	
         var obj = serviceRequestDao.read(new IdType(id));
         if(isXetNghiem(obj)) {
-            return ResponseEntity.ok(new XetNghiem(obj));
+        	var xetNghiem = new XetNghiem(obj);
+            return ResponseEntity.ok(convertToRaw(xetNghiem, includeServiceProvider.orElse(false)));
         }
         return new ResponseEntity<>("No xetNghiem with id:" + id, HttpStatus.BAD_REQUEST);
     }
