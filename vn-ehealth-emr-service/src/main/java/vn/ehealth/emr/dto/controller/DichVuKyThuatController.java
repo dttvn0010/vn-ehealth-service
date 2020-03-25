@@ -31,6 +31,7 @@ import vn.ehealth.emr.model.dto.ChanDoanHinhAnh;
 import vn.ehealth.emr.model.dto.CoSoKhamBenh;
 import vn.ehealth.emr.model.dto.DichVuKyThuat;
 import vn.ehealth.emr.model.dto.GiaiPhauBenh;
+import vn.ehealth.emr.model.dto.KhoaDieuTri;
 import vn.ehealth.emr.model.dto.PhauThuatThuThuat;
 import vn.ehealth.emr.model.dto.VaoKhoa;
 import vn.ehealth.emr.model.dto.XetNghiem;
@@ -186,14 +187,11 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         throw new RuntimeException("No data found for DichVuKyThuat with id:" + dto.id);
     }
     
-    private CoSoKhamBenh getCoSoKhamBenh(@Nonnull DichVuKyThuat dto) {
+    private KhoaDieuTri getKhoaDieuTri(@Nonnull DichVuKyThuat dto) {
     	var enc = enCounterDao.read(createIdType(dto.encounterId));
     	if(enc != null) {
     		var falculty = organizationDao.readRef(enc.getServiceProvider());
-    		if(falculty != null) {
-    			var serviceProvider = organizationDao.readRef(falculty.getPartOf());
-    			return new CoSoKhamBenh(serviceProvider);
-    		}
+    		return new KhoaDieuTri(falculty);
     	}
     	return null;
     }
@@ -207,8 +205,8 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     	var item = JsonUtil.objectToMap(dto);
     	
     	if(includeServiceProvider.orElse(false)) {
-    		var coSoKhamBenh = getCoSoKhamBenh(dto);
-    		item.put("coSoKhamBenh", coSoKhamBenh);
+    		var khoaDieuTri = getKhoaDieuTri(dto);
+    		item.put("khoaDieuTri", khoaDieuTri);
     	}
     	
     	if(includeEncounter.orElse(false)) {
