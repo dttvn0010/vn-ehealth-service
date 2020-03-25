@@ -250,7 +250,8 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         var obj = serviceRequestDao.read(new IdType(id));
         if(isChanDoanHinhAnh(obj)) {
         	var cdha = new ChanDoanHinhAnh(obj);
-            return ResponseEntity.ok(convertToRaw(cdha, includeServiceProvider.orElse(false)));
+        	var result = convertToRaw(cdha, includeServiceProvider.orElse(false))
+            return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No chanDoanHinhAnh with id:" + id, HttpStatus.BAD_REQUEST);
     }
@@ -313,7 +314,8 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         var obj = serviceRequestDao.read(new IdType(id));
         if(isPhauThuatThuThuat(obj)) {
         	var pttt = new PhauThuatThuThuat(obj);
-            return ResponseEntity.ok(convertToRaw(pttt, includeServiceProvider.orElse(false)));
+        	var result = convertToRaw(pttt, includeServiceProvider.orElse(false));
+            return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No phauThuatThuThuat with id:" + id, HttpStatus.BAD_REQUEST);
     }
@@ -374,7 +376,8 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         var obj = serviceRequestDao.read(new IdType(id));
         if(isGiaiPhauBenh(obj)) {
         	var gpb = new GiaiPhauBenh(obj);
-            return ResponseEntity.ok(convertToRaw(gpb, includeServiceProvider.orElse(false)));
+        	var result = convertToRaw(gpb, includeServiceProvider.orElse(false));
+            return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No giaiPhauBenh with id:" + id, HttpStatus.BAD_REQUEST);
     }
@@ -435,7 +438,8 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         var obj = serviceRequestDao.read(new IdType(id));
         if(isXetNghiem(obj)) {
         	var xetNghiem = new XetNghiem(obj);
-            return ResponseEntity.ok(convertToRaw(xetNghiem, includeServiceProvider.orElse(false)));
+        	var result = convertToRaw(xetNghiem, includeServiceProvider.orElse(false));
+            return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No xetNghiem with id:" + id, HttpStatus.BAD_REQUEST);
     }
