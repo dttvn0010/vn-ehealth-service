@@ -1,7 +1,5 @@
 package vn.ehealth.emr.model.dto;
 
-import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
-
 import java.util.Date;
 
 import org.hl7.fhir.r4.model.Encounter;
@@ -9,9 +7,13 @@ import org.hl7.fhir.r4.model.ResourceType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+
 public class VaoKhoa extends BaseModelDTO {
     public String patientId;
     public String falcultyId;
+    public String episodeOfCareId;
         
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayGioVao;
@@ -44,6 +46,7 @@ public class VaoKhoa extends BaseModelDTO {
         var ent = new Encounter();
         
         ent.setSubject(createReference(ResourceType.Patient, dto.patientId));
+        ent.setEpisodeOfCare(listOf(createReference(ResourceType.EpisodeOfCare, dto.episodeOfCareId)));
         ent.setServiceProvider(createReference(ResourceType.Organization, dto.falcultyId));
         ent.setPeriod(createPeriod(dto.ngayGioVao, dto.ngayGioKetThucDieuTri));
         

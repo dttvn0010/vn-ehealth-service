@@ -90,7 +90,7 @@ public class XetNghiem extends DichVuKyThuat {
         Procedure procedure;
         if(this.id != null) {
             var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + this.id);
-            procedure = DaoFactory.getProcedureDao().searchOne(params);
+            procedure = (Procedure) DaoFactory.getProcedureDao().searchOne(params);
             if(procedure == null) throw new RuntimeException("No procedure with requestId:" + this.id);
         }else {
             procedure = new Procedure();
@@ -123,7 +123,7 @@ public class XetNghiem extends DichVuKyThuat {
         DiagnosticReport diagnosticReport = null;
         if(this.id != null) {
             var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + this.id);
-            diagnosticReport = DaoFactory.getDiagnosticReportDao().searchOne(params);
+            diagnosticReport = (DiagnosticReport) DaoFactory.getDiagnosticReportDao().searchOne(params);
             if(diagnosticReport == null) throw new RuntimeException("No diagnosticReport with requestId:" + this.id);
         }else {
             diagnosticReport = new DiagnosticReport();
@@ -160,7 +160,7 @@ public class XetNghiem extends DichVuKyThuat {
         var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
         
         // Procedure
-        var procedure = DaoFactory.getProcedureDao().searchOne(params);
+        var procedure = (Procedure) DaoFactory.getProcedureDao().searchOne(params);
         if(procedure != null) {
             this.ngayThucHien = procedure.hasPerformedDateTimeType()? procedure.getPerformedDateTimeType().getValue() : null;
             this.bacSiXetNghiem = CanboYte.fromReference(procedure.getAsserter());
@@ -169,7 +169,8 @@ public class XetNghiem extends DichVuKyThuat {
         // Observations
         var observations =  DaoFactory.getObservationDao().search(params);
         this.dsKetQuaXetNghiem = new ArrayList<>();
-        for(var obs : observations) {
+        for(var item : observations) {
+            var obs = (Observation) item;
             var ketQuaXn = new KetQuaXetNghiem();
             ketQuaXn.giaTri = obs.hasValue()? obs.getValueStringType().getValue() : "";
             ketQuaXn.dmChiSoXetNghiem = DanhMuc.fromConcept(obs.getCode());
@@ -177,7 +178,7 @@ public class XetNghiem extends DichVuKyThuat {
         }
                 
         // DiagnosticReport
-        var diagnosticReport = DaoFactory.getDiagnosticReportDao().searchOne(params);
+        var diagnosticReport = (DiagnosticReport) DaoFactory.getDiagnosticReportDao().searchOne(params);
         if(diagnosticReport != null) {
             this.dmXetNghiem = new DanhMuc(diagnosticReport.getCode());
             this.nguoiVietBaoCao = diagnosticReport.hasPerformer()?

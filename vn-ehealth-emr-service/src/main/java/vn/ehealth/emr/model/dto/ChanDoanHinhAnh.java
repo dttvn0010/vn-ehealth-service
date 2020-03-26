@@ -75,7 +75,7 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
         Procedure procedure;
         if(this.id != null) {
             var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + this.id);
-            procedure = DaoFactory.getProcedureDao().searchOne(params);
+            procedure = (Procedure) DaoFactory.getProcedureDao().searchOne(params);
             if(procedure == null) throw new RuntimeException("No procedure with requestId:" + this.id);
         }else {
             procedure = new Procedure();
@@ -96,7 +96,7 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
         DiagnosticReport diagnosticReport = null;
         if(this.id != null) {
             var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + this.id);
-            diagnosticReport = DaoFactory.getDiagnosticReportDao().searchOne(params);
+            diagnosticReport = (DiagnosticReport) DaoFactory.getDiagnosticReportDao().searchOne(params);
             if(diagnosticReport == null) throw new RuntimeException("No diagnosticReport with requestId:" + this.id);
         }else {
             diagnosticReport = new DiagnosticReport();
@@ -132,7 +132,7 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
         var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
         
         // Procedure        
-        var procedure = DaoFactory.getProcedureDao().searchOne(params);
+        var procedure = (Procedure) DaoFactory.getProcedureDao().searchOne(params);
         if(procedure != null) {
             this.ngayThucHien = procedure.hasPerformedDateTimeType()? procedure.getPerformedDateTimeType().getValue() : null;
             this.bacSiChuyenKhoa = CanboYte.fromReference(procedure.getAsserter());
@@ -141,7 +141,7 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
         }
         
         // DiagnosticReport
-        var diagnosticReport = DaoFactory.getDiagnosticReportDao().searchOne(params);
+        var diagnosticReport = (DiagnosticReport) DaoFactory.getDiagnosticReportDao().searchOne(params);
         if(diagnosticReport != null) {
             this.dmCdha = new DanhMuc(diagnosticReport.getCode());
             this.nguoiVietBaoCao = diagnosticReport.hasPerformer()?

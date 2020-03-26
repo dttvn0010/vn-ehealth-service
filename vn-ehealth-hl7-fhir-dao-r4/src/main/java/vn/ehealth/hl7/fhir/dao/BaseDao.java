@@ -11,6 +11,7 @@ import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -266,7 +267,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public List<FHIR> search(Map params) {
+    public List<Resource> search(Map params) {
         Method method = null;
         for(var m : this.getClass().getMethods()) {
             if("search".equals(m.getName())) {
@@ -293,12 +294,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
                     }
                 }    
                 
-                var lst = (List<Object>) method.invoke(this, lstParam.toArray());
-                var result = new ArrayList<FHIR>();
-                for(var item : lst) {
-                    result.add((FHIR) item);
-                }
-                return result;
+                return (List<Resource>) method.invoke(this, lstParam.toArray());
             }catch(Exception e) {
                 e.printStackTrace();
             }
@@ -307,7 +303,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public FHIR searchOne(Map params) {
+    public Resource searchOne(Map params) {
         var newParams = new HashMap<>(params);
         newParams.put("count", 1);
         var lst = search(newParams);

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.hl7.fhir.r4.model.EpisodeOfCare;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.slf4j.Logger;
@@ -80,7 +81,7 @@ public class DotKhamBenhController {
     	var lst = episodeOfCareDao.search(params);
     	
     	var result = transform(lst, x -> {
-    		var dto = DotKhamBenh.fromFhir(x);
+    		var dto = DotKhamBenh.fromFhir((EpisodeOfCare)x);
     		return convertToRaw(dto, includePatient.orElse(false));
     	});
         

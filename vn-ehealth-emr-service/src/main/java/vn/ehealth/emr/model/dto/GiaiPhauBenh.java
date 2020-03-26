@@ -112,7 +112,7 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         DiagnosticReport diagnosticReport = null;
         if(this.id != null) {
             var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + this.id);
-            diagnosticReport = DaoFactory.getDiagnosticReportDao().searchOne(params);
+            diagnosticReport = (DiagnosticReport) DaoFactory.getDiagnosticReportDao().searchOne(params);
             if(diagnosticReport == null) throw new RuntimeException("No diagnosticReport with requestId:" + this.id);
         }else {
             diagnosticReport = new DiagnosticReport();
@@ -171,7 +171,7 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         
         // DiagnosticReport
         var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
-        var diagnosticReport = DaoFactory.getDiagnosticReportDao().searchOne(params);
+        var diagnosticReport = (DiagnosticReport) DaoFactory.getDiagnosticReportDao().searchOne(params);
         if(diagnosticReport != null) {
           
             this.nguoiVietBaoCao = diagnosticReport.hasPerformer()?

@@ -3,6 +3,7 @@ package vn.ehealth.emr.dto.controller;
 import java.util.HashMap;
 import java.util.Optional;
 
+import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ private static Logger logger = LoggerFactory.getLogger(BenhNhanController.class)
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
         var lst = encounterDao.search(new HashMap<>());
-        var result = transform(lst, x -> VaoKhoa.fromFhir(x));
+        var result = transform(lst, x -> VaoKhoa.fromFhir((Encounter) x));
         return ResponseEntity.ok(result);
     }
     

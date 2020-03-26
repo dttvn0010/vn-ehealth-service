@@ -1,6 +1,7 @@
 package vn.ehealth.emr.dto.controller;
 
 import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Practitioner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class CanBoYteController {
     @GetMapping("/get_all")
     public ResponseEntity<?> getAllDto() {
         var lst = practitionerDao.search(new HashMap<>());
-        var result = transform(lst, x -> CanboYte.fromFhir(x));
+        var result = transform(lst, x -> CanboYte.fromFhir((Practitioner) x));
         return ResponseEntity.ok(result);
     }
     

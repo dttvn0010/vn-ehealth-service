@@ -1,6 +1,7 @@
 package vn.ehealth.emr.dto.controller;
 
 import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Patient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class BenhNhanController {
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
         var lst = patientDao.search(new HashMap<>());
-        var result = transform(lst, x -> BenhNhan.fromFhir(x));
+        var result = transform(lst, x -> BenhNhan.fromFhir((Patient) x));
         return ResponseEntity.ok(result);
     }
     
