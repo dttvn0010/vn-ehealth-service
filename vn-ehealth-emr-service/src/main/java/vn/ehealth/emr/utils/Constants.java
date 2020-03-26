@@ -89,6 +89,7 @@ public class Constants {
     
     public static interface CodeSystemValue {
         final public static String ICD10 = "http://hl7.org/fhir/sid/icd-10";
+        final public static String GIOI_TINH = codeSystems.getProperty("gioi_tinh");
         final public static String DVHC = codeSystems.getProperty("dvhc");
         final public static String QUOC_GIA = codeSystems.getProperty("quoc_gia");
         
@@ -97,6 +98,7 @@ public class Constants {
         final public static String NGHE_NGHIEP = codeSystems.getProperty("nghe_nghiep");
         final public static String DOI_TUONG_TAI_CHINH = codeSystems.getProperty("doituong_taichinh");
         final public static String LOAI_TO_CHUC = codeSystems.getProperty("loai_to_chuc");
+        final public static String ENCOUTER_TYPE = codeSystems.getProperty("encounter_type");
         
         final public static String LOAI_KHAM_BENH = codeSystems.getProperty("loai_kham_benh");
         final public static String KHOA_DIEU_TRI = codeSystems.getProperty("khoa_dieu_tri");
@@ -128,12 +130,16 @@ public class Constants {
         final public static String KHOA_DIEU_TRI = "FAL";
     }
     
+    public static interface EncounterType {
+        final public static String DOT_KHAM = "HSBA";
+        final public static String VAO_KHOA = "VK";
+    }
+    
     public static interface LoaiDichVuKT {
         final public static String PHAU_THUAT_THU_THUAT = "SUR";
         final public static String XET_NGHIEM = "LAB";
         final public static String GIAI_PHAU_BENH = "SP";
         final public static String CHAN_DOAN_HINH_ANH = "CA";        
         final public static String THAM_DO_CHUC_NANG = "XRC";
-    }
-    
+    }    
 }

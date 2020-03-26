@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.hl7.fhir.r4.model.EpisodeOfCare;
+import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.slf4j.Logger;
@@ -24,8 +24,7 @@ import vn.ehealth.emr.model.dto.BenhNhan;
 import vn.ehealth.emr.model.dto.CoSoKhamBenh;
 import vn.ehealth.emr.model.dto.DotKhamBenh;
 import vn.ehealth.emr.utils.JsonUtil;
-
-import vn.ehealth.hl7.fhir.ehr.dao.impl.EpisodeOfCareDao;
+import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
 import vn.ehealth.hl7.fhir.provider.dao.impl.OrganizationDao;
 
@@ -39,7 +38,7 @@ public class DotKhamBenhController {
     private static Logger logger = LoggerFactory.getLogger(BenhNhanController.class);
     
     @Autowired private PatientDao patientDao;
-    @Autowired private EpisodeOfCareDao episodeOfCareDao;
+    @Autowired private EncounterDao encounterDao;
     @Autowired private OrganizationDao organizationDao;
         
     private Map<String, Object> convertToRaw(DotKhamBenh dto, boolean includePatient) {
@@ -59,7 +58,7 @@ public class DotKhamBenhController {
     
     @GetMapping("/get_by_id/{id}")
     public ResponseEntity<?> getById(@PathVariable String id, @RequestParam Optional<Boolean> includePatient) {
-        var obj = episodeOfCareDao.read(new IdType(id));
+        var obj = encounterDao.read(new IdType(id));
         var dto = DotKhamBenh.fromFhir(obj);
         var result = convertToRaw(dto, includePatient.orElse(false));
         return ResponseEntity.ok(result);
@@ -68,8 +67,8 @@ public class DotKhamBenhController {
     @GetMapping("/count")
     public long count(@RequestParam Optional<String> patientId) {
         var params = new HashMap<String, Object>();
-        patientId.ifPresent(x -> params.put("patient", ResourceType.Patient + "/" +  x));
-    	return episodeOfCareDao.count(params);
+        patientId.ifPresent(x -> params.put("subject", ResourceType.Patient + "/" +  x));
+    	return encounterDao.count(params);
     }
     
     @GetMapping("/get_list")
@@ -77,11 +76,11 @@ public class DotKhamBenhController {
     									@RequestParam Optional<Boolean> includePatient) {
     	
         var params = new HashMap<String, Object>();
-        patientId.ifPresent(x -> params.put("patient", ResourceType.Patient + "/" + x));
-    	var lst = episodeOfCareDao.search(params);
+        patientId.ifPresent(x -> params.put("subject", ResourceType.Patient + "/" + x));
+    	var lst = encounterDao.search(params);
     	
     	var result = transform(lst, x -> {
-    		var dto = DotKhamBenh.fromFhir((EpisodeOfCare)x);
+    		var dto = DotKhamBenh.fromFhir((Encounter)x);
     		return convertToRaw(dto, includePatient.orElse(false));
     	});
         
@@ -94,9 +93,9 @@ public class DotKhamBenhController {
             var obj = DotKhamBenh.toFhir(dto);            
             
             if(obj.hasId()) {
-                obj = episodeOfCareDao.update(obj, obj.getIdElement());
+                obj = encounterDao.update(obj, obj.getIdElement());
             }else {
-                obj = episodeOfCareDao.create(obj);
+                obj = encounterDao.create(obj);
             }
             dto = DotKhamBenh.fromFhir(obj);
             var result = mapOf("success", true, "dto", dto);

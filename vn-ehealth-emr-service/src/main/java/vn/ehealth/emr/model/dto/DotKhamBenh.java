@@ -1,7 +1,8 @@
 package vn.ehealth.emr.model.dto;
 
 import java.util.Date;
-import org.hl7.fhir.r4.model.EpisodeOfCare;
+
+import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.ResourceType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -27,13 +28,13 @@ public class DotKhamBenh extends BaseModelDTO {
         super();
     }
     
-    public DotKhamBenh(EpisodeOfCare obj) {
+    public DotKhamBenh(Encounter obj) {
         super(obj);
         
         if(obj == null) return;
         
-        this.patientId = idFromRef(obj.getPatient());
-        this.serviceProviderId = idFromRef(obj.getManagingOrganization());
+        this.patientId = idFromRef(obj.getSubject());
+        this.serviceProviderId = idFromRef(obj.getServiceProvider());
         
         this.maYte = obj.hasIdentifier()? obj.getIdentifierFirstRep().getValue(): "";
         
@@ -48,25 +49,25 @@ public class DotKhamBenh extends BaseModelDTO {
         }
     }
     
-    public static DotKhamBenh fromFhir(EpisodeOfCare obj) {
+    public static DotKhamBenh fromFhir(Encounter obj) {
         if(obj == null) return null;
         return new DotKhamBenh(obj);
     }
     
-    public static EpisodeOfCare toFhir(DotKhamBenh dto) {
+    public static Encounter toFhir(DotKhamBenh dto) {
         if(dto == null) return null;
-        var episode = new EpisodeOfCare();
-        episode.setId(dto.id);
-        episode.setIdentifier(listOf(createIdentifier(dto.maYte, IdentifierSystem.MA_HO_SO)));
-        episode.setType(listOf(DanhMuc.toConcept(dto.dmLoaiKham, CodeSystemValue.LOAI_KHAM_BENH)));
-        episode.setPatient(createReference(ResourceType.Patient, dto.patientId));
-        episode.setManagingOrganization(createReference(ResourceType.Organization, dto.serviceProviderId));
-        episode.setPeriod(createPeriod(dto.ngayGioVao, dto.ngayGioKetThucDieuTri));
-        return episode;
+        var obj = new Encounter();
+        obj.setId(dto.id);
+        obj.setIdentifier(listOf(createIdentifier(dto.maYte, IdentifierSystem.MA_HO_SO)));
+        obj.setType(listOf(DanhMuc.toConcept(dto.dmLoaiKham, CodeSystemValue.LOAI_KHAM_BENH)));
+        obj.setSubject(createReference(ResourceType.Patient, dto.patientId));
+        obj.setServiceProvider(createReference(ResourceType.Organization, dto.serviceProviderId));
+        obj.setPeriod(createPeriod(dto.ngayGioVao, dto.ngayGioKetThucDieuTri));
+        return obj;
     }
 
     @Override
     public ResourceType getType() {
-        return ResourceType.EpisodeOfCare;
+        return ResourceType.Encounter;
     }
 }

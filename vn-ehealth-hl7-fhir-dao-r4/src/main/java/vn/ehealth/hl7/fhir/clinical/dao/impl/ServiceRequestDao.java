@@ -201,7 +201,8 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
         }
         // category
         if (category != null) {
-            criteria.and("category.coding.code.myStringValue").is(category.getValue());
+            criteria.and("category.coding.code").is(category.getValue())
+                    .and("category.coding.system").is(category.getSystem());
         }
         // code
         if (code != null) {

@@ -71,6 +71,7 @@ public class SpecimenEntity extends BaseResource {
         obj.setSubject(BaseReference.toReference(ent.subject));
         obj.setReceivedTime(ent.receivedTime);
         obj.setParent(BaseReference.toReferenceList(ent.parent));
+        obj.setRequest(BaseReference.toReferenceList(ent.request));
         obj.setCollection(SpecimenCollectionEntity.toSpecimenCollectionComponent(ent.collection));
         
         obj.setProcessing(transform(ent.processing, 

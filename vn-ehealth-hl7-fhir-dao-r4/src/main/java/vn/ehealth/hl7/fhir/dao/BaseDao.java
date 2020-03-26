@@ -198,24 +198,9 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         return retVal;
     }
     
-    public long countByCriteria(Criteria criteria) {
-        var query = Query.query(criteria);
-        return mongo.count(query, getEntityClass());
-    }
-    
-    public List<FHIR> findByCriteria(Criteria criteria) {
-        return findByCriteria(criteria, -1, -1);
-    }
-    
     @SuppressWarnings("unchecked")
-    public List<FHIR> findByCriteria(Criteria criteria, int start, int count) {
+    public List<FHIR> findByCriteria(Criteria criteria) {
         var query = Query.query(criteria);
-        if(start >= 0) {
-            query.skip(start);
-        }
-        if(count >= 0) {
-            query.limit(count);
-        }
         var lst = mongo.find(query, getEntityClass());
         return DataConvertUtil.transform(lst, x -> transform((ENT)x));
     }

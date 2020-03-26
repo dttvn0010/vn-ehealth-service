@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ca.uhn.fhir.rest.param.TokenParam;
 import vn.ehealth.emr.model.dto.CoSoKhamBenh;
 import vn.ehealth.emr.model.dto.KhoaDieuTri;
 import vn.ehealth.emr.model.dto.ToChuc;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.LoaiToChuc;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.provider.dao.impl.OrganizationDao;
-import vn.ehealth.utils.MongoUtils;
-
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
@@ -35,15 +35,15 @@ public class ToChucController {
     @Autowired private OrganizationDao organizationDao;
     
     private List<Organization> getOrganizations(String maLoaiToChuc, String parentId) {
-        var params = mapOf(
-                        "type.coding.code", (Object) maLoaiToChuc,
-                        "type.coding.system", CodeSystemValue.LOAI_TO_CHUC                        
-                     );
+        var params = mapOf("type", new TokenParam(CodeSystemValue.LOAI_TO_CHUC, maLoaiToChuc));
         
         if(parentId != null) {
-            params.put("partOf.reference", ResourceType.Organization + "/" + parentId);
+            params.put("partOf", ResourceType.Organization + "/" + parentId);
         }
-        return organizationDao.findByCriteria(MongoUtils.createCriteria(params));
+        
+        var lst = organizationDao.search(params);
+        lst = FPUtil.filter(lst, x -> x instanceof Organization);
+        return transform(lst, x -> (Organization)x);        
     }
     
     private Organization saveToChuc(ToChuc dto) {

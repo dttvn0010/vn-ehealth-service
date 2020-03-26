@@ -138,7 +138,8 @@ public class OrganizationDao extends BaseDao<OrganizationEntity, Organization> {
             criteria.and("name").regex(phonetic.getValue());
         }
         if (type != null) {
-            criteria.and("type.coding.code.myStringValue").is(type.getValue());
+            criteria.and("type.coding.code").is(type.getValue())
+                    .and("type.coding.system").is(type.getSystem());
         }
         return criteria;
     }

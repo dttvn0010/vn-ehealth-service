@@ -1,19 +1,9 @@
 package vn.ehealth.emr.dto.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
-
-import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Observation;
-import org.hl7.fhir.r4.model.Procedure;
-import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
-import org.hl7.fhir.r4.model.Specimen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,27 +18,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.model.dto.ChanDoanHinhAnh;
-import vn.ehealth.emr.model.dto.DichVuKyThuat;
 import vn.ehealth.emr.model.dto.GiaiPhauBenh;
-import vn.ehealth.emr.model.dto.KhoaDieuTri;
 import vn.ehealth.emr.model.dto.PhauThuatThuThuat;
-import vn.ehealth.emr.model.dto.VaoKhoa;
 import vn.ehealth.emr.model.dto.XetNghiem;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
-import vn.ehealth.emr.utils.JsonUtil;
-import vn.ehealth.hl7.fhir.clinical.dao.impl.ProcedureDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
-import vn.ehealth.hl7.fhir.diagnostic.dao.impl.DiagnosticReportDao;
-import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ObservationDao;
-import vn.ehealth.hl7.fhir.diagnostic.dao.impl.SpecimenDao;
-import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
-import vn.ehealth.hl7.fhir.provider.dao.impl.OrganizationDao;
-import vn.ehealth.utils.MongoUtils;
-
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
-
+import static vn.ehealth.emr.dto.controller.DichVuKyThuatHelper.*;
 
 @RestController
 @RequestMapping("/api/dich_vu_ky_thuat")
@@ -56,172 +34,8 @@ public class DichVuKyThuatController {
 
 private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.class);
     
-    @Autowired private EncounterDao enCounterDao;
-    @Autowired private OrganizationDao organizationDao;
     @Autowired private ServiceRequestDao serviceRequestDao;
-    @Autowired private ProcedureDao procedureDao;
-    @Autowired private DiagnosticReportDao  diagnosticReportDao;
-    @Autowired private SpecimenDao specimenDao;
-    @Autowired private ObservationDao observationDao;
-    
-    private Map<String, Object> makeParams(String maDv, Optional<String> patientId, Optional<String> encounterId) {
-        var params = mapOf(
-            "category.coding.code", (Object) maDv,
-            "category.coding.system", CodeSystemValue.LOAI_DICH_VU_KY_THUAT
-        );
         
-        patientId.ifPresent(x -> params.put("subject.reference", ResourceType.Patient + "/" + x));
-        encounterId.ifPresent(x -> params.put("encounter.reference", ResourceType.Encounter + "/" + x));
-        
-        return params;
-    }
-    
-    private long countDichVuKT(String maDv, 
-                Optional<String> patientId, 
-                Optional<String> encounterId) {
-        
-        var params = makeParams(maDv, patientId, encounterId);
-        return serviceRequestDao.countByCriteria(MongoUtils.createCriteria(params));
-    }
-        
-    private List<ServiceRequest> getDichVuKTList(String maDv, 
-                                    Optional<String> patientId, 
-                                    Optional<String> encounterId,
-                                    Optional<Integer> start,
-                                    Optional<Integer> count) {
-        
-        var params = makeParams(maDv, patientId, encounterId);        
-        return serviceRequestDao.findByCriteria(MongoUtils.createCriteria(params),
-                                    start.orElse(-1), count.orElse(-1));
-    }
-    
-    private DiagnosticReport saveDiagnosticReport(DiagnosticReport obj) {
-        if(obj != null) {
-            if(obj.hasId()) {
-                return diagnosticReportDao.update(obj, obj.getIdElement());
-            }else {
-                return diagnosticReportDao.create(obj);
-            }
-        }
-        return null;
-    }
-    
-    private ServiceRequest saveServiceRequest(ServiceRequest obj) {
-        if(obj != null) {
-            if(obj.hasId()) {
-                return serviceRequestDao.update(obj, obj.getIdElement());
-            }else {
-                return serviceRequestDao.create(obj);
-            }
-        }
-        return null;
-    }
-    
-    private Procedure saveProcedure(Procedure obj) {
-        if(obj != null) {
-            if(obj.hasId()) {
-                return procedureDao.update(obj, obj.getIdElement());
-            }else {
-                return procedureDao.create(obj);
-            }
-        }
-        return null;
-    }
-    
-    private Specimen saveSpecimen(Specimen obj) {
-        if((obj != null)) {
-            if(obj.hasId()) {
-                return specimenDao.update(obj, obj.getIdElement());
-            }else {
-                return specimenDao.create(obj);                        
-            }
-        }
-        return null;
-    }
-    
-    @SuppressWarnings("unchecked")
-    private ServiceRequest saveDichVuKT(@Nonnull DichVuKyThuat dto) {
-        if(dto.encounterId != null && dto.patientId == null) {
-            var enc = enCounterDao.read(createIdType(dto.encounterId));
-            dto.patientId = enc != null? idFromRef(enc.getSubject()) : null;
-        }
-        
-        var entities = dto.toFhir();
-        if(entities != null) {
-            var serviceRequest = (ServiceRequest) entities.get("serviceRequest");
-            var procedure = (Procedure) entities.get("procedure");                
-            var diagnosticReport = (DiagnosticReport) entities.get("diagnosticReport");
-            var specimen = (Specimen) entities.get("specimen");
-            var observations = (List<Observation>) entities.get("observations");
-            if(observations == null) observations = new ArrayList<>();
-                    
-            serviceRequest = saveServiceRequest(serviceRequest);
-            if(serviceRequest != null) {
-                var ref = createReference(serviceRequest);
-                if(procedure != null) procedure.setBasedOn(listOf(ref));
-                if(diagnosticReport != null) diagnosticReport.setBasedOn(listOf(ref));
-                if(specimen != null) specimen.setRequest(listOf(ref));
-                observations.forEach(x -> x.setBasedOn(listOf(ref)));
-            }
-            
-            diagnosticReport = saveDiagnosticReport(diagnosticReport);
-            if(diagnosticReport != null) {
-                if(procedure != null) procedure.setReport(listOf(createReference(diagnosticReport)));                
-            }
-            
-            procedure = saveProcedure(procedure);
-            if(procedure != null) {                
-                var ref = createReference(procedure);
-                observations.forEach(x -> x.setPartOf(listOf(ref)));
-            }
-            
-            specimen = saveSpecimen(specimen);
-            
-            if(serviceRequest != null) {
-                var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
-                var oldObservations = observationDao.search(params);
-                oldObservations.forEach(x -> observationDao.remove(x.getIdElement()));
-                observations.forEach(x -> observationDao.create(x));
-            }
-                                    
-            return serviceRequest;
-        }
-        throw new RuntimeException("No data found for DichVuKyThuat with id:" + dto.id);
-    }
-    
-    private KhoaDieuTri getKhoaDieuTri(@Nonnull DichVuKyThuat dto) {
-    	var enc = enCounterDao.read(createIdType(dto.encounterId));
-    	if(enc != null) {
-    		var falculty = organizationDao.readRef(enc.getServiceProvider());
-    		return new KhoaDieuTri(falculty);
-    	}
-    	return null;
-    }
-    
-    private Map<String, Object> convertToRaw(DichVuKyThuat dto, 
-    								Optional<Boolean> includeServiceProvider, 
-    								Optional<Boolean> includeEncounter) {
-    	
-    	if(dto == null) return null;
-    	
-    	var item = JsonUtil.objectToMap(dto);
-    	
-    	if(includeServiceProvider.orElse(false)) {
-    		var khoaDieuTri = getKhoaDieuTri(dto);
-    		item.put("khoaDieuTri", khoaDieuTri);
-    	}
-    	
-    	if(includeEncounter.orElse(false)) {
-    		var encounter = enCounterDao.read(createIdType(dto.encounterId));
-    		if(encounter != null) {
-    			var vaoKhoa = VaoKhoa.fromFhir(encounter);
-    			item.put("vaoKhoa", vaoKhoa);
-    		}
-    	}
-    	
-    	return item;
-    }
-    
     // ========================================  ChanDoanHinhAnh ===============================
     private boolean isChanDoanHinhAnh(ServiceRequest obj) {
         if(obj != null && obj.hasCategory()) {
@@ -253,7 +67,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         
         var result = transform(lst, x -> {
         	var cdha = new ChanDoanHinhAnh(x);        	
-        	return convertToRaw(cdha, includeServiceProvider, includeEncounter);
+        	return convertDichVuKyThuatToRaw(cdha, includeServiceProvider, includeEncounter);
         });
         
         return ResponseEntity.ok(result);
@@ -266,7 +80,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         var obj = serviceRequestDao.read(new IdType(id));
         if(isChanDoanHinhAnh(obj)) {
         	var cdha = new ChanDoanHinhAnh(obj);
-        	var result = convertToRaw(cdha, includeServiceProvider, includeEncounter);
+        	var result = convertDichVuKyThuatToRaw(cdha, includeServiceProvider, includeEncounter);
             return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No chanDoanHinhAnh with id:" + id, HttpStatus.BAD_REQUEST);
@@ -319,7 +133,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
 
         var result = transform(lst, x -> {
         	var pttt = new PhauThuatThuThuat(x);        	
-        	return convertToRaw(pttt, includeServiceProvider, includeEncounter);
+        	return convertDichVuKyThuatToRaw(pttt, includeServiceProvider, includeEncounter);
         });
         
         return ResponseEntity.ok(result);
@@ -333,7 +147,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         var obj = serviceRequestDao.read(new IdType(id));
         if(isPhauThuatThuThuat(obj)) {
         	var pttt = new PhauThuatThuThuat(obj);
-        	var result = convertToRaw(pttt, includeServiceProvider, includeEncounter);
+        	var result = convertDichVuKyThuatToRaw(pttt, includeServiceProvider, includeEncounter);
             return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No phauThuatThuThuat with id:" + id, HttpStatus.BAD_REQUEST);
@@ -384,7 +198,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         
         var result = transform(lst, x -> {
         	var gpb = new GiaiPhauBenh(x);        	
-        	return convertToRaw(gpb, includeServiceProvider, includeEncounter);
+        	return convertDichVuKyThuatToRaw(gpb, includeServiceProvider, includeEncounter);
         });
         
         return ResponseEntity.ok(result);
@@ -398,7 +212,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         var obj = serviceRequestDao.read(new IdType(id));
         if(isGiaiPhauBenh(obj)) {
         	var gpb = new GiaiPhauBenh(obj);
-        	var result = convertToRaw(gpb, includeServiceProvider, includeEncounter);
+        	var result = convertDichVuKyThuatToRaw(gpb, includeServiceProvider, includeEncounter);
             return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No giaiPhauBenh with id:" + id, HttpStatus.BAD_REQUEST);
@@ -449,7 +263,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
 
         var result = transform(lst, x -> {
         	var xetNghiem = new XetNghiem(x);        	
-        	return convertToRaw(xetNghiem, includeServiceProvider, includeEncounter);
+        	return convertDichVuKyThuatToRaw(xetNghiem, includeServiceProvider, includeEncounter);
         });
         
         return ResponseEntity.ok(result);
@@ -463,7 +277,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
         var obj = serviceRequestDao.read(new IdType(id));
         if(isXetNghiem(obj)) {
         	var xetNghiem = new XetNghiem(obj);
-        	var result = convertToRaw(xetNghiem, includeServiceProvider, includeEncounter);
+        	var result = convertDichVuKyThuatToRaw(xetNghiem, includeServiceProvider, includeEncounter);
             return ResponseEntity.ok(result);
         }
         return new ResponseEntity<>("No xetNghiem with id:" + id, HttpStatus.BAD_REQUEST);

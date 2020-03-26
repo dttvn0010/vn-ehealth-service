@@ -16,8 +16,6 @@ import vn.ehealth.emr.utils.Constants.ExtensionURL;
 import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
 import vn.ehealth.emr.utils.MessageUtils;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
-import vn.ehealth.utils.MongoUtils;
-
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
@@ -59,14 +57,7 @@ public class GiaiPhauBenh extends DichVuKyThuat {
     public GiaiPhauBenh(ServiceRequest serviceRequest) {
         super(serviceRequest);
     }
-    
-    private Specimen getSpecimentByRequest(String serviceRequestId) {
-        Object ref = ResourceType.ServiceRequest + "/" + serviceRequestId;
-        var criteria = MongoUtils.createCriteria(mapOf("request.reference", ref));               
-        var specimens = DaoFactory.getSpecimenDao().findByCriteria(criteria, 0, 1);
-        return specimens.size() > 0? specimens.get(0) : null;
-    }
-    
+   
     @Override
     public Map<String, Object> toFhir() {
         //ServiceRequest
@@ -93,7 +84,8 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         // Specimen
         Specimen specimen;
         if(this.id != null) {
-        	specimen = getSpecimentByRequest(serviceRequest.getId());
+            var params = mapOf("serviceRequest", ResourceType.ServiceRequest + "/" + this.id);
+        	specimen = (Specimen) DaoFactory.getSpecimenDao().searchOne(params);
             if(specimen == null) throw new RuntimeException("No specimen with requestId:" + this.id);
         }else {
         	specimen = new Specimen();
@@ -150,7 +142,9 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         this.dmGpb = new DanhMuc(serviceRequest.getCode());
        
         // Specimen                       
-        var specimen = getSpecimentByRequest(serviceRequest.getId());
+        var params = mapOf("serviceRequest", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
+        var specimen = (Specimen) DaoFactory.getSpecimenDao().searchOne(params);
+        
         if(specimen != null) {
             this.ngayThucHien =  specimen.getReceivedTime();
             this.bacSiChuyenKhoa = CanboYte.fromReference(specimen.getCollection().getCollector());
@@ -170,7 +164,7 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         }
         
         // DiagnosticReport
-        var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
+        params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
         var diagnosticReport = (DiagnosticReport) DaoFactory.getDiagnosticReportDao().searchOne(params);
         if(diagnosticReport != null) {
           

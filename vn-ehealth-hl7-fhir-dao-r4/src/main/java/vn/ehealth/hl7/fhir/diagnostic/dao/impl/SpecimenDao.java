@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
@@ -30,11 +31,11 @@ import vn.ehealth.hl7.fhir.diagnostic.entity.SpecimenEntity;
 @Repository
 public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, TokenParam resid,
+	public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, ReferenceParam request, TokenParam resid,
 			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
 			StringParam _content, StringParam _page, String sortParam, Integer count, Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<>();
-		Criteria criteria = setParamToCriteria(active, resid, _lastUpdated, _tag, _profile, _query, _security,
+		Criteria criteria = setParamToCriteria(active, request, resid, _lastUpdated, _tag, _profile, _query, _security,
 				_content);
 		Query query = new Query();
 		if (criteria != null) {
@@ -103,11 +104,11 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 		return resources;
 	}
 
-	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, TokenParam resid,
+	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam request, TokenParam resid,
 			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
 			StringParam _content) {
 		long total = 0;
-		Criteria criteria = setParamToCriteria(active, resid, _lastUpdated, _tag, _profile, _query, _security,
+		Criteria criteria = setParamToCriteria(active, request, resid, _lastUpdated, _tag, _profile, _query, _security,
 				_content);
 		Query query = new Query();
 		if (criteria != null) {
@@ -117,7 +118,7 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 		return total;
 	}
 
-	private Criteria setParamToCriteria(TokenParam active, TokenParam resid, DateRangeParam _lastUpdated,
+	private Criteria setParamToCriteria(TokenParam active, ReferenceParam serviceRequest, TokenParam resid, DateRangeParam _lastUpdated,
 			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
@@ -125,6 +126,9 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 			criteria = Criteria.where("active").is(active);
 		} else {
 			criteria = Criteria.where("active").is(true);
+		}
+		if(serviceRequest != null) {
+		    criteria.and("request.reference").is(serviceRequest.getValue());
 		}
 		// set param default
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
