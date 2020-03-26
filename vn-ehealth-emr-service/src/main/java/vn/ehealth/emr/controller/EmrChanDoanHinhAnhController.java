@@ -102,16 +102,20 @@ public class EmrChanDoanHinhAnhController {
                                 .map(obj -> objectMapper.convertValue(obj, EmrChanDoanHinhAnh.class))
                                 .collect(Collectors.toList());
             
-            // Save to FHIR db
-            var hsbaEncounter = EmrHoSoBenhAn.getEncounter(matraodoiHsba);
-            cdhaList.forEach(cdha -> {
-                cdha.saveToFhirDb(hsbaEncounter);;
-            });
-            
             var user = UserUtil.getCurrentUser();
             var userId = user.map(x -> x.id).orElse(null);
             
             emrChanDoanHinhAnhService.createOrUpdateFromHIS(userId, hsba, cdhaList, jsonSt);
+            
+            // save to FHIR db
+            try {
+                var hsbaEncounter = EmrHoSoBenhAn.getEncounter(matraodoiHsba);
+                cdhaList.forEach(cdha -> {
+                    cdha.saveToFhirDb(hsbaEncounter);;
+                });
+            }catch(Exception e) {
+                logger.error("Cannot save to FHIR db:", e);
+            }
             
             var result = Map.of(
                 "success" , true,

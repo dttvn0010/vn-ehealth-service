@@ -73,6 +73,13 @@ public class EmrBenhNhanController {
             
             benhNhan = emrBenhNhanService.createOrUpdate(userId, benhNhan, jsonSt);
             
+            // Save to FhirDB
+            try {
+                benhNhan.saveToFhirDb();
+            }catch(Exception e) {
+                logger.error("Cannot save to fhir db: ", e);
+            }
+            
             var result = Map.of(
                 "success" , true,
                 "emrBenhNhan", benhNhan 

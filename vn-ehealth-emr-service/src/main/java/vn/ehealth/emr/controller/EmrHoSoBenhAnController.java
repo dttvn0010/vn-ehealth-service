@@ -223,7 +223,11 @@ public class EmrHoSoBenhAnController {
             hsba = emrHoSoBenhAnService.createOrUpdateFromHIS(userId, emrBenhNhan.get().id, emrCoSoKhamBenh.id, hsba, jsonSt);
             
             // save to FHIR db
-            hsba.saveToFhirDb();
+            try {
+                hsba.saveToFhirDb();
+            }catch(Exception e) {
+                logger.error("Cannot save to fhir db: ", e);
+            }
             
             var result = Map.of(
                 "success" , true,

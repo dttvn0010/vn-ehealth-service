@@ -61,7 +61,7 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
     	procedure.setCode(code);
         procedure.setSubject(subject);        
         procedure.setEncounter(encounter);
-        procedure.setAsserter(BaseRef.toPatientRef(this.bacSiChuyenKhoa));
+        procedure.setAsserter(BaseRef.toPractitionerRef(this.bacSiChuyenKhoa));
         
         if(this.ngayThucHien != null) {
         	procedure.setPerformed(new DateTimeType(this.ngayThucHien));

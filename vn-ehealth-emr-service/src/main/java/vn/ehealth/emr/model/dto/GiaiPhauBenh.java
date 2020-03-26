@@ -166,13 +166,13 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         	var diagnosticReport = (DiagnosticReport) procedure.getReportFirstRep().getResource();
         	if(diagnosticReport != null) {
                 if(diagnosticReport.hasPerformer()) {
-                	this.nguoiVietBaoCao = new BaseRef(diagnosticReport.getPerformerFirstRep());
+                	this.nguoiVietBaoCao = BaseRef.fromPractitionerRef(diagnosticReport.getPerformerFirstRep());
                 }
                 
                 this.ngayGioBaoCao = diagnosticReport.getIssued();
                 
                 if(diagnosticReport.hasResultsInterpreter()) {
-                	this.nguoiDanhGiaKetQua = new BaseRef(diagnosticReport.getResultsInterpreterFirstRep());
+                	this.nguoiDanhGiaKetQua = BaseRef.fromPractitionerRef(diagnosticReport.getResultsInterpreterFirstRep());
                 }
 
                 if(diagnosticReport.hasConclusionCode()) {

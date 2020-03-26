@@ -1,0 +1,135 @@
+{
+    "emrBenhNhan": {
+        "idhis": "5400525",
+        "tendaydu": "LÊ HỒNG PHÚC"
+    },
+    "emrCoSoKhamBenh": {
+        "ma": "5980",
+        "ten": "Bệnh viện Đa khoa Trung ương Cần Thơ"
+    },
+    "matraodoi": "11101005",
+    "mayte": "180034028",
+    "ngaytiepnhan": "2018-07-31 09:26:00",
+    "nguoitiepnhan": "Người tiếp nhận",
+    "emrDmLoaiBenhAn": {
+        "ma": "20",
+        "ten": "Bệnh án ngoại trú"
+    },
+    "emrQuanLyNguoiBenh": {
+        "emrDmNoiTrucTiepVao": {
+            "ma": "01",
+            "ten": "Nơi trực tiếp vào"
+        }
+    },
+    "emrChanDoan": {
+        "emrDmMaBenhChandoannoiden": {
+            "ma": "01",
+            "ten": "Bệnh chẩn đoán nơi đến"
+        },
+        "motachandoannoiden": "Mô tả chẩn đoán nơi đến",
+        "emrDmMaBenhChandoankkb": {
+            "ma": "01",
+            "ten": "Bệnh chẩn đoán khi khám bệnh"
+        },
+        "motachandoankkb": "Mô tả chẩn đoán khi khám bệnh",
+        "emrDmMaBenhChandoanravienchinh": {
+            "ma": "001",
+            "ten": "Bệnh chẩn đoán ra viện chính"
+        },
+        "motachandoanravienchinh": "Mô tả chẩn đoán ra viện chính",
+        "emrDmMaBenhChandoanravienkemtheos": [
+            {
+                "ma": "001",
+                "ten": "Bệnh chẩn đoán ra viện kèm theo 1"
+            },
+            {
+                "ma": "002",
+                "ten": "Bệnh chẩn đoán ra viện kèm theo 2"
+            }
+        ],
+        "motachandoanravienkemtheo": "Mô tả chẩn đoán ra viện kèm theo"
+    },
+    "emrBenhAn": {
+        "ngaygiodenkham": "2018-07-31 09:26:00",
+        "lydovaovien": "Lý do vào viện",
+        "hoibenh": {
+            "quatrinhbenhly": "Quá trình bệnh lý",
+            "tiensubenh": {
+                "tiensubanthan": "Tiền sử bản thân",
+                "tiensugiadinh": "Tiền sử gia đình"
+            }
+        },
+        "khambenh": {
+            "toanthan": "Toàn thân",
+            "mach": 60,
+            "nhietdo": 37,
+            "huyetapcao": 120,
+            "huyetapthap": 70,
+            "nhiptho": 20,
+            "cannang": 60,
+            "coquankhac": "Bệnh lý khác",
+            "tomtatkqcanlamsang": "Tóm tắt kết quả cận lâm sàng",
+            "daxuly": "Đã xử lý (thuốc/chăm sóc)",
+            "ngaybatdaudieutri": "2018-07-31 00:00:00",
+            "ngayketthucdieutri": "2018-08-01 00:00:00"
+        },
+        "tongket": {
+            "dienbienlamsang": "Diễn biến lâm sàng",
+            "canlamsang": "Kết quả xét nghiệm Cận lâm sàng",
+            "phuongphapdieutri": "Phương pháp điều trị",
+            "tinhtrangnguoibenh": "Tình trạng người bệnh",
+            "chidandieutri": "Hướng điều trị tiếp theo"
+        }
+    },
+    "bacsylambenhan": {
+        "chungchihanhnghe": "11111",
+        "ten": "Bác sỹ làm bệnh án"
+    },
+    "ngaykybenhan": "2018-06-29 00:00:00",
+    "nguoigiaohoso": "Người giao hồ sơ",
+    "ngaygiaohoso": "2018-06-29 00:00:00",
+    "nguoinhanhoso": "Người nhận hồ sơ",
+    "ngaynhanhoso": "2018-06-29 00:00:00",
+    "bacsydieutri": {
+        "ten": "Bác sỹ điều trị",
+        "chungchihanhnghe": "1111"
+    },
+    "ngaybacsydieutriky": "2018-06-29 00:00:00",
+    "sotodieutri": [
+        {
+            "ma": "01",
+            "ten": "X - Quang",
+            "soluong": 1
+        },
+        {
+            "ma": "02",
+            "ten": "CT Scanner",
+            "soluong": 1
+        },
+        {
+            "ma": "03",
+            "ten": "Siêu âm",
+            "soluong": 1
+        },
+        {
+            "ma": "04",
+            "ten": "Xét nghiệm",
+            "soluong": 1
+        },
+        {
+            "ma": "99",
+            "ten": "Khác",
+            "soluong": 1
+        }
+    ],
+    "emrFileDinhKems": [
+        {
+            "url": "url file 1",
+            "ten": "Tên file 1"
+        },
+        {
+            "url": "url file 2",
+            "ten": "Tên file 2"
+        }
+    ]
+}

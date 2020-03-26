@@ -1,0 +1,291 @@
+{
+    "emrBenhNhan": {
+        "idhis": "5400525",
+        "tendaydu": "LÊ HỒNG PHÚC"
+    },
+    "emrCoSoKhamBenh": {
+        "ma": "5980",
+        "ten": "Bệnh viện Đa khoa Trung ương Cần Thơ"
+    },
+    "matraodoi": "11101004",
+    "mayte": "180034027",
+    "ngaytiepnhan": "2018-07-31 09:26:00",
+    "nguoitiepnhan": "Người tiếp nhận",
+    "emrDmLoaiBenhAn": {
+        "ma": "11",
+        "ten": "Bệnh án ngoại khoa"
+    },
+    "emrQuanLyNguoiBenh": {
+        "ngaygiovaovien": "2018-06-28 05:06:00",
+        "emrDmNoiTrucTiepVao": {
+            "ma": "01",
+            "ten": "Nơi trực tiếp vào"
+        },
+        "emrDmNoiGioiThieu": {
+            "ma": "01",
+            "ten": "Nơi giới thiệu"
+        },
+        "vaovienlanthu": 2,
+        "emrDmLoaiChuyenVien": {
+            "ma": "01",
+            "ten": "Loại chuyển viện"
+        },
+        "noichuyenden": "Nơi chuyển đến",
+        "ngaygioravien": "2018-06-29 04:06:00",
+        "emrDmLoaiRaVien": {
+            "ma": "01",
+            "ten": "Loại ra viện"
+        },
+        "tongsongaydieutri": 10
+    },
+    "emrVaoKhoas": [
+        {
+            "emrDmKhoaDieuTri": {
+                "ma": "01",
+                "ten": "Khoa điều trị 1"
+            },
+            "ngaygiovaokhoa": "2018-06-29 00:00:00",
+            "ngayketthucdieutri": "2018-06-29 00:00:00",
+            "tenkhoa": "Tên khoa",
+            "bacsidieutri": {
+                "chungchihanhnghe": "1111",
+                "ten": "Bác sĩ điều trị"
+            },
+            "phong": "Phòng",
+            "giuong": "Giường",
+            "songaydieutri": 10,
+            "tentruongkhoa": "Tên trưởng khoa"
+        },
+        {
+            "emrDmKhoaDieuTri": {
+                "ma": "02",
+                "ten": "Khoa điều trị 2"
+            },
+            "ngaygiovaokhoa": "2018-06-29 00:00:00",
+            "ngayketthucdieutri": "2018-06-29 00:00:00",
+            "tenkhoa": "Tên khoa",
+            "bacsidieutri": {
+                "chungchihanhnghe": "1111",
+                "ten": "Bác sĩ điều trị"
+            },
+            "phong": "Phòng",
+            "giuong": "Giường",
+            "songaydieutri": 10,
+            "tentruongkhoa": "Tên trưởng khoa"
+        }
+    ],
+    "emrChanDoan": {
+        "emrDmMaBenhChandoannoiden": {
+            "ma": "01",
+            "ten": "Bệnh chẩn đoán nơi đến"
+        },
+        "motachandoannoiden": "Mô tả chẩn đoán nơi đến",
+        "emrDmMaBenhChandoankkb": {
+            "ma": "01",
+            "ten": "Bệnh chẩn đoán khi khám bệnh"
+        },
+        "motachandoankkb": "Mô tả chẩn đoán khi khám bệnh",
+        "emrDmMaBenhChandoandieutrichinh": {
+            "ma": "01",
+            "ten": "Bệnh chẩn đoán điều trị chính"
+        },
+        "motachandoandieutrichinh": "Mô tả chẩn đoán điều trị chính",
+        "emrDmMaBenhChandoandieutrikemtheos": [
+            {
+                "ma": "01",
+                "ten": "Bệnh chẩn đoán điều trị kèm theo 1"
+            },
+            {
+                "ma": "02",
+                "ten": "Bệnh chẩn đoán điều trị kèm theo 2"
+            }
+        ],
+        "motachandoandieutrikemtheo": "Mô tả chẩn đoán điều trị kèm theo",
+        "emrDmMaBenhChandoandieutriphanbiet": {
+            "ma": "01",
+            "ten": "Bệnh chẩn đoán điều trị phân biệt"
+        },
+        "motachandoandieutriphanbiet": "Mô tả chẩn đoán điều trị phân biệt",
+        "bitaibien": false,
+        "bibienchung": false,
+        "emrDmLyDoTaiBienBienChung": {
+            "ma": "001",
+            "ten": "Lý do tai biến biến chứng"
+        },
+        "tongsongaysaupt": 10,
+        "tongsolanpt": 2,
+        "emrDmMaBenhChandoanravienchinh": {
+            "ma": "01",
+            "ten": "Bệnh chẩn đoán ra viện chính"
+        },
+        "motachandoanravienchinh": "Mô tả chẩn đoán ra viện chính",
+        "emrDmMaBenhChandoanravienkemtheos": [
+            {
+                "ma": "01",
+                "ten": "Bệnh chẩn đoán ra viện kèm theo 1"
+            },
+            {
+                "ma": "02",
+                "ten": "Bệnh chẩn đoán ra viện kèm theo 2"
+            }
+        ],
+        "motachandoanravienkemtheo": "Mô tả chẩn đoán ra viện kèm theo",
+        "emrDmMaBenhChandoanraviennguyennhan": {
+            "ma": "01",
+            "ten": "Chẩn đoán ra viện nguyên nhân"
+        },
+        "motachandoanraviennguyennhan": "Mô tả chẩn đoán ra nguyên nhân",
+        "emrDmMaBenhChandoantruocpts": [
+            {
+                "ma": "01",
+                "ten": "Chẩn đoán ra trước phẫu thuật 1"
+            },
+            {
+                "ma": "02",
+                "ten": "Chẩn đoán ra trước phẫu thuật 2"
+            }
+        ],
+        "motachandoantruocpt": "Mô tả chẩn đoán trước phẫu thuật",
+        "emrDmMaBenhChandoansaupts": [
+            {
+                "ma": "01",
+                "ten": "Chẩn đoán ra trước sau thuật 1"
+            },
+            {
+                "ma": "01",
+                "ten": "Chẩn đoán ra trước sau thuật 2"
+            }
+        ],
+        "motachandoansaupt": "Mô tả chẩn đoán sau phẫu thuật"
+    },
+    "emrTinhTrangRaVien": {
+        "emrDmKetQuaDieuTri": {
+            "ma": "01",
+            "ten": "Kết quả điều trị"
+        },
+        "emrDmKetQuaGiaiPhauBenh": {
+            "ma": "01",
+            "ten": "Kết quả giải phẫu bệnh"
+        },
+        "ngaygiotuvong": "2018-06-29 00:00:00",
+        "emrDmLyDoTuVong": {
+            "ma": "01",
+            "ten": "Lý do tử vong(Bệnh/Tai biến/Khác)"
+        },
+        "emrDmThoiDiemTuVong": {
+            "ma": "01",
+            "ten": "Thời điểm tử vong"
+        },
+        "emrDmMaBenhNguyennhantuvong": {
+            "ma": "01",
+            "ten": "Bệnh gây tử vong"
+        },
+        "motanguyennhantuvong": "Mô tả bệnh gây tử vong",
+        "khamnghiemtuthi": false,
+        "emrDmMaBenhGiaiphaututhi": {
+            "ma": "01",
+            "ten": "Bệnh giải phẫu tử thi"
+        },
+        "motagiaiphaututhi": "Mô tả bệnh giải phẫu tử thi"
+    },
+    "emrBenhAn": {
+        "lydovaovien": "Lý do vào viện",
+        "vaongaythu": 2,
+        "hoibenh": {
+            "quatrinhbenhly": "Quá trình bệnh lý",
+            "tiensubenh": {
+                "tiensubanthan": "Tiền sử bản thân",
+                "diung": "24 tháng",
+                "matuy": "",
+                "ruoubia": "36 tháng",
+                "thuocla": "",
+                "thuoclao": "",
+                "dacdiemkhac": "",
+                "tiensugiadinh": "Tiền sử gia đình"
+            }
+        },
+        "khambenh": {
+            "toanthan": "Toàn thân",
+            "mach": 60,
+            "nhietdo": 37,
+            "huyetapcao": 120,
+            "huyetapthap": 70,
+            "nhiptho": 20,
+            "cannang": 60,
+            "benhngoaikhoa": "Bệnh ngoại khoa",
+            "tuanhoan": "Tuần hoàn",
+            "hohap": "Hô hấp",
+            "tieuhoa": "Tiêu hóa",
+            "tietnieusinhduc": "Thận-Tiết niệu-Sinh dục",
+            "thankinh": "Thần kinh",
+            "coxuongkhop": "Cơ xương khớp",
+            "taimuihong": "Tai mũi họng",
+            "ranghammat": "Răng hàm mặt",
+            "mat": "Mắt",
+            "noitietdinhduong": "Nội tiết dinh dưỡng",
+            "coquankhac": "Bệnh lý khác",
+            "xetnghiemcanlamsang": "Các xét nghiệm cận lâm sàng cần làm",
+            "tomtat": "Tóm tắt bệnh án"
+        },
+        "tienluong": "Tiên lượng",
+        "huongdieutri": "Hướng điều trị",
+        "tongket": {
+            "dienbienlamsang": "Diễn biến lâm sàng",
+            "canlamsang": "Kết quả xét nghiệm Cận lâm sàng",
+            "phuongphapdieutri": "Phương pháp điều trị",
+            "tinhtrangnguoibenh": "Tình trạng người bệnh",
+            "chidandieutri": "Hướng điều trị tiếp theo"
+        }
+    },
+    "bacsylambenhan": {
+        "chungchihanhnghe": "11111",
+        "ten": "Bác sỹ làm bệnh án"
+    },
+    "ngaykybenhan": "2018-06-29 00:00:00",
+    "nguoigiaohoso": "Người giao hồ sơ",
+    "ngaygiaohoso": "2018-06-29 00:00:00",
+    "nguoinhanhoso": "Người nhận hồ sơ",
+    "ngaynhanhoso": "2018-06-29 00:00:00",
+    "bacsydieutri": {
+        "ten": "Bác sỹ điều trị",
+        "chungchihanhnghe": "1111"
+    },
+    "ngaybacsydieutriky": "2018-06-29 00:00:00",
+    "sotodieutri": [
+        {
+            "ma": "01",
+            "ten": "X - Quang",
+            "soluong": 1
+        },
+        {
+            "ma": "02",
+            "ten": "CT Scanner",
+            "soluong": 1
+        },
+        {
+            "ma": "03",
+            "ten": "Siêu âm",
+            "soluong": 1
+        },
+        {
+            "ma": "04",
+            "ten": "Xét nghiệm",
+            "soluong": 1
+        },
+        {
+            "ma": "99",
+            "ten": "Khác",
+            "soluong": 1
+        }
+    ],
+    "emrFileDinhKems": [
+        {
+            "url": "url file 1",
+            "ten": "Tên file 1"
+        },
+        {
+            "url": "url file 2",
+            "ten": "Tên file 2"
+        }
+    ]
+}

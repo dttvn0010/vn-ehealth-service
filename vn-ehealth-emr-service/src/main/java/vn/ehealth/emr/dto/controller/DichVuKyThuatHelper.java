@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.Resource;
@@ -43,8 +44,9 @@ public class DichVuKyThuatHelper {
     public static List<Procedure> getDichVuKTList(String maDv, 
                                     Optional<String> patientId, 
                                     Optional<String> encounterId,
+                                    Optional<Boolean> includePatient,
                                     Optional<Boolean> includeEncounter,
-                                    Optional<Boolean> includeServiceProvider,                                    
+                                    Optional<Boolean> includeServiceProvider,
                                     Optional<Integer> start,
                                     Optional<Integer> count) {
         
@@ -55,12 +57,22 @@ public class DichVuKyThuatHelper {
         
         var includes = new HashSet<Include>();
         
+        includes.add(new Include("Procedure:basedOn"));
+        includes.add(new Include("Procedure:report"));
+        
+        if(includePatient.orElse(false)) {
+            includes.add(new Include("Procedure:subject"));
+        }
+        
+        //includes.add(new Include("Procedure:asserter"));
+        //includes.add(new Include("Procedure:performer:actor"));
+        
         if(includeEncounter.orElse(false)) {
-        	includes.add(new Include("encounter"));
+        	includes.add(new Include("Procedure:encounter"));
         }
         
         if(includeServiceProvider.orElse(false)) {
-        	includes.add(new Include("encounter:serviceProvider"));
+        	includes.add(new Include("Procedure:encounter:serviceProvider"));
         }
         
         params.put("includes", includes);
@@ -112,7 +124,7 @@ public class DichVuKyThuatHelper {
             if(obj.hasId()) {
                 return specimentDao.update(obj, obj.getIdElement());
             }else {
-                return specimentDao.create(obj);                        
+                return specimentDao.create(obj);
             }
         }
         return null;
@@ -163,6 +175,53 @@ public class DichVuKyThuatHelper {
     		observations.forEach(x -> DaoFactory.getObservationDao().remove(x.getIdElement()));
     	}
     }
+        
+    public static void updateReferenceResource(Procedure obj, 
+                            Optional<Boolean> includePatient,
+                            Optional<Boolean> includeEncounter,
+                            Optional<Boolean> includeServiceProvider) {
+     
+        if(obj == null) return;
+        
+        if(includePatient.orElse(false)) {
+            setReferenceResource(obj.getSubject());
+        }
+        
+        if(obj.hasPerformer()) {
+            obj.getPerformer().forEach(x -> setReferenceResource(x.getActor()));
+        }
+        
+        setReferenceResource(obj.getRecorder());
+        setReferenceResource(obj.getAsserter());
+        
+        if(obj.hasBasedOn()) {
+            setReferenceResource(obj.getBasedOnFirstRep());
+            var serviceRequest = (ServiceRequest) obj.getBasedOnFirstRep().getResource();
+            if(serviceRequest != null) {
+                setReferenceResource(serviceRequest.getRequester());
+            }
+        }
+        
+        if(obj.hasReport()) {
+            setReferenceResource(obj.getReportFirstRep());
+            var diagnosticReport = (DiagnosticReport) obj.getReportFirstRep().getResource();
+            if(diagnosticReport != null) {
+                setReferenceResource(diagnosticReport.getPerformer());
+                setReferenceResource(diagnosticReport.getResultsInterpreter());
+            }
+        }
+        
+        if(includeEncounter.orElse(false)) {
+            setReferenceResource(obj.getEncounter());
+            var enc = (Encounter) (obj.getEncounter().getResource());
+            
+            if(includeServiceProvider.orElse(false) && enc != null) {                   
+                setReferenceResource(enc.getServiceProvider());
+            }
+        }
+    }
+    
+    
     
     @SuppressWarnings("unchecked")
     public static Procedure saveDichVuKT(DichVuKyThuat dto) {
@@ -226,8 +285,8 @@ public class DichVuKyThuatHelper {
              
             // Update result
             if(procedure != null) {
-            	setReferenceResource(procedure.getBasedOn());
-            	setReferenceResource(procedure.getReport());
+                var optFalse = Optional.of(false);
+            	updateReferenceResource(procedure, optFalse, optFalse, optFalse);
             }
             
             return procedure;

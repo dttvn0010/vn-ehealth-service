@@ -1,12 +1,12 @@
 {
-    "encounterId": "17986862-6547-4f7f-98f9-21bacf60480f",
+    "encounter": {"id": "53ca5095-ba61-4751-872d-eb4c63bffecf"},
     "dmPttt": {
         "ma": "01",
         "ten": "Test phẫu thuật thủ thuật 1"
     },
     "ngayYeuCau": "2018-06-28 00:00:00",
     "bacSiYeuCau": {
-        "id": "bb41d74e-3e9e-4c71-ab6e-626e3a98cb93",
+        "id": "3fc30003-9586-4388-b897-faec5e21314d",
         "ten": "Bác sĩ A"
     },
     "noiDungYeuCau": "Mổ mắt cá chân",
@@ -16,17 +16,17 @@
     "trinhTuPttt": "Trình tự pttt",
     "ghiChu": "Ghi chú",
     "thuKyGhiChep": {
-        "id": "b21be17e-bfa4-489b-8762-15ad4c4cb02f",
+        "id": "ee4f32dd-b94c-4ef8-8635-1aae5eb2a948",
         "ten": "Bác sĩ E"
     },
     "chuTichHoiDong": {
-        "id": "c639bda6-af79-4477-8d62-c46fcd04723e",
+        "id": "a17046b2-5953-450a-b9e3-67ba1bd11a80",
         "ten": "Bác sĩ B"
     },
     "hoiDongPttt": [
         {
             "bacsi": {
-                "id": "c639bda6-af79-4477-8d62-c46fcd04723e",
+                "id": "a17046b2-5953-450a-b9e3-67ba1bd11a80",
                 "ten": "Bác sĩ B"
             },
             "dmVaiTro": {
@@ -36,7 +36,7 @@
         },
         {
             "bacsi": {
-                "id": "b21be17e-bfa4-489b-8762-15ad4c4cb02f",
+                "id": "ee4f32dd-b94c-4ef8-8635-1aae5eb2a948",
                 "ten": "Bác sĩ E"
             },
             "dmVaiTro": {
@@ -46,7 +46,7 @@
         },
         {
             "bacsi": {
-                "id": "94af5a9f-0553-4b1b-a4d9-f5241eb5487a",
+                "id": "18977921-ae3a-4019-acc3-9f1eed39c99b",
                 "ten": "Bác sĩ F"
             },
             "dmVaiTro": {
@@ -56,11 +56,11 @@
         }
     ],
     "nguoiVietBaoCao": {
-        "id": "e74136c0-af78-4326-a721-b74b62f613a5",
+        "id": "14e9d5d9-947a-44af-bbca-e5f067cf9a42",
         "ten": "Bác sĩ C"
     },
     "nguoiDanhGiaKetQua": {
-        "id": "c1ae37d4-cd92-4daf-9b39-b8e192bfc8cd",
+        "id": "573b57bb-b59d-4a0e-9e6f-591310bd54d1",
         "ten": "Bác sĩ D"
     },
     "ngayGioBaoCao": "2018-06-30 00:00:00"

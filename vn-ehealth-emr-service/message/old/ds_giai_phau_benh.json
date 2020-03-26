@@ -1,0 +1,48 @@
+{
+  "matraodoiHoSo": "18.052294",
+  "emrGiaiPhauBenhs": [
+    {
+      "idhis": "1111111",
+      "emrDmGiaiPhauBenh": {
+        "ma": "001",
+        "ten": "Giải phẫu bệnh"
+      },
+      "emrDmLoaiGiaiPhauBenh": {
+        "ma": "001",
+        "ten": "Loại giải phẫu bệnh "
+      },
+      "emrDmViTriLayMau": {
+        "ma": "001",
+        "ten": "Vị trị lấy mẫu"
+      },
+      "emrDmKetQuaGiaiPhauBenh": {
+        "ma": "001",
+        "ten": "Kết quả giải phẫu"
+      },
+      "ngayyeucau": "2018-06-29 00:00:00",
+      "bacsiyeucau": {
+        "chungchihanhnghe": "11111",
+        "ten": "Bác sĩ yêu cầu"
+      },
+      "bacsichuyenkhoa": {
+        "chungchihanhnghe": "11112",
+        "ten": "Bác sĩ thực hiện"
+      },
+      "ngaythuchien": "2018-06-29 00:00:00",
+      "nhanxetdaithe": "Nhận xét đại thể",
+      "nhanxetvithe": "Nhận xét vi thể",
+      "motachandoangiaiphau": "Mô tả chẩn đoán giải phẫu",
+      "ngaylaymausinhthiet": "2018-06-29 00:00:00",
+      "emrFileDinhKemGpbs": [
+        {
+          "url": "url file 1",
+          "ten": "Tên file 1"
+        },
+        {
+          "url": "url file 2",
+          "ten": "Tên file 2"
+        }
+      ]
+    }
+  ]
+}

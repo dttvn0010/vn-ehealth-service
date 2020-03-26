@@ -49,6 +49,7 @@ public class BaseRef {
 	public BaseRef(Reference ref) {
 		if(ref != null) {
 			this.id = idFromRef(ref);
+			this.display = ref.getDisplay();
 			this.resourceType = getResourceType(ref);
 			this.resource = ref.getResource();
 		}

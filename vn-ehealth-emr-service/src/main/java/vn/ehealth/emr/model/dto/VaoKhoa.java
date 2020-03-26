@@ -67,24 +67,15 @@ public class VaoKhoa extends BaseModelDTO {
     public static Encounter toFhir(VaoKhoa dto) {
         if(dto == null) return null;
         var obj = new Encounter();
-        
-        if(dto.patient != null) {
-        	obj.setSubject(createReference(ResourceType.Patient, dto.patient.id));
-        }
-        
-        if(dto.hsbaEncounter != null) {
-        	obj.setPartOf(createReference(ResourceType.Encounter, dto.hsbaEncounter.id));
-        }
-        
-        if(dto.falcultyOrganization != null) {
-        	obj.setServiceProvider(createReference(ResourceType.Organization, dto.falcultyOrganization.id));
-        }
+        obj.setSubject(BaseRef.toPatientRef(dto.patient));
+        obj.setPartOf(BaseRef.toEncounterRef(dto.hsbaEncounter));
+        obj.setServiceProvider(BaseRef.toOrganizationRef(dto.falcultyOrganization));
         
         obj.setPeriod(createPeriod(dto.ngayGioVao, dto.ngayGioKetThucDieuTri));
         
         if(dto.bacSiDieuTri != null) {
         	var participant = obj.addParticipant();
-        	participant.setIndividual(createReference(ResourceType.Practitioner, dto.bacSiDieuTri.id));        	
+        	participant.setIndividual(BaseRef.toPractitionerRef(dto.bacSiDieuTri));        	
         }
         
         var encType = createCodeableConcept(EncounterType.VAO_KHOA, 

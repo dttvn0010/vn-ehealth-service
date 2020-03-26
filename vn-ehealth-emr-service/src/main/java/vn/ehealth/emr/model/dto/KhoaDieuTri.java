@@ -8,7 +8,6 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 import org.hl7.fhir.r4.model.Organization;
-import org.hl7.fhir.r4.model.ResourceType;
 
 public class KhoaDieuTri extends ToChuc {
     public BaseRef parent;
@@ -39,11 +38,7 @@ public class KhoaDieuTri extends ToChuc {
         var obj = new Organization();
         
         obj.setId(this.id);
-        
-        if(this.parent != null) {
-        	obj.setPartOf(createReference(ResourceType.Organization, this.parent.id));
-        }
-        
+        obj.setPartOf(BaseRef.toOrganizationRef(this.parent));
         obj.setName(this.ten);
         
         var orgType = createCodeableConcept(LoaiToChuc.KHOA_DIEU_TRI, 

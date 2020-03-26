@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
@@ -57,8 +58,8 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
         	query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
         
-        String[] keys = {"subject", "encounter", "basedOn", "asserter", 
-				"recorder", "report", "location", "reasonReference", 
+        String[] keys = {"subject", "encounter", "encounter:serviceProvider", "encounter:appointment",
+                    "basedOn", "asserter", "recorder", "report", "location", "reasonReference", 
 				"performer:actor", "performer:onBehalfOf", "complicationDetail", 
 				"usedReference"};
 
@@ -75,6 +76,16 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
                 
                 if(includeMap.get("encounter") && obj.hasEncounter()) {
                 	setReferenceResource(obj.getEncounter());
+                	
+            	    var enc = (Encounter) obj.getEncounter().getResource();
+                    
+                    if(includeMap.get("encounter:serviceProvider") && enc != null) {
+                        setReferenceResource(enc.getServiceProvider());
+                    }
+                    
+                    if(includeMap.get("encounter:appointment") && enc != null) {
+                        setReferenceResource(enc.getAppointment());
+                    }
                 }
                 
                 if(includeMap.get("basedOn") && obj.hasBasedOn()) {
@@ -169,7 +180,8 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
         }
         // category
         if (category != null) {
-            criteria.and("category.coding.code.myStringValue").is(category.getValue());
+            criteria.and("category.coding.code").is(category.getValue())
+                    .and("category.coding.system").is(category.getSystem());
         }
         // code
         if (code != null) {

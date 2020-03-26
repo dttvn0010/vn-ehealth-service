@@ -1,0 +1,40 @@
+{
+  "matraodoiHoSo": "18.052294",
+  "emrThamDoChucNangs": [
+    {
+      "idhis": "1111111",
+      "emrDmThamDoChucNang": {
+        "ma": "001",
+        "ten": "Thăm dò chức năng"
+      },
+      "emrDmLoaiThamDoChucNang": {
+        "ma": "001",
+        "ten": "Loại thăm dò chức năng"
+      },
+      "ngayyeucau": "2018-06-29 00:00:00",
+      "bacsiyeucau": {
+        "chungchihanhnghe": "11111",
+        "ten": "Bác sĩ yêu cầu"
+      },
+      "noidungyeucau": "Nội dung yêu cầu",
+      "ngaythuchien": "2018-06-29 00:00:00",
+      "bacsichuyenkhoa": {
+        "chungchihanhnghe": "11112",
+        "ten": "Bác sĩ thực hiện"
+      },
+      "ketqua": "Kết quả",
+      "ketluan": "Kết luận",
+      "loidan": "Lời dặn",
+      "emrFileDinhKemTdcns": [
+        {
+          "url": "url file 1",
+          "ten": "Tên file 1"
+        },
+        {
+          "url": "url file 2",
+          "ten": "Tên file 2"
+        }
+      ]
+    }
+  ]
+}

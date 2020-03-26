@@ -131,7 +131,7 @@ public class XetNghiem extends DichVuKyThuat {
         // Procedure        
         this.dmXetNghiem = new DanhMuc(procedure.getCode());
         this.ngayThucHien = procedure.hasPerformedDateTimeType()? procedure.getPerformedDateTimeType().getValue() : null;
-        this.bacSiXetNghiem = BaseRef.fromPatientRef(procedure.getAsserter());
+        this.bacSiXetNghiem = BaseRef.fromPractitionerRef(procedure.getAsserter());
         
         // ServiceRequest
         if(procedure.hasBasedOn()) {
@@ -139,7 +139,7 @@ public class XetNghiem extends DichVuKyThuat {
         	if(serviceRequest != null) {
         		this.ngayYeuCau = serviceRequest.getAuthoredOn();
                 this.noiDungYeuCau = serviceRequest.hasOrderDetail()? serviceRequest.getOrderDetailFirstRep().getText() : "";
-                this.bacSiYeuCau = BaseRef.fromPatientRef(serviceRequest.getRequester());
+                this.bacSiYeuCau = BaseRef.fromPractitionerRef(serviceRequest.getRequester());
         	}
         	        	
         	// Observations
@@ -161,13 +161,13 @@ public class XetNghiem extends DichVuKyThuat {
         	var diagnosticReport = (DiagnosticReport) procedure.getReportFirstRep().getResource();
         	if(diagnosticReport != null) {
                 if(diagnosticReport.hasPerformer()) {
-                	this.nguoiVietBaoCao = new BaseRef(diagnosticReport.getPerformerFirstRep());
+                	this.nguoiVietBaoCao = BaseRef.fromPractitionerRef(diagnosticReport.getPerformerFirstRep());
                 }
                 
                 this.ngayGioBaoCao = diagnosticReport.getIssued();
                 
                 if(diagnosticReport.hasResultsInterpreter()) {
-                	this.nguoiDanhGiaKetQua = new BaseRef(diagnosticReport.getResultsInterpreterFirstRep());
+                	this.nguoiDanhGiaKetQua = BaseRef.fromPractitionerRef(diagnosticReport.getResultsInterpreterFirstRep());
                 }
             }
         }

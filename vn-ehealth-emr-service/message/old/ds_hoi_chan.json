@@ -1,0 +1,48 @@
+{
+  "matraodoiHoSo": "18.052294",
+  "emrHoiChans": [
+    {
+      "idhis": "1111",
+      "emrDmKhoaDieuTri": {
+        "ma": "001",
+        "ten": "Khoa điều trị"
+      },
+      "ngaythuchien": "2018-06-29 00:00:00",
+      "tomtatdienbien": "Tóm tắt diễn biến",
+      "ketluanhoichan": "Kết luận hội chẩn",
+      "huongdieutri": "Hướng điều trị",
+      "emrThanhVienHoiChans": [
+        {
+          "bacsihoichan": {
+            "chungchihanhnghe": "11111",
+            "ten": "Bác sĩ A"
+          },
+          "emrDmVaiTro": {
+            "ma": "0001",
+            "ten": "Chủ tọa"
+          }
+        },
+        {
+          "bacsihoichan": {
+            "chungchihanhnghe": "11112",
+            "ten": "Bác sĩ B"
+          },
+          "emrDmVaiTro": {
+            "ma": "0002",
+            "ten": "Thành viên"
+          }
+        }
+      ],
+      "emrFileDinhKemHoiChans": [
+        {
+          "url": "url file 1",
+          "ten": "Tên file 1"
+        },
+        {
+          "url": "url file 2",
+          "ten": "Tên file 2"
+        }
+      ]
+    }
+  ]
+}

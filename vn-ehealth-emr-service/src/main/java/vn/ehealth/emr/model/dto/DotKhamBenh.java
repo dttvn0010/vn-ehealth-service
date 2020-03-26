@@ -67,14 +67,8 @@ public class DotKhamBenh extends BaseModelDTO {
         var obj = new Encounter();
         obj.setId(dto.id);
         obj.setIdentifier(listOf(createIdentifier(dto.maYte, IdentifierSystem.MA_HO_SO)));
-        
-        if(dto.patient != null) {
-        	obj.setSubject(createReference(ResourceType.Patient, dto.patient.id));
-        }
-        
-        if(dto.serviceProvider != null) {
-        	obj.setServiceProvider(createReference(ResourceType.Organization, dto.serviceProvider.id));
-        }
+        obj.setSubject(BaseRef.toPatientRef(dto.patient));
+        obj.setServiceProvider(BaseRef.toOrganizationRef(dto.serviceProvider));
         
         obj.setPeriod(createPeriod(dto.ngayGioVao, dto.ngayGioKetThucDieuTri));
         

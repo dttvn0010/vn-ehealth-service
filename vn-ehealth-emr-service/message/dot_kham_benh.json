@@ -1,6 +1,6 @@
 {
-    "patient":{"id": "6686823d-2227-4993-9eda-41cbfa4d2b05"},
-    "serviceProvider":{"id": "50abb583-5908-4536-85fe-89a3e0a0a4c7"},
+    "patient":{"id": "79f273fa-a61c-444b-a367-29c4b518f624"},
+    "serviceProvider":{"id": "7e5d0563-a0ea-4946-8057-56c34f0dd8ee"},
     "maYte": "180034027",
     "dmLoaiKham" : {"ma":"01","ten":"Bệnh án nội khoa"},
     "ngayGioVao": "2018-06-28 05:06:00",

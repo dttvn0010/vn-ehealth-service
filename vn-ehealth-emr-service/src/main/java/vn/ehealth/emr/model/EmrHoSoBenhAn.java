@@ -10,16 +10,20 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Encounter;
+import org.hl7.fhir.r4.model.Organization;
+import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import ca.uhn.fhir.rest.param.TokenParam;
+import vn.ehealth.emr.model.dto.BaseRef;
 import vn.ehealth.emr.model.dto.DotKhamBenh;
 import vn.ehealth.emr.service.EmrServiceFactory;
 import vn.ehealth.emr.utils.ObjectIdUtil;
@@ -36,6 +40,12 @@ public class EmrHoSoBenhAn {
     public EmrDmContent emrDmLoaiBenhAn;    
     public ObjectId emrBenhNhanId;    
     public ObjectId emrCoSoKhamBenhId;
+    
+    @JsonIgnore
+    private Map<String, Object> _emrBenhNhan;
+    
+    @JsonIgnore
+    private Map<String, Object> _emrCoSoKhamBenh;
         
     public int nguonDuLieu;    
     public int trangThai;
@@ -131,6 +141,10 @@ public class EmrHoSoBenhAn {
         return EmrServiceFactory.getEmrBenhNhanService().getById(emrBenhNhanId).orElse(null);
     }
     
+    public void setEmrBenhNhan(Map<String, Object> emrBenhNhan) {
+        this._emrBenhNhan = emrBenhNhan;
+    }
+    
     public void setEmrBenhNhanId(String emrBenhNhanId) {
         this.emrBenhNhanId = ObjectIdUtil.stringToId(emrBenhNhanId);
     }
@@ -141,6 +155,10 @@ public class EmrHoSoBenhAn {
     
     public EmrCoSoKhamBenh getEmrCoSoKhamBenh() {
         return EmrServiceFactory.getEmrCoSoKhamBenhService().getById(emrCoSoKhamBenhId).orElse(null);
+    }
+    
+    public void setEmrCoSoKhamBenh(Map<String, Object> emrCoSoKhamBenh) {
+        this._emrCoSoKhamBenh = emrCoSoKhamBenh;
     }
     
     public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
@@ -266,9 +284,22 @@ public class EmrHoSoBenhAn {
     
     public void saveToFhirDb() {
     	var dto = toDto();
-    	var encounterDao = DaoFactory.getEncounterDao();
-    	var encounter = getEncounter(this.mayte);
     	
+    	Organization org = null;    	
+    	if(_emrCoSoKhamBenh != null) {
+    	    org = EmrCoSoKhamBenh.getOrganization((String)_emrCoSoKhamBenh.get("ma"));
+    	}
+    	dto.serviceProvider = new BaseRef(org);
+    	
+    	Patient patient = null;
+    	if(_emrBenhNhan != null) {
+    	    patient = EmrBenhNhan.getPatient((String) _emrBenhNhan.get("idhis"));
+    	}
+    	dto.patient = new BaseRef(patient);
+    	
+    	var encounterDao = DaoFactory.getEncounterDao();
+        var encounter = getEncounter(this.mayte);
+        
     	if(encounter != null) {
     		encounter = encounterDao.update(DotKhamBenh.toFhir(dto), encounter.getIdElement());
     	}else {
