@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
+import org.hl7.fhir.r4.model.Encounter;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
@@ -17,8 +19,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import ca.uhn.fhir.rest.param.TokenParam;
+import vn.ehealth.emr.model.dto.DotKhamBenh;
 import vn.ehealth.emr.service.EmrServiceFactory;
 import vn.ehealth.emr.utils.ObjectIdUtil;
+import vn.ehealth.emr.utils.Constants.IdentifierSystem;
+import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
+
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection="emr_ho_so_benh_an")
@@ -66,7 +74,7 @@ public class EmrHoSoBenhAn {
     
     public Map<String, Object> emrBenhAn;
         
-    public List<EmrKhoaDieuTri> emrVaoKhoas;
+    public List<EmrVaoKhoa> emrVaoKhoas;
     
     public Map<String, Object> emrChanDoan;
     
@@ -239,5 +247,45 @@ public class EmrHoSoBenhAn {
         }
         
         return "";
+    }
+    
+    public static Encounter getEncounter(String maHoSo) {
+    	var params = mapOf("identifier", new TokenParam(IdentifierSystem.MA_HO_SO, maHoSo));
+    	var fhirObj = (Encounter) DaoFactory.getEncounterDao().searchOne(params);    	
+    	return fhirObj;
+    }
+    
+    public DotKhamBenh toDto() {
+    	var dto = new DotKhamBenh();
+    	dto.maYte = this.mayte;
+    	dto.dmLoaiKham = this.emrDmLoaiBenhAn != null? this.emrDmLoaiBenhAn.toDto() : null;
+    	dto.ngayGioVao = this.emrQuanLyNguoiBenh != null? this.emrQuanLyNguoiBenh.ngaygiovaovien : null;
+    	dto.ngayGioKetThucDieuTri = this.emrQuanLyNguoiBenh != null? this.emrQuanLyNguoiBenh.ngaygioravien : null;
+    	return dto;
+    }
+    
+    public void saveToFhirDb() {
+    	var dto = toDto();
+    	var encounterDao = DaoFactory.getEncounterDao();
+    	var encounter = getEncounter(this.mayte);
+    	
+    	if(encounter != null) {
+    		encounter = encounterDao.update(DotKhamBenh.toFhir(dto), encounter.getIdElement());
+    	}else {
+    		encounter = encounterDao.create(DotKhamBenh.toFhir(dto));
+    	}
+    	
+    	var params = mapOf("partOf", ResourceType.Encounter + "/" + encounter.getId());
+    	var vaoKhoaEncounters = encounterDao.search(params);
+    	
+    	for(var vaoKhoaEncounter : vaoKhoaEncounters) {
+    		encounterDao.remove(vaoKhoaEncounter.getIdElement());
+    	}
+    	
+    	if(emrVaoKhoas != null) {
+    		for(var emrVaoKhoa : emrVaoKhoas) {
+    			emrVaoKhoa.saveToFhirDb(encounter);
+    		}
+    	}
     }
 }

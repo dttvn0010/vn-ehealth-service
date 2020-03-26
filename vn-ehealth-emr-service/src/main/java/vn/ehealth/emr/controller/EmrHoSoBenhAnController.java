@@ -220,8 +220,11 @@ public class EmrHoSoBenhAnController {
             var user = UserUtil.getCurrentUser();
             var userId = user.map(x -> x.id).orElse(null);
             
-            emrHoSoBenhAnService.createOrUpdateFromHIS(userId, emrBenhNhan.get().id, emrCoSoKhamBenh.id, hsba, jsonSt);
-                        
+            hsba = emrHoSoBenhAnService.createOrUpdateFromHIS(userId, emrBenhNhan.get().id, emrCoSoKhamBenh.id, hsba, jsonSt);
+            
+            // save to FHIR db
+            hsba.saveToFhirDb();
+            
             var result = Map.of(
                 "success" , true,
                 "emrHoSoBenhAn", hsba  

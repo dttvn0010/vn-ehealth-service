@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.Encounter;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +26,10 @@ import vn.ehealth.hl7.fhir.clinical.entity.ProcedureEntity;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.diagnostic.entity.ServiceRequestEntity;
+
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
+
 
 @Repository
 public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequest>{
@@ -58,97 +60,68 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
         	query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
         	query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+        
+        String[] keys = {"basedOn", "replaces", "subject", 
+        		"encounter", "encounter:serviceProvider", "encounter:appointment",
+				"requester", "performer", "reasonReference", "supportingInfo", 
+				"specimen", "relevantHistory"};
+        
+        var includeMap = getIncludeMap(ResourceType.ServiceRequest, keys, includes);
+        
         List<ServiceRequestEntity> entitys = mongo.find(query, ServiceRequestEntity.class);
         if (entitys != null) {
             for (ServiceRequestEntity item : entitys) {
             	ServiceRequest obj = transform(item);
-
-                // add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getBasedOn() != null && obj.getBasedOn().size() > 0) {
-						for (Reference ref : obj.getBasedOn()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getRequester() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getRequester());
-						if (nested != null) {
-							obj.getRequester().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getPerformer() != null && obj.getPerformer().size() > 0) {
-						for (Reference ref : obj.getPerformer()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getLocationReference() != null && obj.getLocationReference().size() > 0) {
-						for (Reference ref : obj.getLocationReference()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getSpecimen() != null && obj.getSpecimen().size() > 0) {
-						for (Reference ref : obj.getSpecimen()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-				} else {
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("ServiceRequest:subject"))
-							&& obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("ServiceRequest:encounter")) && obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-				}
+            	
+            	if(includeMap.get("basedOn") && obj.hasBasedOn()) {
+            		setReferenceResource(obj.getBasedOn());
+            	}
+            	
+            	if(includeMap.get("replaces") && obj.hasReplaces()) {
+            		setReferenceResource(obj.getReplaces());
+            	}
+            	
+            	if(includeMap.get("subject") && obj.hasSubject()) {
+            		setReferenceResource(obj.getSubject());
+            	}
+            	
+            	if(includeMap.get("encounter") && obj.hasEncounter()) {
+            		setReferenceResource(obj.getEncounter());
+            		var enc = (Encounter) obj.getEncounter().getResource();
+            		
+            		if(includeMap.get("encounter:serviceProvider") && enc != null) {
+            			setReferenceResource(enc.getServiceProvider());
+            		}
+            		
+            		if(includeMap.get("encounter:appointment") && enc != null) {
+            			setReferenceResource(enc.getAppointment());
+            		}
+            	}
+            	
+            	if(includeMap.get("requester") && obj.hasRequester()) {
+            		setReferenceResource(obj.getRequester());
+            	}
+            	
+            	if(includeMap.get("performer") && obj.hasPerformer()) {
+            		setReferenceResource(obj.getPerformer());
+            	}
+            	
+            	if(includeMap.get("reasonReference") && obj.hasReasonReference()) {
+            		setReferenceResource(obj.getReasonReference());
+            	}
+            	
+            	if(includeMap.get("supportingInfo") && obj.hasSupportingInfo()) {
+            		setReferenceResource(obj.getSupportingInfo());
+            	}
+            	
+            	if(includeMap.get("specimen") && obj.hasSpecimen()) {
+            		setReferenceResource(obj.getSpecimen());
+            	}
+            	
+            	if(includeMap.get("relevantHistory") && obj.hasRelevantHistory()) {
+            		setReferenceResource(obj.getRelevantHistory());
+            	}
+            	
                 resources.add(obj);
             }
         }
@@ -187,7 +160,7 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
             criteria = Criteria.where("active").is(true);
         }
         // set param default
-        criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+        criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
                 identifier);
         // based-on
         if (basedOn != null) {
@@ -218,7 +191,7 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
 		 */
         // date
         if (date != null) {
-            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "performed", date);
+            criteria = setTypeDateToCriteria(criteria, "performed", date);
         }
         // definition
         if (definition != null) {

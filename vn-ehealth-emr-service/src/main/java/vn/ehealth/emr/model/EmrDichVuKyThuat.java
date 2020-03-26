@@ -2,69 +2,55 @@ package vn.ehealth.emr.model;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
 
-import org.bson.types.ObjectId;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import org.hl7.fhir.r4.model.Encounter;
 import ca.uhn.fhir.rest.param.TokenParam;
-import vn.ehealth.emr.service.ServiceFactory;
-import vn.ehealth.emr.utils.ObjectIdUtil;
-import vn.ehealth.emr.utils.Constants.IdentifierSystem;
-import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
+import vn.ehealth.emr.dto.controller.DichVuKyThuatHelper;
+import vn.ehealth.emr.model.dto.BaseRef;
+import vn.ehealth.emr.model.dto.DichVuKyThuat;
+import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 
-public class EmrDichVuKyThuat {
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
+import static vn.ehealth.hl7.fhir.dao.util.DaoFactory.*;
 
-    public ObjectId emrHoSoBenhAnId;
-    public ObjectId emrBenhNhanId;
-    public ObjectId emrCoSoKhamBenhId;
-    
-    public String getEmrHoSoBenhAnId() {
-        return ObjectIdUtil.idToString(emrHoSoBenhAnId);
+public abstract class EmrDichVuKyThuat {
+	
+	public EmrDmContent emrDmKhoaDieuTri;
+		
+	public Encounter getVaoKhoaEncounter(Encounter hsbaEncounter) {
+		if(hsbaEncounter == null 
+			|| hsbaEncounter.getServiceProvider() == null
+			|| !hsbaEncounter.getServiceProvider().hasReference()
+			|| emrDmKhoaDieuTri == null) {
+			return null;
+		}
+		
+		var params = mapOf(
+				"partOf", hsbaEncounter.getServiceProvider().getReference(),
+				"type", new TokenParam(CodeSystemValue.KHOA_DIEU_TRI, emrDmKhoaDieuTri.ma)
+			);
+	
+		var khoaDieuTri = getOrganizationDao().searchOne(params);
+		if(khoaDieuTri != null) {
+			params = mapOf(
+					"partOf", createReference(hsbaEncounter),
+					"serviceProvider", createReference(khoaDieuTri)
+				);
+			return (Encounter) getEncounterDao().searchOne(params);
+		}
+    	return null;
+	}
+	
+	public void saveToFhirDb(Encounter hsbaEncounter) {
+    	if(hsbaEncounter == null) return;
+    	var vaoKhoaEncounter = getVaoKhoaEncounter(hsbaEncounter);
+    	var encounter = vaoKhoaEncounter != null? vaoKhoaEncounter : hsbaEncounter;
+    	
+    	var dto = toDto();
+    	dto.patient = new BaseRef(encounter.getSubject());
+    	dto.encounter = new BaseRef(encounter);
+    	DichVuKyThuatHelper.saveDichVuKT(dto);
+    	
     }
-    
-    public void setEmrHoSoBenhAnId(String emrHoSoBenhAnId) {
-        this.emrHoSoBenhAnId = ObjectIdUtil.stringToId(emrHoSoBenhAnId);            
-    }
-
-    public String getEmrBenhNhanId() {
-        return ObjectIdUtil.idToString(emrBenhNhanId);
-    }
-
-    public void setEmrBenhNhanId(String emrBenhNhanId) {
-        this.emrBenhNhanId = ObjectIdUtil.stringToId(emrBenhNhanId);
-    }
-    
-    public String getEmrCoSoKhamBenhId() {
-        return ObjectIdUtil.idToString(emrCoSoKhamBenhId);
-    }
-    
-    public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
-        this.emrCoSoKhamBenhId = ObjectIdUtil.stringToId(emrCoSoKhamBenhId);
-    }
-    
-    @JsonIgnore
-    public String getPatientId() {
-        var emrBenhNhan = ServiceFactory.getEmrBenhNhanService().getById(this.emrBenhNhanId).orElse(null);
-        if(emrBenhNhan != null) {
-            var params = mapOf("identifier", new TokenParam(IdentifierSystem.THE_BHYT, emrBenhNhan.sobhyt));
-            var patient = DaoFactory.getPatientDao().searchOne(params);
-            if(patient != null) {
-                return patient.getId();
-            }
-        }
-        return null;
-    }
-    
-    @JsonIgnore 
-    public String getEncounterId() {
-        var emrHoSoBenhAn = ServiceFactory.getEmrHoSoBenhAnService().getById(this.emrHoSoBenhAnId).orElse(null);
-        if(emrHoSoBenhAn != null) {
-            var params = mapOf("identifier", new TokenParam(IdentifierSystem.MA_HO_SO, emrHoSoBenhAn.mayte));
-            var encounter = DaoFactory.getEncounterDao().searchOne(params);
-            if(encounter != null) {
-                return encounter.getId();
-            }
-        }
-        return null;
-    }
+	
+	abstract public DichVuKyThuat toDto();
 }

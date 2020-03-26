@@ -152,6 +152,16 @@ public class FhirUtil {
         return null;
     }
     
+    public static ResourceType getResourceType(Reference ref) {
+    	if(ref != null && ref.hasReference()) {
+    		var arr = ref.getReference().split("/");
+            if(arr.length == 2) {
+                return ResourceType.fromCode(arr[0]);
+            }
+    	}
+    	return null;
+    }
+    
     public static IdType createIdType(Reference ref) {
         if((ref != null && ref.hasReference())) {
             var arr = ref.getReference().split("/");

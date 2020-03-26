@@ -55,7 +55,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         if (fhirId != null && !fhirId.isEmpty()) {
             ent.fhirId = (fhirId);
         } else {
-            ent.fhirId = (StringUtil.generateUID());
+            ent.fhirId = (StringUtil.generateUUID());
         }
 
         ent.active = (true);

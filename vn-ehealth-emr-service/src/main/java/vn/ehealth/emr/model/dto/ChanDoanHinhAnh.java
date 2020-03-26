@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
@@ -12,8 +13,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
 import vn.ehealth.emr.utils.MessageUtils;
-import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
-
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
@@ -23,19 +22,19 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayYeuCau;
     
-    public CanboYte bacSiYeuCau;
+    public BaseRef bacSiYeuCau;
     public String noiDungYeuCau;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayThucHien;
     
-    public CanboYte bacSiChuyenKhoa;
+    public BaseRef bacSiChuyenKhoa;
     public String ketQua;
     public String ketLuan;
     public String loiDan;
     
-    public CanboYte nguoiVietBaoCao;
-    public CanboYte nguoiDanhGiaKetQua;
+    public BaseRef nguoiVietBaoCao;
+    public BaseRef nguoiDanhGiaKetQua;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayGioBaoCao;    
@@ -44,73 +43,70 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
         super();
     }
     
-    public ChanDoanHinhAnh(ServiceRequest serviceRequest) {
-        super(serviceRequest);
+    public ChanDoanHinhAnh(Procedure procedure) {
+        super(procedure, false, false);
     }
     
     @Override
     public Map<String, Object> toFhir() {
-        //ServiceRequest
-        ServiceRequest serviceRequest;
-        if(this.id != null) {
-            serviceRequest = DaoFactory.getServiceRequestDao().read(this.getIdPart());
-            if(serviceRequest == null) throw new RuntimeException("No serviceRequest with id:" + this.id);
-        }else {
-            serviceRequest = new ServiceRequest();
-        }
-        
-        var cdhaConcept = createCodeableConcept(LoaiDichVuKT.CHAN_DOAN_HINH_ANH, 
+    	var cdhaConcept = createCodeableConcept(LoaiDichVuKT.CHAN_DOAN_HINH_ANH, 
                 MessageUtils.get("text.CT"), 
                 CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
+    	
+    	var code = DanhMuc.toConcept(this.dmCdha, CodeSystemValue.DICH_VU_KY_THUAT);
+    	var subject = this.patient != null? createReference(ResourceType.Patient, this.patient.id) : null;
+    	var encounter = this.encounter != null? createReference(ResourceType.Encounter, this.encounter.id) : null;
+    	
+    	var procedure = new Procedure();
+    	procedure.setId(this.id);
+    	procedure.setCategory(cdhaConcept);
+    	procedure.setCode(code);
+        procedure.setSubject(subject);        
+        procedure.setEncounter(encounter);
         
-        serviceRequest.setCategory(listOf(cdhaConcept));
-        serviceRequest.setSubject(createReference(ResourceType.Patient, this.patientId));
-        serviceRequest.setEncounter(createReference(ResourceType.Encounter, this.encounterId));
-        serviceRequest.setRequester(CanboYte.toReference(this.bacSiYeuCau));
-        serviceRequest.setAuthoredOn(this.ngayYeuCau);
-        serviceRequest.setCode(DanhMuc.toConcept(this.dmCdha, CodeSystemValue.DICH_VU_KY_THUAT));
-        serviceRequest.setOrderDetail(listOf(createCodeableConcept(this.noiDungYeuCau)));
-        
-        // Procedure
-        Procedure procedure;
-        if(this.id != null) {
-            var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + this.id);
-            procedure = (Procedure) DaoFactory.getProcedureDao().searchOne(params);
-            if(procedure == null) throw new RuntimeException("No procedure with requestId:" + this.id);
-        }else {
-            procedure = new Procedure();
+        if(this.bacSiChuyenKhoa != null) {
+        	procedure.setAsserter(createReference(ResourceType.Practitioner, this.bacSiChuyenKhoa.id));
         }
         
-        procedure.setCategory(cdhaConcept);
-        procedure.setSubject(serviceRequest.getSubject());        
-        procedure.setEncounter(serviceRequest.getEncounter());
-        procedure.setAsserter(BaseModelDTO.toReference(this.bacSiChuyenKhoa));
-        
-        if(this.ngayThucHien != null) procedure.setPerformed(new DateTimeType(this.ngayThucHien));
-        
-        procedure.setCode(serviceRequest.getCode());        
+        if(this.ngayThucHien != null) {
+        	procedure.setPerformed(new DateTimeType(this.ngayThucHien));
+        }
+                
         procedure.setOutcome(createCodeableConcept(this.ketQua));
         procedure.setFollowUp(listOf(createCodeableConcept(this.loiDan)));
-                    
-        // DiagnosticReport
-        DiagnosticReport diagnosticReport = null;
-        if(this.id != null) {
-            var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + this.id);
-            diagnosticReport = (DiagnosticReport) DaoFactory.getDiagnosticReportDao().searchOne(params);
-            if(diagnosticReport == null) throw new RuntimeException("No diagnosticReport with requestId:" + this.id);
-        }else {
-            diagnosticReport = new DiagnosticReport();
+    	
+        //ServiceRequest
+        var serviceRequest = new ServiceRequest();
+        serviceRequest.setCategory(listOf(cdhaConcept));
+        serviceRequest.setCode(code);
+		serviceRequest.setSubject(subject);
+		serviceRequest.setEncounter(encounter);
+		
+		if(this.bacSiYeuCau != null) {
+        	serviceRequest.setRequester(createReference(ResourceType.Practitioner, this.bacSiYeuCau.id));
         }
-                                                    
+		
+		serviceRequest.setAuthoredOn(this.ngayYeuCau);        
+        serviceRequest.setOrderDetail(listOf(createCodeableConcept(this.noiDungYeuCau)));
+                                    
+        // DiagnosticReport
+        var diagnosticReport = new DiagnosticReport();
         diagnosticReport.setCategory(listOf(cdhaConcept));
-        diagnosticReport.setSubject(serviceRequest.getSubject());
-        diagnosticReport.setEncounter(serviceRequest.getEncounter());
+        diagnosticReport.setCode(serviceRequest.getCode());
+        diagnosticReport.setSubject(subject);
+        diagnosticReport.setEncounter(encounter);
         
-        diagnosticReport.setPerformer(listOf(BaseModelDTO.toReference(this.nguoiVietBaoCao)));
-        diagnosticReport.setResultsInterpreter(listOf(BaseModelDTO.toReference(this.nguoiDanhGiaKetQua)));
+        if(this.nguoiVietBaoCao != null) {
+        	var nguoiVietBaoCaoRef = createReference(ResourceType.Practitioner, this.nguoiVietBaoCao.id);
+        	diagnosticReport.setPerformer(listOf(nguoiVietBaoCaoRef));
+        }
         
-        diagnosticReport.setIssued(this.ngayGioBaoCao);
-        diagnosticReport.setCode(serviceRequest.getCode());        
+        if(this.nguoiDanhGiaKetQua != null) {
+        	var nguoiDanhGiaKetQuaRef = createReference(ResourceType.Practitioner, this.nguoiDanhGiaKetQua.id);
+        	diagnosticReport.setResultsInterpreter(listOf(nguoiDanhGiaKetQuaRef));
+        }
+        
+        diagnosticReport.setIssued(this.ngayGioBaoCao);                
         diagnosticReport.setConclusion(this.ketLuan);
         
         return mapOf(
@@ -121,37 +117,46 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
     }
 
     @Override
-    public void fromFhir(ServiceRequest serviceRequest) {
-        if(serviceRequest == null) return;
-        
-        // ServiceRequest        
-        this.ngayYeuCau = serviceRequest.getAuthoredOn();
-        this.bacSiYeuCau = CanboYte.fromReference(serviceRequest.getRequester());
-        this.noiDungYeuCau = serviceRequest.hasOrderDetail()? serviceRequest.getOrderDetailFirstRep().getText() : "";
-        
-        var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
+    public void fromFhir(Procedure procedure, boolean includeSpecimen, boolean includeObservation) {
+        if(procedure == null) return;
         
         // Procedure        
-        var procedure = (Procedure) DaoFactory.getProcedureDao().searchOne(params);
-        if(procedure != null) {
-            this.ngayThucHien = procedure.hasPerformedDateTimeType()? procedure.getPerformedDateTimeType().getValue() : null;
-            this.bacSiChuyenKhoa = CanboYte.fromReference(procedure.getAsserter());
-            this.ketQua = procedure.hasOutcome()? procedure.getOutcome().getText() : "";
-            this.loiDan = procedure.hasFollowUp()? procedure.getFollowUpFirstRep().getText() : "";
+        this.dmCdha = new DanhMuc(procedure.getCode());
+        this.ngayThucHien = procedure.hasPerformedDateTimeType()? procedure.getPerformedDateTimeType().getValue() : null;
+        this.bacSiChuyenKhoa = new BaseRef(procedure.getAsserter());
+        this.bacSiChuyenKhoa.data = CanboYte.fromFhir((Practitioner) this.bacSiChuyenKhoa.resource);
+        
+        this.ketQua = procedure.hasOutcome()? procedure.getOutcome().getText() : "";
+        this.loiDan = procedure.hasFollowUp()? procedure.getFollowUpFirstRep().getText() : "";
+        
+        // ServiceRequest
+        if(procedure.hasBasedOn()) {
+        	var serviceRequest = (ServiceRequest) procedure.getBasedOnFirstRep().getResource();
+        	if(serviceRequest != null) {
+        		this.ngayYeuCau = serviceRequest.getAuthoredOn();
+                this.noiDungYeuCau = serviceRequest.hasOrderDetail()? serviceRequest.getOrderDetailFirstRep().getText() : "";
+                
+                this.bacSiYeuCau = new BaseRef(serviceRequest.getRequester());
+                this.bacSiYeuCau.data = CanboYte.fromFhir((Practitioner) this.bacSiYeuCau.resource);
+        	}
         }
         
         // DiagnosticReport
-        var diagnosticReport = (DiagnosticReport) DaoFactory.getDiagnosticReportDao().searchOne(params);
-        if(diagnosticReport != null) {
-            this.dmCdha = new DanhMuc(diagnosticReport.getCode());
-            this.nguoiVietBaoCao = diagnosticReport.hasPerformer()?
-                                    CanboYte.fromReference(diagnosticReport.getPerformerFirstRep()) : null;
-            this.ngayGioBaoCao = diagnosticReport.getIssued();
-            this.nguoiDanhGiaKetQua = diagnosticReport.hasResultsInterpreter()?
-                                    CanboYte.fromReference(diagnosticReport.getResultsInterpreterFirstRep()) : null;
-                                    
-            this.ketLuan = diagnosticReport.getConclusion();
+        if(procedure.hasReport()) {
+        	var diagnosticReport = (DiagnosticReport) procedure.getReportFirstRep().getResource();
+        	if(diagnosticReport != null) {
+                if(diagnosticReport.hasPerformer()) {
+                	this.nguoiVietBaoCao = new BaseRef(diagnosticReport.getPerformerFirstRep());
+                }
+                
+                this.ngayGioBaoCao = diagnosticReport.getIssued();
+                
+                if(diagnosticReport.hasResultsInterpreter()) {
+                	this.nguoiDanhGiaKetQua = new BaseRef(diagnosticReport.getResultsInterpreterFirstRep());
+                }
+
+                this.ketLuan = diagnosticReport.getConclusion();
+            }
         }
-        
     }
 }

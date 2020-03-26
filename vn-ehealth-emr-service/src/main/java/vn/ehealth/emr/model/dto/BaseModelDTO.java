@@ -22,9 +22,9 @@ public abstract class BaseModelDTO {
         
     }
     
-    public BaseModelDTO(Resource ent) {
-        if(ent != null) {
-            this.id = ent.getId();
+    public BaseModelDTO(Resource obj) {
+        if(obj != null) {
+            this.id = obj.getId();
         }
     }
     

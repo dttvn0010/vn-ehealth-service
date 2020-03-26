@@ -17,12 +17,12 @@ public abstract class ToChuc extends BaseModelDTO {
         if(obj != null) {
             this.ma = obj.hasIdentifier()? obj.getIdentifierFirstRep().getValue() : "";
             this.ten = obj.hasName() ? obj.getName() : "";
-            fromFhir(obj);
+            getContentFromFhir(obj);
         }
     }
     
     public abstract Organization toFhir();
-    protected abstract void fromFhir(Organization obj);
+    protected abstract void getContentFromFhir(Organization obj);
     
     @Override
     public ResourceType getType() {

@@ -25,7 +25,7 @@ public class EmrHoiChan {
     public int trangThai;
     public String idhis;
     
-    public EmrKhoaDieuTri emrKhoaDieuTri;
+    public EmrVaoKhoa emrKhoaDieuTri;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaythuchien;

@@ -1,7 +1,7 @@
 package vn.ehealth.emr.dto.controller;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.hl7.fhir.r4.model.Encounter;
@@ -20,16 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import vn.ehealth.emr.model.dto.BenhNhan;
-import vn.ehealth.emr.model.dto.CoSoKhamBenh;
+import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.rest.param.TokenParam;
 import vn.ehealth.emr.model.dto.DotKhamBenh;
-import vn.ehealth.emr.utils.JsonUtil;
+import vn.ehealth.emr.utils.Constants.CodeSystemValue;
+import vn.ehealth.emr.utils.Constants.EncounterType;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
-import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
-import vn.ehealth.hl7.fhir.provider.dao.impl.OrganizationDao;
-
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
+
 
 @RestController
 @RequestMapping("/api/dot_kham_benh")
@@ -37,52 +37,70 @@ public class DotKhamBenhController {
 
     private static Logger logger = LoggerFactory.getLogger(BenhNhanController.class);
     
-    @Autowired private PatientDao patientDao;
     @Autowired private EncounterDao encounterDao;
-    @Autowired private OrganizationDao organizationDao;
         
-    private Map<String, Object> convertToRaw(DotKhamBenh dto, boolean includePatient) {
-    	if(dto == null) return null;
-    	
-    	var item = JsonUtil.objectToMap(dto);
-    	var serviceProvider = organizationDao.read(createIdType(dto.serviceProviderId));
-    	if(serviceProvider != null) {
-    		item.put("coSoKhamBenh", new CoSoKhamBenh(serviceProvider));    		
-    	}
-    	if(includePatient) {
-			var patient = patientDao.read(createIdType(dto.patientId));
-			item.put("benhNhan", BenhNhan.fromFhir(patient));
-		}
-    	return item;
+    private boolean isDotKhamBenh(Encounter obj) {
+        if(obj != null && obj.hasType()) {
+            for(var concept : obj.getType()) {
+                boolean isDotKhamBenh = conceptHasCode(concept, EncounterType.DOT_KHAM, 
+                                                CodeSystemValue.ENCOUTER_TYPE);                
+                if(isDotKhamBenh) return true;
+            }
+        }
+        return false;
     }
     
     @GetMapping("/get_by_id/{id}")
-    public ResponseEntity<?> getById(@PathVariable String id, @RequestParam Optional<Boolean> includePatient) {
+    public ResponseEntity<?> getById(@PathVariable String id,
+    								@RequestParam Optional<Boolean> includePatient,
+    								@RequestParam Optional<Boolean> includeServiceProvider) {
         var obj = encounterDao.read(new IdType(id));
-        var dto = DotKhamBenh.fromFhir(obj);
-        var result = convertToRaw(dto, includePatient.orElse(false));
-        return ResponseEntity.ok(result);
+        if(isDotKhamBenh(obj)) {
+        	if(includeServiceProvider.orElse(false)) {
+        		setReferenceResource(obj.getServiceProvider());
+        	}
+        	
+        	if(includePatient.orElse(false)) {
+        		setReferenceResource(obj.getSubject());
+        	}
+	        var dto = DotKhamBenh.fromFhir(obj);
+	        return ResponseEntity.ok(dto);
+        }
+        return new ResponseEntity<>("No dotkhambenh with id:" + id, HttpStatus.BAD_REQUEST);
     }
     
     @GetMapping("/count")
     public long count(@RequestParam Optional<String> patientId) {
         var params = new HashMap<String, Object>();
+        params.put("type", new TokenParam(CodeSystemValue.ENCOUTER_TYPE, EncounterType.DOT_KHAM));
         patientId.ifPresent(x -> params.put("subject", ResourceType.Patient + "/" +  x));
     	return encounterDao.count(params);
     }
     
     @GetMapping("/get_list")
     public ResponseEntity<?> getList(@RequestParam Optional<String> patientId, 
-    									@RequestParam Optional<Boolean> includePatient) {
+    									@RequestParam Optional<Boolean> includePatient,
+    									@RequestParam Optional<Boolean> includeServiceProvider) {
     	
         var params = new HashMap<String, Object>();
+        params.put("type", new TokenParam(CodeSystemValue.ENCOUTER_TYPE, EncounterType.DOT_KHAM));
         patientId.ifPresent(x -> params.put("subject", ResourceType.Patient + "/" + x));
+        
+        var includes = new HashSet<Include>();
+       
+        if(includeServiceProvider.orElse(false)) {
+        	includes.add(new Include("Encounter:serviceProvider"));
+        }
+        
+        if(includePatient.orElse(false)) {
+        	includes.add(new Include("Encounter:subject"));
+        }
+        
+        params.put("includes", includes);
+        
     	var lst = encounterDao.search(params);
     	
-    	var result = transform(lst, x -> {
-    		var dto = DotKhamBenh.fromFhir((Encounter)x);
-    		return convertToRaw(dto, includePatient.orElse(false));
-    	});
+    	var result = transform(lst, x -> DotKhamBenh.fromFhir((Encounter)x));
         
         return ResponseEntity.ok(result);
     }

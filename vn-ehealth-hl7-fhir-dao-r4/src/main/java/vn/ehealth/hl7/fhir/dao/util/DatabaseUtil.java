@@ -1,13 +1,20 @@
 package vn.ehealth.hl7.fhir.dao.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
 
+import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.QuantityParam;
@@ -15,7 +22,6 @@ import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.StringUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 
 public class DatabaseUtil {
@@ -358,171 +364,38 @@ public class DatabaseUtil {
 	}
 
 	public static Resource getResourceFromReference(Reference ref) {
-		if (ref != null && ref.hasReference()) {
-			Resource retVal = null;
-			switch (StringUtil.getType(ref.getReference())) {
-			case ConstantKeys.RES_CAREPLAN: {
-				retVal = DaoFactory.getCarePlanDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_PATIENT: {
-				retVal = DaoFactory.getPatientDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_ENCOUNTER: {
-				retVal = DaoFactory.getEncounterDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_CLINICAL_IMPRESSION: {
-				retVal = DaoFactory.getClinicalImpressionDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_CONDITION: {
-				retVal = DaoFactory.getConditionDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_DETECTED_ISSUE: {
-				retVal = DaoFactory.getDetectedIssueDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_GOAL: {
-				retVal = DaoFactory.getGoalDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_PROCEDURE: {
-				retVal = DaoFactory.getProcedureDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_SERVICE_REQUEST: {
-				retVal = DaoFactory.getServiceRequestDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_DIAGNOSTIC_REPORT: {
-				retVal = DaoFactory.getDiagnosticReportDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_IMAGING_STUDY: {
-				retVal = DaoFactory.getImagingStudyDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_OBSERVATION: {
-				retVal = DaoFactory.getObservationDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_SPECIMEN: {
-				retVal = DaoFactory.getSpecimenDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_CARETEAM: {
-				retVal = DaoFactory.getCareTeamDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_EPISODEOFCARE: {
-				retVal = DaoFactory.getEpisodeOfCareDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_IMMUNIZATION: {
-				retVal = DaoFactory.getImmunizationDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_MEDICATION_ADMINISTRATION: {
-				retVal = DaoFactory.getMedicationAdministrationDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_MEDICATION_DISPENSE: {
-				retVal = DaoFactory.getMedicationDispenseDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_MEDICATION: {
-				retVal = DaoFactory.getMedicationDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_MEDICATION_REQUEST: {
-				retVal = DaoFactory.getMedicationRequestDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_MEDICATION_STATEMENT: {
-				retVal = DaoFactory.getMedicationStatementDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_RELATED_PERSON: {
-				retVal = DaoFactory.getRelatedPersonDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_DEVICE: {
-				retVal = DaoFactory.getDeviceDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_HEALTHCARE_SERVICE: {
-				retVal = DaoFactory.getHealthcareServiceDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_LOCATION: {
-				retVal = DaoFactory.getLocationDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_ORGANIZATION: {
-				retVal = DaoFactory.getOrganizationDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_PRACTITIONER: {
-				retVal = DaoFactory.getPractitionerDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_PRACTITIONER_ROLE: {
-				retVal = DaoFactory.getPractitionerRoleDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_APPOINTMENT: {
-				retVal = DaoFactory.getAppointmentDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_APPOINMENT_RESPONSE: {
-				retVal = DaoFactory.getAppointmentResponseDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_SCHEDULE: {
-				retVal = DaoFactory.getScheduleDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_SLOT: {
-				retVal = DaoFactory.getSlotDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_CODESYSTEM: {
-				retVal = DaoFactory.getCodeSystemDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_CONCEPTMAP: {
-				retVal = DaoFactory.getConceptMapDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_VALUESET: {
-				retVal = DaoFactory.getValueSetDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_PERSON: {
-				retVal = DaoFactory.getPersonDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_ALLERGY_INTORANCE: {
-				retVal = DaoFactory.getAllergyIntoleranceDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_FAMILY_MEMBER_HISTORY: {
-				retVal = DaoFactory.getFamilyMemberHistoryDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			case ConstantKeys.RES_MEDIA: {
-				retVal = DaoFactory.getMediaDao().read(FhirUtil.createIdType(ref));
-				break;
-			}
-			default:
-				return null;
-
-			}
-			return retVal;
+		var resourceType = FhirUtil.getResourceType(ref);
+		if(resourceType != null) {
+			var dao = DaoFactory.getDaoByType(resourceType);
+			if(dao != null) {
+				return dao.read(FhirUtil.createIdType(ref));
+			} 
 		}
 		return null;
+	}
+	
+	public static void setReferenceResource(Reference ref) {
+		if(ref != null) {
+			ref.setResource(getResourceFromReference(ref));
+		}
+	}
+	
+	public static void setReferenceResource(List<Reference> refs) {
+		if(refs != null) {
+			refs.forEach(x -> setReferenceResource(x));
+		}
+	}
+	
+	public static Map<String, Boolean> getIncludeMap(ResourceType resourceType, String[] keys, Set<Include> includes) {
+		var includeMap = new HashMap<String, Boolean>();
+		var includeAll = new Include("*");
+		for(var key : keys) {
+			boolean contained = (includes != null) &&( 
+									includes.contains(includeAll) || 
+									includes.contains(new Include(resourceType + ":" + key))
+								);
+			includeMap.put(key, contained);
+		}
+		return includeMap;
 	}
 }

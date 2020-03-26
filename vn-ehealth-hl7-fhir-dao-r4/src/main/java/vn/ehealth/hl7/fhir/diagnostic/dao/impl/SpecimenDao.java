@@ -118,7 +118,7 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 		return total;
 	}
 
-	private Criteria setParamToCriteria(TokenParam active, ReferenceParam serviceRequest, TokenParam resid, DateRangeParam _lastUpdated,
+	private Criteria setParamToCriteria(TokenParam active, ReferenceParam request, TokenParam resid, DateRangeParam _lastUpdated,
 			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
@@ -127,8 +127,8 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 		} else {
 			criteria = Criteria.where("active").is(true);
 		}
-		if(serviceRequest != null) {
-		    criteria.and("request.reference").is(serviceRequest.getValue());
+		if(request != null) {
+		    criteria.and("request.reference").is(request.getValue());
 		}
 		// set param default
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,

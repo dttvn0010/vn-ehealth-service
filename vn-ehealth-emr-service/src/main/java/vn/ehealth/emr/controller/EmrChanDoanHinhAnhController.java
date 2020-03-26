@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.emr.dto.controller.DichVuKyThuatHelper;
 import vn.ehealth.emr.model.EmrChanDoanHinhAnh;
+import vn.ehealth.emr.model.EmrHoSoBenhAn;
 import vn.ehealth.emr.service.EmrChanDoanHinhAnhService;
 import vn.ehealth.emr.service.EmrHoSoBenhAnService;
 import vn.ehealth.emr.utils.EmrUtils;
@@ -102,16 +102,10 @@ public class EmrChanDoanHinhAnhController {
                                 .map(obj -> objectMapper.convertValue(obj, EmrChanDoanHinhAnh.class))
                                 .collect(Collectors.toList());
             
+            // Save to FHIR db
+            var hsbaEncounter = EmrHoSoBenhAn.getEncounter(matraodoiHsba);
             cdhaList.forEach(cdha -> {
-                cdha.emrHoSoBenhAnId = hsba.id;
-                cdha.emrBenhNhanId = hsba.emrBenhNhanId;
-                cdha.emrCoSoKhamBenhId = hsba.emrCoSoKhamBenhId;
-            });
-            
-            // Save FHIR entity
-            cdhaList.forEach(cdha -> {
-                var dto = cdha.toDto();
-                DichVuKyThuatHelper.saveDichVuKT(dto);
+                cdha.saveToFhirDb(hsbaEncounter);;
             });
             
             var user = UserUtil.getCurrentUser();

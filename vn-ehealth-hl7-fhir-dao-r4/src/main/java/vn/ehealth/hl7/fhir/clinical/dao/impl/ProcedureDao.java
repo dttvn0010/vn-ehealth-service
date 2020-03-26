@@ -6,9 +6,7 @@ import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Procedure;
-import org.hl7.fhir.r4.model.Procedure.ProcedurePerformerComponent;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,7 +25,7 @@ import vn.ehealth.hl7.fhir.clinical.entity.ProcedureEntity;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
 @Repository
 public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
@@ -58,148 +56,66 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
         	query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
         	query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+        
+        String[] keys = {"subject", "encounter", "basedOn", "asserter", 
+				"recorder", "report", "location", "reasonReference", 
+				"performer:actor", "performer:onBehalfOf", "complicationDetail", 
+				"usedReference"};
+
+        var includeMap = getIncludeMap(ResourceType.Encounter, keys, includes);
+
         List<ProcedureEntity> procedureEntitys = mongo.find(query, ProcedureEntity.class);
         if (procedureEntitys != null) {
             for (ProcedureEntity item : procedureEntitys) {
                 Procedure obj = transform(item);
-                // add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getBasedOn() != null && obj.getBasedOn().size() > 0) {
-						for (Reference ref : obj.getBasedOn()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getAsserter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getAsserter());
-						if (nested != null) {
-							obj.getAsserter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getRecorder() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getRecorder());
-						if (nested != null) {
-							obj.getRecorder().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getReport() != null && obj.getReport().size() > 0) {
-						for (Reference ref : obj.getReport()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getLocation() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getLocation());
-						if (nested != null) {
-							obj.getLocation().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getReasonReference() != null && obj.getReasonReference().size() > 0) {
-						for (Reference ref : obj.getReasonReference()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getPerformer() != null && obj.getPerformer().size() > 0) {
-						for (ProcedurePerformerComponent ref : obj.getPerformer()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref.getActor());
-							if (nested != null) {
-								ref.getActor().setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-							Resource nested1 = DatabaseUtil.getResourceFromReference(ref.getOnBehalfOf());
-							if (nested1 != null) {
-								ref.getOnBehalfOf().setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getReasonReference() != null && obj.getReasonReference().size() > 0) {
-						for (Reference ref : obj.getReasonReference()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getComplicationDetail() != null && obj.getComplicationDetail().size() > 0) {
-						for (Reference ref : obj.getComplicationDetail()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getUsedReference() != null && obj.getUsedReference().size() > 0) {
-						for (Reference ref : obj.getUsedReference()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-				} else {
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("Procedure:subject"))
-							&& obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("Procedure:encounter")) && obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-				}
+                
+                if(includeMap.get("subject") && obj.hasSubject()) {
+                	setReferenceResource(obj.getSubject());
+                }
+                
+                if(includeMap.get("encounter") && obj.hasEncounter()) {
+                	setReferenceResource(obj.getEncounter());
+                }
+                
+                if(includeMap.get("basedOn") && obj.hasBasedOn()) {
+                	setReferenceResource(obj.getBasedOn());
+                }
+                
+                if(includeMap.get("asserter") && obj.hasAsserter()) {
+                	setReferenceResource(obj.getAsserter());
+                }
+                
+                if(includeMap.get("recorder") && obj.hasRecorder()) {
+                	setReferenceResource(obj.getRecorder());
+                }
+                
+                if(includeMap.get("report") && obj.hasReport()) {
+                	setReferenceResource(obj.getReport());
+                }
+                
+                if(includeMap.get("location") && obj.hasLocation()) {
+                	setReferenceResource(obj.getLocation());
+                }
+                
+                if(includeMap.get("reasonReference") && obj.hasReasonReference()) {
+                	setReferenceResource(obj.getReasonReference());
+                }
+                
+                if(includeMap.get("performer:actor") && obj.hasPerformer()) {
+                	obj.getPerformer().forEach(x -> setReferenceResource(x.getActor()));
+                }
+                
+                if(includeMap.get("performer:onBehalfOf") && obj.hasPerformer()) {
+                	obj.getPerformer().forEach(x -> setReferenceResource(x.getOnBehalfOf()));
+                }
+                
+                if(includeMap.get("complicationDetail") && obj.hasComplicationDetail()) {
+                	setReferenceResource(obj.getComplicationDetail());
+                }
+                
+                if(includeMap.get("usedReference") && obj.hasUsedReference()) {
+                	setReferenceResource(obj.getUsedReference());
+                }
                 resources.add(obj);
             }
         }
@@ -239,7 +155,7 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
             criteria = Criteria.where("active").is(true);
         }
         // set param default
-        criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+        criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
                 identifier);
         // based-on
         if (basedOn != null) {
@@ -271,7 +187,7 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
         }
         // date
         if (date != null) {
-            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "performed", date);
+            criteria = setTypeDateToCriteria(criteria, "performed", date);
         }
         // definition
         if (definition != null) {

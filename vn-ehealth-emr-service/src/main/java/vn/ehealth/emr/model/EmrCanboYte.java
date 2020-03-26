@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import ca.uhn.fhir.rest.param.TokenParam;
+import vn.ehealth.emr.model.dto.BaseRef;
 import vn.ehealth.emr.model.dto.CanboYte;
 import vn.ehealth.emr.utils.Constants.IdentifierSystem;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
@@ -47,5 +48,14 @@ public class EmrCanboYte {
         var dto = _toDto();        
         dto.id = getFhirId();
         return dto;
+    }
+    
+    public BaseRef toRef() {
+    	var params = mapOf("identifier", new TokenParam(IdentifierSystem.CHUNG_CHI_HANH_NGHE, this.chungchihanhnghe));
+    	var obj = DaoFactory.getPractitionerDao().searchOne(params);
+    	if(obj == null) {
+    		obj = DaoFactory.getPractitionerDao().create(CanboYte.toFhir(toDto()));
+    	}
+    	return new BaseRef(obj);
     }
 }

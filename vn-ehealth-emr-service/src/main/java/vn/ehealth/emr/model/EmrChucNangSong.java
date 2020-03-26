@@ -25,7 +25,7 @@ public class EmrChucNangSong {
     public int trangThai;
     public String idhis;
     
-    public EmrKhoaDieuTri emrKhoaDieuTri;
+    public EmrVaoKhoa emrKhoaDieuTri;
     
     public String sophieu;
     

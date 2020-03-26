@@ -21,6 +21,34 @@ public class EmrChanDoanHinhAnh extends EmrDichVuKyThuat {
 
     @Id public ObjectId id;    
     
+    public ObjectId emrHoSoBenhAnId;
+    public ObjectId emrBenhNhanId;
+    public ObjectId emrCoSoKhamBenhId;
+    
+    public String getEmrHoSoBenhAnId() {
+        return ObjectIdUtil.idToString(emrHoSoBenhAnId);
+    }
+    
+    public void setEmrHoSoBenhAnId(String emrHoSoBenhAnId) {
+        this.emrHoSoBenhAnId = ObjectIdUtil.stringToId(emrHoSoBenhAnId);            
+    }
+
+    public String getEmrBenhNhanId() {
+        return ObjectIdUtil.idToString(emrBenhNhanId);
+    }
+
+    public void setEmrBenhNhanId(String emrBenhNhanId) {
+        this.emrBenhNhanId = ObjectIdUtil.stringToId(emrBenhNhanId);
+    }
+    
+    public String getEmrCoSoKhamBenhId() {
+        return ObjectIdUtil.idToString(emrCoSoKhamBenhId);
+    }
+    
+    public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
+        this.emrCoSoKhamBenhId = ObjectIdUtil.stringToId(emrCoSoKhamBenhId);
+    }
+    
     public int trangThai;
     public String idhis;
     
@@ -52,16 +80,14 @@ public class EmrChanDoanHinhAnh extends EmrDichVuKyThuat {
     }
     
     public ChanDoanHinhAnh toDto() {
-        var dto = new ChanDoanHinhAnh();
-        dto.patientId = getPatientId();
-        dto.encounterId = getEncounterId();
+    	var dto = new ChanDoanHinhAnh();
         dto.dmCdha = this.emrDmChanDoanHinhAnh != null? this.emrDmChanDoanHinhAnh.toDto() : null;
         dto.ngayYeuCau = this.ngayyeucau;
-        dto.bacSiYeuCau = this.bacsiyeucau != null? this.bacsiyeucau.toDto() : null;
+        dto.bacSiYeuCau = this.bacsiyeucau != null? this.bacsiyeucau.toRef() : null;
         dto.noiDungYeuCau = this.noidungyeucau;
         
         dto.ngayThucHien = this.ngaythuchien;
-        dto.bacSiChuyenKhoa = this.bacsichuyenkhoa != null? this.bacsichuyenkhoa.toDto() : null;
+        dto.bacSiChuyenKhoa = this.bacsichuyenkhoa != null? this.bacsichuyenkhoa.toRef() : null;
         dto.ketQua = this.ketqua;
         dto.ketLuan = this.ketluan;
         dto.loiDan = this.loidan;

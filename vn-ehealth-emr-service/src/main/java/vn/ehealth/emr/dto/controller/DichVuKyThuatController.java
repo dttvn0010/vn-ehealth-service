@@ -2,8 +2,9 @@ package vn.ehealth.emr.dto.controller;
 
 import java.util.Optional;
 
+import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.ServiceRequest;
+import org.hl7.fhir.r4.model.Procedure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,8 @@ import vn.ehealth.emr.model.dto.PhauThuatThuThuat;
 import vn.ehealth.emr.model.dto.XetNghiem;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
-import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
+import vn.ehealth.hl7.fhir.clinical.dao.impl.ProcedureDao;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 import static vn.ehealth.emr.dto.controller.DichVuKyThuatHelper.*;
@@ -34,16 +36,28 @@ public class DichVuKyThuatController {
 
 private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.class);
     
-    @Autowired private ServiceRequestDao serviceRequestDao;
+    @Autowired private ProcedureDao procedureDao;
         
+    private void updateReferenceResource(Procedure obj, 
+    									Optional<Boolean> includeEncounter,
+										Optional<Boolean> includeServiceProvider) {
+    	if(obj == null) return;
+    	
+    	if(includeEncounter.orElse(false)) {
+    		setReferenceResource(obj.getEncounter());
+    		var enc = (Encounter) (obj.getEncounter().getResource());
+    		
+    		if(includeServiceProvider.orElse(false) && enc != null) {        			
+    			setReferenceResource(enc.getServiceProvider());
+    		}
+    	}
+    }
+    
     // ========================================  ChanDoanHinhAnh ===============================
-    private boolean isChanDoanHinhAnh(ServiceRequest obj) {
+    private boolean isChanDoanHinhAnh(Procedure obj) {
         if(obj != null && obj.hasCategory()) {
-            for(var concept : obj.getCategory()) {
-                boolean isCdha = conceptHasCode(concept, LoaiDichVuKT.CHAN_DOAN_HINH_ANH, 
-                                                CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
-                if(isCdha) return true;
-            }
+            return conceptHasCode(obj.getCategory(), LoaiDichVuKT.CHAN_DOAN_HINH_ANH, 
+                    CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
         }
         return false;
     }
@@ -58,30 +72,29 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     public ResponseEntity<?> getChanDoanHinhAnhList(
     							@RequestParam Optional<String> patientId, 
                                 @RequestParam Optional<String> encounterId,
-                                @RequestParam Optional<Boolean> includeServiceProvider,
                                 @RequestParam Optional<Boolean> includeEncounter,
+								@RequestParam Optional<Boolean> includeServiceProvider,
                                 @RequestParam Optional<Integer> start,
                                 @RequestParam Optional<Integer> count) {
         
-        var lst = getDichVuKTList(LoaiDichVuKT.CHAN_DOAN_HINH_ANH, patientId, encounterId, start, count);
+        var lst = getDichVuKTList(LoaiDichVuKT.CHAN_DOAN_HINH_ANH, patientId, encounterId, 
+        							includeServiceProvider, includeEncounter, start, count);
         
-        var result = transform(lst, x -> {
-        	var cdha = new ChanDoanHinhAnh(x);        	
-        	return convertDichVuKyThuatToRaw(cdha, includeServiceProvider, includeEncounter);
-        });
+        var result = transform(lst, x -> new ChanDoanHinhAnh(x));
         
         return ResponseEntity.ok(result);
     }
     
     @GetMapping("/get_cdha_by_id/{id}")
     public ResponseEntity<?> getChanDoanHinhAnhById(@PathVariable String id, 
-								@RequestParam Optional<Boolean> includeServiceProvider,
-								@RequestParam Optional<Boolean> includeEncounter) {
-        var obj = serviceRequestDao.read(new IdType(id));
+    							@RequestParam Optional<Boolean> includeEncounter,
+								@RequestParam Optional<Boolean> includeServiceProvider){
+        
+    	var obj = procedureDao.read(new IdType(id));
         if(isChanDoanHinhAnh(obj)) {
-        	var cdha = new ChanDoanHinhAnh(obj);
-        	var result = convertDichVuKyThuatToRaw(cdha, includeServiceProvider, includeEncounter);
-            return ResponseEntity.ok(result);
+        	updateReferenceResource(obj, includeEncounter, includeServiceProvider);        	
+        	var cdha = new ChanDoanHinhAnh(obj);        	
+            return ResponseEntity.ok(cdha);
         }
         return new ResponseEntity<>("No chanDoanHinhAnh with id:" + id, HttpStatus.BAD_REQUEST);
     }
@@ -89,8 +102,8 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     @PostMapping("/save_cdha")
     public ResponseEntity<?> saveChanDoanHinhAnh(@RequestBody ChanDoanHinhAnh dto) {
         try {
-            var serviceRequest = saveDichVuKT(dto);
-            var cdha = new ChanDoanHinhAnh(serviceRequest);
+            var procedure = saveDichVuKT(dto);
+            var cdha = new ChanDoanHinhAnh(procedure);            
             var result = mapOf("success", true, "chanDoanHinhAnh", cdha);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
@@ -101,13 +114,11 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     }
     
     // ========================================  PhauThuatThuThuat ===============================
-    private boolean isPhauThuatThuThuat(ServiceRequest obj) {
+    private boolean isPhauThuatThuThuat(Procedure obj) {
         if(obj != null && obj.hasCategory()) {
-            for(var concept : obj.getCategory()) {
-                boolean isPttt = conceptHasCode(concept, LoaiDichVuKT.PHAU_THUAT_THU_THUAT, 
-                                                CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
-                if(isPttt) return true;
-            }
+        	boolean isPttt = conceptHasCode(obj.getCategory(), LoaiDichVuKT.PHAU_THUAT_THU_THUAT, 
+                    CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
+    		if(isPttt) return true;
         }
         return false;
     }
@@ -124,31 +135,29 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     public ResponseEntity<?> getPhauThuatThuThuatList(
     							@RequestParam Optional<String> patientId, 
                                 @RequestParam Optional<String> encounterId,
-                                @RequestParam Optional<Boolean> includeServiceProvider,
                                 @RequestParam Optional<Boolean> includeEncounter,
+								@RequestParam Optional<Boolean> includeServiceProvider,
                                 @RequestParam Optional<Integer> start,
                                 @RequestParam Optional<Integer> end) {
         
-        var lst = getDichVuKTList(LoaiDichVuKT.PHAU_THUAT_THU_THUAT, patientId, encounterId, start, end);
+        var lst = getDichVuKTList(LoaiDichVuKT.PHAU_THUAT_THU_THUAT, patientId, encounterId, 
+        								includeEncounter, includeServiceProvider, start, end);
 
-        var result = transform(lst, x -> {
-        	var pttt = new PhauThuatThuThuat(x);        	
-        	return convertDichVuKyThuatToRaw(pttt, includeServiceProvider, includeEncounter);
-        });
+        var result = transform(lst, x -> new PhauThuatThuThuat(x));
         
         return ResponseEntity.ok(result);
     }
     
     @GetMapping("/get_pttt_by_id/{id}")
     public ResponseEntity<?> getPhauThuatThuThuatById(@PathVariable String id,
-    							@RequestParam Optional<Boolean> includeServiceProvider,
-    							@RequestParam Optional<Boolean> includeEncounter) {
+					    		@RequestParam Optional<Boolean> includeEncounter,
+								@RequestParam Optional<Boolean> includeServiceProvider) {
     	
-        var obj = serviceRequestDao.read(new IdType(id));
+        var obj = procedureDao.read(new IdType(id));
         if(isPhauThuatThuThuat(obj)) {
-        	var pttt = new PhauThuatThuThuat(obj);
-        	var result = convertDichVuKyThuatToRaw(pttt, includeServiceProvider, includeEncounter);
-            return ResponseEntity.ok(result);
+        	updateReferenceResource(obj, includeEncounter, includeServiceProvider);
+        	var pttt = new PhauThuatThuThuat(obj);        	
+            return ResponseEntity.ok(pttt);
         }
         return new ResponseEntity<>("No phauThuatThuThuat with id:" + id, HttpStatus.BAD_REQUEST);
     }
@@ -168,13 +177,11 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     }
     
     // ========================================  GiaiPhauBenh ===============================
-    private boolean isGiaiPhauBenh(ServiceRequest obj) {
+    private boolean isGiaiPhauBenh(Procedure obj) {
         if(obj != null && obj.hasCategory()) {
-            for(var concept : obj.getCategory()) {
-                boolean isGpb = conceptHasCode(concept, LoaiDichVuKT.GIAI_PHAU_BENH, 
-                                                CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
-                if(isGpb) return true;
-            }
+        	boolean isGpb = conceptHasCode(obj.getCategory(), LoaiDichVuKT.GIAI_PHAU_BENH, 
+                    CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
+    		if(isGpb) return true;
         }
         return false;
     }
@@ -189,31 +196,31 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     public ResponseEntity<?> getGiaiPhauBenhList(
     							@RequestParam Optional<String> patientId, 
                                 @RequestParam Optional<String> encounterId,
-                                @RequestParam Optional<Boolean> includeServiceProvider,
                                 @RequestParam Optional<Boolean> includeEncounter,
+								@RequestParam Optional<Boolean> includeServiceProvider,
+								@RequestParam Optional<Boolean> includeSpecimen,
                                 @RequestParam Optional<Integer> start,
                                 @RequestParam Optional<Integer> count) {
         
-        var lst = getDichVuKTList(LoaiDichVuKT.GIAI_PHAU_BENH, patientId, encounterId, start, count);
+        var lst = getDichVuKTList(LoaiDichVuKT.GIAI_PHAU_BENH, patientId, encounterId,
+        							includeEncounter, includeServiceProvider, start, count);
         
-        var result = transform(lst, x -> {
-        	var gpb = new GiaiPhauBenh(x);        	
-        	return convertDichVuKyThuatToRaw(gpb, includeServiceProvider, includeEncounter);
-        });
+        var result = transform(lst, x -> new GiaiPhauBenh(x, includeSpecimen.orElse(false)));
         
         return ResponseEntity.ok(result);
     }
     
     @GetMapping("/get_gpb_by_id/{id}")
     public ResponseEntity<?> getGiaiPhauBenhById(@PathVariable String id,
-    						  	@RequestParam Optional<Boolean> includeServiceProvider,
-    						  	@RequestParam Optional<Boolean> includeEncounter) {
+					    		@RequestParam Optional<Boolean> includeEncounter,
+								@RequestParam Optional<Boolean> includeServiceProvider,
+								@RequestParam Optional<Boolean> includeSpecimen) {
     	
-        var obj = serviceRequestDao.read(new IdType(id));
+        var obj = procedureDao.read(new IdType(id));
         if(isGiaiPhauBenh(obj)) {
-        	var gpb = new GiaiPhauBenh(obj);
-        	var result = convertDichVuKyThuatToRaw(gpb, includeServiceProvider, includeEncounter);
-            return ResponseEntity.ok(result);
+        	updateReferenceResource(obj, includeEncounter, includeServiceProvider);
+        	var gpb = new GiaiPhauBenh(obj, includeSpecimen.orElse(false));
+            return ResponseEntity.ok(gpb);
         }
         return new ResponseEntity<>("No giaiPhauBenh with id:" + id, HttpStatus.BAD_REQUEST);
     }
@@ -222,7 +229,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     public ResponseEntity<?> saveGiaiPhauBenh(@RequestBody GiaiPhauBenh dto) {
         try {
             var serviceRequest = saveDichVuKT(dto);
-            var gpb = new GiaiPhauBenh(serviceRequest);
+            var gpb = new GiaiPhauBenh(serviceRequest, true);
             var result = mapOf("success", true, "giaiPhauBenh", gpb);
             return ResponseEntity.ok(result);
         }catch(Exception e) {
@@ -233,13 +240,12 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     }
     
     // ========================================  XetNghiem ===============================
-    private boolean isXetNghiem(ServiceRequest obj) {
+    private boolean isXetNghiem(Procedure obj) {
         if(obj != null && obj.hasCategory()) {
-            for(var concept : obj.getCategory()) {
-                boolean isXetNghiem = conceptHasCode(concept, LoaiDichVuKT.XET_NGHIEM, 
-                                                CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
-                if(isXetNghiem) return true;
-            }
+        	boolean isXetNghiem = conceptHasCode(obj.getCategory(), LoaiDichVuKT.XET_NGHIEM, 
+                    CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
+        	
+        	if(isXetNghiem) return true;
         }
         return false;
     }
@@ -254,31 +260,31 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     public ResponseEntity<?> getXetNghiemList(
     							@RequestParam Optional<String> patientId, 
                                 @RequestParam Optional<String> encounterId,
-                                @RequestParam Optional<Boolean> includeServiceProvider,
                                 @RequestParam Optional<Boolean> includeEncounter,
+								@RequestParam Optional<Boolean> includeServiceProvider,
+								@RequestParam Optional<Boolean> includeObservation,
                                 @RequestParam Optional<Integer> start,
                                 @RequestParam Optional<Integer> end) {
         
-        var lst = getDichVuKTList(LoaiDichVuKT.XET_NGHIEM, patientId, encounterId, start, end);
+        var lst = getDichVuKTList(LoaiDichVuKT.XET_NGHIEM, patientId, encounterId, 
+        							includeEncounter, includeServiceProvider, start, end);
 
-        var result = transform(lst, x -> {
-        	var xetNghiem = new XetNghiem(x);        	
-        	return convertDichVuKyThuatToRaw(xetNghiem, includeServiceProvider, includeEncounter);
-        });
+        var result = transform(lst, x -> new XetNghiem(x, includeObservation.orElse(false)));
         
         return ResponseEntity.ok(result);
     }
     
     @GetMapping("/get_xet_nghiem_by_id/{id}")
     public ResponseEntity<?> getXetNghiemById(@PathVariable String id,
-    							@RequestParam Optional<Boolean> includeServiceProvider,
-    							@RequestParam Optional<Boolean> includeEncounter) {
-    	
-        var obj = serviceRequestDao.read(new IdType(id));
+					    		@RequestParam Optional<Boolean> includeEncounter,
+								@RequestParam Optional<Boolean> includeServiceProvider,
+								@RequestParam Optional<Boolean> includeObservation) {
+					    	
+        var obj = procedureDao.read(new IdType(id));
         if(isXetNghiem(obj)) {
-        	var xetNghiem = new XetNghiem(obj);
-        	var result = convertDichVuKyThuatToRaw(xetNghiem, includeServiceProvider, includeEncounter);
-            return ResponseEntity.ok(result);
+        	updateReferenceResource(obj, includeEncounter, includeServiceProvider);
+        	var xetNghiem = new XetNghiem(obj, includeObservation.orElse(false));        	        	
+            return ResponseEntity.ok(xetNghiem);
         }
         return new ResponseEntity<>("No xetNghiem with id:" + id, HttpStatus.BAD_REQUEST);
     }
@@ -287,7 +293,7 @@ private static Logger logger = LoggerFactory.getLogger(DichVuKyThuatController.c
     public ResponseEntity<?> saveXetNghiem(@RequestBody XetNghiem dto) {
         try {
             var serviceRequest = saveDichVuKT(dto);
-            var xetNghiem = new XetNghiem(serviceRequest);
+            var xetNghiem = new XetNghiem(serviceRequest, true);
             var result = mapOf("success", true, "xetNghiem", xetNghiem);
             return ResponseEntity.ok(result);
         }catch(Exception e) {

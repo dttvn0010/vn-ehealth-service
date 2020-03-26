@@ -6,10 +6,7 @@ import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Encounter;
-import org.hl7.fhir.r4.model.Encounter.DiagnosisComponent;
-import org.hl7.fhir.r4.model.Encounter.EncounterLocationComponent;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,8 +25,8 @@ import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.ehr.entity.EncounterEntity;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
 @Repository
 public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
@@ -63,111 +60,68 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+		
 		List<EncounterEntity> encounterEntitys = mongo.find(query, EncounterEntity.class);
+		
+		String[] keys = {"subject", "episodeOfCare", "participant:individual", "appointment", 
+							"diagnosis:condition", "basedOn", "reasonReference", "account", 
+							"serviceProvider", "location:location", 
+							"hospitalization:origin", "hospitalization:destination"};
+		
+		var includeMap = getIncludeMap(ResourceType.Encounter, keys, includes);
+		
 		if (encounterEntitys != null) {
 			for (EncounterEntity item : encounterEntitys) {
 				Encounter obj = transform(item);
-				// add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getDiagnosis() != null && obj.getDiagnosis().size() > 0) {
-						for (DiagnosisComponent ref : obj.getDiagnosis()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref.getCondition());
-							if (nested != null) {
-								ref.getCondition().setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getBasedOn() != null && obj.getBasedOn().size() > 0) {
-						for (Reference ref : obj.getBasedOn()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getAppointment() != null && obj.getAppointment().size() > 0) {
-						for (Reference ref : obj.getAppointment()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getReasonReference() != null && obj.getReasonReference().size() > 0) {
-						for (Reference ref : obj.getReasonReference()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getAccount() != null && obj.getAccount().size() > 0) {
-						for (Reference ref : obj.getAccount()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getServiceProvider() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getServiceProvider());
-						if (nested != null) {
-							obj.getServiceProvider().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getLocation() != null && obj.getLocation().size() > 0) {
-						for (EncounterLocationComponent ref : obj.getLocation()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref.getLocation());
-							if (nested != null) {
-								ref.getLocation().setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-
-				} else {
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("Encounter:subject"))
-							&& obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("Encounter:diagnosis"))
-							&& obj.getDiagnosis() != null && obj.getDiagnosis().size() > 0) {
-						for (DiagnosisComponent ref : obj.getDiagnosis()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref.getCondition());
-							if (nested != null) {
-								ref.getCondition().setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
+				
+				if(includeMap.get("subject") && obj.hasSubject()) {
+					setReferenceResource(obj.getSubject());
 				}
+				
+				if(includeMap.get("episodeOfCare") && obj.hasEpisodeOfCare()) {
+					setReferenceResource(obj.getEpisodeOfCare());
+				}
+				
+				if(includeMap.get("participant:individual") && obj.hasParticipant()) {
+					obj.getParticipant().forEach(x -> setReferenceResource(x.getIndividual()));
+				}
+				
+				if(includeMap.get("appointment") && obj.hasAppointment()) {
+					setReferenceResource(obj.getAppointment());
+				}
+				
+				if(includeMap.get("diagnosis:condition") && obj.hasDiagnosis()) {
+					obj.getDiagnosis().forEach(x -> setReferenceResource(x.getCondition()));
+				}
+				
+				if(includeMap.get("basedOn") && obj.hasBasedOn()) {
+					setReferenceResource(obj.getBasedOn());
+				}
+				
+				if(includeMap.get("reasonReference") && obj.hasReasonReference()) {
+					setReferenceResource(obj.getReasonReference());
+				}
+				
+				if(includeMap.get("account") && obj.hasAccount()) {
+					setReferenceResource(obj.getAccount());
+				}
+				
+				if(includeMap.get("serviceProvider") && obj.hasServiceProvider()) {
+					setReferenceResource(obj.getServiceProvider());
+				}
+				
+				if(includeMap.get("location:location") && obj.hasLocation()) {
+					obj.getLocation().forEach(x -> setReferenceResource(x.getLocation()));
+				}
+				
+				if(includeMap.get("hospitalization:origin") && obj.hasHospitalization()) {
+					setReferenceResource(obj.getHospitalization().getOrigin());
+				}
+				
+				if(includeMap.get("hospitalization:destination") && obj.hasHospitalization()) {
+					setReferenceResource(obj.getHospitalization().getDestination());
+				}				
+				
 				resources.add(obj);
 			}
 		}
@@ -212,7 +166,7 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 			criteria = Criteria.where("active").is(true);
 		}
 		// set param default
-		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
 		// appointment
 		if (appointment != null) {
@@ -230,7 +184,7 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 		}
 		// date
 		if (date != null) {
-			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "period", date);
+			criteria = setTypeDateToCriteria(criteria, "period", date);
 		}
 		// diagnosis
 		if (diagnosis != null) {
@@ -282,7 +236,7 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 		}
 		// location.period
 		if (locationPeriod != null) {
-			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "location.period", locationPeriod);
+			criteria = setTypeDateToCriteria(criteria, "location.period", locationPeriod);
 		}
 		// part-of
 		if (partOf != null) {

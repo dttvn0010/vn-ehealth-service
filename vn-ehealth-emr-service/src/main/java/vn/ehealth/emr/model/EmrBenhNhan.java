@@ -9,7 +9,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -98,16 +97,9 @@ public class EmrBenhNhan {
     
     public ObjectId emrPersonId;
     
-    @JsonIgnore
-    public String getFhirId() {
+    public static Patient getPatient(String sobhyt) {
         var params = mapOf("identifier", new TokenParam(IdentifierSystem.THE_BHYT, sobhyt));
-        var fhirObj = (Patient) DaoFactory.getPatientDao().searchOne(params);
-        if(fhirObj != null) {
-            var dto = _toDto();
-            fhirObj = BenhNhan.toFhir(dto);
-            fhirObj = DaoFactory.getPatientDao().create(fhirObj);
-        }
-        return fhirObj.getId();
+        return (Patient) DaoFactory.getPatientDao().searchOne(params);
     }
     
     private static Map<String, String> gioiTinhCodeMap = mapOf(
@@ -124,7 +116,7 @@ public class EmrBenhNhan {
             "U", MessageUtils.get("gioitinh.khongxacdinh")
         );
     
-    private BenhNhan _toDto() {
+    public BenhNhan toDto() {
         var dto = new BenhNhan();
         dto.tenDayDu = this.tendaydu;
         dto.ngaySinh = this.ngaysinh;
@@ -154,10 +146,14 @@ public class EmrBenhNhan {
         return dto;
     }
     
-    public BenhNhan toDto() {
-        var dto = _toDto();
-        dto.id = getFhirId();
-        return dto;
+    public void saveToFhirDb() {
+    	var dto = toDto();
+    	var patient = getPatient(this.sobhyt);
+    	if(patient != null) {
+    		patient = DaoFactory.getPatientDao().update(BenhNhan.toFhir(dto), patient.getIdElement());
+    	}else {
+    		patient = DaoFactory.getPatientDao().create(BenhNhan.toFhir(dto));
+    	}
     }
         
 }

@@ -1,5 +1,5 @@
 {	
-	"serviceProviderId": "4a40968c-5b93-4bfa-9987-4e6f17dd2d07",
+	"parent": {"id": "50abb583-5908-4536-85fe-89a3e0a0a4c7"},
 	"ten": "Khoa khám bệnh, bệnh viện 1",
 	"dmLoaiKhoa": {"ma": "01", "ten": "Khoa khám bệnh"}
 }
