@@ -1,13 +1,14 @@
 package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.getIncludeMap;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.FamilyMemberHistory;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,7 +26,7 @@ import vn.ehealth.hl7.fhir.clinical.entity.FamilyMemberHistoryEntity;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
 @Repository
 public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, FamilyMemberHistory> {
@@ -75,43 +76,23 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+		
+		String[] keys = {"patient", "reasonReference"};
+
+        var includeMap = getIncludeMap(ResourceType.FamilyMemberHistory, keys, includes);
+        
 		List<FamilyMemberHistoryEntity> entitys = mongo.find(query, FamilyMemberHistoryEntity.class);
 		if (entitys != null && entitys.size() > 0) {
 			for (FamilyMemberHistoryEntity item : entitys) {
 				FamilyMemberHistory obj = transform(item);
 
-				// add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getPatient() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getPatient());
-						if (nested != null) {
-							obj.getPatient().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getReasonReference() != null && obj.getReasonReference().size() > 0) {
-						for (Reference ref : obj.getReasonReference()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-				} else {
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("FamilyMemberHistory:patient"))
-							&& obj.getPatient() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getPatient());
-						if (nested != null) {
-							obj.getPatient().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
+				if(includeMap.get("patient") && obj.hasPatient()) {
+				    setReferenceResource(obj.getPatient());
 				}
+				
+				if(includeMap.get("reasonReference") && obj.hasReasonReference()) {
+                    setReferenceResource(obj.getReasonReference());
+                }
 				resources.add(obj);
 			}
 		}
@@ -146,7 +127,7 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 			criteria = Criteria.where("active").is(true);
 		}
 		// set param default
-		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
 		// code
 		if (code != null) {
@@ -154,7 +135,7 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 		}
 		// date
 		if (date != null) {
-			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "performed", date);
+			criteria = setTypeDateToCriteria(criteria, "performed", date);
 		}
 		// patient
 		if (patient != null) {

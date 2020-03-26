@@ -7,8 +7,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Observation;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,8 +26,9 @@ import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.diagnostic.entity.ObservationEntity;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
+
 
 @Repository
 public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
@@ -65,85 +65,41 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+		
+		String[] keys = {"subject", "encounter", "basedOn", "device", 
+		                    "hasMember", "specimen"};
+
+        var includeMap = getIncludeMap(ResourceType.Observation, keys, includes);
+        
+        
 		List<ObservationEntity> ObservationEntitys = mongo.find(query, ObservationEntity.class);
 		if (ObservationEntitys != null) {
 			for (ObservationEntity item : ObservationEntitys) {
 				Observation obj = transform(item);
-				// add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getBasedOn() != null && obj.getBasedOn().size() > 0) {
-						for (Reference ref : obj.getBasedOn()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getDevice() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getDevice());
-						if (nested != null) {
-							obj.getDevice().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getHasMember() != null && obj.getHasMember().size() > 0) {
-						for (Reference ref : obj.getHasMember()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getSpecimen() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSpecimen());
-						if (nested != null) {
-							obj.getSpecimen().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-
-				} else {
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("Observation:subject"))
-							&& obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("Observation:encounter")) && obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-				}
+				
+				if(includeMap.get("subject") && obj.hasSubject()) {
+                    setReferenceResource(obj.getSubject());
+                }
+                
+                if(includeMap.get("encounter") && obj.hasEncounter()) {
+                    setReferenceResource(obj.getEncounter());
+                }
+                                
+                if(includeMap.get("basedOn") && obj.hasBasedOn()) {
+                    setReferenceResource(obj.getBasedOn());
+                }
+                
+                if(includeMap.get("device") && obj.hasDevice()) {
+                    setReferenceResource(obj.getDevice());
+                }
+                if(includeMap.get("hasMember") && obj.hasHasMember()) {
+                    setReferenceResource(obj.getHasMember());
+                }
+                
+                if(includeMap.get("specimen") && obj.hasSpecimen()) {
+                    setReferenceResource(obj.getSpecimen());
+                }                
+                
 				resources.add(obj);
 			}
 		}
@@ -231,10 +187,10 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 			}
 		}
 		if (codeList != null) {
-			DatabaseUtil.setCodeListToCriteria(criteria, codeList);
+			setCodeListToCriteria(criteria, codeList);
 		}
 		// set param default
-		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
 
 		return criteria;

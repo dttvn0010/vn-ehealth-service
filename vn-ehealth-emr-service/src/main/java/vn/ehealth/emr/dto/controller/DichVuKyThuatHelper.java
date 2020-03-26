@@ -8,7 +8,6 @@ import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createReference;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.hl7.fhir.r4.model.DiagnosticReport;
@@ -30,23 +29,14 @@ import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
 public class DichVuKyThuatHelper {
 
-    private static Map<String, Object> makeParams(String maDv, 
-    								Optional<String> patientId, 
-    								Optional<String> encounterId) {
-    	
-        var params = mapOf("category", new TokenParam(CodeSystemValue.LOAI_DICH_VU_KY_THUAT, maDv));
-        
-        patientId.ifPresent(x -> params.put("subject", ResourceType.Patient + "/" + x));
-        encounterId.ifPresent(x -> params.put("encounter", ResourceType.Encounter + "/" + x));
-        
-        return params;
-    }
-    
     public static long countDichVuKT(String maDv, 
                 Optional<String> patientId, 
                 Optional<String> encounterId) {
         
-        var params = makeParams(maDv, patientId, encounterId);
+        var params = mapOf("category", new TokenParam(CodeSystemValue.LOAI_DICH_VU_KY_THUAT, maDv));
+        
+        patientId.ifPresent(x -> params.put("subject", ResourceType.Patient + "/" + x));
+        encounterId.ifPresent(x -> params.put("encounter", ResourceType.Encounter + "/" + x));
         return DaoFactory.getServiceRequestDao().count(params);
     }
         
@@ -58,7 +48,11 @@ public class DichVuKyThuatHelper {
                                     Optional<Integer> start,
                                     Optional<Integer> count) {
         
-        var params = makeParams(maDv, patientId, encounterId);
+        var params = mapOf("category", new TokenParam(CodeSystemValue.LOAI_DICH_VU_KY_THUAT, maDv));
+        
+        patientId.ifPresent(x -> params.put("subject", ResourceType.Patient + "/" + x));
+        encounterId.ifPresent(x -> params.put("encounter", ResourceType.Encounter + "/" + x));
+        
         var includes = new HashSet<Include>();
         
         if(includeEncounter.orElse(false)) {
@@ -124,7 +118,7 @@ public class DichVuKyThuatHelper {
         return null;
     }
     
-    private static void removeOldData(String procedureId) {
+    private static void removeOldProcedureData(String procedureId) {
     	ServiceRequest serviceRequest = null;
     	DiagnosticReport diagnosticReport = null;
     	Specimen specimen = null;
@@ -177,12 +171,11 @@ public class DichVuKyThuatHelper {
         if(enc == null) return null;
         
         dto.patient = new BaseRef(enc.getSubject());
-        dto.falcultyOrganization = new BaseRef(enc.getServiceProvider());
         
         var entities = dto.toFhir();
         if(entities != null) {
         	if(dto.id != null) {
-        		removeOldData(dto.id);
+        	    removeOldProcedureData(dto.id);
         	}
         	
             var serviceRequest = (ServiceRequest) entities.get("serviceRequest");
@@ -240,5 +233,21 @@ public class DichVuKyThuatHelper {
             return procedure;
         }
         throw new RuntimeException("No data found for DichVuKyThuat with id:" + dto.id);
+    }
+    
+    public static Specimen getSpecimen(ServiceRequest serviceRequest) {
+        if(serviceRequest == null) return null;
+        
+        var params = mapOf("request", ResourceType.ServiceRequest + "/" + serviceRequest.getId());              
+        return (Specimen) DaoFactory.getSpecimenDao().searchOne(params);
+    }
+    
+    public static List<Observation> getObservations(ServiceRequest serviceRequest) {
+        if(serviceRequest == null) return new ArrayList<>();
+        
+        var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
+        var lst =  DaoFactory.getObservationDao().search(params);
+        lst = FPUtil.filter(lst, x -> x instanceof Observation);
+        return transform(lst, x -> (Observation) x);
     }
 }

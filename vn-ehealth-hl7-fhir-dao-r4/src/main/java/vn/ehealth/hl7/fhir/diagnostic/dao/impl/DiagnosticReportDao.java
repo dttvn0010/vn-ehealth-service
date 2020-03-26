@@ -6,9 +6,7 @@ import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.DiagnosticReport.DiagnosticReportMediaComponent;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,7 +24,7 @@ import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 import vn.ehealth.hl7.fhir.diagnostic.entity.DiagnosticReportEntity;
 
 @Repository
@@ -58,109 +56,51 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+		
+		String[] keys = {"subject", "encounter", "basedOn", "performer", 
+                "resultsInterpreter", "specimen", "imagingStudy", "media:link"};
+		
+		
+		var includeMap = getIncludeMap(ResourceType.DiagnosticReport, keys, includes);
+		
         List<DiagnosticReportEntity> DiagnosticReportEntitys = mongo.find(query, DiagnosticReportEntity.class);
         if (DiagnosticReportEntitys != null) {
             for (DiagnosticReportEntity item : DiagnosticReportEntitys) {
                 DiagnosticReport obj = transform(item);
-				// add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getBasedOn() != null && obj.getBasedOn().size() > 0) {
-						for (Reference ref : obj.getBasedOn()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getPerformer() != null && obj.getPerformer().size() > 0) {
-						for (Reference ref : obj.getPerformer()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getResultsInterpreter() != null && obj.getResultsInterpreter().size() > 0) {
-						for (Reference ref : obj.getResultsInterpreter()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getSpecimen() != null && obj.getSpecimen().size() > 0) {
-						for (Reference ref : obj.getSpecimen()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getImagingStudy() != null && obj.getImagingStudy().size() > 0) {
-						for (Reference ref : obj.getImagingStudy()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getMedia() != null && obj.getMedia().size() > 0) {
-						for (DiagnosticReportMediaComponent ref : obj.getMedia()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref.getLink());
-							if (nested != null) {
-								ref.getLink().setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-
-				} else {
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("DiagnosticReport:subject"))
-							&& obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("DiagnosticReport:encounter")) && obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-				}
+				
+                if(includeMap.get("subject") && obj.hasSubject()) {
+                    setReferenceResource(obj.getSubject());
+                }
+                
+                if(includeMap.get("encounter") && obj.hasEncounter()) {
+                    setReferenceResource(obj.getEncounter());
+                }
+                
+                if(includeMap.get("basedOn") && obj.hasBasedOn()) {
+                    setReferenceResource(obj.getBasedOn());
+                }
+                
+                if(includeMap.get("performer") && obj.hasPerformer()) {
+                    setReferenceResource(obj.getPerformer());
+                }
+                
+                if(includeMap.get("resultsInterpreter") && obj.hasResultsInterpreter()) {
+                    setReferenceResource(obj.getResultsInterpreter());
+                }
+                
+                if(includeMap.get("specimen") && obj.hasSpecimen()) {
+                    setReferenceResource(obj.getSpecimen());
+                }
+                
+                if(includeMap.get("imagingStudy") && obj.hasImagingStudy()) {
+                    setReferenceResource(obj.getImagingStudy());
+                }
+                
+                if(includeMap.get("media:link") && obj.hasMedia()) {
+                    obj.getMedia().forEach(x -> setReferenceResource(x.getLink()));
+                }
+                
+                
                 resources.add(obj);
             }
         }
@@ -209,7 +149,7 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
             }
         }
         // set param default
-        criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+        criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
                 identifier);
 
         return criteria;

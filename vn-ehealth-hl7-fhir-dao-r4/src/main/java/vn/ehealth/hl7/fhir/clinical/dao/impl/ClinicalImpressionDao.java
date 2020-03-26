@@ -1,5 +1,7 @@
 package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.getIncludeMap;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -8,8 +10,7 @@ import org.bson.types.ObjectId;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.ClinicalImpression;
 import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,7 +29,7 @@ import vn.ehealth.hl7.fhir.clinical.entity.ClinicalImpressionEntity;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
 @Repository
 public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, ClinicalImpression> {
@@ -59,76 +60,35 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
         	query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
         	query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+        
+        String[] keys = {"subject", "encounter", "assessor", "problem", "prognosisReference"};
+
+        var includeMap = getIncludeMap(ResourceType.ClinicalImpression, keys, includes);
+        
 		List<ClinicalImpressionEntity> clinicalImpressionEntitys = mongo.find(query, ClinicalImpressionEntity.class);
 		if (clinicalImpressionEntitys != null) {
 			for (ClinicalImpressionEntity item : clinicalImpressionEntitys) {
 				ClinicalImpression obj = transform(item);
-                // add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getAssessor() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getAssessor());
-						if (nested != null) {
-							obj.getAssessor().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getProblem() != null && obj.getProblem().size() > 0) {
-						for (Reference ref : obj.getProblem()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getPrognosisReference() != null && obj.getPrognosisReference().size() > 0) {
-						for (Reference ref : obj.getPrognosisReference()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-				} else {
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("ClinicalImpression:subject"))
-							&& obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("ClinicalImpression:encounter")) && obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-				}
+				
+                if(includeMap.get("subject") && obj.hasSubject()) {
+                    setReferenceResource(obj.getSubject());
+                }
+                
+                if(includeMap.get("encounter") && obj.hasEncounter()) {
+                    setReferenceResource(obj.getEncounter());
+                }
+                
+                if(includeMap.get("assessor") && obj.hasAssessor()) {
+                    setReferenceResource(obj.getAssessor());
+                }
+                
+                if(includeMap.get("problem") && obj.hasProblem()) {
+                    setReferenceResource(obj.getProblem());
+                }
+                
+                if(includeMap.get("prognosisReference") && obj.hasPrognosisReference()) {
+                    setReferenceResource(obj.getPrognosisReference());
+                }
 				resources.add(obj);
 			}
 		}
@@ -167,7 +127,7 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 			criteria = Criteria.where("active").is(true);
 		}
 		// set param default
-		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
 		// action
 		if (action != null) {
@@ -201,7 +161,7 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 		}
 		// date
 		if (date != null) {
-			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "date", date);
+			criteria = setTypeDateToCriteria(criteria, "date", date);
 		}
 		// finding-code
 		if (findingCode != null) {

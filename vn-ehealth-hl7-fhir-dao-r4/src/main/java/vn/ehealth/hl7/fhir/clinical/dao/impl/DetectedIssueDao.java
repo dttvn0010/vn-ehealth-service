@@ -1,12 +1,14 @@
 package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.getIncludeMap;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.DetectedIssue;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,7 +27,7 @@ import vn.ehealth.hl7.fhir.clinical.entity.DetectedIssueEntity;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
 @Repository
 public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue> {
@@ -53,39 +55,22 @@ public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+		
+		String[] keys = {"patient", "author"};
+
+        var includeMap = getIncludeMap(ResourceType.DetectedIssue, keys, includes);
+        
 		List<DetectedIssueEntity> detectedIssueEntitys = mongo.find(query, DetectedIssueEntity.class);
 		if (detectedIssueEntitys != null) {
 			for (DetectedIssueEntity item : detectedIssueEntitys) {
 				DetectedIssue obj = transform(item);
-				// add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getPatient() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getPatient());
-						if (nested != null) {
-							obj.getPatient().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getAuthor() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getAuthor());
-						if (nested != null) {
-							obj.getAuthor().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-				} else {
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("DetectedIssue:patient"))
-							&& obj.getPatient() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getPatient());
-						if (nested != null) {
-							obj.getPatient().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
+				if(includeMap.get("patient") && obj.hasPatient()) {
+				    setReferenceResource(obj.getPatient());
 				}
+				
+				if(includeMap.get("author") && obj.hasAuthor()) {
+                    setReferenceResource(obj.getAuthor());
+                }
 				resources.add(obj);
 			}
 		}
@@ -119,7 +104,7 @@ public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue
 			criteria = Criteria.where("active").is(true);
 		}
 		// set param default
-		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
 		// author
 		if (author != null) {
@@ -138,7 +123,7 @@ public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue
 		}
 		// date
 		if (date != null) {
-			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "date", date);
+			criteria = setTypeDateToCriteria(criteria, "date", date);
 		}
 		// implicated
 		if (implicated != null) {

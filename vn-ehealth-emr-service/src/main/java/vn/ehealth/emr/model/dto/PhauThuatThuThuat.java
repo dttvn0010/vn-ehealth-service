@@ -6,9 +6,7 @@ import java.util.Map;
 
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.Procedure;
-import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Procedure.ProcedurePerformerComponent;
@@ -32,8 +30,7 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
             if(performer == null) return null;
             var dto = new ThanhVienPttt();
             dto.dmVaiTro = DanhMuc.fromConcept(performer.getFunction());
-            dto.bacsi = new BaseRef(performer.getActor());
-            dto.bacsi.data = CanboYte.fromFhir((Practitioner) dto.bacsi.resource);
+            dto.bacsi = BaseRef.fromPractitionerRef(performer.getActor());
             return dto;
         }
         
@@ -41,9 +38,7 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
             if(dto == null) return null;
             var performer = new ProcedurePerformerComponent();
             performer.setFunction(DanhMuc.toConcept(dto.dmVaiTro, CodeSystemValue.VAI_TRO_PTTT));
-            if(dto.bacsi != null) {
-            	performer.setActor(createReference(ResourceType.Practitioner, dto.bacsi.id));
-            }
+            performer.setActor(BaseRef.toPractitionerRef(dto.bacsi));
             return performer;
         }
     }
@@ -89,8 +84,8 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
                 CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
     	
     	var code = DanhMuc.toConcept(this.dmPttt, CodeSystemValue.DICH_VU_KY_THUAT);
-    	var subject = this.patient != null? createReference(ResourceType.Patient, this.patient.id) : null;
-    	var encounter = this.encounter != null? createReference(ResourceType.Encounter, this.encounter.id) : null;
+    	var subject = BaseRef.toPatientRef(this.patient);
+    	var encounter = BaseRef.toEncounterRef(this.encounter);
     	
     	// Procedure
     	var procedure = new Procedure();
@@ -100,13 +95,8 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
         procedure.setSubject(subject);        
         procedure.setEncounter(encounter);
         
-        if(this.chuTichHoiDong != null) {
-        	procedure.setAsserter(createReference(ResourceType.Practitioner, this.chuTichHoiDong.id));
-        }
-        
-        if(this.thuKyGhiChep != null) {
-        	procedure.setRecorder(createReference(ResourceType.Practitioner, this.thuKyGhiChep.id));
-        }
+        procedure.setAsserter(BaseRef.toPractitionerRef(this.chuTichHoiDong));
+        procedure.setRecorder(BaseRef.toPractitionerRef(this.thuKyGhiChep));
         
         if(this.ngayThucHien != null) {
         	procedure.setPerformed(new DateTimeType(this.ngayThucHien));
@@ -123,10 +113,7 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
 		serviceRequest.setSubject(subject);
 		serviceRequest.setEncounter(encounter);
 		
-		if(this.bacSiYeuCau != null) {
-        	serviceRequest.setRequester(createReference(ResourceType.Practitioner, this.bacSiYeuCau.id));
-        }
-		
+		serviceRequest.setRequester(BaseRef.toPractitionerRef(this.bacSiYeuCau));
 		serviceRequest.setAuthoredOn(this.ngayYeuCau);        
         serviceRequest.setOrderDetail(listOf(createCodeableConcept(this.noiDungYeuCau)));
         
@@ -137,16 +124,8 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
         diagnosticReport.setSubject(subject);
         diagnosticReport.setEncounter(encounter);
         
-        if(this.nguoiVietBaoCao != null) {
-        	var nguoiVietBaoCaoRef = createReference(ResourceType.Practitioner, this.nguoiVietBaoCao.id);
-        	diagnosticReport.setPerformer(listOf(nguoiVietBaoCaoRef));
-        }
-        
-        if(this.nguoiDanhGiaKetQua != null) {
-        	var nguoiDanhGiaKetQuaRef = createReference(ResourceType.Practitioner, this.nguoiDanhGiaKetQua.id);
-        	diagnosticReport.setResultsInterpreter(listOf(nguoiDanhGiaKetQuaRef));
-        }
-        
+        diagnosticReport.setPerformer(listOf(BaseRef.toPractitionerRef(this.nguoiVietBaoCao)));
+        diagnosticReport.setResultsInterpreter(listOf(BaseRef.toPractitionerRef(this.nguoiDanhGiaKetQua)));        
         diagnosticReport.setIssued(this.ngayGioBaoCao);
                
         diagnosticReport.setConclusion(this.ketLuan);
@@ -165,11 +144,8 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
     	// Procedure        
         this.dmPttt = new DanhMuc(procedure.getCode());
         this.ngayThucHien = procedure.hasPerformedDateTimeType()? procedure.getPerformedDateTimeType().getValue() : null;
-        this.chuTichHoiDong = new BaseRef(procedure.getAsserter());
-        this.chuTichHoiDong.data = CanboYte.fromFhir((Practitioner) this.chuTichHoiDong.resource);
-        
-        this.thuKyGhiChep = new BaseRef(procedure.getRecorder());
-        this.thuKyGhiChep.data = CanboYte.fromFhir((Practitioner) this.thuKyGhiChep.resource);
+        this.chuTichHoiDong = BaseRef.fromPractitionerRef(procedure.getAsserter());        
+        this.thuKyGhiChep = BaseRef.fromPractitionerRef(procedure.getRecorder());
         
         if(procedure.hasPerformer()) {
             this.hoiDongPttt = transform(procedure.getPerformer(), x -> ThanhVienPttt.fromPerformer(x));
@@ -195,10 +171,8 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
         	var serviceRequest = (ServiceRequest) procedure.getBasedOnFirstRep().getResource();
         	if(serviceRequest != null) {
         		this.ngayYeuCau = serviceRequest.getAuthoredOn();
-                this.noiDungYeuCau = serviceRequest.hasOrderDetail()? serviceRequest.getOrderDetailFirstRep().getText() : "";
-                
-                this.bacSiYeuCau = new BaseRef(serviceRequest.getRequester());
-                this.bacSiYeuCau.data = CanboYte.fromFhir((Practitioner) this.bacSiYeuCau.resource);
+                this.noiDungYeuCau = serviceRequest.hasOrderDetail()? serviceRequest.getOrderDetailFirstRep().getText() : "";                
+                this.bacSiYeuCau = BaseRef.fromPractitionerRef(serviceRequest.getRequester());
         	}
         }
         

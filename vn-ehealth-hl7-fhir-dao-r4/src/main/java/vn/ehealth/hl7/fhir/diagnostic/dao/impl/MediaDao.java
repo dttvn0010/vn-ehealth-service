@@ -6,8 +6,7 @@ import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Media;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,7 +23,7 @@ import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 import vn.ehealth.hl7.fhir.diagnostic.entity.MediaEntity;
 
 @Repository
@@ -78,85 +77,40 @@ public class MediaDao extends BaseDao<MediaEntity, Media> {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+		
+		String[] keys = {"subject", "encounter", "basedOn", "partOf", 
+                            "operator", "device"};
+
+        var includeMap = getIncludeMap(ResourceType.Media, keys, includes);
+        
 		List<MediaEntity> lst = mongo.find(query, MediaEntity.class);
 		if (lst != null && lst.size() > 0) {
 			for (MediaEntity item : lst) {
 				Media obj = transform(item);
-				// add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getBasedOn() != null && obj.getBasedOn().size() > 0) {
-						for (Reference ref : obj.getBasedOn()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getPartOf() != null && obj.getPartOf().size() > 0) {
-						for (Reference ref : obj.getPartOf()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.hasOperator()) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getOperator());
-						if (nested != null) {
-							obj.getOperator().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.hasDevice()) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getDevice());
-						if (nested != null) {
-							obj.getDevice().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-				} else {
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("Media:subject")) && obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("Media:encounter"))
-							&& obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-				}
+				if(includeMap.get("subject") && obj.hasSubject()) {
+                    setReferenceResource(obj.getSubject());
+                }
+                
+                if(includeMap.get("encounter") && obj.hasEncounter()) {
+                    setReferenceResource(obj.getEncounter());
+                }
+                
+                if(includeMap.get("basedOn") && obj.hasBasedOn()) {
+                    setReferenceResource(obj.getBasedOn());
+                }
+                
+                if(includeMap.get("partOf") && obj.hasPartOf()) {
+                    setReferenceResource(obj.getPartOf());
+                }
+                
+                if(includeMap.get("operator") && obj.hasOperator()) {
+                    setReferenceResource(obj.getOperator());
+                }
+                
+                if(includeMap.get("device") && obj.hasDevice()) {
+                    setReferenceResource(obj.getDevice());
+                }
+                
 				resources.add(obj);
 			}
 		}
@@ -198,7 +152,7 @@ public class MediaDao extends BaseDao<MediaEntity, Media> {
 			criteria = Criteria.where("active").is(true);
 		}
 		// set param default
-		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
 
 		return criteria;

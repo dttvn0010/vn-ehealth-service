@@ -8,19 +8,16 @@ import java.util.Map;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Observation;
-import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.Procedure;
-import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.StringType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.emr.utils.MessageUtils;
+import vn.ehealth.emr.dto.controller.DichVuKyThuatHelper;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
-import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
-
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
@@ -68,8 +65,8 @@ public class XetNghiem extends DichVuKyThuat {
                 CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
     	
     	var code = DanhMuc.toConcept(this.dmXetNghiem, CodeSystemValue.DICH_VU_KY_THUAT);
-    	var subject = this.patient != null? createReference(ResourceType.Patient, this.patient.id) : null;
-    	var encounter = this.encounter != null? createReference(ResourceType.Encounter, this.encounter.id) : null;
+    	var subject = BaseRef.toPatientRef(this.patient);
+    	var encounter = BaseRef.toEncounterRef(this.encounter);
     	
     	var procedure = new Procedure();
     	procedure.setId(this.id);
@@ -77,10 +74,7 @@ public class XetNghiem extends DichVuKyThuat {
     	procedure.setCode(code);
         procedure.setSubject(subject);        
         procedure.setEncounter(encounter);
-        
-        if(this.bacSiXetNghiem != null) {
-        	procedure.setAsserter(createReference(ResourceType.Practitioner, this.bacSiXetNghiem.id));
-        }
+        procedure.setAsserter(BaseRef.toPractitionerRef(this.bacSiXetNghiem));
         
         if(this.ngayThucHien != null) {
         	procedure.setPerformed(new DateTimeType(this.ngayThucHien));
@@ -92,10 +86,7 @@ public class XetNghiem extends DichVuKyThuat {
         serviceRequest.setCode(code);
 		serviceRequest.setSubject(subject);
 		serviceRequest.setEncounter(encounter);
-		
-		if(this.bacSiYeuCau != null) {
-        	serviceRequest.setRequester(createReference(ResourceType.Practitioner, this.bacSiYeuCau.id));
-        }
+		serviceRequest.setRequester(BaseRef.toPractitionerRef(this.bacSiYeuCau));
 		
 		serviceRequest.setAuthoredOn(this.ngayYeuCau);        
         serviceRequest.setOrderDetail(listOf(createCodeableConcept(this.noiDungYeuCau)));
@@ -121,17 +112,8 @@ public class XetNghiem extends DichVuKyThuat {
         diagnosticReport.setCode(serviceRequest.getCode());
         diagnosticReport.setSubject(subject);
         diagnosticReport.setEncounter(encounter);
-        
-        if(this.nguoiVietBaoCao != null) {
-        	var nguoiVietBaoCaoRef = createReference(ResourceType.Practitioner, this.nguoiVietBaoCao.id);
-        	diagnosticReport.setPerformer(listOf(nguoiVietBaoCaoRef));
-        }
-        
-        if(this.nguoiDanhGiaKetQua != null) {
-        	var nguoiDanhGiaKetQuaRef = createReference(ResourceType.Practitioner, this.nguoiDanhGiaKetQua.id);
-        	diagnosticReport.setResultsInterpreter(listOf(nguoiDanhGiaKetQuaRef));
-        }
-        
+        diagnosticReport.setPerformer(listOf(BaseRef.toPractitionerRef(this.nguoiVietBaoCao)));
+        diagnosticReport.setResultsInterpreter(listOf(BaseRef.toPractitionerRef(this.nguoiDanhGiaKetQua)));
         diagnosticReport.setIssued(this.ngayGioBaoCao);                
         
         return mapOf(
@@ -149,8 +131,7 @@ public class XetNghiem extends DichVuKyThuat {
         // Procedure        
         this.dmXetNghiem = new DanhMuc(procedure.getCode());
         this.ngayThucHien = procedure.hasPerformedDateTimeType()? procedure.getPerformedDateTimeType().getValue() : null;
-        this.bacSiXetNghiem = new BaseRef(procedure.getAsserter());
-        this.bacSiXetNghiem.data = CanboYte.fromFhir((Practitioner) this.bacSiXetNghiem.resource);
+        this.bacSiXetNghiem = BaseRef.fromPatientRef(procedure.getAsserter());
         
         // ServiceRequest
         if(procedure.hasBasedOn()) {
@@ -158,15 +139,12 @@ public class XetNghiem extends DichVuKyThuat {
         	if(serviceRequest != null) {
         		this.ngayYeuCau = serviceRequest.getAuthoredOn();
                 this.noiDungYeuCau = serviceRequest.hasOrderDetail()? serviceRequest.getOrderDetailFirstRep().getText() : "";
-                
-                this.bacSiYeuCau = new BaseRef(serviceRequest.getRequester());
-                this.bacSiYeuCau.data = CanboYte.fromFhir((Practitioner) this.bacSiYeuCau.resource);
+                this.bacSiYeuCau = BaseRef.fromPatientRef(serviceRequest.getRequester());
         	}
         	        	
         	// Observations
         	if(includeObservation) {
-	        	var params = mapOf("basedOn", ResourceType.ServiceRequest + "/" + serviceRequest.getId());
-	            var observations =  DaoFactory.getObservationDao().search(params);
+	            var observations =  DichVuKyThuatHelper.getObservations(serviceRequest);
 	            this.dsKetQuaXetNghiem = new ArrayList<>();
 	            for(var item : observations) {
 	                var obs = (Observation) item;

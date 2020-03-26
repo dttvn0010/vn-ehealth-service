@@ -5,18 +5,17 @@ import java.util.Map;
 
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.Procedure;
-import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.Specimen;
 import org.hl7.fhir.r4.model.StringType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import vn.ehealth.emr.dto.controller.DichVuKyThuatHelper;
 import vn.ehealth.emr.utils.Constants.CodeSystemValue;
 import vn.ehealth.emr.utils.Constants.ExtensionURL;
 import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
-import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 import vn.ehealth.emr.utils.MessageUtils;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
@@ -67,8 +66,8 @@ public class GiaiPhauBenh extends DichVuKyThuat {
                 CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
     	
     	var code = DanhMuc.toConcept(this.dmGpb, CodeSystemValue.DICH_VU_KY_THUAT);
-    	var subject = this.patient != null? createReference(ResourceType.Patient, this.patient.id) : null;
-    	var encounter = this.encounter != null? createReference(ResourceType.Encounter, this.encounter.id) : null;
+    	var subject = BaseRef.toPatientRef(this.patient);
+    	var encounter = BaseRef.toEncounterRef(this.encounter);
     	
     	//Procedure
     	var procedure = new Procedure();
@@ -86,21 +85,13 @@ public class GiaiPhauBenh extends DichVuKyThuat {
 		serviceRequest.setEncounter(encounter);
         
         serviceRequest.setAuthoredOn(this.ngayYeuCau);
-        
-        if(this.bacSiYeuCau != null) {
-        	var bacSiYeuCauRef = createReference(ResourceType.Practitioner, this.bacSiYeuCau.id);
-        	serviceRequest.setRequester(bacSiYeuCauRef);
-        }
+        serviceRequest.setRequester(BaseRef.toPractitionerRef(this.bacSiYeuCau));
                
         // Specimen
         var specimen = new Specimen();
         specimen.setSubject(subject); 
         specimen.setReceivedTime(this.ngayThucHien);
-        
-        if(this.bacSiChuyenKhoa != null) {
-        	var bacSiChuyenKhoaRef = createReference(ResourceType.Practitioner, this.bacSiChuyenKhoa.id);
-        	specimen.getCollection().setCollector(bacSiChuyenKhoaRef);
-        }
+        specimen.getCollection().setCollector(BaseRef.toPractitionerRef(this.bacSiChuyenKhoa));
         
         specimen.getCollection().setBodySite(DanhMuc.toConcept(this.dmViTriLayMau, CodeSystemValue.VI_TRI_MAU_SINH_THIET));
         specimen.getCollection().setCollected(new DateTimeType(this.ngayLayMau));
@@ -115,16 +106,8 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         diagnosticReport.setCode(code);
         diagnosticReport.setSubject(subject);
         diagnosticReport.setEncounter(encounter);
-        
-        if(this.nguoiVietBaoCao != null) {
-        	var nguoiVietBaoCaoRef = createReference(ResourceType.Practitioner, this.nguoiVietBaoCao.id);
-        	diagnosticReport.setPerformer(listOf(nguoiVietBaoCaoRef));
-        }
-        
-        if(this.nguoiDanhGiaKetQua != null) {
-        	var nguoiDanhGiaKetQuaRef = createReference(ResourceType.Practitioner, this.nguoiDanhGiaKetQua.id);
-        	diagnosticReport.setResultsInterpreter(listOf(nguoiDanhGiaKetQuaRef));
-        }
+        diagnosticReport.setPerformer(listOf(BaseRef.toPractitionerRef(this.nguoiVietBaoCao)));
+        diagnosticReport.setResultsInterpreter(listOf(BaseRef.toPractitionerRef(this.nguoiDanhGiaKetQua)));
         
         diagnosticReport.setIssued(this.ngayGioBaoCao);
         var conclusionCode = createCodeableConcept(this.maChanDoanGpb, this.moTaChanDoanGpb, CodeSystemValue.ICD10);
@@ -149,21 +132,17 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         	var serviceRequest = (ServiceRequest) procedure.getBasedOnFirstRep().getResource();
         	this.dmGpb = new DanhMuc(serviceRequest.getCode());
         	if(serviceRequest != null) {
-        		this.ngayYeuCau = serviceRequest.getAuthoredOn();
-                
-                this.bacSiYeuCau = new BaseRef(serviceRequest.getRequester());
-                this.bacSiYeuCau.data = CanboYte.fromFhir((Practitioner) this.bacSiYeuCau.resource);
+        		this.ngayYeuCau = serviceRequest.getAuthoredOn();                
+                this.bacSiYeuCau = BaseRef.fromPractitionerRef(serviceRequest.getRequester());
         	}
         	
         	// Specimen
         	if(includeSpecimen) {
-        		var params = mapOf("request", ResourceType.ServiceRequest + "/" + serviceRequest.getId());        		
-        		var specimen = (Specimen) DaoFactory.getSpecimenDao().searchOne(params);
+        		var specimen = DichVuKyThuatHelper.getSpecimen(serviceRequest);
         		
         		if(specimen != null) {
                     this.ngayThucHien =  specimen.getReceivedTime();
-                    this.bacSiChuyenKhoa = new BaseRef(specimen.getCollection().getCollector());
-                    this.bacSiChuyenKhoa.data = CanboYte.fromFhir((Practitioner) this.bacSiChuyenKhoa.resource);
+                    this.bacSiChuyenKhoa = BaseRef.fromPractitionerRef(specimen.getCollection().getCollector());
                     
                     this.dmViTriLayMau =  new DanhMuc(specimen.getCollection().getBodySite());
                     this.ngayLayMau = specimen.getCollection().hasCollectedDateTimeType()?specimen.getCollection().getCollectedDateTimeType().getValue() : null;

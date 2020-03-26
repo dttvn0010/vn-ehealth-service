@@ -62,7 +62,7 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
 				"performer:actor", "performer:onBehalfOf", "complicationDetail", 
 				"usedReference"};
 
-        var includeMap = getIncludeMap(ResourceType.Encounter, keys, includes);
+        var includeMap = getIncludeMap(ResourceType.Procedure, keys, includes);
 
         List<ProcedureEntity> procedureEntitys = mongo.find(query, ProcedureEntity.class);
         if (procedureEntitys != null) {

@@ -6,8 +6,7 @@ import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Goal;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,7 +25,7 @@ import vn.ehealth.hl7.fhir.clinical.entity.GoalEntity;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
 @Repository
 public class GoalDao extends BaseDao<GoalEntity, Goal> {
@@ -54,50 +53,26 @@ public class GoalDao extends BaseDao<GoalEntity, Goal> {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+		
+		String[] keys = {"subject", "expressedBy", "addresses"};
+
+        var includeMap = getIncludeMap(ResourceType.Goal, keys, includes);
+        
         List<GoalEntity> goalEntitys = mongo.find(query, GoalEntity.class);
         if (goalEntitys != null) {
             for (GoalEntity item : goalEntitys) {
                 Goal obj = transform(item);
-				// add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getExpressedBy() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getExpressedBy());
-						if (nested != null) {
-							obj.getExpressedBy().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getAddresses() != null && obj.getAddresses().size() > 0) {
-						for (Reference ref : obj.getAddresses()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-
-				} else {
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("Goal:subject"))
-							&& obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-				}
+                if(includeMap.get("subject") && obj.hasSubject()) {
+                    setReferenceResource(obj.getSubject());
+                }
+                
+                if(includeMap.get("expressedBy") && obj.hasExpressedBy()) {
+                    setReferenceResource(obj.getExpressedBy());
+                }
+                
+                if(includeMap.get("addresses") && obj.hasAddresses()) {
+                    setReferenceResource(obj.getAddresses());
+                }
                 resources.add(obj);
             }
         }
@@ -131,7 +106,7 @@ public class GoalDao extends BaseDao<GoalEntity, Goal> {
             criteria = Criteria.where("active").is(true);
         }
         // set param default
-        criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+        criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
                 identifier);
 
         // category
@@ -151,7 +126,7 @@ public class GoalDao extends BaseDao<GoalEntity, Goal> {
         }
         // start-date
         if (startDate != null) {
-            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "start", startDate);
+            criteria = setTypeDateToCriteria(criteria, "start", startDate);
         }
         // status
         if (status != null) {
@@ -169,7 +144,7 @@ public class GoalDao extends BaseDao<GoalEntity, Goal> {
         }
         // target-date
         if (targetDate != null) {
-            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "target.due", targetDate);
+            criteria = setTypeDateToCriteria(criteria, "target.due", targetDate);
         }
         return criteria;
     }

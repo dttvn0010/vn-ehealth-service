@@ -83,11 +83,19 @@ public class EmrChanDoanHinhAnh extends EmrDichVuKyThuat {
     	var dto = new ChanDoanHinhAnh();
         dto.dmCdha = this.emrDmChanDoanHinhAnh != null? this.emrDmChanDoanHinhAnh.toDto() : null;
         dto.ngayYeuCau = this.ngayyeucau;
-        dto.bacSiYeuCau = this.bacsiyeucau != null? this.bacsiyeucau.toRef() : null;
+        
+        if(this.bacsiyeucau != null) {
+            dto.bacSiYeuCau = this.bacsiyeucau.toRef();
+        }
+        
         dto.noiDungYeuCau = this.noidungyeucau;
         
         dto.ngayThucHien = this.ngaythuchien;
-        dto.bacSiChuyenKhoa = this.bacsichuyenkhoa != null? this.bacsichuyenkhoa.toRef() : null;
+        
+        if(this.bacsichuyenkhoa != null) {
+            dto.bacSiChuyenKhoa = this.bacsichuyenkhoa.toRef();
+        }
+        
         dto.ketQua = this.ketqua;
         dto.ketLuan = this.ketluan;
         dto.loiDan = this.loidan;

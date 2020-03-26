@@ -1,13 +1,14 @@
 package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.getIncludeMap;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.CarePlan;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,7 +27,7 @@ import vn.ehealth.hl7.fhir.clinical.entity.CarePlanEntity;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
 @Repository
 public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
@@ -56,107 +57,47 @@ public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.ASC, sortParam));
 		}
+		
+		String[] keys = {"subject", "encounter", "basedOn", "author", 
+                            "contributor", "careTeam", "addresses", "goal"};
+
+        var includeMap = getIncludeMap(ResourceType.CarePlan, keys, includes);
 		List<CarePlanEntity> carePlanEntitys = mongo.find(query, CarePlanEntity.class);
 		if (carePlanEntitys != null) {
 			for (CarePlanEntity item : carePlanEntitys) {
 				CarePlan obj = transform(item);
 
-                // add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getBasedOn() != null && obj.getBasedOn().size() > 0) {
-						for (Reference ref : obj.getBasedOn()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getAuthor() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getAuthor());
-						if (nested != null) {
-							obj.getAuthor().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getContributor() != null && obj.getContributor().size() > 0) {
-						for (Reference ref : obj.getContributor()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getCareTeam() != null && obj.getCareTeam().size() > 0) {
-						for (Reference ref : obj.getCareTeam()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getAddresses() != null && obj.getAddresses().size() > 0) {
-						for (Reference ref : obj.getAddresses()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getGoal() != null && obj.getGoal().size() > 0) {
-						for (Reference ref : obj.getGoal()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-				} else {
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("CarePlan:subject"))
-							&& obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("CarePlan:encounter")) && obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
+				if(includeMap.get("subject") && obj.hasSubject()) {
+				    setReferenceResource(obj.getSubject());
 				}
+				
+				if(includeMap.get("encounter") && obj.hasEncounter()) {
+                    setReferenceResource(obj.getEncounter());
+                }
+				
+				if(includeMap.get("basedOn") && obj.hasBasedOn()) {
+                    setReferenceResource(obj.getBasedOn());
+                }
+				
+				if(includeMap.get("author") && obj.hasAuthor()) {
+                    setReferenceResource(obj.getAuthor());
+                }
+				
+				if(includeMap.get("contributor") && obj.hasContributor()) {
+                    setReferenceResource(obj.getContributor());
+                }
+				
+				if(includeMap.get("careTeam") && obj.hasCareTeam()) {
+                    setReferenceResource(obj.getCareTeam());
+                }
+				
+				if(includeMap.get("addresses") && obj.hasAddresses()) {
+                    setReferenceResource(obj.getAddresses());
+                }
+				
+				if(includeMap.get("goal") && obj.hasGoal()) {
+                    setReferenceResource(obj.getGoal());
+                }
 				resources.add(obj);
 			}
 		}
@@ -198,7 +139,7 @@ public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 			criteria = Criteria.where("active").is(true);
 		}
 		// set param default
-		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
 
 		// activity-code
@@ -260,7 +201,7 @@ public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 		}
 		// date
 		if (date != null) {
-			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "date", date);
+			criteria = setTypeDateToCriteria(criteria, "date", date);
 		}
 		// definition
 		if (definition != null) {

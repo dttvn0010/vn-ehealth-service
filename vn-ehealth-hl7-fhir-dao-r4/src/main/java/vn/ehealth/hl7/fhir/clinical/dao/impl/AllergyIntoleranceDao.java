@@ -1,12 +1,14 @@
 package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.getIncludeMap;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.AllergyIntolerance;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,7 +26,7 @@ import vn.ehealth.hl7.fhir.clinical.entity.AllergyIntoleranceEntity;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
 @Repository
 public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, AllergyIntolerance> {
@@ -79,66 +81,32 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+		
+		String[] keys = {"patient", "encounter", "asserter", "asserter",  "recorder"};
+
+        var includeMap = getIncludeMap(ResourceType.AllergyIntolerance, keys, includes);
+        
 		List<AllergyIntoleranceEntity> entitys = mongo.find(query, AllergyIntoleranceEntity.class);
 		if (entitys != null && entitys.size() > 0) {
 			for (AllergyIntoleranceEntity item : entitys) {
 				AllergyIntolerance obj = transform(item);
-
-				// add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getPatient() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getPatient());
-						if (nested != null) {
-							obj.getPatient().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getAsserter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getAsserter());
-						if (nested != null) {
-							obj.getAsserter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getRecorder() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getRecorder());
-						if (nested != null) {
-							obj.getRecorder().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-				} else {
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("AllergyIntorance:patient")) && obj.getPatient() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getPatient());
-						if (nested != null) {
-							obj.getPatient().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("AllergyIntorance:encounter"))
-							&& obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
+				
+				if(includeMap.get("patient") && obj.hasPatient()) {
+				    setReferenceResource(obj.getPatient());
 				}
+				
+				if(includeMap.get("encounter") && obj.hasEncounter()) {
+				    setReferenceResource(obj.getEncounter());
+				}
+				
+				if(includeMap.get("asserter") && obj.hasAsserter()) {
+				    setReferenceResource(obj.getAsserter());
+				}
+				
+				if(includeMap.get("recorder") && obj.hasRecorder()) {
+                    setReferenceResource(obj.getRecorder());
+                }
+				
 				resources.add(obj);
 			}
 		} 
@@ -183,7 +151,7 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 			criteria = Criteria.where("active").is(true);
 		}
 		// set param default
-		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
 //		// category
 //		if (category != null) {
@@ -206,13 +174,13 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 			criteria.and("manifestation.coding.code.myStringValue").is(manifestation.getValue());
 		}
 		if (date != null) {
-			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "recordedDate", date);
+			criteria = setTypeDateToCriteria(criteria, "recordedDate", date);
 		}
 		if (lastDate != null) {
-			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "lastOccurrence", lastDate);
+			criteria = setTypeDateToCriteria(criteria, "lastOccurrence", lastDate);
 		}
 		if (onset != null) {
-			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "reaction.onset", onset);
+			criteria = setTypeDateToCriteria(criteria, "reaction.onset", onset);
 		}
 		// encounter
 		if (encounter != null) {

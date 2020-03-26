@@ -43,7 +43,9 @@ public class EmrVaoKhoa {
     	var dto = new VaoKhoa();
     	dto.ngayGioVao = ngaygiovaokhoa;
     	dto.ngayGioKetThucDieuTri = dto.ngayGioKetThucDieuTri;
-    	dto.bacSiDieuTri = bacsidieutri != null? bacsidieutri.toRef() : null;
+    	if(this.bacsidieutri != null) {
+    	    dto.bacSiDieuTri = bacsidieutri.toRef();
+    	}
     	return dto;
     }
     

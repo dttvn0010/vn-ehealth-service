@@ -1,12 +1,14 @@
 package vn.ehealth.hl7.fhir.diagnostic.dao.impl;
 
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.getIncludeMap;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.setReferenceResource;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.Specimen;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,8 +27,9 @@ import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.diagnostic.entity.SpecimenEntity;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
+
 
 @Repository
 public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
@@ -51,53 +54,32 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+		
+		String[] keys = {"subject", "request", "parent", "processing:additive"};
+
+        var includeMap = getIncludeMap(ResourceType.Specimen, keys, includes);
+        
 		List<SpecimenEntity> specimenEntitys = mongo.find(query, SpecimenEntity.class);
 		if (specimenEntitys != null) {
 			for (SpecimenEntity item : specimenEntitys) {
 				Specimen obj = transform(item);
-				// add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getRequest() != null && obj.getRequest().size() > 0) {
-						for (Reference ref : obj.getRequest()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-
-				} else {
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("Specimen:subject"))
-							&& obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("Specimen:request"))
-							&& obj.getRequest() != null && obj.getRequest().size() > 0) {
-						for (Reference ref : obj.getRequest()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-				}
+				
+				if(includeMap.get("subject") && obj.hasSubject()) {
+                    setReferenceResource(obj.getSubject());
+                }
+                
+                if(includeMap.get("request") && obj.hasRequest()) {
+                    setReferenceResource(obj.getRequest());
+                }
+                
+                if(includeMap.get("parent") && obj.hasParent()) {
+                    setReferenceResource(obj.getParent());
+                }
+                
+                if(includeMap.get("processing:additive") && obj.hasProcessing()) {
+                    obj.getProcessing().forEach(x -> setReferenceResource(x.getAdditive()));
+                }
+                
 				resources.add(obj);
 			}
 		}
@@ -131,7 +113,7 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 		    criteria.and("request.reference").is(request.getValue());
 		}
 		// set param default
-		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				null);
 
 		return criteria;
