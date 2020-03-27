@@ -265,7 +265,7 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 				resources.add(patient);
 				// active
 				Criteria criteria = Criteria.where("active").is(true);
-				criteria.orOperator(Criteria.where("subject.reference").is(thePatientId.asStringValue()),
+				criteria.andOperator(Criteria.where("subject.reference").is(thePatientId.asStringValue()),
 						Criteria.where("subject.display").is(thePatientId.asStringValue()),
 						Criteria.where("patient.reference").is(thePatientId.asStringValue()),
 						Criteria.where("patient.display").is(thePatientId.asStringValue()));
