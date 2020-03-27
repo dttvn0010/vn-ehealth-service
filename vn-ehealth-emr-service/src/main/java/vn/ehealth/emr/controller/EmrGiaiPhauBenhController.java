@@ -106,6 +106,10 @@ public class EmrGiaiPhauBenhController {
             
             emrGiaiPhauBenhService.createOrUpdateFromHIS(userId, hsba, gpbList, jsonSt);
             
+            // TODO: Save to FHIR db
+            // .....
+            // .....
+            
             var result = Map.of(
                 "success" , true,
                 "gpbList", gpbList  

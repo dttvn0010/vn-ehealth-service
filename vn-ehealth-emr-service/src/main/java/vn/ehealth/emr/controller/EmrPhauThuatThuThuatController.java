@@ -106,6 +106,10 @@ public class EmrPhauThuatThuThuatController {
             
             emrPhauThuatThuThuatService.createOrUpdateFromHIS(userId, hsba, ptttList, jsonSt);
             
+            // TODO: Save to FHIR db
+            // .....
+            // .....
+            
             var result = Map.of(
                 "success" , true,
                 "ptttList", ptttList  
