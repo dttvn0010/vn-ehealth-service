@@ -214,11 +214,11 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
         // encounter
         if (encounter != null) {
             if(encounter.getValue().indexOf("|")==-1) {
-                criteria.orOperator(Criteria.where("context.reference").is(encounter.getValue()),
-                        Criteria.where("context.display").is(encounter.getValue()));
+                criteria.orOperator(Criteria.where("encounter.reference").is(encounter.getValue()),
+                        Criteria.where("encounter.display").is(encounter.getValue()));
             }else {
                 String[] ref= encounter.getValue().split("\\|");
-                criteria.and("context.identifier.system").is(ref[0]).and("context.identifier.value").is(ref[1]);
+                criteria.and("encounter.identifier.system").is(ref[0]).and("encounter.identifier.value").is(ref[1]);
             }
         }
         // location

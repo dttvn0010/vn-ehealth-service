@@ -298,7 +298,7 @@ public class EmrHoSoBenhAn {
     	dto.patient = new BaseRef(patient);
     	
     	var encounterDao = DaoFactory.getEncounterDao();
-        var encounter = getEncounter(this.mayte);
+        var encounter = getEncounter(this.matraodoi);
         
     	if(encounter != null) {
     		encounter = encounterDao.update(DotKhamBenh.toFhir(dto), encounter.getIdElement());

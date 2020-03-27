@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,8 +28,8 @@ import vn.ehealth.emr.utils.Constants.EncounterType;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
-import static vn.ehealth.hl7.fhir.core.util.FhirUtil.conceptHasCode;
-import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.setReferenceResource;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
 
 @RestController
@@ -73,6 +74,22 @@ private static Logger logger = LoggerFactory.getLogger(BenhNhanController.class)
 	        return ResponseEntity.ok(dto);
         }
         return new ResponseEntity<>("No vaoKhoa with id:" + id, HttpStatus.BAD_REQUEST);
+    }
+    
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable String id) {
+    	try {
+    		var obj = encounterDao.read(new IdType(id));
+    		if(isVaoKhoa(obj)) {
+	    		encounterDao.remove(createIdType(id));
+	    		return ResponseEntity.ok(mapOf("success", true));
+    		}else {
+    			return new ResponseEntity<>("No vaoKhoa with id:" + id, HttpStatus.BAD_REQUEST);
+    		}
+    	}catch(Exception e) {
+    		var result = mapOf("success", false, "error", e.getMessage());
+    		return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+    	}
     }
     
     @GetMapping("/get_by_parent_id/{parentId}")

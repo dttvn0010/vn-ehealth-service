@@ -1,5 +1,5 @@
 {
-  "matraodoiHoSo": "180340024",
+  "matraodoiHoSo": "180034027",
   "emrChanDoanHinhAnhs": [
     {
       "idhis": "11111",
@@ -11,6 +11,10 @@
         "ma": "001",
         "ten": "Loại chẩn đoán hình ảnh"
       },
+	  "emrDmKhoaDieuTri": {
+		"ma": "01",
+		"ten": "Khoa khám bệnh"
+	  },
       "ngayyeucau": "2018-06-29 00:00:00",
       "bacsiyeucau": {
         "chungchihanhnghe": "11111",

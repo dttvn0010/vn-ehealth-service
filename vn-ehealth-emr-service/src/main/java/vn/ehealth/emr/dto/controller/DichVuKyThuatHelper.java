@@ -130,7 +130,7 @@ public class DichVuKyThuatHelper {
         return null;
     }
     
-    private static void removeOldProcedureData(String procedureId) {
+    public static void removeOldProcedureData(String procedureId) {
     	ServiceRequest serviceRequest = null;
     	DiagnosticReport diagnosticReport = null;
     	Specimen specimen = null;

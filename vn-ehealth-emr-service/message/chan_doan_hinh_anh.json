@@ -1,29 +1,29 @@
 {
-    "encounter": {"id": "53ca5095-ba61-4751-872d-eb4c63bffecf"},
+    "encounter": {"id": "16573858-3657-47ab-8c0c-6c7e03674f90"},
     "dmCdha": {
         "ma": "01",
         "ten": "Test chẩn đoán hình ảnh 1"
     },
     "ngayYeuCau": "2018-06-28 00:00:00",
     "bacSiYeuCau": {
-        "id": "3fc30003-9586-4388-b897-faec5e21314d",
+        "id": "bb41d74e-3e9e-4c71-ab6e-626e3a98cb93",
         "ten": "Bác sĩ A"
     },
     "noiDungYeuCau": "Kiểm tra lao phổi",
     "ngayThucHien": "2018-06-29 00:00:00",
     "bacSiChuyenKhoa": {
-        "id": "a17046b2-5953-450a-b9e3-67ba1bd11a80",
+        "id": "c639bda6-af79-4477-8d62-c46fcd04723e",
         "ten": "Bác sĩ B"
     },
     "ketQua": "Kết quả chẩn đoán",
     "ketLuan": "Kết luận chẩn đoán",
     "loiDan": "Lời dặn chẩn đoán",
     "nguoiVietBaoCao": {
-        "id": "14e9d5d9-947a-44af-bbca-e5f067cf9a42",
+        "id": "e74136c0-af78-4326-a721-b74b62f613a5",
         "ten": "Bác sĩ C"
     },
     "nguoiDanhGiaKetQua": {
-        "id": "573b57bb-b59d-4a0e-9e6f-591310bd54d1",
+        "id": "c1ae37d4-cd92-4daf-9b39-b8e192bfc8cd",
         "ten": "Bác sĩ D"
     },
     "ngayGioBaoCao": "2018-06-30 00:00:00"
