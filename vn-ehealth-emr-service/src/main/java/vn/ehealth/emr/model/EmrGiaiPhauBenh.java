@@ -13,11 +13,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import vn.ehealth.emr.model.dto.GiaiPhauBenh;
 import vn.ehealth.emr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "emr_giai_phau_benh")
-public class EmrGiaiPhauBenh {
+public class EmrGiaiPhauBenh extends EmrDichVuKyThuat{
 
     @Id public ObjectId id;    
     public ObjectId emrHoSoBenhAnId;    
@@ -80,4 +81,28 @@ public class EmrGiaiPhauBenh {
     public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
         this.emrCoSoKhamBenhId = ObjectIdUtil.stringToId(emrCoSoKhamBenhId);
     }
+
+    public GiaiPhauBenh toDto(){
+        var dto = new GiaiPhauBenh();
+        dto.dmGpb = this.emrDmGiaiPhauBenh != null ? this.emrDmGiaiPhauBenh.toDto() : null;
+        dto.dmViTriLayMau = this.emrDmViTriLayMau != null ? this.emrDmViTriLayMau.toDto() : null;
+        dto.ngayLayMau = this.ngaylaymausinhthiet;
+        dto.moTaChanDoanGpb = this.motachandoangiaiphau;
+        dto.ngayYeuCau = this.ngayyeucau;
+        if (bacsiyeucau.toRef() != null) {
+            dto.bacSiYeuCau = this.bacsiyeucau.toRef();
+        }
+        dto.ngayThucHien = this.ngaythuchien;
+        if (this.bacsichuyenkhoa.toRef() != null) {
+            dto.bacSiChuyenKhoa = this.bacsichuyenkhoa.toRef();
+        }
+        dto.nhanXetViThe = this.nhanxetdaithe;
+        dto.nhanXetDaiThe = this.nhanxetdaithe;
+//        dto.ketLuan =
+//        dto.nguoiVietBaoCao =
+//        dto.nguoiDanhGiaKetQua =
+//        dto.ngayGioBaoCao =
+        return dto;
+    }
+
 }

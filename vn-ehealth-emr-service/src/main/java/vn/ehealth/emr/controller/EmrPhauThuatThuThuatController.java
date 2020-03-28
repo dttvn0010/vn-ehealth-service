@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import vn.ehealth.emr.model.EmrHoSoBenhAn;
 import vn.ehealth.emr.model.EmrPhauThuatThuThuat;
 import vn.ehealth.emr.service.EmrHoSoBenhAnService;
 import vn.ehealth.emr.service.EmrPhauThuatThuThuatService;
@@ -107,9 +108,16 @@ public class EmrPhauThuatThuThuatController {
             emrPhauThuatThuThuatService.createOrUpdateFromHIS(userId, hsba, ptttList, jsonSt);
             
             // TODO: Save to FHIR db
-            // .....
-            // .....
-            
+            try {
+                var hsbaEncounter = EmrHoSoBenhAn.getEncounter(matraodoiHsba);
+                ptttList.forEach(pttt -> {
+                    pttt.saveToFhirDb(hsbaEncounter);;
+                });
+            }catch(Exception e) {
+                logger.error("Cannot save to FHIR db:", e);
+            }
+
+
             var result = Map.of(
                 "success" , true,
                 "ptttList", ptttList  
