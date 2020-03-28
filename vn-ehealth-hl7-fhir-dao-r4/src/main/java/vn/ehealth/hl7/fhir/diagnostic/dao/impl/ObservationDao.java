@@ -29,24 +29,23 @@ import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.diagnostic.entity.ObservationEntity;
 import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
-
 @Repository
 public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
-			TokenParam category, TokenOrListParam code, TokenParam comboCode, TokenParam comboDataAbsentReason,
-			TokenParam comboValueConcept, TokenParam componentCode, TokenParam componentDataAbsentReason,
-			TokenParam componentValueConcept, ReferenceParam conetext, TokenParam dataAbsentReason, DateRangeParam date,
-			ReferenceParam device, ReferenceParam encounter, TokenParam identifier, TokenParam method,
-			ReferenceParam patient, ReferenceParam performer, ReferenceParam relatedTarget, TokenParam relatedType,
-			ReferenceParam specimen, TokenParam status, ReferenceParam subject, TokenParam valueConcept,
-			DateRangeParam valueDate, StringParam valueString, TokenParam resid, DateRangeParam _lastUpdated,
-			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content,
-			StringParam _page, String sortParam, Integer count, Set<Include> includes) {
+	public List<IBaseResource> search(FhirContext fhirContext, ReferenceParam basedOn, TokenParam category,
+			TokenOrListParam code, TokenParam comboCode, TokenParam comboDataAbsentReason, TokenParam comboValueConcept,
+			TokenParam componentCode, TokenParam componentDataAbsentReason, TokenParam componentValueConcept,
+			ReferenceParam conetext, TokenParam dataAbsentReason, DateRangeParam date, ReferenceParam device,
+			ReferenceParam encounter, TokenParam identifier, TokenParam method, ReferenceParam patient,
+			ReferenceParam performer, ReferenceParam relatedTarget, TokenParam relatedType, ReferenceParam specimen,
+			TokenParam status, ReferenceParam subject, TokenParam valueConcept, DateRangeParam valueDate,
+			StringParam valueString, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
+			TokenParam _query, TokenParam _security, StringParam _content, StringParam _page, String sortParam,
+			Integer count, Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
 
-		Criteria criteria = setParamToCriteria(active, basedOn, category, code, comboCode, comboDataAbsentReason,
+		Criteria criteria = setParamToCriteria(basedOn, category, code, comboCode, comboDataAbsentReason,
 				comboValueConcept, componentCode, componentDataAbsentReason, componentValueConcept, conetext,
 				dataAbsentReason, date, device, encounter, identifier, method, patient, performer, relatedTarget,
 				relatedType, specimen, status, subject, valueConcept, valueDate, valueString, resid, _lastUpdated, _tag,
@@ -65,58 +64,56 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
-		
-		String[] keys = {"subject", "encounter", "basedOn", "device", 
-		                    "hasMember", "specimen"};
 
-        var includeMap = getIncludeMap(ResourceType.Observation, keys, includes);
-        
-        
+		String[] keys = { "subject", "encounter", "basedOn", "device", "hasMember", "specimen" };
+
+		var includeMap = getIncludeMap(ResourceType.Observation, keys, includes);
+
 		List<ObservationEntity> ObservationEntitys = mongo.find(query, ObservationEntity.class);
 		if (ObservationEntitys != null) {
 			for (ObservationEntity item : ObservationEntitys) {
 				Observation obj = transform(item);
-				
-				if(includeMap.get("subject") && obj.hasSubject()) {
-                    setReferenceResource(obj.getSubject());
-                }
-                
-                if(includeMap.get("encounter") && obj.hasEncounter()) {
-                    setReferenceResource(obj.getEncounter());
-                }
-                                
-                if(includeMap.get("basedOn") && obj.hasBasedOn()) {
-                    setReferenceResource(obj.getBasedOn());
-                }
-                
-                if(includeMap.get("device") && obj.hasDevice()) {
-                    setReferenceResource(obj.getDevice());
-                }
-                if(includeMap.get("hasMember") && obj.hasHasMember()) {
-                    setReferenceResource(obj.getHasMember());
-                }
-                
-                if(includeMap.get("specimen") && obj.hasSpecimen()) {
-                    setReferenceResource(obj.getSpecimen());
-                }                
-                
+
+				if (includeMap.get("subject") && obj.hasSubject()) {
+					setReferenceResource(obj.getSubject());
+				}
+
+				if (includeMap.get("encounter") && obj.hasEncounter()) {
+					setReferenceResource(obj.getEncounter());
+				}
+
+				if (includeMap.get("basedOn") && obj.hasBasedOn()) {
+					setReferenceResource(obj.getBasedOn());
+				}
+
+				if (includeMap.get("device") && obj.hasDevice()) {
+					setReferenceResource(obj.getDevice());
+				}
+				if (includeMap.get("hasMember") && obj.hasHasMember()) {
+					setReferenceResource(obj.getHasMember());
+				}
+
+				if (includeMap.get("specimen") && obj.hasSpecimen()) {
+					setReferenceResource(obj.getSpecimen());
+				}
+
 				resources.add(obj);
 			}
 		}
 		return resources;
 	}
 
-	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
-			TokenParam category, TokenOrListParam code, TokenParam comboCode, TokenParam comboDataAbsentReason,
-			TokenParam comboValueConcept, TokenParam componentCode, TokenParam componentDataAbsentReason,
-			TokenParam componentValueConcept, ReferenceParam conetext, TokenParam dataAbsentReason, DateRangeParam date,
-			ReferenceParam device, ReferenceParam encounter, TokenParam identifier, TokenParam method,
-			ReferenceParam patient, ReferenceParam performer, ReferenceParam relatedTarget, TokenParam relatedType,
-			ReferenceParam specimen, TokenParam status, ReferenceParam subject, TokenParam valueConcept,
-			DateRangeParam valueDate, StringParam valueString, TokenParam resid, DateRangeParam _lastUpdated,
-			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
+	public long countMatchesAdvancedTotal(FhirContext fhirContext, ReferenceParam basedOn, TokenParam category,
+			TokenOrListParam code, TokenParam comboCode, TokenParam comboDataAbsentReason, TokenParam comboValueConcept,
+			TokenParam componentCode, TokenParam componentDataAbsentReason, TokenParam componentValueConcept,
+			ReferenceParam conetext, TokenParam dataAbsentReason, DateRangeParam date, ReferenceParam device,
+			ReferenceParam encounter, TokenParam identifier, TokenParam method, ReferenceParam patient,
+			ReferenceParam performer, ReferenceParam relatedTarget, TokenParam relatedType, ReferenceParam specimen,
+			TokenParam status, ReferenceParam subject, TokenParam valueConcept, DateRangeParam valueDate,
+			StringParam valueString, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
+			TokenParam _query, TokenParam _security, StringParam _content) {
 		long total = 0;
-		Criteria criteria = setParamToCriteria(active, basedOn, category, code, comboCode, comboDataAbsentReason,
+		Criteria criteria = setParamToCriteria(basedOn, category, code, comboCode, comboDataAbsentReason,
 				comboValueConcept, componentCode, componentDataAbsentReason, componentValueConcept, conetext,
 				dataAbsentReason, date, device, encounter, identifier, method, patient, performer, relatedTarget,
 				relatedType, specimen, status, subject, valueConcept, valueDate, valueString, resid, _lastUpdated, _tag,
@@ -129,22 +126,18 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 		return total;
 	}
 
-	private Criteria setParamToCriteria(TokenParam active, ReferenceParam basedOn, TokenParam category,
-			TokenOrListParam codeList, TokenParam comboCode, TokenParam comboDataAbsentReason,
-			TokenParam comboValueConcept, TokenParam componentCode, TokenParam componentDataAbsentReason,
-			TokenParam componentValueConcept, ReferenceParam conetext, TokenParam dataAbsentReason, DateRangeParam date,
-			ReferenceParam device, ReferenceParam encounter, TokenParam identifier, TokenParam method,
-			ReferenceParam patient, ReferenceParam performer, ReferenceParam relatedTarget, TokenParam relatedType,
-			ReferenceParam specimen, TokenParam status, ReferenceParam subject, TokenParam valueConcept,
-			DateRangeParam valueDate, StringParam valueString, TokenParam resid, DateRangeParam _lastUpdated,
-			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
+	private Criteria setParamToCriteria(ReferenceParam basedOn, TokenParam category, TokenOrListParam codeList,
+			TokenParam comboCode, TokenParam comboDataAbsentReason, TokenParam comboValueConcept,
+			TokenParam componentCode, TokenParam componentDataAbsentReason, TokenParam componentValueConcept,
+			ReferenceParam conetext, TokenParam dataAbsentReason, DateRangeParam date, ReferenceParam device,
+			ReferenceParam encounter, TokenParam identifier, TokenParam method, ReferenceParam patient,
+			ReferenceParam performer, ReferenceParam relatedTarget, TokenParam relatedType, ReferenceParam specimen,
+			TokenParam status, ReferenceParam subject, TokenParam valueConcept, DateRangeParam valueDate,
+			StringParam valueString, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
+			TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
-		if (active != null) {
-			criteria = Criteria.where("active").is(active);
-		} else {
-			criteria = Criteria.where("active").is(true);
-		}
+		criteria = Criteria.where("active").is(true);
 		// subject
 		if (subject != null) {
 			if (subject.getValue().indexOf("|") == -1) {
@@ -190,12 +183,11 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 			setCodeListToCriteria(criteria, codeList);
 		}
 		// set param default
-		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
-				identifier);
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, identifier);
 
 		return criteria;
 	}
-	
+
 	@Override
 	protected String getProfile() {
 		return "Observation-v1.0";

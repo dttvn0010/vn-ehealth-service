@@ -54,7 +54,6 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 
 	@Search
 	public IBundleProvider searchDiagnosticReport(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
@@ -90,17 +89,17 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 			List<IBaseResource> results = new ArrayList<>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = diagnosticReportDao.search(fhirContext, active, basedOn, category, code, conetext, date,
-						diagnosis, encounter, identifier, image, issued, patient, performer, result, specimen, status,
-						subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam,
-						count, includes);
+				results = diagnosticReportDao.search(fhirContext, basedOn, category, code, conetext, date, diagnosis,
+						encounter, identifier, image, issued, patient, performer, result, specimen, status, subject,
+						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count,
+						includes);
 				// return results;
 			} else
-				results = diagnosticReportDao.search(fhirContext, active, basedOn, category, code, conetext, date,
-						diagnosis, encounter, identifier, image, issued, patient, performer, result, specimen, status,
-						subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count,
-						includes);
-			//final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
+				results = diagnosticReportDao.search(fhirContext, basedOn, category, code, conetext, date, diagnosis,
+						encounter, identifier, image, issued, patient, performer, result, specimen, status, subject,
+						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count, includes);
+			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x
+			// -> x);
 			final List<IBaseResource> finalResults = results;
 
 			return new IBundleProvider() {
@@ -108,9 +107,9 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 				@Override
 				public Integer size() {
 					return Integer.parseInt(String.valueOf(diagnosticReportDao.countMatchesAdvancedTotal(fhirContext,
-							active, basedOn, category, code, conetext, date, diagnosis, encounter, identifier, image,
-							issued, patient, performer, result, specimen, status, subject, resid, _lastUpdated, _tag,
-							_profile, _query, _security, _content)));
+							basedOn, category, code, conetext, date, diagnosis, encounter, identifier, image, issued,
+							patient, performer, result, specimen, status, subject, resid, _lastUpdated, _tag, _profile,
+							_query, _security, _content)));
 				}
 
 				@Override
@@ -141,7 +140,6 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
@@ -166,9 +164,9 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = diagnosticReportDao.countMatchesAdvancedTotal(fhirContext, active, basedOn, category, code,
-				conetext, date, diagnosis, encounter, identifier, image, issued, patient, performer, result, specimen,
-				status, subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		long total = diagnosticReportDao.countMatchesAdvancedTotal(fhirContext, basedOn, category, code, conetext, date,
+				diagnosis, encounter, identifier, image, issued, patient, performer, result, specimen, status, subject,
+				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}

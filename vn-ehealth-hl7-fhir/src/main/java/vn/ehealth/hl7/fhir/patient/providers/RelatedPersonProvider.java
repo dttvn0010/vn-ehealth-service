@@ -40,7 +40,8 @@ import vn.ehealth.hl7.fhir.patient.dao.impl.RelatedPersonDao;
 import vn.ehealth.hl7.fhir.patient.entity.RelatedPersonEntity;
 
 @Component
-public class RelatedPersonProvider extends BaseController<RelatedPersonEntity, RelatedPerson> implements IResourceProvider {
+public class RelatedPersonProvider extends BaseController<RelatedPersonEntity, RelatedPerson>
+		implements IResourceProvider {
 	@Autowired
 	RelatedPersonDao relatedPersonDao;
 
@@ -51,7 +52,6 @@ public class RelatedPersonProvider extends BaseController<RelatedPersonEntity, R
 
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
 			@OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESSCOUNTRY) StringParam addressCountry,
@@ -75,7 +75,7 @@ public class RelatedPersonProvider extends BaseController<RelatedPersonEntity, R
 			// Search result parameters
 			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {
-		//log.debug("Search RelatedPerson Provider called");
+		// log.debug("Search RelatedPerson Provider called");
 		// String permissionAccept = PatientOauth2Keys.RelatedPersonOauth2.RELATED_LIST;
 		// OAuth2Util.checkOauth2(request, permissionAccept);
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
@@ -86,13 +86,13 @@ public class RelatedPersonProvider extends BaseController<RelatedPersonEntity, R
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = relatedPersonDao.search(fhirContext, active, address, addressCity, addressCountry,
-						addressState, birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom,
-						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count);
+				results = relatedPersonDao.search(fhirContext, address, addressCity, addressCountry, addressState,
+						birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom, resid,
+						_lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count);
 			} else
-				results = relatedPersonDao.search(fhirContext, active, address, addressCity, addressCountry,
-						addressState, birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom,
-						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, "", count);
+				results = relatedPersonDao.search(fhirContext, address, addressCity, addressCountry, addressState,
+						birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom, resid,
+						_lastUpdated, _tag, _profile, _query, _security, _content, _page, "", count);
 
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 			// return finalResults;
@@ -101,10 +101,10 @@ public class RelatedPersonProvider extends BaseController<RelatedPersonEntity, R
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(relatedPersonDao.findMatchesAdvancedTotal(fhirContext,
-							active, address, addressCity, addressCountry, addressState, birthDate, email, gender,
-							identifier, name, patient, phone, phonetic, telecom, resid, _lastUpdated, _tag, _profile,
-							_query, _security, _content)));
+					return Integer.parseInt(String.valueOf(
+							relatedPersonDao.findMatchesAdvancedTotal(fhirContext, address, addressCity, addressCountry,
+									addressState, birthDate, email, gender, identifier, name, patient, phone, phonetic,
+									telecom, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -133,7 +133,6 @@ public class RelatedPersonProvider extends BaseController<RelatedPersonEntity, R
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
 			@OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESSCOUNTRY) StringParam addressCountry,
@@ -155,15 +154,15 @@ public class RelatedPersonProvider extends BaseController<RelatedPersonEntity, R
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = relatedPersonDao.findMatchesAdvancedTotal(fhirContext, active, address, addressCity,
-				addressCountry, addressState, birthDate, email, gender, identifier, name, patient, phone, phonetic,
-				telecom, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		long total = relatedPersonDao.findMatchesAdvancedTotal(fhirContext, address, addressCity, addressCountry,
+				addressState, birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom, resid,
+				_lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<RelatedPersonEntity, RelatedPerson> getDao() {
-        return relatedPersonDao;
-    }
+	@Override
+	protected BaseDao<RelatedPersonEntity, RelatedPerson> getDao() {
+		return relatedPersonDao;
+	}
 }

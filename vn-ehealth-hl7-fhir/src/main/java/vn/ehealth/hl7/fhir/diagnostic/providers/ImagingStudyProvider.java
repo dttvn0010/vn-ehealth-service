@@ -40,21 +40,19 @@ import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ImagingStudyDao;
 import vn.ehealth.hl7.fhir.diagnostic.entity.ImagingStudyEntity;
 
 @Component
-public class ImagingStudyProvider extends BaseController<ImagingStudyEntity, ImagingStudy> implements IResourceProvider {
-	
+public class ImagingStudyProvider extends BaseController<ImagingStudyEntity, ImagingStudy>
+		implements IResourceProvider {
+
 	@Autowired
 	ImagingStudyDao imagingStudyDao;
-
 
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return ImagingStudy.class;
 	}
 
-
 	@Search
 	public IBundleProvider searchImagingStudy(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
 			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
@@ -73,21 +71,22 @@ public class ImagingStudyProvider extends BaseController<ImagingStudyEntity, Ima
 			List<IBaseResource> results = new ArrayList<>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = imagingStudyDao.search(fhirContext, active, resid, _lastUpdated, _tag, _profile, _query,
-						_security, _content, _page, sortParam, count, includes);
+				results = imagingStudyDao.search(fhirContext, resid, _lastUpdated, _tag, _profile, _query, _security,
+						_content, _page, sortParam, count, includes);
 				// return results;
 			} else
-				results = imagingStudyDao.search(fhirContext, active, resid, _lastUpdated, _tag, _profile, _query,
-						_security, _content, _page, null, count, includes);
-			//final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
+				results = imagingStudyDao.search(fhirContext, resid, _lastUpdated, _tag, _profile, _query, _security,
+						_content, _page, null, count, includes);
+			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x
+			// -> x);
 			final List<IBaseResource> finalResults = results;
 
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(imagingStudyDao.countMatchesAdvancedTotal(fhirContext,
-							active, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
+					return Integer.parseInt(String.valueOf(imagingStudyDao.countMatchesAdvancedTotal(fhirContext, resid,
+							_lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -118,7 +117,6 @@ public class ImagingStudyProvider extends BaseController<ImagingStudyEntity, Ima
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
 			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
@@ -127,14 +125,14 @@ public class ImagingStudyProvider extends BaseController<ImagingStudyEntity, Ima
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = imagingStudyDao.countMatchesAdvancedTotal(fhirContext, active, resid, _lastUpdated, _tag, _profile,
-				_query, _security, _content);
+		long total = imagingStudyDao.countMatchesAdvancedTotal(fhirContext, resid, _lastUpdated, _tag, _profile, _query,
+				_security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<ImagingStudyEntity, ImagingStudy> getDao() {
-        return imagingStudyDao;
-    }
+	@Override
+	protected BaseDao<ImagingStudyEntity, ImagingStudy> getDao() {
+		return imagingStudyDao;
+	}
 }

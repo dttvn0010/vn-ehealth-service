@@ -42,7 +42,8 @@ import vn.ehealth.hl7.fhir.provider.dao.impl.OrganizationDao;
 import vn.ehealth.hl7.fhir.provider.entity.OrganizationEntity;
 
 @Component
-public class OrganizationProvider extends BaseController<OrganizationEntity, Organization> implements IResourceProvider {
+public class OrganizationProvider extends BaseController<OrganizationEntity, Organization>
+		implements IResourceProvider {
 
 	@Autowired
 	OrganizationDao organizationDao;
@@ -56,7 +57,6 @@ public class OrganizationProvider extends BaseController<OrganizationEntity, Org
 
 	@Search
 	public IBundleProvider searchOrganization(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
 			@OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESSCOUNTRY) StringParam addressCountry,
@@ -88,23 +88,23 @@ public class OrganizationProvider extends BaseController<OrganizationEntity, Org
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = organizationDao.search(fhirContext, active, address, addressCity, addressCountry,
-						addressPostalCode, addressState, addressUse, endpoint, identifier, name, partof, phonetic, type,
-						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count);
+				results = organizationDao.search(fhirContext, address, addressCity, addressCountry, addressPostalCode,
+						addressState, addressUse, endpoint, identifier, name, partof, phonetic, type, resid,
+						_lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count);
 			} else
-				results = organizationDao.search(fhirContext, active, address, addressCity, addressCountry,
-						addressPostalCode, addressState, addressUse, endpoint, identifier, name, partof, phonetic, type,
-						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, "", count);
+				results = organizationDao.search(fhirContext, address, addressCity, addressCountry, addressPostalCode,
+						addressState, addressUse, endpoint, identifier, name, partof, phonetic, type, resid,
+						_lastUpdated, _tag, _profile, _query, _security, _content, _page, "", count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(organizationDao.countMatchesAdvancedTotal(fhirContext,
-							active, address, addressCity, addressCountry, addressPostalCode, addressState, addressUse,
-							endpoint, identifier, name, partof, phonetic, type, resid, _lastUpdated, _tag, _profile,
-							_query, _security, _content)));
+					return Integer.parseInt(String.valueOf(
+							organizationDao.countMatchesAdvancedTotal(fhirContext, address, addressCity, addressCountry,
+									addressPostalCode, addressState, addressUse, endpoint, identifier, name, partof,
+									phonetic, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -135,7 +135,6 @@ public class OrganizationProvider extends BaseController<OrganizationEntity, Org
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
 			@OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESSCOUNTRY) StringParam addressCountry,
@@ -156,15 +155,15 @@ public class OrganizationProvider extends BaseController<OrganizationEntity, Org
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = organizationDao.countMatchesAdvancedTotal(fhirContext, active, address, addressCity,
-				addressCountry, addressPostalCode, addressState, addressUse, endpoint, identifier, name, partof,
-				phonetic, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		long total = organizationDao.countMatchesAdvancedTotal(fhirContext, address, addressCity, addressCountry,
+				addressPostalCode, addressState, addressUse, endpoint, identifier, name, partof, phonetic, type, resid,
+				_lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<OrganizationEntity, Organization> getDao() {
-        return organizationDao;
-    }
+	@Override
+	protected BaseDao<OrganizationEntity, Organization> getDao() {
+		return organizationDao;
+	}
 }

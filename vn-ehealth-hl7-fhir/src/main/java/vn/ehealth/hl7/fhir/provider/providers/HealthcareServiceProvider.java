@@ -40,8 +40,9 @@ import vn.ehealth.hl7.fhir.provider.dao.impl.HealthcareServiceDao;
 import vn.ehealth.hl7.fhir.provider.entity.HealthcareServiceEntity;
 
 @Component
-public class HealthcareServiceProvider extends BaseController<HealthcareServiceEntity, HealthcareService> implements IResourceProvider {
-	
+public class HealthcareServiceProvider extends BaseController<HealthcareServiceEntity, HealthcareService>
+		implements IResourceProvider {
+
 	@Autowired
 	HealthcareServiceDao healthcareServiceDao;
 
@@ -52,7 +53,6 @@ public class HealthcareServiceProvider extends BaseController<HealthcareServiceE
 
 	@Search
 	public IBundleProvider searchHealthcareService(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CHARACTERISTIC) TokenParam characteristic,
 			@OptionalParam(name = ConstantKeys.SP_ENDPOINT) ReferenceParam endpoint,
@@ -72,7 +72,7 @@ public class HealthcareServiceProvider extends BaseController<HealthcareServiceE
 			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {
 
-		//log.debug("search HealthcareService Provider called");
+		// log.debug("search HealthcareService Provider called");
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
 					new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
@@ -81,13 +81,13 @@ public class HealthcareServiceProvider extends BaseController<HealthcareServiceE
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = healthcareServiceDao.search(fhirContext, active, category, characteristic, endpoint,
-						identifier, location, name, organization, programname, type, resid, _lastUpdated, _tag,
-						_profile, _query, _security, _content, _page, sortParam, count);
+				results = healthcareServiceDao.search(fhirContext, category, characteristic, endpoint, identifier,
+						location, name, organization, programname, type, resid, _lastUpdated, _tag, _profile, _query,
+						_security, _content, _page, sortParam, count);
 			} else
-				results = healthcareServiceDao.search(fhirContext, active, category, characteristic, endpoint,
-						identifier, location, name, organization, programname, type, resid, _lastUpdated, _tag,
-						_profile, _query, _security, _content, _page, "", count);
+				results = healthcareServiceDao.search(fhirContext, category, characteristic, endpoint, identifier,
+						location, name, organization, programname, type, resid, _lastUpdated, _tag, _profile, _query,
+						_security, _content, _page, "", count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
@@ -95,8 +95,8 @@ public class HealthcareServiceProvider extends BaseController<HealthcareServiceE
 				@Override
 				public Integer size() {
 					return Integer.parseInt(String.valueOf(healthcareServiceDao.countMatchesAdvancedTotal(fhirContext,
-							active, category, characteristic, endpoint, identifier, location, name, organization,
-							programname, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
+							category, characteristic, endpoint, identifier, location, name, organization, programname,
+							type, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -127,7 +127,6 @@ public class HealthcareServiceProvider extends BaseController<HealthcareServiceE
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CHARACTERISTIC) TokenParam characteristic,
 			@OptionalParam(name = ConstantKeys.SP_ENDPOINT) ReferenceParam endpoint,
@@ -145,15 +144,15 @@ public class HealthcareServiceProvider extends BaseController<HealthcareServiceE
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = healthcareServiceDao.countMatchesAdvancedTotal(fhirContext, active, category, characteristic,
-				endpoint, identifier, location, name, organization, programname, type, resid, _lastUpdated, _tag,
-				_profile, _query, _security, _content);
+		long total = healthcareServiceDao.countMatchesAdvancedTotal(fhirContext, category, characteristic, endpoint,
+				identifier, location, name, organization, programname, type, resid, _lastUpdated, _tag, _profile,
+				_query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<HealthcareServiceEntity, HealthcareService> getDao() {
-        return healthcareServiceDao;
-    }
+	@Override
+	protected BaseDao<HealthcareServiceEntity, HealthcareService> getDao() {
+		return healthcareServiceDao;
+	}
 }

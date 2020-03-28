@@ -28,10 +28,7 @@ import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.RelatedPerson;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.Specimen;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -43,7 +40,7 @@ public class PlainDao implements iPlainDao{
 
 	public List<IBaseResource> history(InstantType theSince, DateRangeParam theAt) {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
-		Criteria criteria = Criteria.where("1 =1 ");
+		Criteria criteria = Criteria.where("$where").is("1==1");
 
 		// Patient
 		List<Patient> patients = DaoFactory.getPatientDao().findByCriteria(criteria);

@@ -40,7 +40,8 @@ import vn.ehealth.hl7.fhir.provider.dao.impl.PractitionerDao;
 import vn.ehealth.hl7.fhir.provider.entity.PractitionerEntity;
 
 @Component
-public class PractitionerProvider extends BaseController<PractitionerEntity, Practitioner> implements IResourceProvider {
+public class PractitionerProvider extends BaseController<PractitionerEntity, Practitioner>
+		implements IResourceProvider {
 	@Autowired
 	PractitionerDao practitionerDao;
 
@@ -51,7 +52,6 @@ public class PractitionerProvider extends BaseController<PractitionerEntity, Pra
 
 	@Search
 	public IBundleProvider searchPractitioner(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
 			@OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESSCOUNTRY) StringParam addressCountry,
@@ -79,7 +79,7 @@ public class PractitionerProvider extends BaseController<PractitionerEntity, Pra
 			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {
 
-		//log.debug("search Practitioner Provider called");
+		// log.debug("search Practitioner Provider called");
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
 					new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
@@ -88,15 +88,15 @@ public class PractitionerProvider extends BaseController<PractitionerEntity, Pra
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = practitionerDao.search(fhirContext, active, address, addressCity, addressCountry,
-						addressPostalCode, addressState, addressUse, communication, email, family, gender, given,
-						identifier, name, phone, phonetic, telecom, resid, _lastUpdated, _tag, _profile, _query,
-						_security, _content, managingOrg, _page, sortParam, count);
+				results = practitionerDao.search(fhirContext, address, addressCity, addressCountry, addressPostalCode,
+						addressState, addressUse, communication, email, family, gender, given, identifier, name, phone,
+						phonetic, telecom, resid, _lastUpdated, _tag, _profile, _query, _security, _content,
+						managingOrg, _page, sortParam, count);
 			} else
-				results = practitionerDao.search(fhirContext, active, address, addressCity, addressCountry,
-						addressPostalCode, addressState, addressUse, communication, email, family, gender, given,
-						identifier, name, phone, phonetic, telecom, resid, _lastUpdated, _tag, _profile, _query,
-						_security, _content, managingOrg, _page, "", count);
+				results = practitionerDao.search(fhirContext, address, addressCity, addressCountry, addressPostalCode,
+						addressState, addressUse, communication, email, family, gender, given, identifier, name, phone,
+						phonetic, telecom, resid, _lastUpdated, _tag, _profile, _query, _security, _content,
+						managingOrg, _page, "", count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
@@ -104,7 +104,7 @@ public class PractitionerProvider extends BaseController<PractitionerEntity, Pra
 				@Override
 				public Integer size() {
 					return Integer.parseInt(String.valueOf(practitionerDao.countMatchesAdvancedTotal(fhirContext,
-							active, address, addressCity, addressCountry, addressPostalCode, addressState, addressUse,
+							address, addressCity, addressCountry, addressPostalCode, addressState, addressUse,
 							communication, email, family, gender, given, identifier, name, phone, phonetic, telecom,
 							resid, _lastUpdated, _tag, _profile, _query, _security, _content, managingOrg)));
 				}
@@ -137,7 +137,6 @@ public class PractitionerProvider extends BaseController<PractitionerEntity, Pra
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
 			@OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESSCOUNTRY) StringParam addressCountry,
@@ -163,16 +162,16 @@ public class PractitionerProvider extends BaseController<PractitionerEntity, Pra
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
 			@OptionalParam(name = "managingOrg") ReferenceParam managingOrg) {
 		Parameters retVal = new Parameters();
-		long total = practitionerDao.countMatchesAdvancedTotal(fhirContext, active, address, addressCity,
-				addressCountry, addressPostalCode, addressState, addressUse, communication, email, family, gender,
-				given, identifier, name, phone, phonetic, telecom, resid, _lastUpdated, _tag, _profile, _query,
-				_security, _content, managingOrg);
+		long total = practitionerDao.countMatchesAdvancedTotal(fhirContext, address, addressCity, addressCountry,
+				addressPostalCode, addressState, addressUse, communication, email, family, gender, given, identifier,
+				name, phone, phonetic, telecom, resid, _lastUpdated, _tag, _profile, _query, _security, _content,
+				managingOrg);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<PractitionerEntity, Practitioner> getDao() {
-        return practitionerDao;
-    }
+	@Override
+	protected BaseDao<PractitionerEntity, Practitioner> getDao() {
+		return practitionerDao;
+	}
 }

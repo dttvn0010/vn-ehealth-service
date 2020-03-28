@@ -55,7 +55,6 @@ public class ValueSetProvider extends BaseController<ValueSetEntity, ValueSet> i
 
 	@Search
 	public IBundleProvider searchValueSet(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = ConstantKeys.SP_DESCRIPTION) StringParam description,
 			@OptionalParam(name = ConstantKeys.SP_EXPANSION) UriParam expansion,
@@ -77,7 +76,7 @@ public class ValueSetProvider extends BaseController<ValueSetEntity, ValueSet> i
 			// Search result parameters
 			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {
-		//log.debug("Search ValueSet Provider called");
+		// log.debug("Search ValueSet Provider called");
 		// String permissionAccept = TerminologyOauth2Keys.ValueSetOauth2.VALUESET_LIST;
 		// OAuth2Util.checkOauth2(request, permissionAccept);
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
@@ -88,13 +87,13 @@ public class ValueSetProvider extends BaseController<ValueSetEntity, ValueSet> i
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = valueSetDao.search(fhirContext, active, date, description, expansion, identifier,
-						jurisdiction, name, publisher, reference, status, title, url, version, resid, _lastUpdated,
-						_tag, _profile, _query, _security, _content, _page, sortParam, count);
+				results = valueSetDao.search(fhirContext, date, description, expansion, identifier, jurisdiction, name,
+						publisher, reference, status, title, url, version, resid, _lastUpdated, _tag, _profile, _query,
+						_security, _content, _page, sortParam, count);
 			} else
-				results = valueSetDao.search(fhirContext, active, date, description, expansion, identifier,
-						jurisdiction, name, publisher, reference, status, title, url, version, resid, _lastUpdated,
-						_tag, _profile, _query, _security, _content, _page, null, count);
+				results = valueSetDao.search(fhirContext, date, description, expansion, identifier, jurisdiction, name,
+						publisher, reference, status, title, url, version, resid, _lastUpdated, _tag, _profile, _query,
+						_security, _content, _page, null, count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
@@ -134,7 +133,6 @@ public class ValueSetProvider extends BaseController<ValueSetEntity, ValueSet> i
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = ConstantKeys.SP_DESCRIPTION) StringParam description,
 			@OptionalParam(name = ConstantKeys.SP_EXPANSION) UriParam expansion,
@@ -161,8 +159,8 @@ public class ValueSetProvider extends BaseController<ValueSetEntity, ValueSet> i
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<ValueSetEntity, ValueSet> getDao() {
-        return valueSetDao;
-    }
+	@Override
+	protected BaseDao<ValueSetEntity, ValueSet> getDao() {
+		return valueSetDao;
+	}
 }

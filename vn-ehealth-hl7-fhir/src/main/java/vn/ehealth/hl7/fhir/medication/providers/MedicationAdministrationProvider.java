@@ -40,8 +40,9 @@ import vn.ehealth.hl7.fhir.medication.dao.impl.MedicationAdministrationDao;
 import vn.ehealth.hl7.fhir.medication.entity.MedicationAdministrationEntity;
 
 @Component
-public class MedicationAdministrationProvider extends BaseController<MedicationAdministrationEntity, MedicationAdministration> implements IResourceProvider {
-	
+public class MedicationAdministrationProvider
+		extends BaseController<MedicationAdministrationEntity, MedicationAdministration> implements IResourceProvider {
+
 	@Autowired
 	MedicationAdministrationDao medicationAdministrationDao;
 
@@ -50,10 +51,8 @@ public class MedicationAdministrationProvider extends BaseController<MedicationA
 		return MedicationAdministration.class;
 	}
 
-
 	@Search
 	public IBundleProvider searchMedicationAdministration(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
 			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
 			@OptionalParam(name = ConstantKeys.SP_DEVICE) ReferenceParam device,
@@ -85,12 +84,12 @@ public class MedicationAdministrationProvider extends BaseController<MedicationA
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = medicationAdministrationDao.search(fhirContext, active, code, context, device, effectiveTime,
+				results = medicationAdministrationDao.search(fhirContext, code, context, device, effectiveTime,
 						identifier, medication, notGiven, patient, performer, prescription, reasonGiven, reasonNotGiven,
 						status, subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
 						sortParam, count);
 			} else
-				results = medicationAdministrationDao.search(fhirContext, active, code, context, device, effectiveTime,
+				results = medicationAdministrationDao.search(fhirContext, code, context, device, effectiveTime,
 						identifier, medication, notGiven, patient, performer, prescription, reasonGiven, reasonNotGiven,
 						status, subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null,
 						count);
@@ -102,9 +101,9 @@ public class MedicationAdministrationProvider extends BaseController<MedicationA
 				public Integer size() {
 					return Integer
 							.parseInt(String.valueOf(medicationAdministrationDao.countMatchesAdvancedTotal(fhirContext,
-									active, code, context, device, effectiveTime, identifier, medication, notGiven,
-									patient, performer, prescription, reasonGiven, reasonNotGiven, status, subject,
-									resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
+									code, context, device, effectiveTime, identifier, medication, notGiven, patient,
+									performer, prescription, reasonGiven, reasonNotGiven, status, subject, resid,
+									_lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -134,9 +133,7 @@ public class MedicationAdministrationProvider extends BaseController<MedicationA
 	}
 
 	@Operation(name = "$total", idempotent = true)
-	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
-			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
+	public Parameters getTotal(HttpServletRequest request, @OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
 			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
 			@OptionalParam(name = ConstantKeys.SP_DEVICE) ReferenceParam device,
 			@OptionalParam(name = ConstantKeys.SP_EFFECTIVE_TIME) DateRangeParam effectiveTime,
@@ -158,16 +155,15 @@ public class MedicationAdministrationProvider extends BaseController<MedicationA
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = medicationAdministrationDao.countMatchesAdvancedTotal(fhirContext, active, code, context, device,
+		long total = medicationAdministrationDao.countMatchesAdvancedTotal(fhirContext, code, context, device,
 				effectiveTime, identifier, medication, notGiven, patient, performer, prescription, reasonGiven,
 				reasonNotGiven, status, subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-
-    @Override
-    protected BaseDao<MedicationAdministrationEntity, MedicationAdministration> getDao() {
-        return medicationAdministrationDao;
-    }
+	@Override
+	protected BaseDao<MedicationAdministrationEntity, MedicationAdministration> getDao() {
+		return medicationAdministrationDao;
+	}
 }

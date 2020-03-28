@@ -40,8 +40,9 @@ import vn.ehealth.hl7.fhir.ehr.dao.impl.EpisodeOfCareDao;
 import vn.ehealth.hl7.fhir.ehr.entity.EpisodeOfCareEntity;
 
 @Component
-public class EpisodeOfCareProvider extends BaseController<EpisodeOfCareEntity, EpisodeOfCare> implements IResourceProvider {
-	
+public class EpisodeOfCareProvider extends BaseController<EpisodeOfCareEntity, EpisodeOfCare>
+		implements IResourceProvider {
+
 	@Autowired
 	EpisodeOfCareDao episodeOfCareDao;
 
@@ -52,7 +53,6 @@ public class EpisodeOfCareProvider extends BaseController<EpisodeOfCareEntity, E
 
 	@Search
 	public IBundleProvider searchEpisodeOfCare(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_CARE_MANAGER) ReferenceParam careManager,
 			@OptionalParam(name = ConstantKeys.SP_CONDITION) ReferenceParam condition,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
@@ -79,11 +79,11 @@ public class EpisodeOfCareProvider extends BaseController<EpisodeOfCareEntity, E
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = episodeOfCareDao.search(fhirContext, active, careManager, condition, date, identifier,
+				results = episodeOfCareDao.search(fhirContext, careManager, condition, date, identifier,
 						incomingreferral, organization, patient, status, type, resid, _lastUpdated, _tag, _profile,
 						_query, _security, _content, _page, sortParam, count);
 			} else
-				results = episodeOfCareDao.search(fhirContext, active, careManager, condition, date, identifier,
+				results = episodeOfCareDao.search(fhirContext, careManager, condition, date, identifier,
 						incomingreferral, organization, patient, status, type, resid, _lastUpdated, _tag, _profile,
 						_query, _security, _content, _page, "", count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
@@ -92,7 +92,7 @@ public class EpisodeOfCareProvider extends BaseController<EpisodeOfCareEntity, E
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(episodeOfCareDao.getTotal(fhirContext, active, careManager,
+					return Integer.parseInt(String.valueOf(episodeOfCareDao.getTotal(fhirContext, careManager,
 							condition, date, identifier, incomingreferral, organization, patient, status, type, resid,
 							_lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
@@ -125,7 +125,6 @@ public class EpisodeOfCareProvider extends BaseController<EpisodeOfCareEntity, E
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_CARE_MANAGER) ReferenceParam careManager,
 			@OptionalParam(name = ConstantKeys.SP_CONDITION) ReferenceParam condition,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
@@ -144,15 +143,14 @@ public class EpisodeOfCareProvider extends BaseController<EpisodeOfCareEntity, E
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = episodeOfCareDao.getTotal(fhirContext, active, careManager, condition, date, identifier,
-				incomingreferral, organization, patient, status, type, resid, _lastUpdated, _tag, _profile, _query,
-				_security, _content);
+		long total = episodeOfCareDao.getTotal(fhirContext, careManager, condition, date, identifier, incomingreferral,
+				organization, patient, status, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<EpisodeOfCareEntity, EpisodeOfCare> getDao() {
-        return episodeOfCareDao;
-    }
+	@Override
+	protected BaseDao<EpisodeOfCareEntity, EpisodeOfCare> getDao() {
+		return episodeOfCareDao;
+	}
 }

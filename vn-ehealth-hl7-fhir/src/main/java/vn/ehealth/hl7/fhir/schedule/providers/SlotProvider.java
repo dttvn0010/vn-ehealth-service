@@ -55,7 +55,6 @@ public class SlotProvider extends BaseController<SlotEntity, Slot> implements IR
 
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = ConstantKeys.SP_SCHEDULE) ReferenceParam schedule,
@@ -78,19 +77,19 @@ public class SlotProvider extends BaseController<SlotEntity, Slot> implements IR
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = slotDao.search(fhirContext, active, status, identifier, schedule, date, slotType, resid,
-						_lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count);
+				results = slotDao.search(fhirContext, status, identifier, schedule, date, slotType, resid, _lastUpdated,
+						_tag, _profile, _query, _security, _content, _page, sortParam, count);
 			} else
-				results = slotDao.search(fhirContext, active, status, identifier, schedule, date, slotType, resid,
-						_lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count);
+				results = slotDao.search(fhirContext, status, identifier, schedule, date, slotType, resid, _lastUpdated,
+						_tag, _profile, _query, _security, _content, _page, null, count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String
-							.valueOf(slotDao.findMatchesAdvancedTotal(fhirContext, active, status, identifier, schedule,
+					return Integer.parseInt(
+							String.valueOf(slotDao.findMatchesAdvancedTotal(fhirContext, status, identifier, schedule,
 									date, slotType, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
@@ -120,10 +119,8 @@ public class SlotProvider extends BaseController<SlotEntity, Slot> implements IR
 		}
 	}
 
-
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = ConstantKeys.SP_SCHEDULE) ReferenceParam schedule,
@@ -137,14 +134,14 @@ public class SlotProvider extends BaseController<SlotEntity, Slot> implements IR
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = slotDao.findMatchesAdvancedTotal(fhirContext, active, status, identifier, schedule, date, slotType,
-				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		long total = slotDao.findMatchesAdvancedTotal(fhirContext, status, identifier, schedule, date, slotType, resid,
+				_lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<SlotEntity, Slot> getDao() {
-        return slotDao;
-    }
+	@Override
+	protected BaseDao<SlotEntity, Slot> getDao() {
+		return slotDao;
+	}
 }

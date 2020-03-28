@@ -27,102 +27,99 @@ import vn.ehealth.hl7.fhir.schedule.entity.SlotEntity;
 @Repository
 public class SlotDao extends BaseDao<SlotEntity, Slot> {
 
-    @SuppressWarnings("deprecation")
-    public List<Resource> search(FhirContext fhirContext, TokenParam active, TokenParam status, TokenParam identifier,
-            ReferenceParam schedule, DateRangeParam date, TokenParam slotType, TokenParam resid,
-            DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-            StringParam _content, StringParam _page, String sortParam, Integer count) {
+	@SuppressWarnings("deprecation")
+	public List<Resource> search(FhirContext fhirContext, TokenParam status, TokenParam identifier,
+			ReferenceParam schedule, DateRangeParam date, TokenParam slotType, TokenParam resid,
+			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
+			StringParam _content, StringParam _page, String sortParam, Integer count) {
 
-        List<Resource> resources = new ArrayList<>();
-        Criteria criteria = setParamToCriteria(fhirContext, active, status, identifier, schedule, date, slotType, resid,
-                _lastUpdated, _tag, _profile, _query, _security, _content);
-        Query query = new Query();
-        if (criteria != null) {
-            query = Query.query(criteria);
-        }
-        Pageable pageableRequest;
-        pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
-        query.with(pageableRequest);
+		List<Resource> resources = new ArrayList<>();
+		Criteria criteria = setParamToCriteria(fhirContext, status, identifier, schedule, date, slotType, resid,
+				_lastUpdated, _tag, _profile, _query, _security, _content);
+		Query query = new Query();
+		if (criteria != null) {
+			query = Query.query(criteria);
+		}
+		Pageable pageableRequest;
+		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
+		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
-        List<SlotEntity> slotEntitys = mongo.find(query, SlotEntity.class);
-        if (slotEntitys != null) {
-            for (SlotEntity item : slotEntitys) {
-                Slot slot = transform(item);
-                resources.add(slot);
-            }
-        }
-        return resources;
-    }
+		List<SlotEntity> slotEntitys = mongo.find(query, SlotEntity.class);
+		if (slotEntitys != null) {
+			for (SlotEntity item : slotEntitys) {
+				Slot slot = transform(item);
+				resources.add(slot);
+			}
+		}
+		return resources;
+	}
 
-    public long findMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, TokenParam status,
-            TokenParam identifier, ReferenceParam schedule, DateRangeParam date, TokenParam slotType, TokenParam resid,
-            DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-            StringParam _content) {
-        long total = 0;
-        Criteria criteria = setParamToCriteria(fhirContext, active, status, identifier, schedule, date, slotType, resid,
-                _lastUpdated, _tag, _profile, _query, _security, _content);
+	public long findMatchesAdvancedTotal(FhirContext fhirContext, TokenParam status, TokenParam identifier,
+			ReferenceParam schedule, DateRangeParam date, TokenParam slotType, TokenParam resid,
+			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
+			StringParam _content) {
+		long total = 0;
+		Criteria criteria = setParamToCriteria(fhirContext, status, identifier, schedule, date, slotType, resid,
+				_lastUpdated, _tag, _profile, _query, _security, _content);
 
-        Query query = new Query();
-        if (criteria != null) {
-            query = Query.query(criteria);
-        }
-        total = mongo.count(query, SlotEntity.class);
-        return total;
-    }
+		Query query = new Query();
+		if (criteria != null) {
+			query = Query.query(criteria);
+		}
+		total = mongo.count(query, SlotEntity.class);
+		return total;
+	}
 
-    private Criteria setParamToCriteria(FhirContext fhirContext, TokenParam active, TokenParam status,
-            TokenParam identifier, ReferenceParam schedule, DateRangeParam date, TokenParam slotType, TokenParam resid,
-            DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-            StringParam _content) {
-        Criteria criteria = null;
-        criteria = Criteria.where("$where").is("1==1");
-        // active
-        if (active != null) {
-            criteria = Criteria.where("active").is(active.getValue());
-        } else {
-            criteria = Criteria.where("active").is(true);
-        }
-        if (status != null) {
-            criteria.and("status").is(status.getValue());
-        }
-        // default
-        criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
-                identifier);
-        if (schedule != null) {
-            criteria.and("schedule.reference.myStringValue").is(schedule.getValue());
-        }
-        if (slotType != null) {
-            criteria.and("serviceType").is(slotType.getValue());
-        }
-        if (date != null) {
-            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "start", date);
-        }
-        return criteria;
-    }
+	private Criteria setParamToCriteria(FhirContext fhirContext, TokenParam status, TokenParam identifier,
+			ReferenceParam schedule, DateRangeParam date, TokenParam slotType, TokenParam resid,
+			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
+			StringParam _content) {
+		Criteria criteria = null;
+		criteria = Criteria.where("$where").is("1==1");
+		// active
+		criteria = Criteria.where("active").is(true);
 
-    @Override
-    protected String getProfile() {
-        return "Slot-v1.0";
-    }
+		if (status != null) {
+			criteria.and("status").is(status.getValue());
+		}
+		// default
+		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+				identifier);
+		if (schedule != null) {
+			criteria.and("schedule.reference.myStringValue").is(schedule.getValue());
+		}
+		if (slotType != null) {
+			criteria.and("serviceType").is(slotType.getValue());
+		}
+		if (date != null) {
+			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "start", date);
+		}
+		return criteria;
+	}
 
-    @Override
-    protected SlotEntity fromFhir(Slot obj) {
-        return SlotEntity.fromSlot(obj);
-    }
+	@Override
+	protected String getProfile() {
+		return "Slot-v1.0";
+	}
 
-    @Override
-    protected Slot toFhir(SlotEntity ent) {
-        return SlotEntity.toSlot(ent);
-    }
+	@Override
+	protected SlotEntity fromFhir(Slot obj) {
+		return SlotEntity.fromSlot(obj);
+	}
 
-    @Override
-    protected Class<? extends BaseResource> getEntityClass() {
-        return SlotEntity.class;
-    }
+	@Override
+	protected Slot toFhir(SlotEntity ent) {
+		return SlotEntity.toSlot(ent);
+	}
+
+	@Override
+	protected Class<? extends BaseResource> getEntityClass() {
+		return SlotEntity.class;
+	}
 }

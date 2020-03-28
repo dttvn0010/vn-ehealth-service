@@ -41,7 +41,8 @@ import vn.ehealth.hl7.fhir.medication.dao.impl.ImmunizationDao;
 import vn.ehealth.hl7.fhir.medication.entity.ImmunizationEntity;
 
 @Component
-public class ImmunizationProvider extends BaseController<ImmunizationEntity, Immunization> implements IResourceProvider {
+public class ImmunizationProvider extends BaseController<ImmunizationEntity, Immunization>
+		implements IResourceProvider {
 	@Autowired
 	ImmunizationDao immunizationDao;
 
@@ -52,7 +53,6 @@ public class ImmunizationProvider extends BaseController<ImmunizationEntity, Imm
 
 	@Search
 	public IBundleProvider searchImmunization(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = ConstantKeys.SP_DOSE_SEQUENCE) NumberParam doseSequence,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
@@ -86,25 +86,25 @@ public class ImmunizationProvider extends BaseController<ImmunizationEntity, Imm
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = immunizationDao.search(fhirContext, active, date, doseSequence, identifier, location,
-						lotNumber, manufacturer, notgiven, patient, practitioner, reaction, reactionDate, reason,
-						reasonNotGiven, status, vaccineCode, resid, _lastUpdated, _tag, _profile, _query, _security,
-						_content, _page, sortParam, count);
+				results = immunizationDao.search(fhirContext, date, doseSequence, identifier, location, lotNumber,
+						manufacturer, notgiven, patient, practitioner, reaction, reactionDate, reason, reasonNotGiven,
+						status, vaccineCode, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
+						sortParam, count);
 			} else
-				results = immunizationDao.search(fhirContext, active, date, doseSequence, identifier, location,
-						lotNumber, manufacturer, notgiven, patient, practitioner, reaction, reactionDate, reason,
-						reasonNotGiven, status, vaccineCode, resid, _lastUpdated, _tag, _profile, _query, _security,
-						_content, _page, null, count);
+				results = immunizationDao.search(fhirContext, date, doseSequence, identifier, location, lotNumber,
+						manufacturer, notgiven, patient, practitioner, reaction, reactionDate, reason, reasonNotGiven,
+						status, vaccineCode, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
+						null, count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(immunizationDao.countMatchesAdvancedTotal(fhirContext,
-							active, date, doseSequence, identifier, location, lotNumber, manufacturer, notgiven,
-							patient, practitioner, reaction, reactionDate, reason, reasonNotGiven, status, vaccineCode,
-							resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
+					return Integer.parseInt(String.valueOf(immunizationDao.countMatchesAdvancedTotal(fhirContext, date,
+							doseSequence, identifier, location, lotNumber, manufacturer, notgiven, patient,
+							practitioner, reaction, reactionDate, reason, reasonNotGiven, status, vaccineCode, resid,
+							_lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -135,7 +135,6 @@ public class ImmunizationProvider extends BaseController<ImmunizationEntity, Imm
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = ConstantKeys.SP_DOSE_SEQUENCE) NumberParam doseSequence,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
@@ -159,15 +158,15 @@ public class ImmunizationProvider extends BaseController<ImmunizationEntity, Imm
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = immunizationDao.countMatchesAdvancedTotal(fhirContext, active, date, doseSequence, identifier,
-				location, lotNumber, manufacturer, notgiven, patient, practitioner, reaction, reactionDate, reason,
+		long total = immunizationDao.countMatchesAdvancedTotal(fhirContext, date, doseSequence, identifier, location,
+				lotNumber, manufacturer, notgiven, patient, practitioner, reaction, reactionDate, reason,
 				reasonNotGiven, status, vaccineCode, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<ImmunizationEntity, Immunization> getDao() {
-        return immunizationDao;
-    }
+	@Override
+	protected BaseDao<ImmunizationEntity, Immunization> getDao() {
+		return immunizationDao;
+	}
 }

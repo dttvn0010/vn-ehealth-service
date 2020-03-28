@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.InstantType;
@@ -61,6 +62,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         ent.active = (true);
         ent.version = (version);
         ent.resCreated = (new Date());
+        ent.fhirVersion = "R4";
         return ent;
     }
     
@@ -159,10 +161,10 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         return null;
     }
     
-    @SuppressWarnings({ "deprecation", "unchecked" })
-    public List<FHIR> getHistory(IdType theId, InstantType theSince, DateRangeParam theAt, StringParam _page,
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public List<IBaseResource> getHistory(IdType theId, InstantType theSince, DateRangeParam theAt, StringParam _page,
             Integer count) {
-        var retVal = new ArrayList<FHIR>();
+    	List<IBaseResource> retVal = new ArrayList<>();
         Criteria criteria = null;
         criteria = Criteria.where("$where").is("1==1");
         if (theId != null && theId.hasIdPart()) {
@@ -179,10 +181,10 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         }
         if (criteria != null) {
             Query qry = Query.query(criteria);
-//            Pageable pageableRequest;
-//            pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-//                    count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
-//            qry.with(pageableRequest);
+            Pageable pageableRequest;
+            pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+                    count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
+            qry.with(pageableRequest);
             qry.with(new Sort(Sort.Direction.DESC, "resUpdated"));
             qry.with(new Sort(Sort.Direction.DESC, "resCreated"));
 
@@ -198,11 +200,42 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         return retVal;
     }
     
+    public int countHistory(IdType theId, InstantType theSince, DateRangeParam theAt, StringParam _page,
+            Integer count) {
+    	int retVal = 0;
+        Criteria criteria = null;
+        criteria = Criteria.where("$where").is("1==1");
+        if (theId != null && theId.hasIdPart()) {
+            String fhirId = theId.getIdPart();
+            criteria.and(ConstantKeys.SP_FHIR_ID).is(fhirId);
+        }
+        if (theAt != null) {
+            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "resUpdated", theAt);
+        }
+        if (theSince != null) {
+            Date dateParam = theSince.getValue();
+            // criteria.and("resCreated").gte(dateParam).lte(dateNow);
+            criteria.and("resCreated").gte(dateParam);
+        }
+        if (criteria != null) {
+            Query qry = Query.query(criteria);
+
+            retVal = (int) mongo.count(qry, getEntityClass());
+        }
+        return retVal;
+    }
+    
     @SuppressWarnings("unchecked")
     public List<FHIR> findByCriteria(Criteria criteria) {
         var query = Query.query(criteria);
         var lst = mongo.find(query, getEntityClass());
         return DataConvertUtil.transform(lst, x -> transform((ENT)x));
+    }
+    
+    public int countByCriteria(Criteria criteria) {
+        var query = Query.query(criteria);
+        int count = (int) mongo.count(query, getEntityClass());
+        return count;
     }
         
     public FHIR readRef(Reference ref) {
@@ -213,8 +246,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
             if(!ref.getReference().startsWith(obj.getResourceType() + "/")) {
                 return null;
             }
-        }
-        
+        }        
         return obj;
     }
     

@@ -54,7 +54,6 @@ public class ClinicalImpressionProvider extends BaseController<ClinicalImpressio
 
 	@Search
 	public IBundleProvider searchClinicalImpression(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ACTION) ReferenceParam action,
 			@OptionalParam(name = ConstantKeys.SP_ASSESSOR) ReferenceParam assessor,
 			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
@@ -87,15 +86,15 @@ public class ClinicalImpressionProvider extends BaseController<ClinicalImpressio
 			List<IBaseResource> results = new ArrayList<>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = clinicalImpressionDao.search(fhirContext, active, action, assessor, context, date,
-						findingCode, findingRef, identifier, investigation, patient, previous, problem, status, subject,
-						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count,
-						includes);
+				results = clinicalImpressionDao.search(fhirContext, action, assessor, context, date, findingCode,
+						findingRef, identifier, investigation, patient, previous, problem, status, subject, resid,
+						_lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count, includes);
 			} else
-				results = clinicalImpressionDao.search(fhirContext, active, action, assessor, context, date,
-						findingCode, findingRef, identifier, investigation, patient, previous, problem, status, subject,
-						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count, includes);
-			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
+				results = clinicalImpressionDao.search(fhirContext, action, assessor, context, date, findingCode,
+						findingRef, identifier, investigation, patient, previous, problem, status, subject, resid,
+						_lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count, includes);
+			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x
+			// -> x);
 			final List<IBaseResource> finalResults = results;
 
 			return new IBundleProvider() {
@@ -103,7 +102,7 @@ public class ClinicalImpressionProvider extends BaseController<ClinicalImpressio
 				@Override
 				public Integer size() {
 					return Integer.parseInt(String.valueOf(clinicalImpressionDao.countMatchesAdvancedTotal(fhirContext,
-							active, action, assessor, context, date, findingCode, findingRef, identifier, investigation,
+							action, assessor, context, date, findingCode, findingRef, identifier, investigation,
 							patient, previous, problem, status, subject, resid, _lastUpdated, _tag, _profile, _query,
 							_security, _content)));
 				}
@@ -137,7 +136,6 @@ public class ClinicalImpressionProvider extends BaseController<ClinicalImpressio
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ACTION) ReferenceParam action,
 			@OptionalParam(name = ConstantKeys.SP_ASSESSOR) ReferenceParam assessor,
 			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
@@ -159,9 +157,9 @@ public class ClinicalImpressionProvider extends BaseController<ClinicalImpressio
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = clinicalImpressionDao.countMatchesAdvancedTotal(fhirContext, active, action, assessor, context,
-				date, findingCode, findingRef, identifier, investigation, patient, previous, problem, status, subject,
-				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		long total = clinicalImpressionDao.countMatchesAdvancedTotal(fhirContext, action, assessor, context, date,
+				findingCode, findingRef, identifier, investigation, patient, previous, problem, status, subject, resid,
+				_lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}

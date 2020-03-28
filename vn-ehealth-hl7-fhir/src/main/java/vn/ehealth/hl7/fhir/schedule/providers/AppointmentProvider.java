@@ -51,7 +51,6 @@ public class AppointmentProvider extends BaseController<AppointmentEntity, Appoi
 
 	@Search
 	public IBundleProvider searchAppointment(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
 			@OptionalParam(name = ConstantKeys.SP_APPOINTMENT_TYPE) TokenParam appointmentType,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
@@ -80,21 +79,21 @@ public class AppointmentProvider extends BaseController<AppointmentEntity, Appoi
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = appointmentDao.search(fhirContext, active, actor, appointmentType, date, identifier,
-						incomingreferral, location, partStatus, patient, practitioner, serviceType, status, resid,
-						_lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count);
+				results = appointmentDao.search(fhirContext, actor, appointmentType, date, identifier, incomingreferral,
+						location, partStatus, patient, practitioner, serviceType, status, resid, _lastUpdated, _tag,
+						_profile, _query, _security, _content, _page, sortParam, count);
 			} else
-				results = appointmentDao.search(fhirContext, active, actor, appointmentType, date, identifier,
-						incomingreferral, location, partStatus, patient, practitioner, serviceType, status, resid,
-						_lastUpdated, _tag, _profile, _query, _security, _content, _page, "", count);
+				results = appointmentDao.search(fhirContext, actor, appointmentType, date, identifier, incomingreferral,
+						location, partStatus, patient, practitioner, serviceType, status, resid, _lastUpdated, _tag,
+						_profile, _query, _security, _content, _page, "", count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(appointmentDao.countMatchesAdvancedTotal(fhirContext, active,
-							actor, appointmentType, date, identifier, incomingreferral, location, partStatus, patient,
+					return Integer.parseInt(String.valueOf(appointmentDao.countMatchesAdvancedTotal(fhirContext, actor,
+							appointmentType, date, identifier, incomingreferral, location, partStatus, patient,
 							practitioner, serviceType, status, resid, _lastUpdated, _tag, _profile, _query, _security,
 							_content)));
 				}
@@ -127,7 +126,6 @@ public class AppointmentProvider extends BaseController<AppointmentEntity, Appoi
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
 			@OptionalParam(name = ConstantKeys.SP_APPOINTMENT_TYPE) TokenParam appointmentType,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
@@ -147,15 +145,15 @@ public class AppointmentProvider extends BaseController<AppointmentEntity, Appoi
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = appointmentDao.countMatchesAdvancedTotal(fhirContext, active, actor, appointmentType, date,
-				identifier, incomingreferral, location, partStatus, patient, practitioner, serviceType, status, resid,
-				_lastUpdated, _tag, _profile, _query, _security, _content);
+		long total = appointmentDao.countMatchesAdvancedTotal(fhirContext, actor, appointmentType, date, identifier,
+				incomingreferral, location, partStatus, patient, practitioner, serviceType, status, resid, _lastUpdated,
+				_tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<AppointmentEntity, Appointment> getDao() {
-        return appointmentDao;
-    }
+	@Override
+	protected BaseDao<AppointmentEntity, Appointment> getDao() {
+		return appointmentDao;
+	}
 }

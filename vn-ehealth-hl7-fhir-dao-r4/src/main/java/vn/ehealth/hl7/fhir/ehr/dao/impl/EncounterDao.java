@@ -32,7 +32,7 @@ import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(FhirContext ctx, TokenParam active, ReferenceParam appointment, TokenParam _class,
+	public List<IBaseResource> search(FhirContext ctx, ReferenceParam appointment, TokenParam _class,
 			DateRangeParam date, ReferenceParam diagnosis, ReferenceParam episodeofcare, TokenParam identifier,
 			ReferenceParam incomingreferral, NumberParam length, ReferenceParam location, DateRangeParam locationPeriod,
 			ReferenceParam partOf, ReferenceParam participant, TokenParam participantType, ReferenceParam patient,
@@ -42,7 +42,7 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 			StringParam _content, StringParam _page, String sortParam, Integer count, Set<Include> includes) {
 
 		List<IBaseResource> resources = new ArrayList<>();
-		Criteria criteria = setParamToCriteria(active, appointment, _class, date, diagnosis, episodeofcare, identifier,
+		Criteria criteria = setParamToCriteria(appointment, _class, date, diagnosis, episodeofcare, identifier,
 				incomingreferral, length, location, locationPeriod, partOf, participant, participantType, patient,
 				practitioner, reason, serviceProvider, specialArrangement, status, subject, type, resid, _lastUpdated,
 				_tag, _profile, _query, _security, _content);
@@ -60,76 +60,75 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
-		
+
 		List<EncounterEntity> encounterEntitys = mongo.find(query, EncounterEntity.class);
-		
-		String[] keys = {"subject", "episodeOfCare", "participant:individual", "appointment", 
-							"diagnosis:condition", "basedOn", "reasonReference", "account", 
-							"serviceProvider", "location:location", 
-							"hospitalization:origin", "hospitalization:destination"};
-		
+
+		String[] keys = { "subject", "episodeOfCare", "participant:individual", "appointment", "diagnosis:condition",
+				"basedOn", "reasonReference", "account", "serviceProvider", "location:location",
+				"hospitalization:origin", "hospitalization:destination" };
+
 		var includeMap = getIncludeMap(ResourceType.Encounter, keys, includes);
-		
+
 		if (encounterEntitys != null) {
 			for (EncounterEntity item : encounterEntitys) {
 				Encounter obj = transform(item);
-				
-				if(includeMap.get("subject") && obj.hasSubject()) {
+
+				if (includeMap.get("subject") && obj.hasSubject()) {
 					setReferenceResource(obj.getSubject());
 				}
-				
-				if(includeMap.get("episodeOfCare") && obj.hasEpisodeOfCare()) {
+
+				if (includeMap.get("episodeOfCare") && obj.hasEpisodeOfCare()) {
 					setReferenceResource(obj.getEpisodeOfCare());
 				}
-				
-				if(includeMap.get("participant:individual") && obj.hasParticipant()) {
+
+				if (includeMap.get("participant:individual") && obj.hasParticipant()) {
 					obj.getParticipant().forEach(x -> setReferenceResource(x.getIndividual()));
 				}
-				
-				if(includeMap.get("appointment") && obj.hasAppointment()) {
+
+				if (includeMap.get("appointment") && obj.hasAppointment()) {
 					setReferenceResource(obj.getAppointment());
 				}
-				
-				if(includeMap.get("diagnosis:condition") && obj.hasDiagnosis()) {
+
+				if (includeMap.get("diagnosis:condition") && obj.hasDiagnosis()) {
 					obj.getDiagnosis().forEach(x -> setReferenceResource(x.getCondition()));
 				}
-				
-				if(includeMap.get("basedOn") && obj.hasBasedOn()) {
+
+				if (includeMap.get("basedOn") && obj.hasBasedOn()) {
 					setReferenceResource(obj.getBasedOn());
 				}
-				
-				if(includeMap.get("reasonReference") && obj.hasReasonReference()) {
+
+				if (includeMap.get("reasonReference") && obj.hasReasonReference()) {
 					setReferenceResource(obj.getReasonReference());
 				}
-				
-				if(includeMap.get("account") && obj.hasAccount()) {
+
+				if (includeMap.get("account") && obj.hasAccount()) {
 					setReferenceResource(obj.getAccount());
 				}
-				
-				if(includeMap.get("serviceProvider") && obj.hasServiceProvider()) {
+
+				if (includeMap.get("serviceProvider") && obj.hasServiceProvider()) {
 					setReferenceResource(obj.getServiceProvider());
 				}
-				
-				if(includeMap.get("location:location") && obj.hasLocation()) {
+
+				if (includeMap.get("location:location") && obj.hasLocation()) {
 					obj.getLocation().forEach(x -> setReferenceResource(x.getLocation()));
 				}
-				
-				if(includeMap.get("hospitalization:origin") && obj.hasHospitalization()) {
+
+				if (includeMap.get("hospitalization:origin") && obj.hasHospitalization()) {
 					setReferenceResource(obj.getHospitalization().getOrigin());
 				}
-				
-				if(includeMap.get("hospitalization:destination") && obj.hasHospitalization()) {
+
+				if (includeMap.get("hospitalization:destination") && obj.hasHospitalization()) {
 					setReferenceResource(obj.getHospitalization().getDestination());
-				}				
-				
+				}
+
 				resources.add(obj);
 			}
 		}
 		return resources;
 	}
 
-	public long getTotal(FhirContext fhirContext, TokenParam active, ReferenceParam appointment, TokenParam _class,
-			DateRangeParam date, ReferenceParam diagnosis, ReferenceParam episodeofcare, TokenParam identifier,
+	public long getTotal(FhirContext fhirContext, ReferenceParam appointment, TokenParam _class, DateRangeParam date,
+			ReferenceParam diagnosis, ReferenceParam episodeofcare, TokenParam identifier,
 			ReferenceParam incomingreferral, NumberParam length, ReferenceParam location, DateRangeParam locationPeriod,
 			ReferenceParam partOf, ReferenceParam participant, TokenParam participantType, ReferenceParam patient,
 			ReferenceParam practitioner, TokenParam reason, ReferenceParam serviceProvider,
@@ -138,7 +137,7 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 			StringParam _content) {
 
 		long total = 0;
-		Criteria criteria = setParamToCriteria(active, appointment, _class, date, diagnosis, episodeofcare, identifier,
+		Criteria criteria = setParamToCriteria(appointment, _class, date, diagnosis, episodeofcare, identifier,
 				incomingreferral, length, location, locationPeriod, partOf, participant, participantType, patient,
 				practitioner, reason, serviceProvider, specialArrangement, status, subject, type, resid, _lastUpdated,
 				_tag, _profile, _query, _security, _content);
@@ -150,8 +149,8 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 		return total;
 	}
 
-	private Criteria setParamToCriteria(TokenParam active, ReferenceParam appointment, TokenParam _class,
-			DateRangeParam date, ReferenceParam diagnosis, ReferenceParam episodeofcare, TokenParam identifier,
+	private Criteria setParamToCriteria(ReferenceParam appointment, TokenParam _class, DateRangeParam date,
+			ReferenceParam diagnosis, ReferenceParam episodeofcare, TokenParam identifier,
 			ReferenceParam incomingreferral, NumberParam length, ReferenceParam location, DateRangeParam locationPeriod,
 			ReferenceParam partOf, ReferenceParam participant, TokenParam participantType, ReferenceParam patient,
 			ReferenceParam practitioner, TokenParam reason, ReferenceParam serviceProvider,
@@ -160,14 +159,9 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 			StringParam _content) {
 		Criteria criteria = null;
 		// active
-		if (active != null) {
-			criteria = Criteria.where("active").is(active);
-		} else {
-			criteria = Criteria.where("active").is(true);
-		}
+		criteria = Criteria.where("active").is(true);
 		// set param default
-		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
-				identifier);
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, identifier);
 		// appointment
 		if (appointment != null) {
 			if (appointment.getValue().indexOf("|") == -1) {
@@ -320,12 +314,11 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 		}
 		// type
 		if (type != null) {
-			criteria.and("type.coding.code").is(type.getValue())
-			        .and("type.coding.system").is(type.getSystem());
+			criteria.and("type.coding.code").is(type.getValue()).and("type.coding.system").is(type.getSystem());
 		}
 		return criteria;
 	}
-	
+
 	@Override
 	protected String getProfile() {
 		return "Encounter-v1.0";

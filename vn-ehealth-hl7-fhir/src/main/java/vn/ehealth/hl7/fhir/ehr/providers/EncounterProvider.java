@@ -43,7 +43,7 @@ import vn.ehealth.hl7.fhir.ehr.entity.EncounterEntity;
 
 @Component
 public class EncounterProvider extends BaseController<EncounterEntity, Encounter> implements IResourceProvider {
-	
+
 	@Autowired
 	EncounterDao encounterDao;
 
@@ -51,10 +51,9 @@ public class EncounterProvider extends BaseController<EncounterEntity, Encounter
 	public Class<? extends IBaseResource> getResourceType() {
 		return Encounter.class;
 	}
-	
+
 	@Search
 	public IBundleProvider searchEncounter(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_APPOINTMENT) ReferenceParam appointment,
 			@OptionalParam(name = ConstantKeys.SP_CLASS) TokenParam _class,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
@@ -94,30 +93,31 @@ public class EncounterProvider extends BaseController<EncounterEntity, Encounter
 			List<IBaseResource> results = new ArrayList<>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = encounterDao.search(fhirContext, active, appointment, _class, date, diagnosis, episodeofcare,
+				results = encounterDao.search(fhirContext, appointment, _class, date, diagnosis, episodeofcare,
 						identifier, incomingreferral, length, location, locationPeriod, partOf, participant,
 						participantType, patient, practitioner, reason, serviceProvider, specialArrangement, status,
 						subject, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
 						sortParam, count, includes);
 				// return results;
 			} else
-				results = encounterDao.search(fhirContext, active, appointment, _class, date, diagnosis, episodeofcare,
+				results = encounterDao.search(fhirContext, appointment, _class, date, diagnosis, episodeofcare,
 						identifier, incomingreferral, length, location, locationPeriod, partOf, participant,
 						participantType, patient, practitioner, reason, serviceProvider, specialArrangement, status,
 						subject, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null,
 						count, includes);
-			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
+			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x
+			// -> x);
 			final List<IBaseResource> finalResults = results;
 
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(encounterDao.getTotal(fhirContext, active, appointment,
-							_class, date, diagnosis, episodeofcare, identifier, incomingreferral, length, location,
-							locationPeriod, partOf, participant, participantType, patient, practitioner, reason,
-							serviceProvider, specialArrangement, status, subject, type, resid, _lastUpdated, _tag,
-							_profile, _query, _security, _content)));
+					return Integer.parseInt(String.valueOf(encounterDao.getTotal(fhirContext, appointment, _class, date,
+							diagnosis, episodeofcare, identifier, incomingreferral, length, location, locationPeriod,
+							partOf, participant, participantType, patient, practitioner, reason, serviceProvider,
+							specialArrangement, status, subject, type, resid, _lastUpdated, _tag, _profile, _query,
+							_security, _content)));
 				}
 
 				@Override
@@ -148,7 +148,6 @@ public class EncounterProvider extends BaseController<EncounterEntity, Encounter
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_APPOINTMENT) ReferenceParam appointment,
 			@OptionalParam(name = ConstantKeys.SP_CLASS) TokenParam _class,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
@@ -178,16 +177,16 @@ public class EncounterProvider extends BaseController<EncounterEntity, Encounter
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = encounterDao.getTotal(fhirContext, active, appointment, _class, date, diagnosis, episodeofcare,
-				identifier, incomingreferral, length, location, locationPeriod, partOf, participant, participantType,
-				patient, practitioner, reason, serviceProvider, specialArrangement, status, subject, type, resid,
-				_lastUpdated, _tag, _profile, _query, _security, _content);
+		long total = encounterDao.getTotal(fhirContext, appointment, _class, date, diagnosis, episodeofcare, identifier,
+				incomingreferral, length, location, locationPeriod, partOf, participant, participantType, patient,
+				practitioner, reason, serviceProvider, specialArrangement, status, subject, type, resid, _lastUpdated,
+				_tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<EncounterEntity, Encounter> getDao() {
-        return encounterDao;
-    }
+	@Override
+	protected BaseDao<EncounterEntity, Encounter> getDao() {
+		return encounterDao;
+	}
 }

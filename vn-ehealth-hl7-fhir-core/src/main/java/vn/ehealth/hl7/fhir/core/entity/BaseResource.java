@@ -11,6 +11,7 @@ public abstract class BaseResource {
     public Date resDeleted;
     public String resMessage;
     public String resource;
+    public String fhirVersion;
     public List<String> profile;
     public Integer version = 1;
     public boolean active;

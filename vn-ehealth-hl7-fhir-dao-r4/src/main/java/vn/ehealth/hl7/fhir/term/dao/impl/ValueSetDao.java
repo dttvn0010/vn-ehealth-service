@@ -40,382 +40,376 @@ import vn.ehealth.hl7.fhir.term.entity.ValueSetExpansionEntity;
  */
 @Repository
 public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
- 
-    @SuppressWarnings("deprecation")
-    public List<Resource> search(FhirContext fhirContext, TokenParam active, DateRangeParam date,
-            StringParam description, UriParam expansion, TokenParam identifier, TokenParam jurisdiction,
-            StringParam name, StringParam publisher, UriParam reference, TokenParam status, StringParam title,
-            UriParam url, TokenParam version, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
-            UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content, StringParam _page,
-            String sortParam, Integer count) {
-        List<Resource> resources = new ArrayList<>();
 
-        Criteria criteria = null;
-        criteria = Criteria.where("active").is(true);
-        // default
-        criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
-                identifier);
-        // custom
-        if (date != null) {
-            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "date", date);
-        }
-        if (description != null) {
-            criteria.and("description").is(description.getValue());
-        }
-        if (jurisdiction != null) {
-            criteria.and("jurisdiction").regex(jurisdiction.getValue());
-        }
-        if (name != null) {
-            criteria.and("name").regex(name.getValue());
-        }
+	@SuppressWarnings("deprecation")
+	public List<Resource> search(FhirContext fhirContext, DateRangeParam date, StringParam description,
+			UriParam expansion, TokenParam identifier, TokenParam jurisdiction, StringParam name, StringParam publisher,
+			UriParam reference, TokenParam status, StringParam title, UriParam url, TokenParam version,
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, StringParam _page, String sortParam, Integer count) {
+		List<Resource> resources = new ArrayList<>();
 
-        if (publisher != null) {
-            criteria.and("publisher").regex(publisher.getValue());
-        }
+		Criteria criteria = null;
+		criteria = Criteria.where("active").is(true);
+		// default
+		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+				identifier);
+		// custom
+		if (date != null) {
+			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "date", date);
+		}
+		if (description != null) {
+			criteria.and("description").is(description.getValue());
+		}
+		if (jurisdiction != null) {
+			criteria.and("jurisdiction").regex(jurisdiction.getValue());
+		}
+		if (name != null) {
+			criteria.and("name").regex(name.getValue());
+		}
 
-        if (status != null) {
-            criteria.and("status").regex(status.getValue());
-        }
+		if (publisher != null) {
+			criteria.and("publisher").regex(publisher.getValue());
+		}
 
-        if (title != null) {
-            criteria.and("title").regex(title.getValue());
-        }
-        if (url != null) {
-            criteria.and("url").regex(url.getValue());
-        }
-        if (version != null) {
-            criteria.and("version").regex(version.getValue());
-        }
+		if (status != null) {
+			criteria.and("status").regex(status.getValue());
+		}
 
-        if (criteria != null) {
-            Query query = Query.query(criteria);
-            Pageable pageableRequest;
-            pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                    count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
-            query.with(pageableRequest);
-    		if (sortParam != null && !sortParam.equals("")) {
-    			query.with(new Sort(Sort.Direction.DESC, sortParam));
-    		} else {
-    			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-    			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
-    		}
-            List<ValueSetEntity> results = mongo.find(query, ValueSetEntity.class);
-            if (results != null && results.size() > 0) {
-                if (reference != null || expansion != null) {
-                    if (reference != null && expansion != null) {
-                        for (ValueSetEntity valueSetEntity : results) {
-                            // composes
-                            Criteria criteria1 = null;
-                            criteria1 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
-                            Query qry1 = Query.query(criteria1);
-                            ValueSetComposeEntity valueSetComposeEntity = mongo.findOne(qry1,
-                                    ValueSetComposeEntity.class);
-                            List<ConceptSetEntity> ConceptSetEntitys = new ArrayList<>();
-                            if (valueSetComposeEntity != null) {
-                                Criteria criteria2 = null;
-                                criteria2 = Criteria.where("valueSetComposeId")
-                                        .is(valueSetComposeEntity.id.toString());
-                                criteria2.and("type").is("include").and("system").is(reference.getValue());
-                                Query qry2 = Query.query(criteria2);
-                                ConceptSetEntitys = mongo.find(qry2, ConceptSetEntity.class);
-                            }
+		if (title != null) {
+			criteria.and("title").regex(title.getValue());
+		}
+		if (url != null) {
+			criteria.and("url").regex(url.getValue());
+		}
+		if (version != null) {
+			criteria.and("version").regex(version.getValue());
+		}
 
-                            // Expansion
-                            Criteria criteria3 = null;
-                            criteria3 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
-                            if (expansion != null) {
-                                criteria3.and("identifier.myStringValue").regex(expansion.getValue());
-                            }
-                            Query qry3 = Query.query(criteria3);
-                            ValueSetExpansionEntity expansio = mongo.findOne(qry3, ValueSetExpansionEntity.class);
-                            if (ConceptSetEntitys != null && ConceptSetEntitys.size() > 0 && expansio != null) {
-                                resources.add(transform(valueSetEntity));
-                            }
-                        }
-                    } else if (reference != null && expansion == null) {
-                        for (ValueSetEntity valueSetEntity : results) {
-                            // composes
-                            Criteria criteria1 = null;
-                            criteria1 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
-                            Query qry1 = Query.query(criteria1);
-                            ValueSetComposeEntity valueSetComposeEntity = mongo.findOne(qry1,
-                                    ValueSetComposeEntity.class);
-                            List<ConceptSetEntity> ConceptSetEntitys = new ArrayList<>();
-                            if (valueSetComposeEntity != null) {
-                                Criteria criteria2 = null;
-                                criteria2 = Criteria.where("valueSetComposeId")
-                                        .is(valueSetComposeEntity.id.toString());
-                                criteria2.and("type").is("include").and("system").is(reference.getValue());
-                                Query qry2 = Query.query(criteria2);
-                                ConceptSetEntitys = mongo.find(qry2, ConceptSetEntity.class);
-                            }
-                            if (ConceptSetEntitys != null && ConceptSetEntitys.size() > 0) {
-                                resources.add(transform(valueSetEntity));
-                            }
-                        }
-                    } else {
-                        for (ValueSetEntity valueSetEntity : results) {
-                            // Expansion
-                            Criteria criteria3 = null;
-                            criteria3 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
-                            if (expansion != null) {
-                                criteria3.and("identifier.myStringValue").regex(expansion.getValue());
-                            }
-                            Query qry3 = Query.query(criteria3);
-                            ValueSetExpansionEntity expansio = mongo.findOne(qry3, ValueSetExpansionEntity.class);
-                            if (expansio != null) {
-                                resources.add(transform(valueSetEntity));
-                            }
-                        }
-                    }
+		if (criteria != null) {
+			Query query = Query.query(criteria);
+			Pageable pageableRequest;
+			pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+					count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
+			query.with(pageableRequest);
+			if (sortParam != null && !sortParam.equals("")) {
+				query.with(new Sort(Sort.Direction.DESC, sortParam));
+			} else {
+				query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
+				query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+			}
+			List<ValueSetEntity> results = mongo.find(query, ValueSetEntity.class);
+			if (results != null && results.size() > 0) {
+				if (reference != null || expansion != null) {
+					if (reference != null && expansion != null) {
+						for (ValueSetEntity valueSetEntity : results) {
+							// composes
+							Criteria criteria1 = null;
+							criteria1 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
+							Query qry1 = Query.query(criteria1);
+							ValueSetComposeEntity valueSetComposeEntity = mongo.findOne(qry1,
+									ValueSetComposeEntity.class);
+							List<ConceptSetEntity> ConceptSetEntitys = new ArrayList<>();
+							if (valueSetComposeEntity != null) {
+								Criteria criteria2 = null;
+								criteria2 = Criteria.where("valueSetComposeId").is(valueSetComposeEntity.id.toString());
+								criteria2.and("type").is("include").and("system").is(reference.getValue());
+								Query qry2 = Query.query(criteria2);
+								ConceptSetEntitys = mongo.find(qry2, ConceptSetEntity.class);
+							}
 
-                } else {
-                    for (ValueSetEntity valueSetEntity : results) {
-                        resources.add(transform(valueSetEntity));
-                    }
-                }
-            }
-        }
-        return resources;
-    }
+							// Expansion
+							Criteria criteria3 = null;
+							criteria3 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
+							if (expansion != null) {
+								criteria3.and("identifier.myStringValue").regex(expansion.getValue());
+							}
+							Query qry3 = Query.query(criteria3);
+							ValueSetExpansionEntity expansio = mongo.findOne(qry3, ValueSetExpansionEntity.class);
+							if (ConceptSetEntitys != null && ConceptSetEntitys.size() > 0 && expansio != null) {
+								resources.add(transform(valueSetEntity));
+							}
+						}
+					} else if (reference != null && expansion == null) {
+						for (ValueSetEntity valueSetEntity : results) {
+							// composes
+							Criteria criteria1 = null;
+							criteria1 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
+							Query qry1 = Query.query(criteria1);
+							ValueSetComposeEntity valueSetComposeEntity = mongo.findOne(qry1,
+									ValueSetComposeEntity.class);
+							List<ConceptSetEntity> ConceptSetEntitys = new ArrayList<>();
+							if (valueSetComposeEntity != null) {
+								Criteria criteria2 = null;
+								criteria2 = Criteria.where("valueSetComposeId").is(valueSetComposeEntity.id.toString());
+								criteria2.and("type").is("include").and("system").is(reference.getValue());
+								Query qry2 = Query.query(criteria2);
+								ConceptSetEntitys = mongo.find(qry2, ConceptSetEntity.class);
+							}
+							if (ConceptSetEntitys != null && ConceptSetEntitys.size() > 0) {
+								resources.add(transform(valueSetEntity));
+							}
+						}
+					} else {
+						for (ValueSetEntity valueSetEntity : results) {
+							// Expansion
+							Criteria criteria3 = null;
+							criteria3 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
+							if (expansion != null) {
+								criteria3.and("identifier.myStringValue").regex(expansion.getValue());
+							}
+							Query qry3 = Query.query(criteria3);
+							ValueSetExpansionEntity expansio = mongo.findOne(qry3, ValueSetExpansionEntity.class);
+							if (expansio != null) {
+								resources.add(transform(valueSetEntity));
+							}
+						}
+					}
 
-    public List<ValueSetContainEntity> checkHasChild(String valueSetExpansionId,
-            List<ValueSetExpansionContainsComponent> expansions, String parentId) {
-        List<ValueSetContainEntity> valueSetContainEntitys = new ArrayList<>();
-        for (ValueSetExpansionContainsComponent v : expansions) {
-            ValueSetContainEntity valueSetContainEntity = new ValueSetContainEntity();
-            valueSetContainEntity.code = (v.getCode());
-            valueSetContainEntity.system = (v.getSystem());
-            valueSetContainEntity._abstract = (v.getAbstract());
-            valueSetContainEntity.inactive = (v.getInactive());
-            valueSetContainEntity.version = (Integer.parseInt(v.getVersion()));
-            valueSetContainEntity.display = (v.getDisplay());
-            valueSetContainEntity.valueSetExpansionId = (valueSetExpansionId);
-            valueSetContainEntity.parentContainId = (parentId);
-            // designation
-            if (v.hasDesignation()) {
-                List<ConceptReferenceDesignationEntity> conceptDesignationEntitys = new ArrayList<>();
-                for (ConceptReferenceDesignationComponent conceptReferenceDesignationComponent : v.getDesignation()) {
-                    ConceptReferenceDesignationEntity conceptDesignationEntity = new ConceptReferenceDesignationEntity();
-                    conceptDesignationEntity.language = (conceptReferenceDesignationComponent.getLanguage());
-                    conceptDesignationEntity.use = BaseCoding.fromCoding(conceptReferenceDesignationComponent.getUse());
-                    conceptDesignationEntity.value = (conceptReferenceDesignationComponent.getValue());
-                    conceptDesignationEntitys.add(conceptDesignationEntity);
-                }
-                valueSetContainEntity.designation = (conceptDesignationEntitys);
-            }
-            mongo.save(valueSetContainEntity);
-            if (v.hasContains()) {
-                List<ValueSetContainEntity> valueSetContainEntitytmps = new ArrayList<>();
-                valueSetContainEntitytmps = checkHasChild(valueSetExpansionId, v.getContains(),
-                        valueSetContainEntity.id.toString());
-                valueSetContainEntity.contains = (valueSetContainEntitytmps);
-            }
-            valueSetContainEntitys.add(valueSetContainEntity);
-        }
-        return valueSetContainEntitys;
-    }
+				} else {
+					for (ValueSetEntity valueSetEntity : results) {
+						resources.add(transform(valueSetEntity));
+					}
+				}
+			}
+		}
+		return resources;
+	}
 
-    public ValueSetComposeEntity composes(ValueSetComposeEntity valueSetComposeEntity) {
-        if (valueSetComposeEntity != null) {
-            Criteria criteria2 = null;
-            criteria2 = Criteria.where("valueSetComposeId").is(valueSetComposeEntity.id.toString());
-            Query qry2 = Query.query(criteria2);
-            List<ConceptSetEntity> ConceptSetEntitys = mongo.find(qry2, ConceptSetEntity.class);
-            for (ConceptSetEntity ConceptSetEntity : ConceptSetEntitys) {
-                Criteria criteria3 = null;
-                criteria3 = Criteria.where("codeSystemId").is(ConceptSetEntity.id.toString())
-                        .and("parentConceptId").is("");
-                Query qry3 = Query.query(criteria3);
-                List<ConceptEntity> conceptEntitys = mongo.find(qry3, ConceptEntity.class);
-                if(conceptEntitys != null) {
-                    ConceptSetEntity.concept = new ArrayList<>();
-                    conceptEntitys.forEach(x -> {
-                        ConceptSetEntity.concept.add(new ConceptReferenceEntity(x.code, x.display));
-                    });
-                }                           
-            }
-            valueSetComposeEntity.include = (ConceptSetEntitys);
-        }
-        return valueSetComposeEntity;
-    }
+	public List<ValueSetContainEntity> checkHasChild(String valueSetExpansionId,
+			List<ValueSetExpansionContainsComponent> expansions, String parentId) {
+		List<ValueSetContainEntity> valueSetContainEntitys = new ArrayList<>();
+		for (ValueSetExpansionContainsComponent v : expansions) {
+			ValueSetContainEntity valueSetContainEntity = new ValueSetContainEntity();
+			valueSetContainEntity.code = (v.getCode());
+			valueSetContainEntity.system = (v.getSystem());
+			valueSetContainEntity._abstract = (v.getAbstract());
+			valueSetContainEntity.inactive = (v.getInactive());
+			valueSetContainEntity.version = (Integer.parseInt(v.getVersion()));
+			valueSetContainEntity.display = (v.getDisplay());
+			valueSetContainEntity.valueSetExpansionId = (valueSetExpansionId);
+			valueSetContainEntity.parentContainId = (parentId);
+			// designation
+			if (v.hasDesignation()) {
+				List<ConceptReferenceDesignationEntity> conceptDesignationEntitys = new ArrayList<>();
+				for (ConceptReferenceDesignationComponent conceptReferenceDesignationComponent : v.getDesignation()) {
+					ConceptReferenceDesignationEntity conceptDesignationEntity = new ConceptReferenceDesignationEntity();
+					conceptDesignationEntity.language = (conceptReferenceDesignationComponent.getLanguage());
+					conceptDesignationEntity.use = BaseCoding.fromCoding(conceptReferenceDesignationComponent.getUse());
+					conceptDesignationEntity.value = (conceptReferenceDesignationComponent.getValue());
+					conceptDesignationEntitys.add(conceptDesignationEntity);
+				}
+				valueSetContainEntity.designation = (conceptDesignationEntitys);
+			}
+			mongo.save(valueSetContainEntity);
+			if (v.hasContains()) {
+				List<ValueSetContainEntity> valueSetContainEntitytmps = new ArrayList<>();
+				valueSetContainEntitytmps = checkHasChild(valueSetExpansionId, v.getContains(),
+						valueSetContainEntity.id.toString());
+				valueSetContainEntity.contains = (valueSetContainEntitytmps);
+			}
+			valueSetContainEntitys.add(valueSetContainEntity);
+		}
+		return valueSetContainEntitys;
+	}
 
-    public ValueSetExpansionEntity expansions(ValueSetExpansionEntity valueSetExpansionEntity) {
-        if (valueSetExpansionEntity != null) {
-            Criteria criteria2 = null;
-            criteria2 = Criteria.where("valueSetExpansionId").is(valueSetExpansionEntity.id.toString())
-                    .and("parentContainId").is("");
-            Query qry2 = Query.query(criteria2);
-            List<ValueSetContainEntity> valueSetContainEntitys = mongo.find(qry2, ValueSetContainEntity.class);
-            List<ValueSetContainEntity> valueSetContainTmps = concepts(valueSetContainEntitys,
-                    valueSetExpansionEntity.id.toString());
-            valueSetExpansionEntity.contains = (valueSetContainTmps);
-        }
-        return valueSetExpansionEntity;
-    }
+	public ValueSetComposeEntity composes(ValueSetComposeEntity valueSetComposeEntity) {
+		if (valueSetComposeEntity != null) {
+			Criteria criteria2 = null;
+			criteria2 = Criteria.where("valueSetComposeId").is(valueSetComposeEntity.id.toString());
+			Query qry2 = Query.query(criteria2);
+			List<ConceptSetEntity> ConceptSetEntitys = mongo.find(qry2, ConceptSetEntity.class);
+			for (ConceptSetEntity ConceptSetEntity : ConceptSetEntitys) {
+				Criteria criteria3 = null;
+				criteria3 = Criteria.where("codeSystemId").is(ConceptSetEntity.id.toString()).and("parentConceptId")
+						.is("");
+				Query qry3 = Query.query(criteria3);
+				List<ConceptEntity> conceptEntitys = mongo.find(qry3, ConceptEntity.class);
+				if (conceptEntitys != null) {
+					ConceptSetEntity.concept = new ArrayList<>();
+					conceptEntitys.forEach(x -> {
+						ConceptSetEntity.concept.add(new ConceptReferenceEntity(x.code, x.display));
+					});
+				}
+			}
+			valueSetComposeEntity.include = (ConceptSetEntitys);
+		}
+		return valueSetComposeEntity;
+	}
 
-    public List<ValueSetContainEntity> concepts(List<ValueSetContainEntity> concepts, String valueSetExpansionId) {
-        List<ValueSetContainEntity> conceptmps = new ArrayList<>();
-        if (concepts.size() > 0) {
-            for (ValueSetContainEntity conceptEntity : concepts) {
-                Criteria criteria2 = null;
-                criteria2 = Criteria.where("valueSetExpansionId").regex(valueSetExpansionId);
-                criteria2.and("parentContainId").regex(conceptEntity.id.toString());
-                Query qry2 = Query.query(criteria2);
-                List<ValueSetContainEntity> conceptresultmps = mongo.find(qry2, ValueSetContainEntity.class);
-                if (conceptresultmps.size() > 0) {
-                    concepts(conceptresultmps, valueSetExpansionId);
-                    conceptEntity.contains = (conceptresultmps);
-                }
-            }
-            conceptmps.addAll(concepts);
-        }
-        return conceptmps;
-    }
+	public ValueSetExpansionEntity expansions(ValueSetExpansionEntity valueSetExpansionEntity) {
+		if (valueSetExpansionEntity != null) {
+			Criteria criteria2 = null;
+			criteria2 = Criteria.where("valueSetExpansionId").is(valueSetExpansionEntity.id.toString())
+					.and("parentContainId").is("");
+			Query qry2 = Query.query(criteria2);
+			List<ValueSetContainEntity> valueSetContainEntitys = mongo.find(qry2, ValueSetContainEntity.class);
+			List<ValueSetContainEntity> valueSetContainTmps = concepts(valueSetContainEntitys,
+					valueSetExpansionEntity.id.toString());
+			valueSetExpansionEntity.contains = (valueSetContainTmps);
+		}
+		return valueSetExpansionEntity;
+	}
 
-    public long getTotal(FhirContext ctx, DateRangeParam date, StringParam description, UriParam expansion,
-            TokenParam identifier, TokenParam jurisdiction, StringParam name, StringParam publisher, UriParam reference,
-            TokenParam status, StringParam title, UriParam url, TokenParam version, TokenParam resid,
-            DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-            StringParam _content) {
-        List<Resource> resources = new ArrayList<>();
+	public List<ValueSetContainEntity> concepts(List<ValueSetContainEntity> concepts, String valueSetExpansionId) {
+		List<ValueSetContainEntity> conceptmps = new ArrayList<>();
+		if (concepts.size() > 0) {
+			for (ValueSetContainEntity conceptEntity : concepts) {
+				Criteria criteria2 = null;
+				criteria2 = Criteria.where("valueSetExpansionId").regex(valueSetExpansionId);
+				criteria2.and("parentContainId").regex(conceptEntity.id.toString());
+				Query qry2 = Query.query(criteria2);
+				List<ValueSetContainEntity> conceptresultmps = mongo.find(qry2, ValueSetContainEntity.class);
+				if (conceptresultmps.size() > 0) {
+					concepts(conceptresultmps, valueSetExpansionId);
+					conceptEntity.contains = (conceptresultmps);
+				}
+			}
+			conceptmps.addAll(concepts);
+		}
+		return conceptmps;
+	}
 
-        Criteria criteria = null;
-        criteria = Criteria.where("active").is(true);
-        // default
-        criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
-                identifier);
-        // custom
-        if (date != null) {
-            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "date", date);
-        }
-        if (description != null) {
-            criteria.and("description").is(description.getValue());
-        }
-        if (identifier != null) {
-            criteria.and("identifiers.system").is(identifier.getSystem()).and("identifiers.value")
-                    .is(identifier.getValue());
-        }
-        if (jurisdiction != null) {
-            criteria.and("jurisdiction").regex(jurisdiction.getValue());
-        }
-        if (name != null) {
-            criteria.and("name").regex(name.getValue());
-        }
+	public long getTotal(FhirContext ctx, DateRangeParam date, StringParam description, UriParam expansion,
+			TokenParam identifier, TokenParam jurisdiction, StringParam name, StringParam publisher, UriParam reference,
+			TokenParam status, StringParam title, UriParam url, TokenParam version, TokenParam resid,
+			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
+			StringParam _content) {
+		List<Resource> resources = new ArrayList<>();
 
-        if (publisher != null) {
-            criteria.and("publisher").regex(publisher.getValue());
-        }
+		Criteria criteria = null;
+		criteria = Criteria.where("active").is(true);
+		// default
+		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+				identifier);
+		// custom
+		if (date != null) {
+			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "date", date);
+		}
+		if (description != null) {
+			criteria.and("description").is(description.getValue());
+		}
+		if (identifier != null) {
+			criteria.and("identifiers.system").is(identifier.getSystem()).and("identifiers.value")
+					.is(identifier.getValue());
+		}
+		if (jurisdiction != null) {
+			criteria.and("jurisdiction").regex(jurisdiction.getValue());
+		}
+		if (name != null) {
+			criteria.and("name").regex(name.getValue());
+		}
 
-        if (status != null) {
-            criteria.and("status").regex(status.getValue());
-        }
+		if (publisher != null) {
+			criteria.and("publisher").regex(publisher.getValue());
+		}
 
-        if (title != null) {
-            criteria.and("title").regex(title.getValue());
-        }
-        if (url != null) {
-            criteria.and("url").regex(url.getValue());
-        }
-        if (version != null) {
-            criteria.and("version").regex(version.getValue());
-        }
-        Query query = Query.query(criteria);
-        List<ValueSetEntity> results = mongo.find(query, ValueSetEntity.class);
-        if (results != null && results.size() > 0) {
-            if (reference != null || expansion != null) {
-                if (reference != null && expansion != null) {
-                    for (ValueSetEntity valueSetEntity : results) {
-                        // composes
-                        Criteria criteria1 = null;
-                        criteria1 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
-                        Query qry1 = Query.query(criteria1);
-                        ValueSetComposeEntity valueSetComposeEntity = mongo.findOne(qry1, ValueSetComposeEntity.class);
-                        List<ConceptSetEntity> ConceptSetEntitys = new ArrayList<>();
-                        if (valueSetComposeEntity != null) {
-                            Criteria criteria2 = null;
-                            criteria2 = Criteria.where("valueSetComposeId")
-                                    .is(valueSetComposeEntity.id.toString());
-                            criteria2.and("type").is("include").and("system").is(reference.getValue());
-                            Query qry2 = Query.query(criteria2);
-                            ConceptSetEntitys = mongo.find(qry2, ConceptSetEntity.class);
-                        }
+		if (status != null) {
+			criteria.and("status").regex(status.getValue());
+		}
 
-                        // Expansion
-                        Criteria criteria3 = null;
-                        criteria3 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
-                        if (expansion != null) {
-                            criteria3.and("identifier.myStringValue").regex(expansion.getValue());
-                        }
-                        Query qry3 = Query.query(criteria3);
-                        ValueSetExpansionEntity expansio = mongo.findOne(qry3, ValueSetExpansionEntity.class);
-                        if (ConceptSetEntitys != null && ConceptSetEntitys.size() > 0 && expansio != null) {
-                            resources.add(transform(valueSetEntity));
-                        }
-                    }
-                } else if (reference != null && expansion == null) {
-                    for (ValueSetEntity valueSetEntity : results) {
-                        // composes
-                        Criteria criteria1 = null;
-                        criteria1 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
-                        Query qry1 = Query.query(criteria1);
-                        ValueSetComposeEntity valueSetComposeEntity = mongo.findOne(qry1, ValueSetComposeEntity.class);
-                        List<ConceptSetEntity> ConceptSetEntitys = new ArrayList<>();
-                        if (valueSetComposeEntity != null) {
-                            Criteria criteria2 = null;
-                            criteria2 = Criteria.where("valueSetComposeId")
-                                    .is(valueSetComposeEntity.id.toString());
-                            criteria2.and("type").is("include").and("system").is(reference.getValue());
-                            Query qry2 = Query.query(criteria2);
-                            ConceptSetEntitys = mongo.find(qry2, ConceptSetEntity.class);
-                        }
-                        if (ConceptSetEntitys != null && ConceptSetEntitys.size() > 0) {
-                            resources.add(transform(valueSetEntity));
-                        }
-                    }
-                } else {
-                    for (ValueSetEntity valueSetEntity : results) {
-                        // Expansion
-                        Criteria criteria3 = null;
-                        criteria3 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
-                        if (expansion != null) {
-                            criteria3.and("identifier.myStringValue").regex(expansion.getValue());
-                        }
-                        Query qry3 = Query.query(criteria3);
-                        ValueSetExpansionEntity expansio = mongo.findOne(qry3, ValueSetExpansionEntity.class);
-                        if (expansio != null) {
-                            resources.add(transform(valueSetEntity));
-                        }
-                    }
-                }
+		if (title != null) {
+			criteria.and("title").regex(title.getValue());
+		}
+		if (url != null) {
+			criteria.and("url").regex(url.getValue());
+		}
+		if (version != null) {
+			criteria.and("version").regex(version.getValue());
+		}
+		Query query = Query.query(criteria);
+		List<ValueSetEntity> results = mongo.find(query, ValueSetEntity.class);
+		if (results != null && results.size() > 0) {
+			if (reference != null || expansion != null) {
+				if (reference != null && expansion != null) {
+					for (ValueSetEntity valueSetEntity : results) {
+						// composes
+						Criteria criteria1 = null;
+						criteria1 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
+						Query qry1 = Query.query(criteria1);
+						ValueSetComposeEntity valueSetComposeEntity = mongo.findOne(qry1, ValueSetComposeEntity.class);
+						List<ConceptSetEntity> ConceptSetEntitys = new ArrayList<>();
+						if (valueSetComposeEntity != null) {
+							Criteria criteria2 = null;
+							criteria2 = Criteria.where("valueSetComposeId").is(valueSetComposeEntity.id.toString());
+							criteria2.and("type").is("include").and("system").is(reference.getValue());
+							Query qry2 = Query.query(criteria2);
+							ConceptSetEntitys = mongo.find(qry2, ConceptSetEntity.class);
+						}
 
-            } else {
-                for (ValueSetEntity valueSetEntity : results) {
-                    resources.add(transform(valueSetEntity));
-                }
-            }
-        }
-        return resources.size();
-    }
+						// Expansion
+						Criteria criteria3 = null;
+						criteria3 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
+						if (expansion != null) {
+							criteria3.and("identifier.myStringValue").regex(expansion.getValue());
+						}
+						Query qry3 = Query.query(criteria3);
+						ValueSetExpansionEntity expansio = mongo.findOne(qry3, ValueSetExpansionEntity.class);
+						if (ConceptSetEntitys != null && ConceptSetEntitys.size() > 0 && expansio != null) {
+							resources.add(transform(valueSetEntity));
+						}
+					}
+				} else if (reference != null && expansion == null) {
+					for (ValueSetEntity valueSetEntity : results) {
+						// composes
+						Criteria criteria1 = null;
+						criteria1 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
+						Query qry1 = Query.query(criteria1);
+						ValueSetComposeEntity valueSetComposeEntity = mongo.findOne(qry1, ValueSetComposeEntity.class);
+						List<ConceptSetEntity> ConceptSetEntitys = new ArrayList<>();
+						if (valueSetComposeEntity != null) {
+							Criteria criteria2 = null;
+							criteria2 = Criteria.where("valueSetComposeId").is(valueSetComposeEntity.id.toString());
+							criteria2.and("type").is("include").and("system").is(reference.getValue());
+							Query qry2 = Query.query(criteria2);
+							ConceptSetEntitys = mongo.find(qry2, ConceptSetEntity.class);
+						}
+						if (ConceptSetEntitys != null && ConceptSetEntitys.size() > 0) {
+							resources.add(transform(valueSetEntity));
+						}
+					}
+				} else {
+					for (ValueSetEntity valueSetEntity : results) {
+						// Expansion
+						Criteria criteria3 = null;
+						criteria3 = Criteria.where("valueSetId").is(valueSetEntity.id.toString());
+						if (expansion != null) {
+							criteria3.and("identifier.myStringValue").regex(expansion.getValue());
+						}
+						Query qry3 = Query.query(criteria3);
+						ValueSetExpansionEntity expansio = mongo.findOne(qry3, ValueSetExpansionEntity.class);
+						if (expansio != null) {
+							resources.add(transform(valueSetEntity));
+						}
+					}
+				}
 
- 
-    @Override
-    protected String getProfile() {
-        return "CarePlan-v1.0";
-    }
+			} else {
+				for (ValueSetEntity valueSetEntity : results) {
+					resources.add(transform(valueSetEntity));
+				}
+			}
+		}
+		return resources.size();
+	}
 
-    @Override
-    protected ValueSetEntity fromFhir(ValueSet obj) {
-        return ValueSetEntity.fromValueSet(obj);
-    }
+	@Override
+	protected String getProfile() {
+		return "CarePlan-v1.0";
+	}
 
-    @Override
-    protected ValueSet toFhir(ValueSetEntity ent) {
-        return ValueSetEntity.toValueSet(ent);
-    }
+	@Override
+	protected ValueSetEntity fromFhir(ValueSet obj) {
+		return ValueSetEntity.fromValueSet(obj);
+	}
 
-    @Override
-    protected Class<? extends BaseResource> getEntityClass() {
-        return ValueSetEntity.class;
-    }
+	@Override
+	protected ValueSet toFhir(ValueSetEntity ent) {
+		return ValueSetEntity.toValueSet(ent);
+	}
+
+	@Override
+	protected Class<? extends BaseResource> getEntityClass() {
+		return ValueSetEntity.class;
+	}
 }

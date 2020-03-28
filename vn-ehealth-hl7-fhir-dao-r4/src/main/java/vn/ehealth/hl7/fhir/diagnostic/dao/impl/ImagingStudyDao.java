@@ -27,128 +27,119 @@ import vn.ehealth.hl7.fhir.diagnostic.entity.ImagingStudyEntity;
 
 import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
-
 @Repository
 public class ImagingStudyDao extends BaseDao<ImagingStudyEntity, ImagingStudy> {
 
-   @SuppressWarnings("deprecation")
-   public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, TokenParam resid,
-            DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-            StringParam _content, StringParam _page, String sortParam, Integer count, Set<Include> includes) {
-        List<IBaseResource> resources = new ArrayList<>();
-        Criteria criteria = setParamToCriteria(active, resid, _lastUpdated, _tag, _profile, _query, _security,
-                _content);
-        Query query = new Query();
-        if (criteria != null) {
-            query = Query.query(criteria);
-        }
-        Pageable pageableRequest;
-        pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
-        query.with(pageableRequest);
+	@SuppressWarnings("deprecation")
+	public List<IBaseResource> search(FhirContext fhirContext, TokenParam resid, DateRangeParam _lastUpdated,
+			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content,
+			StringParam _page, String sortParam, Integer count, Set<Include> includes) {
+		List<IBaseResource> resources = new ArrayList<>();
+		Criteria criteria = setParamToCriteria(resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		Query query = new Query();
+		if (criteria != null) {
+			query = Query.query(criteria);
+		}
+		Pageable pageableRequest;
+		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
+		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
-		
-		String[] keys = {"subject", "encounter", "basedOn", "referrer", 
-                "interpreter", "endpoint", "procedureReference", "location", "reasonReference"};
-       
-        var includeMap = getIncludeMap(ResourceType.ImagingStudy, keys, includes);
-        
-        
-        List<ImagingStudyEntity> ImagingStudyEntitys = mongo.find(query, ImagingStudyEntity.class);
-        if (ImagingStudyEntitys != null) {
-            for (ImagingStudyEntity item : ImagingStudyEntitys) {
-                ImagingStudy obj = transform(item);
-                if(includeMap.get("subject") && obj.hasSubject()) {
-                    setReferenceResource(obj.getSubject());
-                }
-                
-                if(includeMap.get("encounter") && obj.hasEncounter()) {
-                    setReferenceResource(obj.getEncounter());
-                }
-                
-                if(includeMap.get("basedOn") && obj.hasBasedOn()) {
-                    setReferenceResource(obj.getBasedOn());
-                }
-                                
-                if(includeMap.get("referrer") && obj.hasReferrer()) {
-                    setReferenceResource(obj.getReferrer());
-                }
-                
-                if(includeMap.get("interpreter") && obj.hasInterpreter()) {
-                    setReferenceResource(obj.getInterpreter());
-                }
-                
-                if(includeMap.get("endpoint") && obj.hasEndpoint()) {
-                    setReferenceResource(obj.getEndpoint());
-                }
-                
-                if(includeMap.get("procedureReference") && obj.hasProcedureReference()) {
-                    setReferenceResource(obj.getProcedureReference());
-                }
-                
-                if(includeMap.get("location") && obj.hasLocation()) {
-                    setReferenceResource(obj.getLocation());
-                }
-                
-                if(includeMap.get("reasonReference") && obj.hasReasonReference()) {
-                    setReferenceResource(obj.getReasonReference());
-                }
-                
-                resources.add(obj);
-            }
-        }
-        return resources;
-    }
 
-    public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, TokenParam resid,
-            DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-            StringParam _content) {
-        long total = 0;
-        Criteria criteria = setParamToCriteria(active, resid, _lastUpdated, _tag, _profile, _query, _security,
-                _content);
-        Query query = new Query();
-        if (criteria != null) {
-            query = Query.query(criteria);
-        }
-        total = mongo.count(query, ImagingStudyEntity.class);
-        return total;
-    }
+		String[] keys = { "subject", "encounter", "basedOn", "referrer", "interpreter", "endpoint",
+				"procedureReference", "location", "reasonReference" };
 
-    private Criteria setParamToCriteria(TokenParam active, TokenParam resid, DateRangeParam _lastUpdated,
-            TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
-        Criteria criteria = null;
-        // active
-        if (active != null) {
-            criteria = Criteria.where("active").is(active);
-        } else {
-            criteria = Criteria.where("active").is(true);
-        }
+		var includeMap = getIncludeMap(ResourceType.ImagingStudy, keys, includes);
 
-        return criteria;
-    }
+		List<ImagingStudyEntity> ImagingStudyEntitys = mongo.find(query, ImagingStudyEntity.class);
+		if (ImagingStudyEntitys != null) {
+			for (ImagingStudyEntity item : ImagingStudyEntitys) {
+				ImagingStudy obj = transform(item);
+				if (includeMap.get("subject") && obj.hasSubject()) {
+					setReferenceResource(obj.getSubject());
+				}
 
-    @Override
-    protected String getProfile() {
-        return "ImagingStudy-v1.0";
-    }
+				if (includeMap.get("encounter") && obj.hasEncounter()) {
+					setReferenceResource(obj.getEncounter());
+				}
 
-    @Override
-    protected ImagingStudyEntity fromFhir(ImagingStudy obj) {
-        return ImagingStudyEntity.fromImagingStudy(obj);
-    }
+				if (includeMap.get("basedOn") && obj.hasBasedOn()) {
+					setReferenceResource(obj.getBasedOn());
+				}
 
-    @Override
-    protected ImagingStudy toFhir(ImagingStudyEntity ent) {
-        return ImagingStudyEntity.toImagingStudy(ent);
-    }
+				if (includeMap.get("referrer") && obj.hasReferrer()) {
+					setReferenceResource(obj.getReferrer());
+				}
 
-    @Override
-    protected Class<? extends BaseResource> getEntityClass() {
-        return ImagingStudyEntity.class;
-    }
+				if (includeMap.get("interpreter") && obj.hasInterpreter()) {
+					setReferenceResource(obj.getInterpreter());
+				}
+
+				if (includeMap.get("endpoint") && obj.hasEndpoint()) {
+					setReferenceResource(obj.getEndpoint());
+				}
+
+				if (includeMap.get("procedureReference") && obj.hasProcedureReference()) {
+					setReferenceResource(obj.getProcedureReference());
+				}
+
+				if (includeMap.get("location") && obj.hasLocation()) {
+					setReferenceResource(obj.getLocation());
+				}
+
+				if (includeMap.get("reasonReference") && obj.hasReasonReference()) {
+					setReferenceResource(obj.getReasonReference());
+				}
+
+				resources.add(obj);
+			}
+		}
+		return resources;
+	}
+
+	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam resid, DateRangeParam _lastUpdated,
+			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
+		long total = 0;
+		Criteria criteria = setParamToCriteria(resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		Query query = new Query();
+		if (criteria != null) {
+			query = Query.query(criteria);
+		}
+		total = mongo.count(query, ImagingStudyEntity.class);
+		return total;
+	}
+
+	private Criteria setParamToCriteria(TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
+			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
+		Criteria criteria = null;
+		// active
+		criteria = Criteria.where("active").is(true);
+
+		return criteria;
+	}
+
+	@Override
+	protected String getProfile() {
+		return "ImagingStudy-v1.0";
+	}
+
+	@Override
+	protected ImagingStudyEntity fromFhir(ImagingStudy obj) {
+		return ImagingStudyEntity.fromImagingStudy(obj);
+	}
+
+	@Override
+	protected ImagingStudy toFhir(ImagingStudyEntity ent) {
+		return ImagingStudyEntity.toImagingStudy(ent);
+	}
+
+	@Override
+	protected Class<? extends BaseResource> getEntityClass() {
+		return ImagingStudyEntity.class;
+	}
 }

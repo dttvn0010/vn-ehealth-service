@@ -59,10 +59,8 @@ public class ConceptMapProvider extends BaseController<ConceptMapEntity, Concept
 
 	private static final Logger log = LoggerFactory.getLogger(ConceptMapProvider.class);
 
-
 	@Search
 	public IBundleProvider searchConceptMap(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = ConstantKeys.SP_DEPENDSON) UriParam dependson,
 			@OptionalParam(name = ConstantKeys.SP_DESCRIPTION) StringParam description,
@@ -97,24 +95,23 @@ public class ConceptMapProvider extends BaseController<ConceptMapEntity, Concept
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = conceptMapDao.search(fhirContext, active, date, dependson, description, identifier,
-						jurisdiction, name, other, product, publisher, code, source, status, target, title, url,
-						version, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam,
-						count);
+				results = conceptMapDao.search(fhirContext, date, dependson, description, identifier, jurisdiction,
+						name, other, product, publisher, code, source, status, target, title, url, version, resid,
+						_lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count);
 			} else
-				results = conceptMapDao.search(fhirContext, active, date, dependson, description, identifier,
-						jurisdiction, name, other, product, publisher, code, source, status, target, title, url,
-						version, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count);
+				results = conceptMapDao.search(fhirContext, date, dependson, description, identifier, jurisdiction,
+						name, other, product, publisher, code, source, status, target, title, url, version, resid,
+						_lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(conceptMapDao.findMatchesAdvancedTotal(fhirContext, active,
-							date, dependson, description, identifier, jurisdiction, name, other, product, publisher,
-							code, source, status, target, title, url, version, resid, _lastUpdated, _tag, _profile,
-							_query, _security, _content)));
+					return Integer.parseInt(String.valueOf(conceptMapDao.findMatchesAdvancedTotal(fhirContext, date,
+							dependson, description, identifier, jurisdiction, name, other, product, publisher, code,
+							source, status, target, title, url, version, resid, _lastUpdated, _tag, _profile, _query,
+							_security, _content)));
 				}
 
 				@Override
@@ -164,7 +161,6 @@ public class ConceptMapProvider extends BaseController<ConceptMapEntity, Concept
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = ConstantKeys.SP_DEPENDSON) UriParam dependson,
 			@OptionalParam(name = ConstantKeys.SP_DESCRIPTION) StringParam description,
@@ -188,15 +184,15 @@ public class ConceptMapProvider extends BaseController<ConceptMapEntity, Concept
 			@OptionalParam(name = "_query") TokenParam _query, @OptionalParam(name = "_security") TokenParam _security,
 			@OptionalParam(name = "_content") StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = conceptMapDao.findMatchesAdvancedTotal(fhirContext, active, date, dependson, description,
-				identifier, jurisdiction, name, other, product, publisher, code, source, status, target, title, url,
-				version, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		long total = conceptMapDao.findMatchesAdvancedTotal(fhirContext, date, dependson, description, identifier,
+				jurisdiction, name, other, product, publisher, code, source, status, target, title, url, version, resid,
+				_lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<ConceptMapEntity, ConceptMap> getDao() {
-        return conceptMapDao;
-    }
+	@Override
+	protected BaseDao<ConceptMapEntity, ConceptMap> getDao() {
+		return conceptMapDao;
+	}
 }

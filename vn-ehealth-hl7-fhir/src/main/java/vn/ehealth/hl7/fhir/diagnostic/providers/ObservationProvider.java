@@ -56,7 +56,6 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 
 	@Search
 	public IBundleProvider searchObservation(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenOrListParam code,
@@ -101,25 +100,24 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 			List<IBaseResource> results = new ArrayList<IBaseResource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = observationDao.search(fhirContext, active, basedOn, category, code, comboCode,
-						comboDataAbsentReason, comboValueConcept, componentCode, componentDataAbsentReason,
-						componentValueConcept, conetext, dataAbsentReason, date, device, encounter, identifier, method,
-						patient, performer, relatedTarget, relatedType, specimen, status, subject, valueConcept,
-						valueDate, valueString, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
-						sortParam, count, includes);
+				results = observationDao.search(fhirContext, basedOn, category, code, comboCode, comboDataAbsentReason,
+						comboValueConcept, componentCode, componentDataAbsentReason, componentValueConcept, conetext,
+						dataAbsentReason, date, device, encounter, identifier, method, patient, performer,
+						relatedTarget, relatedType, specimen, status, subject, valueConcept, valueDate, valueString,
+						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count,
+						includes);
 			} else
-				results = observationDao.search(fhirContext, active, basedOn, category, code, comboCode,
-						comboDataAbsentReason, comboValueConcept, componentCode, componentDataAbsentReason,
-						componentValueConcept, conetext, dataAbsentReason, date, device, encounter, identifier, method,
-						patient, performer, relatedTarget, relatedType, specimen, status, subject, valueConcept,
-						valueDate, valueString, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
-						null, count, includes);
+				results = observationDao.search(fhirContext, basedOn, category, code, comboCode, comboDataAbsentReason,
+						comboValueConcept, componentCode, componentDataAbsentReason, componentValueConcept, conetext,
+						dataAbsentReason, date, device, encounter, identifier, method, patient, performer,
+						relatedTarget, relatedType, specimen, status, subject, valueConcept, valueDate, valueString,
+						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count, includes);
 			final List<IBaseResource> finalResults = results;
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(observationDao.countMatchesAdvancedTotal(fhirContext, active,
+					return Integer.parseInt(String.valueOf(observationDao.countMatchesAdvancedTotal(fhirContext,
 							basedOn, category, code, comboCode, comboDataAbsentReason, comboValueConcept, componentCode,
 							componentDataAbsentReason, componentValueConcept, conetext, dataAbsentReason, date, device,
 							encounter, identifier, method, patient, performer, relatedTarget, relatedType, specimen,
@@ -155,7 +153,6 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenOrListParam code,
@@ -190,7 +187,7 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = observationDao.countMatchesAdvancedTotal(fhirContext, active, basedOn, category, code, comboCode,
+		long total = observationDao.countMatchesAdvancedTotal(fhirContext, basedOn, category, code, comboCode,
 				comboDataAbsentReason, comboValueConcept, componentCode, componentDataAbsentReason,
 				componentValueConcept, conetext, dataAbsentReason, date, device, encounter, identifier, method, patient,
 				performer, relatedTarget, relatedType, specimen, status, subject, valueConcept, valueDate, valueString,
@@ -248,8 +245,8 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 				for (TokenParam codeitem : code.getValuesAsQueryTokens()) {
 					TokenOrListParam subList = new TokenOrListParam();
 					subList.add(codeitem);
-					List<IBaseResource> subResults = observationDao.search(fhirContext, active, basedOn, category,
-							subList, comboCode, comboDataAbsentReason, comboValueConcept, componentCode,
+					List<IBaseResource> subResults = observationDao.search(fhirContext, basedOn, category, subList,
+							comboCode, comboDataAbsentReason, comboValueConcept, componentCode,
 							componentDataAbsentReason, componentValueConcept, conetext, dataAbsentReason, date, device,
 							encounter, identifier, method, patient, performer, relatedTarget, relatedType, specimen,
 							status, subject, valueConcept, valueDate, valueString, resid, _lastUpdated, _tag, _profile,

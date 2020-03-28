@@ -51,7 +51,6 @@ public class MedicationProvider extends BaseController<MedicationEntity, Medicat
 
 	@Search
 	public IBundleProvider searchMedication(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
 			@OptionalParam(name = ConstantKeys.SP_CONTAINER) TokenParam container,
 			@OptionalParam(name = ConstantKeys.SP_FORM) TokenParam form,
@@ -82,12 +81,12 @@ public class MedicationProvider extends BaseController<MedicationEntity, Medicat
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = medicationDao.search(fhirContext, active, code, container, form, ingredient, ingredientCode,
+				results = medicationDao.search(fhirContext, code, container, form, ingredient, ingredientCode,
 						manufacturer, overTheCounter, packageItem, packageItemCode, status, resid, _lastUpdated, _tag,
 						_profile, _query, _security, _content, hospital, productName, medicationType, _page, sortParam,
 						count);
 			} else
-				results = medicationDao.search(fhirContext, active, code, container, form, ingredient, ingredientCode,
+				results = medicationDao.search(fhirContext, code, container, form, ingredient, ingredientCode,
 						manufacturer, overTheCounter, packageItem, packageItemCode, status, resid, _lastUpdated, _tag,
 						_profile, _query, _security, _content, hospital, productName, medicationType, _page, null,
 						count);
@@ -97,10 +96,10 @@ public class MedicationProvider extends BaseController<MedicationEntity, Medicat
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(medicationDao.countMatchesAdvancedTotal(fhirContext, active,
-							code, container, form, ingredient, ingredientCode, manufacturer, overTheCounter,
-							packageItem, packageItemCode, status, resid, _lastUpdated, _tag, _profile, _query,
-							_security, _content, hospital, productName, medicationType)));
+					return Integer.parseInt(String.valueOf(medicationDao.countMatchesAdvancedTotal(fhirContext, code,
+							container, form, ingredient, ingredientCode, manufacturer, overTheCounter, packageItem,
+							packageItemCode, status, resid, _lastUpdated, _tag, _profile, _query, _security, _content,
+							hospital, productName, medicationType)));
 				}
 
 				@Override
@@ -129,11 +128,8 @@ public class MedicationProvider extends BaseController<MedicationEntity, Medicat
 		}
 	}
 
-	
 	@Operation(name = "$total", idempotent = true)
-	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
-			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
+	public Parameters getTotal(HttpServletRequest request, @OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
 			@OptionalParam(name = ConstantKeys.SP_CONTAINER) TokenParam container,
 			@OptionalParam(name = ConstantKeys.SP_FORM) TokenParam form,
 			@OptionalParam(name = ConstantKeys.SP_INGREDIENT) ReferenceParam ingredient,
@@ -155,15 +151,15 @@ public class MedicationProvider extends BaseController<MedicationEntity, Medicat
 			@OptionalParam(name = "productName") StringParam productName,
 			@OptionalParam(name = "medicationType") StringParam medicationType) {
 		Parameters retVal = new Parameters();
-		long total = medicationDao.countMatchesAdvancedTotal(fhirContext, active, code, container, form, ingredient,
+		long total = medicationDao.countMatchesAdvancedTotal(fhirContext, code, container, form, ingredient,
 				ingredientCode, manufacturer, overTheCounter, packageItem, packageItemCode, status, resid, _lastUpdated,
 				_tag, _profile, _query, _security, _content, hospital, productName, medicationType);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<MedicationEntity, Medication> getDao() {
-        return medicationDao;
-    }
+	@Override
+	protected BaseDao<MedicationEntity, Medication> getDao() {
+		return medicationDao;
+	}
 }

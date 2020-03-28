@@ -58,7 +58,6 @@ public class MediaProvider extends BaseController<MediaEntity, Media> implements
 
 	@Search
 	public IBundleProvider searchDiagnosticReport(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = Media.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = Media.SP_CREATED) DateRangeParam created,
 			@OptionalParam(name = Media.SP_DEVICE) ReferenceParam device,
@@ -90,15 +89,15 @@ public class MediaProvider extends BaseController<MediaEntity, Media> implements
 			List<IBaseResource> results = new ArrayList<>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = baseDao.search(active, basedOn, created, device, encounter, identifier, modality, operator,
-						patient, site, status, subject, type, view,
+				results = baseDao.search(basedOn, created, device, encounter, identifier, modality, operator, patient,
+						site, status, subject, type, view,
 						// COMMON PARAMS
 						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count,
 						includes);
 				// return results;
 			} else
-				results = baseDao.search(active, basedOn, created, device, encounter, identifier, modality, operator,
-						patient, site, status, subject, type, view,
+				results = baseDao.search(basedOn, created, device, encounter, identifier, modality, operator, patient,
+						site, status, subject, type, view,
 						// COMMON PARAMS
 						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count, includes);
 			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x
@@ -109,11 +108,10 @@ public class MediaProvider extends BaseController<MediaEntity, Media> implements
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String
-							.valueOf(baseDao.countMatchesAdvancedTotal(active, basedOn, created, device, encounter,
-									identifier, modality, operator, patient, site, status, subject, type, view,
-									// COMMON PARAMS
-									resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
+					return Integer.parseInt(String.valueOf(baseDao.countMatchesAdvancedTotal(basedOn, created, device,
+							encounter, identifier, modality, operator, patient, site, status, subject, type, view,
+							// COMMON PARAMS
+							resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -144,7 +142,6 @@ public class MediaProvider extends BaseController<MediaEntity, Media> implements
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = Media.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = Media.SP_CREATED) DateRangeParam created,
 			@OptionalParam(name = Media.SP_DEVICE) ReferenceParam device,
@@ -166,8 +163,8 @@ public class MediaProvider extends BaseController<MediaEntity, Media> implements
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = baseDao.countMatchesAdvancedTotal(active, basedOn, created, device, encounter, identifier,
-				modality, operator, patient, site, status, subject, type, view,
+		long total = baseDao.countMatchesAdvancedTotal(basedOn, created, device, encounter, identifier, modality,
+				operator, patient, site, status, subject, type, view,
 				// COMMON PARAMS
 				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));

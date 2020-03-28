@@ -34,17 +34,17 @@ import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, QuantityParam abatementAge,
-			TokenParam abatementBoolean, DateRangeParam abatementDate, TokenParam abatementString,
-			DateRangeParam assertedDate, ReferenceParam asserter, TokenParam bodySite, TokenParam category,
-			TokenParam clinicalStatus, TokenParam code, ReferenceParam context, ReferenceParam Condition,
-			TokenParam evidence, ReferenceParam evidenceDetail, TokenParam identifier, QuantityParam onsetAge,
-			DateRangeParam onsetDate, StringParam onsetInfo, ReferenceParam patient, TokenParam severity,
-			TokenParam stage, ReferenceParam subject, TokenParam verificationStatus, TokenParam resid,
-			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-			StringParam _content, StringParam _page, String sortParam, Integer count, Set<Include> includes) {
+	public List<IBaseResource> search(FhirContext fhirContext, QuantityParam abatementAge, TokenParam abatementBoolean,
+			DateRangeParam abatementDate, TokenParam abatementString, DateRangeParam assertedDate,
+			ReferenceParam asserter, TokenParam bodySite, TokenParam category, TokenParam clinicalStatus,
+			TokenParam code, ReferenceParam context, ReferenceParam Condition, TokenParam evidence,
+			ReferenceParam evidenceDetail, TokenParam identifier, QuantityParam onsetAge, DateRangeParam onsetDate,
+			StringParam onsetInfo, ReferenceParam patient, TokenParam severity, TokenParam stage,
+			ReferenceParam subject, TokenParam verificationStatus, TokenParam resid, DateRangeParam _lastUpdated,
+			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content,
+			StringParam _page, String sortParam, Integer count, Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<>();
-		Criteria criteria = setParamToCriteria(active, abatementAge, abatementBoolean, abatementDate, abatementString,
+		Criteria criteria = setParamToCriteria(abatementAge, abatementBoolean, abatementDate, abatementString,
 				assertedDate, asserter, bodySite, category, clinicalStatus, code, context, Condition, evidence,
 				evidenceDetail, identifier, onsetAge, onsetDate, onsetInfo, patient, severity, stage, subject,
 				verificationStatus, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
@@ -62,38 +62,38 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
-		
-		String[] keys = {"subject", "encounter",  "asserter", "recorder"};
 
-        var includeMap = getIncludeMap(ResourceType.Condition, keys, includes);
-        
+		String[] keys = { "subject", "encounter", "asserter", "recorder" };
+
+		var includeMap = getIncludeMap(ResourceType.Condition, keys, includes);
+
 		List<ConditionEntity> conditionEntitys = mongo.find(query, ConditionEntity.class);
 		if (conditionEntitys != null) {
 			for (ConditionEntity item : conditionEntitys) {
 				Condition obj = transform(item);
-				
-				if(includeMap.get("subject") && obj.hasSubject()) {
-				    setReferenceResource(obj.getSubject());
+
+				if (includeMap.get("subject") && obj.hasSubject()) {
+					setReferenceResource(obj.getSubject());
 				}
-				
-				if(includeMap.get("encounter") && obj.hasEncounter()) {
-                    setReferenceResource(obj.getEncounter());
-                }
-				
-				if(includeMap.get("asserter") && obj.hasAsserter()) {
-                    setReferenceResource(obj.getAsserter());
-                }
-				
-				if(includeMap.get("recorder") && obj.hasRecorder()) {
-                    setReferenceResource(obj.getRecorder());
-                }
+
+				if (includeMap.get("encounter") && obj.hasEncounter()) {
+					setReferenceResource(obj.getEncounter());
+				}
+
+				if (includeMap.get("asserter") && obj.hasAsserter()) {
+					setReferenceResource(obj.getAsserter());
+				}
+
+				if (includeMap.get("recorder") && obj.hasRecorder()) {
+					setReferenceResource(obj.getRecorder());
+				}
 				resources.add(obj);
 			}
 		}
 		return resources;
 	}
 
-	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, QuantityParam abatementAge,
+	public long countMatchesAdvancedTotal(FhirContext fhirContext, QuantityParam abatementAge,
 			TokenParam abatementBoolean, DateRangeParam abatementDate, TokenParam abatementString,
 			DateRangeParam assertedDate, ReferenceParam asserter, TokenParam bodySite, TokenParam category,
 			TokenParam clinicalStatus, TokenParam code, ReferenceParam context, ReferenceParam Condition,
@@ -103,7 +103,7 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
 			StringParam _content) {
 		long total = 0;
-		Criteria criteria = setParamToCriteria(active, abatementAge, abatementBoolean, abatementDate, abatementString,
+		Criteria criteria = setParamToCriteria(abatementAge, abatementBoolean, abatementDate, abatementString,
 				assertedDate, asserter, bodySite, category, clinicalStatus, code, context, Condition, evidence,
 				evidenceDetail, identifier, onsetAge, onsetDate, onsetInfo, patient, severity, stage, subject,
 				verificationStatus, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
@@ -115,7 +115,7 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 		return total;
 	}
 
-	private Criteria setParamToCriteria(TokenParam active, QuantityParam abatementAge, TokenParam abatementBoolean,
+	private Criteria setParamToCriteria(QuantityParam abatementAge, TokenParam abatementBoolean,
 			DateRangeParam abatementDate, TokenParam abatementString, DateRangeParam assertedDate,
 			ReferenceParam asserter, TokenParam bodySite, TokenParam category, TokenParam clinicalStatus,
 			TokenParam code, ReferenceParam context, ReferenceParam encounter, TokenParam evidence,
@@ -125,14 +125,9 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
-		if (active != null) {
-			criteria = Criteria.where("active").is(active);
-		} else {
-			criteria = Criteria.where("active").is(true);
-		}
+		criteria = Criteria.where("active").is(true);
 		// set param default
-		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
-				identifier);
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, identifier);
 		// abatementAge
 		if (abatementAge != null) {
 			criteria = setQuantityToCriteria(criteria, "abatement", abatementAge);

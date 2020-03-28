@@ -62,7 +62,6 @@ public class CodeSystemProvider extends BaseController<CodeSystemEntity, CodeSys
 
 	@Search
 	public IBundleProvider searchCodeSystem(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = ConstantKeys.SP_NAME) StringParam name,
@@ -95,13 +94,13 @@ public class CodeSystemProvider extends BaseController<CodeSystemEntity, CodeSys
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = codeSystemDao.search(fhirContext, active, date, identifier, name, code, contentMode,
-						description, jurisdiction, language, publisher, status, system, title, url, version, resid,
-						_lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count);
+				results = codeSystemDao.search(fhirContext, date, identifier, name, code, contentMode, description,
+						jurisdiction, language, publisher, status, system, title, url, version, resid, _lastUpdated,
+						_tag, _profile, _query, _security, _content, _page, sortParam, count);
 			} else
-				results = codeSystemDao.search(fhirContext, active, date, identifier, name, code, contentMode,
-						description, jurisdiction, language, publisher, status, system, title, url, version, resid,
-						_lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count);
+				results = codeSystemDao.search(fhirContext, date, identifier, name, code, contentMode, description,
+						jurisdiction, language, publisher, status, system, title, url, version, resid, _lastUpdated,
+						_tag, _profile, _query, _security, _content, _page, null, count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
@@ -163,7 +162,6 @@ public class CodeSystemProvider extends BaseController<CodeSystemEntity, CodeSys
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = ConstantKeys.SP_NAME) StringParam name,
@@ -192,8 +190,8 @@ public class CodeSystemProvider extends BaseController<CodeSystemEntity, CodeSys
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<CodeSystemEntity, CodeSystem> getDao() {
-        return codeSystemDao;
-    }
+	@Override
+	protected BaseDao<CodeSystemEntity, CodeSystem> getDao() {
+		return codeSystemDao;
+	}
 }

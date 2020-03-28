@@ -53,7 +53,6 @@ public class ProcedureProvider extends BaseController<ProcedureEntity, Procedure
 
 	@Search
 	public IBundleProvider searchProcedure(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
@@ -86,23 +85,23 @@ public class ProcedureProvider extends BaseController<ProcedureEntity, Procedure
 			List<IBaseResource> results = new ArrayList<IBaseResource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = procedureDao.search(active, basedOn, category, code, context, date, definition, encounter,
-						identifier, location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag,
-						_profile, _query, _security, _content, _page, sortParam, count, includes);
+				results = procedureDao.search(basedOn, category, code, context, date, definition, encounter, identifier,
+						location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag, _profile,
+						_query, _security, _content, _page, sortParam, count, includes);
 				// return results;
 			} else
-				results = procedureDao.search(active, basedOn, category, code, context, date, definition, encounter,
-						identifier, location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag,
-						_profile, _query, _security, _content, _page, null, count, includes);
+				results = procedureDao.search(basedOn, category, code, context, date, definition, encounter, identifier,
+						location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag, _profile,
+						_query, _security, _content, _page, null, count, includes);
 			final List<IBaseResource> finalResults = results;
 
 			return new IBundleProvider() {
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(procedureDao.countMatchesAdvancedTotal(fhirContext, active,
-							basedOn, category, code, context, date, definition, encounter, identifier, location,
-							partOf, patient, performer, status, subject, resid, _lastUpdated, _tag, _profile, _query,
-							_security, _content)));
+					return Integer.parseInt(String.valueOf(
+							procedureDao.countMatchesAdvancedTotal(fhirContext, basedOn, category, code, context, date,
+									definition, encounter, identifier, location, partOf, patient, performer, status,
+									subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -133,7 +132,6 @@ public class ProcedureProvider extends BaseController<ProcedureEntity, Procedure
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
@@ -156,8 +154,8 @@ public class ProcedureProvider extends BaseController<ProcedureEntity, Procedure
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = procedureDao.countMatchesAdvancedTotal(fhirContext, active, basedOn, category, code, context,
-				date, definition, encounter, identifier, location, partOf, patient, performer, status, subject, resid,
+		long total = procedureDao.countMatchesAdvancedTotal(fhirContext, basedOn, category, code, context, date,
+				definition, encounter, identifier, location, partOf, patient, performer, status, subject, resid,
 				_lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
