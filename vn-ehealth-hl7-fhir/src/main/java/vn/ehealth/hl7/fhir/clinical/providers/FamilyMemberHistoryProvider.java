@@ -59,7 +59,6 @@ public class FamilyMemberHistoryProvider extends BaseController<FamilyMemberHist
 
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = FamilyMemberHistory.SP_CODE) TokenParam code,
 			@OptionalParam(name = FamilyMemberHistory.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = FamilyMemberHistory.SP_IDENTIFIER) TokenParam identifier,
@@ -89,14 +88,14 @@ public class FamilyMemberHistoryProvider extends BaseController<FamilyMemberHist
 			List<IBaseResource> results = new ArrayList<IBaseResource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = baseDao.search(active, code, date, identifier, instantiatesCanonical, instantiatesUri,
-						patient, relationship, gender, status,
+				results = baseDao.search(code, date, identifier, instantiatesCanonical, instantiatesUri, patient,
+						relationship, gender, status,
 						// Common
 						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count,
 						includes);
 			} else
-				results = baseDao.search(active, code, date, identifier, instantiatesCanonical, instantiatesUri,
-						patient, relationship, gender, status,
+				results = baseDao.search(code, date, identifier, instantiatesCanonical, instantiatesUri, patient,
+						relationship, gender, status,
 						// Common
 						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count, includes);
 			final List<IBaseResource> finalResults = results;
@@ -105,8 +104,8 @@ public class FamilyMemberHistoryProvider extends BaseController<FamilyMemberHist
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(baseDao.countMatchesAdvancedTotal(active, code, date,
-							identifier, instantiatesCanonical, instantiatesUri, patient, relationship, gender, status,
+					return Integer.parseInt(String.valueOf(baseDao.countMatchesAdvancedTotal(code, date, identifier,
+							instantiatesCanonical, instantiatesUri, patient, relationship, gender, status,
 							// Common
 							resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
@@ -139,7 +138,6 @@ public class FamilyMemberHistoryProvider extends BaseController<FamilyMemberHist
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = FamilyMemberHistory.SP_CODE) TokenParam code,
 			@OptionalParam(name = FamilyMemberHistory.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = FamilyMemberHistory.SP_IDENTIFIER) TokenParam identifier,
@@ -159,8 +157,8 @@ public class FamilyMemberHistoryProvider extends BaseController<FamilyMemberHist
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = baseDao.countMatchesAdvancedTotal(active, code, date, identifier, instantiatesCanonical,
-				instantiatesUri, patient, relationship, gender, status,
+		long total = baseDao.countMatchesAdvancedTotal(code, date, identifier, instantiatesCanonical, instantiatesUri,
+				patient, relationship, gender, status,
 				// Common
 				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));

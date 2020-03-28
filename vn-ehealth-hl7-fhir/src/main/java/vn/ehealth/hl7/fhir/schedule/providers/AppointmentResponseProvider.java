@@ -40,7 +40,8 @@ import vn.ehealth.hl7.fhir.schedule.dao.impl.AppointmentResponseDao;
 import vn.ehealth.hl7.fhir.schedule.entity.AppointmentResponseEntity;
 
 @Component
-public class AppointmentResponseProvider extends BaseController<AppointmentResponseEntity, AppointmentResponse> implements IResourceProvider {
+public class AppointmentResponseProvider extends BaseController<AppointmentResponseEntity, AppointmentResponse>
+		implements IResourceProvider {
 	@Autowired
 	AppointmentResponseDao appointmentResponseDao;
 
@@ -51,7 +52,6 @@ public class AppointmentResponseProvider extends BaseController<AppointmentRespo
 
 	@Search
 	public IBundleProvider searchSlot(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = ConstantKeys.SP_APPOINTMENT) ReferenceParam appointment,
@@ -76,13 +76,13 @@ public class AppointmentResponseProvider extends BaseController<AppointmentRespo
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = appointmentResponseDao.search(fhirContext, active, actor, identifier, appointment, location,
-						patient, practitioner, partStatus, resid, _lastUpdated, _tag, _profile, _query, _security,
-						_content, _page, sortParam, count);
+				results = appointmentResponseDao.search(fhirContext, actor, identifier, appointment, location, patient,
+						practitioner, partStatus, resid, _lastUpdated, _tag, _profile, _query, _security, _content,
+						_page, sortParam, count);
 			} else
-				results = appointmentResponseDao.search(fhirContext, active, actor, identifier, appointment, location,
-						patient, practitioner, partStatus, resid, _lastUpdated, _tag, _profile, _query, _security,
-						_content, _page, null, count);
+				results = appointmentResponseDao.search(fhirContext, actor, identifier, appointment, location, patient,
+						practitioner, partStatus, resid, _lastUpdated, _tag, _profile, _query, _security, _content,
+						_page, null, count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
@@ -90,7 +90,7 @@ public class AppointmentResponseProvider extends BaseController<AppointmentRespo
 				@Override
 				public Integer size() {
 					return Integer.parseInt(String.valueOf(appointmentResponseDao.findMatchesAdvancedTotal(fhirContext,
-							active, actor, identifier, appointment, location, patient, practitioner, partStatus, resid,
+							actor, identifier, appointment, location, patient, practitioner, partStatus, resid,
 							_lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
@@ -122,7 +122,6 @@ public class AppointmentResponseProvider extends BaseController<AppointmentRespo
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = ConstantKeys.SP_APPOINTMENT) ReferenceParam appointment,
@@ -138,15 +137,15 @@ public class AppointmentResponseProvider extends BaseController<AppointmentRespo
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = appointmentResponseDao.findMatchesAdvancedTotal(fhirContext, active, actor, identifier,
-				appointment, location, patient, practitioner, partStatus, resid, _lastUpdated, _tag, _profile, _query,
-				_security, _content);
+		long total = appointmentResponseDao.findMatchesAdvancedTotal(fhirContext, actor, identifier, appointment,
+				location, patient, practitioner, partStatus, resid, _lastUpdated, _tag, _profile, _query, _security,
+				_content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<AppointmentResponseEntity, AppointmentResponse> getDao() {
-        return appointmentResponseDao;
-    }
+	@Override
+	protected BaseDao<AppointmentResponseEntity, AppointmentResponse> getDao() {
+		return appointmentResponseDao;
+	}
 }

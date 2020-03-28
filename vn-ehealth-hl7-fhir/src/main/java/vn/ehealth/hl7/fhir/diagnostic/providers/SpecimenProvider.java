@@ -42,7 +42,7 @@ import vn.ehealth.hl7.fhir.diagnostic.entity.SpecimenEntity;
 
 @Component
 public class SpecimenProvider extends BaseController<SpecimenEntity, Specimen> implements IResourceProvider {
-	
+
 	@Autowired
 	SpecimenDao specimenDao;
 
@@ -53,8 +53,20 @@ public class SpecimenProvider extends BaseController<SpecimenEntity, Specimen> i
 
 	@Search
 	public IBundleProvider searchSpecimen(HttpServletRequest _request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
+			@OptionalParam(name = Specimen.SP_ACCESSION) TokenParam accession,
+			@OptionalParam(name = Specimen.SP_BODYSITE) TokenParam bodysite,
+			@OptionalParam(name = Specimen.SP_COLLECTED) DateRangeParam collected,
+			@OptionalParam(name = Specimen.SP_COLLECTOR) ReferenceParam collector,
+			@OptionalParam(name = Specimen.SP_CONTAINER) TokenParam container,
+			@OptionalParam(name = Specimen.SP_CONTAINER_ID) TokenParam containerId,
+			@OptionalParam(name = Specimen.SP_IDENTIFIER) TokenParam identifier,
+			@OptionalParam(name = Specimen.SP_PARENT) ReferenceParam parent,
+			@OptionalParam(name = Specimen.SP_PATIENT) ReferenceParam patient,
+			@OptionalParam(name = Specimen.SP_STATUS) TokenParam status,
+			@OptionalParam(name = Specimen.SP_SUBJECT) ReferenceParam subject,
+			@OptionalParam(name = Specimen.SP_TYPE) TokenParam type,
 			@OptionalParam(name = ConstantKeys.SP_REQUEST) ReferenceParam request,
+			// COMMON PARAMS
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
 			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
@@ -73,20 +85,21 @@ public class SpecimenProvider extends BaseController<SpecimenEntity, Specimen> i
 			List<IBaseResource> results = new ArrayList<>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = specimenDao.search(fhirContext, active, request, resid, _lastUpdated, _tag, _profile, _query,
+				results = specimenDao.search(fhirContext, request, resid, _lastUpdated, _tag, _profile, _query,
 						_security, _content, _page, sortParam, count, includes);
 			} else
-				results = specimenDao.search(fhirContext, active, request, resid, _lastUpdated, _tag, _profile, _query,
+				results = specimenDao.search(fhirContext, request, resid, _lastUpdated, _tag, _profile, _query,
 						_security, _content, _page, null, count, includes);
-			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
+			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x
+			// -> x);
 			final List<IBaseResource> finalResults = results;
 
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(specimenDao.countMatchesAdvancedTotal(fhirContext, active,
-							request, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
+					return Integer.parseInt(String.valueOf(specimenDao.countMatchesAdvancedTotal(fhirContext, request,
+							resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -117,7 +130,6 @@ public class SpecimenProvider extends BaseController<SpecimenEntity, Specimen> i
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest _request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_REQUEST) ReferenceParam request,
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
@@ -127,14 +139,14 @@ public class SpecimenProvider extends BaseController<SpecimenEntity, Specimen> i
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = specimenDao.countMatchesAdvancedTotal(fhirContext, active, request, resid, _lastUpdated, _tag, _profile,
+		long total = specimenDao.countMatchesAdvancedTotal(fhirContext, request, resid, _lastUpdated, _tag, _profile,
 				_query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<SpecimenEntity, Specimen> getDao() {
-        return specimenDao;
-    }
+	@Override
+	protected BaseDao<SpecimenEntity, Specimen> getDao() {
+		return specimenDao;
+	}
 }

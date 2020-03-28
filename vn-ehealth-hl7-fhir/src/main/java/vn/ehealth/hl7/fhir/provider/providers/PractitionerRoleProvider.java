@@ -48,7 +48,8 @@ import vn.ehealth.hl7.fhir.provider.entity.PractitionerRoleEntity;
  * @version 1.0
  */
 @Component
-public class PractitionerRoleProvider extends BaseController<PractitionerRoleEntity, PractitionerRole> implements IResourceProvider {
+public class PractitionerRoleProvider extends BaseController<PractitionerRoleEntity, PractitionerRole>
+		implements IResourceProvider {
 	@Autowired
 	PractitionerRoleDao practitionerRoleDao;
 
@@ -59,10 +60,8 @@ public class PractitionerRoleProvider extends BaseController<PractitionerRoleEnt
 		return PractitionerRole.class;
 	}
 
-
 	@Search
 	public IBundleProvider searchPractitioner(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = ConstantKeys.SP_EMAIL) TokenParam email,
 			@OptionalParam(name = ConstantKeys.SP_ENDPOINT) ReferenceParam endpoint,
@@ -94,11 +93,11 @@ public class PractitionerRoleProvider extends BaseController<PractitionerRoleEnt
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = practitionerRoleDao.search(fhirContext, active, date, email, endpoint, identifier, location,
+				results = practitionerRoleDao.search(fhirContext, date, email, endpoint, identifier, location,
 						organization, phone, practitioner, role, service, specialty, telecom, resid, _lastUpdated, _tag,
 						_profile, _query, _security, _content, _page, sortParam, count);
 			} else
-				results = practitionerRoleDao.search(fhirContext, active, date, email, endpoint, identifier, location,
+				results = practitionerRoleDao.search(fhirContext, date, email, endpoint, identifier, location,
 						organization, phone, practitioner, role, service, specialty, telecom, resid, _lastUpdated, _tag,
 						_profile, _query, _security, _content, _page, "", count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
@@ -107,8 +106,8 @@ public class PractitionerRoleProvider extends BaseController<PractitionerRoleEnt
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(
-							practitionerRoleDao.countMatchesAdvancedTotal(fhirContext, active, date, email, endpoint,
+					return Integer.parseInt(String
+							.valueOf(practitionerRoleDao.countMatchesAdvancedTotal(fhirContext, date, email, endpoint,
 									identifier, location, organization, phone, practitioner, role, service, specialty,
 									telecom, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
@@ -141,7 +140,6 @@ public class PractitionerRoleProvider extends BaseController<PractitionerRoleEnt
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = ConstantKeys.SP_EMAIL) TokenParam email,
 			@OptionalParam(name = ConstantKeys.SP_ENDPOINT) ReferenceParam endpoint,
@@ -162,16 +160,15 @@ public class PractitionerRoleProvider extends BaseController<PractitionerRoleEnt
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = practitionerRoleDao.countMatchesAdvancedTotal(fhirContext, active, date, email, endpoint,
-				identifier, location, organization, phone, practitioner, role, service, specialty, telecom, resid,
-				_lastUpdated, _tag, _profile, _query, _security, _content);
+		long total = practitionerRoleDao.countMatchesAdvancedTotal(fhirContext, date, email, endpoint, identifier,
+				location, organization, phone, practitioner, role, service, specialty, telecom, resid, _lastUpdated,
+				_tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-
-    @Override
-    protected BaseDao<PractitionerRoleEntity, PractitionerRole> getDao() {
-        return practitionerRoleDao;
-    }
+	@Override
+	protected BaseDao<PractitionerRoleEntity, PractitionerRole> getDao() {
+		return practitionerRoleDao;
+	}
 }

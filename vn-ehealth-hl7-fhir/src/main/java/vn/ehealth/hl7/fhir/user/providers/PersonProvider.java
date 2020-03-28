@@ -51,7 +51,7 @@ public class PersonProvider extends BaseController<PersonEntity, Person> impleme
 	}
 
 	@Search
-	public IBundleProvider searchPerson(HttpServletRequest request, @OptionalParam(name = "active") TokenParam active,
+	public IBundleProvider searchPerson(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
 			@OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESSCOUNTRY) StringParam addressCountry,
@@ -83,24 +83,23 @@ public class PersonProvider extends BaseController<PersonEntity, Person> impleme
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = personDao.search(fhirContext, active, address, addressCity, addressCountry, addressState,
-						birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom, resid,
-						_lastUpdated, _tag, _profile, _query, _security, _content, managingOrg, _page, sortParam,
-						count);
+				results = personDao.search(fhirContext, address, addressCity, addressCountry, addressState, birthDate,
+						email, gender, identifier, name, patient, phone, phonetic, telecom, resid, _lastUpdated, _tag,
+						_profile, _query, _security, _content, managingOrg, _page, sortParam, count);
 			} else
-				results = personDao.search(fhirContext, active, address, addressCity, addressCountry, addressState,
-						birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom, resid,
-						_lastUpdated, _tag, _profile, _query, _security, _content, managingOrg, _page, "", count);
+				results = personDao.search(fhirContext, address, addressCity, addressCountry, addressState, birthDate,
+						email, gender, identifier, name, patient, phone, phonetic, telecom, resid, _lastUpdated, _tag,
+						_profile, _query, _security, _content, managingOrg, _page, "", count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(personDao.findMatchesAdvancedTotal(fhirContext, active,
-							address, addressCity, addressCountry, addressState, birthDate, email, gender, identifier,
-							name, patient, phone, phonetic, telecom, resid, _lastUpdated, _tag, _profile, _query,
-							_security, _content, managingOrg)));
+					return Integer.parseInt(String.valueOf(personDao.findMatchesAdvancedTotal(fhirContext, address,
+							addressCity, addressCountry, addressState, birthDate, email, gender, identifier, name,
+							patient, phone, phonetic, telecom, resid, _lastUpdated, _tag, _profile, _query, _security,
+							_content, managingOrg)));
 				}
 
 				@Override
@@ -131,7 +130,6 @@ public class PersonProvider extends BaseController<PersonEntity, Person> impleme
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = "active") TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
 			@OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESSCOUNTRY) StringParam addressCountry,
@@ -153,15 +151,15 @@ public class PersonProvider extends BaseController<PersonEntity, Person> impleme
 			@OptionalParam(name = "_content") StringParam _content,
 			@OptionalParam(name = "organization") ReferenceParam managingOrg) {
 		Parameters retVal = new Parameters();
-		long total = personDao.findMatchesAdvancedTotal(fhirContext, active, address, addressCity, addressCountry,
-				addressState, birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom, resid,
-				_lastUpdated, _tag, _profile, _query, _security, _content, managingOrg);
+		long total = personDao.findMatchesAdvancedTotal(fhirContext, address, addressCity, addressCountry, addressState,
+				birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom, resid, _lastUpdated,
+				_tag, _profile, _query, _security, _content, managingOrg);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<PersonEntity, Person> getDao() {
-        return personDao;
-    }
+	@Override
+	protected BaseDao<PersonEntity, Person> getDao() {
+		return personDao;
+	}
 }

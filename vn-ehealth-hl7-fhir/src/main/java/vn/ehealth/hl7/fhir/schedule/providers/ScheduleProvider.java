@@ -84,7 +84,6 @@ public class ScheduleProvider extends BaseController<ScheduleEntity, Schedule> i
 
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
@@ -106,20 +105,19 @@ public class ScheduleProvider extends BaseController<ScheduleEntity, Schedule> i
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = scheduleDao.search(fhirContext, active, identifier, actor, date, type, resid, _lastUpdated,
-						_tag, _profile, _query, _security, _content, _page, sortParam, count);
+				results = scheduleDao.search(fhirContext, identifier, actor, date, type, resid, _lastUpdated, _tag,
+						_profile, _query, _security, _content, _page, sortParam, count);
 			} else
-				results = scheduleDao.search(fhirContext, active, identifier, actor, date, type, resid, _lastUpdated,
-						_tag, _profile, _query, _security, _content, _page, null, count);
+				results = scheduleDao.search(fhirContext, identifier, actor, date, type, resid, _lastUpdated, _tag,
+						_profile, _query, _security, _content, _page, null, count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(
-							String.valueOf(scheduleDao.findMatchesAdvancedTotal(fhirContext, active, identifier, actor,
-									date, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
+					return Integer.parseInt(String.valueOf(scheduleDao.findMatchesAdvancedTotal(fhirContext, identifier,
+							actor, date, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -150,7 +148,6 @@ public class ScheduleProvider extends BaseController<ScheduleEntity, Schedule> i
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
@@ -163,14 +160,14 @@ public class ScheduleProvider extends BaseController<ScheduleEntity, Schedule> i
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = scheduleDao.findMatchesAdvancedTotal(fhirContext, active, identifier, actor, date, type, resid,
+		long total = scheduleDao.findMatchesAdvancedTotal(fhirContext, identifier, actor, date, type, resid,
 				_lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<ScheduleEntity, Schedule> getDao() {
-        return scheduleDao;
-    }
+	@Override
+	protected BaseDao<ScheduleEntity, Schedule> getDao() {
+		return scheduleDao;
+	}
 }

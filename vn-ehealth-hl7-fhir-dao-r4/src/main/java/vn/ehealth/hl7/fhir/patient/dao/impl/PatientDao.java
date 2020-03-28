@@ -266,10 +266,10 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 				resources.add(patient);
 				// active
 				Criteria criteria = Criteria.where("active").is(true);
-				criteria.andOperator(Criteria.where("subject.reference").is(thePatientId.asStringValue()),
-						Criteria.where("subject.display").is(thePatientId.asStringValue()),
-						Criteria.where("patient.reference").is(thePatientId.asStringValue()),
-						Criteria.where("patient.display").is(thePatientId.asStringValue()));
+				// criteria.and("subject.reference").is(thePatientId.asStringValue());
+				criteria.andOperator(
+						new Criteria().orOperator(Criteria.where("subject.reference").is(thePatientId.asStringValue()),
+								Criteria.where("patient.reference").is(thePatientId.asStringValue())));
 				if (theStart != null) {
 					criteria.and("resUpdated").gte(theStart.getValue());
 				}
@@ -277,9 +277,9 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 					criteria.and("resUpdated").lte(theEnd.getValue());
 				}
 				// Encounter
-				List<Encounter> enconters = DaoFactory.getEncounterDao().findByCriteria(criteria);
-				if (enconters != null && enconters.size() > 0) {
-					resources.addAll(enconters);
+				List<Encounter> encounters = DaoFactory.getEncounterDao().findByCriteria(criteria);
+				if (encounters != null && encounters.size() > 0) {
+					resources.addAll(encounters);
 				}
 				// EpisodeOfCare
 				List<EpisodeOfCare> episodeOfCares = DaoFactory.getEpisodeOfCareDao().findByCriteria(criteria);
@@ -376,12 +376,14 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 					resources.addAll(observations);
 				}
 				// FamilyMemberHistory
-				List<FamilyMemberHistory> familyMemberHistorys = DaoFactory.getFamilyMemberHistoryDao().findByCriteria(criteria);
+				List<FamilyMemberHistory> familyMemberHistorys = DaoFactory.getFamilyMemberHistoryDao()
+						.findByCriteria(criteria);
 				if (familyMemberHistorys != null && familyMemberHistorys.size() > 0) {
 					resources.addAll(familyMemberHistorys);
 				}
 				// AllergyIntolerance
-				List<AllergyIntolerance> allergyIntolerances = DaoFactory.getAllergyIntoleranceDao().findByCriteria(criteria);
+				List<AllergyIntolerance> allergyIntolerances = DaoFactory.getAllergyIntoleranceDao()
+						.findByCriteria(criteria);
 				if (allergyIntolerances != null && allergyIntolerances.size() > 0) {
 					resources.addAll(allergyIntolerances);
 				}

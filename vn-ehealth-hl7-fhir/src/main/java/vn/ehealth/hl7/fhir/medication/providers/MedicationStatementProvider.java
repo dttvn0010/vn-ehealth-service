@@ -40,7 +40,8 @@ import vn.ehealth.hl7.fhir.medication.dao.impl.MedicationStatementDao;
 import vn.ehealth.hl7.fhir.medication.entity.MedicationStatementEntity;
 
 @Component
-public class MedicationStatementProvider extends BaseController<MedicationStatementEntity, MedicationStatement> implements IResourceProvider {
+public class MedicationStatementProvider extends BaseController<MedicationStatementEntity, MedicationStatement>
+		implements IResourceProvider {
 
 	@Autowired
 	MedicationStatementDao medicationStatementDao;
@@ -52,7 +53,6 @@ public class MedicationStatementProvider extends BaseController<MedicationStatem
 
 	@Search
 	public IBundleProvider searchMedicationStatement(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
 			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
@@ -81,13 +81,13 @@ public class MedicationStatementProvider extends BaseController<MedicationStatem
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = medicationStatementDao.search(fhirContext, active, category, code, context, effective,
-						identifier, medication, partOf, patient, source, status, subject, resid, _lastUpdated, _tag,
-						_profile, _query, _security, _content, _page, sortParam, count);
+				results = medicationStatementDao.search(fhirContext, category, code, context, effective, identifier,
+						medication, partOf, patient, source, status, subject, resid, _lastUpdated, _tag, _profile,
+						_query, _security, _content, _page, sortParam, count);
 			} else
-				results = medicationStatementDao.search(fhirContext, active, category, code, context, effective,
-						identifier, medication, partOf, patient, source, status, subject, resid, _lastUpdated, _tag,
-						_profile, _query, _security, _content, _page, null, count);
+				results = medicationStatementDao.search(fhirContext, category, code, context, effective, identifier,
+						medication, partOf, patient, source, status, subject, resid, _lastUpdated, _tag, _profile,
+						_query, _security, _content, _page, null, count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
@@ -95,8 +95,8 @@ public class MedicationStatementProvider extends BaseController<MedicationStatem
 				@Override
 				public Integer size() {
 					return Integer.parseInt(String.valueOf(medicationStatementDao.countMatchesAdvancedTotal(fhirContext,
-							active, category, code, context, effective, identifier, medication, partOf, patient, source,
-							status, subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
+							category, code, context, effective, identifier, medication, partOf, patient, source, status,
+							subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -127,7 +127,6 @@ public class MedicationStatementProvider extends BaseController<MedicationStatem
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
 			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
@@ -147,15 +146,15 @@ public class MedicationStatementProvider extends BaseController<MedicationStatem
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = medicationStatementDao.countMatchesAdvancedTotal(fhirContext, active, category, code, context,
-				effective, identifier, medication, partOf, patient, source, status, subject, resid, _lastUpdated, _tag,
-				_profile, _query, _security, _content);
+		long total = medicationStatementDao.countMatchesAdvancedTotal(fhirContext, category, code, context, effective,
+				identifier, medication, partOf, patient, source, status, subject, resid, _lastUpdated, _tag, _profile,
+				_query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<MedicationStatementEntity, MedicationStatement> getDao() {
-        return medicationStatementDao;
-    }
+	@Override
+	protected BaseDao<MedicationStatementEntity, MedicationStatement> getDao() {
+		return medicationStatementDao;
+	}
 }

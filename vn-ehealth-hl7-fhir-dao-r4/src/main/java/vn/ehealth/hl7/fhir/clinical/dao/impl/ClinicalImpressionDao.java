@@ -36,7 +36,7 @@ import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, ClinicalImpression> {
 
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, ReferenceParam action,
+	public List<IBaseResource> search(FhirContext fhirContext, ReferenceParam action,
 			ReferenceParam assessor, ReferenceParam context, DateRangeParam date, TokenParam findingCode,
 			ReferenceParam findingRef, TokenParam identifier, ReferenceParam investigation, ReferenceParam patient,
 			ReferenceParam previous, ReferenceParam problem, TokenParam status, ReferenceParam subject,
@@ -44,7 +44,7 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 			TokenParam _security, StringParam _content, StringParam _page, String sortParam, Integer count,
 			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<>();
-		Criteria criteria = setParamToCriteria(active, action, assessor, context, date, findingCode, findingRef,
+		Criteria criteria = setParamToCriteria(action, assessor, context, date, findingCode, findingRef,
 				identifier, investigation, patient, previous, problem, status, subject, resid, _lastUpdated, _tag,
 				_profile, _query, _security, _content);
 		Query query = new Query();
@@ -96,14 +96,14 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 		return resources;
 	}
 
-	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam action,
+	public long countMatchesAdvancedTotal(FhirContext fhirContext, ReferenceParam action,
 			ReferenceParam assessor, ReferenceParam context, DateRangeParam date, TokenParam findingCode,
 			ReferenceParam findingRef, TokenParam identifier, ReferenceParam investigation, ReferenceParam patient,
 			ReferenceParam previous, ReferenceParam problem, TokenParam status, ReferenceParam subject,
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
 			TokenParam _security, StringParam _content) {
 		long total = 0;
-		Criteria criteria = setParamToCriteria(active, action, assessor, context, date, findingCode, findingRef,
+		Criteria criteria = setParamToCriteria(action, assessor, context, date, findingCode, findingRef,
 				identifier, investigation, patient, previous, problem, status, subject, resid, _lastUpdated, _tag,
 				_profile, _query, _security, _content);
 		Query query = new Query();
@@ -114,7 +114,7 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 		return total;
 	}
 
-	private Criteria setParamToCriteria(TokenParam active, ReferenceParam action, ReferenceParam assessor,
+	private Criteria setParamToCriteria(ReferenceParam action, ReferenceParam assessor,
 			ReferenceParam context, DateRangeParam date, TokenParam findingCode, ReferenceParam findingRef,
 			TokenParam identifier, ReferenceParam investigation, ReferenceParam patient, ReferenceParam previous,
 			ReferenceParam problem, TokenParam status, ReferenceParam subject, TokenParam resid,
@@ -122,11 +122,7 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 			StringParam _content) {
 		Criteria criteria = null;
 		// active
-		if (active != null) {
-			criteria = Criteria.where("active").is(active);
-		} else {
-			criteria = Criteria.where("active").is(true);
-		}
+		criteria = Criteria.where("active").is(true);
 		// set param default
 		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);

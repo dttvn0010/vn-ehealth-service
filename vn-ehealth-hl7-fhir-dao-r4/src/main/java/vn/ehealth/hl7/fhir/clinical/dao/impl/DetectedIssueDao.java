@@ -34,13 +34,13 @@ import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue> {
 
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, ReferenceParam author, TokenParam category,
+	public List<IBaseResource> search(FhirContext fhirContext, ReferenceParam author, TokenParam category,
 			DateRangeParam date, TokenParam identifier, ReferenceParam implicated, ReferenceParam patient,
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
 			TokenParam _security, StringParam _content, StringParam _page, String sortParam, Integer count,
 			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<>();
-		Criteria criteria = setParamToCriteria(active, author, category, date, identifier, implicated, patient, resid,
+		Criteria criteria = setParamToCriteria(author, category, date, identifier, implicated, patient, resid,
 				_lastUpdated, _tag, _profile, _query, _security, _content);
 		Query query = new Query();
 		if (criteria != null) {
@@ -56,34 +56,34 @@ public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
-		
-		String[] keys = {"patient", "author"};
 
-        var includeMap = getIncludeMap(ResourceType.DetectedIssue, keys, includes);
-        
+		String[] keys = { "patient", "author" };
+
+		var includeMap = getIncludeMap(ResourceType.DetectedIssue, keys, includes);
+
 		List<DetectedIssueEntity> detectedIssueEntitys = mongo.find(query, DetectedIssueEntity.class);
 		if (detectedIssueEntitys != null) {
 			for (DetectedIssueEntity item : detectedIssueEntitys) {
 				DetectedIssue obj = transform(item);
-				if(includeMap.get("patient") && obj.hasPatient()) {
-				    setReferenceResource(obj.getPatient());
+				if (includeMap.get("patient") && obj.hasPatient()) {
+					setReferenceResource(obj.getPatient());
 				}
-				
-				if(includeMap.get("author") && obj.hasAuthor()) {
-                    setReferenceResource(obj.getAuthor());
-                }
+
+				if (includeMap.get("author") && obj.hasAuthor()) {
+					setReferenceResource(obj.getAuthor());
+				}
 				resources.add(obj);
 			}
 		}
 		return resources;
 	}
 
-	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam author,
-			TokenParam category, DateRangeParam date, TokenParam identifier, ReferenceParam implicated,
-			ReferenceParam patient, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
-			TokenParam _query, TokenParam _security, StringParam _content) {
+	public long countMatchesAdvancedTotal(FhirContext fhirContext, ReferenceParam author, TokenParam category,
+			DateRangeParam date, TokenParam identifier, ReferenceParam implicated, ReferenceParam patient,
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content) {
 		long total = 0;
-		Criteria criteria = setParamToCriteria(active, author, category, date, identifier, implicated, patient, resid,
+		Criteria criteria = setParamToCriteria(author, category, date, identifier, implicated, patient, resid,
 				_lastUpdated, _tag, _profile, _query, _security, _content);
 		Query query = new Query();
 		if (criteria != null) {
@@ -93,20 +93,15 @@ public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue
 		return total;
 	}
 
-	private Criteria setParamToCriteria(TokenParam active, ReferenceParam author, TokenParam category,
-			DateRangeParam date, TokenParam identifier, ReferenceParam implicated, ReferenceParam patient,
-			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
-			TokenParam _security, StringParam _content) {
+	private Criteria setParamToCriteria(ReferenceParam author, TokenParam category, DateRangeParam date,
+			TokenParam identifier, ReferenceParam implicated, ReferenceParam patient, TokenParam resid,
+			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
+			StringParam _content) {
 		Criteria criteria = null;
 		// active
-		if (active != null) {
-			criteria = Criteria.where("active").is(active);
-		} else {
-			criteria = Criteria.where("active").is(true);
-		}
+		criteria = Criteria.where("active").is(true);
 		// set param default
-		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
-				identifier);
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, identifier);
 		// author
 		if (author != null) {
 			if (author.getValue().indexOf("|") == -1) {

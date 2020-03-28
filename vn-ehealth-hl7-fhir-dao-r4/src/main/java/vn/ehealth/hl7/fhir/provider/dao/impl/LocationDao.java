@@ -128,11 +128,10 @@ public class LocationDao extends BaseDao<LocationEntity, Location> {
             StringParam _content) {
 
         Criteria criteria = null;
+        criteria = Criteria.where("active").is(true);
         if (status != null) {
             criteria = Criteria.where("status").is(status.getValue());
-        } else {
-            criteria = Criteria.where("status").is(true);
-        }
+        } 
         criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
                 identifier);
         if (address != null) {

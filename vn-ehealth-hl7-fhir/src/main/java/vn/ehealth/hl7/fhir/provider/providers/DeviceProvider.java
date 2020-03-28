@@ -52,7 +52,6 @@ public class DeviceProvider extends BaseController<DeviceEntity, Device> impleme
 
 	@Search
 	public IBundleProvider searchDevice(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = "device-name") StringParam deviceName,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = "location") ReferenceParam location,
@@ -80,11 +79,11 @@ public class DeviceProvider extends BaseController<DeviceEntity, Device> impleme
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = deviceDao.search(fhirContext, active, deviceName, identifier, location, manufacturer, model,
+				results = deviceDao.search(fhirContext, deviceName, identifier, location, manufacturer, model,
 						organization, patient, udiCarrier, udiDi, url, status, type, resid, _lastUpdated, _tag,
 						_profile, _query, _security, _content, _page, sortParam, count);
 			} else
-				results = deviceDao.search(fhirContext, active, deviceName, identifier, location, manufacturer, model,
+				results = deviceDao.search(fhirContext, deviceName, identifier, location, manufacturer, model,
 						organization, patient, udiCarrier, udiDi, url, status, type, resid, _lastUpdated, _tag,
 						_profile, _query, _security, _content, _page, "", count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
@@ -93,10 +92,9 @@ public class DeviceProvider extends BaseController<DeviceEntity, Device> impleme
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String
-							.valueOf(deviceDao.findMatchesAdvancedTotal(fhirContext, active, deviceName, identifier,
-									location, manufacturer, model, organization, patient, udiCarrier, udiDi, url,
-									status, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
+					return Integer.parseInt(String.valueOf(deviceDao.findMatchesAdvancedTotal(fhirContext, deviceName,
+							identifier, location, manufacturer, model, organization, patient, udiCarrier, udiDi, url,
+							status, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -127,7 +125,6 @@ public class DeviceProvider extends BaseController<DeviceEntity, Device> impleme
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = "device-name") StringParam deviceName,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = "location") ReferenceParam location,
@@ -146,9 +143,9 @@ public class DeviceProvider extends BaseController<DeviceEntity, Device> impleme
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = deviceDao.findMatchesAdvancedTotal(fhirContext, active, deviceName, identifier, location,
-				manufacturer, model, organization, patient, udiCarrier, udiDi, url, status, type, resid, _lastUpdated,
-				_tag, _profile, _query, _security, _content);
+		long total = deviceDao.findMatchesAdvancedTotal(fhirContext, deviceName, identifier, location, manufacturer,
+				model, organization, patient, udiCarrier, udiDi, url, status, type, resid, _lastUpdated, _tag, _profile,
+				_query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}

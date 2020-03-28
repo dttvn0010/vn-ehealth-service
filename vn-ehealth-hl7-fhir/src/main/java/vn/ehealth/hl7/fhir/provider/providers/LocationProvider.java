@@ -155,8 +155,8 @@ public class LocationProvider extends BaseController<LocationEntity, Location> i
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<LocationEntity, Location> getDao() {
-        return locationDao;
-    }
+	@Override
+	protected BaseDao<LocationEntity, Location> getDao() {
+		return locationDao;
+	}
 }

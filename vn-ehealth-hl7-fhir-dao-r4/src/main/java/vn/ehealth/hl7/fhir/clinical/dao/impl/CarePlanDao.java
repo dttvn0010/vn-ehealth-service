@@ -34,17 +34,16 @@ import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, TokenParam activityCode,
-			DateRangeParam activityDate, ReferenceParam activityReference, ReferenceParam basedOn,
-			ReferenceParam careTeam, TokenParam category, ReferenceParam condition, ReferenceParam context,
-			DateRangeParam date, ReferenceParam definition, ReferenceParam encounter, ReferenceParam goal,
-			TokenParam identifier, TokenParam intent, ReferenceParam partOf, ReferenceParam patient,
-			ReferenceParam performer, ReferenceParam replaces, TokenParam status, ReferenceParam subject,
-			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
-			TokenParam _security, StringParam _content, StringParam _page, String sortParam, Integer count,
-			Set<Include> includes) {
+	public List<IBaseResource> search(FhirContext fhirContext, TokenParam activityCode, DateRangeParam activityDate,
+			ReferenceParam activityReference, ReferenceParam basedOn, ReferenceParam careTeam, TokenParam category,
+			ReferenceParam condition, ReferenceParam context, DateRangeParam date, ReferenceParam definition,
+			ReferenceParam encounter, ReferenceParam goal, TokenParam identifier, TokenParam intent,
+			ReferenceParam partOf, ReferenceParam patient, ReferenceParam performer, ReferenceParam replaces,
+			TokenParam status, ReferenceParam subject, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
+			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content, StringParam _page,
+			String sortParam, Integer count, Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<>();
-		Criteria criteria = setParamToCriteria(active, activityCode, activityDate, activityReference, basedOn, careTeam,
+		Criteria criteria = setParamToCriteria(activityCode, activityDate, activityReference, basedOn, careTeam,
 				category, condition, context, date, definition, encounter, goal, identifier, intent, partOf, patient,
 				performer, replaces, status, subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		Query query = new Query();
@@ -58,63 +57,61 @@ public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.ASC, sortParam));
 		}
-		
-		String[] keys = {"subject", "encounter", "basedOn", "author", 
-                            "contributor", "careTeam", "addresses", "goal"};
 
-        var includeMap = getIncludeMap(ResourceType.CarePlan, keys, includes);
+		String[] keys = { "subject", "encounter", "basedOn", "author", "contributor", "careTeam", "addresses", "goal" };
+
+		var includeMap = getIncludeMap(ResourceType.CarePlan, keys, includes);
 		List<CarePlanEntity> carePlanEntitys = mongo.find(query, CarePlanEntity.class);
 		if (carePlanEntitys != null) {
 			for (CarePlanEntity item : carePlanEntitys) {
 				CarePlan obj = transform(item);
 
-				if(includeMap.get("subject") && obj.hasSubject()) {
-				    setReferenceResource(obj.getSubject());
+				if (includeMap.get("subject") && obj.hasSubject()) {
+					setReferenceResource(obj.getSubject());
 				}
-				
-				if(includeMap.get("encounter") && obj.hasEncounter()) {
-                    setReferenceResource(obj.getEncounter());
-                }
-				
-				if(includeMap.get("basedOn") && obj.hasBasedOn()) {
-                    setReferenceResource(obj.getBasedOn());
-                }
-				
-				if(includeMap.get("author") && obj.hasAuthor()) {
-                    setReferenceResource(obj.getAuthor());
-                }
-				
-				if(includeMap.get("contributor") && obj.hasContributor()) {
-                    setReferenceResource(obj.getContributor());
-                }
-				
-				if(includeMap.get("careTeam") && obj.hasCareTeam()) {
-                    setReferenceResource(obj.getCareTeam());
-                }
-				
-				if(includeMap.get("addresses") && obj.hasAddresses()) {
-                    setReferenceResource(obj.getAddresses());
-                }
-				
-				if(includeMap.get("goal") && obj.hasGoal()) {
-                    setReferenceResource(obj.getGoal());
-                }
+
+				if (includeMap.get("encounter") && obj.hasEncounter()) {
+					setReferenceResource(obj.getEncounter());
+				}
+
+				if (includeMap.get("basedOn") && obj.hasBasedOn()) {
+					setReferenceResource(obj.getBasedOn());
+				}
+
+				if (includeMap.get("author") && obj.hasAuthor()) {
+					setReferenceResource(obj.getAuthor());
+				}
+
+				if (includeMap.get("contributor") && obj.hasContributor()) {
+					setReferenceResource(obj.getContributor());
+				}
+
+				if (includeMap.get("careTeam") && obj.hasCareTeam()) {
+					setReferenceResource(obj.getCareTeam());
+				}
+
+				if (includeMap.get("addresses") && obj.hasAddresses()) {
+					setReferenceResource(obj.getAddresses());
+				}
+
+				if (includeMap.get("goal") && obj.hasGoal()) {
+					setReferenceResource(obj.getGoal());
+				}
 				resources.add(obj);
 			}
 		}
 		return resources;
 	}
 
-	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, TokenParam activityCode,
-			DateRangeParam activityDate, ReferenceParam activityReference, ReferenceParam basedOn,
-			ReferenceParam careTeam, TokenParam category, ReferenceParam condition, ReferenceParam context,
-			DateRangeParam date, ReferenceParam definition, ReferenceParam encounter, ReferenceParam goal,
-			TokenParam identifier, TokenParam intent, ReferenceParam partOf, ReferenceParam patient,
-			ReferenceParam performer, ReferenceParam replaces, TokenParam status, ReferenceParam subject,
-			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
-			TokenParam _security, StringParam _content) {
+	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam activityCode, DateRangeParam activityDate,
+			ReferenceParam activityReference, ReferenceParam basedOn, ReferenceParam careTeam, TokenParam category,
+			ReferenceParam condition, ReferenceParam context, DateRangeParam date, ReferenceParam definition,
+			ReferenceParam encounter, ReferenceParam goal, TokenParam identifier, TokenParam intent,
+			ReferenceParam partOf, ReferenceParam patient, ReferenceParam performer, ReferenceParam replaces,
+			TokenParam status, ReferenceParam subject, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
+			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		long total = 0;
-		Criteria criteria = setParamToCriteria(active, activityCode, activityDate, activityReference, basedOn, careTeam,
+		Criteria criteria = setParamToCriteria(activityCode, activityDate, activityReference, basedOn, careTeam,
 				category, condition, context, date, definition, encounter, goal, identifier, intent, partOf, patient,
 				performer, replaces, status, subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		Query query = new Query();
@@ -125,7 +122,7 @@ public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 		return total;
 	}
 
-	private Criteria setParamToCriteria(TokenParam active, TokenParam activityCode, DateRangeParam activityDate,
+	private Criteria setParamToCriteria(TokenParam activityCode, DateRangeParam activityDate,
 			ReferenceParam activityReference, ReferenceParam basedOn, ReferenceParam careTeam, TokenParam category,
 			ReferenceParam condition, ReferenceParam context, DateRangeParam date, ReferenceParam definition,
 			ReferenceParam encounter, ReferenceParam goal, TokenParam identifier, TokenParam intent,
@@ -134,14 +131,9 @@ public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
-		if (active != null) {
-			criteria = Criteria.where("active").is(active);
-		} else {
-			criteria = Criteria.where("active").is(true);
-		}
+		criteria = Criteria.where("active").is(true);
 		// set param default
-		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
-				identifier);
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, identifier);
 
 		// activity-code
 		if (activityCode != null) {

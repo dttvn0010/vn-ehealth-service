@@ -48,7 +48,7 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
     }
 
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(TokenParam active, TokenParam code, DateRangeParam date, TokenParam identifier,
+	public List<IBaseResource> search(TokenParam code, DateRangeParam date, TokenParam identifier,
 			ReferenceParam instantiatesCanonical, UriParam instantiatesUri, ReferenceParam patient,
 			TokenParam relationship, TokenParam gender, TokenParam status,
 			// Common
@@ -56,8 +56,8 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 			TokenParam _security, StringParam _content, StringParam _page, String sortParam, Integer count,
 			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
-		Criteria criteria = setParamToCriteria(active, code, date, identifier, patient, status, resid, _lastUpdated,
-				_tag, _profile, _query, _security, _content);
+		Criteria criteria = setParamToCriteria(code, date, identifier, patient, status, resid, _lastUpdated, _tag,
+				_profile, _query, _security, _content);
 		Query query = new Query();
 		if (criteria != null) {
 			query = Query.query(criteria);
@@ -72,38 +72,38 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
-		
-		String[] keys = {"patient", "reasonReference"};
 
-        var includeMap = getIncludeMap(ResourceType.FamilyMemberHistory, keys, includes);
-        
+		String[] keys = { "patient", "reasonReference" };
+
+		var includeMap = getIncludeMap(ResourceType.FamilyMemberHistory, keys, includes);
+
 		List<FamilyMemberHistoryEntity> entitys = mongo.find(query, FamilyMemberHistoryEntity.class);
 		if (entitys != null && entitys.size() > 0) {
 			for (FamilyMemberHistoryEntity item : entitys) {
 				FamilyMemberHistory obj = transform(item);
 
-				if(includeMap.get("patient") && obj.hasPatient()) {
-				    setReferenceResource(obj.getPatient());
+				if (includeMap.get("patient") && obj.hasPatient()) {
+					setReferenceResource(obj.getPatient());
 				}
-				
-				if(includeMap.get("reasonReference") && obj.hasReasonReference()) {
-                    setReferenceResource(obj.getReasonReference());
-                }
+
+				if (includeMap.get("reasonReference") && obj.hasReasonReference()) {
+					setReferenceResource(obj.getReasonReference());
+				}
 				resources.add(obj);
 			}
 		}
 		return null;
 	}
 
-	public long countMatchesAdvancedTotal(TokenParam active, TokenParam code, DateRangeParam date,
-			TokenParam identifier, ReferenceParam instantiatesCanonical, UriParam instantiatesUri,
-			ReferenceParam patient, TokenParam relationship, TokenParam gender, TokenParam status,
+	public long countMatchesAdvancedTotal(TokenParam code, DateRangeParam date, TokenParam identifier,
+			ReferenceParam instantiatesCanonical, UriParam instantiatesUri, ReferenceParam patient,
+			TokenParam relationship, TokenParam gender, TokenParam status,
 			// Common
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
 			TokenParam _security, StringParam _content) {
 		long total = 0;
-		Criteria criteria = setParamToCriteria(active, code, date, identifier, patient, status, resid, _lastUpdated,
-				_tag, _profile, _query, _security, _content);
+		Criteria criteria = setParamToCriteria(code, date, identifier, patient, status, resid, _lastUpdated, _tag,
+				_profile, _query, _security, _content);
 		Query query = new Query();
 		if (criteria != null) {
 			query = Query.query(criteria);
@@ -112,19 +112,14 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 		return total;
 	}
 
-	private Criteria setParamToCriteria(TokenParam active, TokenParam code, DateRangeParam date, TokenParam identifier,
+	private Criteria setParamToCriteria(TokenParam code, DateRangeParam date, TokenParam identifier,
 			ReferenceParam patient, TokenParam status, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
 			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
-		if (active != null) {
-			criteria = Criteria.where("active").is(active);
-		} else {
-			criteria = Criteria.where("active").is(true);
-		}
+		criteria = Criteria.where("active").is(true);
 		// set param default
-		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
-				identifier);
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, identifier);
 		// code
 		if (code != null) {
 			criteria.and("code.coding.code.myStringValue").is(code.getValue());

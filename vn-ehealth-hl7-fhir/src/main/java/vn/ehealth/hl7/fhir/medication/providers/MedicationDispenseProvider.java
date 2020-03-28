@@ -40,71 +40,70 @@ import vn.ehealth.hl7.fhir.medication.dao.impl.MedicationDispenseDao;
 import vn.ehealth.hl7.fhir.medication.entity.MedicationDispenseEntity;
 
 @Component
-public class MedicationDispenseProvider extends BaseController<MedicationDispenseEntity, MedicationDispense> implements IResourceProvider {
+public class MedicationDispenseProvider extends BaseController<MedicationDispenseEntity, MedicationDispense>
+		implements IResourceProvider {
 
-    @Autowired
-    MedicationDispenseDao medicationDispenseDao;
+	@Autowired
+	MedicationDispenseDao medicationDispenseDao;
 
-    @Override
-    public Class<? extends IBaseResource> getResourceType() {
-        return MedicationDispense.class;
-    }
+	@Override
+	public Class<? extends IBaseResource> getResourceType() {
+		return MedicationDispense.class;
+	}
 
-    @Search
-    public IBundleProvider searchMedicationDispense(HttpServletRequest request,
-            @OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
-            @OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
-            @OptionalParam(name = ConstantKeys.SP_TYPE) TokenParam type,
-            @OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
-            @OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-            @OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
-            @OptionalParam(name = ConstantKeys.SP_DESTINATION) ReferenceParam destination,
-            @OptionalParam(name = ConstantKeys.SP_MEDICATION) ReferenceParam medication,
-            @OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
-            @OptionalParam(name = ConstantKeys.SP_PERFORMER) ReferenceParam performer,
-            @OptionalParam(name = ConstantKeys.SP_PRESCRIPTION) ReferenceParam prescription,
-            @OptionalParam(name = ConstantKeys.SP_RECEIVER) ReferenceParam receiver,
-            @OptionalParam(name = ConstantKeys.SP_RESPONSIBLEPARTY) ReferenceParam responsibleparty,
-            @OptionalParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
-            @OptionalParam(name = ConstantKeys.SP_WHENHANDEDOVER) ReferenceParam whenhandedover,
-            @OptionalParam(name = ConstantKeys.SP_WHENPREPARED) DateRangeParam whenprepared,
-            @OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-            @OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-            @OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-            @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-            @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-            @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
-            @OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
-            throws OperationOutcomeException {
-    	if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
+	@Search
+	public IBundleProvider searchMedicationDispense(HttpServletRequest request,
+			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
+			@OptionalParam(name = ConstantKeys.SP_TYPE) TokenParam type,
+			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
+			@OptionalParam(name = ConstantKeys.SP_DESTINATION) ReferenceParam destination,
+			@OptionalParam(name = ConstantKeys.SP_MEDICATION) ReferenceParam medication,
+			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OptionalParam(name = ConstantKeys.SP_PERFORMER) ReferenceParam performer,
+			@OptionalParam(name = ConstantKeys.SP_PRESCRIPTION) ReferenceParam prescription,
+			@OptionalParam(name = ConstantKeys.SP_RECEIVER) ReferenceParam receiver,
+			@OptionalParam(name = ConstantKeys.SP_RESPONSIBLEPARTY) ReferenceParam responsibleparty,
+			@OptionalParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
+			@OptionalParam(name = ConstantKeys.SP_WHENHANDEDOVER) ReferenceParam whenhandedover,
+			@OptionalParam(name = ConstantKeys.SP_WHENPREPARED) DateRangeParam whenprepared,
+			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
+			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
+			throws OperationOutcomeException {
+		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
 					new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
-        } else {
-        	List<Resource> results = new ArrayList<Resource>();
-            if (theSort != null) {
-                String sortParam = theSort.getParamName();
-                results = medicationDispenseDao.search(fhirContext, active, code, type, status,
-                        identifier, context, destination, medication, patient, performer, prescription, receiver,
-                        responsibleparty, subject, whenhandedover, whenprepared, resid, _lastUpdated, _tag, _profile,
-                        _query, _security, _content, _page, sortParam, count);
-            } else
-            	results = medicationDispenseDao.search(fhirContext, active, code, type, status, identifier,
-                    context, destination, medication, patient, performer, prescription, receiver, responsibleparty,
-                    subject, whenhandedover, whenprepared, resid, _lastUpdated, _tag, _profile, _query, _security,
-                    _content, _page, null, count);
-            final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
+		} else {
+			List<Resource> results = new ArrayList<Resource>();
+			if (theSort != null) {
+				String sortParam = theSort.getParamName();
+				results = medicationDispenseDao.search(fhirContext, code, type, status, identifier, context,
+						destination, medication, patient, performer, prescription, receiver, responsibleparty, subject,
+						whenhandedover, whenprepared, resid, _lastUpdated, _tag, _profile, _query, _security, _content,
+						_page, sortParam, count);
+			} else
+				results = medicationDispenseDao.search(fhirContext, code, type, status, identifier, context,
+						destination, medication, patient, performer, prescription, receiver, responsibleparty, subject,
+						whenhandedover, whenprepared, resid, _lastUpdated, _tag, _profile, _query, _security, _content,
+						_page, null, count);
+			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer
-							.parseInt(String.valueOf(medicationDispenseDao.countMatchesAdvancedTotal(fhirContext, active, code, type, status,
-					                identifier, context, destination, medication, patient, performer, prescription, receiver,
-					                responsibleparty, subject, whenhandedover, whenprepared, resid, _lastUpdated, _tag, _profile, _query,
-					                _security, _content)));
+					return Integer.parseInt(String.valueOf(medicationDispenseDao.countMatchesAdvancedTotal(fhirContext,
+							code, type, status, identifier, context, destination, medication, patient, performer,
+							prescription, receiver, responsibleparty, subject, whenhandedover, whenprepared, resid,
+							_lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -130,45 +129,42 @@ public class MedicationDispenseProvider extends BaseController<MedicationDispens
 					return null;
 				}
 			};
-        }
-    }
+		}
+	}
 
-    @Operation(name = "$total", idempotent = true)
-    public Parameters getTotal(HttpServletRequest request,
-            @OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
-            @OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
-            @OptionalParam(name = ConstantKeys.SP_TYPE) TokenParam type,
-            @OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
-            @OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-            @OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
-            @OptionalParam(name = ConstantKeys.SP_DESTINATION) ReferenceParam destination,
-            @OptionalParam(name = ConstantKeys.SP_MEDICATION) ReferenceParam medication,
-            @OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
-            @OptionalParam(name = ConstantKeys.SP_PERFORMER) ReferenceParam performer,
-            @OptionalParam(name = ConstantKeys.SP_PRESCRIPTION) ReferenceParam prescription,
-            @OptionalParam(name = ConstantKeys.SP_RECEIVER) ReferenceParam receiver,
-            @OptionalParam(name = ConstantKeys.SP_RESPONSIBLEPARTY) ReferenceParam responsibleparty,
-            @OptionalParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
-            @OptionalParam(name = ConstantKeys.SP_WHENHANDEDOVER) ReferenceParam whenhandedover,
-            @OptionalParam(name = ConstantKeys.SP_WHENPREPARED) DateRangeParam whenprepared,
-            @OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-            @OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-            @OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-            @OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-            @OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-            @OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-            @OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
-        Parameters retVal = new Parameters();
-        long total = medicationDispenseDao.countMatchesAdvancedTotal(fhirContext, active, code, type, status,
-                identifier, context, destination, medication, patient, performer, prescription, receiver,
-                responsibleparty, subject, whenhandedover, whenprepared, resid, _lastUpdated, _tag, _profile, _query,
-                _security, _content);
-        retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
-        return retVal;
-    }
+	@Operation(name = "$total", idempotent = true)
+	public Parameters getTotal(HttpServletRequest request, @OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
+			@OptionalParam(name = ConstantKeys.SP_TYPE) TokenParam type,
+			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
+			@OptionalParam(name = ConstantKeys.SP_DESTINATION) ReferenceParam destination,
+			@OptionalParam(name = ConstantKeys.SP_MEDICATION) ReferenceParam medication,
+			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OptionalParam(name = ConstantKeys.SP_PERFORMER) ReferenceParam performer,
+			@OptionalParam(name = ConstantKeys.SP_PRESCRIPTION) ReferenceParam prescription,
+			@OptionalParam(name = ConstantKeys.SP_RECEIVER) ReferenceParam receiver,
+			@OptionalParam(name = ConstantKeys.SP_RESPONSIBLEPARTY) ReferenceParam responsibleparty,
+			@OptionalParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
+			@OptionalParam(name = ConstantKeys.SP_WHENHANDEDOVER) ReferenceParam whenhandedover,
+			@OptionalParam(name = ConstantKeys.SP_WHENPREPARED) DateRangeParam whenprepared,
+			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+		Parameters retVal = new Parameters();
+		long total = medicationDispenseDao.countMatchesAdvancedTotal(fhirContext, code, type, status, identifier,
+				context, destination, medication, patient, performer, prescription, receiver, responsibleparty, subject,
+				whenhandedover, whenprepared, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
+		return retVal;
+	}
 
-    @Override
-    protected BaseDao<MedicationDispenseEntity, MedicationDispense> getDao() {
-        return medicationDispenseDao;
-    }
+	@Override
+	protected BaseDao<MedicationDispenseEntity, MedicationDispense> getDao() {
+		return medicationDispenseDao;
+	}
 }

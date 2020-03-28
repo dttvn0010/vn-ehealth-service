@@ -27,92 +27,93 @@ import vn.ehealth.hl7.fhir.medication.entity.MedicationDispenseEntity;
 @Repository
 public class MedicationDispenseDao extends BaseDao<MedicationDispenseEntity, MedicationDispense> {
 
-    @SuppressWarnings("deprecation")
-    public List<Resource> search(FhirContext fhirContext, TokenParam active, TokenParam code, TokenParam type,
-            TokenParam status, TokenParam identifier, ReferenceParam context, ReferenceParam destination,
-            ReferenceParam medication, ReferenceParam patient, ReferenceParam performer, ReferenceParam prescription,
-            ReferenceParam receiver, ReferenceParam responsibleparty, ReferenceParam subject,
-            ReferenceParam whenhandedover, DateRangeParam whenprepared, TokenParam resid, DateRangeParam _lastUpdated,
-            TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content,
-            StringParam _page, String sortParam, Integer count) {
-        List<Resource> resources = new ArrayList<>();
-        Criteria criteria = setParamToCriteria(active, code, type, status, identifier, context, destination, medication,
-                patient, performer, prescription, receiver, responsibleparty, subject, whenhandedover, whenprepared,
-                resid, _lastUpdated, _tag, _profile, _query, _security, _content);
-        Query query = new Query();
-        if (criteria != null) {
-            query = Query.query(criteria);
-        }
-        Pageable pageableRequest;
-        pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
-        query.with(pageableRequest);
+	@SuppressWarnings("deprecation")
+	public List<Resource> search(FhirContext fhirContext, TokenParam code, TokenParam type, TokenParam status,
+			TokenParam identifier, ReferenceParam context, ReferenceParam destination, ReferenceParam medication,
+			ReferenceParam patient, ReferenceParam performer, ReferenceParam prescription, ReferenceParam receiver,
+			ReferenceParam responsibleparty, ReferenceParam subject, ReferenceParam whenhandedover,
+			DateRangeParam whenprepared, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
+			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content, StringParam _page,
+			String sortParam, Integer count) {
+		List<Resource> resources = new ArrayList<>();
+		Criteria criteria = setParamToCriteria(code, type, status, identifier, context, destination, medication,
+				patient, performer, prescription, receiver, responsibleparty, subject, whenhandedover, whenprepared,
+				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		Query query = new Query();
+		if (criteria != null) {
+			query = Query.query(criteria);
+		}
+		Pageable pageableRequest;
+		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
+		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
-        List<MedicationDispenseEntity> medicationDispenseEntitys = mongo.find(query, MedicationDispenseEntity.class);
-        if (medicationDispenseEntitys != null) {
-            for (MedicationDispenseEntity item : medicationDispenseEntitys) {
-                MedicationDispense medicationDispense = transform(item);
-                resources.add(medicationDispense);
-            }
-        }
-        return resources;
-    }
+		List<MedicationDispenseEntity> medicationDispenseEntitys = mongo.find(query, MedicationDispenseEntity.class);
+		if (medicationDispenseEntitys != null) {
+			for (MedicationDispenseEntity item : medicationDispenseEntitys) {
+				MedicationDispense medicationDispense = transform(item);
+				resources.add(medicationDispense);
+			}
+		}
+		return resources;
+	}
 
-    public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, TokenParam code, TokenParam type,
-            TokenParam status, TokenParam identifier, ReferenceParam context, ReferenceParam destination,
-            ReferenceParam medication, ReferenceParam patient, ReferenceParam performer, ReferenceParam prescription,
-            ReferenceParam receiver, ReferenceParam responsibleparty, ReferenceParam subject,
-            ReferenceParam whenhandedover, DateRangeParam whenprepared, TokenParam resid, DateRangeParam _lastUpdated,
-            TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
-        long total = 0;
-        Criteria criteria = setParamToCriteria(active, code, type, status, identifier, context, destination, medication,
-                patient, performer, prescription, receiver, responsibleparty, subject, whenhandedover, whenprepared,
-                resid, _lastUpdated, _tag, _profile, _query, _security, _content);
-        Query query = new Query();
-        if (criteria != null) {
-            query = Query.query(criteria);
-        }
-        total = mongo.count(query, MedicationDispenseEntity.class);
-        return total;
-    }
+	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam code, TokenParam type, TokenParam status,
+			TokenParam identifier, ReferenceParam context, ReferenceParam destination, ReferenceParam medication,
+			ReferenceParam patient, ReferenceParam performer, ReferenceParam prescription, ReferenceParam receiver,
+			ReferenceParam responsibleparty, ReferenceParam subject, ReferenceParam whenhandedover,
+			DateRangeParam whenprepared, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
+			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
+		long total = 0;
+		Criteria criteria = setParamToCriteria(code, type, status, identifier, context, destination, medication,
+				patient, performer, prescription, receiver, responsibleparty, subject, whenhandedover, whenprepared,
+				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		Query query = new Query();
+		if (criteria != null) {
+			query = Query.query(criteria);
+		}
+		total = mongo.count(query, MedicationDispenseEntity.class);
+		return total;
+	}
 
-    private Criteria setParamToCriteria(TokenParam active, TokenParam code, TokenParam type, TokenParam status,
-            TokenParam identifier, ReferenceParam context, ReferenceParam destination, ReferenceParam medication,
-            ReferenceParam patient, ReferenceParam performer, ReferenceParam prescription, ReferenceParam receiver,
-            ReferenceParam responsibleparty, ReferenceParam subject, ReferenceParam whenhandedover,
-            DateRangeParam whenprepared, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
-            UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
-        Criteria criteria = null;
-        // active
-        if (active != null) {
-            criteria = Criteria.where("active").is(active);
-        } else {
-            criteria = Criteria.where("active").is(true);
-        }
-        // status
-        if (status != null) {
-            criteria.and("status").is(status.getValue());
-        }
-        return criteria;
-    }
+	private Criteria setParamToCriteria(TokenParam code, TokenParam type, TokenParam status, TokenParam identifier,
+			ReferenceParam context, ReferenceParam destination, ReferenceParam medication, ReferenceParam patient,
+			ReferenceParam performer, ReferenceParam prescription, ReferenceParam receiver,
+			ReferenceParam responsibleparty, ReferenceParam subject, ReferenceParam whenhandedover,
+			DateRangeParam whenprepared, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
+			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
+		Criteria criteria = null;
+		// active
+		criteria = Criteria.where("active").is(true);
+		// status
+		if (status != null) {
+			criteria.and("status").is(status.getValue());
+		}
+		return criteria;
+	}
 
-    @Override
-    protected String getProfile() {
-        return "MedicationDispense-v1.0";
-    }
+	@Override
+	protected String getProfile() {
+		return "MedicationDispense-v1.0";
+	}
 
-    @Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return MedicationDispense.class;
-    }
+	@Override
+	protected MedicationDispenseEntity fromFhir(MedicationDispense obj) {
+		return MedicationDispenseEntity.fromMedicationDispense(obj);
+	}
 
-    @Override
-    protected Class<? extends BaseResource> getEntityClass() {
-        return MedicationDispenseEntity.class;
-    }
+	@Override
+	protected MedicationDispense toFhir(MedicationDispenseEntity ent) {
+		return MedicationDispenseEntity.toMedicationDispense(ent);
+	}
+
+	@Override
+	protected Class<? extends BaseResource> getEntityClass() {
+		return MedicationDispenseEntity.class;
+	}
 }

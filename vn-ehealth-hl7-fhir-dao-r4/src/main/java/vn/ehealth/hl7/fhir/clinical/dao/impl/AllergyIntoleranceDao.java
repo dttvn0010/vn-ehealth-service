@@ -48,7 +48,7 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
     }
 
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(TokenParam active, TokenParam encounter, ReferenceParam asserter,
+	public List<IBaseResource> search(TokenParam encounter, ReferenceParam asserter,
 			TokenParam category, TokenParam clinicalStatus, TokenParam code, TokenParam criticality,
 			DateRangeParam date, TokenParam identifier, DateRangeParam lastDate, TokenParam manifestation,
 			DateRangeParam onset, ReferenceParam patient, ReferenceParam recorder, TokenParam route,
@@ -58,7 +58,7 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 			TokenParam _security, StringParam _content, StringParam _page, String sortParam, Integer count,
 			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
-		Criteria criteria = setParamToCriteria(active, encounter, asserter, category, clinicalStatus, code, criticality,
+		Criteria criteria = setParamToCriteria(encounter, asserter, category, clinicalStatus, code, criticality,
 				date, identifier, lastDate, manifestation, onset, patient, recorder, route, severity, type,
 				verificationStatus,
 				// COMMON PARAMS
@@ -109,7 +109,7 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 		return null;
 	}
 
-	public long countMatchesAdvancedTotal(TokenParam active, TokenParam encounter, ReferenceParam asserter,
+	public long countMatchesAdvancedTotal(TokenParam encounter, ReferenceParam asserter,
 			TokenParam category, TokenParam clinicalStatus, TokenParam code, TokenParam criticality,
 			DateRangeParam date, TokenParam identifier, DateRangeParam lastDate, TokenParam manifestation,
 			DateRangeParam onset, ReferenceParam patient, ReferenceParam recorder, TokenParam route,
@@ -118,7 +118,7 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
 			TokenParam _security, StringParam _content) {
 		long total = 0;
-		Criteria criteria = setParamToCriteria(active, encounter, asserter, category, clinicalStatus, code, criticality,
+		Criteria criteria = setParamToCriteria(encounter, asserter, category, clinicalStatus, code, criticality,
 				date, identifier, lastDate, manifestation, onset, patient, recorder, route, severity, type,
 				verificationStatus,
 				// COMMON PARAMS
@@ -131,7 +131,7 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 		return total;
 	}
 
-	private Criteria setParamToCriteria(TokenParam active, TokenParam encounter, ReferenceParam asserter,
+	private Criteria setParamToCriteria(TokenParam encounter, ReferenceParam asserter,
 			TokenParam category, TokenParam clinicalStatus, TokenParam code, TokenParam criticality,
 			DateRangeParam date, TokenParam identifier, DateRangeParam lastDate, TokenParam manifestation,
 			DateRangeParam onset, ReferenceParam patient, ReferenceParam recorder, TokenParam route,
@@ -141,11 +141,7 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 			TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
-		if (active != null) {
-			criteria = Criteria.where("active").is(active);
-		} else {
-			criteria = Criteria.where("active").is(true);
-		}
+		criteria = Criteria.where("active").is(true);
 		// set param default
 		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);

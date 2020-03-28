@@ -59,8 +59,6 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
-			@OptionalParam(name = ConstantKeys.SP_ENCOUNTER) TokenParam encounter,
 			@OptionalParam(name = AllergyIntolerance.SP_ASSERTER) ReferenceParam asserter,
 			@OptionalParam(name = AllergyIntolerance.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = AllergyIntolerance.SP_CLINICAL_STATUS) TokenParam clinicalStatus,
@@ -77,6 +75,7 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 			@OptionalParam(name = AllergyIntolerance.SP_SEVERITY) TokenParam severity,
 			@OptionalParam(name = AllergyIntolerance.SP_TYPE) TokenParam type,
 			@OptionalParam(name = AllergyIntolerance.SP_VERIFICATION_STATUS) TokenParam verificationStatus,
+			@OptionalParam(name = ConstantKeys.SP_ENCOUNTER) TokenParam encounter,
 			// COMMON PARAMS
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
@@ -94,10 +93,10 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 					new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
 		} else {
-			List<IBaseResource> results = new ArrayList<IBaseResource>();
+			List<IBaseResource> results = new ArrayList<IBaseResource>();			
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = baseDao.search(active, encounter, asserter, category, clinicalStatus, code, criticality, date,
+				results = baseDao.search(encounter, asserter, category, clinicalStatus, code, criticality, date,
 						identifier, lastDate, manifestation, onset, patient, recorder, route, severity, type,
 						verificationStatus,
 						// COMMON PARAMS
@@ -105,7 +104,7 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 						includes);
 				// return results;
 			} else
-				results = baseDao.search(active, encounter, asserter, category, clinicalStatus, code, criticality, date,
+				results = baseDao.search(encounter, asserter, category, clinicalStatus, code, criticality, date,
 						identifier, lastDate, manifestation, onset, patient, recorder, route, severity, type,
 						verificationStatus,
 						// COMMON PARAMS
@@ -116,7 +115,7 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(baseDao.countMatchesAdvancedTotal(active, encounter,
+					return Integer.parseInt(String.valueOf(baseDao.countMatchesAdvancedTotal(encounter,
 							asserter, category, clinicalStatus, code, criticality, date, identifier, lastDate,
 							manifestation, onset, patient, recorder, route, severity, type, verificationStatus,
 							// COMMON PARAMS
@@ -151,7 +150,6 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ENCOUNTER) TokenParam encounter,
 			@OptionalParam(name = AllergyIntolerance.SP_ASSERTER) ReferenceParam asserter,
 			@OptionalParam(name = AllergyIntolerance.SP_CATEGORY) TokenParam category,
@@ -178,7 +176,7 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = baseDao.countMatchesAdvancedTotal(active, encounter, asserter, category, clinicalStatus, code,
+		long total = baseDao.countMatchesAdvancedTotal(encounter, asserter, category, clinicalStatus, code,
 				criticality, date, identifier, lastDate, manifestation, onset, patient, recorder, route, severity, type,
 				verificationStatus,
 				// COMMON PARAMS

@@ -26,137 +26,137 @@ import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.provider.entity.HealthcareServiceEntity;
 
 @Repository
-public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, HealthcareService>  {
+public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, HealthcareService> {
 
-    @SuppressWarnings("deprecation")
-    public List<Resource> search(FhirContext fhirContext, TokenParam active, TokenParam category,
-            TokenParam characteristic, ReferenceParam endpoint, TokenParam identifier, ReferenceParam location,
-            StringParam name, ReferenceParam organization, StringParam programname, TokenParam type, TokenParam resid,
-            DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-            StringParam _content, StringParam _page, String sortParam, Integer count) {
-        List<Resource> resources = new ArrayList<>();
-        Criteria criteria = null;
-        criteria = setParamToCriteria(active, category, characteristic, endpoint, identifier, location, name,
-                organization, programname, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+	@SuppressWarnings("deprecation")
+	public List<Resource> search(FhirContext fhirContext, TokenParam category, TokenParam characteristic,
+			ReferenceParam endpoint, TokenParam identifier, ReferenceParam location, StringParam name,
+			ReferenceParam organization, StringParam programname, TokenParam type, TokenParam resid,
+			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
+			StringParam _content, StringParam _page, String sortParam, Integer count) {
+		List<Resource> resources = new ArrayList<>();
+		Criteria criteria = null;
+		criteria = setParamToCriteria(category, characteristic, endpoint, identifier, location, name, organization,
+				programname, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 
-        Query query = new Query();
-        if (criteria != null) {
-            query = Query.query(criteria);
-        }
-        Pageable pageableRequest;
-        pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
-                count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
-        query.with(pageableRequest);
+		Query query = new Query();
+		if (criteria != null) {
+			query = Query.query(criteria);
+		}
+		Pageable pageableRequest;
+		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
+		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
-        List<HealthcareServiceEntity> healthcareServiceResults = mongo.find(query, HealthcareServiceEntity.class);
-        for (HealthcareServiceEntity healthcareServiceEntity : healthcareServiceResults) {
-            resources.add(transform(healthcareServiceEntity));
-        }
-        return resources;
-    }
+		List<HealthcareServiceEntity> healthcareServiceResults = mongo.find(query, HealthcareServiceEntity.class);
+		for (HealthcareServiceEntity healthcareServiceEntity : healthcareServiceResults) {
+			resources.add(transform(healthcareServiceEntity));
+		}
+		return resources;
+	}
 
-    public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, TokenParam category,
-            TokenParam characteristic, ReferenceParam endpoint, TokenParam identifier, ReferenceParam location,
-            StringParam name, ReferenceParam organization, StringParam programname, TokenParam type, TokenParam resid,
-            DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-            StringParam _content) {
-        Criteria criteria = null;
-        criteria = setParamToCriteria(active, category, characteristic, endpoint, identifier, location, name,
-                organization, programname, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
-        long count = 0;
-        if (criteria != null) {
-            Query qry = Query.query(criteria);
-            count = mongo.count(qry, HealthcareServiceEntity.class);
-        } else {
-            Query query = new Query();
-            count = mongo.count(query, HealthcareServiceEntity.class);
-        }
-        return count;
-    }
+	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam category, TokenParam characteristic,
+			ReferenceParam endpoint, TokenParam identifier, ReferenceParam location, StringParam name,
+			ReferenceParam organization, StringParam programname, TokenParam type, TokenParam resid,
+			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
+			StringParam _content) {
+		Criteria criteria = null;
+		criteria = setParamToCriteria(category, characteristic, endpoint, identifier, location, name, organization,
+				programname, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		long count = 0;
+		if (criteria != null) {
+			Query qry = Query.query(criteria);
+			count = mongo.count(qry, HealthcareServiceEntity.class);
+		} else {
+			Query query = new Query();
+			count = mongo.count(query, HealthcareServiceEntity.class);
+		}
+		return count;
+	}
 
-    private Criteria setParamToCriteria(TokenParam active, TokenParam category, TokenParam characteristic,
-            ReferenceParam endpoint, TokenParam identifier, ReferenceParam location, StringParam name,
-            ReferenceParam organization, StringParam programname, TokenParam type, TokenParam resid,
-            DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-            StringParam _content) {
-        Criteria criteria = null;
-        // default
-        criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
-                identifier);
-        // active
-        if (active != null) {
-            criteria = Criteria.where("active").is(active.getValue());
-        } else {
-            criteria = Criteria.where("active").is(true);
-        }
-        // category
-        if (category != null) {
-            criteria.and("category").regex(category.getValue());
-        }
-        // characteristic
-        if (characteristic != null) {
-            criteria.and("characteristic").regex(characteristic.getValue());
-        }
-        // endpoint
-        if (endpoint != null) {
-            criteria.orOperator(Criteria.where("endpoint.reference").regex(endpoint.getValue()),
-                    Criteria.where("endpoint.display").regex(endpoint.getValue()),
-                    Criteria.where("endpoint.identifier.value").regex(endpoint.getValue()),
-                    Criteria.where("endpoint.identifier.system").regex(endpoint.getValue()));
-        }
-        // identifier
-        if (identifier != null) {
-            criteria.and("identifier.system").is(identifier.getSystem()).and("identifier.value")
-                    .is(identifier.getValue());
-        }
-        // location
-        if (location != null) {
-            criteria.orOperator(Criteria.where("location.reference").regex(location.getValue()),
-                    Criteria.where("location.display").regex(location.getValue()),
-                    Criteria.where("location.identifier.value").regex(location.getValue()),
-                    Criteria.where("location.identifier.system").regex(location.getValue()));
-        }
-        // name
-        if (name != null && !name.isEmpty()) {
-            criteria.and("name").regex(name.getValue());
-        }
-        // organization
-        if (organization != null) {
-            criteria.orOperator(Criteria.where("providedBy.reference").regex(organization.getValue()),
-                    Criteria.where("providedBy.display").regex(organization.getValue()),
-                    Criteria.where("providedBy.identifier.value").regex(organization.getValue()),
-                    Criteria.where("providedBy.identifier.system").regex(organization.getValue()));
-        }
-        // programName
-        if (programname != null) {
-            criteria.and("programName").regex(characteristic.getValue());
-        }
-        // type
-        if (type != null) {
-            criteria.and("type").regex(type.getValue());
-        }
+	private Criteria setParamToCriteria(TokenParam category, TokenParam characteristic, ReferenceParam endpoint,
+			TokenParam identifier, ReferenceParam location, StringParam name, ReferenceParam organization,
+			StringParam programname, TokenParam type, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
+			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
+		Criteria criteria = null;
+		// default
+		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+				identifier);
+		// active
+		criteria = Criteria.where("active").is(true);
+		// category
+		if (category != null) {
+			criteria.and("category").regex(category.getValue());
+		}
+		// characteristic
+		if (characteristic != null) {
+			criteria.and("characteristic").regex(characteristic.getValue());
+		}
+		// endpoint
+		if (endpoint != null) {
+			criteria.orOperator(Criteria.where("endpoint.reference").regex(endpoint.getValue()),
+					Criteria.where("endpoint.display").regex(endpoint.getValue()),
+					Criteria.where("endpoint.identifier.value").regex(endpoint.getValue()),
+					Criteria.where("endpoint.identifier.system").regex(endpoint.getValue()));
+		}
+		// identifier
+		if (identifier != null) {
+			criteria.and("identifier.system").is(identifier.getSystem()).and("identifier.value")
+					.is(identifier.getValue());
+		}
+		// location
+		if (location != null) {
+			criteria.orOperator(Criteria.where("location.reference").regex(location.getValue()),
+					Criteria.where("location.display").regex(location.getValue()),
+					Criteria.where("location.identifier.value").regex(location.getValue()),
+					Criteria.where("location.identifier.system").regex(location.getValue()));
+		}
+		// name
+		if (name != null && !name.isEmpty()) {
+			criteria.and("name").regex(name.getValue());
+		}
+		// organization
+		if (organization != null) {
+			criteria.orOperator(Criteria.where("providedBy.reference").regex(organization.getValue()),
+					Criteria.where("providedBy.display").regex(organization.getValue()),
+					Criteria.where("providedBy.identifier.value").regex(organization.getValue()),
+					Criteria.where("providedBy.identifier.system").regex(organization.getValue()));
+		}
+		// programName
+		if (programname != null) {
+			criteria.and("programName").regex(characteristic.getValue());
+		}
+		// type
+		if (type != null) {
+			criteria.and("type").regex(type.getValue());
+		}
 
-        return criteria;
-    }
+		return criteria;
+	}
 
-    @Override
-    protected String getProfile() {
-        return "HealthcareService-v1.0";
-    }
+	@Override
+	protected String getProfile() {
+		return "HealthcareService-v1.0";
+	}
 
-    @Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return HealthcareService.class;
-    }
-    
-    @Override
-    protected Class<? extends BaseResource> getEntityClass() {
-        return HealthcareServiceEntity.class;
-    }
+	@Override
+	protected HealthcareServiceEntity fromFhir(HealthcareService obj) {
+		return HealthcareServiceEntity.fromHealthcareService(obj);
+	}
+
+	@Override
+	protected HealthcareService toFhir(HealthcareServiceEntity ent) {
+		return HealthcareServiceEntity.toHealthcareService(ent);
+	}
+
+	@Override
+	protected Class<? extends BaseResource> getEntityClass() {
+		return HealthcareServiceEntity.class;
+	}
 
 }

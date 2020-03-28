@@ -52,7 +52,6 @@ public class CareTeamProvider extends BaseController<CareTeamEntity, CareTeam> i
 
 	@Search
 	public IBundleProvider searchCareTeam(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
@@ -80,23 +79,23 @@ public class CareTeamProvider extends BaseController<CareTeamEntity, CareTeam> i
 			List<Resource> results = new ArrayList<Resource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = careTeamDao.search(fhirContext, active, category, context, date, encounter, identifier,
-						participant, patient, status, subject, resid, _lastUpdated, _tag, _profile, _query, _security,
-						_content, _page, sortParam, count);
+				results = careTeamDao.search(fhirContext, category, context, date, encounter, identifier, participant,
+						patient, status, subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content,
+						_page, sortParam, count);
 				// return results;
 			} else
-				results = careTeamDao.search(fhirContext, active, category, context, date, encounter, identifier,
-						participant, patient, status, subject, resid, _lastUpdated, _tag, _profile, _query, _security,
-						_content, _page, null, count);
+				results = careTeamDao.search(fhirContext, category, context, date, encounter, identifier, participant,
+						patient, status, subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content,
+						_page, null, count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 
 			return new IBundleProvider() {
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(careTeamDao.getTotal(fhirContext, active, category, context,
-							date, encounter, identifier, participant, patient, status, subject, resid, _lastUpdated,
-							_tag, _profile, _query, _security, _content)));
+					return Integer.parseInt(String.valueOf(careTeamDao.getTotal(fhirContext, category, context, date,
+							encounter, identifier, participant, patient, status, subject, resid, _lastUpdated, _tag,
+							_profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -127,7 +126,6 @@ public class CareTeamProvider extends BaseController<CareTeamEntity, CareTeam> i
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
@@ -146,15 +144,14 @@ public class CareTeamProvider extends BaseController<CareTeamEntity, CareTeam> i
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = careTeamDao.getTotal(fhirContext, active, category, context, date, encounter, identifier,
-				participant, patient, status, subject, resid, _lastUpdated, _tag, _profile, _query, _security,
-				_content);
+		long total = careTeamDao.getTotal(fhirContext, category, context, date, encounter, identifier, participant,
+				patient, status, subject, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
-    @Override
-    protected BaseDao<CareTeamEntity, CareTeam> getDao() {
-        return careTeamDao;
-    }
+	@Override
+	protected BaseDao<CareTeamEntity, CareTeam> getDao() {
+		return careTeamDao;
+	}
 }
