@@ -117,14 +117,9 @@ public class ScheduleDao extends BaseDao<ScheduleEntity, Schedule> {
 	}
 
 	@Override
-	protected ScheduleEntity fromFhir(Schedule obj) {
-		return ScheduleEntity.fromSchedule(obj);
-	}
-
-	@Override
-	protected Schedule toFhir(ScheduleEntity ent) {
-		return ScheduleEntity.toSchedule(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Schedule.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

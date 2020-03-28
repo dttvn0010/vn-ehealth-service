@@ -271,14 +271,9 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
 	}
 
 	@Override
-	protected ServiceRequestEntity fromFhir(ServiceRequest obj) {
-		return ServiceRequestEntity.fromServiceRequest(obj);
-	}
-
-	@Override
-	protected ServiceRequest toFhir(ServiceRequestEntity ent) {
-		return ServiceRequestEntity.toServiceRequest(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return ServiceRequest.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

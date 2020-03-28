@@ -7,8 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
-
+import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 /**
  * @author SONVT24
@@ -19,6 +18,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @Document(collection = "concept")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class ConceptEntity extends BaseResource {
+    
     @Id
     public ObjectId id;
     public String code;

@@ -110,15 +110,10 @@ public class SlotDao extends BaseDao<SlotEntity, Slot> {
 	}
 
 	@Override
-	protected SlotEntity fromFhir(Slot obj) {
-		return SlotEntity.fromSlot(obj);
-	}
-
-	@Override
-	protected Slot toFhir(SlotEntity ent) {
-		return SlotEntity.toSlot(ent);
-	}
-
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Slot.class;
+    }
+	
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return SlotEntity.class;

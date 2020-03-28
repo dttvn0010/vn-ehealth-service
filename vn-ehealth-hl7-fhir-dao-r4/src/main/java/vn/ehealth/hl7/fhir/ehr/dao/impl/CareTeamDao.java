@@ -153,14 +153,9 @@ public class CareTeamDao extends BaseDao<CareTeamEntity, CareTeam> {
 	}
 
 	@Override
-	protected CareTeamEntity fromFhir(CareTeam obj) {
-		return CareTeamEntity.fromCareTeam(obj);
-	}
-
-	@Override
-	protected CareTeam toFhir(CareTeamEntity ent) {
-		return CareTeamEntity.toCareTeam(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return CareTeam.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

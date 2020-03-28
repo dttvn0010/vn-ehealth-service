@@ -155,14 +155,9 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
 	}
 
 	@Override
-	protected DiagnosticReportEntity fromFhir(DiagnosticReport obj) {
-		return DiagnosticReportEntity.fromDiagnosticReport(obj);
-	}
-
-	@Override
-	protected DiagnosticReport toFhir(DiagnosticReportEntity ent) {
-		return DiagnosticReportEntity.toDiagnosticReport(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return DiagnosticReport.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

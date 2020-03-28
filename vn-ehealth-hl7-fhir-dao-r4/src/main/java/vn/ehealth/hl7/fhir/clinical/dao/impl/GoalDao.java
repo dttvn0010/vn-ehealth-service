@@ -151,18 +151,13 @@ public class GoalDao extends BaseDao<GoalEntity, Goal> {
 	}
 
 	@Override
-	protected GoalEntity fromFhir(Goal obj) {
-		return GoalEntity.fromGoalEntity(obj);
-	}
-
-	@Override
-	protected Goal toFhir(GoalEntity ent) {
-		return GoalEntity.toGoal(ent);
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return GoalEntity.class;
 	}
+
+    @Override
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Goal.class;
+    }
 
 }

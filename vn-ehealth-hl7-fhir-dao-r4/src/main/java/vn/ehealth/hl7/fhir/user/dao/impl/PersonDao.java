@@ -139,14 +139,9 @@ public class PersonDao extends BaseDao<PersonEntity, Person> {
 	}
 
 	@Override
-	protected PersonEntity fromFhir(Person obj) {
-		return PersonEntity.fromPerson(obj);
-	}
-
-	@Override
-	protected Person toFhir(PersonEntity ent) {
-		return PersonEntity.toPerson(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Person.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

@@ -182,14 +182,9 @@ public class AppointmentDao extends BaseDao<AppointmentEntity, Appointment> {
 	}
 
 	@Override
-	protected AppointmentEntity fromFhir(Appointment obj) {
-		return AppointmentEntity.fromAppointment(obj);
-	}
-
-	@Override
-	protected Appointment toFhir(AppointmentEntity ent) {
-		return AppointmentEntity.toAppointment(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Appointment.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

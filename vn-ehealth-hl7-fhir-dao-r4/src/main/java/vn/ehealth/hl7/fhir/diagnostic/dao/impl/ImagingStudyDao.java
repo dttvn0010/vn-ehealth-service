@@ -130,14 +130,9 @@ public class ImagingStudyDao extends BaseDao<ImagingStudyEntity, ImagingStudy> {
 	}
 
 	@Override
-	protected ImagingStudyEntity fromFhir(ImagingStudy obj) {
-		return ImagingStudyEntity.fromImagingStudy(obj);
-	}
-
-	@Override
-	protected ImagingStudy toFhir(ImagingStudyEntity ent) {
-		return ImagingStudyEntity.toImagingStudy(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return ImagingStudy.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

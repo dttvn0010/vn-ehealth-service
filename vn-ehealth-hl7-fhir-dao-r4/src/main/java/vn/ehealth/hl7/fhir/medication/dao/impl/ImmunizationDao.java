@@ -196,14 +196,9 @@ public class ImmunizationDao extends BaseDao<ImmunizationEntity, Immunization> {
 	}
 
 	@Override
-	protected ImmunizationEntity fromFhir(Immunization obj) {
-		return ImmunizationEntity.fromImmunization(obj);
-	}
-
-	@Override
-	protected Immunization toFhir(ImmunizationEntity ent) {
-		return ImmunizationEntity.toImmunization(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Immunization.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

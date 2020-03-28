@@ -277,14 +277,9 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
 	}
 
 	@Override
-	protected ProcedureEntity fromFhir(Procedure obj) {
-		return ProcedureEntity.fromProcedure(obj);
-	}
-
-	@Override
-	protected Procedure toFhir(ProcedureEntity ent) {
-		return ProcedureEntity.toProcedure(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Procedure.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

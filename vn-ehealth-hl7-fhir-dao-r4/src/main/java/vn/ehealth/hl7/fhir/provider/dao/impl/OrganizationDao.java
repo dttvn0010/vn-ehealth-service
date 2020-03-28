@@ -145,14 +145,9 @@ public class OrganizationDao extends BaseDao<OrganizationEntity, Organization> {
 	}
 
 	@Override
-	protected OrganizationEntity fromFhir(Organization obj) {
-		return OrganizationEntity.fromOrganization(obj);
-	}
-
-	@Override
-	protected Organization toFhir(OrganizationEntity ent) {
-		return OrganizationEntity.toOrganization(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Organization.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

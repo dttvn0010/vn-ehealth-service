@@ -162,14 +162,9 @@ public class PractitionerRoleDao extends BaseDao<PractitionerRoleEntity, Practit
 	}
 
 	@Override
-	protected PractitionerRoleEntity fromFhir(PractitionerRole obj) {
-		return PractitionerRoleEntity.fromPractitionerRole(obj);
-	}
-
-	@Override
-	protected PractitionerRole toFhir(PractitionerRoleEntity ent) {
-		return PractitionerRoleEntity.toPractitionerRole(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return PractitionerRole.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

@@ -145,14 +145,9 @@ public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, Healt
 	}
 
 	@Override
-	protected HealthcareServiceEntity fromFhir(HealthcareService obj) {
-		return HealthcareServiceEntity.fromHealthcareService(obj);
-	}
-
-	@Override
-	protected HealthcareService toFhir(HealthcareServiceEntity ent) {
-		return HealthcareServiceEntity.toHealthcareService(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return HealthcareService.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

@@ -159,14 +159,9 @@ public class DeviceDao extends BaseDao<DeviceEntity, Device> {
 	}
 
 	@Override
-	protected DeviceEntity fromFhir(Device obj) {
-		return DeviceEntity.fromDevice(obj);
-	}
-
-	@Override
-	protected Device toFhir(DeviceEntity ent) {
-		return DeviceEntity.toDevice(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Device.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

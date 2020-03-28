@@ -166,14 +166,9 @@ public class EpisodeOfCareDao extends BaseDao<EpisodeOfCareEntity, EpisodeOfCare
 	}
 
 	@Override
-	protected EpisodeOfCareEntity fromFhir(EpisodeOfCare obj) {
-		return EpisodeOfCareEntity.fromEpisodeOfCare(obj);
-	}
-
-	@Override
-	protected EpisodeOfCare toFhir(EpisodeOfCareEntity ent) {
-		return EpisodeOfCareEntity.toEpisodeOfCare(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return EpisodeOfCare.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

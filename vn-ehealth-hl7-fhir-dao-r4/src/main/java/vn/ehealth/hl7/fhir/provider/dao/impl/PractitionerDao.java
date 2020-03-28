@@ -179,14 +179,9 @@ public class PractitionerDao extends BaseDao<PractitionerEntity, Practitioner> {
 	}
 
 	@Override
-	protected PractitionerEntity fromFhir(Practitioner obj) {
-		return PractitionerEntity.fromPractitioner(obj);
-	}
-
-	@Override
-	protected Practitioner toFhir(PractitionerEntity ent) {
-		return PractitionerEntity.toPractitioner(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Practitioner.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

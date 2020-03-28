@@ -64,7 +64,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         ent.version = (version);
         ent.resCreated = (new Date());
         ent.fhirVersion = "R4";
-        return ent;
+        return (ENT) ent;
     }
     
     public FHIR create(FHIR object) {

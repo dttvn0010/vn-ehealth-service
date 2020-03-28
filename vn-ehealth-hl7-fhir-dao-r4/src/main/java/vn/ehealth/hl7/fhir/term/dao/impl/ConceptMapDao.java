@@ -86,7 +86,7 @@ public class ConceptMapDao extends BaseDao<ConceptMapEntity, ConceptMap> {
 						groupElementEntity.unmapped = (unMapped);
 						groupTmps.add(groupElementEntity);
 					}
-					conceptMapEntity.group = (groupTmps);
+					//TODO: conceptMapEntity.group = (groupTmps);
 					ConceptMap conceptMap = transform(conceptMapEntity);
 					resources.add(conceptMap);
 				}
@@ -141,7 +141,7 @@ public class ConceptMapDao extends BaseDao<ConceptMapEntity, ConceptMap> {
 					groupElementEntity.unmapped = (unMapped);
 					groupTmps.add(groupElementEntity);
 				}
-				conceptMapEntity.group = (groupTmps);
+				// TODO :conceptMapEntity.group = (groupTmps);
 				ConceptMap conceptMap = transform(conceptMapEntity);
 				resources.add(conceptMap);
 			}
@@ -280,18 +280,13 @@ public class ConceptMapDao extends BaseDao<ConceptMapEntity, ConceptMap> {
 	}
 
 	@Override
-	protected ConceptMapEntity fromFhir(ConceptMap obj) {
-		return ConceptMapEntity.fromConceptMap(obj);
-	}
-
-	@Override
-	protected ConceptMap toFhir(ConceptMapEntity ent) {
-		return ConceptMapEntity.toConceptMap(ent);
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return ConceptMapEntity.class;
 	}
+
+    @Override
+    protected Class<? extends DomainResource> getResourceClass() {
+        return ConceptMap.class;
+    }
 
 }

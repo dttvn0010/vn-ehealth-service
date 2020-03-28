@@ -199,14 +199,9 @@ public class MedicationAdministrationDao extends BaseDao<MedicationAdministratio
 	}
 
 	@Override
-	protected MedicationAdministrationEntity fromFhir(MedicationAdministration obj) {
-		return MedicationAdministrationEntity.fromMedicationAdministration(obj);
-	}
-
-	@Override
-	protected MedicationAdministration toFhir(MedicationAdministrationEntity ent) {
-		return MedicationAdministrationEntity.toMedicationAdministration(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+	    return MedicationAdministration.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

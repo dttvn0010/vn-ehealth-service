@@ -138,14 +138,9 @@ public class RelatedPersonDao extends BaseDao<RelatedPersonEntity, RelatedPerson
 	}
 
 	@Override
-	protected RelatedPersonEntity fromFhir(RelatedPerson obj) {
-		return RelatedPersonEntity.fromRelatedPerson(obj);
-	}
-
-	@Override
-	protected RelatedPerson toFhir(RelatedPersonEntity ent) {
-		return RelatedPersonEntity.toRelatedPerson(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return RelatedPerson.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

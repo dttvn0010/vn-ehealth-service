@@ -20,6 +20,7 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
@@ -196,7 +197,7 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 				for (ConceptReferenceDesignationComponent conceptReferenceDesignationComponent : v.getDesignation()) {
 					ConceptReferenceDesignationEntity conceptDesignationEntity = new ConceptReferenceDesignationEntity();
 					conceptDesignationEntity.language = (conceptReferenceDesignationComponent.getLanguage());
-					conceptDesignationEntity.use = BaseCoding.fromCoding(conceptReferenceDesignationComponent.getUse());
+					conceptDesignationEntity.use = FhirUtil.fhirToEntity(conceptReferenceDesignationComponent.getUse(), BaseCoding.class);
 					conceptDesignationEntity.value = (conceptReferenceDesignationComponent.getValue());
 					conceptDesignationEntitys.add(conceptDesignationEntity);
 				}
@@ -393,31 +394,19 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 		}
 		return resources.size();
 	}
-
-<<<<<<< HEAD
-    @Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return ValueSet.class;
+	
+	@Override
+    protected String getProfile() {
+        return "CarePlan-v1.0";
     }
-=======
-	@Override
-	protected String getProfile() {
-		return "CarePlan-v1.0";
-	}
-
-	@Override
-	protected ValueSetEntity fromFhir(ValueSet obj) {
-		return ValueSetEntity.fromValueSet(obj);
-	}
->>>>>>> 63f7ecaa14a4d140af9b47a71fe3b22d8754b120
-
-	@Override
-	protected ValueSet toFhir(ValueSetEntity ent) {
-		return ValueSetEntity.toValueSet(ent);
-	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return ValueSetEntity.class;
 	}
+
+    @Override
+    protected Class<? extends DomainResource> getResourceClass() {
+        return ValueSet.class;
+    }
 }

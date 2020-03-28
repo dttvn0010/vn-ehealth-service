@@ -25,16 +25,16 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-
+import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.term.entity.CodeSystemEntity;
 import vn.ehealth.hl7.fhir.term.entity.ConceptDesignationEntity;
 import vn.ehealth.hl7.fhir.term.entity.ConceptEntity;
 import vn.ehealth.hl7.fhir.term.entity.ConceptPropertyEntity;
-import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 /**
  * @author SONVT24
@@ -154,8 +154,8 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 						.getDesignation()) {
 					ConceptDesignationEntity conceptDesignationEntity = new ConceptDesignationEntity();
 					conceptDesignationEntity.language = (conceptDefinitionDesignationComponent.getLanguage());
-					conceptDesignationEntity.use = BaseCoding
-							.fromCoding(conceptDefinitionDesignationComponent.getUse());
+					conceptDesignationEntity.use = FhirUtil.fhirToEntity(
+							conceptDefinitionDesignationComponent.getUse(), BaseCoding.class);
 					conceptDesignationEntity.value = (conceptDefinitionDesignationComponent.getValue());
 					conceptDesignationEntitys.add(conceptDesignationEntity);
 				}
@@ -259,7 +259,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 							retVal.addParameter().addPart().setName("value")
 									.setValue(new StringType(conceptDesignationEntity.value));
 							retVal.addParameter().addPart().setName("use")
-									.setValue(BaseCoding.toCoding(conceptDesignationEntity.use));
+									.setValue(FhirUtil.entityToFhir(conceptDesignationEntity.use, Coding.class));
 							retVal.addParameter().addPart().setName("language")
 									.setValue(new StringType(conceptDesignationEntity.language));
 						}
@@ -307,7 +307,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 							retVal.addParameter().addPart().setName("value")
 									.setValue(new StringType(conceptDesignationEntity.value));
 							retVal.addParameter().addPart().setName("use")
-									.setValue(BaseCoding.toCoding(conceptDesignationEntity.use));
+									.setValue(FhirUtil.entityToFhir(conceptDesignationEntity.use, Coding.class));
 							retVal.addParameter().addPart().setName("language")
 									.setValue(new StringType(conceptDesignationEntity.language));
 						}
@@ -410,17 +410,12 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 	}
 
 	@Override
-	protected CodeSystemEntity fromFhir(CodeSystem obj) {
-		return CodeSystemEntity.fromCodeSystem(obj);
-	}
-
-	@Override
-	protected CodeSystem toFhir(CodeSystemEntity ent) {
-		return CodeSystemEntity.toCodeSystem(ent);
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return CodeSystemEntity.class;
 	}
+
+    @Override
+    protected Class<? extends DomainResource> getResourceClass() {
+        return CodeSystem.class;
+    }
 }
