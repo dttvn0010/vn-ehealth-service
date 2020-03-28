@@ -16,25 +16,31 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1, 'patient.reference':1, 'managingOrganization.reference':1, 'careManager.reference':1, 'team.reference':1}", name = "index_by_default")
 public class EpisodeOfCareEntity extends BaseResource{
     
-    public static class DiagnosisEntity {
+    public static class EpisodeOfCareStatusHistory {
+
+        public String status;
+        public BasePeriod period;        
+    }
+    
+    public static class Diagnosis {
         public BaseReference condition;
         public BaseCodeableConcept role;
         public int rank;
     }
-    
-    
+        
     @Id
     public ObjectId id;
     public List<BaseIdentifier> identifier;
     public String status;
-    public List<EOCStatusHistoryEntity> statusHistory;
+    public List<EpisodeOfCareStatusHistory> statusHistory;
     public List<BaseCodeableConcept> type;
-    public List<DiagnosisEntity> diagnosis;
+    public List<Diagnosis> diagnosis;
     public BaseReference patient;
     public BaseReference managingOrganization;
     public BasePeriod period;
     public List<BaseReference> referralRequest;
     public BaseReference careManager;
     public List<BaseReference> team;
+    public List<BaseReference> account;
     
 }

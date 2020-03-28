@@ -23,7 +23,8 @@ public class ServiceRequestEntity extends BaseResource {
     @Id
     public ObjectId id;
     public List<BaseIdentifier> identifier;
-    //List<BaseReference> definition;
+    public List<String> instantiatesCanonical;
+    public List<String> instantiatesUri;
     public List<BaseReference> basedOn;
     public List<BaseReference> replaces;
     public BaseIdentifier requisition;
@@ -37,17 +38,21 @@ public class ServiceRequestEntity extends BaseResource {
     @JsonIgnore public Type quantity;
     public BaseReference subject;    
     public BaseReference encounter;
-    public Type occurrence;
-    public Type asNeeded;
+    @JsonIgnore public Type occurrence;
+    @JsonIgnore public Type asNeeded;
     public Date authoredOn;
     public BaseReference requester;
     public BaseCodeableConcept performerType;
     public List<BaseReference> performer;
+    public List<BaseCodeableConcept> locationCode;
+    public List<BaseReference> locationReference;
     public List<BaseCodeableConcept> reasonCode;
     public List<BaseReference> reasonReference;
+    public List<BaseReference> insurance;
     public List<BaseReference> supportingInfo;
     public List<BaseReference> specimen;
     public List<BaseCodeableConcept> bodySite;
     public List<BaseAnnotation> note;
+    public String patientInstruction;
     public List<BaseReference> relevantHistory;
 }

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
 import org.hl7.fhir.r4.model.Patient.LinkType;
 import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
@@ -18,10 +17,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
-import vn.ehealth.hl7.fhir.core.entity.BaseContactPerson;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseHumanName;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
+import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
@@ -33,14 +32,25 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @Document(collection = "patient")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "idx_patient_by_default")
 public class PatientEntity extends BaseResource {
-    public static class PatientCommunicationEntity {
+    
+    public static class PatientCommunication {
         public BaseCodeableConcept language;
         public Boolean preferred;
     }
     
-    public static class PatientLinkEntity {
+    public static class PatientLink {
         public BaseReference other;
         public LinkType type;
+    }
+    
+    public static class Contact {
+        protected List<BaseCodeableConcept> relationship;
+        protected BaseHumanName name;
+        protected List<BaseContactPoint> telecom;
+        protected BaseAddress address;
+        protected String gender;
+        protected BaseReference organization;
+        protected BasePeriod period;
     }
     
     @Id
@@ -56,11 +66,11 @@ public class PatientEntity extends BaseResource {
     public BaseCodeableConcept maritalStatus;
     @JsonIgnore public Type multipleBirth;
     public List<BaseAttachment> photo;    
-    public List<BaseContactPerson> contact;
-    public List<PatientCommunicationEntity> communication;
+    public List<Contact> contact;
+    public List<PatientCommunication> communication;
     public List<BaseReference> generalPractitioner;    
     public BaseReference managingOrganization;
-    public List<PatientLinkEntity> link;
+    public List<PatientLink> link;
     
     public List<BaseCodeableConcept> category;
 }

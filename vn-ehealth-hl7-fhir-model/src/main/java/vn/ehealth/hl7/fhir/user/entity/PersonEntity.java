@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.user.entity;
 import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
+import org.hl7.fhir.r4.model.Person.IdentityAssuranceLevel;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,6 +19,13 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @Document(collection = "person")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class PersonEntity extends BaseResource{
+    
+    public class PersonLink{
+        public BaseReference target;
+        public IdentityAssuranceLevel assurance;    
+        
+    }
+        
     @Id
     public ObjectId id;
     public List<BaseIdentifier> identifier;
@@ -28,5 +36,5 @@ public class PersonEntity extends BaseResource{
     public List<BaseAddress> address;
     public BaseAttachment photo;
     public BaseReference managingOrganization;
-    public List<PersonLinkEntity> link;
+    public List<PersonLink> link;
 }

@@ -22,18 +22,33 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @Document(collection = "medicationDispense")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class MedicationDispenseEntity extends BaseResource {
+    
+    public static class MedicationDispensePerformer {
+        public BaseReference actor;
+        public BaseCodeableConcept function;
+    }
+    
+    public static class MedicationDispenseSubstitution {
+        public boolean wasSubstituted;
+        public BaseCodeableConcept type;
+        public List<BaseCodeableConcept> reason;
+        public List<BaseReference> responsibleParty;
+    }
+
+    
     @Id
     public ObjectId id;
     public List<BaseIdentifier> identifier;
     public List<BaseReference> partOf;
-    //Enumeration<MedicationDispenseStatus>
     public String status;
+    @JsonIgnore public Type statusReason;
     public BaseCodeableConcept category;
     @JsonIgnore public Type medication;
     public BaseReference subject;
     public BaseReference context;
     public List<BaseReference> supportingInformation;
-    public List<MedicationDispensePerformerEntity> performer;
+    public List<MedicationDispensePerformer> performer;
+    public BaseReference location;
     public List<BaseReference> authorizingPrescription;
     public BaseCodeableConcept type;
     public BaseQuantity quantity;
@@ -44,9 +59,7 @@ public class MedicationDispenseEntity extends BaseResource {
     public List<BaseReference> receiver;
     public List<BaseAnnotation> note;
     public List<BaseDosage> dosageInstruction;
-    public MedicationDispenseSubstitutionEntity substitution;
+    public MedicationDispenseSubstitution substitution;
     public List<BaseReference> detectedIssue;
-    //public Boolean notDone;
-    //public Type notDoneReason;
     public List<BaseReference> eventHistory;
 }

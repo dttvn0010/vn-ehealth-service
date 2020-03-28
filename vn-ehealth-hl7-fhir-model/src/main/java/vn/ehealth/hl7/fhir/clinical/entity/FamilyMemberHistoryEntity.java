@@ -20,14 +20,21 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @Document(collection = "familyMemberHistory")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class FamilyMemberHistoryEntity extends BaseResource {
+    
+    public static class FamilyMemberHistoryCondition {
+        public BaseCodeableConcept code;
+        public BaseCodeableConcept outcome;
+        public Boolean contributedToDeath;
+        @JsonIgnore public Type onset;
+        public List<BaseAnnotation> note;
+    }
+
+    
 	@Id
 	public ObjectId id;
 	public List<BaseIdentifier> identifier;
-	// TODO: add transform and base datatype
-	public List<BaseReference> instantiatesCanonical;
-	// TODO: add transform and base datatype
+	public List<String> instantiatesCanonical;
 	public List<String> instantiatesUri;
-
 	public String status;
 	public BaseCodeableConcept dataAbsentReason;
 	public BaseReference patient;
@@ -35,15 +42,12 @@ public class FamilyMemberHistoryEntity extends BaseResource {
 	public String name;
 	public BaseCodeableConcept relationship;
 	public BaseCodeableConcept sex;
-	@JsonIgnore
-	public Type born;
-	@JsonIgnore
-	public Type age;
+	@JsonIgnore public Type born;
+	@JsonIgnore public Type age;
 	public Boolean estimatedAge;
-	@JsonIgnore
-	public Type deceased;
+	@JsonIgnore public Type deceased;
 	public List<BaseCodeableConcept> reasonCode;
 	public List<BaseReference> reasonReference;
 	public List<BaseAnnotation> note;
-	public List<FamilyMemberHistoryConditionEntity> condition;
+	public List<FamilyMemberHistoryCondition> condition;
 }

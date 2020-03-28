@@ -31,10 +31,12 @@ import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.StringType;
+import org.hl7.fhir.r4.model.Type;
 
 import ca.uhn.fhir.model.api.annotation.Child;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 public class FhirUtil {
 
@@ -299,7 +301,7 @@ public class FhirUtil {
         return true;
     }
     
-    private static List<Field> getAnnotedFields(Class<?> fhirType) {
+    public static List<Field> getAnnotedFields(Class<?> fhirType) {
         var fields = new ArrayList<Field>();
         
         for(var field : fhirType.getDeclaredFields()) {
@@ -313,7 +315,7 @@ public class FhirUtil {
         return fields;
     }
     
-    private static Field getEntField(Class<?> entType, String fieldName) {
+    public static Field getEntField(Class<?> entType, String fieldName) {
         var type = entType;
         while(type != null) {
             try {
@@ -531,6 +533,10 @@ public class FhirUtil {
                 setMetaExt((DomainResource)obj, (BaseResource)ent);
             }
             
+            if(obj instanceof Type && ent instanceof BaseType) {
+                ((BaseType)ent).extension = ((Type)obj).getExtension();
+            }
+            
             return (T) ent;
         }  
         
@@ -594,6 +600,10 @@ public class FhirUtil {
             
             if(obj instanceof DomainResource && ent instanceof BaseResource) {
                 getMetaExt((BaseResource)ent, (DomainResource)obj);
+            }
+            
+            if(obj instanceof Type && ent instanceof BaseType) {
+                ((Type)obj).setExtension(((BaseType)ent).extension);
             }
             
             return (T) obj;

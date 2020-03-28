@@ -20,15 +20,28 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1, 'basedOn.reference':1, 'subject.reference':1, 'encounter.reference':1}", name = "index_by_default")
 public class ProcedureEntity extends BaseResource {
 
+    public static class ProcedureFocalDevice {
+
+        public BaseCodeableConcept action;
+        public BaseReference manipulated;
+    }
+    
+    public static class ProcedurePerformer {
+
+        public BaseCodeableConcept function;
+        public BaseReference actor;
+        public BaseReference onBehalfOf;
+    }
+
     @Id
     public ObjectId id;
     public List<BaseIdentifier> identifier;
-    //public List<BaseReference> definition;
+    public List<String> instantiatesCanonical;
+    public List<String> instantiatesUri;
     public List<BaseReference> basedOn;
     public List<BaseReference> partOf;
     public String status;
-    //public Boolean notDone;
-    //public CodeableConcept notDoneReason;
+    public BaseCodeableConcept statusReason;
     public BaseCodeableConcept category;
     public BaseCodeableConcept code;
     public BaseReference subject;
@@ -37,7 +50,7 @@ public class ProcedureEntity extends BaseResource {
     public Date performedDate;
     public BaseReference recorder;
     public BaseReference asserter;
-    public List<ProcedurePerformerEntity> performer;
+    public List<ProcedurePerformer> performer;
     public BaseReference location;
     public List<BaseCodeableConcept> reasonCode;
     public List<BaseReference> reasonReference;
@@ -48,7 +61,7 @@ public class ProcedureEntity extends BaseResource {
     public List<BaseReference> complicationDetail;
     public List<BaseCodeableConcept> followUp;
     public List<BaseAnnotation> note;
-    public List<ProcedureFocalDeviceEntity> focalDevice;
+    public List<ProcedureFocalDevice> focalDevice;
     public List<BaseReference> usedReference;
     public List<BaseCodeableConcept> usedCode;
 }

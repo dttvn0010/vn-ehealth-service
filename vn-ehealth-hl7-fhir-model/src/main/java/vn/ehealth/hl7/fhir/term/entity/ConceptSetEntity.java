@@ -18,11 +18,20 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @Document(collection = "conceptSetEntity")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class ConceptSetEntity extends BaseResource{
+    
+    public static class ConceptSetFilter {
+
+        public String property;
+        public String value;
+        public String op;
+    }
+
+    
     @Id
     public ObjectId id;
     public  String system;
     public List<ConceptReferenceEntity> concept;
-    public List<ConceptSetFilterEntity> filter;
+    public List<ConceptSetFilter> filter;
     public String valueSetComposeId;
     public String type;
 }

@@ -41,6 +41,7 @@ public class ImagingStudyEntity extends BaseResource {
         public List<BaseReference> endpoint;
         public BaseCoding bodySite;
         public BaseCoding laterality;
+        public List<BaseReference> specimen;
         public Date started;
         public List<ImagingStudySeriesPerformer> performer;
         public List<ImagingStudySeriesInstance> instance;
@@ -62,6 +63,7 @@ public class ImagingStudyEntity extends BaseResource {
     public int numberOfInstances;
     public BaseReference procedureReference;
     public List<BaseCodeableConcept> procedureCode;
+    public BaseReference location;
     public List<BaseCodeableConcept> reasonCode;
     public List<BaseReference> reasonReference;
     public List<BaseAnnotation> note;

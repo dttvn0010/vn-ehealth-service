@@ -7,7 +7,17 @@ import org.hl7.fhir.r4.model.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class BaseDosage {
+public class BaseDosage extends BaseType {
+    
+    public static class BaseDosageDoseAndRate extends BaseType {
+
+        public BaseCodeableConcept type;
+        @JsonIgnore public Type dose;
+        @JsonIgnore public Type rate;
+        public List<Extension> extension;
+    }
+    
+    
     public Integer sequence;
     public String text;
     public List<BaseCodeableConcept> additionalInstruction;
@@ -17,12 +27,8 @@ public class BaseDosage {
     public BaseCodeableConcept site;
     public BaseCodeableConcept route;
     public BaseCodeableConcept method;
-    //private Type dose;
+    public List<BaseDosageDoseAndRate> doseAndRate;
     public BaseRatio maxDosePerPeriod;
     public BaseQuantity maxDosePerAdministration;
     public BaseQuantity maxDosePerLifetime;
-    //private Type rate;
-    List<BaseDosageDoseAndRate> doseAndRate;    
-    public List<Extension> extension;
-    
 }

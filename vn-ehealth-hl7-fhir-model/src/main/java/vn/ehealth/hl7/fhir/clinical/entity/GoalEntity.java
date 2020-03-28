@@ -21,16 +21,24 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @Document(collection = "goal")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class GoalEntity extends BaseResource {
+    
+    public static class GoalTarget {
+        public BaseCodeableConcept measure;
+        @JsonIgnore public Type detail;
+        @JsonIgnore public Type due;
+    }
+    
     @Id
     public ObjectId id;
     public List<BaseIdentifier> identifier;
-    //public String status;
+    public String lifecycleStatus;
+    public BaseCodeableConcept achievementStatus;
     public List<BaseCodeableConcept> category;
     public BaseCodeableConcept priority;
     public BaseCodeableConcept description;
     public BaseReference subject;
     @JsonIgnore public Type start;
-    /** target **/
+    public List<GoalTarget> target;
     public Date statusDate;
     public String statusReason;
     public BaseReference expressedBy;

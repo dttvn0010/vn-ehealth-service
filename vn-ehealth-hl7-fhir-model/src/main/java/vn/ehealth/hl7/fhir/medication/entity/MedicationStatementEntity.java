@@ -28,6 +28,7 @@ public class MedicationStatementEntity extends BaseResource {
     public List<BaseReference> partOf;
     public BaseReference context;
     public String status;
+    public List<BaseCodeableConcept> statusReason;
     public BaseCodeableConcept category;
     @JsonIgnore public Type medication;
     @JsonIgnore public Type effective;
@@ -35,11 +36,8 @@ public class MedicationStatementEntity extends BaseResource {
     public BaseReference informationSource;
     public BaseReference subject;
     public List<BaseReference> derivedFrom;
-    //public String taken;
-    //public List<CodeableConcept> reasonNotTaken;
     public List<BaseCodeableConcept> reasonCode;
     public List<BaseReference> reasonReference;
     public List<BaseAnnotation> note;
     public List<BaseDosage> dosage;
-    /** dosage **/
 }

@@ -1,5 +1,6 @@
 package vn.ehealth.hl7.fhir.clinical.entity;
 
+import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Type;
@@ -19,6 +20,18 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class ConditionEntity extends BaseResource {
 
+    public static class ConditionStage {        
+        public BaseCodeableConcept summary;
+        public List<BaseReference> assessment;
+        public BaseCodeableConcept type;        
+    }
+
+    public static class ConditionEvidence {
+
+        public List<BaseCodeableConcept> code;
+        public List<BaseReference> detail;
+    }
+    
     @Id
     public ObjectId id;
     public List<BaseIdentifier> identifier;
@@ -32,9 +45,10 @@ public class ConditionEntity extends BaseResource {
     public BaseReference encounter;
     @JsonIgnore public Type onset;
     @JsonIgnore public Type abatement;
-    //public Date assertedDate;
+    public Date recordedDate;
+    public BaseReference recorder;
     public BaseReference asserter;
-    public List<ConditionStageEntity> stage;
-    public List<ConditionEvidenceEntity> evidence;
+    public List<ConditionStage> stage;
+    public List<ConditionEvidence> evidence;
     public List<BaseAnnotation> note;
 }

@@ -28,6 +28,7 @@ public class CarePlanEntity extends BaseResource {
         public List<String> instantiatesUri;
         public BaseCodeableConcept code;
         public List<BaseCodeableConcept> reasonCode;
+        public List<BaseReference> reasonReference;
         public List<BaseReference> reasonBaseReference;
         public List<BaseReference> goal;
         public String status;
