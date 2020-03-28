@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.ResourceType;
@@ -283,13 +284,8 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
     }
 
     @Override
-    protected ProcedureEntity fromFhir(Procedure obj) {
-        return ProcedureEntity.fromProcedure(obj);
-    }
-
-    @Override
-    protected Procedure toFhir(ProcedureEntity ent) {
-        return ProcedureEntity.toProcedure(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Procedure.class;
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
@@ -202,14 +203,9 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 	}
 
 	@Override
-	protected ObservationEntity fromFhir(Observation obj) {
-		return ObservationEntity.fromObservation(obj);
-	}
-
-	@Override
-	protected Observation toFhir(ObservationEntity ent) {
-		return ObservationEntity.toObservation(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Observation.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

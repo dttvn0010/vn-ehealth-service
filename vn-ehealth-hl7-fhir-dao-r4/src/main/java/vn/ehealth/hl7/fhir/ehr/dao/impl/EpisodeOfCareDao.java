@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.ehr.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.EpisodeOfCare;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -170,13 +171,8 @@ public class EpisodeOfCareDao extends BaseDao<EpisodeOfCareEntity, EpisodeOfCare
     }
 
     @Override
-    protected EpisodeOfCareEntity fromFhir(EpisodeOfCare obj) {
-        return EpisodeOfCareEntity.fromEpisodeOfCare(obj);
-    }
-
-    @Override
-    protected EpisodeOfCare toFhir(EpisodeOfCareEntity ent) {
-        return EpisodeOfCareEntity.toEpisodeOfCare(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return EpisodeOfCare.class;
     }
 
     @Override

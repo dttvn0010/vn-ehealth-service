@@ -9,6 +9,7 @@ import java.util.Set;
 import org.bson.types.ObjectId;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.ClinicalImpression;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
@@ -255,14 +256,9 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 	}
 
 	@Override
-	protected ClinicalImpressionEntity fromFhir(ClinicalImpression obj) {
-		return ClinicalImpressionEntity.fromClinicalImpression(obj);
-	}
-
-	@Override
-	protected ClinicalImpression toFhir(ClinicalImpressionEntity ent) {
-		return ClinicalImpressionEntity.toClinicalImpression(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return ClinicalImpression.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

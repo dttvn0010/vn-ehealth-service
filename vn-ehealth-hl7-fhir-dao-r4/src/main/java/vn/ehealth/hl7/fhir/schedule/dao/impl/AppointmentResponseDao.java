@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.AppointmentResponse;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -150,13 +151,8 @@ public class AppointmentResponseDao extends BaseDao<AppointmentResponseEntity, A
     }
 
     @Override
-    protected AppointmentResponseEntity fromFhir(AppointmentResponse obj) {
-        return AppointmentResponseEntity.from(obj);
-    }
-
-    @Override
-    protected AppointmentResponse toFhir(AppointmentResponseEntity ent) {
-        return AppointmentResponseEntity.toAppointmentResponse(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return AppointmentResponse.class;
     }
 
     @Override

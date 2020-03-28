@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.provider.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Location;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -204,13 +205,8 @@ public class LocationDao extends BaseDao<LocationEntity, Location> {
     }
 
     @Override
-    protected LocationEntity fromFhir(Location obj) {
-        return LocationEntity.fromLocation(obj);
-    }
-
-    @Override
-    protected Location toFhir(LocationEntity ent) {
-        return LocationEntity.toLocation(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Location.class;
     }
 
     @Override

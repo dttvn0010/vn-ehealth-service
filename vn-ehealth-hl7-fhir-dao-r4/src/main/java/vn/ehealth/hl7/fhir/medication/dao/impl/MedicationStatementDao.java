@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.medication.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.MedicationStatement;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -178,13 +179,8 @@ public class MedicationStatementDao extends BaseDao<MedicationStatementEntity, M
     }
 
     @Override
-    protected MedicationStatementEntity fromFhir(MedicationStatement obj) {
-        return MedicationStatementEntity.fromMedicationStatement(obj);
-    }
-
-    @Override
-    protected MedicationStatement toFhir(MedicationStatementEntity ent) {
-        return MedicationStatementEntity.toMedicationStatement(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return MedicationStatement.class;
     }
 
     @Override

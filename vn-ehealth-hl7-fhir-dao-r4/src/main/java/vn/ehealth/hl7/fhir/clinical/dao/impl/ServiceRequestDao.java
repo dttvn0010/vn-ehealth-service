@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
@@ -276,13 +277,8 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
     }
 
     @Override
-    protected ServiceRequestEntity fromFhir(ServiceRequest obj) {
-        return ServiceRequestEntity.fromServiceRequest(obj);
-    }
-
-    @Override
-    protected ServiceRequest toFhir(ServiceRequestEntity ent) {
-        return ServiceRequestEntity.toServiceRequest(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return ServiceRequest.class;
     }
 
     @Override

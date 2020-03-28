@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.Specimen;
 import org.springframework.data.domain.PageRequest;
@@ -125,14 +126,9 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 	}
 
 	@Override
-	protected SpecimenEntity fromFhir(Specimen obj) {
-		return SpecimenEntity.fromSpecimen(obj);
-	}
-
-	@Override
-	protected Specimen toFhir(SpecimenEntity ent) {
-		return SpecimenEntity.toSpecimen(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Specimen.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

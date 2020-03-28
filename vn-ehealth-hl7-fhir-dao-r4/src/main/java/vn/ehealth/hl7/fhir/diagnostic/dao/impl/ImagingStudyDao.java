@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.ImagingStudy;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
@@ -138,13 +139,8 @@ public class ImagingStudyDao extends BaseDao<ImagingStudyEntity, ImagingStudy> {
     }
 
     @Override
-    protected ImagingStudyEntity fromFhir(ImagingStudy obj) {
-        return ImagingStudyEntity.fromImagingStudy(obj);
-    }
-
-    @Override
-    protected ImagingStudy toFhir(ImagingStudyEntity ent) {
-        return ImagingStudyEntity.toImagingStudy(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return ImagingStudy.class;
     }
 
     @Override

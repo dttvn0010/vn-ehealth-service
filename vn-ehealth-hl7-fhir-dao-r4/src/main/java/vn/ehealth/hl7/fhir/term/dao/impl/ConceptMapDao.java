@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.ConceptMap;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -284,13 +285,8 @@ public class ConceptMapDao extends BaseDao<ConceptMapEntity, ConceptMap> {
     }
 
     @Override
-    protected ConceptMapEntity fromFhir(ConceptMap obj) {
-        return ConceptMapEntity.fromConceptMap(obj);
-    }
-
-    @Override
-    protected ConceptMap toFhir(ConceptMapEntity ent) {
-        return ConceptMapEntity.toConceptMap(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return ConceptMap.class;
     }
 
     @Override

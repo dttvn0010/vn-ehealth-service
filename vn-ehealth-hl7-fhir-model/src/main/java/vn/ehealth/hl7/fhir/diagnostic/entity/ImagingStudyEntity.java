@@ -2,39 +2,60 @@ package vn.ehealth.hl7.fhir.diagnostic.entity;
 
 import java.util.Date;
 
-
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.ImagingStudy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 
 @Document(collection = "imagingStudy")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class ImagingStudyEntity extends BaseResource {
+    
+    public static class ImagingStudySeriesPerformer {
+        public BaseReference actor;
+        public BaseCodeableConcept function;
+    }
+    
+    public static class ImagingStudySeriesInstance {
+        public String uid;
+        public int number;
+        public BaseCoding sopClass;
+        public String title;
+    }
+    
+    public static class ImagingStudySeries {
+        public String uid;
+        public int number;
+        public BaseCoding modality;
+        public String description;
+        public int numberOfInstances;
+        public List<BaseReference> endpoint;
+        public BaseCoding bodySite;
+        public BaseCoding laterality;
+        public Date started;
+        public List<ImagingStudySeriesPerformer> performer;
+        public List<ImagingStudySeriesInstance> instance;
+    }
+    
     @Id
     public ObjectId id;
-    //public String uid;
-    //public BaseIdentifier accession;
     public List<BaseIdentifier> identifier;
-    //public String availability;
-    public List<BaseCoding> modalityList;
-    //public BaseReference patient;
-    //public BaseReference context;
+    public String status;
+    public List<BaseCoding> modality;
+    public BaseReference subject;
+    public BaseReference encounter;
     public Date started;
     public List<BaseReference> basedOn;
     public BaseReference referrer;
-    public BaseReference encounter;
-    public BaseReference subject;
     public List<BaseReference> interpreter;
     public List<BaseReference> endpoint;
     public int numberOfSeries;
@@ -42,55 +63,8 @@ public class ImagingStudyEntity extends BaseResource {
     public BaseReference procedureReference;
     public List<BaseCodeableConcept> procedureCode;
     public List<BaseCodeableConcept> reasonCode;
+    public List<BaseReference> reasonReference;
+    public List<BaseAnnotation> note;
     public String description;
-    public List<ImagingStudySeriesEntity> series;
-    
-    
-    public static ImagingStudyEntity fromImagingStudy(ImagingStudy obj) {
-        if(obj == null) return null;
-        
-        var ent = new ImagingStudyEntity();
-        ent.identifier = BaseIdentifier.fromIdentifierList(obj.getIdentifier());
-        ent.modalityList = BaseCoding.fromCodingList(obj.getModality());
-        ent.started = obj.getStarted();
-        ent.basedOn = BaseReference.fromReferenceList(obj.getBasedOn());
-        ent.referrer = BaseReference.fromReference(obj.getReferrer());
-        ent.encounter = BaseReference.fromReference(obj.getEncounter());
-        ent.subject = BaseReference.fromReference(obj.getSubject());
-        ent.interpreter = BaseReference.fromReferenceList(obj.getInterpreter());
-        ent.endpoint = BaseReference.fromReferenceList(obj.getEndpoint());
-        ent.numberOfSeries = obj.getNumberOfSeries();
-        ent.numberOfInstances = obj.getNumberOfInstances();
-        ent.procedureReference = BaseReference.fromReference(obj.getProcedureReference());
-        ent.procedureCode = BaseCodeableConcept.fromCodeableConcept(obj.getProcedureCode());
-        ent.reasonCode = BaseCodeableConcept.fromCodeableConcept(obj.getReasonCode());
-        ent.description = obj.getDescription();
-        ent.series = transform(obj.getSeries(), ImagingStudySeriesEntity::fromImagingStudySeriesComponent);
-        
-        return ent;
-    }
-    
-    public static ImagingStudy toImagingStudy(ImagingStudyEntity ent) {
-        if(ent == null) return null;
-        
-        var obj = new ImagingStudy();
-        obj.setIdentifier(BaseIdentifier.toIdentifierList(ent.identifier));
-        obj.setModality(BaseCoding.toCodingList(ent.modalityList));
-        obj.setStarted(ent.started);
-        obj.setBasedOn(BaseReference.toReferenceList(ent.basedOn));
-        obj.setReferrer(BaseReference.toReference(ent.referrer));
-        obj.setEncounter(BaseReference.toReference(ent.encounter));
-        obj.setSubject(BaseReference.toReference(ent.subject));
-        obj.setInterpreter(BaseReference.toReferenceList(ent.interpreter));
-        obj.setEndpoint(BaseReference.toReferenceList(ent.endpoint));
-        obj.setNumberOfSeries(ent.numberOfSeries);
-        obj.setNumberOfInstances(ent.numberOfInstances);
-        obj.setProcedureReference(BaseReference.toReference(ent.procedureReference));
-        obj.setProcedureCode(BaseCodeableConcept.toCodeableConcept(ent.procedureCode));
-        obj.setReasonCode(BaseCodeableConcept.toCodeableConcept(ent.reasonCode));
-        obj.setDescription(ent.description);
-        obj.setSeries(transform(ent.series,ImagingStudySeriesEntity::toImagingStudySeriesComponent));
-        
-        return obj;
-    }
+    public List<ImagingStudySeries> series;
 }

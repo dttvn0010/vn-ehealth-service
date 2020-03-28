@@ -9,6 +9,7 @@ import org.hl7.fhir.r4.model.CareTeam;
 import org.hl7.fhir.r4.model.Condition;
 import org.hl7.fhir.r4.model.DetectedIssue;
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.EpisodeOfCare;
 import org.hl7.fhir.r4.model.FamilyMemberHistory;
@@ -401,14 +402,9 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 	}
 
 	@Override
-	protected PatientEntity fromFhir(Patient obj) {
-		return PatientEntity.fromPatient(obj);
-	}
-
-	@Override
-	protected Patient toFhir(PatientEntity ent) {
-		return PatientEntity.toPatient(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Patient.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

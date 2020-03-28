@@ -8,6 +8,7 @@ import org.hl7.fhir.r4.model.CodeSystem.ConceptDefinitionComponent;
 import org.hl7.fhir.r4.model.CodeSystem.ConceptDefinitionDesignationComponent;
 import org.hl7.fhir.r4.model.CodeSystem.ConceptPropertyComponent;
 import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
@@ -24,15 +25,16 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
-import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
+
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.term.entity.CodeSystemEntity;
 import vn.ehealth.hl7.fhir.term.entity.ConceptDesignationEntity;
 import vn.ehealth.hl7.fhir.term.entity.ConceptEntity;
 import vn.ehealth.hl7.fhir.term.entity.ConceptPropertyEntity;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 /**
  * @author SONVT24
@@ -96,12 +98,12 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
             pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
                     count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
             query.with(pageableRequest);
-    		if (sortParam != null && !sortParam.equals("")) {
-    			query.with(new Sort(Sort.Direction.DESC, sortParam));
-    		} else {
-    			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-    			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
-    		}
+            if (sortParam != null && !sortParam.equals("")) {
+                query.with(new Sort(Sort.Direction.DESC, sortParam));
+            } else {
+                query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
+                query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+            }
             List<CodeSystemEntity> results = mongo.find(query, CodeSystemEntity.class);
             if (code != null || language != null) {
                 for (CodeSystemEntity codeSystemEntity : results) {
@@ -150,10 +152,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
                 List<ConceptDesignationEntity> conceptDesignationEntitys = new ArrayList<>();
                 for (ConceptDefinitionDesignationComponent conceptDefinitionDesignationComponent : concept
                         .getDesignation()) {
-                    ConceptDesignationEntity conceptDesignationEntity = new ConceptDesignationEntity();
-                    conceptDesignationEntity.language = (conceptDefinitionDesignationComponent.getLanguage());
-                    conceptDesignationEntity.use = BaseCoding.fromCoding(conceptDefinitionDesignationComponent.getUse());
-                    conceptDesignationEntity.value = (conceptDefinitionDesignationComponent.getValue());
+                    var conceptDesignationEntity = fhirToEntity(conceptDefinitionDesignationComponent, ConceptDesignationEntity.class);
                     conceptDesignationEntitys.add(conceptDesignationEntity);
                 }
                 conceptEntity.designation = (conceptDesignationEntitys);
@@ -255,7 +254,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
                             retVal.addParameter().addPart().setName("value")
                                     .setValue(new StringType(conceptDesignationEntity.value));
                             retVal.addParameter().addPart().setName("use")
-                                    .setValue(BaseCoding.toCoding(conceptDesignationEntity.use));
+                                    .setValue(entityToFhir(conceptDesignationEntity.use, Coding.class));
                             retVal.addParameter().addPart().setName("language")
                                 .setValue(new StringType(conceptDesignationEntity.language));
                         }
@@ -302,7 +301,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
                             retVal.addParameter().addPart().setName("value")
                                     .setValue(new StringType(conceptDesignationEntity.value));
                             retVal.addParameter().addPart().setName("use")
-                                    .setValue(BaseCoding.toCoding(conceptDesignationEntity.use));
+                                    .setValue(entityToFhir(conceptDesignationEntity.use, Coding.class));
                             retVal.addParameter().addPart().setName("language")
                                     .setValue(new StringType(conceptDesignationEntity.language));
                         }
@@ -405,13 +404,8 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
     }
 
     @Override
-    protected CodeSystemEntity fromFhir(CodeSystem obj) {
-        return CodeSystemEntity.fromCodeSystem(obj);
-    }
-
-    @Override
-    protected CodeSystem toFhir(CodeSystemEntity ent) {
-        return CodeSystemEntity.toCodeSystem(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return CodeSystem.class;
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
@@ -332,14 +333,9 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 	}
 
 	@Override
-	protected EncounterEntity fromFhir(Encounter obj) {
-		return EncounterEntity.fromEncounter(obj);
-	}
-
-	@Override
-	protected Encounter toFhir(EncounterEntity ent) {
-		return EncounterEntity.toEncounter(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Encounter.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

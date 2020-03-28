@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.provider.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -181,13 +182,8 @@ public class PractitionerDao extends BaseDao<PractitionerEntity, Practitioner> {
     }
 
     @Override
-    protected PractitionerEntity fromFhir(Practitioner obj) {
-        return PractitionerEntity.fromPractitioner(obj);
-    }
-
-    @Override
-    protected Practitioner toFhir(PractitionerEntity ent) {
-        return PractitionerEntity.toPractitioner(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Practitioner.class;
     }
 
     @Override

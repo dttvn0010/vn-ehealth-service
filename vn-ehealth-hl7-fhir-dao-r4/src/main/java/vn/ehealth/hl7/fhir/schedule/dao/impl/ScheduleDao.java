@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.schedule.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.Schedule;
 import org.springframework.data.domain.PageRequest;
@@ -120,13 +121,8 @@ public class ScheduleDao extends BaseDao<ScheduleEntity, Schedule> {
     }
 
     @Override
-    protected ScheduleEntity fromFhir(Schedule obj) {
-        return ScheduleEntity.fromSchedule(obj);
-    }
-
-    @Override
-    protected Schedule toFhir(ScheduleEntity ent) {
-        return ScheduleEntity.toSchedule(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Schedule.class;
     }
 
     @Override

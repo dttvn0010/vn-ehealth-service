@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Goal;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
@@ -155,13 +156,8 @@ public class GoalDao extends BaseDao<GoalEntity, Goal> {
     }
 
     @Override
-    protected GoalEntity fromFhir(Goal obj) {
-        return GoalEntity.fromGoalEntity(obj);
-    }
-
-    @Override
-    protected Goal toFhir(GoalEntity ent) {
-        return GoalEntity.toGoal(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Goal.class;
     }
 
     @Override

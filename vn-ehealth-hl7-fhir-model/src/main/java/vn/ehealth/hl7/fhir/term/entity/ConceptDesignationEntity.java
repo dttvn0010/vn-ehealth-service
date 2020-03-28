@@ -1,7 +1,5 @@
 package vn.ehealth.hl7.fhir.term.entity;
 
-import org.hl7.fhir.r4.model.CodeSystem.ConceptDefinitionDesignationComponent;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
@@ -16,21 +14,4 @@ public class ConceptDesignationEntity extends BaseResource {
     public BaseCoding use;
     public String value;
     
-    public static ConceptDesignationEntity fromConceptDefinitionDesignationComponent(ConceptDefinitionDesignationComponent obj) {
-        if(obj == null) return null;
-        var ent = new ConceptDesignationEntity();
-        ent.language = obj.getLanguage();
-        ent.use = BaseCoding.fromCoding(obj.getUse());
-        ent.value = obj.getValue();
-        return ent;
-    }
-    
-    public static ConceptDefinitionDesignationComponent toConceptDefinitionDesignationComponent(ConceptDesignationEntity ent) {
-        if(ent == null) return null;
-        var obj = new ConceptDefinitionDesignationComponent();
-        obj.setLanguage(ent.language);
-        obj.setUse(BaseCoding.toCoding(ent.use));
-        obj.setValue(ent.value);
-        return obj;
-    }
 }

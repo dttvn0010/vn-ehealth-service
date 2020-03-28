@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Medication;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -176,13 +177,8 @@ public class MedicationDao extends BaseDao<MedicationEntity, Medication> {
     }
 
     @Override
-    protected MedicationEntity fromFhir(Medication obj) {
-        return MedicationEntity.fromMedication(obj);
-    }
-
-    @Override
-    protected Medication toFhir(MedicationEntity ent) {
-        return MedicationEntity.toMedication(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Medication.class;
     }
 
     @Override

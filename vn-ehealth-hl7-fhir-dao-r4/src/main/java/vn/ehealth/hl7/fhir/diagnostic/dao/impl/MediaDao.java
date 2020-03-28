@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Media;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
@@ -35,14 +36,9 @@ public class MediaDao extends BaseDao<MediaEntity, Media> {
 	}
 
 	@Override
-	protected MediaEntity fromFhir(Media obj) {
-		return MediaEntity.from(obj);
-	}
-
-	@Override
-	protected Media toFhir(MediaEntity ent) {
-		return MediaEntity.to(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Media.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

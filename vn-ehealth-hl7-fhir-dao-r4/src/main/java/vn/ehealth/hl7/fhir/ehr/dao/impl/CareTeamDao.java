@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.CareTeam;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -157,13 +158,8 @@ public class CareTeamDao extends BaseDao<CareTeamEntity, CareTeam> {
     }
 
     @Override
-    protected CareTeamEntity fromFhir(CareTeam obj) {
-        return CareTeamEntity.fromCareTeam(obj);
-    }
-
-    @Override
-    protected CareTeam toFhir(CareTeamEntity ent) {
-        return CareTeamEntity.toCareTeam(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return CareTeam.class;
     }
 
     @Override

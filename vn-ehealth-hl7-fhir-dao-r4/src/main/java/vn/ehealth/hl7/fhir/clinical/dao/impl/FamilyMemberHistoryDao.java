@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.FamilyMemberHistory;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
@@ -42,14 +43,9 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 	}
 
 	@Override
-	protected FamilyMemberHistoryEntity fromFhir(FamilyMemberHistory obj) {
-		return FamilyMemberHistoryEntity.from(obj);
-	}
-
-	@Override
-	protected FamilyMemberHistory toFhir(FamilyMemberHistoryEntity ent) {
-		return FamilyMemberHistoryEntity.to(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return FamilyMemberHistory.class;
+    }
 
 	@SuppressWarnings("deprecation")
 	public List<IBaseResource> search(TokenParam active, TokenParam code, DateRangeParam date, TokenParam identifier,

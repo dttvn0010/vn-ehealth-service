@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.term.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ValueSet;
 import org.hl7.fhir.r4.model.ValueSet.ConceptReferenceDesignationComponent;
@@ -19,9 +20,9 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
-import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
+import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.term.entity.ConceptEntity;
@@ -196,10 +197,7 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
             if (v.hasDesignation()) {
                 List<ConceptReferenceDesignationEntity> conceptDesignationEntitys = new ArrayList<>();
                 for (ConceptReferenceDesignationComponent conceptReferenceDesignationComponent : v.getDesignation()) {
-                    ConceptReferenceDesignationEntity conceptDesignationEntity = new ConceptReferenceDesignationEntity();
-                    conceptDesignationEntity.language = (conceptReferenceDesignationComponent.getLanguage());
-                    conceptDesignationEntity.use = BaseCoding.fromCoding(conceptReferenceDesignationComponent.getUse());
-                    conceptDesignationEntity.value = (conceptReferenceDesignationComponent.getValue());
+                    var conceptDesignationEntity = FhirUtil.fhirToEntity(conceptReferenceDesignationComponent, ConceptReferenceDesignationEntity.class);
                     conceptDesignationEntitys.add(conceptDesignationEntity);
                 }
                 valueSetContainEntity.designation = (conceptDesignationEntitys);
@@ -405,13 +403,8 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
     }
 
     @Override
-    protected ValueSetEntity fromFhir(ValueSet obj) {
-        return ValueSetEntity.fromValueSet(obj);
-    }
-
-    @Override
-    protected ValueSet toFhir(ValueSetEntity ent) {
-        return ValueSetEntity.toValueSet(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return ValueSet.class;
     }
 
     @Override

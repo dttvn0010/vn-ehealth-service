@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Device;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -163,13 +164,8 @@ public class DeviceDao extends BaseDao<DeviceEntity, Device> {
     }
 
     @Override
-    protected DeviceEntity fromFhir(Device obj) {
-        return DeviceEntity.fromDevice(obj);
-    }
-
-    @Override
-    protected Device toFhir(DeviceEntity ent) {
-        return DeviceEntity.toDevice(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Device.class;
     }
 
     @Override

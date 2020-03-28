@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.AllergyIntolerance;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,19 +38,14 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 	}
 
 	@Override
-	protected AllergyIntoleranceEntity fromFhir(AllergyIntolerance obj) {
-		return AllergyIntoleranceEntity.from(obj);
-	}
-
-	@Override
-	protected AllergyIntolerance toFhir(AllergyIntoleranceEntity ent) {
-		return AllergyIntoleranceEntity.to(ent);
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return AllergyIntoleranceEntity.class;
 	}
+	
+	@Override
+    protected Class<? extends DomainResource> getResourceClass() {
+        return AllergyIntolerance.class;
+    }
 
 	@SuppressWarnings("deprecation")
 	public List<IBaseResource> search(TokenParam active, TokenParam encounter, ReferenceParam asserter,

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.DetectedIssue;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -154,14 +155,9 @@ public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue
 	}
 
 	@Override
-	protected DetectedIssueEntity fromFhir(DetectedIssue obj) {
-		return DetectedIssueEntity.fromDetectedIssue(obj);
-	}
-
-	@Override
-	protected DetectedIssue toFhir(DetectedIssueEntity ent) {
-		return DetectedIssueEntity.toDetectedIssue(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return DetectedIssue.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

@@ -37,21 +37,22 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     protected MongoOperations mongo;
     
     abstract protected String getProfile();
-    abstract protected ENT fromFhir(FHIR obj);
-    abstract protected FHIR toFhir(ENT ent);
+    //abstract protected ENT fromFhir(FHIR obj);
+    //abstract protected FHIR toFhir(ENT ent);
     abstract protected Class<? extends BaseResource> getEntityClass();
+    abstract protected Class<? extends DomainResource> getResourceClass();
     
+    @SuppressWarnings("unchecked")
     public FHIR transform(ENT ent) {
-        var obj = toFhir(ent);
-        obj.setMeta(DataConvertUtil.getMeta(ent, getProfile()));
-        DataConvertUtil.getMetaExt(ent, obj);
+        var obj = FhirUtil.entityToFhir(ent, getResourceClass());
+        obj.setMeta(FhirUtil.getMeta(ent, getProfile()));
         obj.setId(ent.fhirId);
-        return obj;        
+        return (FHIR) obj;        
     }
     
+    @SuppressWarnings("unchecked")
     private ENT createNewEntity(FHIR obj, int version, String fhirId) {
-        var ent = fromFhir(obj);
-        DataConvertUtil.setMetaExt(obj, ent);
+        var ent = FhirUtil.fhirToEntity(obj, getEntityClass());
         if (fhirId != null && !fhirId.isEmpty()) {
             ent.fhirId = (fhirId);
         } else {
@@ -61,7 +62,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         ent.active = (true);
         ent.version = (version);
         ent.resCreated = (new Date());
-        return ent;
+        return (ENT) ent;
     }
     
     public FHIR create(FHIR object) {

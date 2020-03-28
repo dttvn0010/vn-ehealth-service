@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.CarePlan;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -300,14 +301,9 @@ public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 	}
 
 	@Override
-	protected CarePlanEntity fromFhir(CarePlan obj) {
-		return CarePlanEntity.fromCarePlan(obj);
-	}
-
-	@Override
-	protected CarePlan toFhir(CarePlanEntity ent) {
-		return CarePlanEntity.toCarePlan(ent);
-	}
+    protected Class<? extends DomainResource> getResourceClass() {
+        return CarePlan.class;
+    }
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

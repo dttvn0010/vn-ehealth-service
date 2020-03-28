@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.provider.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.HealthcareService;
 import org.hl7.fhir.r4.model.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -149,15 +150,10 @@ public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, Healt
     }
 
     @Override
-    protected HealthcareServiceEntity fromFhir(HealthcareService obj) {
-        return HealthcareServiceEntity.fromHealthcareService(obj);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return HealthcareService.class;
     }
-
-    @Override
-    protected HealthcareService toFhir(HealthcareServiceEntity ent) {
-        return HealthcareServiceEntity.toHealthcareService(ent);
-    }
-
+    
     @Override
     protected Class<? extends BaseResource> getEntityClass() {
         return HealthcareServiceEntity.class;

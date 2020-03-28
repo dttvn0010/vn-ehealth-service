@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -161,13 +162,8 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
     }
 
     @Override
-    protected DiagnosticReportEntity fromFhir(DiagnosticReport obj) {
-        return DiagnosticReportEntity.fromDiagnosticReport(obj);
-    }
-
-    @Override
-    protected DiagnosticReport toFhir(DiagnosticReportEntity ent) {
-        return DiagnosticReportEntity.toDiagnosticReport(ent);
+    protected Class<? extends DomainResource> getResourceClass() {
+        return DiagnosticReport.class;
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Condition;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -268,15 +269,10 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 	}
 
 	@Override
-	protected ConditionEntity fromFhir(Condition obj) {
-		return ConditionEntity.fromCondition(obj);
-	}
-
-	@Override
-	protected Condition toFhir(ConditionEntity ent) {
-		return ConditionEntity.toCondition(ent);
-	}
-
+    protected Class<? extends DomainResource> getResourceClass() {
+        return Condition.class;
+    }
+	
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return ConditionEntity.class;
