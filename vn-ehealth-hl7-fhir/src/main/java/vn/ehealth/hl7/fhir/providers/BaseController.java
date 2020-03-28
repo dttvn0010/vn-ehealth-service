@@ -158,6 +158,19 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
     public List<FHIR> getInstanceHistory(@IdParam IdType theId, @OptionalParam(name = "_since") InstantType theSince,
             @OptionalParam(name = "_at") DateRangeParam theAt,
             @OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Count Integer count) {
+    	
+    	FHIR object = null;
+        if (theId.hasVersionIdPart()) {
+            object = getDao().readOrVread(theId);
+        } else {
+            object = getDao().read(theId);
+        }
+        if (object == null) {
+            throw OperationOutcomeFactory.buildOperationOutcomeException(
+                    new ResourceNotFoundException("No Entity/" + theId.getIdPart()),
+                    OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+        }
+        
         List<FHIR> retVal = new ArrayList<FHIR>();
         retVal = getDao().getHistory(theId, theSince, theAt, _page, count);
         return retVal;
