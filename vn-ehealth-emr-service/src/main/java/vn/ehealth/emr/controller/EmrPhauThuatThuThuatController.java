@@ -14,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vn.ehealth.emr.model.EmrPhauThuatThuThuat;
@@ -24,6 +27,8 @@ import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
 
+@RestController
+@RequestMapping("/api/pttt")
 public class EmrPhauThuatThuThuatController {
     
     private Logger logger = LoggerFactory.getLogger(EmrPhauThuatThuThuatController.class);
@@ -100,6 +105,10 @@ public class EmrPhauThuatThuThuatController {
             var userId = user.map(x -> x.id).orElse(null);
             
             emrPhauThuatThuThuatService.createOrUpdateFromHIS(userId, hsba, ptttList, jsonSt);
+            
+            // TODO: Save to FHIR db
+            // .....
+            // .....
             
             var result = Map.of(
                 "success" , true,

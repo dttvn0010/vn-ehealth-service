@@ -1,29 +1,29 @@
 {
-    "encounterId": "17986862-6547-4f7f-98f9-21bacf60480f",
+    "encounterId": "7dcbdb62-bb24-4ca8-b48a-ecbdb3ff1124",
     "dmTdcn": {
         "ma": "01",
         "ten": "Điện tim đồ"
     },
     "ngayYeuCau": "2018-06-28 00:00:00",
     "bacSiYeuCau": {
-        "id": "79829711-14ee-40a5-ad92-16552e825467",
+        "id": "bb41d74e-3e9e-4c71-ab6e-626e3a98cb93",
         "ten": "Bác sĩ A"
     },
     "noiDungYeuCau": "Nội dung yêu cầu",
     "ngayThucHien": "2018-06-29 00:00:00",
     "bacSiChuyenKhoa": {
-        "id": "e8d4abdf-b814-415f-a849-c535a35feda2",
+        "id": "c639bda6-af79-4477-8d62-c46fcd04723e",
         "ten": "Bác sĩ B"
     },
     "ketQua": "Kết quả chẩn đoán",
     "ketLuan": "Kết luận chẩn đoán",
     "loiDan": "Lời dặn chẩn đoán",
     "nguoiVietBaoCao": {
-        "id": "5aabe31b-577a-489d-a176-ba209c63b114",
+        "id": "e74136c0-af78-4326-a721-b74b62f613a5",
         "ten": "Bác sĩ C"
     },
     "nguoiDanhGiaKetQua": {
-        "id": "21ea2960-3155-4951-bf70-77ff97fefa72",
+        "id": "c1ae37d4-cd92-4daf-9b39-b8e192bfc8cd",
         "ten": "Bác sĩ D"
     },
     "ngayGioBaoCao": "2018-06-30 00:00:00"

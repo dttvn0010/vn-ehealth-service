@@ -14,7 +14,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vn.ehealth.emr.model.EmrBenhNhan;
@@ -23,6 +26,8 @@ import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
 
+@RestController
+@RequestMapping("/api/benh_nhan")
 public class EmrBenhNhanController {
     
     private static Logger logger = LoggerFactory.getLogger(EmrBenhNhanController.class);
@@ -67,6 +72,13 @@ public class EmrBenhNhanController {
             var userId = user.map(x -> x.id).orElse(null);
             
             benhNhan = emrBenhNhanService.createOrUpdate(userId, benhNhan, jsonSt);
+            
+            // Save to FhirDB
+            try {
+                benhNhan.saveToFhirDb();
+            }catch(Exception e) {
+                logger.error("Cannot save to fhir db: ", e);
+            }
             
             var result = Map.of(
                 "success" , true,

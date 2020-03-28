@@ -84,10 +84,12 @@ public class ScheduleDao extends BaseDao<ScheduleEntity, Schedule> {
             UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
         Criteria criteria = null;
         criteria = Criteria.where("$where").is("1==1");
-        // acive
-        if (active != null) {
-            criteria.and("active").is(active.getValue());
-        }
+		// active
+		if (active != null) {
+			criteria = Criteria.where("active").is(active);
+		} else {
+			criteria = Criteria.where("active").is(true);
+		}
         // default
         criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
                 identifier);

@@ -1,19 +1,24 @@
 package vn.ehealth.hl7.fhir.dao.util;
 
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import vn.ehealth.hl7.fhir.clinical.dao.impl.AllergyIntoleranceDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.CarePlanDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ClinicalImpressionDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ConditionDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.DetectedIssueDao;
+import vn.ehealth.hl7.fhir.clinical.dao.impl.FamilyMemberHistoryDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.GoalDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ProcedureDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
+import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.DiagnosticReportDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ImagingStudyDao;
+import vn.ehealth.hl7.fhir.diagnostic.dao.impl.MediaDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ObservationDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.SpecimenDao;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.CareTeamDao;
@@ -90,8 +95,57 @@ public class DaoFactory implements ApplicationContextAware {
     private static ConceptMapDao conceptMapDao;
     private static ValueSetDao valueSetDao;
     
-    private static PersonDao personDao;   
+    private static PersonDao personDao;
     
+    private static AllergyIntoleranceDao allergyIntoleranceDao;
+    private static FamilyMemberHistoryDao familyMemberHistoryDao;
+    private static MediaDao mediaDao;
+    
+	
+	public static BaseDao<?,?> getDaoByType(ResourceType resourceType) {		
+		switch (resourceType) {
+		case CarePlan: return getCarePlanDao();
+		case Patient: return getPatientDao();
+		case Encounter: return getEncounterDao();
+		case ClinicalImpression: return getClinicalImpressionDao();
+		case Condition: return getConditionDao();
+		case DetectedIssue: return getDetectedIssueDao();
+		case Goal: return getGoalDao();
+		case Procedure: return getProcedureDao();
+		case ServiceRequest: return getServiceRequestDao();
+		case DiagnosticReport: return getDiagnosticReportDao();
+		case ImagingStudy: return getImagingStudyDao();
+		case Observation: return getObservationDao();
+		case Specimen: return getSpecimenDao();
+		case CareTeam: return getCareTeamDao();
+		case EpisodeOfCare: return getEpisodeOfCareDao();
+		case Immunization: return getImmunizationDao();
+		case MedicationAdministration: return getMedicationAdministrationDao();
+		case MedicationDispense: return getMedicationDispenseDao();
+		case Medication: return getMedicationDao();
+		case MedicationRequest: return getMedicationRequestDao();
+		case MedicationStatement: return getMedicationStatementDao();
+		case RelatedPerson: return getRelatedPersonDao();
+		case Device: return getDeviceDao();
+		case HealthcareService: return getHealthcareServiceDao();
+		case Location: return getLocationDao();
+		case Organization: return getOrganizationDao();
+		case Practitioner: return getPractitionerDao();
+		case PractitionerRole: return getPractitionerRoleDao();
+		case Appointment: return getAppointmentDao();
+		case AppointmentResponse: return getAppointmentResponseDao();
+		case Schedule: return getScheduleDao();
+		case Slot: return getSlotDao();
+		case CodeSystem: return getCodeSystemDao();
+		case ConceptMap: return getConceptMapDao();
+		case ValueSet: return getValueSetDao();
+		case Person: return getPersonDao();
+		case AllergyIntolerance: return getAllergyIntoleranceDao();
+		case FamilyMemberHistory: return getFamilyMemberHistoryDao();
+		case Media: return getMediaDao();
+		default: return null;
+		}
+	}
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -348,5 +402,26 @@ public class DaoFactory implements ApplicationContextAware {
         	personDao = applicationContext.getBean(PersonDao.class);
         }
         return personDao;
+    }
+    
+    public static FamilyMemberHistoryDao getFamilyMemberHistoryDao() {
+        if(familyMemberHistoryDao == null) {
+        	familyMemberHistoryDao = applicationContext.getBean(FamilyMemberHistoryDao.class);
+        }
+        return familyMemberHistoryDao;
+    }
+    
+    public static AllergyIntoleranceDao getAllergyIntoleranceDao() {
+        if(allergyIntoleranceDao == null) {
+        	allergyIntoleranceDao = applicationContext.getBean(AllergyIntoleranceDao.class);
+        }
+        return allergyIntoleranceDao;
+    }
+    
+    public static MediaDao getMediaDao() {
+        if(mediaDao == null) {
+        	mediaDao = applicationContext.getBean(MediaDao.class);
+        }
+        return mediaDao;
     }
 }

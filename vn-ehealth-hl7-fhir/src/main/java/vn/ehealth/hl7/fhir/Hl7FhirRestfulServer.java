@@ -24,15 +24,16 @@ import ca.uhn.fhir.rest.server.HardcodedServerAddressStrategy;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.CorsInterceptor;
+import ca.uhn.fhir.rest.server.interceptor.RequestValidatingInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.ResponseHighlighterInterceptor;
-import ca.uhn.fhir.rest.server.interceptor.ResponseValidatingInterceptor;
 import ca.uhn.fhir.util.VersionUtil;
 import ca.uhn.fhir.validation.ResultSeverityEnum;
-
+import vn.ehealth.hl7.fhir.clinical.providers.AllergyIntoleranceProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.CarePlanProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.ClinicalImpressionProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.ConditionProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.DetectedIssueProvider;
+import vn.ehealth.hl7.fhir.clinical.providers.FamilyMemberHistoryProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.GoalProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.ProcedureProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.ServiceRequestProvider;
@@ -41,6 +42,7 @@ import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 //import vn.ehealth.hl7.fhir.core.oauth2.ServerInterceptor;
 import vn.ehealth.hl7.fhir.diagnostic.providers.DiagnosticReportProvider;
 import vn.ehealth.hl7.fhir.diagnostic.providers.ImagingStudyProvider;
+import vn.ehealth.hl7.fhir.diagnostic.providers.MediaProvider;
 import vn.ehealth.hl7.fhir.diagnostic.providers.ObservationProvider;
 import vn.ehealth.hl7.fhir.diagnostic.providers.SpecimenProvider;
 import vn.ehealth.hl7.fhir.ehr.providers.CareTeamProvider;
@@ -72,8 +74,7 @@ import vn.ehealth.hl7.fhir.user.providers.PersonProvider;
 
 public class Hl7FhirRestfulServer extends RestfulServer {
 	private static final long serialVersionUID = 1L;
-	// private static final org.slf4j.Logger ourLog =
-	// org.slf4j.LoggerFactory.getLogger(Hl7FhirRestfulServer.class);
+	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(Hl7FhirRestfulServer.class);
 	private ApplicationContext applicationContext;
 
 	public Hl7FhirRestfulServer(ApplicationContext context) {
@@ -135,10 +136,13 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 				(IResourceProvider) applicationContext.getBean(ConceptMapProvider.class),
 				(IResourceProvider) applicationContext.getBean(ValueSetProvider.class),
 				(IResourceProvider) applicationContext.getBean(PersonProvider.class),
-				(IResourceProvider) applicationContext.getBean(ServiceRequestProvider.class)));
+				(IResourceProvider) applicationContext.getBean(ServiceRequestProvider.class),
+				(IResourceProvider) applicationContext.getBean(FamilyMemberHistoryProvider.class),
+				(IResourceProvider) applicationContext.getBean(AllergyIntoleranceProvider.class),
+				(IResourceProvider) applicationContext.getBean(MediaProvider.class)));
 		setServerConformanceProvider(new Hl7FhirServerConformanceProvider());
-		// ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
-		// registerInterceptor(loggingInterceptor);
+		//ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
+		//registerInterceptor(loggingInterceptor);
 		/*
 		 * Use a narrative generator. This is a completely optional step, but can be
 		 * useful as it causes HAPI to generate narratives for resources which don't
@@ -148,24 +152,20 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 		getFhirContext().setNarrativeGenerator(narrativeGen);
 
 		registerInterceptor(new ResponseHighlighterInterceptor());
+//
+//		// Create an interceptor to validate incoming requests
+//		RequestValidatingInterceptor requestInterceptor = new RequestValidatingInterceptor();
+//
+//		// Register a validator module (you could also use SchemaBaseValidator and/or
+//		// SchematronBaseValidator)
+//		requestInterceptor.addValidatorModule(new FhirInstanceValidator());
+//		requestInterceptor.setFailOnSeverity(ResultSeverityEnum.ERROR);
+//		requestInterceptor.setAddResponseHeaderOnSeverity(ResultSeverityEnum.INFORMATION);
+//		requestInterceptor.setResponseHeaderValue("Validation on ${line}: ${message} ${severity}");
+//		requestInterceptor.setResponseHeaderValueNoIssues("No issues detected");
 
-		/*
-		 * // Create an interceptor to validate incoming requests
-		 * RequestValidatingInterceptor requestInterceptor = new
-		 * RequestValidatingInterceptor();
-		 * 
-		 * // Register a validator module (you could also use SchemaBaseValidator and/or
-		 * SchematronBaseValidator) requestInterceptor.addValidatorModule(new
-		 * FhirInstanceValidator());
-		 * requestInterceptor.setFailOnSeverity(ResultSeverityEnum.ERROR);
-		 * requestInterceptor.setAddResponseHeaderOnSeverity(ResultSeverityEnum.
-		 * INFORMATION); requestInterceptor.
-		 * setResponseHeaderValue("Validation on ${line}: ${message} ${severity}");
-		 * requestInterceptor.setResponseHeaderValueNoIssues("No issues detected");
-		 * 
-		 * // Now register the validating interceptor
-		 * registerInterceptor(requestInterceptor);
-		 */
+//		// Now register the validating interceptor
+//		registerInterceptor(requestInterceptor);
 
 		// Create an interceptor to validate responses
 		// This is configured in the same way as above

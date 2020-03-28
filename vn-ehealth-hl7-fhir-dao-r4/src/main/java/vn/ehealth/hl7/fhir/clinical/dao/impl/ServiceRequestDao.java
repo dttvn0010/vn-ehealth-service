@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.Encounter;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,14 +26,16 @@ import vn.ehealth.hl7.fhir.clinical.entity.ProcedureEntity;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.diagnostic.entity.ServiceRequestEntity;
+
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
+
 
 @Repository
 public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequest>{
 
 	@SuppressWarnings("deprecation")
-    public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
+    public List<IBaseResource> search(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
 			TokenParam category, TokenParam code, ReferenceParam context, DateRangeParam date,
 			ReferenceParam definition, ReferenceParam encounter, TokenParam identifier, ReferenceParam location,
 			ReferenceParam partOf, ReferenceParam patient, ReferenceParam performer, TokenParam status,
@@ -41,7 +43,7 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
 			TokenParam _query, TokenParam _security, StringParam _content, StringParam _page, String sortParam,
 			Integer count, Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
-        Criteria criteria = setParamToCriteria(active, bassedOn, category, code, context, date, definition, encounter,
+        Criteria criteria = setParamToCriteria(active, basedOn, category, code, context, date, definition, encounter,
                 identifier, location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag, _profile,
                 _query, _security, _content);
         Query query = new Query();
@@ -58,111 +60,82 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
         	query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
         	query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+        
+        String[] keys = {"basedOn", "replaces", "subject", 
+        		"encounter", "encounter:serviceProvider", "encounter:appointment",
+				"requester", "performer", "reasonReference", "supportingInfo", 
+				"specimen", "relevantHistory"};
+        
+        var includeMap = getIncludeMap(ResourceType.ServiceRequest, keys, includes);
+        
         List<ServiceRequestEntity> entitys = mongo.find(query, ServiceRequestEntity.class);
         if (entitys != null) {
             for (ServiceRequestEntity item : entitys) {
             	ServiceRequest obj = transform(item);
-
-                // add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getBasedOn() != null && obj.getBasedOn().size() > 0) {
-						for (Reference ref : obj.getBasedOn()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getRequester() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getRequester());
-						if (nested != null) {
-							obj.getRequester().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getPerformer() != null && obj.getPerformer().size() > 0) {
-						for (Reference ref : obj.getPerformer()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getLocationReference() != null && obj.getLocationReference().size() > 0) {
-						for (Reference ref : obj.getLocationReference()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-					if (obj.getSpecimen() != null && obj.getSpecimen().size() > 0) {
-						for (Reference ref : obj.getSpecimen()) {
-							Resource nested = DatabaseUtil.getResourceFromReference(ref);
-							if (nested != null) {
-								ref.setResource(nested);
-//								if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//									resources.add(nested);
-							}
-						}
-					}
-				} else {
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("ServiceRequest:subject"))
-							&& obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("ServiceRequest:encounter")) && obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-				}
+            	
+            	if(includeMap.get("basedOn") && obj.hasBasedOn()) {
+            		setReferenceResource(obj.getBasedOn());
+            	}
+            	
+            	if(includeMap.get("replaces") && obj.hasReplaces()) {
+            		setReferenceResource(obj.getReplaces());
+            	}
+            	
+            	if(includeMap.get("subject") && obj.hasSubject()) {
+            		setReferenceResource(obj.getSubject());
+            	}
+            	
+            	if(includeMap.get("encounter") && obj.hasEncounter()) {
+            		setReferenceResource(obj.getEncounter());
+            		var enc = (Encounter) obj.getEncounter().getResource();
+            		
+            		if(includeMap.get("encounter:serviceProvider") && enc != null) {
+            			setReferenceResource(enc.getServiceProvider());
+            		}
+            		
+            		if(includeMap.get("encounter:appointment") && enc != null) {
+            			setReferenceResource(enc.getAppointment());
+            		}
+            	}
+            	
+            	if(includeMap.get("requester") && obj.hasRequester()) {
+            		setReferenceResource(obj.getRequester());
+            	}
+            	
+            	if(includeMap.get("performer") && obj.hasPerformer()) {
+            		setReferenceResource(obj.getPerformer());
+            	}
+            	
+            	if(includeMap.get("reasonReference") && obj.hasReasonReference()) {
+            		setReferenceResource(obj.getReasonReference());
+            	}
+            	
+            	if(includeMap.get("supportingInfo") && obj.hasSupportingInfo()) {
+            		setReferenceResource(obj.getSupportingInfo());
+            	}
+            	
+            	if(includeMap.get("specimen") && obj.hasSpecimen()) {
+            		setReferenceResource(obj.getSpecimen());
+            	}
+            	
+            	if(includeMap.get("relevantHistory") && obj.hasRelevantHistory()) {
+            		setReferenceResource(obj.getRelevantHistory());
+            	}
+            	
                 resources.add(obj);
             }
         }
         return resources;
 	}
 
-	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam bassedOn,
+	public long countMatchesAdvancedTotal(FhirContext fhirContext, TokenParam active, ReferenceParam basedOn,
 			TokenParam category, TokenParam code, ReferenceParam context, DateRangeParam date,
 			ReferenceParam definition, ReferenceParam encounter, TokenParam identifier, ReferenceParam location,
 			ReferenceParam partOf, ReferenceParam patient, ReferenceParam performer, TokenParam status,
 			ReferenceParam subject, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
 			TokenParam _query, TokenParam _security, StringParam _content) {
 		long total = 0;
-        Criteria criteria = setParamToCriteria(active, bassedOn, category, code, context, date, definition, encounter,
+        Criteria criteria = setParamToCriteria(active, basedOn, category, code, context, date, definition, encounter,
                 identifier, location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag, _profile,
                 _query, _security, _content);
         Query query = new Query();
@@ -173,7 +146,7 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
         return total;
 	}
 	
-	private Criteria setParamToCriteria(TokenParam active, ReferenceParam bassedOn, TokenParam category,
+	private Criteria setParamToCriteria(TokenParam active, ReferenceParam basedOn, TokenParam category,
             TokenParam code, ReferenceParam context, DateRangeParam date, ReferenceParam definition,
             ReferenceParam encounter, TokenParam identifier, ReferenceParam location, ReferenceParam partOf,
             ReferenceParam patient, ReferenceParam performer, TokenParam status, ReferenceParam subject,
@@ -187,21 +160,22 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
             criteria = Criteria.where("active").is(true);
         }
         // set param default
-        criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+        criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
                 identifier);
         // based-on
-        if (bassedOn != null) {
-            if(bassedOn.getValue().indexOf("|")==-1) {
-                criteria.orOperator(Criteria.where("bassedOn.reference").is(bassedOn.getValue()),
-                        Criteria.where("bassedOn.display").is(bassedOn.getValue()));
+        if (basedOn != null) {
+            if(basedOn.getValue().indexOf("|")==-1) {
+                criteria.orOperator(Criteria.where("basedOn.reference").is(basedOn.getValue()),
+                        Criteria.where("basedOn.display").is(basedOn.getValue()));
             }else {
-                String[] ref= bassedOn.getValue().split("\\|");
-                criteria.and("bassedOn.identifier.system").is(ref[0]).and("bassedOn.identifier.value").is(ref[1]);
+                String[] ref= basedOn.getValue().split("\\|");
+                criteria.and("basedOn.identifier.system").is(ref[0]).and("basedOn.identifier.value").is(ref[1]);
             }
         }
         // category
         if (category != null) {
-            criteria.and("category.coding.code.myStringValue").is(category.getValue());
+            criteria.and("category.coding.code").is(category.getValue())
+                    .and("category.coding.system").is(category.getSystem());
         }
         // code
         if (code != null) {
@@ -217,7 +191,7 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
 		 */
         // date
         if (date != null) {
-            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "performed", date);
+            criteria = setTypeDateToCriteria(criteria, "performed", date);
         }
         // definition
         if (definition != null) {

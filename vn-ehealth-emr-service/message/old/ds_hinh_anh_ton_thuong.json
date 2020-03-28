@@ -1,0 +1,21 @@
+{
+  "matraodoiHoSo": "18.052294",
+  "emrHinhAnhTonThuongs": [
+    {
+      "idhis": "1111111",
+      "anhtonthuong": "Ảnh tổn thương",
+      "motatonthuong": "Mô tả tổn thương",
+      "dinhdanganh": "Định dạng ảnh",
+      "emrFileDinhKemHatts": [
+        {
+          "url": "url file 1",
+          "ten": "Tên file 1"
+        },
+        {
+          "url": "url file 2",
+          "ten": "Tên file 2"
+        }
+      ]
+    }
+  ]
+}

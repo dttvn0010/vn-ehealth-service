@@ -1,0 +1,49 @@
+{
+  "matraodoiHoSo": "18.052294",
+  "emrDonThuocs": [
+    {
+      "idhis": "11111",
+      "ngaykedon": "2018-06-29 00:00:00",
+      "bacsikedon": {
+        "chungchihanhnghe": "11111",
+        "ten": "Bác sĩ kê đơn"
+      },
+      "sodon": "Số đơn",
+      "emrDonThuocChiTiets": [
+        {
+          "emrDmThuoc": {
+            "ma": "001",
+            "ten": "Tên thuốc"
+          },
+          "emrDmDuongDungThuoc": {
+            "ma": "001",
+            "ten": "Đường dùng thuốc"
+          },
+          "emrDmTanXuatDungThuoc": {
+            "ma": "001",
+            "ten": "Tần suất dùng thuốc"
+          },
+          "emrDmChiDanDungThuoc": {
+            "ma": "001",
+            "ten": "Chỉ dẫn dùng thuốc"
+          },
+          "ngaybatdau": "2018-06-29 00:00:00",
+          "ngayketthuc": "2018-06-29 00:00:00",
+          "lieuluongdung": "Liều lượng",
+          "chidandungthuoc": "Chỉ dẫn dùng thuốc",
+          "bietduoc": "Biệt dược"
+        }
+      ],
+      "emrFileDinhKemDonThuocs": [
+        {
+          "url": "url file 1",
+          "ten": "Tên file 1"
+        },
+        {
+          "url": "url file 2",
+          "ten": "Tên file 2"
+        }
+      ]
+    }
+  ]
+}

@@ -1,12 +1,14 @@
 package vn.ehealth.hl7.fhir.clinical.dao.impl;
 
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.getIncludeMap;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Condition;
-import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,7 +28,7 @@ import vn.ehealth.hl7.fhir.clinical.entity.ConditionEntity;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
+import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 
 @Repository
 public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
@@ -60,65 +62,31 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
 			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
 		}
+		
+		String[] keys = {"subject", "encounter",  "asserter", "recorder"};
+
+        var includeMap = getIncludeMap(ResourceType.Condition, keys, includes);
+        
 		List<ConditionEntity> conditionEntitys = mongo.find(query, ConditionEntity.class);
 		if (conditionEntitys != null) {
 			for (ConditionEntity item : conditionEntitys) {
 				Condition obj = transform(item);
-				// add more Resource as it's references
-				if (includes != null && includes.size() > 0 && includes.contains(new Include("*"))) {
-					if (obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getAsserter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getAsserter());
-						if (nested != null) {
-							obj.getAsserter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (obj.getRecorder() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getRecorder());
-						if (nested != null) {
-							obj.getRecorder().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-
-				} else {
-					if (includes != null && includes.size() > 0 && includes.contains(new Include("Condition:subject"))
-							&& obj.getSubject() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getSubject());
-						if (nested != null) {
-							obj.getSubject().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
-					if (includes != null && includes.size() > 0
-							&& includes.contains(new Include("Condition:encounter")) && obj.getEncounter() != null) {
-						Resource nested = DatabaseUtil.getResourceFromReference(obj.getEncounter());
-						if (nested != null) {
-							obj.getEncounter().setResource(nested);
-//							if (!FPUtil.anyMatch(resources, x -> nested.getId().equals(x.getIdElement().getValue())))
-//								resources.add(nested);
-						}
-					}
+				
+				if(includeMap.get("subject") && obj.hasSubject()) {
+				    setReferenceResource(obj.getSubject());
 				}
+				
+				if(includeMap.get("encounter") && obj.hasEncounter()) {
+                    setReferenceResource(obj.getEncounter());
+                }
+				
+				if(includeMap.get("asserter") && obj.hasAsserter()) {
+                    setReferenceResource(obj.getAsserter());
+                }
+				
+				if(includeMap.get("recorder") && obj.hasRecorder()) {
+                    setReferenceResource(obj.getRecorder());
+                }
 				resources.add(obj);
 			}
 		}
@@ -163,11 +131,11 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 			criteria = Criteria.where("active").is(true);
 		}
 		// set param default
-		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
 		// abatementAge
 		if (abatementAge != null) {
-			criteria = DatabaseUtil.setQuantityToCriteria(criteria, "abatement", abatementAge);
+			criteria = setQuantityToCriteria(criteria, "abatement", abatementAge);
 		}
 		// abatement-boolean
 		if (abatementBoolean != null) {
@@ -175,7 +143,7 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 		}
 		// abatement-date
 		if (abatementDate != null) {
-			criteria = DatabaseUtil.setDatetimePeriodToCriteria(criteria, "abatement", abatementDate);
+			criteria = setDatetimePeriodToCriteria(criteria, "abatement", abatementDate);
 		}
 		// abatement-string
 		if (abatementString != null) {
@@ -183,7 +151,7 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 		}
 		// asserted-date
 		if (assertedDate != null) {
-			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "assertedDate", assertedDate);
+			criteria = setTypeDateToCriteria(criteria, "assertedDate", assertedDate);
 		}
 		// asserter
 		if (asserter != null) {
@@ -249,11 +217,11 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 		}
 		// onset-age
 		if (onsetAge != null) {
-			criteria = DatabaseUtil.setQuantityToCriteria(criteria, "onset", onsetAge);
+			criteria = setQuantityToCriteria(criteria, "onset", onsetAge);
 		}
 		// onset-date
 		if (onsetDate != null) {
-			criteria = DatabaseUtil.setDatetimePeriodToCriteria(criteria, "onset", onsetDate);
+			criteria = setDatetimePeriodToCriteria(criteria, "onset", onsetDate);
 		}
 		// onset-info
 		if (onsetInfo != null) {

@@ -20,7 +20,7 @@ public class CoSoKhamBenh extends ToChuc {
         super(obj);
     }
     
-    public void fromFhir(Organization obj) {
+    public void getContentFromFhir(Organization obj) {
     }
 
     public Organization toFhir() {
@@ -36,5 +36,10 @@ public class CoSoKhamBenh extends ToChuc {
         obj.setType(listOf(orgType));
         
         return obj;
+    }
+    
+    public static CoSoKhamBenh fromFhir(Organization obj) {
+    	if(obj == null) return null;
+    	return new CoSoKhamBenh(obj);
     }
 }

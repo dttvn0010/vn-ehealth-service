@@ -24,45 +24,6 @@ public class ConstantKeys {
     public static final int MAXLENGHT500 = 500;
     public static final int MAXLENGHT30 = 30;
     
-    // Resource list
-    public static final String RES_CAREPLAN = "CarePlan";
-    public static final String RES_CLINICAL_IMPRESSION = "ClinicalImpression";
-    public static final String RES_CONDITION = "Condition";
-    public static final String RES_DETECTED_ISSUE = "DetectedIssue";
-    public static final String RES_GOAL = "Goal";
-    public static final String RES_PROCEDURE = "Procedure";
-    public static final String RES_SERVICE_REQUEST = "ServiceRequest";
-    public static final String RES_DIAGNOSTIC_REPORT = "DiagnosticReport";
-    public static final String RES_IMAGING_STUDY = "ImagingStudy";
-    public static final String RES_OBSERVATION = "Observation";
-    public static final String RES_SPECIMEN = "Specimen";
-    public static final String RES_CARETEAM = "CareTeam";
-    public static final String RES_ENCOUNTER = "Encounter";
-    public static final String RES_EPISODEOFCARE = "EpisodeOfCare";
-    
-    public static final String RES_IMMUNIZATION = "Immunization";
-    public static final String RES_MEDICATION_ADMINISTRATION = "MedicationAdministration";
-    public static final String RES_MEDICATION = "Medication";
-    public static final String RES_MEDICATION_DISPENSE = "MedicationDispense";
-    public static final String RES_MEDICATION_REQUEST = "MedicationRequest";
-    public static final String RES_MEDICATION_STATEMENT = "MedicationStatement";
-    public static final String RES_PATIENT = "Patient";
-    public static final String RES_RELATED_PERSON = "RelatedPerson";
-    public static final String RES_DEVICE = "Device";
-    public static final String RES_HEALTHCARE_SERVICE = "HealthcareService";
-    public static final String RES_LOCATION = "Location";
-    public static final String RES_ORGANIZATION = "Organization";
-    public static final String RES_PRACTITIONER = "Practitioner";
-    public static final String RES_PRACTITIONER_ROLE = "PractitionerRole";
-    public static final String RES_APPOINTMENT = "Appoinment";
-    public static final String RES_APPOINMENT_RESPONSE = "AppoinmentResponse";
-    public static final String RES_SCHEDULE = "Schedule";
-    public static final String RES_SLOT = "Slot";
-    public static final String RES_CODESYSTEM = "CodeSystem";
-    public static final String RES_CONCEPTMAP = "ConceptMap";
-    public static final String RES_VALUESET = "ValueSet";
-    public static final String RES_PERSON = "Person";
-    
     // Param list
     public static final String SP_BIRTHDATE = "birthdate";
     public static final String SP_FAMILY = "family";
@@ -269,8 +230,11 @@ public class ConstantKeys {
     public static final String SP_ISROOT = "isroot";
     public static final String SP_ROOT_CONCEPT = "rootconcept";
     public static final String SP_TABLE_NAME = "tableName";
+    public static final String SP_SEX = "sex";
     
     public static final String SP_OBSERVATION_MAX = "max";
+    
+    public static final String SP_REQUEST = "request";
     
     public static class PatientStaus {
         public static String getTen(int trangThai) {

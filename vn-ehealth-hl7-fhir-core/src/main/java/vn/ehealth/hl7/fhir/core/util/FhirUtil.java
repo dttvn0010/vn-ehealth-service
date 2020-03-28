@@ -133,6 +133,13 @@ public class FhirUtil {
         return new Reference(type + "/" + id);
     }
     
+    public static Reference createReference(String display) {
+        if(display == null) return null;
+        var ref = new Reference();
+        ref.setDisplay(display);
+        return ref;
+    }
+    
     public static IdType createIdType(String id) {
         return new IdType(id);
     }
@@ -150,6 +157,16 @@ public class FhirUtil {
             }
         }
         return null;
+    }
+    
+    public static ResourceType getResourceType(Reference ref) {
+    	if(ref != null && ref.hasReference()) {
+    		var arr = ref.getReference().split("/");
+            if(arr.length == 2) {
+                return ResourceType.fromCode(arr[0]);
+            }
+    	}
+    	return null;
     }
     
     public static IdType createIdType(Reference ref) {

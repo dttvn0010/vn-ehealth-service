@@ -6,7 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import vn.ehealth.emr.model.User;
-import vn.ehealth.emr.service.ServiceFactory;
+import vn.ehealth.emr.service.EmrServiceFactory;
 
 public class UserUtil {
 
@@ -15,7 +15,7 @@ public class UserUtil {
         
         if(userDetails instanceof UserDetails) {
             String username = ((UserDetails) userDetails).getUsername();
-            return ServiceFactory.getUserService().getByUsername(username);
+            return EmrServiceFactory.getUserService().getByUsername(username);
         }
         
         return Optional.ofNullable(null);

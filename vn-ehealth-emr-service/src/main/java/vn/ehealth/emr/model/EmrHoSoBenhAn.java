@@ -9,16 +9,28 @@ import java.util.List;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
+import org.hl7.fhir.r4.model.Encounter;
+import org.hl7.fhir.r4.model.Organization;
+import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import vn.ehealth.emr.service.ServiceFactory;
-import vn.ehealth.utils.MongoUtils;
+import ca.uhn.fhir.rest.param.TokenParam;
+import vn.ehealth.emr.model.dto.BaseRef;
+import vn.ehealth.emr.model.dto.DotKhamBenh;
+import vn.ehealth.emr.service.EmrServiceFactory;
+import vn.ehealth.emr.utils.ObjectIdUtil;
+import vn.ehealth.emr.utils.Constants.IdentifierSystem;
+import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
+
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection="emr_ho_so_benh_an")
@@ -28,6 +40,12 @@ public class EmrHoSoBenhAn {
     public EmrDmContent emrDmLoaiBenhAn;    
     public ObjectId emrBenhNhanId;    
     public ObjectId emrCoSoKhamBenhId;
+    
+    @JsonIgnore
+    private Map<String, Object> _emrBenhNhan;
+    
+    @JsonIgnore
+    private Map<String, Object> _emrCoSoKhamBenh;
         
     public int nguonDuLieu;    
     public int trangThai;
@@ -66,7 +84,7 @@ public class EmrHoSoBenhAn {
     
     public Map<String, Object> emrBenhAn;
         
-    public List<EmrKhoaDieuTri> emrVaoKhoas;
+    public List<EmrVaoKhoa> emrVaoKhoas;
     
     public Map<String, Object> emrChanDoan;
     
@@ -104,11 +122,11 @@ public class EmrHoSoBenhAn {
     public List<ObjectId> dsNguoiXemIds = new ArrayList<>();
         
     public String getId() {
-        return MongoUtils.idToString(id);
+        return ObjectIdUtil.idToString(id);
     }
     
     public void setId(String id) { 
-        this.id = MongoUtils.stringToId(id);
+        this.id = ObjectIdUtil.stringToId(id);
     }
     
     public EmrDmContent getEmrDmLoaiBenhAn() {
@@ -116,59 +134,67 @@ public class EmrHoSoBenhAn {
     }
     
     public String getEmrBenhNhanId() {
-        return MongoUtils.idToString(emrBenhNhanId);
+        return ObjectIdUtil.idToString(emrBenhNhanId);
     }
     
     public EmrBenhNhan getEmrBenhNhan() {
-        return ServiceFactory.getEmrBenhNhanService().getById(emrBenhNhanId).orElse(null);
+        return EmrServiceFactory.getEmrBenhNhanService().getById(emrBenhNhanId).orElse(null);
+    }
+    
+    public void setEmrBenhNhan(Map<String, Object> emrBenhNhan) {
+        this._emrBenhNhan = emrBenhNhan;
     }
     
     public void setEmrBenhNhanId(String emrBenhNhanId) {
-        this.emrBenhNhanId = MongoUtils.stringToId(emrBenhNhanId);
+        this.emrBenhNhanId = ObjectIdUtil.stringToId(emrBenhNhanId);
     }
     
     public String getEmrCoSoKhamBenhId() {
-        return MongoUtils.idToString(emrCoSoKhamBenhId);
+        return ObjectIdUtil.idToString(emrCoSoKhamBenhId);
     }
     
     public EmrCoSoKhamBenh getEmrCoSoKhamBenh() {
-        return ServiceFactory.getEmrCoSoKhamBenhService().getById(emrCoSoKhamBenhId).orElse(null);
+        return EmrServiceFactory.getEmrCoSoKhamBenhService().getById(emrCoSoKhamBenhId).orElse(null);
+    }
+    
+    public void setEmrCoSoKhamBenh(Map<String, Object> emrCoSoKhamBenh) {
+        this._emrCoSoKhamBenh = emrCoSoKhamBenh;
     }
     
     public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
-        this.emrCoSoKhamBenhId = MongoUtils.stringToId(emrCoSoKhamBenhId);
+        this.emrCoSoKhamBenhId = ObjectIdUtil.stringToId(emrCoSoKhamBenhId);
     }
     
     public String getNguoitaoId() {
-        return MongoUtils.idToString(nguoitaoId);
+        return ObjectIdUtil.idToString(nguoitaoId);
     }
     
     public void setNguoitaoId(String nguoitaoId) {
-        this.nguoitaoId = MongoUtils.stringToId(nguoitaoId);
+        this.nguoitaoId = ObjectIdUtil.stringToId(nguoitaoId);
     }
     
     public String getNguoisuaId() {
-        return MongoUtils.idToString(nguoisuaId);
+        return ObjectIdUtil.idToString(nguoisuaId);
     }
     
     public void setNguoisuaId(String nguoisuaId) {
-        this.nguoitaoId = MongoUtils.stringToId(nguoisuaId);
+        this.nguoitaoId = ObjectIdUtil.stringToId(nguoisuaId);
     }
     
     public String getNguoiluutruId() {
-        return MongoUtils.idToString(nguoiluutruId);
+        return ObjectIdUtil.idToString(nguoiluutruId);
     }
     
     public void setNguoiluutruId(String nguoiluutruId) {
-        this.nguoiluutruId = MongoUtils.stringToId(nguoiluutruId);
+        this.nguoiluutruId = ObjectIdUtil.stringToId(nguoiluutruId);
     }
     
     public String getNguoimoluutruId() {
-        return MongoUtils.idToString(nguoimoluutruId);
+        return ObjectIdUtil.idToString(nguoimoluutruId);
     }
     
     public void setNguoimoluutruId(String nguoimoluutruId) {
-        this.nguoimoluutruId = MongoUtils.stringToId(nguoimoluutruId);
+        this.nguoimoluutruId = ObjectIdUtil.stringToId(nguoimoluutruId);
     }
     
     @JsonInclude(Include.NON_NULL)
@@ -190,7 +216,7 @@ public class EmrHoSoBenhAn {
     }
     
     public EmrTuoiBenhNhan getTuoiBenhNhan() {
-        var emrBenhNhan = ServiceFactory.getEmrBenhNhanService().getById(emrBenhNhanId).orElseThrow();
+        var emrBenhNhan = EmrServiceFactory.getEmrBenhNhanService().getById(emrBenhNhanId).orElseThrow();
         
         if(emrBenhNhan == null
             || emrBenhNhan.ngaysinh == null
@@ -239,5 +265,58 @@ public class EmrHoSoBenhAn {
         }
         
         return "";
+    }
+    
+    public static Encounter getEncounter(String maHoSo) {
+    	var params = mapOf("identifier", new TokenParam(IdentifierSystem.MA_HO_SO, maHoSo));
+    	var fhirObj = (Encounter) DaoFactory.getEncounterDao().searchOne(params);    	
+    	return fhirObj;
+    }
+    
+    public DotKhamBenh toDto() {
+    	var dto = new DotKhamBenh();
+    	dto.maYte = this.mayte;
+    	dto.dmLoaiKham = this.emrDmLoaiBenhAn != null? this.emrDmLoaiBenhAn.toDto() : null;
+    	dto.ngayGioVao = this.emrQuanLyNguoiBenh != null? this.emrQuanLyNguoiBenh.ngaygiovaovien : null;
+    	dto.ngayGioKetThucDieuTri = this.emrQuanLyNguoiBenh != null? this.emrQuanLyNguoiBenh.ngaygioravien : null;
+    	return dto;
+    }
+    
+    public void saveToFhirDb() {
+    	var dto = toDto();
+    	
+    	Organization org = null;    	
+    	if(_emrCoSoKhamBenh != null) {
+    	    org = EmrCoSoKhamBenh.getOrganization((String)_emrCoSoKhamBenh.get("ma"));
+    	}
+    	dto.serviceProvider = new BaseRef(org);
+    	
+    	Patient patient = null;
+    	if(_emrBenhNhan != null) {
+    	    patient = EmrBenhNhan.getPatient((String) _emrBenhNhan.get("idhis"));
+    	}
+    	dto.patient = new BaseRef(patient);
+    	
+    	var encounterDao = DaoFactory.getEncounterDao();
+        var encounter = getEncounter(this.matraodoi);
+        
+    	if(encounter != null) {
+    		encounter = encounterDao.update(DotKhamBenh.toFhir(dto), encounter.getIdElement());
+    	}else {
+    		encounter = encounterDao.create(DotKhamBenh.toFhir(dto));
+    	}
+    	
+    	var params = mapOf("partOf", ResourceType.Encounter + "/" + encounter.getId());
+    	var vaoKhoaEncounters = encounterDao.search(params);
+    	
+    	for(var vaoKhoaEncounter : vaoKhoaEncounters) {
+    		encounterDao.remove(vaoKhoaEncounter.getIdElement());
+    	}
+    	
+    	if(emrVaoKhoas != null) {
+    		for(var emrVaoKhoa : emrVaoKhoas) {
+    			emrVaoKhoa.saveToFhirDb(encounter);
+    		}
+    	}
     }
 }

@@ -67,13 +67,12 @@ public class EmrChanDoanHinhAnhService {
             if(cdha.idhis != null) {
                 cdha.id = emrChanDoanHinhAnhRepository.findByIdhis(cdha.idhis).map(x -> x.id).orElse(null);
             }
-            var check = cdha.id;
             cdha.emrHoSoBenhAnId = hsba.id;
             cdha.emrBenhNhanId = hsba.emrBenhNhanId;
             cdha.emrCoSoKhamBenhId = hsba.emrCoSoKhamBenhId;
             cdha = emrChanDoanHinhAnhRepository.save(cdha);
             cdhaList.set(i, cdha);
-            if(check == null) {
+            if(cdha.id == null) {
                 emrLogService.logAction(EmrChanDoanHinhAnh.class.getName(), cdha.id, MA_HANH_DONG.TAO_MOI, new Date(), userId, 
                 		JsonUtil.dumpObject(cdha), "");
             } else {

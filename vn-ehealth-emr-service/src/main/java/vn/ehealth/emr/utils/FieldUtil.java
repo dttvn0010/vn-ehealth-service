@@ -5,13 +5,12 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jfree.util.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FieldUtil {
 
-    Logger logger = LoggerFactory.getLogger(FieldUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(FieldUtil.class);
     
     static String camelToSnake(String s) {
         return s.replaceAll("(.)(\\p{Upper})", "$1_$2").toLowerCase();
@@ -24,7 +23,7 @@ public class FieldUtil {
             field.setAccessible(true);
             return field.get(obj);
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            Log.error("Cannot set field : ", e);
+        	logger.error("Cannot set field : ", e);
         }
         return null;
     }

@@ -1,13 +1,11 @@
 package vn.ehealth.emr.model.dto;
 
 import vn.ehealth.emr.utils.Constants.IdentifierSystem;
-import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 import org.hl7.fhir.r4.model.Practitioner;
-import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 
 public class CanboYte extends BaseModelDTO {
@@ -29,10 +27,6 @@ public class CanboYte extends BaseModelDTO {
     public static CanboYte fromFhir(Practitioner obj) {
         if(obj == null) return null;
         return new CanboYte(obj);
-    }
-    
-    public static CanboYte fromReference(Reference ref) {
-        return fromFhir(DaoFactory.getPractitionerDao().readRef(ref));
     }
     
     public static Practitioner toFhir(CanboYte dto) {

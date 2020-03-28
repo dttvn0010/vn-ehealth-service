@@ -83,7 +83,7 @@ public class BenhNhan  extends BaseModelDTO {
         
         if(obj.hasGender()) {
             var gender = obj.getGender().toCode();
-            this.dmGioiTinh = new DanhMuc(gender, gioiTinhMap.getOrDefault(gender, ""), "");
+            this.dmGioiTinh = new DanhMuc(gender, gioiTinhMap.getOrDefault(gender, ""), CodeSystemValue.GIOI_TINH);
         }
         
         if(obj.hasTelecom()) {

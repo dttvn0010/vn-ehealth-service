@@ -4,26 +4,18 @@ import java.util.UUID;
 
 public class StringUtil {
 
-    public static String generateUID() {
+    public static String generateUUID() {
         //return  UUID.randomUUID().toString().replace("-", "");
     	return  UUID.randomUUID().toString();
     }
     
-	public static String getType(String input) {
-		if (input != null) {
-			int pos = input.indexOf("/");
-			if (pos > 0)
-				return input.substring(0, pos);
-		}
-		return "";
-	}
-
-	public static String getId(String input) {
-    	if(input != null) {
-    		int pos = input.indexOf("/");
-    		if(pos > 0) return input.substring(pos + 1);
-    		else return input;
+    public static boolean isUUID(String st) {
+    	try {
+    		UUID.fromString(st);
+    		return true;
+    	}catch(IllegalArgumentException  e) {
+    		
     	}
-    	return "";
+    	return false;
     }
 }

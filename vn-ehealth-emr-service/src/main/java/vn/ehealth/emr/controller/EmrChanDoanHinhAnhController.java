@@ -14,16 +14,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vn.ehealth.emr.model.EmrChanDoanHinhAnh;
+import vn.ehealth.emr.model.EmrHoSoBenhAn;
 import vn.ehealth.emr.service.EmrChanDoanHinhAnhService;
 import vn.ehealth.emr.service.EmrHoSoBenhAnService;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
 
+@RestController
+@RequestMapping("/api/cdha")
 public class EmrChanDoanHinhAnhController {
     
     private JsonParser jsonParser = new JsonParser();
@@ -95,10 +101,21 @@ public class EmrChanDoanHinhAnhController {
             var cdhaList = cdhaObjList.stream()
                                 .map(obj -> objectMapper.convertValue(obj, EmrChanDoanHinhAnh.class))
                                 .collect(Collectors.toList());
+            
             var user = UserUtil.getCurrentUser();
             var userId = user.map(x -> x.id).orElse(null);
             
             emrChanDoanHinhAnhService.createOrUpdateFromHIS(userId, hsba, cdhaList, jsonSt);
+            
+            // save to FHIR db
+            try {
+                var hsbaEncounter = EmrHoSoBenhAn.getEncounter(matraodoiHsba);
+                cdhaList.forEach(cdha -> {
+                    cdha.saveToFhirDb(hsbaEncounter);;
+                });
+            }catch(Exception e) {
+                logger.error("Cannot save to FHIR db:", e);
+            }
             
             var result = Map.of(
                 "success" , true,

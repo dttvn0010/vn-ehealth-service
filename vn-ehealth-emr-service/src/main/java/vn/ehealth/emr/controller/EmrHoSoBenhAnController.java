@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.Properties;
 
 import org.bson.types.ObjectId;
-import org.jfree.util.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +39,8 @@ import vn.ehealth.emr.validate.JsonParser;
 
 import java.io.*;
 
+@RestController
+@RequestMapping("/api/hsba")
 public class EmrHoSoBenhAnController {
     
     @Value("${server.upload.path}")
@@ -217,8 +220,15 @@ public class EmrHoSoBenhAnController {
             var user = UserUtil.getCurrentUser();
             var userId = user.map(x -> x.id).orElse(null);
             
-            emrHoSoBenhAnService.createOrUpdateFromHIS(userId, emrBenhNhan.get().id, emrCoSoKhamBenh.id, hsba, jsonSt);
-                        
+            hsba = emrHoSoBenhAnService.createOrUpdateFromHIS(userId, emrBenhNhan.get().id, emrCoSoKhamBenh.id, hsba, jsonSt);
+            
+            // save to FHIR db
+            try {
+                hsba.saveToFhirDb();
+            }catch(Exception e) {
+                logger.error("Cannot save to fhir db: ", e);
+            }
+            
             var result = Map.of(
                 "success" , true,
                 "emrHoSoBenhAn", hsba  
@@ -290,7 +300,7 @@ public class EmrHoSoBenhAnController {
             emrHoSoBenhAnService.addEmrFileDinhKems(new ObjectId(id), emrFileDinhKems);
             return ResponseEntity.ok(Map.of("success", true));
         }catch(Exception e) {
-            Log.error("Fail to upload giayto:", e);
+            logger.error("Fail to upload giayto:", e);
             return new ResponseEntity<>(Map.of("success", false, "error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
