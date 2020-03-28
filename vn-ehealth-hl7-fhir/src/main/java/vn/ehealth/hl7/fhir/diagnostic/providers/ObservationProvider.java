@@ -26,6 +26,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.param.CompositeParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
@@ -59,6 +60,7 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenOrListParam code,
+			@OptionalParam(name = Observation.SP_CODE_VALUE_CONCEPT) CompositeParam<TokenParam, TokenParam> codeValueConcept,
 			@OptionalParam(name = ConstantKeys.SP_COMBO_CODE) TokenParam comboCode,
 			@OptionalParam(name = ConstantKeys.SP_COMBO_DATA_ABSENT_REASON) TokenParam comboDataAbsentReason,
 			@OptionalParam(name = ConstantKeys.SP_COMBO_CODE_VALUE_CONCEPT) TokenParam comboValueConcept,
@@ -82,6 +84,7 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 			@OptionalParam(name = ConstantKeys.SP_VALUE_CONCEPT) TokenParam valueConcept,
 			@OptionalParam(name = ConstantKeys.SP_VALUE_DATE) DateRangeParam valueDate,
 			@OptionalParam(name = ConstantKeys.SP_VALUE_STRING) StringParam valueString,
+			// COMMON PARAMS
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
 			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,

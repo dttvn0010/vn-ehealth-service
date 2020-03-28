@@ -53,7 +53,20 @@ public class SpecimenProvider extends BaseController<SpecimenEntity, Specimen> i
 
 	@Search
 	public IBundleProvider searchSpecimen(HttpServletRequest _request,
+			@OptionalParam(name = Specimen.SP_ACCESSION) TokenParam accession,
+			@OptionalParam(name = Specimen.SP_BODYSITE) TokenParam bodysite,
+			@OptionalParam(name = Specimen.SP_COLLECTED) DateRangeParam collected,
+			@OptionalParam(name = Specimen.SP_COLLECTOR) ReferenceParam collector,
+			@OptionalParam(name = Specimen.SP_CONTAINER) TokenParam container,
+			@OptionalParam(name = Specimen.SP_CONTAINER_ID) TokenParam containerId,
+			@OptionalParam(name = Specimen.SP_IDENTIFIER) TokenParam identifier,
+			@OptionalParam(name = Specimen.SP_PARENT) ReferenceParam parent,
+			@OptionalParam(name = Specimen.SP_PATIENT) ReferenceParam patient,
+			@OptionalParam(name = Specimen.SP_STATUS) TokenParam status,
+			@OptionalParam(name = Specimen.SP_SUBJECT) ReferenceParam subject,
+			@OptionalParam(name = Specimen.SP_TYPE) TokenParam type,
 			@OptionalParam(name = ConstantKeys.SP_REQUEST) ReferenceParam request,
+			// COMMON PARAMS
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
 			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,

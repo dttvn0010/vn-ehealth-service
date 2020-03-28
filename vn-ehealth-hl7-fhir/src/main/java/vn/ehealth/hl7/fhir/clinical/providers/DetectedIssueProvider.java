@@ -54,11 +54,14 @@ public class DetectedIssueProvider extends BaseController<DetectedIssueEntity, D
 	@Search
 	public IBundleProvider searchDetectedIssue(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_AUTHOR) ReferenceParam author,
+			@OptionalParam(name = DetectedIssue.SP_CODE) TokenParam code,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
+			@OptionalParam(name = DetectedIssue.SP_IDENTIFIED) DateRangeParam identified,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = ConstantKeys.SP_IMPLICATED) ReferenceParam implicated,
 			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			// COMMON PARAMS
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
 			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,

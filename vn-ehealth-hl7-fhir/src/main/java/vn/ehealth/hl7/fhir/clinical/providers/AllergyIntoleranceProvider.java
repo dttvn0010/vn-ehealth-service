@@ -59,7 +59,6 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ENCOUNTER) TokenParam encounter,
 			@OptionalParam(name = AllergyIntolerance.SP_ASSERTER) ReferenceParam asserter,
 			@OptionalParam(name = AllergyIntolerance.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = AllergyIntolerance.SP_CLINICAL_STATUS) TokenParam clinicalStatus,
@@ -76,6 +75,7 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 			@OptionalParam(name = AllergyIntolerance.SP_SEVERITY) TokenParam severity,
 			@OptionalParam(name = AllergyIntolerance.SP_TYPE) TokenParam type,
 			@OptionalParam(name = AllergyIntolerance.SP_VERIFICATION_STATUS) TokenParam verificationStatus,
+			@OptionalParam(name = ConstantKeys.SP_ENCOUNTER) TokenParam encounter,
 			// COMMON PARAMS
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,

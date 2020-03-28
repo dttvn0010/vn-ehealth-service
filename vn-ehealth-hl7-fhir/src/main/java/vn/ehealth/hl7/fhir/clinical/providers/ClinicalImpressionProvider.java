@@ -54,10 +54,9 @@ public class ClinicalImpressionProvider extends BaseController<ClinicalImpressio
 
 	@Search
 	public IBundleProvider searchClinicalImpression(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTION) ReferenceParam action,
 			@OptionalParam(name = ConstantKeys.SP_ASSESSOR) ReferenceParam assessor,
-			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
+			@OptionalParam(name = ClinicalImpression.SP_ENCOUNTER) ReferenceParam encounter,
 			@OptionalParam(name = ConstantKeys.SP_FINDING_CODE) TokenParam findingCode,
 			@OptionalParam(name = ConstantKeys.SP_FINDING_REF) ReferenceParam findingRef,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
@@ -67,6 +66,10 @@ public class ClinicalImpressionProvider extends BaseController<ClinicalImpressio
 			@OptionalParam(name = ConstantKeys.SP_PROBLEM) ReferenceParam problem,
 			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
 			@OptionalParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
+			@OptionalParam(name = ClinicalImpression.SP_SUPPORTING_INFO) ReferenceParam supportingInfo,
+			@OptionalParam(name = ConstantKeys.SP_ACTION) ReferenceParam action,
+			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
+			// COMMON PARAMS
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
 			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,

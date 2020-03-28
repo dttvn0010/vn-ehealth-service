@@ -26,6 +26,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
@@ -53,6 +54,24 @@ public class ImagingStudyProvider extends BaseController<ImagingStudyEntity, Ima
 
 	@Search
 	public IBundleProvider searchImagingStudy(HttpServletRequest request,
+			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
+			@OptionalParam(name = ImagingStudy.SP_BODYSITE) TokenParam bodysite,
+			@OptionalParam(name = ImagingStudy.SP_DICOM_CLASS) TokenParam dicomClass,
+			@OptionalParam(name = ConstantKeys.SP_ENCOUNTER) ReferenceParam encounter,
+			@OptionalParam(name = ImagingStudy.SP_ENDPOINT) ReferenceParam endpoint,
+			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OptionalParam(name = ImagingStudy.SP_INSTANCE) TokenParam instance,
+			@OptionalParam(name = ImagingStudy.SP_INTERPRETER) ReferenceParam interpreter,
+			@OptionalParam(name = ImagingStudy.SP_MODALITY) TokenParam modality,
+			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OptionalParam(name = ConstantKeys.SP_PERFORMER) ReferenceParam performer,
+			@OptionalParam(name = ImagingStudy.SP_REASON) TokenParam reason,
+			@OptionalParam(name = ImagingStudy.SP_REFERRER) ReferenceParam referrer,
+			@OptionalParam(name = ImagingStudy.SP_SERIES) TokenParam series,
+			@OptionalParam(name = ImagingStudy.SP_STARTED) DateRangeParam started,
+			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+			@OptionalParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
+			// COMMON PARAMS
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
 			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,

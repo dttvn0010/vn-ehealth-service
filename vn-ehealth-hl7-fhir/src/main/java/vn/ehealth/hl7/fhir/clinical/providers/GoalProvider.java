@@ -52,13 +52,16 @@ public class GoalProvider extends BaseController<GoalEntity, Goal> implements IR
 
 	@Search
 	public IBundleProvider searchGoal(HttpServletRequest request,
+			@OptionalParam(name = Goal.SP_ACHIEVEMENT_STATUS) TokenParam achievementStatus,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OptionalParam(name = Goal.SP_LIFECYCLE_STATUS) TokenParam lifecycleStatus,
 			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
 			@OptionalParam(name = ConstantKeys.SP_START_DATE) DateRangeParam startDate,
 			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
 			@OptionalParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
 			@OptionalParam(name = ConstantKeys.SP_TARGET_DATE) DateRangeParam targetDate,
+			// COMMON PARAMS
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
 			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
