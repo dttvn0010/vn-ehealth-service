@@ -1,4 +1,4 @@
-package vn.ehealth.emr.utils;
+package vn.ehealth.hl7.fhir.core.util;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

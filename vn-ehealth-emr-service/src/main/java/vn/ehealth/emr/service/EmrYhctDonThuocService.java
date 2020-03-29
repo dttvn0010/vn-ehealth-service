@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import vn.ehealth.emr.model.EmrYhctDonThuoc;
 import vn.ehealth.emr.repository.EmrHoSoBenhAnRepository;
 import vn.ehealth.emr.repository.EmrYhctDonThuocRepository;
-import vn.ehealth.emr.utils.Constants.TRANGTHAI_DULIEU;
+import vn.ehealth.hl7.fhir.core.util.Constants.TRANGTHAI_DULIEU;
 
 @Service
 public class EmrYhctDonThuocService {

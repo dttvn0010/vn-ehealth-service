@@ -4,4 +4,5 @@ public class BaseRatio extends BaseType {
 
     public BaseQuantity numerator;
     public BaseQuantity denominator;
+ 
 }

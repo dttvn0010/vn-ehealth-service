@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.hl7.fhir.r4.model.Address;
 import org.hl7.fhir.r4.model.CodeableConcept;
 
-import vn.ehealth.emr.utils.Constants.CodeSystemValue;
-import vn.ehealth.emr.utils.Constants.ExtensionURL;
+import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
+import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
 
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -22,9 +22,7 @@ public class DiaChi {
         if(obj == null) return null;
         var dto = new DiaChi();
         
-        if(obj.getLine() != null && obj.getLine().size() > 0) {
-            dto.diaChiChiTiet = obj.getText();
-        }
+        dto.diaChiChiTiet = obj.getText();
         
         if(obj.hasExtension()) {
             var ext = findExtensionByURL(obj.getExtension(), ExtensionURL.DVHC + "/city");

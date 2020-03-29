@@ -17,8 +17,8 @@ import vn.ehealth.emr.model.dto.BenhNhan;
 import vn.ehealth.emr.model.dto.DanhMuc;
 import vn.ehealth.emr.model.dto.DiaChi;
 import vn.ehealth.emr.utils.MessageUtils;
-import vn.ehealth.emr.utils.Constants.CodeSystemValue;
-import vn.ehealth.emr.utils.Constants.IdentifierSystem;
+import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
+import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;

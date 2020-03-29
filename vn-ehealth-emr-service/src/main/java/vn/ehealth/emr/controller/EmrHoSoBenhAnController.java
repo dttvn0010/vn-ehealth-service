@@ -34,7 +34,7 @@ import vn.ehealth.emr.service.UserService;
 import vn.ehealth.emr.utils.DateUtil;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
-import vn.ehealth.emr.utils.Constants.TRANGTHAI_HOSO;
+import vn.ehealth.hl7.fhir.core.util.Constants.TRANGTHAI_HOSO;
 import vn.ehealth.emr.validate.JsonParser;
 
 import java.io.*;

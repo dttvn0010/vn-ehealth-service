@@ -3,7 +3,6 @@ package vn.ehealth.hl7.fhir.user.entity;
 import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Person.IdentityAssuranceLevel;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,7 +21,7 @@ public class PersonEntity extends BaseResource{
     
     public class PersonLink{
         public BaseReference target;
-        public IdentityAssuranceLevel assurance;    
+        public String assurance;    
         
     }
         

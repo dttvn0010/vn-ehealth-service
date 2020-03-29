@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import ca.uhn.fhir.rest.param.TokenParam;
 import vn.ehealth.emr.model.dto.BaseRef;
 import vn.ehealth.emr.model.dto.VaoKhoa;
-import vn.ehealth.emr.utils.Constants.CodeSystemValue;
+import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;

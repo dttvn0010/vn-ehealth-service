@@ -1,7 +1,7 @@
 package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.Date;
-import org.hl7.fhir.r4.model.Type;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @version 1.0
  */
 public class BaseAnnotation extends BaseType {
-    @JsonIgnore public Type author;
+    @JsonIgnore public Object author;
     public Date time;
-    public String text;
+    public String text;    
 }

@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+
 
 /**
  * @author SONVT24
@@ -23,7 +23,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 public class ValueSetExpansionEntity extends BaseResource {
     public static class ValueSetExpansionParameter {
         public String name;
-        @JsonIgnore public Type value;
+        @JsonIgnore public Object value;
         
     }
     

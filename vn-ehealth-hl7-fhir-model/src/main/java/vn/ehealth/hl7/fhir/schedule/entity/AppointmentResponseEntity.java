@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.AppointmentResponse.ParticipantStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,6 +24,6 @@ public class AppointmentResponseEntity extends BaseResource {
     public Date end;
     public List<BaseCodeableConcept> participantType;
     public BaseReference actor;
-    public ParticipantStatus participantStatus;
+    public String participantStatus;
     public String comment;
 }

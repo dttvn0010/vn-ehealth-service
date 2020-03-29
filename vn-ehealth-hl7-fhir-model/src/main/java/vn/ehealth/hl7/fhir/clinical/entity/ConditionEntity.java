@@ -3,7 +3,6 @@ package vn.ehealth.hl7.fhir.clinical.entity;
 import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,6 +14,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+
 
 @Document(collection = "condition")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
@@ -43,8 +43,8 @@ public class ConditionEntity extends BaseResource {
     public List<BaseCodeableConcept> bodySite;
     public BaseReference subject;
     public BaseReference encounter;
-    @JsonIgnore public Type onset;
-    @JsonIgnore public Type abatement;
+    @JsonIgnore public Object onset;
+    @JsonIgnore public Object abatement;
     public Date recordedDate;
     public BaseReference recorder;
     public BaseReference asserter;

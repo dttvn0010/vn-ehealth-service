@@ -1,7 +1,8 @@
 package vn.ehealth.hl7.fhir;
 
 import org.hl7.fhir.r4.model.*;
-import vn.ehealth.hl7.fhir.core.util.FhirUtil;
+
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.clinical.entity.*;
 import vn.ehealth.hl7.fhir.core.entity.*;
 import vn.ehealth.hl7.fhir.diagnostic.entity.*;
@@ -17,9 +18,9 @@ public class ModelVerification {
 
     static void check(Class<?> entType, Class<?> fhirType) {
         System.out.println("Validating class " + entType.getName() + " agaist class " + fhirType.getName());
-        var fields = FhirUtil.getAnnotedFields(fhirType);
+        var fields = DataConvertUtil.getAnnotedFields(fhirType);
         for(var field : fields) {
-            if(FhirUtil.getEntField(entType, field.getName()) == null) {
+            if(DataConvertUtil.getEntField(entType, field.getName()) == null) {
                 System.err.println(String.format("Missing field \"%s\" for class : %s",
                         field.getName(), entType.getName()));
             }

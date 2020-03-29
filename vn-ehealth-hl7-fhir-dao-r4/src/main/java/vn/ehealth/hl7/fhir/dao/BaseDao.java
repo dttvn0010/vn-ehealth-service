@@ -28,10 +28,10 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 
 public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResource> {
     @Autowired
@@ -45,15 +45,15 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     
     @SuppressWarnings("unchecked")
     public FHIR transform(ENT ent) {
-        var obj = FhirUtil.entityToFhir(ent, getResourceClass());
-        obj.setMeta(FhirUtil.getMeta(ent, getProfile()));
+        var obj = DataConvertUtil.entityToFhir(ent, getResourceClass());
+        obj.setMeta(DataConvertUtil.getMeta(ent, getProfile()));
         obj.setId(ent.fhirId);
         return (FHIR) obj;        
     }
     
     @SuppressWarnings("unchecked")
     private ENT createNewEntity(FHIR obj, int version, String fhirId) {
-        var ent = FhirUtil.fhirToEntity(obj, getEntityClass());
+        var ent = DataConvertUtil.fhirToEntity(obj, getEntityClass());
         if (fhirId != null && !fhirId.isEmpty()) {
             ent.fhirId = (fhirId);
         } else {

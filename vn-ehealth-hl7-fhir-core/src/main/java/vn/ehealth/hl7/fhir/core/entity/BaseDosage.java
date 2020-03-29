@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BaseDosage extends BaseType {
     
-    public static class BaseDosageDoseAndRate extends BaseType {
+    public static class BaseDosageDoseAndRate {
 
         public BaseCodeableConcept type;
         @JsonIgnore public Type dose;
@@ -31,4 +31,5 @@ public class BaseDosage extends BaseType {
     public BaseRatio maxDosePerPeriod;
     public BaseQuantity maxDosePerAdministration;
     public BaseQuantity maxDosePerLifetime;
+    
 }

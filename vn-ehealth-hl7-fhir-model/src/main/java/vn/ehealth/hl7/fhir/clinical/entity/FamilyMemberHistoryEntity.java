@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,6 +16,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
+
 @Document(collection = "familyMemberHistory")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class FamilyMemberHistoryEntity extends BaseResource {
@@ -25,7 +25,7 @@ public class FamilyMemberHistoryEntity extends BaseResource {
         public BaseCodeableConcept code;
         public BaseCodeableConcept outcome;
         public Boolean contributedToDeath;
-        @JsonIgnore public Type onset;
+        @JsonIgnore public Object onset;
         public List<BaseAnnotation> note;
     }
 
@@ -42,10 +42,10 @@ public class FamilyMemberHistoryEntity extends BaseResource {
 	public String name;
 	public BaseCodeableConcept relationship;
 	public BaseCodeableConcept sex;
-	@JsonIgnore public Type born;
-	@JsonIgnore public Type age;
+	@JsonIgnore public Object born;
+	@JsonIgnore public Object age;
 	public Boolean estimatedAge;
-	@JsonIgnore public Type deceased;
+	@JsonIgnore public Object deceased;
 	public List<BaseCodeableConcept> reasonCode;
 	public List<BaseReference> reasonReference;
 	public List<BaseAnnotation> note;

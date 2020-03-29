@@ -5,7 +5,6 @@ import java.util.Date;
 
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,25 +19,26 @@ import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
+
 @Document(collection = "specimen")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1', 'request.reference':1, 'basedOn.reference':1, 'subject.reference':1}", name = "index_by_default")
 public class SpecimenEntity extends BaseResource {
     
     public static class SpecimenCollection {
         public BaseReference collector;
-        @JsonIgnore public Type collected;
+        @JsonIgnore public Object collected;
         public BaseDuration duration;
         public BaseQuantity quantity;
         public BaseCodeableConcept method;
         public BaseCodeableConcept bodySite;
-        @JsonIgnore public Type fastingStatus;
+        @JsonIgnore public Object fastingStatus;
     }
     
     public static class SpecimenProcessing {
         public String description;
         public BaseCodeableConcept procedure;
         public List<BaseReference> additive;
-        @JsonIgnore public Type time;
+        @JsonIgnore public Object time;
     }
     
     public static class SpecimenContainer {
@@ -47,7 +47,7 @@ public class SpecimenEntity extends BaseResource {
         public BaseCodeableConcept type;
         public BaseQuantity capacity;
         public BaseQuantity specimenQuantity;
-        @JsonIgnore public Type additive;        
+        @JsonIgnore public Object additive;        
     }
     
     @Id

@@ -1,7 +1,6 @@
 package vn.ehealth.emr.dto.controller;
 
 import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Patient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import vn.ehealth.emr.model.dto.BenhNhan;
 import vn.ehealth.emr.utils.DateUtil;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
+import vn.ehealth.hl7.fhir.patient.entity.PatientEntity;
 
 import java.time.Year;
 import java.time.YearMonth;
@@ -43,14 +44,15 @@ public class BenhNhanController {
     @GetMapping("/get_by_id/{id}")
     public ResponseEntity<?> getById(@PathVariable String id) {
         var obj = patientDao.read(new IdType(id));
-        var dto = BenhNhan.fromFhir(obj);
-        return ResponseEntity.ok(dto);
+        //var dto = BenhNhan.fromFhir(obj);
+        var ent = fhirToEntity(obj, PatientEntity.class);
+        return ResponseEntity.ok(ent);
     }
     
     @GetMapping("/get_all")
     public ResponseEntity<?> getAll() {
-        var lst = patientDao.search(new HashMap<>());
-        var result = transform(lst, x -> BenhNhan.fromFhir((Patient) x));
+        var lst = patientDao.search(new HashMap<>());    
+        var result = FPUtil.transform(lst, x -> fhirToEntity(x, PatientEntity.class));                
         return ResponseEntity.ok(result);
     }
     

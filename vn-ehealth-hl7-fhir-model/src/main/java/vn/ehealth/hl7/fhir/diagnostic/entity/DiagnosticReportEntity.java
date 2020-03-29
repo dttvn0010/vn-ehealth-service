@@ -4,7 +4,6 @@ import java.util.Date;
 
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +15,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+
 
 @Document(collection = "diagnosticReport")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1, 'basedOn.reference':1, 'subject.reference':1, 'encounter.reference':1}", name = "index_by_default")
@@ -36,7 +36,7 @@ public class DiagnosticReportEntity extends BaseResource {
     public BaseCodeableConcept code;
     public BaseReference subject;
     public BaseReference encounter;
-    @JsonIgnore public Type effective;
+    @JsonIgnore public Object effective;
     public Date issued;
     public List<BaseReference> performer;    
     public List<BaseReference> resultsInterpreter;

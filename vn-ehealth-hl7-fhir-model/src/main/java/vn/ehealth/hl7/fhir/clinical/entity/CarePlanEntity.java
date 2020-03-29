@@ -3,7 +3,6 @@ package vn.ehealth.hl7.fhir.clinical.entity;
 import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,6 +16,7 @@ import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+
 
 @Document(collection = "carePlan")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
@@ -34,10 +34,10 @@ public class CarePlanEntity extends BaseResource {
         public String status;
         public BaseCodeableConcept statusReason;
         public Boolean doNotPerform;
-        @JsonIgnore public Type scheduled;
+        @JsonIgnore public Object scheduled;
         public BaseReference location;
         public List<BaseReference> performer;
-        @JsonIgnore public Type product;
+        @JsonIgnore public Object product;
         public BaseQuantity dailyAmount;
         public BaseQuantity quantity;
         public String description;

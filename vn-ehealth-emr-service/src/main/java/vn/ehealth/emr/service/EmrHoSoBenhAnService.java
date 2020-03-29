@@ -19,10 +19,10 @@ import org.springframework.util.StringUtils;
 import vn.ehealth.emr.model.EmrFileDinhKem;
 import vn.ehealth.emr.model.EmrHoSoBenhAn;
 import vn.ehealth.emr.repository.EmrHoSoBenhAnRepository;
-import vn.ehealth.emr.utils.Constants.MA_HANH_DONG;
-import vn.ehealth.emr.utils.Constants.NGUON_DU_LIEU;
-import vn.ehealth.emr.utils.Constants.TRANGTHAI_DULIEU;
-import vn.ehealth.emr.utils.Constants.TRANGTHAI_HOSO;
+import vn.ehealth.hl7.fhir.core.util.Constants.MA_HANH_DONG;
+import vn.ehealth.hl7.fhir.core.util.Constants.NGUON_DU_LIEU;
+import vn.ehealth.hl7.fhir.core.util.Constants.TRANGTHAI_DULIEU;
+import vn.ehealth.hl7.fhir.core.util.Constants.TRANGTHAI_HOSO;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.JsonUtil;
 

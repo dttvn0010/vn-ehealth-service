@@ -5,4 +5,5 @@ public class BaseReference extends BaseType {
 	public String type;
 	public BaseIdentifier identifier;
 	public String display;
+	
 }

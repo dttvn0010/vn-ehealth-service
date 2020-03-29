@@ -3,7 +3,6 @@ package vn.ehealth.hl7.fhir.medication.entity;
 import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +15,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+
 
 @Document(collection = "immunization")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
@@ -46,8 +46,8 @@ public class ImmunizationEntity extends BaseResource {
         public String series;
         public BaseReference authority;
         public List<BaseCodeableConcept> targetDisease;
-        @JsonIgnore protected Type doseNumber;
-        @JsonIgnore protected Type seriesDoses;
+        @JsonIgnore protected Object doseNumber;
+        @JsonIgnore protected Object seriesDoses;
     }
     
     @Id
@@ -58,7 +58,7 @@ public class ImmunizationEntity extends BaseResource {
     public BaseCodeableConcept vaccineCode;
     public BaseReference patient;
     public BaseReference encounter;
-    @JsonIgnore public Type occurrence;
+    @JsonIgnore public Object occurrence;
     public Date recorded;
     public boolean primarySource;
     public BaseCodeableConcept reportOrigin;

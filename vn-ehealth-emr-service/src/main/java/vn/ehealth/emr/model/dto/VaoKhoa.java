@@ -11,8 +11,8 @@ import org.hl7.fhir.r4.model.ResourceType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.emr.utils.MessageUtils;
-import vn.ehealth.emr.utils.Constants.CodeSystemValue;
-import vn.ehealth.emr.utils.Constants.EncounterType;
+import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
+import vn.ehealth.hl7.fhir.core.util.Constants.EncounterType;
 
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;

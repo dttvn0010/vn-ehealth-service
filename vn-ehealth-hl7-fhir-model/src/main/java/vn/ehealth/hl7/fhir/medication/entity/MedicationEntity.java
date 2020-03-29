@@ -3,7 +3,6 @@ package vn.ehealth.hl7.fhir.medication.entity;
 import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,6 +13,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseRatio;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+
 
 @Document(collection = "medication")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
@@ -26,7 +26,7 @@ public class MedicationEntity extends BaseResource {
     }
 
     public static class MedicationIngredient{
-        @JsonIgnore public Type item;
+        @JsonIgnore public Object item;
         public boolean isActive;
         public BaseRatio strength;
     }

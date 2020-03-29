@@ -4,7 +4,6 @@ import java.util.Date;
 
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,6 +17,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
+
 @Document(collection = "medicationStatement")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class MedicationStatementEntity extends BaseResource {
@@ -30,8 +30,8 @@ public class MedicationStatementEntity extends BaseResource {
     public String status;
     public List<BaseCodeableConcept> statusReason;
     public BaseCodeableConcept category;
-    @JsonIgnore public Type medication;
-    @JsonIgnore public Type effective;
+    @JsonIgnore public Object medication;
+    @JsonIgnore public Object effective;
     public Date dateAsserted;
     public BaseReference informationSource;
     public BaseReference subject;

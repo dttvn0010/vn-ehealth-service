@@ -14,9 +14,9 @@ import org.hl7.fhir.r4.model.Procedure.ProcedurePerformerComponent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.emr.utils.MessageUtils;
-import vn.ehealth.emr.utils.Constants.CodeSystemValue;
-import vn.ehealth.emr.utils.Constants.ExtensionURL;
-import vn.ehealth.emr.utils.Constants.LoaiDichVuKT;
+import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
+import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
+import vn.ehealth.hl7.fhir.core.util.Constants.LoaiDichVuKT;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 

@@ -19,8 +19,8 @@ import vn.ehealth.emr.repository.EmrDonThuocRepository;
 import vn.ehealth.emr.repository.EmrHoSoBenhAnRepository;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.JsonUtil;
-import vn.ehealth.emr.utils.Constants.MA_HANH_DONG;
-import vn.ehealth.emr.utils.Constants.TRANGTHAI_DULIEU;
+import vn.ehealth.hl7.fhir.core.util.Constants.MA_HANH_DONG;
+import vn.ehealth.hl7.fhir.core.util.Constants.TRANGTHAI_DULIEU;
 
 @Service
 public class EmrDonThuocService {

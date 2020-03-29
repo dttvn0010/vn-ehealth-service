@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import ca.uhn.fhir.rest.param.TokenParam;
-import vn.ehealth.emr.utils.Constants.IdentifierSystem;
+import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 @JsonInclude(Include.NON_NULL)

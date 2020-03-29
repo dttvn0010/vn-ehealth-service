@@ -9,5 +9,5 @@ public class BaseHumanName extends BaseType {
     public List<String> given;
     public List<String> prefix;
     public List<String> suffix;
-    public BasePeriod period;
+    public BasePeriod period;    
 }

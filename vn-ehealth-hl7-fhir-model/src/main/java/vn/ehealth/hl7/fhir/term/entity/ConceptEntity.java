@@ -7,7 +7,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 /**
  * @author SONVT24

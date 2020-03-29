@@ -4,14 +4,12 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.Type;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;;
 
 public class BaseTiming extends BaseType {
     
-    public static class BaseTimingRepeat extends BaseType {
-        @JsonIgnore public Type bounds;
+    public static class BaseTimingRepeat {
+        @JsonIgnore public Object bounds;
         public Integer count;
         public Integer countMax;
         public BigDecimal duration;
@@ -31,5 +29,6 @@ public class BaseTiming extends BaseType {
     public List<Date> event;
     public BaseTimingRepeat repeat;
     public BaseCodeableConcept code;
+    
     
 }

@@ -28,7 +28,7 @@ import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.FhirUtil;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.term.entity.CodeSystemEntity;
@@ -154,7 +154,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 						.getDesignation()) {
 					ConceptDesignationEntity conceptDesignationEntity = new ConceptDesignationEntity();
 					conceptDesignationEntity.language = (conceptDefinitionDesignationComponent.getLanguage());
-					conceptDesignationEntity.use = FhirUtil.fhirToEntity(
+					conceptDesignationEntity.use = DataConvertUtil.fhirToEntity(
 							conceptDefinitionDesignationComponent.getUse(), BaseCoding.class);
 					conceptDesignationEntity.value = (conceptDefinitionDesignationComponent.getValue());
 					conceptDesignationEntitys.add(conceptDesignationEntity);
@@ -167,7 +167,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 				for (ConceptPropertyComponent conceptPropertyComponent : concept.getProperty()) {
 					ConceptPropertyEntity conceptPropertyEntity = new ConceptPropertyEntity();
 					conceptPropertyEntity.code = (conceptPropertyComponent.getCode());
-					conceptPropertyEntity.value = (conceptPropertyComponent.getValue());
+					//TODO: conceptPropertyEntity.value = (conceptPropertyComponent.getValue());
 					conceptPropertyEntitys.add(conceptPropertyEntity);
 				}
 				conceptEntity.property = (conceptPropertyEntitys);
@@ -259,7 +259,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 							retVal.addParameter().addPart().setName("value")
 									.setValue(new StringType(conceptDesignationEntity.value));
 							retVal.addParameter().addPart().setName("use")
-									.setValue(FhirUtil.entityToFhir(conceptDesignationEntity.use, Coding.class));
+									.setValue(DataConvertUtil.entityToFhir(conceptDesignationEntity.use, Coding.class));
 							retVal.addParameter().addPart().setName("language")
 									.setValue(new StringType(conceptDesignationEntity.language));
 						}
@@ -270,7 +270,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 						for (ConceptPropertyEntity conceptPropertyEntity : properties) {
 							retVal.addParameter().addPart().setName("code")
 									.setValue(new StringType(conceptPropertyEntity.code));
-							retVal.addParameter().addPart().setName("value").setValue(conceptPropertyEntity.value);
+							//TODO:retVal.addParameter().addPart().setName("value").setValue(conceptPropertyEntity.value);
 						}
 
 					}
@@ -307,7 +307,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 							retVal.addParameter().addPart().setName("value")
 									.setValue(new StringType(conceptDesignationEntity.value));
 							retVal.addParameter().addPart().setName("use")
-									.setValue(FhirUtil.entityToFhir(conceptDesignationEntity.use, Coding.class));
+									.setValue(DataConvertUtil.entityToFhir(conceptDesignationEntity.use, Coding.class));
 							retVal.addParameter().addPart().setName("language")
 									.setValue(new StringType(conceptDesignationEntity.language));
 						}
@@ -318,7 +318,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 						for (ConceptPropertyEntity conceptPropertyEntity : properties) {
 							retVal.addParameter().addPart().setName("code")
 									.setValue(new StringType(conceptPropertyEntity.code));
-							retVal.addParameter().addPart().setName("value").setValue(conceptPropertyEntity.value);
+							//TOOD:retVal.addParameter().addPart().setName("value").setValue(conceptPropertyEntity.value);
 						}
 
 					}

@@ -3,7 +3,6 @@ package vn.ehealth.hl7.fhir.term.entity;
 import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -64,7 +63,7 @@ public class ValueSetEntity extends BaseResource {
     
     public static class ValueSetExpansionParameter {
         protected String name;
-        @JsonIgnore protected Type value;
+        @JsonIgnore protected Object value;
     }
     
     public static class ValueSetExpansion {

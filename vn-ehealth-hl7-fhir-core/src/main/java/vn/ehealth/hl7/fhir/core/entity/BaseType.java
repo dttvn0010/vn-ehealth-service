@@ -2,9 +2,10 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.List;
 
-import org.hl7.fhir.r4.model.Extension;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BaseType {
 
-    public List<Extension> extension;
+    @JsonIgnore public List<SimpleExtension> extension;
+    
 }

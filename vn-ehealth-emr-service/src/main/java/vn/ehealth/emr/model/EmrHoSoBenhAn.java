@@ -27,7 +27,7 @@ import vn.ehealth.emr.model.dto.BaseRef;
 import vn.ehealth.emr.model.dto.DotKhamBenh;
 import vn.ehealth.emr.service.EmrServiceFactory;
 import vn.ehealth.emr.utils.ObjectIdUtil;
-import vn.ehealth.emr.utils.Constants.IdentifierSystem;
+import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;

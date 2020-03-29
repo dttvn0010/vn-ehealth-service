@@ -23,7 +23,7 @@ import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.FhirUtil;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.term.entity.ConceptEntity;
@@ -197,7 +197,7 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 				for (ConceptReferenceDesignationComponent conceptReferenceDesignationComponent : v.getDesignation()) {
 					ConceptReferenceDesignationEntity conceptDesignationEntity = new ConceptReferenceDesignationEntity();
 					conceptDesignationEntity.language = (conceptReferenceDesignationComponent.getLanguage());
-					conceptDesignationEntity.use = FhirUtil.fhirToEntity(conceptReferenceDesignationComponent.getUse(), BaseCoding.class);
+					conceptDesignationEntity.use = DataConvertUtil.fhirToEntity(conceptReferenceDesignationComponent.getUse(), BaseCoding.class);
 					conceptDesignationEntity.value = (conceptReferenceDesignationComponent.getValue());
 					conceptDesignationEntitys.add(conceptDesignationEntity);
 				}

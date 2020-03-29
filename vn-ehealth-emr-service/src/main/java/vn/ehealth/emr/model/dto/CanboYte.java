@@ -1,6 +1,6 @@
 package vn.ehealth.emr.model.dto;
 
-import vn.ehealth.emr.utils.Constants.IdentifierSystem;
+import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;

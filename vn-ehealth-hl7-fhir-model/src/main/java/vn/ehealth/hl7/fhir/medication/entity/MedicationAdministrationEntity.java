@@ -2,7 +2,6 @@ package vn.ehealth.hl7.fhir.medication.entity;
 
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Type;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +15,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
+
 @Document(collection = "medicationAdministration")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class MedicationAdministrationEntity extends BaseResource {
@@ -26,7 +26,7 @@ public class MedicationAdministrationEntity extends BaseResource {
         public BaseCodeableConcept route;
         public BaseCodeableConcept method;
         public BaseQuantity dose;
-        @JsonIgnore public Type rate;
+        @JsonIgnore public Object rate;
     }
 
     public static class MedicationAdministrationPerformer {
@@ -42,12 +42,12 @@ public class MedicationAdministrationEntity extends BaseResource {
     public String status;
     public List<BaseCodeableConcept> statusReason;
     public BaseCodeableConcept category;
-    @JsonIgnore public Type medication;
+    @JsonIgnore public Object medication;
     public BaseReference request;
     public BaseReference subject;
     public BaseReference context;
     public List<BaseReference> supportingInformation;
-    @JsonIgnore public Type effective;
+    @JsonIgnore public Object effective;
     public List<MedicationAdministrationPerformer> performer;
     public List<BaseCodeableConcept> reasonCode;
     public List<BaseReference> reasonReference;

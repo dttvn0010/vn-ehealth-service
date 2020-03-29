@@ -2,7 +2,6 @@ package vn.ehealth.hl7.fhir.ehr.entity;
 
 import java.util.List;
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Coding;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -33,7 +32,7 @@ public class EncounterEntity extends BaseResource{
     }
     
     public static class ClassHistory{
-        public Coding class_;
+        public BaseCoding class_;
         public BasePeriod period;
         
     }

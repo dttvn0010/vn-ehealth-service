@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import vn.ehealth.emr.model.EmrBenhNhan;
 import vn.ehealth.emr.repository.EmrBenhNhanRepository;
 import vn.ehealth.emr.utils.JsonUtil;
-import vn.ehealth.emr.utils.Constants.MA_HANH_DONG;
+import vn.ehealth.hl7.fhir.core.util.Constants.MA_HANH_DONG;
 
 @Service
 public class EmrBenhNhanService {

@@ -2,6 +2,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.List;
 
+
 /**
  * @author SONVT24
  * @since 2019
@@ -18,4 +19,5 @@ public class BaseAddress extends BaseType {
     public String postalCode;
     public String country;
     public BasePeriod period;
+    
 }

@@ -3,7 +3,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.r4.model.Extension;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public abstract class BaseResource {
     public Date resCreated;
@@ -17,7 +17,7 @@ public abstract class BaseResource {
     public boolean active;
     public List<BaseCoding> security;
     public List<BaseCoding> tag;
-    public List<Extension> extension;
-    public List<Extension> modifierExtension;
+    @JsonIgnore public List<BaseExtension> extension;
+    @JsonIgnore public List<BaseExtension> modifierExtension;
     public String fhirId;
 }
