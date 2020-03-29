@@ -293,8 +293,10 @@ public class EmrHoSoBenhAn {
     	
     	Patient patient = null;
     	if(_emrBenhNhan != null) {
-    	    patient = EmrBenhNhan.getPatient((String) _emrBenhNhan.get("idhis"));
+    	    patient = EmrBenhNhan.getPatient((String) _emrBenhNhan.get("sobhyt"));
     	}
+    	if(patient == null) return;
+    	
     	dto.patient = new BaseRef(patient);
     	
     	var encounterDao = DaoFactory.getEncounterDao();
