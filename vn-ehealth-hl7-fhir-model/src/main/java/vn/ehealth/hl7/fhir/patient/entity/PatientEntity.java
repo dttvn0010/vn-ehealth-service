@@ -11,8 +11,6 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
@@ -22,7 +20,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
-
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 import vn.ehealth.hl7.fhir.core.util.DateUtil;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
@@ -65,10 +63,10 @@ public class PatientEntity extends BaseResource {
     public List<BaseContactPoint> telecom;
     public String gender;
     public Date birthDate;
-    @JsonIgnore public Object deceased;
+    public BaseType deceased;
     public List<BaseAddress> address;
     public BaseCodeableConcept maritalStatus;
-    @JsonIgnore public Object multipleBirth;
+    public BaseType multipleBirth;
     public List<BaseAttachment> photo;    
     public List<Contact> contact;
     public List<PatientCommunication> communication;

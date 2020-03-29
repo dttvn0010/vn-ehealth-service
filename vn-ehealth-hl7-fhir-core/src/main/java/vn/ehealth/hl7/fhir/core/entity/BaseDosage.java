@@ -7,7 +7,7 @@ import org.hl7.fhir.r4.model.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class BaseDosage extends BaseType {
+public class BaseDosage extends BaseComplexType {
     
     public static class BaseDosageDoseAndRate {
 

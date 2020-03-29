@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;;
 
-public class BaseTiming extends BaseType {
+public class BaseTiming extends BaseComplexType {
     
     public static class BaseTimingRepeat {
         @JsonIgnore public Object bounds;

@@ -8,7 +8,7 @@ import java.util.List;
  * @since 2019
  * @version 1.0
  */
-public class BaseAddress extends BaseType {
+public class BaseAddress extends BaseComplexType {
     public String use;
     public String type;
     public String text;

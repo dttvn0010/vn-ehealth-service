@@ -1,7 +1,5 @@
 package vn.ehealth.hl7.fhir.core.entity;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,27 +23,11 @@ public class SimpleExtension {
         }
     };
     
-    static Type primitiveToFhir(Object val) {
+    public static Type primitiveToFhir(BaseType val) {
         if(val == null) return null;
         
-        if(val instanceof Integer || val instanceof Short) {
-            return new IntegerType((Integer)val);
-            
-        }else if(val instanceof Long 
-                || val instanceof Float 
-                || val instanceof Double
-                || val instanceof BigDecimal) {
-            
-            return new DecimalType((BigDecimal)val);
-            
-        }else if(val instanceof Boolean) {            
-            return new BooleanType((Boolean) val);
-            
-        }else if(val instanceof String) {
-            return new StringType((String) val);
-            
-        }else if(val instanceof Date) {
-            return new DateTimeType((Date) val);            
+        if(val instanceof BasePrimitiveType) {
+            return ((BasePrimitiveType)val).toFhir();
         }
         
         for(var entry : mapClasses.entrySet()) {
@@ -59,31 +41,16 @@ public class SimpleExtension {
         throw new RuntimeException("Unsupport data type :" + val.getClass().getName());
     }
     
-    private static Object getPrimitiveValue(Type fhirObj) {
+    public static BaseSimpleType getPrimitiveValue(Type fhirObj) {
         if(fhirObj == null) return null;
         
         if(fhirObj instanceof PrimitiveType<?>) {
             var val = ((PrimitiveType<?>) fhirObj).getValue();
             
-            if(val instanceof Integer || val instanceof Short) {
-                return ((Integer) val);
-                
-            }else if(val instanceof Long 
-                    || val instanceof Float 
-                    || val instanceof Double
-                    || val instanceof BigDecimal) {
-                
-                return (BigDecimal)val;
-                
-            }else if(val instanceof Boolean) {            
-                return (Boolean) val;
-                
-            }else if(val instanceof String) {
-                return (String) val;
-                
-            }else if(val instanceof Date) {
-                return (Date) val;            
+            if(BasePrimitiveType.isSupported(val)) {
+                return new BasePrimitiveType(val);
             }
+            
             throw new RuntimeException("Unsupport data type:" + val.getClass().getName());
         }
         
@@ -91,7 +58,7 @@ public class SimpleExtension {
             var fhirClass = entry.getKey();
             var baseClass = entry.getValue();
             if(fhirClass.equals(fhirObj.getClass())) {
-                return DataConvertUtil.fhirToEntity(fhirObj, baseClass);
+                return (BaseSimpleType) DataConvertUtil.fhirToEntity(fhirObj, baseClass);
             }
         }
         
@@ -100,7 +67,7 @@ public class SimpleExtension {
     
     public static class RawExtension{
         public String url;
-        public Object value;
+        public BaseSimpleType value;
         
         public RawExtension() {
             
@@ -115,7 +82,7 @@ public class SimpleExtension {
     }   
 
     public String url;
-    public Object value;
+    public BaseSimpleType value;
     public List<RawExtension> extension;    
     
     

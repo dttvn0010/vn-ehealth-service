@@ -2,7 +2,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.math.BigDecimal;
 
-public class BaseQuantity extends BaseType {
+public class BaseQuantity extends BaseSimpleType  {
     public BigDecimal value;
     public String comparator;
     public String unit;

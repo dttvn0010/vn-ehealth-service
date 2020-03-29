@@ -2,7 +2,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import org.hl7.fhir.r4.model.Identifier.IdentifierUse;
 
-public class BaseIdentifier extends BaseType {
+public class BaseIdentifier extends BaseComplexType {
 
     public String system;
 

@@ -2,7 +2,7 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.Date;
 
-public class BaseAttachment extends BaseType {
+public class BaseAttachment extends BaseComplexType {
     public String contentType;
     public String language;
     public byte[] data;

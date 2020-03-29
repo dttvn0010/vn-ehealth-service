@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @since 2019
  * @version 1.0
  */
-public class BaseAnnotation extends BaseType {
+public class BaseAnnotation extends BaseComplexType {
     @JsonIgnore public Object author;
     public Date time;
     public String text;    

@@ -22,8 +22,10 @@ import org.slf4j.LoggerFactory;
 
 import ca.uhn.fhir.model.api.annotation.Child;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
+import vn.ehealth.hl7.fhir.core.entity.BaseComplexType;
 import vn.ehealth.hl7.fhir.core.entity.BaseExtension;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseSimpleType;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 import vn.ehealth.hl7.fhir.core.entity.SimpleExtension;
 
@@ -226,8 +228,21 @@ public class DataConvertUtil {
         try {
             var field = getEntField(ent.getClass(), fieldName);
             field.setAccessible(true);
-            var cvtVal = fhirToEntity(fhirVal, field.getType());
+            var fieldType = field.getType();
+            Object cvtVal =  null;
+            
+            if(BaseSimpleType.class.equals(fieldType)) {
+                cvtVal = SimpleExtension.getPrimitiveValue((Type)fhirVal);
+                
+            }else if(BaseType.class.equals(fieldType)) {
+                 cvtVal = BaseExtension.getBaseValue((Type) fhirVal);
+                field.set(ent, cvtVal);
+            }else {            
+                cvtVal = fhirToEntity(fhirVal, fieldType);                
+            }
+            
             field.set(ent, cvtVal);
+            
         } catch (Exception e) {
             throw new RuntimeException(String.format("Cannot set field \"%s\" for class \"%s\"",
                     fieldName, ent.getClass().getName()), e);            
@@ -304,17 +319,21 @@ public class DataConvertUtil {
         
         var methods = getSetters(obj.getClass(), fieldName);
         
-        for(var method : methods) {
-            Object cvtValue = null;
+        for(var method : methods) {            
             var inputType = method.getParameters()[0].getType();
+            Object cvtValue = null;
             
-            try {                
-                cvtValue = entityToFhir(entVal, inputType);
-            }catch(Exception e) {    
-                logger.error(String.format("Cannot convert entity from class %s to fhir class %s",
-                            entVal.getClass().getName(), inputType.getName()));
+            if(inputType.equals(Type.class)) {
+                 cvtValue = BaseExtension.baseValueToFhir((BaseType) entVal);                        
+            }else {
+                try {                
+                    cvtValue = entityToFhir(entVal, inputType);
+                }catch(Exception e) {    
+                    logger.error(String.format("Cannot convert entity from class %s to fhir class %s",
+                                entVal.getClass().getName(), inputType.getName()));
+                }
             }
-            
+                
             if(cvtValue != null) {
                 try {
                     method.invoke(obj, cvtValue);
@@ -322,7 +341,7 @@ public class DataConvertUtil {
                 } catch (Exception e) {
                     throw new RuntimeException("Cannot invoke setter ", e);
                 }
-            }
+            }            
         }
         
         throw new RuntimeException(String.format("Cannot set field \"%s\" for class \"%s\"",
@@ -468,9 +487,9 @@ public class DataConvertUtil {
                 setMetaExt((DomainResource)obj, (BaseResource)ent);
             }
             
-            if(obj instanceof Type && ent instanceof BaseType) {
+            if(obj instanceof Type && ent instanceof BaseComplexType) {
                 var objExt = ((Type)obj).getExtension();
-                ((BaseType)ent).extension = FPUtil.transform(objExt, SimpleExtension::fromExtension);
+                ((BaseComplexType)ent).extension = FPUtil.transform(objExt, SimpleExtension::fromExtension);
             }
             
             return (T) ent;
@@ -521,8 +540,8 @@ public class DataConvertUtil {
                 getMetaExt((BaseResource)ent, (DomainResource)obj);
             }
             
-            if(obj instanceof Type && ent instanceof BaseType) {
-                var entExt = ((BaseType)ent).extension;
+            if(obj instanceof Type && ent instanceof BaseComplexType) {
+                var entExt = ((BaseComplexType)ent).extension;
                 ((Type)obj).setExtension(FPUtil.transform(entExt, SimpleExtension::toExtension));
             }
             

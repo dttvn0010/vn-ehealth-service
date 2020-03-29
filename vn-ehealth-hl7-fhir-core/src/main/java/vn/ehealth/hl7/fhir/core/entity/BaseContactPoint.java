@@ -1,6 +1,6 @@
 package vn.ehealth.hl7.fhir.core.entity;
 
-public class BaseContactPoint extends BaseType  {
+public class BaseContactPoint extends BaseComplexType  {
 
     public String system;
     public String value;

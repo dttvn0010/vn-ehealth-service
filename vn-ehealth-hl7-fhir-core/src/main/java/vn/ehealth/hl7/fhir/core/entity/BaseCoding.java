@@ -1,6 +1,6 @@
 package vn.ehealth.hl7.fhir.core.entity;
 
-public class BaseCoding  {
+public class BaseCoding extends BaseSimpleType  {
 
     public String system;
     public String version;
