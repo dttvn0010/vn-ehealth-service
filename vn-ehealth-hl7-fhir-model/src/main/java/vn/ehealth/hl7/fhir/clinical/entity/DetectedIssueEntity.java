@@ -7,12 +7,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "detectedIssue")
@@ -38,7 +37,7 @@ public class DetectedIssueEntity extends BaseResource {
     public BaseCodeableConcept code;
     public String severity;
     public BaseReference patient;
-    @JsonIgnore public Object identified;
+    public BaseType identified;
     public BaseReference author;
     public List<BaseReference> implicated;
     public String detail;

@@ -9,8 +9,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -18,6 +16,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseRange;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "observation")
@@ -36,7 +35,7 @@ public class ObservationEntity extends BaseResource {
     
     public static class ObservationComponent {
         public BaseCodeableConcept code;
-        @JsonIgnore public Object value;
+        public BaseType value;
         public BaseCodeableConcept dataAbsentReason;
         public List<BaseCodeableConcept> interpretation;
         public List<ObservationReferenceRange> referenceRange;
@@ -53,10 +52,10 @@ public class ObservationEntity extends BaseResource {
     public BaseReference subject;
     public List<BaseReference> focus;
     public BaseReference encounter;
-    @JsonIgnore public Object effective;
+    public BaseType effective;
     public Date issued;
     public List<BaseReference> performer;
-    @JsonIgnore public Object value;
+    public BaseType value;
     public BaseCodeableConcept dataAbsentReason;
     public List<BaseCodeableConcept> interpretation;
     public List<BaseAnnotation> note;

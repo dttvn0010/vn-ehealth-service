@@ -9,8 +9,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseDuration;
@@ -18,6 +16,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "specimen")
@@ -26,19 +25,19 @@ public class SpecimenEntity extends BaseResource {
     
     public static class SpecimenCollection {
         public BaseReference collector;
-        @JsonIgnore public Object collected;
+        public BaseType collected;
         public BaseDuration duration;
         public BaseQuantity quantity;
         public BaseCodeableConcept method;
         public BaseCodeableConcept bodySite;
-        @JsonIgnore public Object fastingStatus;
+        public BaseType fastingStatus;
     }
     
     public static class SpecimenProcessing {
         public String description;
         public BaseCodeableConcept procedure;
         public List<BaseReference> additive;
-        @JsonIgnore public Object time;
+        public BaseType time;
     }
     
     public static class SpecimenContainer {
@@ -47,7 +46,7 @@ public class SpecimenEntity extends BaseResource {
         public BaseCodeableConcept type;
         public BaseQuantity capacity;
         public BaseQuantity specimenQuantity;
-        @JsonIgnore public Object additive;        
+        public BaseType additive;        
     }
     
     @Id

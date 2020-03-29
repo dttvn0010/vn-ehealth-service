@@ -7,13 +7,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "condition")
@@ -43,8 +42,8 @@ public class ConditionEntity extends BaseResource {
     public List<BaseCodeableConcept> bodySite;
     public BaseReference subject;
     public BaseReference encounter;
-    @JsonIgnore public Object onset;
-    @JsonIgnore public Object abatement;
+    public BaseType onset;
+    public BaseType abatement;
     public Date recordedDate;
     public BaseReference recorder;
     public BaseReference asserter;

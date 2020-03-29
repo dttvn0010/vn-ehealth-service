@@ -7,8 +7,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -16,6 +14,7 @@ import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "carePlan")
@@ -34,10 +33,10 @@ public class CarePlanEntity extends BaseResource {
         public String status;
         public BaseCodeableConcept statusReason;
         public Boolean doNotPerform;
-        @JsonIgnore public Object scheduled;
+        public BaseType scheduled;
         public BaseReference location;
         public List<BaseReference> performer;
-        @JsonIgnore public Object product;
+        public BaseType product;
         public BaseQuantity dailyAmount;
         public BaseQuantity quantity;
         public String description;

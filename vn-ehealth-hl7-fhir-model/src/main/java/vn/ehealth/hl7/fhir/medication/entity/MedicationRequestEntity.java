@@ -9,8 +9,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseDosage;
@@ -20,6 +18,7 @@ import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "medicationRequest")
@@ -42,7 +41,7 @@ public class MedicationRequestEntity extends BaseResource {
     }
 
     public class MedicationRequestSubstitution{
-        @JsonIgnore public Object allowed;
+        public BaseType allowed;
         public BaseCodeableConcept reason;
     }
     
@@ -61,8 +60,8 @@ public class MedicationRequestEntity extends BaseResource {
     public List<BaseCodeableConcept> category;
     public String priority;
     public Boolean doNotPerform;
-    @JsonIgnore public Object reported;
-    @JsonIgnore public Object medication;
+    public BaseType reported;
+    public BaseType medication;
     public BaseReference subject;
     public List<BaseReference> supportingInformation;
     public Date authoredOn;

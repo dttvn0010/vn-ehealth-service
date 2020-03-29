@@ -8,13 +8,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "familyMemberHistory")
@@ -25,7 +24,7 @@ public class FamilyMemberHistoryEntity extends BaseResource {
         public BaseCodeableConcept code;
         public BaseCodeableConcept outcome;
         public Boolean contributedToDeath;
-        @JsonIgnore public Object onset;
+        public BaseType onset;
         public List<BaseAnnotation> note;
     }
 
@@ -42,10 +41,10 @@ public class FamilyMemberHistoryEntity extends BaseResource {
 	public String name;
 	public BaseCodeableConcept relationship;
 	public BaseCodeableConcept sex;
-	@JsonIgnore public Object born;
-	@JsonIgnore public Object age;
+	public BaseType born;
+	public BaseType age;
 	public Boolean estimatedAge;
-	@JsonIgnore public Object deceased;
+	public BaseType deceased;
 	public List<BaseCodeableConcept> reasonCode;
 	public List<BaseReference> reasonReference;
 	public List<BaseAnnotation> note;

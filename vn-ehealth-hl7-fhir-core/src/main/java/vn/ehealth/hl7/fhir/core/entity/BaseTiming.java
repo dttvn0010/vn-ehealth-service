@@ -2,14 +2,12 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;;
+import java.util.List;;
 
 public class BaseTiming extends BaseComplexType {
     
     public static class BaseTimingRepeat {
-        @JsonIgnore public Object bounds;
+        public BaseSimpleType bounds;
         public Integer count;
         public Integer countMax;
         public BigDecimal duration;

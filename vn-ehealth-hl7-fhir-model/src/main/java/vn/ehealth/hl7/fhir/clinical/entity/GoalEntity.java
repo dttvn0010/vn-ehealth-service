@@ -9,13 +9,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "goal")
@@ -24,8 +23,8 @@ public class GoalEntity extends BaseResource {
     
     public static class GoalTarget {
         public BaseCodeableConcept measure;
-        @JsonIgnore public Object detail;
-        @JsonIgnore public Object due;
+        public BaseType detail;
+        public BaseType due;
     }
     
     @Id
@@ -37,7 +36,7 @@ public class GoalEntity extends BaseResource {
     public BaseCodeableConcept priority;
     public BaseCodeableConcept description;
     public BaseReference subject;
-    @JsonIgnore public Object start;
+    public BaseType start;
     public List<GoalTarget> target;
     public Date statusDate;
     public String statusReason;

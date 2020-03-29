@@ -6,10 +6,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 /**
@@ -66,8 +65,8 @@ public class ConceptMapEntity extends BaseResource {
     public BaseIdentifier identifier;
     public String purpose;
     public String copyright;
-    @JsonIgnore public Object source;
-    @JsonIgnore  public Object target;
+    public BaseType source;
+    public BaseType target;
     public List<ConceptMapGroup> group;
 
 }

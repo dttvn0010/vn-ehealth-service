@@ -8,13 +8,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "serviceRequest")
@@ -35,11 +34,11 @@ public class ServiceRequestEntity extends BaseResource {
     public List<BaseCodeableConcept> category;
     public BaseCodeableConcept code;
     public List<BaseCodeableConcept> orderDetail;
-    @JsonIgnore public Object quantity;
+    public BaseType quantity;
     public BaseReference subject;    
     public BaseReference encounter;
-    @JsonIgnore public Object occurrence;
-    @JsonIgnore public Object asNeeded;
+    public BaseType occurrence;
+    public BaseType asNeeded;
     public Date authoredOn;
     public BaseReference requester;
     public BaseCodeableConcept performerType;

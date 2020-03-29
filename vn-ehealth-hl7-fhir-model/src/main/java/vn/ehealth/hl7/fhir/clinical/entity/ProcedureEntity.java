@@ -7,13 +7,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "procedure")
@@ -46,7 +45,7 @@ public class ProcedureEntity extends BaseResource {
     public BaseCodeableConcept code;
     public BaseReference subject;
     public BaseReference encounter;
-    @JsonIgnore public Object performed;
+    public BaseType performed;
     public Date performedDate;
     public BaseReference recorder;
     public BaseReference asserter;

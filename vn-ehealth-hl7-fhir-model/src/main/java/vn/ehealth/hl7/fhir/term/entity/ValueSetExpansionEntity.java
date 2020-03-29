@@ -8,9 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 /**
@@ -23,7 +22,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 public class ValueSetExpansionEntity extends BaseResource {
     public static class ValueSetExpansionParameter {
         public String name;
-        @JsonIgnore public Object value;
+        public BaseType value;
         
     }
     

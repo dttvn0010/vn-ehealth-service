@@ -3,17 +3,14 @@ package vn.ehealth.hl7.fhir.core.entity;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Extension;
-import org.hl7.fhir.r4.model.Type;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BaseDosage extends BaseComplexType {
     
     public static class BaseDosageDoseAndRate {
 
         public BaseCodeableConcept type;
-        @JsonIgnore public Type dose;
-        @JsonIgnore public Type rate;
+        public BaseSimpleType dose;
+        public BaseSimpleType rate;
         public List<Extension> extension;
     }
     
@@ -23,7 +20,7 @@ public class BaseDosage extends BaseComplexType {
     public List<BaseCodeableConcept> additionalInstruction;
     public String patientInstruction;
     public BaseTiming timing;
-    @JsonIgnore public Type asNeeded;
+    public BaseSimpleType asNeeded;
     public BaseCodeableConcept site;
     public BaseCodeableConcept route;
     public BaseCodeableConcept method;

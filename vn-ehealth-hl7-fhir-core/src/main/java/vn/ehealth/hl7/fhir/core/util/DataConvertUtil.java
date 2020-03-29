@@ -232,10 +232,10 @@ public class DataConvertUtil {
             Object cvtVal =  null;
             
             if(BaseSimpleType.class.equals(fieldType)) {
-                cvtVal = SimpleExtension.getPrimitiveValue((Type)fhirVal);
+                cvtVal = BaseSimpleType.fromFhir((Type)fhirVal);
                 
             }else if(BaseType.class.equals(fieldType)) {
-                 cvtVal = BaseExtension.getBaseValue((Type) fhirVal);
+                cvtVal = BaseType.fromFhir((Type) fhirVal);
                 field.set(ent, cvtVal);
             }else {            
                 cvtVal = fhirToEntity(fhirVal, fieldType);                
@@ -324,7 +324,12 @@ public class DataConvertUtil {
             Object cvtValue = null;
             
             if(inputType.equals(Type.class)) {
-                 cvtValue = BaseExtension.baseValueToFhir((BaseType) entVal);                        
+                if(entVal instanceof BaseType) {
+                    cvtValue = BaseType.toFhir((BaseType) entVal);
+                }else {
+                    throw new RuntimeException(
+                        String.format("Cannot cast %s to BaseType", entVal.getClass().getName()));
+                }
             }else {
                 try {                
                     cvtValue = entityToFhir(entVal, inputType);

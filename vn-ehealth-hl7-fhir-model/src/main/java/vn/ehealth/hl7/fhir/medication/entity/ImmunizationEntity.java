@@ -15,6 +15,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "immunization")
@@ -58,7 +59,7 @@ public class ImmunizationEntity extends BaseResource {
     public BaseCodeableConcept vaccineCode;
     public BaseReference patient;
     public BaseReference encounter;
-    @JsonIgnore public Object occurrence;
+    public BaseType occurrence;
     public Date recorded;
     public boolean primarySource;
     public BaseCodeableConcept reportOrigin;

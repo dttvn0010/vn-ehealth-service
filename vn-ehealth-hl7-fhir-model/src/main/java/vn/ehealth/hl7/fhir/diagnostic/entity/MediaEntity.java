@@ -9,14 +9,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "media")
@@ -33,7 +32,7 @@ public class MediaEntity extends BaseResource {
 	public BaseCodeableConcept view;
 	public BaseReference subject;
 	public BaseReference encounter;
-	@JsonIgnore public Object created;
+	public BaseType created;
 	public Date issued;
 	public BaseReference operator;
 	public List<BaseCodeableConcept> reasonCode;
