@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Map;
 
 import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
+import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.r4.model.Patient;
@@ -142,19 +143,28 @@ public class BenhNhan  extends BaseModelDTO {
         obj.setName(listOf(createHumanName(dto.tenDayDu)));        
         obj.setBirthDate(dto.ngaySinh);
         
-        var nationalIdentifier = createIdentifier(dto.cmnd, IdentifierSystem.CMND);
-        var mohIdentifier = createIdentifier(dto.soTheBhyt, IdentifierSystem.THE_BHYT, null, dto.ngayHetHanTheBhyt);
+        if(!StringUtils.isBlank(dto.cmnd)) {
+            var nationalIdentifier = createIdentifier(dto.cmnd, IdentifierSystem.CMND);
+            obj.addIdentifier(nationalIdentifier);
+        }
         
-        obj.setIdentifier(listOf(nationalIdentifier, mohIdentifier));
+        if(!StringUtils.isBlank(dto.soTheBhyt)) {
+            var mohIdentifier = createIdentifier(dto.soTheBhyt, IdentifierSystem.THE_BHYT, null, dto.ngayHetHanTheBhyt);
+            obj.addIdentifier(mohIdentifier);
+        }
         
         if(dto.dmGioiTinh != null)
             obj.setGender(AdministrativeGender.fromCode(dto.dmGioiTinh.ma));
         
         obj.setAddress(listOf(DiaChi.toFhirModel(dto.diaChi)));
-        obj.setTelecom(listOf(createContactPoint(dto.soDienThoai, ContactPointSystem.PHONE),
-                              createContactPoint(dto.email, ContactPointSystem.EMAIL)
-                        ));
+        if(!StringUtils.isBlank(dto.soDienThoai)) {
+            obj.addTelecom(createContactPoint(dto.soDienThoai, ContactPointSystem.PHONE));
+        }
         
+        if(!StringUtils.isBlank(dto.email)) {
+            obj.addTelecom(createContactPoint(dto.email, ContactPointSystem.EMAIL));
+        }
+
         var danTocExt = createExtension(ExtensionURL.DAN_TOC, DanhMuc.toConcept(dto.dmDanToc, CodeSystemValue.DAN_TOC));
         var tonGiaoExt = createExtension(ExtensionURL.TON_GIAO, DanhMuc.toConcept(dto.dmTonGiao, CodeSystemValue.TON_GIAO));
         var ngheNghiepExt = createExtension(ExtensionURL.NGHE_NGHIEP, DanhMuc.toConcept(dto.dmNgheNghiep, CodeSystemValue.NGHE_NGHIEP));

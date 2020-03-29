@@ -110,7 +110,7 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 				(IResourceProvider) applicationContext.getBean(ProcedureProvider.class),
 				(IResourceProvider) applicationContext.getBean(DiagnosticReportProvider.class),
 				(IResourceProvider) applicationContext.getBean(ImagingStudyProvider.class),
-				//(IResourceProvider) applicationContext.getBean(ObservationProvider.class),
+				(IResourceProvider) applicationContext.getBean(ObservationProvider.class),
 				(IResourceProvider) applicationContext.getBean(SpecimenProvider.class),
 				(IResourceProvider) applicationContext.getBean(CareTeamProvider.class),
 				(IResourceProvider) applicationContext.getBean(EncounterProvider.class),

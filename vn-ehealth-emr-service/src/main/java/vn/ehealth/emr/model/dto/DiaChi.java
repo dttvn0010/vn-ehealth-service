@@ -9,7 +9,6 @@ import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
 
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 public class DiaChi {
 
@@ -25,19 +24,22 @@ public class DiaChi {
         dto.diaChiChiTiet = obj.getText();
         
         if(obj.hasExtension()) {
-            var ext = findExtensionByURL(obj.getExtension(), ExtensionURL.DVHC + "/city");
-            if(ext != null && ext.getValue() instanceof CodeableConcept) {
-                dto.dmTinhThanh = DanhMuc.fromConcept((CodeableConcept) ext.getValue());
-            }
-            
-            ext = findExtensionByURL(obj.getExtension(), ExtensionURL.DVHC + "/district");
-            if(ext != null && ext.getValue() instanceof CodeableConcept) {
-                dto.dmQuanHuyen = DanhMuc.fromConcept((CodeableConcept) ext.getValue());
-            }
-            
-            ext = findExtensionByURL(obj.getExtension(), ExtensionURL.DVHC + "/ward");
-            if(ext != null && ext.getValue() instanceof CodeableConcept) {
-                dto.dmXaPhuong = DanhMuc.fromConcept((CodeableConcept) ext.getValue());
+            var extension = obj.getExtensionFirstRep();
+            if(extension.hasExtension()) {            
+                var ext = findExtensionByURL(extension.getExtension(), "city");
+                if(ext != null && ext.getValue() instanceof CodeableConcept) {
+                    dto.dmTinhThanh = DanhMuc.fromConcept((CodeableConcept) ext.getValue());
+                }
+                
+                ext = findExtensionByURL(extension.getExtension(), "district");
+                if(ext != null && ext.getValue() instanceof CodeableConcept) {
+                    dto.dmQuanHuyen = DanhMuc.fromConcept((CodeableConcept) ext.getValue());
+                }
+                
+                ext = findExtensionByURL(extension.getExtension(), "ward");
+                if(ext != null && ext.getValue() instanceof CodeableConcept) {
+                    dto.dmXaPhuong = DanhMuc.fromConcept((CodeableConcept) ext.getValue());
+                }
             }
         }
         return dto;
@@ -51,16 +53,15 @@ public class DiaChi {
         obj.setDistrict(Optional.ofNullable(dto.dmQuanHuyen).map(x -> x.ten).orElse(""));
         obj.setCity(Optional.ofNullable(dto.dmTinhThanh).map(x -> x.ten).orElse(""));
         
-        var tinhThanhExt = createExtension(ExtensionURL.DVHC + "/city", 
-                DanhMuc.toConcept(dto.dmTinhThanh, CodeSystemValue.DVHC));
+        var tinhThanhExt = createExtension("city", DanhMuc.toConcept(dto.dmTinhThanh, CodeSystemValue.DVHC));        
+        var quanHuyenExt = createExtension("district", DanhMuc.toConcept(dto.dmQuanHuyen, CodeSystemValue.DVHC));        
+        var xaPhuongExt = createExtension("ward", DanhMuc.toConcept(dto.dmXaPhuong, CodeSystemValue.DVHC));
         
-        var quanHuyenExt = createExtension(ExtensionURL.DVHC + "/district", 
-                DanhMuc.toConcept(dto.dmQuanHuyen, CodeSystemValue.DVHC));
-        
-        var xaPhuongExt = createExtension(ExtensionURL.DVHC + "/ward", 
-                DanhMuc.toConcept(dto.dmXaPhuong, CodeSystemValue.DVHC));
-        
-        obj.setExtension(listOf(tinhThanhExt, quanHuyenExt, xaPhuongExt));
+        var extension = obj.addExtension();
+        extension.setUrl(ExtensionURL.DVHC);
+        extension.addExtension(tinhThanhExt);
+        extension.addExtension(quanHuyenExt);
+        extension.addExtension(xaPhuongExt);
         
         return obj;
     }

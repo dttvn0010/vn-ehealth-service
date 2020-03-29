@@ -159,6 +159,16 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 				criteria.and("subject.identifier.system").is(ref[0]).and("subject.identifier.value").is(ref[1]);
 			}
 		}
+		//basedOn
+		if (basedOn != null) {
+            if (basedOn.getValue().indexOf("|") == -1) {
+                criteria.orOperator(Criteria.where("basedOn.reference").is(basedOn.getValue()),
+                        Criteria.where("basedOn.display").is(basedOn.getValue()));
+            } else {
+                String[] ref = basedOn.getValue().split("\\|");
+                criteria.and("basedOn.identifier.system").is(ref[0]).and("basedOn.identifier.value").is(ref[1]);
+            }
+        }
 		// encounter
 		if (encounter != null) {
 			if (encounter.getValue().indexOf("|") == -1) {

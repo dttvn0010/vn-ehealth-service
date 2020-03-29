@@ -9,9 +9,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import vn.ehealth.emr.model.dto.DichVuKyThuat;
+import vn.ehealth.emr.model.dto.XetNghiem;
 import vn.ehealth.emr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
@@ -42,8 +45,23 @@ public class EmrXetNghiem {
     public List<EmrFileDinhKem> emrFileDinhKemXetNghiems = new ArrayList<>();
     
     @JsonInclude(Include.NON_NULL)
-    public static class EmrXetNghiemDichVu {
+    public static class EmrXetNghiemDichVu extends EmrDichVuKyThuat {
         
+        @JsonIgnore
+        public Date ngayyeucau;
+        
+        @JsonIgnore
+        public EmrCanboYte bacsiyeucau;
+        
+        @JsonIgnore
+        public String noidungyeucau;
+        
+        @JsonIgnore
+        public Date ngaythuchien;
+        
+        @JsonIgnore
+        public EmrCanboYte bacsixetnghiem;
+                
         public EmrDmContent emrDmXetNghiem;
         public List<EmrXetNghiemKetQua> emrXetNghiemKetQuas = new ArrayList<EmrXetNghiemKetQua>();
         
@@ -55,7 +73,41 @@ public class EmrXetNghiem {
 
             public String giatrido;
         }
-          
+
+        @Override
+        public DichVuKyThuat toDto() {
+            var dto = new XetNghiem();
+            
+            dto.dmXetNghiem = this.emrDmXetNghiem != null? this.emrDmXetNghiem.toDto() : null;
+            dto.ngayYeuCau = this.ngayyeucau;
+            
+            if(this.bacsiyeucau != null) {
+                dto.bacSiYeuCau = this.bacsiyeucau.toRef();
+            }
+            
+            dto.noiDungYeuCau = this.noidungyeucau;
+            
+            dto.ngayThucHien = this.ngaythuchien;
+            
+            if(this.bacsixetnghiem != null) {
+                dto.bacSiXetNghiem = this.bacsixetnghiem.toRef();
+            }
+            
+            if(this.emrXetNghiemKetQuas != null) {
+                dto.dsKetQuaXetNghiem = new ArrayList<>();
+                for(var emrXnkq : this.emrXetNghiemKetQuas) {
+                    var kqxn = new XetNghiem.KetQuaXetNghiem();
+                    
+                    if(emrXnkq.emrDmChiSoXetNghiem != null) {
+                        kqxn.dmChiSoXetNghiem  = emrXnkq.emrDmChiSoXetNghiem.toDto();
+                    }
+                    
+                    kqxn.giaTri = emrXnkq.giatrido;
+                    dto.dsKetQuaXetNghiem.add(kqxn);
+                }
+            }
+            return dto;
+        } 
     }
     
     public List<EmrXetNghiemDichVu> emrXetNghiemDichVus = new ArrayList<>();

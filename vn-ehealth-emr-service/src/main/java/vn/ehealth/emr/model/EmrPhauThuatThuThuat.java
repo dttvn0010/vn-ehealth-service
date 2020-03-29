@@ -12,11 +12,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import vn.ehealth.emr.model.dto.DichVuKyThuat;
+import vn.ehealth.emr.model.dto.PhauThuatThuThuat;
 import vn.ehealth.emr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "emr_phau_thuat_thu_thuat")
-public class EmrPhauThuatThuThuat {
+public class EmrPhauThuatThuThuat extends EmrDichVuKyThuat {
 
     @Id public ObjectId id;        
     public ObjectId emrHoSoBenhAnId;  
@@ -34,9 +36,16 @@ public class EmrPhauThuatThuThuat {
     public EmrDmContent emrDmPhauThuThuat;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngayyeucau;
+    
+    public EmrCanboYte bacsiyeucau;
+    public String noidungyeucau;
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaygiopttt;
     public EmrCanboYte bacsithuchien;
     public EmrCanboYte bacsygayme;
+    
     public String chidinhptt;
     public String phuongphapvocam;
     public String luocdoptt;
@@ -50,9 +59,9 @@ public class EmrPhauThuatThuThuat {
     @JsonInclude(Include.NON_NULL)
     public static class EmrThanhVienPttt {
 
-        public EmrDmContent emrDmVaiTro;
-        
+        public EmrDmContent emrDmVaiTro;        
         public EmrCanboYte bacsipttt;
+
     }
     
     public List<EmrThanhVienPttt> emrThanhVienPttts = new ArrayList<>();
@@ -88,5 +97,38 @@ public class EmrPhauThuatThuThuat {
     
     public void setEmrCoSoKhamBenhId(String emrCoSoKhamBenhId) {
         this.emrCoSoKhamBenhId = ObjectIdUtil.stringToId(emrCoSoKhamBenhId);
+    }
+
+    @Override
+    public DichVuKyThuat toDto() {
+        var dto = new PhauThuatThuThuat();
+        dto.dmPttt = this.emrDmPhauThuThuat != null? this.emrDmPhauThuThuat.toDto() : null;
+        dto.ngayYeuCau = this.ngayyeucau;
+        
+        if(this.bacsiyeucau != null) {
+            dto.bacSiYeuCau = this.bacsiyeucau.toRef();
+        }
+        
+        dto.noiDungYeuCau = this.noidungyeucau;
+        
+        dto.ngayThucHien = this.ngaygiopttt;
+        
+        if(this.bacsithuchien != null) {
+            dto.chuTichHoiDong = this.bacsithuchien.toRef();
+        }
+        
+        if(this.emrThanhVienPttts != null) {
+            dto.hoiDongPttt = new ArrayList<>();
+            for(var tvpttt : this.emrThanhVienPttts) {
+                var tvdto = new PhauThuatThuThuat.ThanhVienPttt();
+                tvdto.bacsi = tvpttt.bacsipttt != null? tvpttt.bacsipttt.toRef() : null;
+                tvdto.dmVaiTro = tvpttt.emrDmVaiTro != null? tvpttt.emrDmVaiTro.toDto() : null;
+                dto.hoiDongPttt.add(tvdto);
+            }
+        }
+        
+        dto.trinhTuPttt = this.trinhtuptt;
+        dto.chiDinhPttt = this.chidinhptt;
+        return dto;
     }
 }

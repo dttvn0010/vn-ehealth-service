@@ -2,6 +2,7 @@ package vn.ehealth.emr.model;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -13,8 +14,13 @@ public class EmrDmContent {
     public String ma = "";
     public String ten = "";
     
+    @JsonIgnore
     public String maicd = "";
+    
+    @JsonIgnore
     public String code = "";
+    
+    @JsonIgnore
     public String codeSystem = "";
     
     public Map<String, Object> extension;

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import vn.ehealth.emr.model.EmrHoSoBenhAn;
 import vn.ehealth.emr.model.EmrXetNghiem;
 import vn.ehealth.emr.service.EmrHoSoBenhAnService;
 import vn.ehealth.emr.service.EmrXetNghiemService;
@@ -133,6 +134,26 @@ public class EmrXetNghiemController {
             var userId = user.map(x -> x.id).orElse(null);
             
             emrXetNghiemService.createOrUpdateFromHIS(userId, hsba, xetnghiemModelList, jsonSt);
+            
+            // save to FHIR db
+            try {
+                var hsbaEncounter = EmrHoSoBenhAn.getEncounter(matraodoiHsba);
+                for(var xn : xetnghiemModelList) {
+                    if(xn.emrXetNghiemDichVus == null) continue;
+                    
+                    for(var xndv : xn.emrXetNghiemDichVus) {
+                        xndv.bacsiyeucau = xn.bacsiyeucau;
+                        xndv.ngayyeucau = xn.ngayyeucau;
+                        xndv.noidungyeucau = xn.noidungyeucau;
+                        xndv.bacsixetnghiem = xn.bacsixetnghiem;
+                        xndv.ngaythuchien = xn.ngaythuchien;
+                        xndv.saveToFhirDb(hsbaEncounter);                        
+                    }
+                }
+                
+            }catch(Exception e) {
+                logger.error("Cannot save to FHIR db:", e);
+            }
             
             var result = Map.of(
                 "success" , true,

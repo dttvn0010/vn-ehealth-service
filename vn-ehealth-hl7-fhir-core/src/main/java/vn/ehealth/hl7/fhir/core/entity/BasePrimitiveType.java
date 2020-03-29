@@ -1,7 +1,7 @@
 package vn.ehealth.hl7.fhir.core.entity;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.DateTimeType;

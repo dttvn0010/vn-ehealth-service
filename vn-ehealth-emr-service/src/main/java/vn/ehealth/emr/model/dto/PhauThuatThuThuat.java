@@ -62,7 +62,7 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayThucHien;
     
-    //public String chiDinhPttt;
+    public String chiDinhPttt;
     public String ketLuan;
     public String trinhTuPttt;
     public String ghiChu;
