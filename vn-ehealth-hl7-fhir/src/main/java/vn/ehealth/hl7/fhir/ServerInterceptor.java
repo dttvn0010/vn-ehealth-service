@@ -202,23 +202,20 @@ public class ServerInterceptor extends InterceptorAdapter {
 			if (media.getSubtype() != null && !media.getSubtype().contains("xml")
 					&& !media.getSubtype().contains("fhir") && !media.getSubtype().contains("json")
 					&& !media.getSubtype().contains("plain") && !media.getSubtype().contains("x-www-form-urlencoded")) {
-				System.out.println("BUG       1111111111111111111111111111");
 				log.debug("Unsupported media type: " + contentType);
 				throw new InvalidRequestException("Unsupported media type: sub " + contentType);
 			} else {
 				if (!contentType.contains("xml") && !contentType.contains("json")
 						&& !contentType.contains("x-www-form-urlencoded")) {
-					System.out.println("BUG       22222222222222222222222222222222");
 					log.debug("Unsupported media type: " + contentType);
 					throw new InvalidRequestException("Unsupported media type: content " + contentType);
 				}
 			}
 
 		} catch (InvalidMediaTypeException e) {
-			System.out.println("BUG       333333333333333333333333333333333");
 			log.debug("Unsupported media type: " + contentType);
-			if (!contentType.contains("xml") && !contentType.contains("json")) {
-				System.out.println("BUG       444444444444444444444444444444");
+			if (!contentType.contains("xml") && !contentType.contains("json")
+					&& !contentType.contains("x-www-form-urlencoded")) {
 				log.debug("Unsupported media type: " + contentType);
 				throw new InvalidRequestException("Unsupported media type: content " + contentType);
 			}
