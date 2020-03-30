@@ -191,7 +191,6 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 		// what is available.
 
 		// registerInterceptor(new OAuth2Interceptor()); // Add OAuth2 Security Filter
-		// registerInterceptor(gatewayInterceptor);
 
 		// Define your CORS configuration. This is an example
 		// showing a typical setup. You should customize this
