@@ -3,10 +3,15 @@ package vn.ehealth.hl7.fhir.core.entity;
 import java.util.List;
 import org.hl7.fhir.r4.model.*;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
+@JsonInclude(Include.NON_NULL)
 public class BaseExtension {
     
+    @JsonInclude(Include.NON_NULL)
     public static class RawExtension{
         public String url;
         public BaseType value;

@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import vn.ehealth.emr.model.dto.BenhNhan;
 import vn.ehealth.emr.utils.DateUtil;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
+import vn.ehealth.hl7.fhir.core.view.DTOView;
+import vn.ehealth.hl7.fhir.core.view.EntityView;
 import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
 import vn.ehealth.hl7.fhir.patient.entity.PatientEntity;
 
@@ -28,6 +31,8 @@ import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -48,11 +53,21 @@ public class BenhNhanController {
         var ent = fhirToEntity(obj, PatientEntity.class);
         return ResponseEntity.ok(ent);
     }
-    
+   
     @GetMapping("/get_all")
-    public ResponseEntity<?> getAll() {
+    @JsonView({EntityView.class})
+    public ResponseEntity<?> getAll(Optional<Boolean> viewDto) {
         var lst = patientDao.search(new HashMap<>());    
-        var result = FPUtil.transform(lst, x -> fhirToEntity(x, PatientEntity.class));                
+        var entLst = FPUtil.transform(lst, x -> fhirToEntity(x, PatientEntity.class));
+        
+        List<?> result;
+        
+        if(viewDto.orElse(false)) {
+            result = FPUtil.transform(entLst, PatientEntity::toDto);
+        }else {
+            result = entLst;
+        }
+        
         return ResponseEntity.ok(result);
     }
     

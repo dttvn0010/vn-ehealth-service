@@ -4,8 +4,13 @@ import java.util.List;
 
 import org.hl7.fhir.r4.model.Extension;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(Include.NON_NULL)
 public class BaseDosage extends BaseComplexType {
     
+    @JsonInclude(Include.NON_NULL)
     public static class BaseDosageDoseAndRate {
 
         public BaseCodeableConcept type;
@@ -13,8 +18,7 @@ public class BaseDosage extends BaseComplexType {
         public BaseSimpleType rate;
         public List<Extension> extension;
     }
-    
-    
+        
     public Integer sequence;
     public String text;
     public List<BaseCodeableConcept> additionalInstruction;

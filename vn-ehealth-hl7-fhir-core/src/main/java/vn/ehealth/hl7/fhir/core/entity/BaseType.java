@@ -23,8 +23,12 @@ import org.hl7.fhir.r4.model.Timing;
 import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.UsageContext;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 
+@JsonInclude(Include.NON_NULL)
 public class BaseType {
     
     private static Map<Class<?>, Class<?>> mapClasses = new HashMap<Class<?>, Class<?>>() {

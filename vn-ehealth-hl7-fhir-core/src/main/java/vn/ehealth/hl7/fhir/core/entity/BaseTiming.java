@@ -2,8 +2,12 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;;
+
+@JsonInclude(Include.NON_NULL)
 public class BaseTiming extends BaseComplexType {
     
     public static class BaseTimingRepeat {

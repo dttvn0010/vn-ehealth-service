@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.patient.entity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.codesystems.ContactPointSystem;
@@ -10,6 +11,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
@@ -23,8 +26,12 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 import vn.ehealth.hl7.fhir.core.util.DateUtil;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
+import vn.ehealth.hl7.fhir.core.view.DTOView;
 import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
+import vn.ehealth.hl7.fhir.utils.EntityUtils;
+
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 /**
  * @author SONVT24
@@ -58,13 +65,13 @@ public class PatientEntity extends BaseResource {
     @Id
     @Indexed(name = "_id_")
     public ObjectId id;
-    public List<BaseIdentifier> identifier;
+    public List<BaseIdentifier> identifier;    
     public List<BaseHumanName> name;
-    public List<BaseContactPoint> telecom;
-    public String gender;
+    public List<BaseContactPoint> telecom;    
+    public String gender;    
     public Date birthDate;
-    public BaseType deceased;
-    public List<BaseAddress> address;
+    public BaseType deceased;    
+    public List<BaseAddress> address;    
     public BaseCodeableConcept maritalStatus;
     public BaseType multipleBirth;
     public List<BaseAttachment> photo;    
@@ -76,25 +83,25 @@ public class PatientEntity extends BaseResource {
     
     public List<BaseCodeableConcept> category;
     
-    public String getAddress() {
+    private String computeAddress() {
         if(address.size() > 0) {
             return address.get(0).text;
         }
         return "";
     }
     
-    public String getFullName() {
+    private String computeFullName() {
         if(name != null && name.size() > 0) {
             return name.get(0).text;
         }
         return "";
     }
     
-    public String getBirthDate() {
+    private String computeBirthDate() {
         return DateUtil.parseDateToString(birthDate, DateUtil.DATE_FORMAT_D_M_Y);
     }
     
-    public String getEmail() {
+    private String computeEmail() {
         var contact = FPUtil.findFirst(telecom, x -> ContactPointSystem.EMAIL.toCode().equals(x.system));
         if(contact != null) {
             return contact.value;
@@ -102,7 +109,7 @@ public class PatientEntity extends BaseResource {
         return "";
     }
     
-    public String getPhone() {
+    private String computePhone() {
         var contact = FPUtil.findFirst(telecom, x -> ContactPointSystem.PHONE.toCode().equals(x.system));
         if(contact != null) {
             return contact.value;
@@ -110,7 +117,7 @@ public class PatientEntity extends BaseResource {
         return "";
     }
     
-    public String getNationalIdentifier() {
+    private String computeNationalIdentifier() {
         var nationalIdentifier = FPUtil.findFirst(identifier, x -> IdentifierSystem.CMND.equals(x.system));
         if(nationalIdentifier != null) {
             return nationalIdentifier.value;
@@ -118,7 +125,7 @@ public class PatientEntity extends BaseResource {
         return  "";
     }
     
-    public String getMohIdentifier() {
+    private String computeMohIdentifier() {
         var mohIdentifier = FPUtil.findFirst(identifier, x -> IdentifierSystem.THE_BHYT.equals(x.system));
         if(mohIdentifier != null) {
             return mohIdentifier.value;
@@ -126,35 +133,58 @@ public class PatientEntity extends BaseResource {
         return  "";
     }
     
-    public BaseCodeableConcept getRace() {
-        var extRace = FPUtil.findFirst(extension, x -> ExtensionURL.DAN_TOC.equals(x.url));
+    private BaseCodeableConcept computeRace() {
+        var extRace = EntityUtils.findExtensionByURL(extension, ExtensionURL.DAN_TOC);
         if(extRace != null && extRace.value instanceof BaseCodeableConcept) {
             return (BaseCodeableConcept) extRace.value;
         }
         return null;
     }
     
-    public BaseCodeableConcept getEthnics() {
-        var extEthnics = FPUtil.findFirst(extension, x -> ExtensionURL.TON_GIAO.equals(x.url));
+    private BaseCodeableConcept computeEthnics() {
+        var extEthnics = EntityUtils.findExtensionByURL(extension, ExtensionURL.TON_GIAO);
         if(extEthnics != null && extEthnics.value instanceof BaseCodeableConcept) {
             return (BaseCodeableConcept) extEthnics.value;
         }
         return null;
     }
     
-    public BaseCodeableConcept getNationality() {
-        var extNationality = FPUtil.findFirst(modifierExtension, x -> ExtensionURL.QUOC_TICH.equals(x.url));
+    private BaseCodeableConcept computeNationality() {
+        var extNationality = EntityUtils.findExtensionByURL(modifierExtension, ExtensionURL.QUOC_TICH);
         if(extNationality != null && extNationality.value instanceof BaseCodeableConcept) {
             return (BaseCodeableConcept) extNationality.value;
         }
         return null;
     }
     
-    public BaseCodeableConcept getJobType() {
-        var extJobType = FPUtil.findFirst(extension, x -> ExtensionURL.NGHE_NGHIEP.equals(x.url));
+    private BaseCodeableConcept computeJobType() {
+        var extJobType = EntityUtils.findExtensionByURL(modifierExtension, ExtensionURL.NGHE_NGHIEP);
         if(extJobType != null && extJobType.value instanceof BaseCodeableConcept) {
             return (BaseCodeableConcept) extJobType.value;
         }
         return null;
+    }
+    
+    public static Map<String, ?> toDto(PatientEntity ent) {
+        if(ent == null) return null;
+        
+        return mapOf(
+                "fullname", ent.computeFullName(),
+                "address", ent.computeAddress(),
+                "birthdate", ent.computeBirthDate(),
+                "email", ent.computeEmail(),
+                "phone", ent.computePhone(),
+                "nationalIdentifier", ent.computeNationalIdentifier(),
+                "mohIdentifier", ent.computeMohIdentifier(),
+                "race", BaseCodeableConcept.toDto(ent.computeRace()),
+                "ethnics", BaseCodeableConcept.toDto(ent.computeEthnics()),
+                "nationality", BaseCodeableConcept.toDto(ent.computeNationality()),
+                "jobtype", BaseCodeableConcept.toDto(ent.computeJobType())                    
+            );
+    }
+    
+    @JsonView(DTOView.class)
+    public Map<String, ?> getDto() {
+        return toDto(this);
     }
 }

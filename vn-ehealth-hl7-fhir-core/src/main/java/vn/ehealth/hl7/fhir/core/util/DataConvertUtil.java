@@ -57,6 +57,10 @@ public class DataConvertUtil {
         return m;
     }
     
+    public static Map<String, ?> emptyMap() {
+        return new HashMap<>();
+    }
+    
     public static Map<String, Object> mapOf(Object ...obj) {
         var m = new HashMap<String, Object>();
         if(obj.length % 2 != 0) {

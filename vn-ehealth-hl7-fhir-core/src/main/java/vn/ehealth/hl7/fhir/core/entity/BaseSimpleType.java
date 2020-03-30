@@ -12,8 +12,12 @@ import org.hl7.fhir.r4.model.Range;
 import org.hl7.fhir.r4.model.Ratio;
 import org.hl7.fhir.r4.model.Type;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 
+@JsonInclude(Include.NON_NULL)
 public class BaseSimpleType extends BaseType {
 
     static Map<Class<?>, Class<?>> mapClasses = new HashMap<Class<?>, Class<?>>() {
