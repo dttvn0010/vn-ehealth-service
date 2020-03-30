@@ -214,14 +214,26 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 	}
 
 	@Operation(name = "$everything", idempotent = true)
-	public IBundleProvider getEverything(@IdParam IdType thePatientId, @OperationParam(name = "start") DateParam theStart,
-			@OperationParam(name = "end") DateParam theEnd) {
+	public IBundleProvider getEverything(@IdParam IdType thePatientId,
+			@OperationParam(name = "start") DateParam theStart, @OperationParam(name = "end") DateParam theEnd) {
+		Patient patient = null;
+
+		if (thePatientId.hasVersionIdPart()) {
+			patient = patientDao.readOrVread(thePatientId);
+		} else {
+			patient = patientDao.read(thePatientId);
+		}
+		if (patient == null) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No Entity/" + thePatientId.getIdPart()),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		}
 
 		List<IBaseResource> results = new ArrayList<IBaseResource>();
 		// Populate bundle with matching resources
-		
+
 		results = patientDao.getEverything(thePatientId, theStart, theEnd);
-		
+
 		// return list
 		final List<IBaseResource> finalResults = results;
 
