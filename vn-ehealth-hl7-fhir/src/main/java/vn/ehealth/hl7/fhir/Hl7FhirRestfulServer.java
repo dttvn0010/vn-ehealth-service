@@ -101,7 +101,11 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 
 		if (serverBase != null && !serverBase.isEmpty()) {
 			setServerAddressStrategy(new HardcodedServerAddressStrategy(serverBase));
-		}
+		}		
+
+		// registering server-level provider
+		registerProvider(new PlainProvider());
+		
 		setResourceProviders(Arrays.asList((IResourceProvider) applicationContext.getBean(CarePlanProvider.class),
 				(IResourceProvider) applicationContext.getBean(ClinicalImpressionProvider.class),
 				(IResourceProvider) applicationContext.getBean(ConditionProvider.class),
@@ -142,11 +146,8 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 				(IResourceProvider) applicationContext.getBean(AllergyIntoleranceProvider.class),
 				(IResourceProvider) applicationContext.getBean(MediaProvider.class)));
 		setServerConformanceProvider(new Hl7FhirServerConformanceProvider());
-		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
-		registerInterceptor(loggingInterceptor);
-		
-		// registering server-level provider
-		registerProvider(new PlainProvider());
+//		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
+//		registerInterceptor(loggingInterceptor);		
 		
 		/*
 		 * Use a narrative generator. This is a completely optional step, but can be
@@ -198,6 +199,7 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 		// Define your CORS configuration. This is an example
 		// showing a typical setup. You should customize this
 		// to your specific needs
+		
 		CorsConfiguration config = new CorsConfiguration();
 		config.addAllowedHeader("x-fhir-starter");
 		config.addAllowedHeader("Origin");
