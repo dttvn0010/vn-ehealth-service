@@ -290,8 +290,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     @CachePut(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME_ENT, key = "#id", condition="#id!=null")
     public ENT readEntity(String id) {
         if(id != null) {
-            var criteria = Criteria.where(ConstantKeys.SP_FHIR_ID).is(id)
-                                    .and(ConstantKeys.SP_ACTIVE).is(true);    
+            var criteria = Criteria.where(ConstantKeys.SP_FHIR_ID).is(id);                                        
             return getEntity(criteria);
         }
         return null;

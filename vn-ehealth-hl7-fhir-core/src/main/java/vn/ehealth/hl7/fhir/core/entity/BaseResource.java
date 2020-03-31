@@ -8,9 +8,6 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonView;
-
-import vn.ehealth.hl7.fhir.core.view.DTOView;
 
 @JsonInclude(Include.NON_NULL)
 public abstract class BaseResource {
@@ -29,8 +26,7 @@ public abstract class BaseResource {
     public List<BaseExtension> modifierExtension;
     @JsonIgnore public String fhirId;
     
-    @JsonView(DTOView.class)
-    public Map<String, Object> getDto() {
+    public Map<String, Object> getDto(Map<String, Object> options) {
         return new HashMap<>(); 
     }
 }

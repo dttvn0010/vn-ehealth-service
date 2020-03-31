@@ -13,8 +13,6 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
@@ -26,7 +24,6 @@ import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
-import vn.ehealth.hl7.fhir.core.view.DTOView;
 import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.hl7.fhir.utils.EntityUtils;
@@ -149,25 +146,46 @@ public class PatientEntity extends BaseResource {
         return null;
     }
     
-    public static Map<String, Object> toDto(PatientEntity ent) {
-        if(ent == null) return null;
-        return ent.getDto();
+    public Map<String, Object> getDto(Map<String, Object> options) {        
+        var simple = false;
+        
+        if(options != null && options.get("simple") != null) {
+            simple = (Boolean) options.get("simple");
+        }
+        
+        var dto = mapOf(
+                    "name", BaseHumanName.toDto(getFirst(name), options),                
+                    "birthdate", birthDate
+                );
+        
+        if(!simple) {
+            var dtoExt = mapOf(
+                    "address", BaseAddress.toDto(getFirst(address)),                    
+                    
+                    "computes", mapOf(
+                        "email", computeEmail(),
+                        "phone", computePhone(),
+                        "nationalIdentifier", computeNationalIdentifier(),
+                        "mohIdentifier", computeMohIdentifier(),
+                        "race", BaseCodeableConcept.toDto(computeRace()),
+                        "ethnics", BaseCodeableConcept.toDto(computeEthnics()),
+                        "nationality", BaseCodeableConcept.toDto(computeNationality()),
+                        "jobtype", BaseCodeableConcept.toDto(computeJobType())
+                    )
+                );
+            
+            dto.putAll(dtoExt);
+        }
+        
+        return dto;
     }
     
-    @JsonView(DTOView.class)
-    public Map<String, Object> getDto() {
-        return mapOf(
-                "name", BaseHumanName.toDto(getFirst(name)),
-                "address", BaseAddress.toDto(getFirst(address)),
-                "birthdate", birthDate,
-                "email", computeEmail(),
-                "phone", computePhone(),
-                "nationalIdentifier", computeNationalIdentifier(),
-                "mohIdentifier", computeMohIdentifier(),
-                "race", BaseCodeableConcept.toDto(computeRace()),
-                "ethnics", BaseCodeableConcept.toDto(computeEthnics()),
-                "nationality", BaseCodeableConcept.toDto(computeNationality()),
-                "jobtype", BaseCodeableConcept.toDto(computeJobType())                    
-            );
+    public static Map<String, Object> toDto(PatientEntity ent, Map<String, Object> options) {
+        if(ent == null) return null;
+        return ent.getDto(options);
+    }
+    
+    public static Map<String, Object> toDto(PatientEntity ent) {
+        return toDto(ent, null);
     }
 }

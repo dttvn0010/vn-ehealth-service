@@ -5,10 +5,6 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonView;
-
-import vn.ehealth.hl7.fhir.core.view.DTOView;
-
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @JsonInclude(Include.NON_NULL)
@@ -17,18 +13,21 @@ public class BaseCodeableConcept  extends BaseSimpleType  {
     public List<BaseCoding> coding;
     public String text;
     
-    public static Map<String, ?> toDto(BaseCodeableConcept ent) {
-        if(ent == null) return null;
-        String display = ent.text, code = "";
-        if(ent.coding != null && ent.coding.size() > 0) {
-            code = ent.coding.get(0).code;
-            display = ent.coding.get(0).display;
+    public Map<String, Object> getDto(Map<String, Object> options) {
+        String display = text, code = "";
+        if(coding != null && coding.size() > 0) {
+            code = coding.get(0).code;
+            display = coding.get(0).display;
         }
-        return mapOf("display", display, "code", code);
+        return mapOf("display", (Object) display, "code", code);
     }
     
-    @JsonView(DTOView.class)
-    public Map<String, ?> getDto() {
-        return toDto(this);
+    public static Map<String, Object> toDto(BaseCodeableConcept ent, Map<String, Object> options) {
+        if(ent == null) return null;        
+        return ent.getDto(options);
+    }
+    
+    public static Map<String, Object> toDto(BaseCodeableConcept ent) {
+        return toDto(ent, null);
     }
 }

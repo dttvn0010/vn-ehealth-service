@@ -9,8 +9,6 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseDuration;
@@ -21,7 +19,6 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
-import vn.ehealth.hl7.fhir.core.view.DTOView;
 import vn.ehealth.hl7.fhir.utils.EntityUtils;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -117,35 +114,36 @@ public class EncounterEntity extends BaseResource{
     }
     
     @JsonIgnore
-    public Map<String, Object> getHsbaDto() {
+    public Map<String, Object> getHsbaDto(Map<String, Object> options) {
         return mapOf(
-                "maHSBA", computeMaHSBA(),
                 "type", BaseCodeableConcept.toDto(computeType()),
-                "patient", BaseReference.toDto(subject),
-                "serviceProvider", serviceProvider.getDto(),
-                "startDate", period != null? period.start : null,
-                "endDate", period != null? period.end : null
+                "patient", BaseReference.toDto(subject, mapOf("simple", true)),
+                "serviceProvider", BaseReference.toDto(serviceProvider),
+                "period", period,
+                "computes", mapOf("maHSBA", computeMaHSBA())
             );
         
     }
     
-    @JsonIgnore
-    public Map<String, Object> getVaoKhoaDto() {
+    public Map<String, Object> getVaoKhoaDto(Map<String, Object> options) {
         //TODO:
         return mapOf("", (Object) "");
     }
     
-    @JsonView(DTOView.class)
-    public Map<String, Object> getDto() {
+    public Map<String, Object> getDto(Map<String, Object> options) {
         if(partOf == null || partOf.reference == null) {
-            return getHsbaDto();
+            return getHsbaDto(options);
         }else {
-            return getVaoKhoaDto();
+            return getVaoKhoaDto(options);
         }
     }
     
-    public static Map<String, Object> toDto(EncounterEntity ent) {
+    public static Map<String, Object> toDto(EncounterEntity ent, Map<String, Object> options) {
         if(ent == null) return null;
-        return ent.getDto();
+        return ent.getDto(options);
+    }
+    
+    public static Map<String, Object> toDto(EncounterEntity ent) {
+        return toDto(ent, null);
     }
 }

@@ -10,15 +10,12 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
-
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
-import vn.ehealth.hl7.fhir.core.view.DTOView;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 
@@ -61,9 +58,7 @@ public class ServiceRequestEntity extends BaseResource {
     public String patientInstruction;
     public List<BaseReference> relevantHistory;
     
-    
-    @JsonView(DTOView.class)
-    public Map<String, Object> getDto() {
+    public Map<String, Object> getDto(Map<String, Object> options) {
         return mapOf(
                     "category", transform(category, BaseCodeableConcept::toDto),
                     "code", BaseCodeableConcept.toDto(code),
@@ -75,8 +70,12 @@ public class ServiceRequestEntity extends BaseResource {
                 );
     }
     
-    public static Map<String, Object> toDto(DiagnosticReportEntity ent) {
+    public static Map<String, Object> toDto(DiagnosticReportEntity ent, Map<String, Object> options) {
         if(ent == null) return null;
-        return ent.getDto();
+        return ent.getDto(options);
+    }
+    
+    public static Map<String, Object> toDto(DiagnosticReportEntity ent) {
+        return toDto(ent, null);
     }
 }

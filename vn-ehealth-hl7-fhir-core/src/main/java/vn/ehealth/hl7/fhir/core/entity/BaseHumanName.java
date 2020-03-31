@@ -6,10 +6,6 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import vn.ehealth.hl7.fhir.core.view.DTOView;
-
-import com.fasterxml.jackson.annotation.JsonView;
-
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @JsonInclude(Include.NON_NULL)
@@ -22,8 +18,14 @@ public class BaseHumanName extends BaseComplexType {
     public List<String> suffix;
     public BasePeriod period;    
     
-    @JsonView(DTOView.class)
-    public Map<String, Object> getDto() {
+    public Map<String, Object> getDto(Map<String, Object> options) {
+        var simple = false;
+        
+        if(options != null && options.get("simple") != null) {
+            simple = (Boolean) options.get("simple");
+        }
+        
+        if(simple) return mapOf("text", (Object) text);
         
         return mapOf(
                     "text", (Object) text,
@@ -34,8 +36,12 @@ public class BaseHumanName extends BaseComplexType {
                 );
     }
     
-    public static Map<String, Object> toDto(BaseHumanName name) {
+    public static Map<String, Object> toDto(BaseHumanName name, Map<String, Object> options) {
         if(name == null) return null;
-        return name.getDto();
+        return name.getDto(options);
+    }
+    
+    public static Map<String, Object> toDto(BaseHumanName name) {
+        return toDto(name, null);
     }
 }

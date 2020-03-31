@@ -8,10 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
-import vn.ehealth.hl7.fhir.core.view.DTOView;
 import vn.ehealth.hl7.fhir.utils.EntityUtils;
-
-import com.fasterxml.jackson.annotation.JsonView;
 
 
 /**
@@ -32,35 +29,48 @@ public class BaseAddress extends BaseComplexType {
     public String country;
     public BasePeriod period;
     
-    @JsonView(DTOView.class)
-    public Map<String, Object> getDto() {
+    public Map<String, Object> getDto(Map<String, Object> options) {
+        var simple = false;
+        
+        if(options != null && options.get("simple") != null) {
+            simple = (Boolean) options.get("simple");
+        }
+        
         var dto = new HashMap<String, Object>();
         dto.put("text", text);
-        if(extension != null) {
+        
+        if(!simple && extension != null) {
             var extDvhc = EntityUtils.findSimpleExtensionByURL(extension, ExtensionURL.DVHC);
             
             if(extDvhc != null && extDvhc.extension != null) {
                 var extCity = EntityUtils.findRawSimpleExtensionByURL(extDvhc.extension, "city");
                 if(extCity != null && extCity.value instanceof BaseCodeableConcept) {
-                    dto.put("city", ((BaseCodeableConcept)extCity.value).getDto());
+                    var cityConcept = (BaseCodeableConcept) extCity.value;
+                    dto.put("city", BaseCodeableConcept.toDto(cityConcept));
                 }
                 
                 var extDistrict = EntityUtils.findRawSimpleExtensionByURL(extDvhc.extension, "district");
                 if(extDistrict != null && extDistrict.value instanceof BaseCodeableConcept) {
-                    dto.put("district", ((BaseCodeableConcept)extDistrict.value).getDto());
+                    var districtConcept = (BaseCodeableConcept) extDistrict.value;
+                    dto.put("district", BaseCodeableConcept.toDto(districtConcept));
                 }
                 
                 var extWard = EntityUtils.findRawSimpleExtensionByURL(extDvhc.extension, "ward");
                 if(extWard != null && extWard.value instanceof BaseCodeableConcept) {
-                    dto.put("ward", ((BaseCodeableConcept)extWard.value).getDto());
+                    var wardConcept = (BaseCodeableConcept) extWard.value;
+                    dto.put("ward", BaseCodeableConcept.toDto(wardConcept));
                 }
             }
         }
         return dto;
     }
     
-    public static Map<String, Object> toDto(BaseAddress addr) {
+    public static Map<String, Object> toDto(BaseAddress addr, Map<String, Object> options) {
         if(addr == null) return null;
-        return addr.getDto();
+        return addr.getDto(options);
+    }
+    
+    public static Map<String, Object> toDto(BaseAddress addr) {
+        return toDto(addr, null);
     }
 }
