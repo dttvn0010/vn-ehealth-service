@@ -277,12 +277,12 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
 	}
 
 	@Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return Procedure.class;
     }
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return ProcedureEntity.class;
 	}
 

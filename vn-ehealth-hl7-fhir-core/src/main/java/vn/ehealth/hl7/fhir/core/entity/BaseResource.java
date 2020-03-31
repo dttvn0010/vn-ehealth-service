@@ -14,12 +14,12 @@ import vn.ehealth.hl7.fhir.core.view.DTOView;
 
 @JsonInclude(Include.NON_NULL)
 public abstract class BaseResource {
-    public Date resCreated;
-    public Date resUpdated;
-    public Date resDeleted;
-    public String resMessage;
+    @JsonIgnore public Date resCreated;
+    @JsonIgnore public Date resUpdated;
+    @JsonIgnore public Date resDeleted;
+    @JsonIgnore public String resMessage;
     public String resource;
-    public String fhirVersion;
+    @JsonIgnore public String fhirVersion;
     public List<String> profile;
     @JsonIgnore public Integer version = 1;
     @JsonIgnore public boolean active;

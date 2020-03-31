@@ -117,12 +117,12 @@ public class ScheduleDao extends BaseDao<ScheduleEntity, Schedule> {
 	}
 
 	@Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return Schedule.class;
     }
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return ScheduleEntity.class;
 	}
 }

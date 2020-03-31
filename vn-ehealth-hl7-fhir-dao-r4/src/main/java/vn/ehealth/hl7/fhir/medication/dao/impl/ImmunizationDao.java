@@ -196,12 +196,12 @@ public class ImmunizationDao extends BaseDao<ImmunizationEntity, Immunization> {
 	}
 
 	@Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return Immunization.class;
     }
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return ImmunizationEntity.class;
 	}
 }

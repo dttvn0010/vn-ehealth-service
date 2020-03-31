@@ -504,8 +504,11 @@ public class DataConvertUtil {
             }
             
             if(obj instanceof Type && ent instanceof BaseComplexType) {
-                var objExt = ((Type)obj).getExtension();
-                ((BaseComplexType)ent).extension = FPUtil.transform(objExt, SimpleExtension::fromExtension);
+                var resource = ((Type)obj);
+                if(resource.hasExtension()) {
+                    ((BaseComplexType)ent).extension = FPUtil.transform(resource.getExtension(), 
+                                                        SimpleExtension::fromExtension);
+                }
             }
             
             return (T) ent;
@@ -558,7 +561,9 @@ public class DataConvertUtil {
             
             if(obj instanceof Type && ent instanceof BaseComplexType) {
                 var entExt = ((BaseComplexType)ent).extension;
-                ((Type)obj).setExtension(FPUtil.transform(entExt, SimpleExtension::toExtension));
+                if(entExt != null && entExt.size() > 0) {
+                    ((Type)obj).setExtension(FPUtil.transform(entExt, SimpleExtension::toExtension));
+                }
             }
             
             return (T) obj;

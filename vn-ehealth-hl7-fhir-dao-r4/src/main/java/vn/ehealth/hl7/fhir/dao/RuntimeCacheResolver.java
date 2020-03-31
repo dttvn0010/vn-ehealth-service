@@ -9,12 +9,15 @@ import org.springframework.cache.interceptor.SimpleCacheResolver;
 
 public class RuntimeCacheResolver extends SimpleCacheResolver {
 
-    protected RuntimeCacheResolver(CacheManager cacheManager) {
+    private String cachePool;
+    
+    protected RuntimeCacheResolver(CacheManager cacheManager, String cachePool) {
         super(cacheManager);
+        this.cachePool = cachePool;
     }
 
     @Override
     protected Collection<String> getCacheNames(CacheOperationInvocationContext<?> context) {
-        return Arrays.asList(context.getTarget().getClass().getSimpleName());
+        return Arrays.asList(cachePool + "." + context.getTarget().getClass().getSimpleName());
     }
 }

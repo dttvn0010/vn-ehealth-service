@@ -199,12 +199,12 @@ public class MedicationAdministrationDao extends BaseDao<MedicationAdministratio
 	}
 
 	@Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
 	    return MedicationAdministration.class;
     }
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return MedicationAdministrationEntity.class;
 	}
 

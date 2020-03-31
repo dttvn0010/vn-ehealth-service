@@ -271,12 +271,12 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
 	}
 
 	@Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return ServiceRequest.class;
     }
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return ServiceRequestEntity.class;
 	}
 }

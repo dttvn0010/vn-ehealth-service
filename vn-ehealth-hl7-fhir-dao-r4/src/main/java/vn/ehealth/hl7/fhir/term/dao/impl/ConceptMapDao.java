@@ -280,12 +280,12 @@ public class ConceptMapDao extends BaseDao<ConceptMapEntity, ConceptMap> {
 	}
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return ConceptMapEntity.class;
 	}
 
     @Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return ConceptMap.class;
     }
 

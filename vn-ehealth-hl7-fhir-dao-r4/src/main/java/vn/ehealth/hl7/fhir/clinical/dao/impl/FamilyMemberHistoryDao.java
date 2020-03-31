@@ -38,12 +38,12 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 	}
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return FamilyMemberHistoryEntity.class;
 	}
 
 	@Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return FamilyMemberHistory.class;
     }
 

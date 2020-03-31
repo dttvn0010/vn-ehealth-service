@@ -204,12 +204,12 @@ public class LocationDao extends BaseDao<LocationEntity, Location> {
     }
 
     @Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return Location.class;
     }
 
     @Override
-    public Class<? extends BaseResource> getEntityClass() {
+    protected Class<? extends BaseResource> getEntityClass() {
         return LocationEntity.class;
     }
 }

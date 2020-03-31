@@ -38,12 +38,12 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 	}
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return AllergyIntoleranceEntity.class;
 	}
 	
 	@Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return AllergyIntolerance.class;
     }
 

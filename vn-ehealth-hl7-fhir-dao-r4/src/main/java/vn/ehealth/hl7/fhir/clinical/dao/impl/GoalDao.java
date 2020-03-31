@@ -151,12 +151,12 @@ public class GoalDao extends BaseDao<GoalEntity, Goal> {
 	}
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return GoalEntity.class;
 	}
 
     @Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return Goal.class;
     }
 

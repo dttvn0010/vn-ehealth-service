@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
@@ -25,7 +26,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1, 'basedOn.reference':1, 'subject.reference':1, 'encounter.reference':1}", name = "index_by_default")
 public class ServiceRequestEntity extends BaseResource {
     @Id
-    public ObjectId id;
+    @JsonIgnore public ObjectId id;
     public List<BaseIdentifier> identifier;
     public List<String> instantiatesCanonical;
     public List<String> instantiatesUri;
@@ -67,7 +68,7 @@ public class ServiceRequestEntity extends BaseResource {
                     "category", transform(category, BaseCodeableConcept::toDto),
                     "code", BaseCodeableConcept.toDto(code),
                     "orderDetail", BaseCodeableConcept.toDto(getFirst(orderDetail)),
-                    "subject", BaseReference.toDto(subject),
+                    "patient", BaseReference.toDto(subject),
                     "encounter", BaseReference.toDto(encounter),
                     "authoredOn", authoredOn,
                     "requester", BaseReference.toDto(requester)                    

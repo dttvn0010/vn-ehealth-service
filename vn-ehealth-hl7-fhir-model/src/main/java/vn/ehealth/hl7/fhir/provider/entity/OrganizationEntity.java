@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
@@ -33,7 +34,7 @@ public class OrganizationEntity extends BaseResource {
     }
     
     @Id
-    public ObjectId id;
+    @JsonIgnore public ObjectId id;
 
     public List<BaseIdentifier> identifier;
     public List<BaseCodeableConcept> type;

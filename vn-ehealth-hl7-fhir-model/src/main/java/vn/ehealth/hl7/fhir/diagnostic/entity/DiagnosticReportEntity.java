@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
@@ -33,7 +34,7 @@ public class DiagnosticReportEntity extends BaseResource {
     }
     
     @Id
-    public ObjectId id;
+    @JsonIgnore public ObjectId id;
     public List<BaseIdentifier> identifier;
     public List<BaseReference> basedOn;
     public String status;
@@ -58,7 +59,7 @@ public class DiagnosticReportEntity extends BaseResource {
         return mapOf(
                     "status", status,
                     "issued", issued,
-                    "subject", BaseReference.toDto(subject),
+                    "patient", BaseReference.toDto(subject),
                     "category", transform(category, BaseCodeableConcept::toDto),
                     "code", BaseCodeableConcept.toDto(code),
                     "performer", transform(performer, BaseReference::toDto),

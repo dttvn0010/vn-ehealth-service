@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
@@ -24,7 +25,6 @@ import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
-import vn.ehealth.hl7.fhir.core.util.DateUtil;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.core.view.DTOView;
 import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
@@ -64,7 +64,7 @@ public class PatientEntity extends BaseResource {
     
     @Id
     @Indexed(name = "_id_")
-    public ObjectId id;
+    @JsonIgnore public ObjectId id;
     public List<BaseIdentifier> identifier;    
     public List<BaseHumanName> name;
     public List<BaseContactPoint> telecom;    
@@ -82,25 +82,9 @@ public class PatientEntity extends BaseResource {
     public List<PatientLink> link;
     
     public List<BaseCodeableConcept> category;
-    
-    private String computeAddress() {
-        if(address.size() > 0) {
-            return address.get(0).text;
-        }
-        return "";
-    }
-    
-    private String computeFullName() {
-        if(name != null && name.size() > 0) {
-            return name.get(0).text;
-        }
-        return "";
-    }
-    
-    private String computeBirthDate() {
-        return DateUtil.parseDateToString(birthDate, DateUtil.DATE_FORMAT_D_M_Y);
-    }
-    
+  
+    // Computes method
+  
     private String computeEmail() {
         var contact = FPUtil.findFirst(telecom, x -> ContactPointSystem.EMAIL.toCode().equals(x.system));
         if(contact != null) {
@@ -173,9 +157,9 @@ public class PatientEntity extends BaseResource {
     @JsonView(DTOView.class)
     public Map<String, Object> getDto() {
         return mapOf(
-                "fullname", computeFullName(),
-                "address", computeAddress(),
-                "birthdate", computeBirthDate(),
+                "name", BaseHumanName.toDto(getFirst(name)),
+                "address", BaseAddress.toDto(getFirst(address)),
+                "birthdate", birthDate,
                 "email", computeEmail(),
                 "phone", computePhone(),
                 "nationalIdentifier", computeNationalIdentifier(),

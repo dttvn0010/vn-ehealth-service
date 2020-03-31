@@ -173,12 +173,12 @@ public class MedicationStatementDao extends BaseDao<MedicationStatementEntity, M
 	}
 
 	@Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return MedicationStatement.class;
     }
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return MedicationStatementEntity.class;
 	}
 

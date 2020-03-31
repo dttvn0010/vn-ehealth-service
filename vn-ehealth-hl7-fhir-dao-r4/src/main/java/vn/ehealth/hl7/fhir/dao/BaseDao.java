@@ -1,18 +1,12 @@
 package vn.ehealth.hl7.fhir.dao;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.InstantType;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -28,7 +22,6 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
@@ -38,8 +31,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     protected MongoOperations mongo;
     
     abstract protected String getProfile();
-    abstract public Class<? extends BaseResource> getEntityClass();
-    abstract public Class<? extends DomainResource> getResourceClass();
+    abstract protected Class<? extends BaseResource> getEntityClass();
+    abstract protected Class<? extends DomainResource> getResourceClass();
     
     @SuppressWarnings("unchecked")
     public FHIR transform(ENT ent) {
@@ -231,98 +224,51 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         return DataConvertUtil.transform(lst, x -> transform((ENT)x));
     }
     
+    @SuppressWarnings("unchecked")
+    public ENT getEntity(Criteria criteria) {                
+        var query = Query.query(criteria);        
+        return (ENT) mongo.findOne(query, getEntityClass());
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<ENT> searchEntity(Criteria criteria, Boolean active, int start, int count, Sort sort) {
+        if(active != null) {
+            criteria.and("active").is("active");
+        }else {
+            criteria.and("active").is(true);
+        }
+                
+        var query = Query.query(criteria);
+        
+        if(sort != null) {
+            query.with(sort);
+        }else {
+            query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
+            query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+        }
+        
+        if(start >= 0) query.skip(start);
+        if(count >= 0) query.limit(count);
+        return (List<ENT>) mongo.find(query, getEntityClass());
+    }
+    
+    public List<ENT> searchEntity(Criteria criteria, int start, int count) {
+        return searchEntity(criteria, null, start, count, null);
+    }
+    
+    @CachePut(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME_ENT, key = "#id", condition="#id!=null")
+    public ENT readEntity(String id) {
+        if(id != null) {
+            var criteria = Criteria.where(ConstantKeys.SP_FHIR_ID).is(id)
+                                    .and(ConstantKeys.SP_ACTIVE).is(true);    
+            return getEntity(criteria);
+        }
+        return null;
+    }
+    
     public int countByCriteria(Criteria criteria) {
         var query = Query.query(criteria);
         int count = (int) mongo.count(query, getEntityClass());
         return count;
     }
-        
-    public FHIR readRef(Reference ref) {
-        if(ref == null || ref.getReference() == null) return null;
-        var obj = read(FhirUtil.idTypeFromRef(ref));
-        
-        if(obj != null) {
-            if(!ref.getReference().startsWith(obj.getResourceType() + "/")) {
-                return null;
-            }
-        }        
-        return obj;
-    }
-    
-
-    @SuppressWarnings("rawtypes")
-    public long count(Map params) {
-        Method method = null;
-        for(var m : this.getClass().getMethods()) {
-            if("count".equals(m.getName())) {
-                method = m;
-                break;
-            }
-        }
-        if(method != null) {
-            try {
-                var lstParam = new ArrayList<Object>();
-                for(var p : method.getParameters()) {
-                    var value = params.get(p.getName());
-                    if(value != null && String.class.equals(value.getClass()) 
-                                    && !String.class.equals(p.getType())) {
-                        
-                        var constructor = p.getType().getConstructor(String.class);
-                        lstParam.add(constructor.newInstance(value));                            
-                    }else {
-                        lstParam.add(value);
-                    }
-                }    
-                
-                return (Long) method.invoke(this, lstParam.toArray());
-            }catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return 0;
-    }
-    
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public List<Resource> search(Map params) {
-        Method method = null;
-        for(var m : this.getClass().getMethods()) {
-            if("search".equals(m.getName())) {
-                method = m;
-                break;
-            }
-        }
-        if(method != null) {
-            try {
-                var newParams = new HashMap<>(params);
-                if(!newParams.containsKey("sortParam")) {
-                    newParams.put("sortParam", "");
-                }
-                var lstParam = new ArrayList<Object>();
-                for(var p : method.getParameters()) {
-                    var value = newParams.get(p.getName());
-                    if(value != null && String.class.equals(value.getClass()) 
-                                    && !String.class.equals(p.getType())) {
-                        
-                        var constructor = p.getType().getConstructor(String.class);
-                        lstParam.add(constructor.newInstance(value));                            
-                    }else {
-                        lstParam.add(value);
-                    }
-                }    
-                
-                return (List<Resource>) method.invoke(this, lstParam.toArray());
-            }catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return new ArrayList<>();
-    }
-    
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public Resource searchOne(Map params) {
-        var newParams = new HashMap<>(params);
-        newParams.put("count", 1);
-        var lst = search(newParams);
-        return lst.size() > 0? lst.get(0) : null;
-    }  
 }

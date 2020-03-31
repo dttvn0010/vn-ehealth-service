@@ -9,10 +9,23 @@ import org.hl7.fhir.r4.model.ResourceType;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseExtension;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
+import vn.ehealth.hl7.fhir.core.entity.SimpleExtension;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 public class EntityUtils {
 
+    public static SimpleExtension.RawExtension findRawSimpleExtensionByURL(List<SimpleExtension.RawExtension> lst, @Nonnull String url) {
+        return FPUtil.findFirst(lst, x -> url.equals(x.url));
+    }
+    
+    public static SimpleExtension findSimpleExtensionByURL(List<SimpleExtension> lst, @Nonnull String url) {
+        return FPUtil.findFirst(lst, x -> url.equals(x.url));
+    }
+    
+    public static BaseExtension.RawExtension findRawExtensionByURL(List<BaseExtension.RawExtension> lst, @Nonnull String url) {
+        return FPUtil.findFirst(lst, x -> url.equals(x.url));
+    }
+    
     public static BaseExtension findExtensionByURL(List<BaseExtension> lst, @Nonnull String url) {
         return FPUtil.findFirst(lst, x -> url.equals(x.url));
     }

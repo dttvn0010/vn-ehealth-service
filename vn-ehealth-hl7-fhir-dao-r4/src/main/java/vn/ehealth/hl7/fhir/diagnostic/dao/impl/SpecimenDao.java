@@ -120,12 +120,12 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 	}
 
 	@Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return Specimen.class;
     }
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return SpecimenEntity.class;
 	}
 }

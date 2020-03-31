@@ -9,4 +9,11 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class BaseComplexType extends BaseType {
 
     public List<SimpleExtension> extension;
+    
+    public List<SimpleExtension> getExtension() {
+        if(extension != null && extension.size() > 0) {
+            return extension;
+        }
+        return null;
+    }
 }

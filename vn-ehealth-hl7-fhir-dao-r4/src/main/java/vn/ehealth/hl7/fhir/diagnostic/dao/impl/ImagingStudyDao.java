@@ -130,12 +130,12 @@ public class ImagingStudyDao extends BaseDao<ImagingStudyEntity, ImagingStudy> {
 	}
 
 	@Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return ImagingStudy.class;
     }
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return ImagingStudyEntity.class;
 	}
 }

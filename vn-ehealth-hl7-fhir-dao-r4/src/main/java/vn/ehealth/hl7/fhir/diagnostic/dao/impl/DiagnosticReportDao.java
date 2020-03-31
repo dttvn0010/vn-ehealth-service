@@ -155,12 +155,12 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
 	}
 
 	@Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return DiagnosticReport.class;
     }
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return DiagnosticReportEntity.class;
 	}
 

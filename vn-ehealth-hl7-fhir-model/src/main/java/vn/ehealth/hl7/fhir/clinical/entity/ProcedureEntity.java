@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
@@ -53,7 +54,7 @@ public class ProcedureEntity extends BaseResource {
     }
 
     @Id
-    public ObjectId id;
+    @JsonIgnore public ObjectId id;
     public List<BaseIdentifier> identifier;
     public List<String> instantiatesCanonical;
     public List<String> instantiatesUri;
@@ -91,7 +92,7 @@ public class ProcedureEntity extends BaseResource {
                     "serviceRequest", BaseReference.toDto(getFirst(basedOn)),
                     "category", BaseCodeableConcept.toDto(category),
                     "code", BaseCodeableConcept.toDto(code),
-                    "subject", BaseReference.toDto(subject),
+                    "patient", BaseReference.toDto(subject),
                     "encounter", BaseReference.toDto(encounter),
                     "recorder", BaseReference.toDto(recorder),
                     "asserter", BaseReference.toDto(asserter),

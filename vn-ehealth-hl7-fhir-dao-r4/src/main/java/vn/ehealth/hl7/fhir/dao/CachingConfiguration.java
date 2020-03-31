@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 public class CachingConfiguration extends CachingConfigurerSupport {
 
     final static String CACHE_RESOLVER_NAME = "simpleCacheResolver";
+    final static String CACHE_RESOLVER_NAME_ENT = "simpleCacheResolverEntity";
 
     @Bean
     @Override
@@ -22,6 +23,11 @@ public class CachingConfiguration extends CachingConfigurerSupport {
 
     @Bean(CACHE_RESOLVER_NAME)
     public CacheResolver cacheResolver(CacheManager cacheManager) {
-        return new RuntimeCacheResolver(cacheManager);
+        return new RuntimeCacheResolver(cacheManager , "Resource");
+    }
+    
+    @Bean(CACHE_RESOLVER_NAME_ENT)
+    public CacheResolver cacheResolverEnitty(CacheManager cacheManager) {
+        return new RuntimeCacheResolver(cacheManager, "Entity");
     }
 }

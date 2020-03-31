@@ -75,7 +75,7 @@ public class EncounterEntity extends BaseResource{
     }
     
     @Id
-    public ObjectId id;
+    @JsonIgnore public ObjectId id;
     public List<BaseIdentifier> identifier;
     public String status;
     public List<StatusHistory> statusHistory;
@@ -121,7 +121,7 @@ public class EncounterEntity extends BaseResource{
         return mapOf(
                 "maHSBA", computeMaHSBA(),
                 "type", BaseCodeableConcept.toDto(computeType()),
-                "patient", subject.getDto(),
+                "patient", BaseReference.toDto(subject),
                 "serviceProvider", serviceProvider.getDto(),
                 "startDate", period != null? period.start : null,
                 "endDate", period != null? period.end : null
@@ -131,6 +131,7 @@ public class EncounterEntity extends BaseResource{
     
     @JsonIgnore
     public Map<String, Object> getVaoKhoaDto() {
+        //TODO:
         return mapOf("", (Object) "");
     }
     

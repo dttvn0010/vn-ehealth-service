@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.IdType;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -48,7 +47,7 @@ public class MongoUtils {
                     switch(op) {
                         
                         case "$regex":
-                            criteria.and(key).regex((String) opVal);
+                            criteria.and(key).regex((String) opVal, "i");
                             break;
                             
                         case "$gt":
@@ -88,9 +87,7 @@ public class MongoUtils {
                 var dao = DaoFactory.getDaoByType(resourceType);
                 if(dao != null) {
                     var id = EntityUtils.idFromRef(ref);
-                    var objResource = dao.read(new IdType(id));
-                    var entResource = DataConvertUtil.fhirToEntity(objResource, dao.getEntityClass());
-                    ref.resource = entResource;
+                    ref.resource = dao.readEntity(id);
                 } 
             }            
         }

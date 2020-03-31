@@ -150,12 +150,12 @@ public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue
 	}
 
 	@Override
-    public Class<? extends DomainResource> getResourceClass() {
+    protected Class<? extends DomainResource> getResourceClass() {
         return DetectedIssue.class;
     }
 
 	@Override
-	public Class<? extends BaseResource> getEntityClass() {
+	protected Class<? extends BaseResource> getEntityClass() {
 		return DetectedIssueEntity.class;
 	}
 
