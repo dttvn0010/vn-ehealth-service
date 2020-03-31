@@ -80,7 +80,7 @@ public class MongoUtils {
         return criteria;
     }
     
-    public static void fetchReferenceResource(BaseReference ref) {
+    public static void setReferenceResource(BaseReference ref) {
         if(ref != null) {
             var resourceType = EntityUtils.getResourceType(ref);
             if(resourceType != null) {
@@ -95,7 +95,7 @@ public class MongoUtils {
     
     public static void fetchReferenceResource(List<BaseReference> refs) {
         if(refs != null) {
-            refs.forEach(ref -> fetchReferenceResource(ref));            
+            refs.forEach(ref -> setReferenceResource(ref));            
         }
     }
 }

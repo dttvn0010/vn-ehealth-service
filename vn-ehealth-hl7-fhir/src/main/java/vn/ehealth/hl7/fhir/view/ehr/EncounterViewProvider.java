@@ -101,11 +101,11 @@ public class EncounterViewProvider {
         var lst = encounterDao.searchEntity(criteria, start.orElse(-1), count.orElse(-1));
 
         if(includePatient.orElse(false)) {
-            lst.forEach(x -> MongoUtils.fetchReferenceResource(x.subject));
+            lst.forEach(x -> MongoUtils.setReferenceResource(x.subject));
         }
         
         if(includeServiceProvider.orElse(false)) {
-            lst.forEach(x -> MongoUtils.fetchReferenceResource(x.serviceProvider));
+            lst.forEach(x -> MongoUtils.setReferenceResource(x.serviceProvider));
         }
         
         for(var enc : lst) {

@@ -48,13 +48,13 @@ public class ProcedureViewProvider {
         lst.forEach(x -> MongoUtils.fetchReferenceResource(x.report));
         
         if(includeEncounter.orElse(false)) {
-            lst.forEach(x -> MongoUtils.fetchReferenceResource(x.encounter));
+            lst.forEach(x -> MongoUtils.setReferenceResource(x.encounter));
             
             if(includeServiceProvider.orElse(false)) {
                 for(var ent : lst) {
                     var encounter = (EncounterEntity) ent.encounter.resource;
                     if(encounter != null) {
-                        MongoUtils.fetchReferenceResource(encounter.serviceProvider);
+                        MongoUtils.setReferenceResource(encounter.serviceProvider);
                     }
                 }
             }
