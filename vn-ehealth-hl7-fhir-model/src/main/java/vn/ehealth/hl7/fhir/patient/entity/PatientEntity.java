@@ -173,11 +173,9 @@ public class PatientEntity extends BaseResource {
                 )
             );
             
-            var dtoExt = mapOf(
+            dto.putAll(mapOf(
                     "address", BaseAddress.toDto(getFirst(address))                    
-                );
-            
-            dto.putAll(dtoExt);
+                ));
         }
         
         return dto;
