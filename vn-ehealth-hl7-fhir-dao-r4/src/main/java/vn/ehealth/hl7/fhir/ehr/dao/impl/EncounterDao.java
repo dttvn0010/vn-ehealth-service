@@ -326,12 +326,12 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return Encounter.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return EncounterEntity.class;
 	}
 }

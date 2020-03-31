@@ -81,10 +81,11 @@ public class Constants {
 
     public static interface IdentifierSystem{
         final public static String CMND = identifierSystems.getProperty("cmnd");
-        final public static String THE_BHYT = identifierSystems.getProperty("the_bhyt");
+        final public static String DINH_DANH_Y_TE = identifierSystems.getProperty("dinh_danh_y_te");
         final public static String CO_SO_KHAM_BENH = identifierSystems.getProperty("co_so_kham_benh");
         final public static String CHUNG_CHI_HANH_NGHE = identifierSystems.getProperty("chung_chi_hanh_nghe");        
         final public static String MA_HO_SO = identifierSystems.getProperty("ma_ho_so");
+        final public static String DON_THUOC = identifierSystems.getProperty("don_thuoc");
     }
     
     public static interface CodeSystemValue {
@@ -97,8 +98,6 @@ public class Constants {
         final public static String TON_GIAO = codeSystems.getProperty("tongiao");
         final public static String NGHE_NGHIEP = codeSystems.getProperty("nghe_nghiep");
         final public static String DOI_TUONG_TAI_CHINH = codeSystems.getProperty("doituong_taichinh");
-        final public static String LOAI_TO_CHUC = codeSystems.getProperty("loai_to_chuc");
-        final public static String ENCOUTER_TYPE = codeSystems.getProperty("encounter_type");
         
         final public static String LOAI_KHAM_BENH = codeSystems.getProperty("loai_kham_benh");
         final public static String KHOA_DIEU_TRI = codeSystems.getProperty("khoa_dieu_tri");
@@ -109,6 +108,9 @@ public class Constants {
         final public static String VAI_TRO_PTTT = codeSystems.getProperty("vaitro_pttt");
         final public static String CHI_SO_XET_NGHIEM = codeSystems.getProperty("chiso_xetnghiem");
         final public static String VI_TRI_MAU_SINH_THIET = codeSystems.getProperty("vi_tri_mau_sinh_thiet");
+        
+        final public static String DM_THUOC = codeSystems.getProperty("thuoc");
+        final public static String DM_DUONG_DUNG_THUOC = codeSystems.getProperty("duong_dung_thuoc");
         
     }
     

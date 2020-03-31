@@ -166,12 +166,12 @@ public class EpisodeOfCareDao extends BaseDao<EpisodeOfCareEntity, EpisodeOfCare
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return EpisodeOfCare.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return EpisodeOfCareEntity.class;
 	}
 }

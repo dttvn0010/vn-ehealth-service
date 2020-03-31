@@ -1,15 +1,10 @@
 package vn.ehealth.emr.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,12 +22,11 @@ import vn.ehealth.emr.service.EmrXetNghiemService;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/xetnghiem")
 public class EmrXetNghiemController {
-    
-    private Logger logger = LoggerFactory.getLogger(EmrXetNghiemController.class);
     
     @Autowired private EmrXetNghiemService emrXetNghiemService;
     
@@ -59,12 +53,11 @@ public class EmrXetNghiemController {
         try {
         	var user = UserUtil.getCurrentUser();
             emrXetNghiemService.delete(new ObjectId(id), user.get().id);
-            var result = Map.of("success" , true);
+            var result = mapOf("success" , true);
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            logger.error("Error delete xetnghiem:", e);
-            var result = Map.of("success" , false);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -76,19 +69,37 @@ public class EmrXetNghiemController {
             var xetnghiem = objectMapper.readValue(jsonSt, EmrXetNghiem.class);
             xetnghiem = emrXetNghiemService.save(xetnghiem, user.get().id, jsonSt);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "emrXetNghiem", xetnghiem 
             );
                     
             return ResponseEntity.ok(result);
         }catch(Exception e) {
-            var result = Map.of(
-                "success" , false,
-                "errors", List.of(e.getMessage()) 
-            );
-            logger.error("Error save xetnghiem:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
+        }
+    }
+    
+    private void saveToFhirDb(EmrHoSoBenhAn hsba, List<EmrXetNghiem> xetNghiemList) {
+        if(hsba == null) return;
+        try {
+            var enc = hsba.getEncounterInDB();
+            if(enc == null) return;
+            
+            for(var xetNghiem : xetNghiemList) {
+                if(xetNghiem.emrXetNghiemDichVus == null) continue;
+                
+                for(var xndv : xetNghiem.emrXetNghiemDichVus) {
+                    xndv.ngayyeucau = xetNghiem.ngayyeucau;
+                    xndv.bacsiyeucau = xetNghiem.bacsiyeucau;
+                    xndv.noidungyeucau = xetNghiem.noidungyeucau;
+                    xndv.ngaythuchien = xetNghiem.ngaythuchien;
+                    xndv.bacsixetnghiem = xetNghiem.bacsixetnghiem;
+                    EmrDichVuKyThuatHelper.saveDichVuKT(enc, xndv);
+                }
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
         }
     }
     
@@ -115,7 +126,7 @@ public class EmrXetNghiemController {
                     for(var xnkq : xnkqList) {
                         var chisoxn = EmrUtils.getFieldAsObject(xnkq, "emrDmChiSoXetNghiem");
                         if(chisoxn != null) {
-                            var extension = Map.of(
+                            var extension = mapOf(
                                 "donvi", chisoxn.getOrDefault("donvi", ""),
                                 "chisobtnam", chisoxn.getOrDefault("chisobtnam", ""),
                                 "chisobtnu", chisoxn.getOrDefault("chisobtnu", "")
@@ -136,26 +147,9 @@ public class EmrXetNghiemController {
             emrXetNghiemService.createOrUpdateFromHIS(userId, hsba, xetnghiemModelList, jsonSt);
             
             // save to FHIR db
-            try {
-                var hsbaEncounter = EmrHoSoBenhAn.getEncounter(matraodoiHsba);
-                for(var xn : xetnghiemModelList) {
-                    if(xn.emrXetNghiemDichVus == null) continue;
-                    
-                    for(var xndv : xn.emrXetNghiemDichVus) {
-                        xndv.bacsiyeucau = xn.bacsiyeucau;
-                        xndv.ngayyeucau = xn.ngayyeucau;
-                        xndv.noidungyeucau = xn.noidungyeucau;
-                        xndv.bacsixetnghiem = xn.bacsixetnghiem;
-                        xndv.ngaythuchien = xn.ngaythuchien;
-                        xndv.saveToFhirDb(hsbaEncounter);                        
-                    }
-                }
-                
-            }catch(Exception e) {
-                logger.error("Cannot save to FHIR db:", e);
-            }
+            saveToFhirDb(hsba, xetnghiemModelList);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "xetnghiemList", xetnghiemModelList  
             );
@@ -163,13 +157,7 @@ public class EmrXetNghiemController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of(
-                "success" , false,
-                "error", error 
-            );
-            logger.error("Error save xetnghiem from HIS:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -186,6 +174,6 @@ public class EmrXetNghiemController {
     
     @GetMapping("/get_hs_goc")
     public ResponseEntity<?> getHsGoc(@RequestParam("xetnghiem_id") String id) {
-        return ResponseEntity.ok(Map.of("hsGoc", emrXetNghiemService.getHsgoc(new ObjectId(id))));
+        return ResponseEntity.ok(mapOf("hsGoc", emrXetNghiemService.getHsgoc(new ObjectId(id))));
     }
 }

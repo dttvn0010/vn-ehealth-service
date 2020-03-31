@@ -1,15 +1,10 @@
 package vn.ehealth.emr.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,17 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vn.ehealth.emr.model.EmrGiaiPhauBenh;
+import vn.ehealth.emr.model.EmrHoSoBenhAn;
 import vn.ehealth.emr.service.EmrGiaiPhauBenhService;
 import vn.ehealth.emr.service.EmrHoSoBenhAnService;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/gpb")
 public class EmrGiaiPhauBenhController {
     
-    private Logger logger = LoggerFactory.getLogger(EmrGiaiPhauBenhController.class);
     @Autowired 
     private EmrGiaiPhauBenhService emrGiaiPhauBenhService;
     @Autowired EmrHoSoBenhAnService emrHoSoBenhAnService;
@@ -56,12 +52,11 @@ public class EmrGiaiPhauBenhController {
         try {
         	var user = UserUtil.getCurrentUser();
             emrGiaiPhauBenhService.delete(new ObjectId(id), user.get().id);
-            var result = Map.of("success" , true);
+            var result = mapOf("success" , true);
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            logger.error("Error delete gbp:", e);
-            var result = Map.of("success" , false);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -73,19 +68,27 @@ public class EmrGiaiPhauBenhController {
             var gbp = objectMapper.readValue(jsonSt, EmrGiaiPhauBenh.class);
             gbp = emrGiaiPhauBenhService.save(gbp, user.get().id, jsonSt);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "emrChanDoanHinhAnh", gbp 
             );
                     
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            var result = Map.of(
-                "success" , false,
-                "errors", List.of(e.getMessage()) 
-            );
-            logger.error("Error save gbp:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
+        }
+    }
+    
+    private void saveToFhirDb(EmrHoSoBenhAn hsba, List<EmrGiaiPhauBenh> gpbList) {
+        if(hsba == null) return;
+        try {
+            var enc = hsba.getEncounterInDB();
+            if(enc != null) {
+                gpbList.forEach(x -> EmrDichVuKyThuatHelper.saveDichVuKT(enc, x));
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
         }
     }
     
@@ -106,11 +109,10 @@ public class EmrGiaiPhauBenhController {
             
             emrGiaiPhauBenhService.createOrUpdateFromHIS(userId, hsba, gpbList, jsonSt);
             
-            // TODO: Save to FHIR db
-            // .....
-            // .....
+            // Save to Fhir
+            saveToFhirDb(hsba, gpbList);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "gpbList", gpbList  
             );
@@ -118,13 +120,7 @@ public class EmrGiaiPhauBenhController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of(
-                "success" , false,
-                "error", error 
-            );
-            logger.error("Error save GiaiPhauBenh from HIS:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -141,6 +137,6 @@ public class EmrGiaiPhauBenhController {
     
     @GetMapping("/get_hs_goc")
     public ResponseEntity<?> getHsGoc(@RequestParam("gpb_id") String id) {
-        return ResponseEntity.ok(Map.of("hsGoc", emrGiaiPhauBenhService.getHsgoc(new ObjectId(id))));
+        return ResponseEntity.ok(mapOf("hsGoc", emrGiaiPhauBenhService.getHsgoc(new ObjectId(id))));
     }
 }

@@ -159,12 +159,12 @@ public class DeviceDao extends BaseDao<DeviceEntity, Device> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return Device.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return DeviceEntity.class;
 	}
 }

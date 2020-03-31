@@ -1,15 +1,10 @@
 package vn.ehealth.emr.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,21 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vn.ehealth.emr.model.EmrDonThuoc;
+import vn.ehealth.emr.model.EmrHoSoBenhAn;
 import vn.ehealth.emr.service.EmrDonThuocService;
 import vn.ehealth.emr.service.EmrHoSoBenhAnService;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
+import vn.ehealth.hl7.fhir.medication.dao.impl.MedicationRequestDao;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+
 
 @RestController
 @RequestMapping("/api/donthuoc")
 public class EmrDonThuocController {
     
-    private Logger logger = LoggerFactory.getLogger(EmrDonThuocController.class);
-    
-    @Autowired 
-    private EmrDonThuocService emrDonThuocService;
-    @Autowired EmrHoSoBenhAnService emrHoSoBenhAnService;
+    @Autowired private EmrDonThuocService emrDonThuocService;
+    @Autowired private EmrHoSoBenhAnService emrHoSoBenhAnService;
+    @Autowired private MedicationRequestDao medicationRequestDao;
     
     private JsonParser jsonParser = new JsonParser();
     private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
@@ -57,12 +54,34 @@ public class EmrDonThuocController {
         try {
         	var user = UserUtil.getCurrentUser();
             emrDonThuocService.delete(new ObjectId(id), user.get().id);
-            var result = Map.of("success" , true);
+            var result = mapOf("success" , true);
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            logger.error("Error delete donthuoc:", e);
-            var result = Map.of("success" , false);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
+        }
+    }
+    
+    private void saveToFhirDb(EmrHoSoBenhAn hsba, List<EmrDonThuoc> donThuocList) {
+        if(hsba == null) return;
+        
+        try {
+            var enc = hsba.getEncounterInDB();
+            if(enc == null) return;
+            
+            for(var donthuoc : donThuocList) {
+                if(donthuoc.emrDonThuocChiTiets == null) continue;                
+                
+                for(var dtct : donthuoc.emrDonThuocChiTiets) {
+                    dtct.bacsikedon = donthuoc.bacsikedon;
+                    dtct.ngaykedon = donthuoc.ngaykedon;
+                    dtct.sodon = donthuoc.sodon;
+                    var medReq = dtct.toFHir(enc);
+                    medicationRequestDao.create(medReq);
+                }
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
         }
     }
     
@@ -74,19 +93,15 @@ public class EmrDonThuocController {
             var donthuoc = objectMapper.readValue(jsonSt, EmrDonThuoc.class);
             donthuoc = emrDonThuocService.save(donthuoc, user.get().id, jsonSt);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "emrDonThuoc", donthuoc 
             );
                     
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            var result = Map.of(
-                "success" , false,
-                "errors", List.of(e.getMessage()) 
-            );
-            logger.error("Error save donthuoc:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -106,7 +121,9 @@ public class EmrDonThuocController {
             var userId = user.map(x -> x.id).orElse(null);
             emrDonThuocService.createOrUpdateFromHIS(userId, hsba, dtList, jsonSt);
             
-            var result = Map.of(
+            saveToFhirDb(hsba, dtList);
+            
+            var result = mapOf(
                 "success" , true,
                 "dtList", dtList  
             );
@@ -114,13 +131,7 @@ public class EmrDonThuocController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of(
-                "success" , false,
-                "error", error 
-            );
-            logger.error("Error save donthuoc from HIS:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -137,7 +148,7 @@ public class EmrDonThuocController {
     
     @GetMapping("/get_hs_goc")
     public ResponseEntity<?> getHsGoc(@RequestParam("donthuoc_id") String id) {
-        return ResponseEntity.ok(Map.of("hsGoc", emrDonThuocService.getHsgoc(new ObjectId(id))));
+        return ResponseEntity.ok(mapOf("hsGoc", emrDonThuocService.getHsgoc(new ObjectId(id))));
     }
 
 }

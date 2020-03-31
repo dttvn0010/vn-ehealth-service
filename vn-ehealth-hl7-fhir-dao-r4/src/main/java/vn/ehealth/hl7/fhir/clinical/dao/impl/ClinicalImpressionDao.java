@@ -252,12 +252,12 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return ClinicalImpression.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return ClinicalImpressionEntity.class;
 	}
 

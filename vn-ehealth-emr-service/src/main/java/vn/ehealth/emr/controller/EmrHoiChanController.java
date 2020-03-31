@@ -1,15 +1,10 @@
 package vn.ehealth.emr.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,13 +21,11 @@ import vn.ehealth.emr.service.EmrHoiChanService;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/hoichan")
 public class EmrHoiChanController {
-    
-    private Logger logger = LoggerFactory.getLogger(EmrHoiChanController.class);
-    
     @Autowired 
     private EmrHoiChanService emrHoiChanService;
     @Autowired EmrHoSoBenhAnService emrHoSoBenhAnService;
@@ -57,12 +50,11 @@ public class EmrHoiChanController {
         try {
         	var user = UserUtil.getCurrentUser();
             emrHoiChanService.delete(new ObjectId(id), user.get().id);
-            var result = Map.of("success" , true);
+            var result = mapOf("success" , true);
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            logger.error("Error delete hoichan:", e);
-            var result = Map.of("success" , false);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -73,18 +65,14 @@ public class EmrHoiChanController {
         	var user = UserUtil.getCurrentUser();
             var hoichan = objectMapper.readValue(jsonSt, EmrHoiChan.class);
             hoichan = emrHoiChanService.save(hoichan, user.get().id, jsonSt);
-            var result = Map.of(
+            var result = mapOf(
                     "success" , true,
                     "emrHoiChan", hoichan 
                 );
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            var result = Map.of(
-                    "success" , false,
-                    "errors", List.of(e.getMessage()) 
-                    );
-            logger.error("Error save hoichan:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
 
@@ -106,7 +94,7 @@ public class EmrHoiChanController {
             
             emrHoiChanService.createOrUpdateFromHIS(userId, hsba, hcList, hcObjList, jsonSt);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "hcList", hcList  
             );
@@ -114,13 +102,7 @@ public class EmrHoiChanController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of(
-                "success" , false,
-                "error", error 
-            );
-            logger.error("Error save hoichan from HIS:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -137,7 +119,7 @@ public class EmrHoiChanController {
     
     @GetMapping("/get_hs_goc")
     public ResponseEntity<?> getHsGoc(@RequestParam("hoichan_id") String id) {
-        return ResponseEntity.ok(Map.of("hsGoc", emrHoiChanService.getHsgoc(new ObjectId(id))));
+        return ResponseEntity.ok(mapOf("hsGoc", emrHoiChanService.getHsgoc(new ObjectId(id))));
     }
 
 }

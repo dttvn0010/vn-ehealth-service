@@ -145,12 +145,12 @@ public class OrganizationDao extends BaseDao<OrganizationEntity, Organization> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return Organization.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return OrganizationEntity.class;
 	}
 }

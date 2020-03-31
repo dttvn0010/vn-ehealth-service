@@ -2,26 +2,31 @@ package vn.ehealth.emr.model;
 
 import java.util.Date;
 import java.util.Map;
-
+import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Address;
+import org.hl7.fhir.r4.model.ContactPoint.ContactPointSystem;
+import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import ca.uhn.fhir.rest.param.TokenParam;
-import vn.ehealth.emr.model.dto.BenhNhan;
-import vn.ehealth.emr.model.dto.DanhMuc;
-import vn.ehealth.emr.model.dto.DiaChi;
-import vn.ehealth.emr.utils.MessageUtils;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
+import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
+import vn.ehealth.utils.MongoUtils;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createContactPoint;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createExtension;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createHumanName;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createIdentifier;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "emr_benh_nhan")
@@ -67,6 +72,10 @@ public class EmrBenhNhan {
     public Date ngaysinh;
 
     public String diachi;
+    
+    public String sodienthoai;
+    
+    public String email;
 
     public String noilamviec;
 
@@ -97,63 +106,100 @@ public class EmrBenhNhan {
     
     public ObjectId emrPersonId;
     
-    public static Patient getPatient(String sobhyt) {
-        var params = mapOf("identifier", new TokenParam(IdentifierSystem.THE_BHYT, sobhyt));
-        return (Patient) DaoFactory.getPatientDao().searchOne(params);
-    }
-    
     private static Map<String, String> gioiTinhCodeMap = mapOf(
             "M", "male",
             "F", "female",
             "O", "other",
-            "U", "unknown"
+            "U", "unknown",
+            "01", "female",
+            "1", "female",
+            "02", "male",
+            "2", "male"
         );
     
-    private static Map<String, String> gioiTinhMap = mapOf(
-            "M", MessageUtils.get("gioitinh.nam"),
-            "F", MessageUtils.get("gioitinh.nu"),
-            "O", MessageUtils.get("gioitinh.khac"),
-            "U", MessageUtils.get("gioitinh.khongxacdinh")
-        );
-    
-    public BenhNhan toDto() {
-        var dto = new BenhNhan();
-        dto.tenDayDu = this.tendaydu;
-        dto.ngaySinh = this.ngaysinh;
-        dto.cmnd = this.iddinhdanhphu;
-        dto.soTheBhyt = this.sobhyt;
-        dto.ngayHetHanTheBhyt = this.ngayhethanthebhyt;
-        
-        dto.diaChi = new DiaChi();
-        dto.diaChi.diaChiChiTiet = this.diachi;
-        dto.diaChi.dmXaPhuong = this.emrDmPhuongXa != null? this.emrDmPhuongXa.toDto() : null;
-        dto.diaChi.dmQuanHuyen = this.emrDmQuanHuyen != null? this.emrDmQuanHuyen.toDto() : null;
-        dto.diaChi.dmTinhThanh = this.emrDmTinhThanh != null? this.emrDmTinhThanh.toDto() : null;
-        
-        if(this.emrDmGioiTinh != null) {
-            var maGioiTinh = this.emrDmGioiTinh.ma;
-            var code = gioiTinhCodeMap.getOrDefault(maGioiTinh, "");
-            var name = gioiTinhMap.getOrDefault(maGioiTinh , "");
-            dto.dmGioiTinh = new DanhMuc(code, name, CodeSystemValue.GIOI_TINH);
+   
+    @JsonIgnore
+    public Address getAddress() {
+        var obj = new Address();
+        if(diachi != null) {
+            obj.setText(diachi);
+            obj.addLine(diachi);
         }
         
-        //dto.soDienThoai = this.sodienthoainguoibaotin;
-        dto.dmDanToc = this.emrDmDanToc != null? this.emrDmDanToc.toDto() : null;
-        dto.dmTonGiao = this.emrDmTonGiao != null? this.emrDmDanToc.toDto() : null;
-        dto.dmNgheNghiep = this.emrDmNgheNghiep != null? this.emrDmNgheNghiep.toDto() : null;
-        dto.dmQuocTich = this.emrDmQuocGia != null? this.emrDmQuocGia.toDto() : null;
-                
-        return dto;
+        if(emrDmQuanHuyen != null) {
+            obj.setDistrict(emrDmQuanHuyen.ten);
+        }
+        
+        if(emrDmTinhThanh != null) {
+            obj.setCity(emrDmTinhThanh.ten);
+        }
+        
+        var tinhThanhExt = createExtension("city", EmrDmContent.toConcept(emrDmTinhThanh, CodeSystemValue.DVHC));        
+        var quanHuyenExt = createExtension("district", EmrDmContent.toConcept(emrDmQuanHuyen, CodeSystemValue.DVHC));        
+        var xaPhuongExt = createExtension("ward", EmrDmContent.toConcept(emrDmPhuongXa, CodeSystemValue.DVHC));
+        
+        var extension = obj.addExtension();
+        extension.setUrl(ExtensionURL.DVHC);
+        extension.addExtension(tinhThanhExt);
+        extension.addExtension(quanHuyenExt);
+        extension.addExtension(xaPhuongExt);
+        return obj;
+    }
+   
+    @JsonIgnore
+    public Patient getPatientInDB() {
+        var params = mapOf("active", true, 
+                            "identifier.system", IdentifierSystem.DINH_DANH_Y_TE,
+                            "identifier.value", sobhyt
+                        );
+        
+        var criteria = MongoUtils.createCriteria(params);
+        var lst = DaoFactory.getPatientDao().findByCriteria(criteria);
+        return lst.size() > 0 ? lst.get(0) : null;
     }
     
-    public void saveToFhirDb() {
-    	var dto = toDto();
-    	var patient = getPatient(this.sobhyt);
-    	if(patient != null) {
-    		patient = DaoFactory.getPatientDao().update(BenhNhan.toFhir(dto), patient.getIdElement());
-    	}else {
-    		patient = DaoFactory.getPatientDao().create(BenhNhan.toFhir(dto));
-    	}
-    }
+    @JsonIgnore
+    public Patient toFhir() {
+        
+        var obj = new Patient();
+        obj.setName(listOf(createHumanName(tendaydu)));        
+        obj.setBirthDate(ngaysinh);
+        
+        if(!StringUtils.isBlank(sobhyt)) {
+            var mohIdentifier = createIdentifier(sobhyt, IdentifierSystem.DINH_DANH_Y_TE, 
+                                                    null, ngayhethanthebhyt);
+            obj.addIdentifier(mohIdentifier);
+        }
+        
+        if(!StringUtils.isBlank(iddinhdanhphu)) {
+            var nationalIdentifier = createIdentifier(iddinhdanhphu, IdentifierSystem.CMND);
+            obj.addIdentifier(nationalIdentifier);
+        }
+        
+        
+        if(emrDmGioiTinh != null) {
+            var genderCode = gioiTinhCodeMap.get(emrDmGioiTinh.ma);
+            obj.setGender(AdministrativeGender.fromCode(genderCode));
+        }
+        
+        obj.setAddress(listOf(getAddress()));
+        if(!StringUtils.isBlank(sodienthoai)) {
+            obj.addTelecom(createContactPoint(sodienthoai, ContactPointSystem.PHONE));
+        }
+        
+        if(!StringUtils.isBlank(email)) {
+            obj.addTelecom(createContactPoint(email, ContactPointSystem.EMAIL));
+        }
+
+        var danTocExt = createExtension(ExtensionURL.DAN_TOC, EmrDmContent.toConcept(emrDmDanToc, CodeSystemValue.DAN_TOC));
+        var tonGiaoExt = createExtension(ExtensionURL.TON_GIAO, EmrDmContent.toConcept(emrDmTonGiao, CodeSystemValue.TON_GIAO));
+        var ngheNghiepExt = createExtension(ExtensionURL.NGHE_NGHIEP, EmrDmContent.toConcept(emrDmNgheNghiep, CodeSystemValue.NGHE_NGHIEP));
+        var quocTichExt = createExtension(ExtensionURL.QUOC_TICH, EmrDmContent.toConcept(emrDmQuocGia, CodeSystemValue.QUOC_GIA));
+        
+        obj.setExtension(listOf(danTocExt, tonGiaoExt, ngheNghiepExt));
+        obj.setModifierExtension(listOf(quocTichExt));
+        
+        return obj;
+    }    
         
 }

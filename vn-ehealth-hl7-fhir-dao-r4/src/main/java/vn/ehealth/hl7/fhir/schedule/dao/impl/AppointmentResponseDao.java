@@ -147,12 +147,12 @@ public class AppointmentResponseDao extends BaseDao<AppointmentResponseEntity, A
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return AppointmentResponse.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return AppointmentResponseEntity.class;
 	}
 }

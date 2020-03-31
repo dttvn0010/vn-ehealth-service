@@ -138,12 +138,12 @@ public class RelatedPersonDao extends BaseDao<RelatedPersonEntity, RelatedPerson
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return RelatedPerson.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return RelatedPersonEntity.class;
 	}
 }

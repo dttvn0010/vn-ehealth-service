@@ -1,21 +1,33 @@
 package vn.ehealth.emr.model;
 
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createCodeableConcept;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.bson.types.ObjectId;
+import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.DateTimeType;
+import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.Encounter;
+import org.hl7.fhir.r4.model.Observation;
+import org.hl7.fhir.r4.model.Procedure;
+import org.hl7.fhir.r4.model.ServiceRequest;
+import org.hl7.fhir.r4.model.StringType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import vn.ehealth.emr.model.dto.DichVuKyThuat;
-import vn.ehealth.emr.model.dto.XetNghiem;
+import vn.ehealth.emr.utils.MessageUtils;
 import vn.ehealth.emr.utils.ObjectIdUtil;
+import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
+import vn.ehealth.hl7.fhir.core.util.Constants.LoaiDichVuKT;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "emr_xet_nghiem")
@@ -47,19 +59,8 @@ public class EmrXetNghiem {
     @JsonInclude(Include.NON_NULL)
     public static class EmrXetNghiemDichVu extends EmrDichVuKyThuat {
         
-        @JsonIgnore
-        public Date ngayyeucau;
-        
-        @JsonIgnore
-        public EmrCanboYte bacsiyeucau;
-        
-        @JsonIgnore
-        public String noidungyeucau;
-        
-        @JsonIgnore
         public Date ngaythuchien;
         
-        @JsonIgnore
         public EmrCanboYte bacsixetnghiem;
                 
         public EmrDmContent emrDmXetNghiem;
@@ -75,38 +76,54 @@ public class EmrXetNghiem {
         }
 
         @Override
-        public DichVuKyThuat toDto() {
-            var dto = new XetNghiem();
+        protected CodeableConcept getCategory() {
+            return createCodeableConcept(LoaiDichVuKT.XET_NGHIEM, 
+                    MessageUtils.get("text.LAB"), 
+                    CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
+        }
+
+        @Override
+        protected CodeableConcept getCode() {
+            return EmrDmContent.toConcept(emrDmXetNghiem, CodeSystemValue.DICH_VU_KY_THUAT);
+        }
+
+        @Override
+        public Map<String, Object> toFhir(Encounter enc) {
+            var resources = toFhirCommon(enc);
             
-            dto.dmXetNghiem = this.emrDmXetNghiem != null? this.emrDmXetNghiem.toDto() : null;
-            dto.ngayYeuCau = this.ngayyeucau;
+            var procedure = (Procedure) resources.get("procedure");
+            var serviceRequest = (ServiceRequest) resources.get("serviceRequest");
+            var diagnosticReport = (DiagnosticReport) resources.get("diagnosticReport");
             
-            if(this.bacsiyeucau != null) {
-                dto.bacSiYeuCau = this.bacsiyeucau.toRef();
-            }
-            
-            dto.noiDungYeuCau = this.noidungyeucau;
-            
-            dto.ngayThucHien = this.ngaythuchien;
-            
-            if(this.bacsixetnghiem != null) {
-                dto.bacSiXetNghiem = this.bacsixetnghiem.toRef();
-            }
-            
-            if(this.emrXetNghiemKetQuas != null) {
-                dto.dsKetQuaXetNghiem = new ArrayList<>();
-                for(var emrXnkq : this.emrXetNghiemKetQuas) {
-                    var kqxn = new XetNghiem.KetQuaXetNghiem();
-                    
-                    if(emrXnkq.emrDmChiSoXetNghiem != null) {
-                        kqxn.dmChiSoXetNghiem  = emrXnkq.emrDmChiSoXetNghiem.toDto();
-                    }
-                    
-                    kqxn.giaTri = emrXnkq.giatrido;
-                    dto.dsKetQuaXetNghiem.add(kqxn);
+            // Procedure
+            if(procedure != null) {
+                procedure.setAsserter(EmrCanboYte.toRef(bacsixetnghiem));
+                
+                if(ngaythuchien != null) {
+                    procedure.setPerformed(new DateTimeType(ngaythuchien));
                 }
             }
-            return dto;
+            
+            // Observations
+            var observations = new ArrayList<Observation>();
+            if(emrXetNghiemKetQuas != null) {
+                for(var xnkq : emrXetNghiemKetQuas) {
+                    var obs = new Observation();
+                    obs.setSubject(serviceRequest.getSubject());
+                    obs.setEncounter(serviceRequest.getEncounter());
+                    
+                    obs.setCode(EmrDmContent.toConcept(xnkq.emrDmChiSoXetNghiem, CodeSystemValue.CHI_SO_XET_NGHIEM));
+                    obs.setValue(new StringType(xnkq.giatrido));
+                    observations.add(obs);
+                }
+            }
+        
+            return mapOf(
+                        "serviceRequest", serviceRequest,
+                        "procedure", procedure,
+                        "observations", observations,
+                        "diagnosticReport", diagnosticReport
+                     );
         } 
     }
     

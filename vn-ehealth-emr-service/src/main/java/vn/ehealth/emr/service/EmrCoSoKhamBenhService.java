@@ -2,6 +2,8 @@ package vn.ehealth.emr.service;
 
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,5 +22,9 @@ public class EmrCoSoKhamBenhService {
     
     public Optional<EmrCoSoKhamBenh> getByMa(String ma) {
         return emrCoSoKhamBenhRepository.findByMa(ma); 
+    }
+    
+    public EmrCoSoKhamBenh save(@Nonnull EmrCoSoKhamBenh cskb) {
+        return emrCoSoKhamBenhRepository.save(cskb);
     }
 }

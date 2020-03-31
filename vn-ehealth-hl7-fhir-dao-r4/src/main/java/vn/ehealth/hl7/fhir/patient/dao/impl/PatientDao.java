@@ -404,12 +404,12 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return Patient.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return PatientEntity.class;
 	}
 

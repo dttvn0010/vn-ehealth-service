@@ -205,12 +205,12 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return Observation.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return ObservationEntity.class;
 	}
 

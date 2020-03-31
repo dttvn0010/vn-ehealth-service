@@ -145,12 +145,12 @@ public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, Healt
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return HealthcareService.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return HealthcareServiceEntity.class;
 	}
 

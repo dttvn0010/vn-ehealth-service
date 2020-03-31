@@ -2,8 +2,6 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.List;
 
-import org.hl7.fhir.r4.model.Extension;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -16,7 +14,7 @@ public class BaseDosage extends BaseComplexType {
         public BaseCodeableConcept type;
         public BaseSimpleType dose;
         public BaseSimpleType rate;
-        public List<Extension> extension;
+        public List<SimpleExtension> extension;
     }
         
     public Integer sequence;

@@ -264,12 +264,12 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return Condition.class;
     }
 	
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return ConditionEntity.class;
 	}
 }

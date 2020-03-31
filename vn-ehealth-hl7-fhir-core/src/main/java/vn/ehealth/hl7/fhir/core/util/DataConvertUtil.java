@@ -41,6 +41,13 @@ public class DataConvertUtil {
         return lst;
     }
     
+    public static<T> T getFirst(List<T> lst) {
+        if(lst != null && lst.size() > 0) {
+            return lst.get(0);
+        }
+        return null;
+    }
+    
     public static  Map<String, String> mapOf(String ...obj) {
         var m = new HashMap<String, String>();
         if(obj.length % 2 != 0) {
@@ -50,7 +57,7 @@ public class DataConvertUtil {
         for(int i = 0; i < n; i++) {
             String key = obj[2*i];
             String value = obj[2*i + 1];
-            if(key != null && value != null) {
+            if(key != null) {
                 m.put(key, value);
             }
         }
@@ -70,7 +77,7 @@ public class DataConvertUtil {
         for(int i = 0; i < n; i++) {
             Object key = obj[2*i];
             Object value = obj[2*i + 1];
-            if(key != null && value != null) {
+            if(key != null) {
                 m.put(key.toString(), value);
             }
         }

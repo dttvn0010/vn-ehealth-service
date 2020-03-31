@@ -17,22 +17,23 @@ import vn.ehealth.emr.dto.response.UserDTO;
 import vn.ehealth.emr.model.Role;
 import vn.ehealth.emr.service.EmailService;
 import vn.ehealth.emr.service.UserService;
+import vn.ehealth.emr.utils.EmrUtils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
+
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-    private static Logger logger = LoggerFactory.getLogger(UserController.class);
     public static Properties messages = new Properties();
-
+    private static Logger logger = LoggerFactory.getLogger(UserController.class);
+    
     static {
         try {
             var input = new ClassPathResource("static/message/user.properties").getInputStream();
@@ -53,15 +54,15 @@ public class UserController {
         try {
             var errors = new ArrayList<>();
             if (StringUtils.isEmpty(userRequestDTO.emrPerson.email)) {
-                errors.add(Map.of("field", "email", "message", messages.getProperty("error.email.required")));
+                errors.add(mapOf("field", "email", "message", messages.getProperty("error.email.required")));
             }
 
             if (StringUtils.isEmpty(userRequestDTO.emrPerson.tendaydu)) {
-                errors.add(Map.of("field", "tendaydu", "message", messages.getProperty("error.tendaydu.required")));
+                errors.add(mapOf("field", "tendaydu", "message", messages.getProperty("error.tendaydu.required")));
             }
 
             if (errors.size() > 0) {
-                var result = Map.of("success", false, "errors", errors);
+                var result = mapOf("success", false, "errors", errors);
                 return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
             }
 
@@ -75,7 +76,7 @@ public class UserController {
 
             emailService.sendEmail(userRequestDTO.emrPerson.email, mailSubject, mailContent);
 
-            var result = Map.of(
+            var result = mapOf(
                     "success", true,
                     "user", user
             );
@@ -83,13 +84,7 @@ public class UserController {
             return ResponseEntity.ok(result);
 
         } catch (Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of(
-                    "success", false,
-                    "errors", List.of(Map.of("unknown", error))
-            );
-            logger.error("Error save user: ", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
 
@@ -127,20 +122,20 @@ public class UserController {
         try {
             var errors = new ArrayList<>();
             if (StringUtils.isEmpty(userUpdateDTO.getEmrPerson().email)) {
-                errors.add(Map.of("field", "email", "message", messages.getProperty("error.email.required")));
+                errors.add(mapOf("field", "email", "message", messages.getProperty("error.email.required")));
             }
 
             if (StringUtils.isEmpty(userUpdateDTO.getEmrPerson().tendaydu)) {
-                errors.add(Map.of("field", "tendaydu", "message", messages.getProperty("error.tendaydu.required")));
+                errors.add(mapOf("field", "tendaydu", "message", messages.getProperty("error.tendaydu.required")));
             }
 
             if (errors.size() > 0) {
-                var result = Map.of("success", false, "errors", errors);
+                var result = mapOf("success", false, "errors", errors);
                 return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
             }
 
             var user = userService.update(userUpdateDTO);
-            var result = Map.of(
+            var result = mapOf(
                     "success", true,
                     "user", user
             );
@@ -148,13 +143,7 @@ public class UserController {
             return ResponseEntity.ok(result);
 
         } catch (Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of(
-                    "success", false,
-                    "errors", List.of(Map.of("unknown", error))
-            );
-            logger.error("Error save user: ", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
 }

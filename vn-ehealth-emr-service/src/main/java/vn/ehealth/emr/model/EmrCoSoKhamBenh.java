@@ -1,18 +1,19 @@
 package vn.ehealth.emr.model;
 
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
-
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Organization;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import ca.uhn.fhir.rest.param.TokenParam;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
+import vn.ehealth.utils.MongoUtils;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createIdentifier;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "emr_co_so_kham_benh")
@@ -45,8 +46,23 @@ public class EmrCoSoKhamBenh {
     
     public String truongphongth;
     
-    public static Organization getOrganization(String maCskb) {
-        var params = mapOf("identifier", new TokenParam(IdentifierSystem.CO_SO_KHAM_BENH, maCskb));
-        return (Organization) DaoFactory.getOrganizationDao().searchOne(params);
+    @JsonIgnore
+    public Organization getOrganizationInDB() {
+        var params = mapOf("active", true,
+                        "identifier.system", IdentifierSystem.CO_SO_KHAM_BENH,
+                        "identifier.value", ma
+                    );
+        
+        var criteria = MongoUtils.createCriteria(params);
+        var lst = DaoFactory.getOrganizationDao().findByCriteria(criteria);
+        return lst.size() > 0 ? lst.get(0) : null;
+    }
+    
+    @JsonIgnore
+    public Organization toFhir() {
+        var obj = new Organization();
+        obj.setIdentifier(listOf(createIdentifier(ma, IdentifierSystem.CO_SO_KHAM_BENH)));
+        obj.setName(ten);
+        return obj;
     }
 }

@@ -1,15 +1,10 @@
 package vn.ehealth.emr.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +21,7 @@ import vn.ehealth.emr.service.EmrHoSoBenhAnService;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/chucnangsong")
@@ -33,10 +29,9 @@ public class EmrChucNangSongController {
 	
 	private JsonParser jsonParser = new JsonParser();
 	private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
-    
-    private Logger logger = LoggerFactory.getLogger(EmrChucNangSongController.class);
-    @Autowired EmrChucNangSongService emrChucNangSongService;
-    @Autowired EmrHoSoBenhAnService emrHoSoBenhAnService;
+
+	@Autowired private EmrChucNangSongService emrChucNangSongService;
+    @Autowired private EmrHoSoBenhAnService emrHoSoBenhAnService;
     
     @GetMapping("/get_ds_chucnangsong_by_bn")
     public ResponseEntity<?> getDsChucNangSongByBenhNhan(@RequestParam("benhnhan_id") String benhNhanId) {
@@ -53,12 +48,11 @@ public class EmrChucNangSongController {
         try {
         	var user = UserUtil.getCurrentUser();
             emrChucNangSongService.delete(new ObjectId(id), user.get().id);
-            var result = Map.of("success" , true);
+            var result = mapOf("success" , true);
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            logger.error("Error delete chucnangsong:", e);
-            var result = Map.of("success" , false);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -71,19 +65,15 @@ public class EmrChucNangSongController {
             var user = UserUtil.getCurrentUser();
             chucnangsong = emrChucNangSongService.save(chucnangsong, user.get().id, jsonSt);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "emrChucNangSong", chucnangsong 
             );
                     
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            var result = Map.of(
-                "success" , false,
-                "errors", List.of(e.getMessage()) 
-            );
-            logger.error("Error save chucnangsong:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -104,7 +94,7 @@ public class EmrChucNangSongController {
             
             emrChucNangSongService.createOrUpdateFromHIS(userId, hsba, cnsList, cnsObjList, jsonSt);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "cnsList", cnsList  
             );
@@ -112,13 +102,7 @@ public class EmrChucNangSongController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of(
-                "success" , false,
-                "error", error 
-            );
-            logger.error("Error save chucnangsong from HIS:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -135,6 +119,6 @@ public class EmrChucNangSongController {
     
     @GetMapping("/get_hs_goc")
     public ResponseEntity<?> getHsGoc(@RequestParam("chucnangsong_id") String id) {
-        return ResponseEntity.ok(Map.of("hsGoc", emrChucNangSongService.getHsgoc(new ObjectId(id))));
+        return ResponseEntity.ok(mapOf("hsGoc", emrChucNangSongService.getHsgoc(new ObjectId(id))));
     }
 }

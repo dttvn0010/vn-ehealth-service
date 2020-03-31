@@ -5,9 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
+import org.hl7.fhir.r4.model.IdType;
 import org.springframework.data.mongodb.core.query.Criteria;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
+import vn.ehealth.hl7.fhir.utils.EntityUtils;
 
 public class MongoUtils {
 
@@ -75,5 +79,26 @@ public class MongoUtils {
             criteria.andOperator(orCrList.toArray(new Criteria[0]));
         }
         return criteria;
+    }
+    
+    public static void fetchReferenceResource(BaseReference ref) {
+        if(ref != null) {
+            var resourceType = EntityUtils.getResourceType(ref);
+            if(resourceType != null) {
+                var dao = DaoFactory.getDaoByType(resourceType);
+                if(dao != null) {
+                    var id = EntityUtils.idFromRef(ref);
+                    var objResource = dao.read(new IdType(id));
+                    var entResource = DataConvertUtil.fhirToEntity(objResource, dao.getEntityClass());
+                    ref.resource = entResource;
+                } 
+            }            
+        }
+    }
+    
+    public static void fetchReferenceResource(List<BaseReference> refs) {
+        if(refs != null) {
+            refs.forEach(ref -> fetchReferenceResource(ref));            
+        }
     }
 }

@@ -8,12 +8,13 @@ import java.util.Optional;
 import java.util.Properties;
 
 import org.bson.types.ObjectId;
+import org.hl7.fhir.r4.model.Encounter;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,13 +36,19 @@ import vn.ehealth.emr.utils.DateUtil;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.TRANGTHAI_HOSO;
+import vn.ehealth.hl7.fhir.core.util.FhirUtil;
+import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
+import vn.ehealth.utils.MongoUtils;
 import vn.ehealth.emr.validate.JsonParser;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 import java.io.*;
 
 @RestController
 @RequestMapping("/api/hsba")
 public class EmrHoSoBenhAnController {
+    
+    private static Logger logger = LoggerFactory.getLogger(EmrHoSoBenhAnController.class);
     
     @Value("${server.upload.path}")
     private String uploadPath;
@@ -51,8 +58,6 @@ public class EmrHoSoBenhAnController {
     private JsonParser jsonParser = new JsonParser();
     
     private static Properties fieldsConvertProp = new Properties();
-    
-    private static Logger logger = LoggerFactory.getLogger(EmrHoSoBenhAnController.class);
         
     static {
         try {
@@ -63,9 +68,11 @@ public class EmrHoSoBenhAnController {
         
     }
     
-    @Autowired EmrHoSoBenhAnService emrHoSoBenhAnService;    
-    @Autowired EmrBenhNhanService emrBenhNhanService;
-    @Autowired EmrCoSoKhamBenhService emrCoSoKhamBenhService;
+    @Autowired private EmrHoSoBenhAnService emrHoSoBenhAnService;    
+    @Autowired private EmrBenhNhanService emrBenhNhanService;
+    @Autowired private EmrCoSoKhamBenhService emrCoSoKhamBenhService;
+    @Autowired private EncounterDao encounterDao; 
+    
     @Autowired UserService userService;
 
     @GetMapping("/count_ds_hs")
@@ -74,9 +81,9 @@ public class EmrHoSoBenhAnController {
             var user = UserUtil.getCurrentUser();
             var count = emrHoSoBenhAnService.countHoSo(user.get().id, user.get().emrCoSoKhamBenhId, trangthai, mayte);
             return ResponseEntity.ok(count);
+            
         }catch (Exception e) {
-            logger.error("Error countHsba:", e);
-            return new ResponseEntity<>(0, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }        
     }
     
@@ -98,8 +105,7 @@ public class EmrHoSoBenhAnController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            logger.error("Error getDsHsba:", e);
-            return new ResponseEntity<>(new ArrayList<EmrHoSoBenhAn>(), HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }        
     }
     
@@ -116,7 +122,7 @@ public class EmrHoSoBenhAnController {
     
     @GetMapping("/get_hs_goc")
     public ResponseEntity<?> getHsGoc(@RequestParam("hsba_id") String id) {
-        return ResponseEntity.ok(Map.of("hsGoc", emrHoSoBenhAnService.getHsgoc(new ObjectId(id))));
+        return ResponseEntity.ok(mapOf("hsGoc", emrHoSoBenhAnService.getHsgoc(new ObjectId(id))));
     }
     
     
@@ -132,10 +138,10 @@ public class EmrHoSoBenhAnController {
         try {
             var user = UserUtil.getCurrentUser();
             emrHoSoBenhAnService.archiveHsba(new ObjectId(id), user.get().id);
-            return ResponseEntity.ok(Map.of("success", true));
+            return ResponseEntity.ok(mapOf("success", true));
         }catch(Exception e) {
             var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            return ResponseEntity.ok(Map.of("success", false, "error", error));
+            return ResponseEntity.ok(mapOf("success", false, "error", error));
         }
     }
     
@@ -144,10 +150,10 @@ public class EmrHoSoBenhAnController {
         try {
             var user = UserUtil.getCurrentUser();            
             emrHoSoBenhAnService.unArchiveHsba(new ObjectId(id), user.get().id);
-            return ResponseEntity.ok(Map.of("success", true));
+            return ResponseEntity.ok(mapOf("success", true));
         }catch(Exception e) {
             var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            return ResponseEntity.ok(Map.of("success", false, "error", error));
+            return ResponseEntity.ok(mapOf("success", false, "error", error));
         }
     }
     
@@ -156,10 +162,10 @@ public class EmrHoSoBenhAnController {
         try {
             var user = UserUtil.getCurrentUser();
             emrHoSoBenhAnService.deleteHsba(new ObjectId(id), user.get().id);
-            return ResponseEntity.ok(Map.of("success", true));
+            return ResponseEntity.ok(mapOf("success", true));
         }catch(Exception e) {
             var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            return ResponseEntity.ok(Map.of("success", false, "error", error));
+            return ResponseEntity.ok(mapOf("success", false, "error", error));
         }
     }
     
@@ -171,19 +177,14 @@ public class EmrHoSoBenhAnController {
             var user = UserUtil.getCurrentUser();
             hsba = emrHoSoBenhAnService.update(hsba, user.get().id);          
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "emrHoSoBenhAn", hsba 
             );
                         
             return ResponseEntity.ok(result);            
         }catch(Exception e) {
-            var result = Map.of(
-                "success" , false,
-                "errors", List.of(e.getMessage()) 
-            );
-            logger.error("Error save hsba:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
         
     }
@@ -195,6 +196,48 @@ public class EmrHoSoBenhAnController {
             jsonSt = jsonSt.replace("\"" + field + "\"", "\"" + fieldReplace + "\"");
         }
         return jsonSt;
+    }
+    
+    private List<Encounter> getVkEncounterList(Encounter hsbaEncounter) {
+        if(hsbaEncounter != null) {
+            var params = mapOf( 
+                    "active", true,
+                    "partOf.reference", ResourceType.Encounter + "/" + hsbaEncounter.getId()
+                );
+    
+            return encounterDao.findByCriteria(MongoUtils.createCriteria(params));
+        }
+        
+        return new ArrayList<>();
+    }
+    
+    private void saveToFhirDb(EmrHoSoBenhAn hsba) {
+        if(hsba == null) return;
+        
+        try {
+            var encounterDb = hsba.getEncounterInDB();
+            if(encounterDb != null) {
+                var oldVkEncounters = getVkEncounterList(encounterDb);
+                oldVkEncounters.forEach(x -> encounterDao.remove(x.getIdElement()));
+            }
+            
+            var encounters = hsba.toFhir();
+            if(encounters.size() > 0) {
+                var hsbaEncounter = encounters.get(0);
+                if(encounterDb != null) {
+                    hsbaEncounter = encounterDao.update(hsbaEncounter, encounterDb.getIdElement());
+                }else {
+                    hsbaEncounter = encounterDao.create(hsbaEncounter);
+                }
+                for(int i = 1; i < encounters.size(); i++) {
+                    var vkEnc = encounters.get(i);
+                    vkEnc.setPartOf(FhirUtil.createReference(hsbaEncounter));
+                    encounterDao.create(vkEnc);
+                }
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
     }
     
     @SuppressWarnings("unchecked")
@@ -223,13 +266,9 @@ public class EmrHoSoBenhAnController {
             hsba = emrHoSoBenhAnService.createOrUpdateFromHIS(userId, emrBenhNhan.get().id, emrCoSoKhamBenh.id, hsba, jsonSt);
             
             // save to FHIR db
-            try {
-                hsba.saveToFhirDb();
-            }catch(Exception e) {
-                logger.error("Cannot save to fhir db: ", e);
-            }
+            saveToFhirDb(hsba);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "emrHoSoBenhAn", hsba  
             );
@@ -237,13 +276,7 @@ public class EmrHoSoBenhAnController {
             return ResponseEntity.ok(result);
         
         } catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of(
-                "success" , false,
-                "error", error 
-            );
-            logger.error("Error save hsba:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -298,10 +331,10 @@ public class EmrHoSoBenhAnController {
             }
             
             emrHoSoBenhAnService.addEmrFileDinhKems(new ObjectId(id), emrFileDinhKems);
-            return ResponseEntity.ok(Map.of("success", true));
+            return ResponseEntity.ok(mapOf("success", true));
+            
         }catch(Exception e) {
-            logger.error("Fail to upload giayto:", e);
-            return new ResponseEntity<>(Map.of("success", false, "error", e.getMessage()), HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -309,10 +342,10 @@ public class EmrHoSoBenhAnController {
     public ResponseEntity<?> addUserViewHSBA(@RequestParam("hsba_id") String id, @RequestParam("userId") String userId) {
     	try {
     	 emrHoSoBenhAnService.addUserViewHSBA(new ObjectId(id), new ObjectId(userId));
-    	 return ResponseEntity.ok(Map.of("success", true));
+    	 return ResponseEntity.ok(mapOf("success", true));
+    	 
     	}catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            return ResponseEntity.ok(Map.of("success", false, "error", error));
+            return EmrUtils.errorResponse(e);
         }
        
     }
@@ -321,10 +354,10 @@ public class EmrHoSoBenhAnController {
     public ResponseEntity<?> deleteUserViewHSBA(@RequestParam("hsba_id") String id, @RequestParam("userId") String userId) {
     	 try {
     		 emrHoSoBenhAnService.deleteUserViewHSBA(new ObjectId(id), new ObjectId(userId));
-             return ResponseEntity.ok(Map.of("success", true));
+             return ResponseEntity.ok(mapOf("success", true));
+             
          }catch(Exception e) {
-             var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-             return ResponseEntity.ok(Map.of("success", false, "error", error));
+             return EmrUtils.errorResponse(e);
          }
     }
 }

@@ -1,15 +1,10 @@
 package vn.ehealth.emr.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,13 +22,12 @@ import vn.ehealth.emr.service.EmrPhauThuatThuThuatService;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/pttt")
 public class EmrPhauThuatThuThuatController {
     
-    private Logger logger = LoggerFactory.getLogger(EmrPhauThuatThuThuatController.class);
-            
     @Autowired private EmrPhauThuatThuThuatService emrPhauThuatThuThuatService;
     @Autowired private EmrHoSoBenhAnService emrHoSoBenhAnService;
     
@@ -57,12 +51,11 @@ public class EmrPhauThuatThuThuatController {
         try {
         	var user = UserUtil.getCurrentUser();
             emrPhauThuatThuThuatService.delete(new ObjectId(id), user.get().id);
-            var result = Map.of("success" , true);
+            var result = mapOf("success" , true);
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            logger.error("Error delete pttt:", e);
-            var result = Map.of("success" , false);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -74,19 +67,26 @@ public class EmrPhauThuatThuThuatController {
             var pttt = objectMapper.readValue(jsonSt, EmrPhauThuatThuThuat.class);
             pttt = emrPhauThuatThuThuatService.save(pttt, user.get().id, jsonSt);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "emrPhauThuatThuThuat", pttt 
             );
                     
             return ResponseEntity.ok(result);
         }catch(Exception e) {
-            var result = Map.of(
-                "success" , false,
-                "errors", List.of(e.getMessage()) 
-            );
-            logger.error("Error save pttt:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
+        }
+    }
+    
+    private void saveToFhirDb(EmrHoSoBenhAn hsba, List<EmrPhauThuatThuThuat> ptttList) {
+        if(hsba == null) return;
+        try {
+            var enc = hsba.getEncounterInDB();
+            if(enc != null) {
+                ptttList.forEach(x -> EmrDichVuKyThuatHelper.saveDichVuKT(enc, x));
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
         }
     }
     
@@ -108,16 +108,9 @@ public class EmrPhauThuatThuThuatController {
             emrPhauThuatThuThuatService.createOrUpdateFromHIS(userId, hsba, ptttList, jsonSt);
             
             // save to FHIR db
-            try {
-                var hsbaEncounter = EmrHoSoBenhAn.getEncounter(matraodoiHsba);
-                ptttList.forEach(pttt -> {
-                    pttt.saveToFhirDb(hsbaEncounter);;
-                });
-            }catch(Exception e) {
-                logger.error("Cannot save to FHIR db:", e);
-            }
-            
-            var result = Map.of(
+            saveToFhirDb(hsba, ptttList);
+                        
+            var result = mapOf(
                 "success" , true,
                 "ptttList", ptttList  
             );
@@ -125,13 +118,7 @@ public class EmrPhauThuatThuThuatController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of(
-                "success" , false,
-                "error", error 
-            );
-            logger.error("Error save phauthuathuthuat from HIS:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -148,6 +135,6 @@ public class EmrPhauThuatThuThuatController {
     
     @GetMapping("/get_hs_goc")
     public ResponseEntity<?> getHsGoc(@RequestParam("pttt_id") String id) {
-        return ResponseEntity.ok(Map.of("hsGoc", emrPhauThuatThuThuatService.getHsgoc(new ObjectId(id))));
+        return ResponseEntity.ok(mapOf("hsGoc", emrPhauThuatThuThuatService.getHsgoc(new ObjectId(id))));
     }
 }

@@ -110,12 +110,12 @@ public class SlotDao extends BaseDao<SlotEntity, Slot> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return Slot.class;
     }
 	
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return SlotEntity.class;
 	}
 }

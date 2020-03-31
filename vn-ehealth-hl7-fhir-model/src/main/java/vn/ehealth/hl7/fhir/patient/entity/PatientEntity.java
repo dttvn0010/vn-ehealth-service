@@ -126,7 +126,7 @@ public class PatientEntity extends BaseResource {
     }
     
     private String computeMohIdentifier() {
-        var mohIdentifier = FPUtil.findFirst(identifier, x -> IdentifierSystem.THE_BHYT.equals(x.system));
+        var mohIdentifier = FPUtil.findFirst(identifier, x -> IdentifierSystem.DINH_DANH_Y_TE.equals(x.system));
         if(mohIdentifier != null) {
             return mohIdentifier.value;
         }
@@ -158,33 +158,32 @@ public class PatientEntity extends BaseResource {
     }
     
     private BaseCodeableConcept computeJobType() {
-        var extJobType = EntityUtils.findExtensionByURL(modifierExtension, ExtensionURL.NGHE_NGHIEP);
+        var extJobType = EntityUtils.findExtensionByURL(extension, ExtensionURL.NGHE_NGHIEP);
         if(extJobType != null && extJobType.value instanceof BaseCodeableConcept) {
             return (BaseCodeableConcept) extJobType.value;
         }
         return null;
     }
     
-    public static Map<String, ?> toDto(PatientEntity ent) {
+    public static Map<String, Object> toDto(PatientEntity ent) {
         if(ent == null) return null;
-        
-        return mapOf(
-                "fullname", ent.computeFullName(),
-                "address", ent.computeAddress(),
-                "birthdate", ent.computeBirthDate(),
-                "email", ent.computeEmail(),
-                "phone", ent.computePhone(),
-                "nationalIdentifier", ent.computeNationalIdentifier(),
-                "mohIdentifier", ent.computeMohIdentifier(),
-                "race", BaseCodeableConcept.toDto(ent.computeRace()),
-                "ethnics", BaseCodeableConcept.toDto(ent.computeEthnics()),
-                "nationality", BaseCodeableConcept.toDto(ent.computeNationality()),
-                "jobtype", BaseCodeableConcept.toDto(ent.computeJobType())                    
-            );
+        return ent.getDto();
     }
     
     @JsonView(DTOView.class)
-    public Map<String, ?> getDto() {
-        return toDto(this);
+    public Map<String, Object> getDto() {
+        return mapOf(
+                "fullname", computeFullName(),
+                "address", computeAddress(),
+                "birthdate", computeBirthDate(),
+                "email", computeEmail(),
+                "phone", computePhone(),
+                "nationalIdentifier", computeNationalIdentifier(),
+                "mohIdentifier", computeMohIdentifier(),
+                "race", BaseCodeableConcept.toDto(computeRace()),
+                "ethnics", BaseCodeableConcept.toDto(computeEthnics()),
+                "nationality", BaseCodeableConcept.toDto(computeNationality()),
+                "jobtype", BaseCodeableConcept.toDto(computeJobType())                    
+            );
     }
 }

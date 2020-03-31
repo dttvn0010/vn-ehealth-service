@@ -16,9 +16,8 @@ import vn.ehealth.emr.service.EmrNhomDmService;
 @RestController
 @RequestMapping("/api/nhom_danhmuc")
 public class EmrNhomDmController {
-
     
-    @Autowired EmrNhomDmService emrNhomDmService;
+    @Autowired private EmrNhomDmService emrNhomDmService;
     
     @GetMapping("/count_nhom_dm_list")
     public long count(@RequestParam String keyword) {

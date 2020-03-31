@@ -1,15 +1,10 @@
 package vn.ehealth.emr.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +22,7 @@ import vn.ehealth.emr.service.EmrHoSoBenhAnService;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/cdha")
@@ -34,8 +30,6 @@ public class EmrChanDoanHinhAnhController {
     
     private JsonParser jsonParser = new JsonParser();
     private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
-    
-    private Logger logger = LoggerFactory.getLogger(EmrChanDoanHinhAnhController.class);
     
     @Autowired private EmrChanDoanHinhAnhService emrChanDoanHinhAnhService;
     @Autowired private EmrHoSoBenhAnService emrHoSoBenhAnService;
@@ -56,12 +50,11 @@ public class EmrChanDoanHinhAnhController {
         try {
         	var user = UserUtil.getCurrentUser();
             emrChanDoanHinhAnhService.delete(new ObjectId(id), user.get().id);
-            var result = Map.of("success" , true);
+            var result = mapOf("success" , true);
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            logger.error("Error delete cdha:", e);
-            var result = Map.of("success" , false);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -73,21 +66,30 @@ public class EmrChanDoanHinhAnhController {
             var cdha = objectMapper.readValue(jsonSt, EmrChanDoanHinhAnh.class);
             cdha = emrChanDoanHinhAnhService.save(cdha, user.get().id, jsonSt);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "emrChanDoanHinhAnh", cdha 
             );
                     
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            var result = Map.of(
-                "success" , false,
-                "errors", List.of(e.getMessage()) 
-            );
-            logger.error("Error save cdha:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }   
+    
+    private void saveToFhirDb(EmrHoSoBenhAn hsba, List<EmrChanDoanHinhAnh> cdhaList) {
+        if(hsba == null) return;
+        try {
+            var enc = hsba.getEncounterInDB();
+            if(enc != null) {
+                cdhaList.forEach(x -> EmrDichVuKyThuatHelper.saveDichVuKT(enc, x));
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     
     @SuppressWarnings("unchecked")
     @PostMapping("/create_or_update_cdha")
@@ -108,16 +110,9 @@ public class EmrChanDoanHinhAnhController {
             emrChanDoanHinhAnhService.createOrUpdateFromHIS(userId, hsba, cdhaList, jsonSt);
             
             // save to FHIR db
-            try {
-                var hsbaEncounter = EmrHoSoBenhAn.getEncounter(matraodoiHsba);
-                cdhaList.forEach(cdha -> {
-                    cdha.saveToFhirDb(hsbaEncounter);;
-                });
-            }catch(Exception e) {
-                logger.error("Cannot save to FHIR db:", e);
-            }
+            saveToFhirDb(hsba, cdhaList);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "cdhaList", cdhaList  
             );
@@ -125,13 +120,7 @@ public class EmrChanDoanHinhAnhController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of(
-                "success" , false,
-                "error", error 
-            );
-            logger.error("Error save chandoanhinhanh from HIS:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -148,6 +137,6 @@ public class EmrChanDoanHinhAnhController {
     
     @GetMapping("/get_hs_goc")
     public ResponseEntity<?> getHsGoc(@RequestParam("cdha_id") String id) {
-        return ResponseEntity.ok(Map.of("hsGoc", emrChanDoanHinhAnhService.getHsgoc(new ObjectId(id))));
+        return ResponseEntity.ok(mapOf("hsGoc", emrChanDoanHinhAnhService.getHsgoc(new ObjectId(id))));
     }
 }

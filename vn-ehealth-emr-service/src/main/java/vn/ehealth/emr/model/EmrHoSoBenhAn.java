@@ -10,9 +10,6 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Encounter;
-import org.hl7.fhir.r4.model.Organization;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
@@ -22,15 +19,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import ca.uhn.fhir.rest.param.TokenParam;
-import vn.ehealth.emr.model.dto.BaseRef;
-import vn.ehealth.emr.model.dto.DotKhamBenh;
 import vn.ehealth.emr.service.EmrServiceFactory;
 import vn.ehealth.emr.utils.ObjectIdUtil;
+import vn.ehealth.hl7.fhir.core.util.FhirUtil;
+import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
+import vn.ehealth.utils.MongoUtils;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createIdentifier;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createPeriod;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection="emr_ho_so_benh_an")
@@ -267,58 +266,59 @@ public class EmrHoSoBenhAn {
         return "";
     }
     
-    public static Encounter getEncounter(String maHoSo) {
-    	var params = mapOf("identifier", new TokenParam(IdentifierSystem.MA_HO_SO, maHoSo));
-    	var fhirObj = (Encounter) DaoFactory.getEncounterDao().searchOne(params);    	
-    	return fhirObj;
+    @JsonIgnore
+    public Encounter getEncounterInDB() {
+    	var params = mapOf(
+    	                "active", true,
+    	                "identifier.system", IdentifierSystem.MA_HO_SO,
+    	                "identifier.value", mayte
+	                );
+    	
+    	var criteria = MongoUtils.createCriteria(params);
+    	var lst = DaoFactory.getEncounterDao().findByCriteria(criteria);    	
+    	return lst.size() > 0? lst.get(0) : null;
     }
     
-    public DotKhamBenh toDto() {
-    	var dto = new DotKhamBenh();
-    	dto.maYte = this.mayte;
-    	dto.dmLoaiKham = this.emrDmLoaiBenhAn != null? this.emrDmLoaiBenhAn.toDto() : null;
-    	dto.ngayGioVao = this.emrQuanLyNguoiBenh != null? this.emrQuanLyNguoiBenh.ngaygiovaovien : null;
-    	dto.ngayGioKetThucDieuTri = this.emrQuanLyNguoiBenh != null? this.emrQuanLyNguoiBenh.ngaygioravien : null;
-    	return dto;
-    }
-    
-    public void saveToFhirDb() {
-    	var dto = toDto();
-    	
-    	Organization org = null;    	
-    	if(_emrCoSoKhamBenh != null) {
-    	    org = EmrCoSoKhamBenh.getOrganization((String)_emrCoSoKhamBenh.get("ma"));
-    	}
-    	dto.serviceProvider = new BaseRef(org);
-    	
-    	Patient patient = null;
-    	if(_emrBenhNhan != null) {
-    	    patient = EmrBenhNhan.getPatient((String) _emrBenhNhan.get("sobhyt"));
-    	}
-    	if(patient == null) return;
-    	
-    	dto.patient = new BaseRef(patient);
-    	
-    	var encounterDao = DaoFactory.getEncounterDao();
-        var encounter = getEncounter(this.matraodoi);
+    @JsonIgnore
+    public List<Encounter> toFhir() {
+        var emrBenhNhan = getEmrBenhNhan();
+        var emrCoSoKhamBenh = getEmrCoSoKhamBenh();        
+        if(emrBenhNhan == null || emrCoSoKhamBenh == null) return null;
         
-    	if(encounter != null) {
-    		encounter = encounterDao.update(DotKhamBenh.toFhir(dto), encounter.getIdElement());
-    	}else {
-    		encounter = encounterDao.create(DotKhamBenh.toFhir(dto));
-    	}
-    	
-    	var params = mapOf("partOf", ResourceType.Encounter + "/" + encounter.getId());
-    	var vaoKhoaEncounters = encounterDao.search(params);
-    	
-    	for(var vaoKhoaEncounter : vaoKhoaEncounters) {
-    		encounterDao.remove(vaoKhoaEncounter.getIdElement());
-    	}
-    	
-    	if(emrVaoKhoas != null) {
-    		for(var emrVaoKhoa : emrVaoKhoas) {
-    			emrVaoKhoa.saveToFhirDb(encounter);
-    		}
-    	}
+        var patient = emrBenhNhan.getPatientInDB();
+        var serviceProvider = emrCoSoKhamBenh.getOrganizationInDB();        
+        if(patient == null || serviceProvider == null) return new ArrayList<>();
+        
+        var enc = new Encounter();
+        enc.setIdentifier(listOf(createIdentifier(mayte, IdentifierSystem.MA_HO_SO)));        
+        enc.setSubject(FhirUtil.createReference(patient));
+        enc.setServiceProvider(FhirUtil.createReference(serviceProvider));        
+        
+        if(emrQuanLyNguoiBenh != null) {
+            enc.setPeriod(createPeriod(emrQuanLyNguoiBenh.ngaygioravien, emrQuanLyNguoiBenh.ngaygioravien));
+        }
+        
+        var loaiBenhAn = EmrDmContent.toConcept(emrDmLoaiBenhAn, CodeSystemValue.LOAI_KHAM_BENH);
+        enc.setType(listOf(loaiBenhAn));
+        
+        var lst = listOf(enc);
+        
+        if(emrVaoKhoas != null) {
+            for(var vk : emrVaoKhoas) {                
+                var vkEnc = new Encounter();
+                vkEnc.setSubject(enc.getSubject());
+                var type = EmrDmContent.toConcept(vk.emrDmKhoaDieuTri, CodeSystemValue.KHOA_DIEU_TRI);
+                vkEnc.setType(listOf(type));
+                vkEnc.setServiceProvider(vkEnc.getServiceProvider());
+                vkEnc.setPeriod(createPeriod(vk.ngaygiovaokhoa, vk.ngayketthucdieutri));
+                
+                if(vk.bacsidieutri != null) {
+                    var participant = vkEnc.addParticipant();
+                    participant.setIndividual(EmrCanboYte.toRef(bacsydieutri));         
+                }
+                lst.add(vkEnc);
+            }
+        }
+        return lst;
     }
 }

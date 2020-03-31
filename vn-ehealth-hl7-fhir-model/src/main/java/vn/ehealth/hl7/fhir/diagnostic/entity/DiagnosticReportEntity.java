@@ -3,10 +3,14 @@ package vn.ehealth.hl7.fhir.diagnostic.entity;
 import java.util.Date;
 
 import java.util.List;
+import java.util.Map;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
@@ -14,6 +18,8 @@ import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
+import vn.ehealth.hl7.fhir.core.view.DTOView;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 
 @Document(collection = "diagnosticReport")
@@ -46,4 +52,26 @@ public class DiagnosticReportEntity extends BaseResource {
     public String conclusion;
     public List<BaseCodeableConcept> conclusionCode;
     public List<BaseAttachment> presentedForm;
+    
+    @JsonView(DTOView.class)
+    public Map<String, Object> getDto() {
+        return mapOf(
+                    "status", status,
+                    "issued", issued,
+                    "subject", BaseReference.toDto(subject),
+                    "category", transform(category, BaseCodeableConcept::toDto),
+                    "code", BaseCodeableConcept.toDto(code),
+                    "performer", transform(performer, BaseReference::toDto),
+                    "resultsInterpreter", transform(resultsInterpreter, BaseReference::toDto),
+                    "specimen", transform(specimen, BaseReference::toDto),
+                    "result", transform(result, BaseReference::toDto),
+                    "imagingStudy", transform(imagingStudy, BaseReference::toDto),
+                    "conclusion", conclusion
+                );
+    }
+    
+    public static Map<String, Object> toDto(DiagnosticReportEntity ent) {
+        if(ent == null) return null;
+        return ent.getDto();
+    }
 }

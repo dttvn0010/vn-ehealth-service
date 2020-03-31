@@ -2,11 +2,14 @@ package vn.ehealth.hl7.fhir.diagnostic.entity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
@@ -14,6 +17,8 @@ import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
+import vn.ehealth.hl7.fhir.core.view.DTOView;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 
 @Document(collection = "serviceRequest")
@@ -54,4 +59,23 @@ public class ServiceRequestEntity extends BaseResource {
     public List<BaseAnnotation> note;
     public String patientInstruction;
     public List<BaseReference> relevantHistory;
+    
+    
+    @JsonView(DTOView.class)
+    public Map<String, Object> getDto() {
+        return mapOf(
+                    "category", transform(category, BaseCodeableConcept::toDto),
+                    "code", BaseCodeableConcept.toDto(code),
+                    "orderDetail", BaseCodeableConcept.toDto(getFirst(orderDetail)),
+                    "subject", BaseReference.toDto(subject),
+                    "encounter", BaseReference.toDto(encounter),
+                    "authoredOn", authoredOn,
+                    "requester", BaseReference.toDto(requester)                    
+                );
+    }
+    
+    public static Map<String, Object> toDto(DiagnosticReportEntity ent) {
+        if(ent == null) return null;
+        return ent.getDto();
+    }
 }

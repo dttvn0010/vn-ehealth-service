@@ -1,14 +1,9 @@
 package vn.ehealth.emr.controller;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,16 +20,18 @@ import vn.ehealth.emr.service.EmrBenhNhanService;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
+import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/benh_nhan")
 public class EmrBenhNhanController {
     
-    private static Logger logger = LoggerFactory.getLogger(EmrBenhNhanController.class);
     private JsonParser jsonParser = new JsonParser();
     private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
     
-    @Autowired EmrBenhNhanService emrBenhNhanService;
+    @Autowired private EmrBenhNhanService emrBenhNhanService;
+    @Autowired private PatientDao patientDao;
     
     @GetMapping("/count_benhnhan")
     public long countBenhNhan(@RequestParam String keyword) {
@@ -54,45 +51,51 @@ public class EmrBenhNhanController {
         var benhNhan = emrBenhNhanService.getById(new ObjectId(id));
         return ResponseEntity.of(benhNhan);
     }
+    
+    private void saveToFhirDb(EmrBenhNhan emrBenhNhan) {
+        try {
+            if(emrBenhNhan == null) return;
+            var patientDb = emrBenhNhan.getPatientInDB();
+            var patient = emrBenhNhan.toFhir();
+            if(patientDb != null) {
+                patientDao.update(patient, patientDb.getIdElement());
+            }else {
+                patientDao.create(patient);
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @PostMapping("/create_or_update_benhnhan")
     public ResponseEntity<?> createOrUpdateBenhNhan(@RequestBody String jsonSt) {
         try {
             var map = jsonParser.parseJson(jsonSt);
-            var benhNhan = objectMapper.convertValue(map, EmrBenhNhan.class);
-            if(StringUtils.isEmpty(benhNhan.iddinhdanhchinh)) {
-                benhNhan.iddinhdanhchinh = benhNhan.idhis;
+            var emrBenhNhan = objectMapper.convertValue(map, EmrBenhNhan.class);
+            if(StringUtils.isEmpty(emrBenhNhan.iddinhdanhchinh)) {
+                emrBenhNhan.iddinhdanhchinh = emrBenhNhan.idhis;
             }
             
-            if(StringUtils.isEmpty(benhNhan.iddinhdanhchinh)) {
+            if(StringUtils.isEmpty(emrBenhNhan.iddinhdanhchinh)) {
                 throw new RuntimeException("Empty iddinhdanhchinh");
             }
             
             var user = UserUtil.getCurrentUser();
             var userId = user.map(x -> x.id).orElse(null);
             
-            benhNhan = emrBenhNhanService.createOrUpdate(userId, benhNhan, jsonSt);
+            emrBenhNhan = emrBenhNhanService.createOrUpdate(userId, emrBenhNhan, jsonSt);
             
             // Save to FhirDB
-            try {
-                benhNhan.saveToFhirDb();
-            }catch(Exception e) {
-                logger.error("Cannot save to fhir db: ", e);
-            }
+            saveToFhirDb(emrBenhNhan);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
-                "emrBenhNhan", benhNhan 
+                "emrBenhNhan", emrBenhNhan 
             );
                     
             return ResponseEntity.ok(result);
         }catch(Exception e) {
-            var result = Map.of(
-                "success" , false,
-                "errors", List.of(e.getMessage()) 
-            );
-            logger.error("Error create/update benhnhan:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }        
     }
 }

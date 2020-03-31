@@ -293,12 +293,12 @@ public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return CarePlan.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return CarePlanEntity.class;
 	}
 }

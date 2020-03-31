@@ -162,12 +162,12 @@ public class PractitionerRoleDao extends BaseDao<PractitionerRoleEntity, Practit
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return PractitionerRole.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return PractitionerRoleEntity.class;
 	}
 }

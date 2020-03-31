@@ -1,7 +1,7 @@
 { 
-	"patient":{"id": "902fca75-2785-44e7-ba6d-cdce408a4013"},
-	"hsbaEncounter": {"id":"89599458-09e7-49a5-a840-0d631c3062f8"},
-    "falcultyOrganization":{"id": "fa4c2b36-97e8-4760-8603-f8508c4e5f09"},
+	"patient":{"id": "8ba81e7e-bc9f-4f37-98cc-188c8cf69934"},
+	"parent": {"id":"0f62daf8-b5b2-4505-a454-a56188c7f29c"},
+    "serviceProvider":{"id": "0fef581f-7a3b-4681-9cff-acdf5a55c7c9"},
     "ngayGioVao": "2018-06-28 05:06:00",
     "ngayGioKetThucDieuTri": "2018-06-29 09:00:00",
 	"bacSiDieuTri": {"id": "bb41d74e-3e9e-4c71-ab6e-626e3a98cb93"}

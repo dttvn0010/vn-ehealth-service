@@ -1,15 +1,10 @@
 package vn.ehealth.emr.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,15 +21,14 @@ import vn.ehealth.emr.service.EmrHoSoBenhAnService;
 import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.emr.utils.UserUtil;
 import vn.ehealth.emr.validate.JsonParser;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/chamsoc")
 public class EmrChamSocController {
     
 	private JsonParser jsonParser = new JsonParser();
-    
-	private Logger logger = LoggerFactory.getLogger(EmrChamSocController.class);
-    
+   
     @Autowired 
     private EmrChamSocService emrChamSocService;
     @Autowired 
@@ -59,12 +53,11 @@ public class EmrChamSocController {
         try {
         	var user = UserUtil.getCurrentUser();
             emrChamSocService.delete(new ObjectId(id), user.get().id);
-            var result = Map.of("success" , true);
+            var result = mapOf("success" , true);
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            logger.error("Error delete chamsoc:", e);
-            var result = Map.of("success" , false);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -76,19 +69,15 @@ public class EmrChamSocController {
             var chamsoc = objectMapper.readValue(jsonSt, EmrChamSoc.class);
             chamsoc = emrChamSocService.save(chamsoc, user.get().id, jsonSt);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "emrChamSoc", chamsoc 
             );
                     
             return ResponseEntity.ok(result);
+            
         }catch(Exception e) {
-            var result = Map.of(
-                "success" , false,
-                "errors", List.of(e.getMessage()) 
-            );
-            logger.error("Error save chamsoc:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -108,7 +97,7 @@ public class EmrChamSocController {
             
             emrChamSocService.createOrUpdateFromHIS(userId, hsba, csList, csObjList, jsonSt);
             
-            var result = Map.of(
+            var result = mapOf(
                 "success" , true,
                 "csList", csList  
             );
@@ -116,13 +105,7 @@ public class EmrChamSocController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            var result = Map.of(
-                "success" , false,
-                "error", error 
-            );
-            logger.error("Error save chamsoc from HIS:", e);
-            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
     
@@ -139,6 +122,6 @@ public class EmrChamSocController {
     
     @GetMapping("/get_hs_goc")
     public ResponseEntity<?> getHsGoc(@RequestParam("chamsoc_id") String id) {
-        return ResponseEntity.ok(Map.of("hsGoc", emrChamSocService.getHsgoc(new ObjectId(id))));
+        return ResponseEntity.ok(mapOf("hsGoc", emrChamSocService.getHsgoc(new ObjectId(id))));
     }
 }

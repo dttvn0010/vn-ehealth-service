@@ -2,14 +2,10 @@ package vn.ehealth.emr.controller;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,12 +19,12 @@ import com.opencsv.CSVReader;
 
 import vn.ehealth.emr.model.EmrDm;
 import vn.ehealth.emr.service.EmrDmService;
+import vn.ehealth.emr.utils.EmrUtils;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/danhmuc")
 public class EmrDmController {
-    
-    private Logger logger = LoggerFactory.getLogger(EmrDmController.class);
     
     @Autowired EmrDmService emrDmService;
 
@@ -98,10 +94,9 @@ public class EmrDmController {
             reader.close();
             emrDmService.importEmrDmList(dmType, emrDmList);
             
-            return ResponseEntity.ok(Map.of("success", true, "csv", csv));
+            return ResponseEntity.ok(mapOf("success", true, "csv", csv));
         } catch (Exception e) {
-            logger.error("Fail to upload file:", e);
-            return new ResponseEntity<>(Map.of("success", false, "error", e.getMessage()), HttpStatus.BAD_REQUEST);
+            return EmrUtils.errorResponse(e);
         }
     }
 }

@@ -410,12 +410,12 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 	}
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return CodeSystemEntity.class;
 	}
 
     @Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return CodeSystem.class;
     }
 }

@@ -401,12 +401,12 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return ValueSetEntity.class;
 	}
 
     @Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return ValueSet.class;
     }
 }

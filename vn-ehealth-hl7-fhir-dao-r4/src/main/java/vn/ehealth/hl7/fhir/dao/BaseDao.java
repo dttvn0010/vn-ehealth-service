@@ -38,8 +38,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     protected MongoOperations mongo;
     
     abstract protected String getProfile();
-    abstract protected Class<? extends BaseResource> getEntityClass();
-    abstract protected Class<? extends DomainResource> getResourceClass();
+    abstract public Class<? extends BaseResource> getEntityClass();
+    abstract public Class<? extends DomainResource> getResourceClass();
     
     @SuppressWarnings("unchecked")
     public FHIR transform(ENT ent) {

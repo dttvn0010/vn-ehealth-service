@@ -36,12 +36,12 @@ public class MediaDao extends BaseDao<MediaEntity, Media> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return Media.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return MediaEntity.class;
 	}
 

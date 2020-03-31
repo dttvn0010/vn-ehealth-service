@@ -2,11 +2,12 @@ package vn.ehealth.emr.model;
 
 import java.util.Map;
 
+import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.Coding;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-import vn.ehealth.emr.model.dto.DanhMuc;
 
 @JsonInclude(Include.NON_NULL)
 public class EmrDmContent {
@@ -28,12 +29,21 @@ public class EmrDmContent {
     public String maNhom;
     public String phienBan;
     
-    public DanhMuc toDto() {
-        var dto = new DanhMuc();
-        dto.ma = ma;
-        dto.ten = ten;
-        dto.maNhom = maNhom;
-        dto.phienBan = phienBan;
-        return dto;
+    public static Coding toCoding(EmrDmContent dto, String maNhom) {
+        if(dto == null) return null;
+        var obj = new Coding();
+        obj.setCode(dto.ma);
+        obj.setDisplay(dto.ten);
+        obj.setSystem(maNhom != null? maNhom : dto.maNhom);
+        return obj;
+    }
+    
+    public static CodeableConcept toConcept(EmrDmContent dto, String maNhom) {
+        if(dto == null) return null;
+        var obj = new CodeableConcept();
+        obj.setText(dto.ten);
+        obj.addCoding(toCoding(dto, maNhom));
+        
+        return obj;
     }
 }

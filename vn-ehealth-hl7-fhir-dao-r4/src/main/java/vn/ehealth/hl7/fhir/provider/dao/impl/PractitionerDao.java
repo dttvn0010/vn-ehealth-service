@@ -179,12 +179,12 @@ public class PractitionerDao extends BaseDao<PractitionerEntity, Practitioner> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
+    public Class<? extends DomainResource> getResourceClass() {
         return Practitioner.class;
     }
 
 	@Override
-	protected Class<? extends BaseResource> getEntityClass() {
+	public Class<? extends BaseResource> getEntityClass() {
 		return PractitionerEntity.class;
 	}
 }
