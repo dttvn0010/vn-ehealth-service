@@ -93,7 +93,7 @@ public class MongoUtils {
         }
     }
     
-    public static void fetchReferenceResource(List<BaseReference> refs) {
+    public static void setReferenceResource(List<BaseReference> refs) {
         if(refs != null) {
             refs.forEach(ref -> setReferenceResource(ref));            
         }

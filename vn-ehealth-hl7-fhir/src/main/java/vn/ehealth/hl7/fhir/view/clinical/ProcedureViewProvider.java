@@ -44,8 +44,8 @@ public class ProcedureViewProvider {
         var criteria = MongoUtils.createCriteria(params);
         var lst = procedureDao.searchEntity(criteria, start.orElse(-1), count.orElse(-1));
         
-        lst.forEach(x -> MongoUtils.fetchReferenceResource(x.basedOn));
-        lst.forEach(x -> MongoUtils.fetchReferenceResource(x.report));
+        lst.forEach(x -> MongoUtils.setReferenceResource(x.basedOn));
+        lst.forEach(x -> MongoUtils.setReferenceResource(x.report));
         
         if(includeEncounter.orElse(false)) {
             lst.forEach(x -> MongoUtils.setReferenceResource(x.encounter));
