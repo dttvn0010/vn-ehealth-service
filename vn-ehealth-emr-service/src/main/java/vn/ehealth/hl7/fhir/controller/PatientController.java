@@ -37,6 +37,8 @@ public class PatientController {
         keyword.ifPresent(x -> {
             params.put("$or", listOf(
                             mapOf3("name.text", "$regex", x),
+                            mapOf3("name.family", "$regex", x),
+                            mapOf3("name.given", "$regex", x),
                             mapOf3("telecom.value", "$regex", x)
                     ));
         });

@@ -200,12 +200,9 @@ public class EmrHoSoBenhAnController {
     
     private List<Encounter> getVkEncounterList(Encounter hsbaEncounter) {
         if(hsbaEncounter != null) {
-            var params = mapOf( 
-                    "active", true,
-                    "partOf.reference", ResourceType.Encounter + "/" + hsbaEncounter.getId()
-                );
-    
-            return encounterDao.findByCriteria(MongoUtils.createCriteria(params));
+            var parent = (Object) (ResourceType.Encounter + "/" + hsbaEncounter.getId());
+            var params = mapOf("partOf.reference", parent);    
+            return encounterDao.searchResource(MongoUtils.createCriteria(params));
         }
         
         return new ArrayList<>();

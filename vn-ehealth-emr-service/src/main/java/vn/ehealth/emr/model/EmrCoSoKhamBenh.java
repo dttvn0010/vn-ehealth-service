@@ -48,14 +48,13 @@ public class EmrCoSoKhamBenh {
     
     @JsonIgnore
     public Organization getOrganizationInDB() {
-        var params = mapOf("active", true,
-                        "identifier.system", IdentifierSystem.CO_SO_KHAM_BENH,
+        var params = mapOf(
+                        "identifier.system", (Object) IdentifierSystem.CO_SO_KHAM_BENH,
                         "identifier.value", ma
                     );
         
         var criteria = MongoUtils.createCriteria(params);
-        var lst = DaoFactory.getOrganizationDao().findByCriteria(criteria);
-        return lst.size() > 0 ? lst.get(0) : null;
+        return DaoFactory.getOrganizationDao().getResource(criteria);
     }
     
     @JsonIgnore

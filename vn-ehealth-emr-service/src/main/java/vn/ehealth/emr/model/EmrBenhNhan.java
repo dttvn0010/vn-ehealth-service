@@ -148,14 +148,13 @@ public class EmrBenhNhan {
    
     @JsonIgnore
     public Patient getPatientInDB() {
-        var params = mapOf("active", true, 
-                            "identifier.system", IdentifierSystem.DINH_DANH_Y_TE,
-                            "identifier.value", sobhyt
+        var params = mapOf( 
+                            "identifier.value", (Object) sobhyt,
+                            "identifier.system",  IdentifierSystem.DINH_DANH_Y_TE                            
                         );
         
         var criteria = MongoUtils.createCriteria(params);
-        var lst = DaoFactory.getPatientDao().findByCriteria(criteria);
-        return lst.size() > 0 ? lst.get(0) : null;
+        return DaoFactory.getPatientDao().getResource(criteria);
     }
     
     @JsonIgnore

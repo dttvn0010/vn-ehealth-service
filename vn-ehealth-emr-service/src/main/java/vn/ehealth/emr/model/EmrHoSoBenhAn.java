@@ -269,14 +269,12 @@ public class EmrHoSoBenhAn {
     @JsonIgnore
     public Encounter getEncounterInDB() {
     	var params = mapOf(
-    	                "active", true,
-    	                "identifier.system", IdentifierSystem.MA_HO_SO,
-    	                "identifier.value", mayte
+    	                "identifier.value", (Object) mayte,
+    	                "identifier.system", IdentifierSystem.MA_HO_SO    	                
 	                );
     	
     	var criteria = MongoUtils.createCriteria(params);
-    	var lst = DaoFactory.getEncounterDao().findByCriteria(criteria);    	
-    	return lst.size() > 0? lst.get(0) : null;
+    	return DaoFactory.getEncounterDao().getResource(criteria);    	
     }
     
     @JsonIgnore

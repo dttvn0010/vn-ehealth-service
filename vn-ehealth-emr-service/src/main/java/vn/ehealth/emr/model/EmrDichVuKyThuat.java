@@ -47,14 +47,12 @@ public abstract class EmrDichVuKyThuat {
 	private Organization getKhoaDieuTri(Reference cskbRef, String maKhoa) {
 	    if(cskbRef != null && cskbRef.hasReference()) {
 	        var params = mapOf(
-	                        "active", true, 
-	                        "partOf.reference", cskbRef.getReference(),
+	                        "partOf.reference", (Object) cskbRef.getReference(),
 	                        "type.coding.system", CodeSystemValue.KHOA_DIEU_TRI,
 	                        "type.coding.code", emrDmKhoaDieuTri.ma
                         );
 	        var criteria = MongoUtils.createCriteria(params);
-	        var lst = DaoFactory.getOrganizationDao().findByCriteria(criteria);
-	        return lst.size() > 0 ? lst.get(0) : null;
+	        return DaoFactory.getOrganizationDao().getResource(criteria);
 	    }
 	    return null;	    
 	}
@@ -67,13 +65,10 @@ public abstract class EmrDichVuKyThuat {
 		var khoaDieuTri = getKhoaDieuTri(hsbaEncounter.getServiceProvider(), emrDmKhoaDieuTri.ma);
 		
 		if(khoaDieuTri != null) {
-		    var params = mapOf(
-		                        "active", true,
-		                        "partOf.reference", ResourceType.Encounter + "/" + hsbaEncounter.getId()
-	                        );
+		    var parent = (Object) (ResourceType.Encounter + "/" + hsbaEncounter.getId());
+		    var params = mapOf("partOf.reference", parent);
 			var criteria = MongoUtils.createCriteria(params);
-			var lst = DaoFactory.getEncounterDao().findByCriteria(criteria);
-			return lst.size() > 0? lst.get(0) : null;
+			return DaoFactory.getEncounterDao().getResource(criteria);
 		}
     	return null;
 	}
