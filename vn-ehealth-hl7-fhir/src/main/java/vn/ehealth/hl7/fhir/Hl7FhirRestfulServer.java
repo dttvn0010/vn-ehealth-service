@@ -102,6 +102,10 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 		if (serverBase != null && !serverBase.isEmpty()) {
 			setServerAddressStrategy(new HardcodedServerAddressStrategy(serverBase));
 		}
+
+		// registering server-level provider
+		registerProvider(new PlainProvider());
+
 		setResourceProviders(Arrays.asList((IResourceProvider) applicationContext.getBean(CarePlanProvider.class),
 				(IResourceProvider) applicationContext.getBean(ClinicalImpressionProvider.class),
 				(IResourceProvider) applicationContext.getBean(ConditionProvider.class),
@@ -142,12 +146,10 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 				(IResourceProvider) applicationContext.getBean(AllergyIntoleranceProvider.class),
 				(IResourceProvider) applicationContext.getBean(MediaProvider.class)));
 		setServerConformanceProvider(new Hl7FhirServerConformanceProvider());
+
 		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
-		registerInterceptor(loggingInterceptor);
-		
-		// registering server-level provider
-		registerProvider(new PlainProvider());
-		
+		registerInterceptor(loggingInterceptor);		
+
 		/*
 		 * Use a narrative generator. This is a completely optional step, but can be
 		 * useful as it causes HAPI to generate narratives for resources which don't
@@ -175,29 +177,25 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 		// Create an interceptor to validate responses
 		// This is configured in the same way as above
 
-		/*
-		 * ResponseValidatingInterceptor responseInterceptor = new
-		 * ResponseValidatingInterceptor(); responseInterceptor.addValidatorModule(new
-		 * FhirInstanceValidator());
-		 * responseInterceptor.setFailOnSeverity(ResultSeverityEnum.ERROR);
-		 * responseInterceptor.setAddResponseHeaderOnSeverity(ResultSeverityEnum.
-		 * INFORMATION); responseInterceptor.
-		 * setResponseHeaderValue("Validation on ${line}: ${message} ${severity}");
-		 * responseInterceptor.setResponseHeaderValueNoIssues("No issues detected");
-		 * registerInterceptor(responseInterceptor);
-		 */
+//		ResponseValidatingInterceptor responseInterceptor = new ResponseValidatingInterceptor();
+//		responseInterceptor.addValidatorModule(new FhirInstanceValidator());
+//		responseInterceptor.setFailOnSeverity(ResultSeverityEnum.ERROR);
+//		responseInterceptor.setAddResponseHeaderOnSeverity(ResultSeverityEnum.INFORMATION);
+//		responseInterceptor.setResponseHeaderValue("Validation on ${line}: ${message} ${severity}");
+//		responseInterceptor.setResponseHeaderValueNoIssues("No issues detected");
+//		Now register the validating interceptor
+//		registerInterceptor(responseInterceptor);
 
 		// This is the format for each line. A number of substitution variables may
 		// be used here. See the JavaDoc for LoggingInterceptor for information on
 		// what is available.
 
-		// ServerInterceptor gatewayInterceptor = new ServerInterceptor(ourLog);
 		// registerInterceptor(new OAuth2Interceptor()); // Add OAuth2 Security Filter
-		// registerInterceptor(gatewayInterceptor);
 
 		// Define your CORS configuration. This is an example
 		// showing a typical setup. You should customize this
 		// to your specific needs
+
 		CorsConfiguration config = new CorsConfiguration();
 		config.addAllowedHeader("x-fhir-starter");
 		config.addAllowedHeader("Origin");

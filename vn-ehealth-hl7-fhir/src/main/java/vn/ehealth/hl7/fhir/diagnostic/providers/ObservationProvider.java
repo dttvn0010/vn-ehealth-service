@@ -60,7 +60,8 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenOrListParam code,
-			//@OptionalParam(name = Observation.SP_CODE_VALUE_CONCEPT) CompositeParam<TokenParam, TokenParam> codeValueConcept,
+			@OptionalParam(name = Observation.SP_CODE_VALUE_CONCEPT, compositeTypes = { TokenParam.class,
+					TokenParam.class }) CompositeParam<TokenParam, TokenParam> codeValueConcept,
 			@OptionalParam(name = ConstantKeys.SP_COMBO_CODE) TokenParam comboCode,
 			@OptionalParam(name = ConstantKeys.SP_COMBO_DATA_ABSENT_REASON) TokenParam comboDataAbsentReason,
 			@OptionalParam(name = ConstantKeys.SP_COMBO_CODE_VALUE_CONCEPT) TokenParam comboValueConcept,
@@ -131,7 +132,7 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 				@Override
 				public Integer preferredPageSize() {
 					// TODO Auto-generated method stub
-					return null;
+					return finalResults.size();
 				}
 
 				@Override

@@ -55,17 +55,15 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
 	public MethodOutcome create(HttpServletRequest theRequest, @ResourceParam FHIR object) {
 		MethodOutcome method = new MethodOutcome();
 		method.setCreated(true);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
-		FHIR mongoObject = null;
+		FHIR newObj = null;
 		try {
-			mongoObject = getDao().create(object);
+			newObj = getDao().create(object);
 			List<String> myString = new ArrayList<>();
-			myString.add("urn:uuid/" + mongoObject.getIdElement());
+			myString.add("urn:uuid:" + newObj.getIdElement());
 			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-					"urn:uuid:" + mongoObject.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-			method.setId(mongoObject.getIdElement());
-			method.setResource(mongoObject);
+					"urn:uuid:" + newObj.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
+			method.setId(newObj.getIdElement());
+			method.setResource(newObj);
 		} catch (Exception ex) {
 			if (ex instanceof OperationOutcomeException) {
 				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
@@ -79,11 +77,11 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
 	}
 
 	@Read
-	public FHIR read(HttpServletRequest request, @IdParam IdType internalId) {
-		var object = getDao().read(internalId);
+	public FHIR read(HttpServletRequest request, @IdParam IdType theId) {
+		var object = getDao().read(theId);
 		if (object == null) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Entity/" + internalId.getIdPart()),
+					new ResourceNotFoundException("No " + theId.getValue() + " found"),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
 		}
 		return object;
@@ -96,30 +94,30 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
 	 * @return read object version
 	 */
 	@Read(version = true)
-	public FHIR readVread(HttpServletRequest request, @IdParam IdType idType) {
+	public FHIR readVread(HttpServletRequest request, @IdParam IdType theId) {
 		FHIR object = null;
-		if (idType.hasVersionIdPart()) {
-			object = getDao().readOrVread(idType);
+		if (theId.hasVersionIdPart()) {
+			object = getDao().readOrVread(theId);
 		} else {
-			object = getDao().read(idType);
+			object = getDao().read(theId);
 		}
 		if (object == null) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Entity/" + idType.getIdPart()),
+					new ResourceNotFoundException("No " + theId.getValue() + " found"),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
 		}
 		return object;
 	}
 
 	@Delete
-	public void delete(HttpServletRequest request, @IdParam IdType internalId) {
+	public void delete(HttpServletRequest request, @IdParam IdType idType) {
 		log.debug("Delete Entity called");
-		var object = getDao().remove(internalId);
+		var object = getDao().remove(idType);
 		if (object == null) {
-			log.error("Couldn't delete object" + internalId);
+			log.error("Couldn't delete object " + idType.getValue());
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("object is not exit"), OperationOutcome.IssueSeverity.ERROR,
-					OperationOutcome.IssueType.NOTFOUND);
+					new ResourceNotFoundException("No " + idType.getValue() + " found"),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
 
 		}
 		return;
@@ -130,16 +128,31 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
 		log.debug("Update Object called");
 		MethodOutcome method = new MethodOutcome();
 		method.setCreated(false);
-		OperationOutcome opOutcome = new OperationOutcome();
-		method.setOperationOutcome(opOutcome);
+
+		FHIR old = null;
+		if (theId.hasVersionIdPart()) {
+			old = getDao().readOrVread(theId);
+		} else {
+			old = getDao().read(theId);
+		}
+		if (old == null) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No " + theId.getValue() + " found"),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		}
+
 		FHIR newObject = null;
 		try {
 			newObject = getDao().update(object, theId);
+			List<String> myString = new ArrayList<>();
+			myString.add("urn:uuid:" + newObject.getIdElement());
+			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Update succsess",
+					"urn:uuid:" + newObject.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
+			method.setId(newObject.getIdElement());
+			method.setResource(newObject);
 		} catch (Exception ex) {
 			ProviderResponseLibrary.handleException(method, ex);
 		}
-		method.setId(newObject.getIdElement());
-		method.setResource(newObject);
 		return method;
 	}
 
@@ -171,7 +184,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
 		}
 		if (object == null) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("No Entity/" + theId.getIdPart()),
+					new ResourceNotFoundException("No " + theId.getValue() + " found"),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
 		}
 

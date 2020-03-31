@@ -57,12 +57,11 @@ public class ServerInterceptor extends InterceptorAdapter {
 			throws ServletException, IOException {
 
 		// Return false when overriding hapi behaviour.
-
 		log.info("Exception = " + theException.getClass().getCanonicalName());
 		if (theException instanceof InvalidRequestException) {
 			if (theException.getOperationOutcome() != null
-					&& (theException.getOperationOutcome() instanceof OperationOutcome  ||
-							theException.getOperationOutcome() instanceof IBaseOperationOutcome)) {
+					&& (theException.getOperationOutcome() instanceof OperationOutcome
+							|| theException.getOperationOutcome() instanceof IBaseOperationOutcome)) {
 				FhirContext ctx = FhirContext.forR4();
 
 				OperationOutcome outcome = (OperationOutcome) theException.getOperationOutcome();
@@ -202,11 +201,12 @@ public class ServerInterceptor extends InterceptorAdapter {
 			// TODO improve the logic here
 			if (media.getSubtype() != null && !media.getSubtype().contains("xml")
 					&& !media.getSubtype().contains("fhir") && !media.getSubtype().contains("json")
-					&& !media.getSubtype().contains("plain")) {
+					&& !media.getSubtype().contains("plain") && !media.getSubtype().contains("x-www-form-urlencoded")) {
 				log.debug("Unsupported media type: " + contentType);
 				throw new InvalidRequestException("Unsupported media type: sub " + contentType);
 			} else {
-				if (!contentType.contains("xml") && !contentType.contains("json")) {
+				if (!contentType.contains("xml") && !contentType.contains("json")
+						&& !contentType.contains("x-www-form-urlencoded")) {
 					log.debug("Unsupported media type: " + contentType);
 					throw new InvalidRequestException("Unsupported media type: content " + contentType);
 				}
@@ -214,7 +214,8 @@ public class ServerInterceptor extends InterceptorAdapter {
 
 		} catch (InvalidMediaTypeException e) {
 			log.debug("Unsupported media type: " + contentType);
-			if (!contentType.contains("xml") && !contentType.contains("json")) {
+			if (!contentType.contains("xml") && !contentType.contains("json")
+					&& !contentType.contains("x-www-form-urlencoded")) {
 				log.debug("Unsupported media type: " + contentType);
 				throw new InvalidRequestException("Unsupported media type: content " + contentType);
 			}

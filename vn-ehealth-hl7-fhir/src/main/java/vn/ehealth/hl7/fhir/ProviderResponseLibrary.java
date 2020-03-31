@@ -28,7 +28,6 @@ public class ProviderResponseLibrary {
                 log.error(outcomeException.getOutcome().getIssueFirstRep().getDiagnostics());
             }
             method.setOperationOutcome(outcomeException.getOutcome());
-            method.setCreated(false);
         } else {
             log.error(ex.getMessage());
             if (ex.getStackTrace().length >0) {
@@ -41,7 +40,6 @@ public class ProviderResponseLibrary {
             if (ex.getCause() != null) {
                 log.error(ex.getCause().toString());
             }
-            method.setCreated(false);
             method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
         }
 
@@ -91,9 +89,7 @@ public class ProviderResponseLibrary {
         if (resource instanceof OperationOutcome) {
             OperationOutcome opOutcome = (OperationOutcome) resource;
             method.setOperationOutcome(opOutcome);
-            method.setCreated(false);
         } else {
-            method.setCreated(true);
             OperationOutcome opOutcome = new OperationOutcome();
             method.setOperationOutcome(opOutcome);
             method.setId(resource.getIdElement());
