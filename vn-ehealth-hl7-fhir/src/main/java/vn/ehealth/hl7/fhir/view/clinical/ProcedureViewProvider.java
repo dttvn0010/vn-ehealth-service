@@ -1,4 +1,4 @@
-package vn.ehealth.hl7.fhir.controller;
+package vn.ehealth.hl7.fhir.view.clinical;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -20,7 +20,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/procedure")
-public class ProcedureController {
+public class ProcedureViewProvider {
 
     @Autowired private ProcedureDao procedureDao; 
     

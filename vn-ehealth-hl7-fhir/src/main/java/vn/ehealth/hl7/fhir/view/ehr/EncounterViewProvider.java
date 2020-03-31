@@ -1,4 +1,4 @@
-package vn.ehealth.hl7.fhir.controller;
+package vn.ehealth.hl7.fhir.view.ehr;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
 
@@ -27,7 +27,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/encounter")
-public class EncounterController {
+public class EncounterViewProvider {
 
     @Autowired private EncounterDao encounterDao;
     

@@ -1,4 +1,4 @@
-package vn.ehealth.hl7.fhir.controller;
+package vn.ehealth.hl7.fhir.view.patient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/patient")
-public class PatientController {
+public class PatientViewProvider {
 
     @Autowired private PatientDao patientDao;
     

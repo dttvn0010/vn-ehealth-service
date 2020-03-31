@@ -25,7 +25,7 @@ public class Application {
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Bean
-    public ServletRegistrationBean ServletRegistrationBean() {
+    public ServletRegistrationBean servletRegistrationBean() {
         ServletRegistrationBean registration = new ServletRegistrationBean(new Hl7FhirRestfulServer(context),
                 "/R4/*");
         registration.setName("FhirServlet");

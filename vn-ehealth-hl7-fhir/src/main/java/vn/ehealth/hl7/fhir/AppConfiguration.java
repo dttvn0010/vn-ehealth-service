@@ -1,4 +1,4 @@
-package vn.ehealth.emr;
+package vn.ehealth.hl7.fhir;
 
 import java.text.SimpleDateFormat;
 
@@ -11,12 +11,10 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import vn.ehealth.emr.utils.DateUtil;
-
 @Configuration
-public class EmrConfiguration {
+public class AppConfiguration {
 
-	@Bean
+    @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
@@ -24,17 +22,15 @@ public class EmrConfiguration {
                 registry.addMapping("/**");
             }            
         };
-    }
-	
-	
-	@Bean
+    }    
+    
+    @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
-        var sdf = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD_HH_MM_SS);
+        var sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         mapper.setDateFormat(sdf);
         mapper.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, true);
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         return mapper;
     }
-	
 }
