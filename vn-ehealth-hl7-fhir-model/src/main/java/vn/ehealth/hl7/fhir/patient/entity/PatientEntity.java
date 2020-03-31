@@ -155,23 +155,26 @@ public class PatientEntity extends BaseResource {
         
         var dto = mapOf(
                     "name", BaseHumanName.toDto(getFirst(name), options),                
-                    "birthdate", birthDate
+                    "birthdate", birthDate,
+                    "computes", computes
                 );
         
         if(!simple) {
+            computes.putAll(
+                mapOf(
+                    "email", computeEmail(),
+                    "phone", computePhone(),
+                    "nationalIdentifier", computeNationalIdentifier(),
+                    "mohIdentifier", computeMohIdentifier(),
+                    "race", BaseCodeableConcept.toDto(computeRace()),
+                    "ethnics", BaseCodeableConcept.toDto(computeEthnics()),
+                    "nationality", BaseCodeableConcept.toDto(computeNationality()),
+                    "jobtype", BaseCodeableConcept.toDto(computeJobType())
+                )
+            );
+            
             var dtoExt = mapOf(
-                    "address", BaseAddress.toDto(getFirst(address)),                    
-                    
-                    "computes", mapOf(
-                        "email", computeEmail(),
-                        "phone", computePhone(),
-                        "nationalIdentifier", computeNationalIdentifier(),
-                        "mohIdentifier", computeMohIdentifier(),
-                        "race", BaseCodeableConcept.toDto(computeRace()),
-                        "ethnics", BaseCodeableConcept.toDto(computeEthnics()),
-                        "nationality", BaseCodeableConcept.toDto(computeNationality()),
-                        "jobtype", BaseCodeableConcept.toDto(computeJobType())
-                    )
+                    "address", BaseAddress.toDto(getFirst(address))                    
                 );
             
             dto.putAll(dtoExt);

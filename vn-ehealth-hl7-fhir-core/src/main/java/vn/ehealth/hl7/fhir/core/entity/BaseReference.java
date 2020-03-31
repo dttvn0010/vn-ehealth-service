@@ -2,6 +2,8 @@ package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.Map;
 
+import org.springframework.data.annotation.Transient;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -14,6 +16,7 @@ public class BaseReference extends BaseComplexType {
 	public BaseIdentifier identifier;
 	public String display;
 	
+	@Transient
 	public BaseResource resource;
 	
     public Map<String, Object> getDto(Map<String, Object> options) {

@@ -115,12 +115,14 @@ public class EncounterEntity extends BaseResource{
     
     @JsonIgnore
     public Map<String, Object> getHsbaDto(Map<String, Object> options) {
+        computes.put("maHSBA", computeMaHSBA());
+        
         return mapOf(
                 "type", BaseCodeableConcept.toDto(computeType()),
                 "patient", BaseReference.toDto(subject, mapOf("simple", true)),
                 "serviceProvider", BaseReference.toDto(serviceProvider),
                 "period", period,
-                "computes", mapOf("maHSBA", computeMaHSBA())
+                "computes", computes
             );
         
     }

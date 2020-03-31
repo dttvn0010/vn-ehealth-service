@@ -8,6 +8,7 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.springframework.data.annotation.Transient;
 
 @JsonInclude(Include.NON_NULL)
 public abstract class BaseResource {
@@ -25,6 +26,10 @@ public abstract class BaseResource {
     public List<BaseExtension> extension;
     public List<BaseExtension> modifierExtension;
     @JsonIgnore public String fhirId;
+    
+    @JsonIgnore
+    @Transient 
+    public Map<String, Object> computes = new HashMap<>();
     
     public Map<String, Object> getDto(Map<String, Object> options) {
         return new HashMap<>(); 

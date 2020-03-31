@@ -6,7 +6,6 @@ import java.time.Year;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.Map;
 import java.util.Optional;
 
 import org.hl7.fhir.r4.model.ResourceType;
@@ -86,16 +85,9 @@ public class EncounterController {
             return new PatientAge(years, PatientAge.YEAR);
         }
     }
-    
-    private PatientAge getPatientAge(EncounterEntity enc) {
-        if(enc.period != null && enc.subject != null) {
-            return getPatientAge((PatientEntity)enc.subject.resource, enc.period.end);
-        }
-        return null;
-    }
+   
     
     @GetMapping("/get_hsba")
-    @SuppressWarnings("unchecked")
     public ResponseEntity<?> getHsbaEncounter(@RequestParam Optional<String> patientId,
                                 @RequestParam Optional<Boolean> includePatient,
                                 @RequestParam Optional<Boolean> includeServiceProvider,
@@ -116,18 +108,17 @@ public class EncounterController {
             lst.forEach(x -> MongoUtils.fetchReferenceResource(x.serviceProvider));
         }
         
+        for(var enc : lst) {
+            var patient = (PatientEntity) enc.subject.resource;
+            if(patient != null && enc.period != null) {
+                patient.computes.put("age", getPatientAge(patient, enc.period.end));
+            }
+        }
+        
         if(viewEntity.orElse(false)) {
             return ResponseEntity.ok(lst);
         }else {
-            var lstDto = transform(lst, EncounterEntity::toDto);
-            for(int i = 0; i < lstDto.size(); i++) {
-                var enc = lst.get(i);
-                var encDto = lstDto.get(i);
-                var patientDto = (Map<String, Object>) encDto.get("patient");
-                var patientComputes = mapOf("age", getPatientAge(enc));
-                patientDto.put("computes", patientComputes);
-            }
-            
+            var lstDto = transform(lst, EncounterEntity::toDto);            
             return ResponseEntity.ok(lstDto);
         }       
     }
