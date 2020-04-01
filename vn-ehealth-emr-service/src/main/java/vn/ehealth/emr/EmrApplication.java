@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EntityScan("vn.ehealth")
 @ComponentScan("vn.ehealth")
 public class EmrApplication {
-
     @Autowired
     ApplicationContext context;
     

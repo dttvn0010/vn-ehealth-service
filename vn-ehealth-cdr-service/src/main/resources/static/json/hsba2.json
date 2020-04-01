@@ -1,0 +1,466 @@
+{
+    "matraodoi": "16BA91408363|2016-01-29 15:26:59",
+    "mayte": "16BA91408363",
+    "emrCoSoKhamBenh" : {
+    	"ma" : "5980"
+    },
+    "emrBenhAn": {
+        "cannang": 60,
+        "chieucao": 170,
+        "coxuongkhop": "C\u01a1 x\u01b0\u01a1ng kh\u1edbp \u0111au m\u1ecfi nh\u1ee9c nh\u1ed1i",
+        "dacdiemkhac": 1,
+        "diung": 1,
+        "emrCkKhamPhuKhoa": {},
+        "emrCkKhamSanKhoa": {},
+        "emrCkKhamSoSinh": {},
+        "emrCkPhuongPhapHoiSinh": {},
+        "emrCkQuaTrinhSinhTruong": {},
+        "emrCkSkTinhTrangSanPhu": {},
+        "emrCkTamThan": {},
+        "emrCkThanKinh": {},
+        "emrCkTiemChung": {},
+        "emrCkTienSuBanThanSanKhoa": {},
+        "emrCkTienSuGiaDinh": {},
+        "emrCkTienSuPhuKhoa": {},
+        "emrCkTienSuSanKhoa": {},
+        "emrCkTinhTrangSanPhu": {},
+        "emrCkTinhTrangSoSinh": {},
+        "emrCkToanThan": {
+            "biphu": "",
+            "hachSoluong": "",
+            "phutoanthan": ""
+        },
+        "emrCkPhuongPhapDieuTriUngBuou": {
+            "sodot": 0
+        },
+        "emrCkTinhTrangRaVienMat": {},
+        "emrDmMaBenhChandoanbenhchinh": {
+            "ma": ""
+        },
+        "emrDmMaBenhChandoankemtheo": {
+            "ma": ""
+        },
+        "emrDmMaBenhChandoanphanbiet": {
+            "ma": ""
+        },
+        "hohap": "H\u00f4 h\u1ea5p b\u00ecnh th\u01b0\u1eddng",
+        "huongdieutri": "B\u1ec7nh nh\u00e2n nh\u1eadp vi\u1ec7n khoa H\u1ed3i s\u1ee9c c\u1ea5p c\u1ee9u",
+        "huyetapcao": 120,
+        "huyetapthap": 60,
+        "lydovaovien": "b\u1ec7nh nh\u00e2n \u0111au b\u1ee5ng, \u0111au qu\u1eb7n v\u00f9ng th\u01b0\u1ee3ng v\u1ecb",
+        "mach": 80,
+        "mat": "M\u1eaft m\u0169i mi\u1ec7ng b\u00ecnh th\u01b0\u1eddng, kh\u00f4ng b\u1ecb d\u1ecbt \u1eadt",
+        "matuy": "",
+        "nhietdo": 36,
+        "nhiptho": 18,
+        "noitietdinhduong": "N\u1ed9i ti\u1ebft c\u01a1 \u0111\u1ecba b\u00ecnh th\u01b0\u1eddng, \u0103n u\u1ed1ng dinh d\u01b0\u1ee1ng b\u00ecnh th\u01b0\u1eddng",
+        "quatrinhbenhly": "T\u00ecnh tr\u1ea1ng b\u1ec7nh l\u00fd \u1ed5n \u0111\u1ecbnh",
+        "ranghammat": "R\u0103ng h\u00e0m m\u1eb7t b\u00ecnh th\u01b0\u1eddng",
+        "ruoubia": "",
+        "taimuihong": "Tai m\u0169i h\u1ecdng b\u1ea5t b\u00ecnh th\u01b0\u1eddng",
+        "thankinh": "C\u00f3 v\u1ea5n \u0111\u1ec1 v\u1ec1 th\u1ea7n kinh",
+        "thuocla": "",
+        "thuoclao": "",
+        "tienluong": "G\u1ea7n kh\u00e1 xa t\u1ed1t",
+        "tiensubanthan": "",
+        "tiensugiadinh": "",
+        "tietnieusinhduc": "Th\u1eadn k\u00e9m, gan k\u00e9m",
+        "tieuhoa": "Ti\u00eau h\u00f3a b\u00ecnh th\u01b0\u1eddng",
+        "toanthan": "To\u00e0n tr\u1ea1ng \u1ed5n \u0111\u1ecbnh",
+        "tomtat": "B\u1ec7nh t\u1ea3",
+        "tuanhoan": "Tu\u1ea7n ho\u00e0n b\u00ecnh th\u01b0\u1eddng",
+        "xetnghiemcanlamsang": "C\u00e1c k\u1ebft qu\u1ea3 cls b\u00ecnh th\u01b0\u1eddng"
+    },
+    "emrBenhNhan": {
+        "iddinhdanhchinh": "1611506793"
+    },
+    "emrChanDoan": {
+        "bibienchung": false,
+        "bitaibien": false,
+        "emrDmLyDoTaiBienBienChung": {
+            "ma": ""
+        },
+        "emrDmMaBenhChandoandieutri": {
+            "ma": ""
+        },
+        "emrDmMaBenhChandoankkb": {
+            "ma": ""
+        },
+        "emrDmMaBenhChandoannoiden": {
+            "ma": ""
+        },
+        "emrDmMaBenhChandoanravienchinh": {
+            "ma": ""
+        },
+        "emrDmMaBenhChandoanravienkemtheo": {
+            "ma": ""
+        },
+        "emrDmMaBenhChandoanraviennguyennhan": {
+            "ma": ""
+        },
+        "emrDmMaBenhChandoansaupt": {
+            "ma": ""
+        },
+        "emrDmMaBenhChandoantruocpt": {
+            "ma": ""
+        },
+        "motachandoandieutri": "B\u1ec7nh t\u1ea3",
+        "motachandoankkb": "B\u1ec7nh t\u1ea3",
+        "motachandoannoiden": "",
+        "motachandoanravienchinh": "B\u1ec7nh t\u1ea3, kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+        "motachandoanravienkemtheo": "",
+        "motachandoansaupt": "B\u1ec7nh t\u1ea3, kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+        "motachandoantruocpt": "B\u1ec7nh t\u1ea3",
+        "tongsolanpt": 3,
+        "tongsongaysaupt": 11
+    },
+    "emrDmLoaiBenhAn": {
+        "ma": ""
+    },
+    "emrChanDoanHinhAnhs": [
+        {
+            "bacsiyeucau": "Ph\u00f9ng Thu H\u01b0\u01a1ng",
+            "emrDmChanDoanHinhAnh": {
+                "ma": ""
+            },
+            "emrDmLoaiChanDoanHinhAnh": {
+                "ma": ""
+            },
+            "ngayyeucau": "2016-01-02 00:00:00"
+        }
+    ],
+    "emrDonThuocs": [
+        {
+            "bacsikedon": "\u0110o\u00e0n Thanh Mai",
+            "emrDonThuocChiTiets": [
+                {
+                    "chidandungthuoc": "\u0111\u01b0\u1eddng mi\u1ec7ng ng\u00e0y 3 l\u1ea7n",
+                    "emrDmThuoc": {
+                        "ma": "AMPICILLIN"
+                    },
+                    "emrDmDuongDungThuoc": {
+                        "ma": ""
+                    },
+                    "emrDmTanXuatDungThuoc": {
+                        "ma": ""
+                    },
+                    "lieuluongdung": "20.00000",
+                    "ngaybatdau": "2015-12-26 00:00:00",
+                    "ngayketthuc": "2015-12-26 00:00:00"
+                }
+            ],
+            "ngaykedon": "2015-12-26 00:00:00",
+            "sodon": 1
+        }
+    ],
+    "emrHinhAnhTonThuongs": [
+        {
+            "motatonthuong": "",
+            "fileDinhkem": [
+                {
+                    "url": "http://test.com/1.jpg",
+                    "format": "jpg"
+                },
+                {
+                    "url": "http://test.com/2.png",
+                    "format": "png"
+                }
+            ]
+        }
+    ],
+    "emrQuanLyNguoiBenh": {
+        "emrDmNoiGioiThieu": {
+            "ma": ""
+        },
+        "emrDmLoaiDoiTuongTaiChinh": {
+            "ma": ""
+        },
+        "emrDmLoaiRaVien": {
+            "ma": ""
+        },
+        "emrDmNoiTrucTiepVao": {
+            "ma": ""
+        },
+        "emrDmLoaiChuyenVien": {
+            "ma": ""
+        },
+        "emrDmCoSoKhamBenh": {
+            "ma": ""
+        },
+        "emrDmLoaiVaoVien": {
+            "ma": ""
+        },
+        "ngaygiovaovien": "2015-12-26 14:22:00",
+        "ngaygioravien": "2016-01-05 15:17:00",
+        "tenbacsichoravien": "\u0110\u1ed7 Th\u1ecb Hi\u1ec1n",
+        "tenbacsikham": "Nguy\u1ec5n Th\u1ecb B\u00edch Th\u1ee7y",
+        "tongsongaydieutri": 11,
+        "vaovienlanthu": 1
+    },
+    "emrThamDoChucNangs": [
+        {
+            "bacsiyeucau": "Tr\u1ea7n \u0110\u0103ng Khoa",
+            "emrDmThamDoChucNang": {
+                "ma": ""
+            },
+            "ngayyeucau": "2016-01-03 00:00:00",
+            "ketluan": ""
+        }
+    ],
+    "emrTinhTrangRaVien": {
+        "emrDmNguyennhantuvong": {
+            "ma": ""
+        },
+        "emrDmKetQuaDieuTri": {
+            "ma": ""
+        },
+        "emrDmGiaiphaututhi": {
+            "ma": ""
+        },
+        "emrDmKetQuaGiaiPhauBenh": {
+            "ma": ""
+        },
+        "emrDmThoiDiemTuVong": {
+            "ma": ""
+        },
+        "emrDmLyDoTuVong": {
+            "ma": ""
+        },
+        "khamnghiemtuthi": false,
+        "motagiaiphaututhi": "",
+        "motanguyennhantuvong": ""
+    },
+    "emrTongKetRaVien": {
+        "bacsydieutri": ""        
+    },
+    "emrTongKetSanKhoa": {},
+    "emrVaoKhoas": [
+        {
+            "bacsidieutri": "\u0110o\u00e0n Thanh Mai",
+            "phong": 10,
+            "giuong": 10,
+            "ngaygiovaokhoa": "2015-12-26 14:22:00",
+            "ngayketthucdieutri": "2016-01-01 14:50:00",
+            "emrDmKhoaDieuTri": {
+                "ma": ""
+            },
+            "emrChamSocs": [
+                {
+                    "sotochamsoc": "",
+                    "emrQuaTrinhChamSocs": [
+                        {
+                            "ngaychamsoc": "2015-12-26 14:48:00",
+                            "theodoidienbien": "B\u1ec7nh nh\u00e2n nh\u1eadp vi\u1ec7n trong t\u00ecnh tr\u1ea1ng \u0111au b\u1ee5ng, \u0111au v\u00f9ng th\u01b0\u1ee3ng v\u1ecb\tCho b\u1ec7nh nh\u00e2n nh\u1eadp vi\u1ec7n khoa h\u1ed3i s\u1ee9c c\u1ea5p c\u1ee9u",
+                            "thuchienylenh": "H\u01b0\u1edbng d\u1eabn n\u1ed9i quy khoa ph\u00f2ng cho b\u1ec7nh nh\u00e2n.H\u01b0\u1edbng d\u1eabn v\u1ec1 b\u1ea3o hi\u1ec3m y t\u1ebf.Ch\u0103m s\u00f3c, theo d\u00f5i b\u1ec7nh nh\u00e2n",
+                            "ytachamsoc": "Ho\u00e0ng \u0110\u00ecnh L\u00e2n"
+                        }
+                    ]
+                }
+            ],
+            "emrChucNangSongs": [
+                {
+                    "emrChucNangSongChiTiets": [
+                        {
+                            "cannang": null,
+                            "huyetapcao": 110,
+                            "huyetapthap": 70,
+                            "mach": 80,
+                            "nhietdo": 37,
+                            "nhiptho": 11,
+                            "ytatheodoi": "Ho\u00e0ng \u0110\u00ecnh L\u00e2n",
+                            "ngaytheodoi": "2015-12-26 14:48:00"
+                        }
+                    ]
+                }
+            ],
+            "emrDieuTris": [
+                {
+                    "sotodieutri": 1,
+                    "emrQuaTrinhDieuTris": [
+                        {
+                            "dienbien": "",
+                            "ngaydieutri": "2016-01-13 00:00:00"
+                        }
+                    ]
+                }
+            ],
+            "emrHoiChans": [
+                {
+                    "emrThanhVienHoiChans": [
+                        {
+                            "ten": "Ph\u1ea1m Thu Huy\u1ec1n",
+                            "emrDmVaiTro": {
+                                "ma": "01"
+                            }
+                        },
+                        {
+                            "ten": "Ph\u1ea1m Minh Tuy\u1ebft",
+                            "emrDmVaiTro": {
+                                "ma": "02"
+                            }
+                        },
+                        {
+                            "ten": "T\u1ea1 Th\u1ecb Ho\u00e0n",
+                            "emrDmVaiTro": {
+                                "ma": "03"
+                            }
+                        },
+                        {
+                            "ten": "Tr\u01b0\u01a1ng Th\u1ecb Thu H\u1eb1ng",
+                            "emrDmVaiTro": {
+                                "ma": "03"
+                            }
+                        }
+                    ],
+                    "ketluanhoichan": "",
+                    "tomtatdienbien": "",
+                    "huongdieutri": "",
+                    "ngaythuchien": "2015-12-26 00:00:00"
+                }
+            ]
+        }
+    ],
+    "emrXetNghiems": [
+        {
+            "bacsixetnghiem": "L\u00ea Th\u1ecb Li\u00ean",
+            "bacsiyeucau": "\u0110o\u00e0n Thanh Mai",
+            "emrDmLoaiXetNghiem": {
+                "ma": ""
+            },
+            "ngaythuchien": "2016-01-05 14:43:00",
+            "ngayyeucau": "2015-12-26 00:00:00",
+            "nhanxet": "B\u1ec7nh t\u1ea3 do virus",
+            "emrXetNghiemDichVus": [
+                {
+                    "emrDmXetNghiem": {
+                        "ma": ""
+                    },
+                    "emrXetNghiemKetQuas": [
+                        {
+                            "emrDmChiSoXetNghiem": {
+                                "ma": ""
+                            },
+                            "emrDmDichKetQuaXetNghiem": {
+                                "ma": ""
+                            },
+                            "giatrido": 2.2
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "emrYhctBenhAn": {
+        "dieutriKethopyhhd": 1,
+        "emrDmYhctCheDoChamSoc": {
+            "ma": ""
+        },
+        "emrYhctBenhanThietChan": {
+            "lstconhuc": "",
+            "lstmachchanQuanTayphai": "02",
+            "lstmachchanQuanTaytrai": "02",
+            "lstmachchanThonTayphai": "01",
+            "lstmachchanThonTaytrai": "01",
+            "lstmachchanXichTayphai": "04",
+            "lstmachchanXichTaytrai": "02",
+            "lstmachchantongquat": "02",
+            "lstphucchan": "04",
+            "lstxucchan": "01",
+            "lstxucchanmohoi": "",
+            "motathietchan": "M\u00f4 t\u1ea3 thi\u1ebft ch\u1ea9n"
+        },
+        "emrYhctBenhanVaanChan": {
+            "dkxuatvien": true,
+            "lstan": "03",
+            "lstbungnguc": "03",
+            "lstchantay": "1",
+            "lstdaitien": "01",
+            "lstdaumatco": "01|09|11|16|19|21",
+            "lstdoiha": "01",
+            "lsthannhiet": "03",
+            "lsthannhietbieuhien": "02",
+            "lstkinhnguyet": "01",
+            "lstlung": "02",
+            "lstmohoi": "02",
+            "lstngu": "01",
+            "lstsinhduc": "01",
+            "lstthongkinh": "01",
+            "lsttieutien": "01",
+            "lstuong": "02",
+            "motavaanchan": "M\u00f4 t\u1ea3 v\u1ea5n ch\u1ea9n"
+        },
+        "emrYhctBenhanVawnChan": {
+            "amthanhnac": "1",
+            "amthanho": "1",
+            "lstchatthaibenhly": "05",
+            "lsthoitho": "03|06",
+            "lstmuicothe": "01",
+            "lsttiengho": "02",
+            "lsttiengnoi": "01",
+            "motavawnchan": "M\u00f4 t\u1ea3 v\u0103n ch\u1ea9n"
+        },
+        "emrYhctBenhanVongChan": {
+            "lstchatluoi": "01",
+            "lsthinhthai": "01",
+            "lstreuluoi": "01",
+            "lstsac": "02",
+            "lstsacluoi": "01",
+            "lstthan": "01",
+            "lsttrach": "01",
+            "motavongchan": "M\u00f4 t\u1ea3 v\u1ecdng ch\u1ea9n"
+        },
+        "lstchedodinhduong": "02",
+        "luantri": "Bi\u1ec7n ch\u1ee9ng lu\u1eadn tr\u00ed : bi\u1ec7n ch\u1ee9ng lu\u1eadn tr\u00ed",
+        "motachamsoc": "",
+        "phapdieutri": "Ph\u00e1p \u0111\u1ed3 \u0111i\u1ec1u tr\u1ecb",
+        "phuonghuyet": "Ph\u01b0\u01a1ng huy\u1ec7t",
+        "phuongphapkhac": "\u0110i\u1ec7n t\u00e2m \u0111\u1ed3",
+        "phuongthuoc": "B\u00e0i thu\u1ed1c h\u1ed3 tr\u00f5 c\u1ee7a vi\u1ec7n: ma ho\u00e0ng",
+        "tienluong": "G\u1ea7n kh\u00e1 xa t\u1ed1t",
+        "tomtattuchan": "T\u00f3m t\u1eaft t\u1ee9 ch\u1ea9n : t\u1ee9 ch\u1ea9n b\u00ecnh th\u01b0\u1eddng"
+    },
+    "emrYhctChanDoan": {
+        "emrDmYhctBenhdanhVaovien": {
+            "ma": ""
+        },
+        "emrDmYhctBenhdanhRavien": {
+            "ma": ""
+        },
+        "emrDmYhctBenhdanhVk": {
+            "ma": ""
+        },
+        "lstbatcuong": "01|02",
+        "lstbatcuongVv": "",
+        "lstdinhvibenh": "03",
+        "lstdinhvibenhVv": "",
+        "lstkinhmach": "01|02",
+        "lstkinhmachVv": "",
+        "lstnguyennhanbenh": "01",
+        "lstnguyennhanbenhVv": "",
+        "lsttangphu": "01|02",
+        "lsttangphuVv": "",
+        "motabenhdanhyhctvaovien": "N10"
+    },
+    "emrYhctDonThuocs": [
+        {
+            "bacsikedon": "\u0110o\u00e0n Thanh Mai",
+            "sodon": 1,
+            "emrYhctDonThuocChiTiets": [
+                {
+                    "chidandungthuoc": "",
+                    "emrDmYhctViThuoc": {
+                        "ma": "I.11"
+                    },
+                    "lieuluongdung": "30.00"
+                },
+                {
+                    "chidandungthuoc": "",
+                    "emrDmYhctViThuoc": {
+                        "ma": "II.2"
+                    },
+                    "lieuluongdung": "30.00"
+                }
+            ]
+        }
+    ]
+}

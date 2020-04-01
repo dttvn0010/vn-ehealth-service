@@ -16,8 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import vn.ehealth.emr.auth.jwt.JWTAuthenticationEntryPoint;
-import vn.ehealth.emr.auth.jwt.JWTAuthenticationFilter;
+import vn.ehealth.auth.jwt.JWTAuthenticationEntryPoint;
+import vn.ehealth.auth.jwt.JWTAuthenticationFilter;
 
 
 @EnableWebSecurity

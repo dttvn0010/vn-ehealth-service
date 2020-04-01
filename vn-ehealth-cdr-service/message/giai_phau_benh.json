@@ -1,0 +1,36 @@
+{
+    "encounter": {"id": "7dcbdb62-bb24-4ca8-b48a-ecbdb3ff1124"},
+    "dmGpb": {
+        "ma": "01",
+        "ten": "Nuôi cấy mô"
+    },
+    "dmViTriLayMau": {
+		"ma": "01",
+		"ten": "Da"
+	},
+	"ngayLayMau": "2018-06-28 00:00:00",
+    "maChanDoanGpb": "001",
+    "moTaChanDoanGpb": "Mô tả gpb",
+    "ngayYeuCau": "2018-06-28 00:00:00",
+    "bacSiYeuCau": {
+        "id": "bb41d74e-3e9e-4c71-ab6e-626e3a98cb93",
+        "ten": "Bác sĩ A"
+    },
+    "ngayThucHien": "2018-06-29 00:00:00",
+    "bacSiChuyenKhoa": {
+        "id": "c639bda6-af79-4477-8d62-c46fcd04723e",
+        "ten": "Bác sĩ B"
+    },
+    "nhanXetViThe": "vi thể",
+    "nhanXetDaiThe": "đại thể",
+    "ketLuan": "Kết luận chẩn đoán",
+    "nguoiVietBaoCao": {
+        "id": "e74136c0-af78-4326-a721-b74b62f613a5",
+        "ten": "Bác sĩ C"
+    },
+    "nguoiDanhGiaKetQua": {
+        "id": "c1ae37d4-cd92-4daf-9b39-b8e192bfc8cd",
+        "ten": "Bác sĩ D"
+    },
+    "ngayGioBaoCao": "2018-06-30 00:00:00"
+}

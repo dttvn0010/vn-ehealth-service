@@ -1,0 +1,59 @@
+{
+  "idhis": "5400525",
+  "emrDmGioiTinh": {
+    "ma": "M",
+    "ten": "Nam"
+  },
+  "emrDmDanToc": {
+    "ma": "DT01",
+    "ten": "Kinh"
+  },
+  "emrDmQuocGia": {
+    "ma": "VIE",
+    "ten": "Việt Nam"
+  },
+  "emrDmNgheNghiep": {
+    "ma": "679",
+    "ten": "Trẻ <6 tuổi đi học, < 15 t không đi học"
+  },
+  "emrDmPhuongXa": {
+    "ma": "14698",
+    "ten": "Xã Kim Đông"
+  },
+  "emrDmQuanHuyen": {
+    "ma": "376",
+    "ten": "Huyện Kim Sơn"
+  },
+  "emrDmTinhThanh": {
+    "ma": "37",
+    "ten": "Tỉnh Ninh Bình"
+  },
+  "emrDmLoaiDoiTuongTaiChinh":{
+	"ma":"01","ten":"BHYT"
+  },
+  "emrDmNgheNghiepBo": {
+    "ma": "683",
+    "ten": "Nông dân"
+  },
+  "emrDmNgheNghiepMe": {
+    "ma": "683",
+    "ten": "Nông dân"
+  },
+  "iddinhdanhchinh": "TE137010004002437000",
+  "iddinhdanhphu": "112114115",
+  "tendaydu": "LÊ HỒNG PHÚC",
+  "ngaysinh": "2018-06-13 00:00:00",
+  "diachi": "Xã Kim Đông, Huyện Kim Sơn, Ninh Bình",
+  "noilamviec": "text",
+  "sobhyt": "TE137010004002437000",
+  "ngayhethanthebhyt": "2024-06-12 00:00:00",
+  "hotenbo": "Le Thanh Linh",
+  "hotenme": "Phạm Thị Thúy Hòa",
+  "tennguoibaotin": "Le Thanh Linh",
+  "diachinguoibaotin": "Xã Kim Đông, Huyện Kim Sơn, Ninh Bình",
+  "sodienthoainguoibaotin": "098756454",
+  "ngaySinhCuaBo": "",
+  "ngaySinhCuaMe": "",
+  "trinhDoVanHoaCuaBo": "10/10",
+  "trinhDoVanHoaCuaMe": "10/10"
+}

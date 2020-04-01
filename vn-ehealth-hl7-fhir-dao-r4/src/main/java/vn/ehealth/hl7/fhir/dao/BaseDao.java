@@ -268,7 +268,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         return transform(ent);
     }
     
-    public int countByCriteria(Criteria criteria) {
+    public int countResource(Criteria criteria) {
+        criteria.and("active").is(true);
         var query = Query.query(criteria);
         int count = (int) mongo.count(query, getEntityClass());
         return count;
