@@ -36,6 +36,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     
     @SuppressWarnings("unchecked")
     public FHIR transform(ENT ent) {
+        if(ent == null) return null;
         var obj = DataConvertUtil.entityToFhir(ent, getResourceClass());
         obj.setMeta(DataConvertUtil.getMeta(ent, getProfile()));
         obj.setId(ent.fhirId);
