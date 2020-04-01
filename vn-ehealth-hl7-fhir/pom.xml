@@ -89,21 +89,6 @@
             <optional>true</optional>
         </dependency>
         
-        <dependency>
-	        <groupId>ca.uhn.hapi.fhir</groupId>
-	        <artifactId>hapi-fhir-testpage-overlay</artifactId>
-	        <version>${hapi-fhir-version}</version>
-	        <type>war</type>
-	        <scope>provided</scope>		
-	    </dependency>
-	    <dependency>
-	        <groupId>ca.uhn.hapi.fhir</groupId>
-	        <artifactId>hapi-fhir-testpage-overlay</artifactId>
-	        <version>${hapi-fhir-version}</version>
-	        <classifier>classes</classifier>
-	        <scope>provided</scope>		
-	    </dependency>
-        
     </dependencies>
 
     <build>
