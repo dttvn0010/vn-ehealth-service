@@ -1,0 +1,34 @@
+{
+  "matraodoiHoSo": "18.052294",
+  "emrChamSocs": [
+    {
+      "idhis": "1111",
+      "emrDmKhoaDieuTri": {
+        "ma": "001",
+        "ten": "Khoa điều trị"
+      },
+      "sotochamsoc": "Số tờ chăm sóc",
+      "emrQuaTrinhChamSocs": [
+        {
+          "ngaychamsoc": "2018-06-29 00:00:00",
+          "ytachamsoc": {
+			"chungchihanhnghe": "11111",
+            "ten": "Y tá chăm sóc"            
+          },
+          "theodoidienbien": "Diễn biến",
+          "thuchienylenh": "y lệnh"
+        }
+      ],
+      "emrFileDinhKemChamSocs": [
+        {
+          "url": "url file 1",
+          "ten": "Tên file 1"
+        },
+        {
+          "url": "url file 2",
+          "ten": "Tên file 2"
+        }
+      ]
+    }
+  ]
+}

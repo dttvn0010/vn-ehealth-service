@@ -3,8 +3,6 @@ package vn.ehealth.hl7.fhir.diagnostic.entity;
 import java.util.Date;
 
 import java.util.List;
-import java.util.Map;
-
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
@@ -17,7 +15,6 @@ import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 
 @Document(collection = "diagnosticReport")
@@ -50,29 +47,4 @@ public class DiagnosticReportEntity extends BaseResource {
     public String conclusion;
     public List<BaseCodeableConcept> conclusionCode;
     public List<BaseAttachment> presentedForm;
-    
-    public Map<String, Object> getDto(Map<String,Object> options) {
-        return mapOf(
-                    "status", status,
-                    "issued", issued,
-                    "patient", BaseReference.toDto(subject),
-                    "category", transform(category, BaseCodeableConcept::toDto),
-                    "code", BaseCodeableConcept.toDto(code),
-                    "performer", transform(performer, BaseReference::toDto),
-                    "resultsInterpreter", transform(resultsInterpreter, BaseReference::toDto),
-                    "specimen", transform(specimen, BaseReference::toDto),
-                    "result", transform(result, BaseReference::toDto),
-                    "imagingStudy", transform(imagingStudy, BaseReference::toDto),
-                    "conclusion", conclusion
-                );
-    }
-    
-    public static Map<String, Object> toDto(DiagnosticReportEntity ent, Map<String,Object> options) {
-        if(ent == null) return null;
-        return ent.getDto(options);
-    }
-    
-    public static Map<String, Object> toDto(DiagnosticReportEntity ent) {
-        return toDto(ent, null);
-    }
 }

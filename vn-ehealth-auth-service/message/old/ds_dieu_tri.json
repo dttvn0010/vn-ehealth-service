@@ -1,0 +1,34 @@
+{
+  "matraodoiHoSo": "18.052294",
+  "emrDieuTris": [
+    {
+      "idhis": "1111",
+      "emrDmKhoaDieuTri": {
+        "ma": "001",
+        "ten": "Khoa điều trị"
+      },
+      "sotodieutri": "Số tờ điều trị",
+      "emrQuaTrinhDieuTris": [
+        {
+          "ngaydieutri": "2018-06-29 00:00:00",
+          "dienbien": "Diễn biến",
+          "ylenh": "Y lệnh",
+          "bacsiraylenh": {
+            "chungchihanhnghe": "11111",
+            "ten": "Bác sĩ ra y lệnh"
+          }
+        }
+      ],
+      "emrFileDinhKemDieuTris": [
+        {
+          "url": "url file 1",
+          "ten": "Tên file 1"
+        },
+        {
+          "url": "url file 2",
+          "ten": "Tên file 2"
+        }
+      ]
+    }
+  ]
+}

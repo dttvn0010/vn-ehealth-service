@@ -1,0 +1,353 @@
+{
+  "emrBenhNhan": {
+    "idhis": "5400525",
+    "tendaydu": "LÊ HỒNG PHÚC"
+  },
+  
+  "emrCoSoKhamBenh": {
+    "ma": "5980",
+    "ten": "Bệnh viện Đa khoa Trung ương Cần Thơ"
+  },
+  
+  "matraodoi": "1101001",
+  "mayte": "180340024",
+  "ngaytiepnhan": "2018-07-31 09:26:00",
+  "nguoitiepnhan": "Người tiếp nhận",
+  "emrDmLoaiBenhAn": {
+    "ma": "05",
+    "ten": "Bệnh án sản khoa"
+  },
+  
+  "emrQuanLyNguoiBenh": {
+    "ngaygiovaovien": "2018-06-28 05:06:00",
+    "emrDmNoiTrucTiepVao": {
+      "ma": "001",
+      "ten": "Nơi trực tiếp vào"
+    },
+    "emrDmNoiGioiThieu": {
+      "ma": "001",
+      "ten": "Nơi giới thiệu"
+    },
+    "vaovienlanthu": 2,
+    "emrVaoKhoas": [
+      {
+        "emrDmKhoaDieuTri": {
+          "ma": "001",
+          "ten": "Khoa điều trị 1"
+        },
+        "ngaygiovaokhoa": "2018-06-29 00:00:00",
+        "ngayketthucdieutri": "2018-06-29 00:00:00",
+        "tenkhoa": "Tên khoa",
+        "bacsidieutri": {
+          "chungchihanhnghe": "1111",
+          "ten": "Bác sĩ điều trị"
+        },
+        "phong": "Phòng",
+        "giuong": "Giường",
+        "songaydieutri": 10,
+        "tentruongkhoa": "Tên trưởng khoa"
+      },
+      {
+        "emrDmKhoaDieuTri": {
+          "ma": "002",
+          "ten": "Khoa điều trị 2"
+        },
+        "ngaygiovaokhoa": "2018-06-29 00:00:00",
+        "ngayketthucdieutri": "2018-06-29 00:00:00",
+        "tenkhoa": "Tên khoa",
+        "bacsidieutri": {
+          "chungchihanhnghe": "1111",
+          "ten": "Bác sĩ điều trị"
+        },
+        "phong": "Phòng",
+        "giuong": "Giường",
+        "songaydieutri": 10,
+        "tentruongkhoa": "Tên trưởng khoa"
+      }
+    ],
+    "emrDmLoaiChuyenVien": {
+      "ma": "001",
+      "ten": "Loại chuyển viện"
+    },
+    "noichuyenden": "Nơi chuyển đến",
+    "ngaygioravien": "2018-06-29 04:06:00",
+    "emrDmLoaiRaVien": {
+      "ma": "001",
+      "ten": "Loại ra viện"
+    },
+    "tongsongaydieutri": 10
+  },
+  
+  "emrChanDoan": {
+    "emrDmMaBenhChandoannoiden": {
+      "ma": "001",
+      "ten": "Bệnh chẩn đoán nơi đến"
+    },
+    "motachandoannoiden": "Mô tả chẩn đoán nơi đến",
+    
+    "emrDmMaBenhChandoankkb": {
+      "ma": "001",
+      "ten": "Bệnh chẩn đoán khi khám bệnh"
+    },
+    "motachandoankkb": "Mô tả chẩn đoán khi khám bệnh",
+    
+    "emrDmMaBenhChandoanlucvaode": {
+      "ma": "001",
+      "ten": "Bệnh chẩn đoán lúc vào đẻ"
+    },
+    "motachandoanlucvaode": "Mô tả chẩn đoán lúc vào đẻ",
+    
+    "ngayde": "2018-06-29 04:06:00",
+    "ngoithai": "",
+    "cachthucde": "",
+    "kiemsoattucung": "",
+    
+    "bitaibien": false,
+    "bibienchung": false,
+    
+    "emrDmLyDoTaiBienBienChung": {
+      "ma": "0001",
+      "ten": "Lý do tai biến biến chứng"
+	},
+	   
+    "tinhinhphauthuat": {
+		"capcuu": false,
+		"chudong": true
+	},
+	
+	"emrDmMaBenhChandoantruocpts": [
+		{
+		  "ma": "001",
+		  "ten": "Bệnh chẩn đoán trước pt 1"
+		},
+		{
+		  "ma": "002",
+		  "ten": "Bệnh chẩn đoán trước pt 2"
+		}
+	],
+    "motachandoantruocpt": "Mô tả chẩn đoán trước pt",
+    
+    "emrDmMaBenhChandoansaupts": [
+		{
+		  "ma": "001",
+		  "ten": "Bệnh chẩn đoán sau pt"
+		},
+		{
+		  "ma": "001",
+		  "ten": "Bệnh chẩn đoán sau pt"
+		}
+	],
+    "motachandoansaupt": "Mô tả chẩn đoán sau pt",
+    
+    "phuongphapphauthuat": "",
+    
+    "tresosinh": {
+		"dathai": true,
+		"trai": 1,
+		"gai": 1,
+		"song": true,
+		"chet": false,
+		"ditat": "",
+		"cannang": ""
+	},
+    
+	"tongsongaysaupt": 10,
+    "tongsolanpt": 2
+  },
+  
+  "emrTinhTrangRaVien": {
+    "emrDmKetQuaDieuTri": {
+      "ma": "001",
+      "ten": "Kết quả điều trị"
+    },
+    
+    "emrDmKetQuaGiaiPhauBenh": {
+      "ma": "001",
+      "ten": "Kết quả giải phẫu bệnh"
+    },
+    
+    "ngaygiotuvong": "2018-06-29 00:00:00",
+    "emrDmLyDoTuVong": {
+      "ma": "001",
+      "ten": "Lý do tử vong(Bệnh/Tai biến/Khác)"
+    },
+    "emrDmThoiDiemTuVong": {
+      "ma": "001",
+      "ten": "Thời điểm tử vong"
+    },
+    "emrDmMaBenhNguyennhantuvong": {
+      "ma": "001",
+      "ten": "Bệnh gây tử vong"
+    },
+    "motanguyennhantuvong": "Mô tả bệnh gây tử vong",
+    
+    "khamnghiemtuthi": false,
+    "emrDmMaBenhGiaiphaututhi": {
+      "ma": "001",
+      "ten": "Bệnh giải phẫu tử thi"
+    },
+    "motagiaiphaututhi": "Mô tả bệnh giải phẫu tử thi"
+  },
+  
+  "emrBenhAn": {
+    "lydovaovien": "Lý do vào viện",
+    "vaongaythu": 2,
+    
+    "hoibenh": {
+	  "quatrinhkythai":  {
+		  "kinhcuoitungay": "2018-06-29 00:00:00",
+		  "kinhcuoidenngay": "2018-06-29 00:00:00",
+		  "tuoithai": "",
+		  "khamthaitai":"",
+		  "tiemphonguonvan": true,
+		  "solantiem": 3,
+		  "ngaygiochuyenda": "2018-06-29 00:00:00",
+		  "dauhieulucdau":"",
+		  "bienchuyen": ""
+	  },
+      "tiensubenh": {
+        "tiensubanthan": "Tiền sử bản thân",
+        "tiensugiadinh": "Tiền sử gia đình"
+      },
+      "tiensuphukhoa": {
+		  "nambatdauthaykinh": "",
+		  "tuoibatdauthaykinh": "",
+		  "tinhchatkinhnguyet": "",
+		  "chukykinh": "",
+		  "luongkinh": "",
+		  "namlaychong": "",
+		  "tuoilaychong": "",,
+		  "benhphukhoadadieutri": ""		  
+	  },
+	  
+	  "tiensusankhoa": [
+	      {
+			  "lancothai": 1,
+			  "nam": "",
+			  "deduthang": "",
+			  "dethieuthang": "",
+			  "say": "",
+			  "hut": "",
+			  "nao": "",
+			  "covac": "",
+			  "chuangoaitc": "",
+			  "chuatrung": "",
+			  "thaichetluu": "",
+			  "conhiensong": "",
+			  "cannang": "",
+			  "phuongphapde": "",
+			  "taibien": ""
+		  }
+	  ]
+    },
+    
+    "khambenh": {
+      "toanthan": "Toàn thân",
+      "phu": false,
+      "mach": 60,
+      "nhietdo": 37,
+      "huyetapcao": 120,
+      "huyetapthap": 70,
+      "nhiptho": 20,
+      "cannang": 60,
+      "tuanhoan": "Tuần hoàn",
+      "hohap": "Hô hấp",
+      "tieuhoa": "Tiêu hóa",
+      "tietnieusinhduc": "Thận-Tiết niệu-Sinh dục",
+      "coquankhac": "Bệnh lý khác",
+      "xetnghiemcanlamsang": "Các xét nghiệm cận lâm sàng cần làm",
+      "tomtat": "Tóm tắt bệnh án"
+    },
+    
+    "khamngoai": {
+		"bungcoseopt": false,
+		"hinhdangtc": "",
+		"tuthetc": "",
+		"chieucaotc": "",
+		"vongbung": "",
+		"concotc": "",
+		"timthai": "",
+		"vu": ""
+	},
+	
+	"khamtrong": {
+		"bishop": "",
+		"amho": "",
+		"amdao": "",
+		"sinhmon": "",
+		"cotucung": "",
+		"phanphu": "",
+		"emrDmTinhtrangoi": {"ma": "0001", "ten": "tinh trang oi"},
+		"emrDmOivo": {"ma": "0001", "ten": "oi vo"},
+		"mausacoi": "",
+		"luongoi": "",
+		"ngoi": "",
+		"the": "",
+		"kieuthe": "",
+		"emrDmDolot": {"ma": "001", "ten": "Do lot"},
+		"dknhohave": ""
+	},
+	
+	"xetnghiemcanlamsang": "Các xét nghiệm cận lâm sàng cần làm",
+    
+    "tienluong": "Tiên lượng",
+    "huongdieutri": "Hướng điều trị",
+    
+    "bacsylambenhan": {
+       "chungchihanhnghe": "11111",
+       "ten": "Bác sỹ làm bệnh án"
+	 },
+	  
+     "ngaykybenhan": "2018-06-29 00:00:00"
+  },
+  
+  "emrTongKetRaVien": {
+    "dienbienlamsang": "Diễn biến lâm sàng",
+    "canlamsang": "Kết quả xét nghiệm Cận lâm sàng",
+    "phuongphapdieutri": "Phương pháp điều trị",
+    "tinhtrangnguoibenh": "Tình trạng người bệnh",
+    "chidandieutri": "Hướng điều trị tiếp theo",
+    "nguoigiaohoso": "Người giao hồ sơ",
+    "ngaygiaohoso": "2018-06-29 00:00:00",
+    "nguoinhanhoso": "Người nhận hồ sơ",
+    "ngaynhanhoso": "2018-06-29 00:00:00",
+    "bacsydieutri": {
+      "ten": "Bác sỹ điều trị",
+      "chungchihanhnghe": "1111"
+    },
+    "ngaybacsydieutriky": "2018-06-29 00:00:00",
+    "sotodieutri": [
+      {
+        "ma": "XQuang",
+        "ten": "X Quang",
+        "soluong": 1
+      },
+      {
+        "ma": "CTScanner",
+        "ten": "Citi Scanner",
+        "soluong": 1
+      },
+      {
+        "ma": "sieuam",
+        "ten": "Siêu Âm",
+        "soluong": 1
+      },
+      {
+        "ma": "MRI",
+        "ten": "Cộng hưởng từ",
+        "soluong": 1
+      }
+    ]
+  },
+  
+  "emrFileDinhKems": [
+    {
+      "url": "url file 1",
+      "format": "Định dạng file 1"
+    },
+    {
+      "url": "url file 2",
+      "format": "Định dạng file 2"
+    }
+  ]
+}

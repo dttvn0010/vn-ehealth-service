@@ -7,10 +7,7 @@ import java.util.Map;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Criteria;
 
-import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
-import vn.ehealth.hl7.fhir.utils.EntityUtils;
 
 public class MongoUtils {
 
@@ -78,24 +75,5 @@ public class MongoUtils {
             criteria.andOperator(orCrList.toArray(new Criteria[0]));
         }
         return criteria;
-    }
-    
-    public static void setReferenceResource(BaseReference ref) {
-        if(ref != null) {
-            var resourceType = EntityUtils.getResourceType(ref);
-            if(resourceType != null) {
-                var dao = DaoFactory.getDaoByType(resourceType);
-                if(dao != null) {
-                    var id = EntityUtils.idFromRef(ref);
-                    ref.resource = dao.readEntity(id);
-                } 
-            }            
-        }
-    }
-    
-    public static void setReferenceResource(List<BaseReference> refs) {
-        if(refs != null) {
-            refs.forEach(ref -> setReferenceResource(ref));            
-        }
     }
 }

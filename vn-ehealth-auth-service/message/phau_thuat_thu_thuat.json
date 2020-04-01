@@ -1,0 +1,67 @@
+{
+    "encounter": {"id": "7dcbdb62-bb24-4ca8-b48a-ecbdb3ff1124"},
+    "dmPttt": {
+        "ma": "01",
+        "ten": "Test phẫu thuật thủ thuật 1"
+    },
+    "ngayYeuCau": "2018-06-28 00:00:00",
+    "bacSiYeuCau": {
+        "id": "bb41d74e-3e9e-4c71-ab6e-626e3a98cb93",
+        "ten": "Bác sĩ A"
+    },
+    "noiDungYeuCau": "Mổ mắt cá chân",
+    "ngayThucHien": "2018-06-29 00:00:00",
+    "chiDinhPttt": "Chỉ định pttt",
+    "ketLuan": "Kết luận pttt",
+    "trinhTuPttt": "Trình tự pttt",
+    "ghiChu": "Ghi chú",
+    "thuKyGhiChep": {
+        "id": "b21be17e-bfa4-489b-8762-15ad4c4cb02f",
+        "ten": "Bác sĩ E"
+    },
+    "chuTichHoiDong": {
+        "id": "c639bda6-af79-4477-8d62-c46fcd04723e",
+        "ten": "Bác sĩ B"
+    },
+    "hoiDongPttt": [
+        {
+            "bacsi": {
+                "id": "c639bda6-af79-4477-8d62-c46fcd04723e",
+                "ten": "Bác sĩ B"
+            },
+            "dmVaiTro": {
+                "ma": "01",
+                "ten": "Chủ tịch hội đồng"
+            }
+        },
+        {
+            "bacsi": {
+                "id": "b21be17e-bfa4-489b-8762-15ad4c4cb02f",
+                "ten": "Bác sĩ E"
+            },
+            "dmVaiTro": {
+                "ma": "02",
+                "ten": "Thư kí"
+            }
+        },
+        {
+            "bacsi": {
+                "id": "94af5a9f-0553-4b1b-a4d9-f5241eb5487a",
+                "ten": "Bác sĩ F"
+            },
+            "dmVaiTro": {
+                "ma": "03",
+                "ten": "Thành viên"
+            }
+        }
+    ],
+    "nguoiVietBaoCao": {
+        "id": "e74136c0-af78-4326-a721-b74b62f613a5",
+        "ten": "Bác sĩ C"
+    },
+    "nguoiDanhGiaKetQua": {
+        "id": "c1ae37d4-cd92-4daf-9b39-b8e192bfc8cd",
+        "ten": "Bác sĩ D"
+    },
+    "ngayGioBaoCao": "2018-06-30 00:00:00"
+}
