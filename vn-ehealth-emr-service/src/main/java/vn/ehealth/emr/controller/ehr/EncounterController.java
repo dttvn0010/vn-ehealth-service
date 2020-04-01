@@ -93,7 +93,7 @@ public class EncounterController {
         return MongoUtils.createCriteria(params);
     }
     
-    @GetMapping("/count")
+    @GetMapping("/count_hsba")
     public long count(@RequestParam Optional<String> patientId) {
         
         var criteria = createCriteria(patientId);
@@ -101,7 +101,7 @@ public class EncounterController {
     }
    
     
-    @GetMapping("/list")
+    @GetMapping("/list_hsba")
     public ResponseEntity<?> getHsbaEncounter(@RequestParam Optional<String> patientId,
                                 @RequestParam Optional<Boolean> includePatient,
                                 @RequestParam Optional<Boolean> includeServiceProvider,
