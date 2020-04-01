@@ -97,7 +97,7 @@ public class UserService {
     public ListResultDTO<UserDTO> search(String roleId, String keyword, Integer page, Integer pageSize) {
         ListResultDTO<UserDTO> resultDTO;
         List<UserDTO> listUserDTO = new ArrayList<>();
-        List<EmrPerson> rawData = emrPersonRepository.findByEmailOrDienthoaiOrTendaydu(keyword, keyword, keyword);
+        List<EmrPerson> rawData = emrPersonRepository.findByEmailOrSodienthoaiOrTendaydu(keyword, keyword, keyword);
         if (rawData != null) {
             rawData.forEach(emrPerson -> {
                 User user = userRepository.findById(emrPerson.userId).orElse(new User());

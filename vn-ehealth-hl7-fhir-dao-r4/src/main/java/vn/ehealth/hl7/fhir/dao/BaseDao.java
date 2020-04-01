@@ -225,37 +225,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         return DataConvertUtil.transform(lst, x -> transform((ENT)x));
     }
     
+    @SuppressWarnings("unchecked")
     public List<FHIR> searchResource(Criteria criteria, Boolean active, int start, int count, Sort sort) {
-        var lst = searchEntity(criteria, active, start, count, sort);
-        return DataConvertUtil.transform(lst, x -> transform((ENT)x));
-    }
-    
-    public List<FHIR> searchResource(Criteria criteria, int start, int count, Sort sort) {
-        return searchResource(criteria, null, start, count, sort);
-    }
-    
-    public List<FHIR> searchResource(Criteria criteria, int start, int count) {
-        return searchResource(criteria, start, count, null);
-    }
-    
-    public List<FHIR> searchResource(Criteria criteria) {
-        return searchResource(criteria, -1, -1);
-    }
-    
-    public FHIR getResource(Criteria criteria) {
-        var ent = getEntity(criteria);
-        return transform(ent);
-    }
-    
-    @SuppressWarnings("unchecked")
-    public ENT getEntity(Criteria criteria) {
-        criteria.and("active").is(true);
-        var query = Query.query(criteria);        
-        return (ENT) mongo.findOne(query, getEntityClass());
-    }
-    
-    @SuppressWarnings("unchecked")
-    public List<ENT> searchEntity(Criteria criteria, Boolean active, int start, int count, Sort sort) {
         if(active != null) {
             criteria.and("active").is(active);
         }else {
@@ -273,28 +244,28 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         
         if(start >= 0) query.skip(start);
         if(count >= 0) query.limit(count);
-        return (List<ENT>) mongo.find(query, getEntityClass());
+        var lst = (List<ENT>) mongo.find(query, getEntityClass());
+        return DataConvertUtil.transform(lst, x -> transform((ENT)x));
     }
     
-    public List<ENT> searchEntity(Criteria criteria, int start, int count, Sort sort) {
-        return searchEntity(criteria, null, start, count, sort);
+    public List<FHIR> searchResource(Criteria criteria, int start, int count, Sort sort) {
+        return searchResource(criteria, null, start, count, sort);
     }
     
-    public List<ENT> searchEntity(Criteria criteria, int start, int count) {
-        return searchEntity(criteria, start, count, null);
+    public List<FHIR> searchResource(Criteria criteria, int start, int count) {
+        return searchResource(criteria, start, count, null);
     }
     
-    public List<ENT> searchEntity(Criteria criteria) {
-        return searchEntity(criteria, -1, -1);
+    public List<FHIR> searchResource(Criteria criteria) {
+        return searchResource(criteria, -1, -1);
     }
     
-    @CachePut(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME_ENT, key = "#id", condition="#id!=null")
-    public ENT readEntity(String id) {
-        if(id != null) {
-            var criteria = Criteria.where(ConstantKeys.SP_FHIR_ID).is(id);                                        
-            return getEntity(criteria);
-        }
-        return null;
+    @SuppressWarnings("unchecked")
+    public FHIR getResource(Criteria criteria) {
+        criteria.and("active").is(true);
+        var query = Query.query(criteria);        
+        var ent = (ENT) mongo.findOne(query, getEntityClass());
+        return transform(ent);
     }
     
     public int countByCriteria(Criteria criteria) {
