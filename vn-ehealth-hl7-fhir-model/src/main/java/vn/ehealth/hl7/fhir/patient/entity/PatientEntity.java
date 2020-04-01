@@ -155,7 +155,7 @@ public class PatientEntity extends BaseResource {
         
         var dto = mapOf(
                     "name", BaseHumanName.toDto(getFirst(name), options),                
-                    "birthdate", birthDate,
+                    "mohIdentifier", computeMohIdentifier(),
                     "computes", computes
                 );
         
