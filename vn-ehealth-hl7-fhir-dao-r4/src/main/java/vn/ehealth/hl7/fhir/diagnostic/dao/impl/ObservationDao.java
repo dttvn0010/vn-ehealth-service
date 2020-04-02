@@ -62,8 +62,8 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
-			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
 
 		String[] keys = { "subject", "encounter", "basedOn", "device", "hasMember", "specimen" };
@@ -138,7 +138,7 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 			TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// subject
 		if (subject != null) {
 			if (subject.getValue().indexOf("|") == -1) {

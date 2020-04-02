@@ -55,7 +55,7 @@ import vn.ehealth.hl7.fhir.patient.entity.PatientEntity;
 public class PatientDao extends BaseDao<PatientEntity, Patient> {
 
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(FhirContext ctx, TokenParam active, TokenParam addressUse, TokenParam animalBreed,
+	public List<IBaseResource> search(FhirContext ctx, TokenParam addressUse, TokenParam animalBreed,
 			TokenParam animalSpecies, TokenParam deceased, TokenParam email, TokenParam gender, TokenParam identifier,
 			TokenParam language, TokenParam phone, TokenParam telecom, ReferenceParam generalPractitioner,
 			ReferenceParam link, ReferenceParam organization, DateRangeParam birthDate, DateRangeParam deathDate,
@@ -66,7 +66,7 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
 
-		Criteria criteria = setParamToCriteria(active, addressUse, animalBreed, animalSpecies, deceased, email, gender,
+		Criteria criteria = setParamToCriteria(addressUse, animalBreed, animalSpecies, deceased, email, gender,
 				identifier, language, phone, telecom, generalPractitioner, link, organization, birthDate, deathDate,
 				address, addressCity, addressCountry, addressState, familyName, givenName, name, phonetic, resid,
 				_lastUpdated, _tag, _profile, _query, _security, _content);
@@ -80,8 +80,8 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 			if (!sortParam.equals("")) {
 				qry.with(new Sort(Sort.Direction.DESC, sortParam));
 			} else {
-				qry.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-				qry.with(new Sort(Sort.Direction.DESC, "resCreated"));
+				qry.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+				qry.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 			}
 			List<PatientEntity> patientResults = mongo.find(qry, PatientEntity.class);
 			for (PatientEntity patientEntity : patientResults) {
@@ -102,7 +102,7 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 //        return resources;
 //    }
 
-	public long findMatchesAdvancedTotal(FhirContext ctx, TokenParam active, TokenParam addressUse,
+	public long findMatchesAdvancedTotal(FhirContext ctx, TokenParam addressUse,
 			TokenParam animalBreed, TokenParam animalSpecies, TokenParam deceased, TokenParam email, TokenParam gender,
 			TokenParam identifier, TokenParam language, TokenParam phone, TokenParam telecom,
 			ReferenceParam generalPractitioner, ReferenceParam link, ReferenceParam organization,
@@ -112,7 +112,7 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 
 		long count = 0;
-		Criteria criteria = setParamToCriteria(active, addressUse, animalBreed, animalSpecies, deceased, email, gender,
+		Criteria criteria = setParamToCriteria(addressUse, animalBreed, animalSpecies, deceased, email, gender,
 				identifier, language, phone, telecom, generalPractitioner, link, organization, birthDate, deathDate,
 				address, addressCity, addressCountry, addressState, familyName, givenName, name, phonetic, resid,
 				_lastUpdated, _tag, _profile, _query, _security, _content);
@@ -125,7 +125,7 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 		return count;
 	}
 
-	private Criteria setParamToCriteria(TokenParam active, TokenParam addressUse, TokenParam animalBreed,
+	private Criteria setParamToCriteria(TokenParam addressUse, TokenParam animalBreed,
 			TokenParam animalSpecies, TokenParam deceased, TokenParam email, TokenParam gender, TokenParam identifier,
 			TokenParam language, TokenParam phone, TokenParam telecom, ReferenceParam generalPractitioner,
 			ReferenceParam link, ReferenceParam organization, DateRangeParam birthDate, DateRangeParam deathDate,
@@ -134,12 +134,9 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
 			StringParam _content) {
 		Criteria criteria = null;
+		criteria = Criteria.where("$where").is("1==1");
 		// active
-		if (active != null) {
-			criteria = Criteria.where("active").is(active.getValue());
-		} else {
-			criteria = Criteria.where("active").is(true);
-		}
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 //                addressUse,addressUse
 		if (addressUse != null) {
 			criteria.and("address.addressUse").regex(addressUse.getValue());
@@ -265,16 +262,16 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 			if (patient != null) {
 				resources.add(patient);
 				// active
-				Criteria criteria = Criteria.where("active").is(true);
+				Criteria criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 				// criteria.and("subject.reference").is(thePatientId.asStringValue());
 				criteria.andOperator(
 						new Criteria().orOperator(Criteria.where("subject.reference").is(thePatientId.asStringValue()),
 								Criteria.where("patient.reference").is(thePatientId.asStringValue())));
 				if (theStart != null) {
-					criteria.and("resUpdated").gte(theStart.getValue());
+					criteria.and(ConstantKeys.QP_UPDATED).gte(theStart.getValue());
 				}
 				if (theEnd != null) {
-					criteria.and("resUpdated").lte(theEnd.getValue());
+					criteria.and(ConstantKeys.QP_UPDATED).lte(theEnd.getValue());
 				}
 				// Encounter
 				List<Encounter> encounters = DaoFactory.getEncounterDao().findByCriteria(criteria);

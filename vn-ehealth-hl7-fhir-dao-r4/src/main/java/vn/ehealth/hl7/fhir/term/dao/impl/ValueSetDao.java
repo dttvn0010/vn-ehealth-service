@@ -52,7 +52,7 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 		List<Resource> resources = new ArrayList<>();
 
 		Criteria criteria = null;
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// default
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
@@ -97,8 +97,8 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 			if (sortParam != null && !sortParam.equals("")) {
 				query.with(new Sort(Sort.Direction.DESC, sortParam));
 			} else {
-				query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-				query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+				query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+				query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 			}
 			List<ValueSetEntity> results = mongo.find(query, ValueSetEntity.class);
 			if (results != null && results.size() > 0) {
@@ -280,7 +280,7 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 		List<Resource> resources = new ArrayList<>();
 
 		Criteria criteria = null;
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// default
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);

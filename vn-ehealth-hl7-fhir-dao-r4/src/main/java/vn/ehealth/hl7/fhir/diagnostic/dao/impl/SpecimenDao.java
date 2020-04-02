@@ -51,8 +51,8 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
-			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
 
 		String[] keys = { "subject", "request", "parent", "processing:additive" };
@@ -104,7 +104,7 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		if (request != null) {
 			criteria.and("request.reference").is(request.getValue());
 		}

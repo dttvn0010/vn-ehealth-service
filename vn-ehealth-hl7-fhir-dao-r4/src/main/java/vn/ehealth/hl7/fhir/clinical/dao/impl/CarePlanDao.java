@@ -55,7 +55,10 @@ public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
-			query.with(new Sort(Sort.Direction.ASC, sortParam));
+			query.with(new Sort(Sort.Direction.DESC, sortParam));
+		} else {
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
 
 		String[] keys = { "subject", "encounter", "basedOn", "author", "contributor", "careTeam", "addresses", "goal" };
@@ -131,7 +134,7 @@ public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
-		criteria = Criteria.where("_active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// set param default
 		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, identifier);
 

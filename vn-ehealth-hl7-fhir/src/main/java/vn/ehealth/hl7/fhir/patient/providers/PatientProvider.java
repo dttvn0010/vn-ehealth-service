@@ -64,7 +64,6 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 
 	@Search
 	public IBundleProvider searchPatient(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS_USE) TokenParam addressUse,
 			@OptionalParam(name = ConstantKeys.SP_ANIMAL_BREED) TokenParam animalBreed,
 			@OptionalParam(name = ConstantKeys.SP_ANIMAL_SPECIES) TokenParam animalSpecies,
@@ -114,15 +113,15 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 			List<IBaseResource> results = new ArrayList<IBaseResource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = patientDao.search(fhirContext, active, addressUse, animalBreed, animalSpecies, deceased,
-						email, gender, identifier, language, phone, telecom, generalPractitioner, link, organization,
+				results = patientDao.search(fhirContext, addressUse, animalBreed, animalSpecies, deceased, email,
+						gender, identifier, language, phone, telecom, generalPractitioner, link, organization,
 						birthDate, deathDate, address, addressCity, addressCountry, addressState, familyName, givenName,
 						name, phonetic, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
 						sortParam, count);
 				// return results;
 			} else
-				results = patientDao.search(fhirContext, active, addressUse, animalBreed, animalSpecies, deceased,
-						email, gender, identifier, language, phone, telecom, generalPractitioner, link, organization,
+				results = patientDao.search(fhirContext, addressUse, animalBreed, animalSpecies, deceased, email,
+						gender, identifier, language, phone, telecom, generalPractitioner, link, organization,
 						birthDate, deathDate, address, addressCity, addressCountry, addressState, familyName, givenName,
 						name, phonetic, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, "",
 						count);
@@ -134,11 +133,11 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(patientDao.findMatchesAdvancedTotal(fhirContext, active,
-							addressUse, animalBreed, animalSpecies, deceased, email, gender, identifier, language,
-							phone, telecom, generalPractitioner, link, organization, birthDate, deathDate, address,
-							addressCity, addressCountry, addressState, familyName, givenName, name, phonetic, resid,
-							_lastUpdated, _tag, _profile, _query, _security, _content)));
+					return Integer.parseInt(String.valueOf(patientDao.findMatchesAdvancedTotal(fhirContext, addressUse,
+							animalBreed, animalSpecies, deceased, email, gender, identifier, language, phone, telecom,
+							generalPractitioner, link, organization, birthDate, deathDate, address, addressCity,
+							addressCountry, addressState, familyName, givenName, name, phonetic, resid, _lastUpdated,
+							_tag, _profile, _query, _security, _content)));
 				}
 
 				@Override
@@ -169,7 +168,6 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OptionalParam(name = "address-use") TokenParam addressUse,
 			@OptionalParam(name = "animal-breed") TokenParam animalBreed,
 			@OptionalParam(name = "animal-species") TokenParam animalSpecies,
@@ -205,10 +203,10 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 	// Search result parameters
 	) {
 		Parameters retVal = new Parameters();
-		long total = patientDao.findMatchesAdvancedTotal(fhirContext, active, addressUse, animalBreed, animalSpecies,
-				deceased, email, gender, identifier, language, phone, telecom, generalPractitioner, link, organization,
-				birthDate, deathDate, address, addressCity, addressCountry, addressState, familyName, givenName, name,
-				phonetic, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		long total = patientDao.findMatchesAdvancedTotal(fhirContext, addressUse, animalBreed, animalSpecies, deceased,
+				email, gender, identifier, language, phone, telecom, generalPractitioner, link, organization, birthDate,
+				deathDate, address, addressCity, addressCountry, addressState, familyName, givenName, name, phonetic,
+				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}

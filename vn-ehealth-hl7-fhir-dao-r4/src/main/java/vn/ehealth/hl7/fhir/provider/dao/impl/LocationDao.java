@@ -39,12 +39,14 @@ public class LocationDao extends BaseDao<LocationEntity, Location> {
 
         List<Resource> resources = new ArrayList<>();
 
+        
         Criteria criteria = null;
+        criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
+        
         if (status != null) {
             criteria = Criteria.where("status").is(status.getValue());
-        } else {
-            criteria = Criteria.where("active").is(true);
         }
+        
         criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
                 identifier);
         if (address != null) {
@@ -109,8 +111,8 @@ public class LocationDao extends BaseDao<LocationEntity, Location> {
     		if (sortParam != null && !sortParam.equals("")) {
     			query.with(new Sort(Sort.Direction.DESC, sortParam));
     		} else {
-    			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-    			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+    			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+    			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
     		}
             List<LocationEntity> locationResults = mongo.find(query, LocationEntity.class);
             for (LocationEntity locationEntity : locationResults) {
@@ -128,7 +130,7 @@ public class LocationDao extends BaseDao<LocationEntity, Location> {
             StringParam _content) {
 
         Criteria criteria = null;
-        criteria = Criteria.where("active").is(true);
+        criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
         if (status != null) {
             criteria = Criteria.where("status").is(status.getValue());
         } 

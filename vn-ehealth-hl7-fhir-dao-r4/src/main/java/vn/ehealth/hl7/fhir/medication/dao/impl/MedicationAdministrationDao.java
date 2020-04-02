@@ -50,8 +50,8 @@ public class MedicationAdministrationDao extends BaseDao<MedicationAdministratio
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
-			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
 		List<MedicationAdministrationEntity> medicationAdministrationEntitys = mongo.find(query,
 				MedicationAdministrationEntity.class);
@@ -90,7 +90,7 @@ public class MedicationAdministrationDao extends BaseDao<MedicationAdministratio
 			StringParam _content) {
 		Criteria criteria = null;
 		// active
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// set param default
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				null);

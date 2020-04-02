@@ -49,8 +49,8 @@ public class ScheduleDao extends BaseDao<ScheduleEntity, Schedule> {
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
-			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
 		List<ScheduleEntity> scheduleEntitys = mongo.find(query, ScheduleEntity.class);
 		if (scheduleEntitys != null) {
@@ -86,7 +86,7 @@ public class ScheduleDao extends BaseDao<ScheduleEntity, Schedule> {
 		Criteria criteria = null;
 		criteria = Criteria.where("$where").is("1==1");
 		// active
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// default
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);

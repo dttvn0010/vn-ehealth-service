@@ -53,7 +53,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 			String sortParam, Integer count) {
 		List<Resource> resources = new ArrayList<>();
 		Criteria criteria = null;
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// default
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, null, _lastUpdated, _tag, _profile, _security,
 				identifier);
@@ -101,8 +101,8 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 			if (sortParam != null && !sortParam.equals("")) {
 				query.with(new Sort(Sort.Direction.DESC, sortParam));
 			} else {
-				query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-				query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+				query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+				query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 			}
 			List<CodeSystemEntity> results = mongo.find(query, CodeSystemEntity.class);
 			if (code != null || language != null) {
@@ -154,8 +154,8 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 						.getDesignation()) {
 					ConceptDesignationEntity conceptDesignationEntity = new ConceptDesignationEntity();
 					conceptDesignationEntity.language = (conceptDefinitionDesignationComponent.getLanguage());
-					conceptDesignationEntity.use = DataConvertUtil.fhirToEntity(
-							conceptDefinitionDesignationComponent.getUse(), BaseCoding.class);
+					conceptDesignationEntity.use = DataConvertUtil
+							.fhirToEntity(conceptDefinitionDesignationComponent.getUse(), BaseCoding.class);
 					conceptDesignationEntity.value = (conceptDefinitionDesignationComponent.getValue());
 					conceptDesignationEntitys.add(conceptDesignationEntity);
 				}
@@ -167,7 +167,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 				for (ConceptPropertyComponent conceptPropertyComponent : concept.getProperty()) {
 					ConceptPropertyEntity conceptPropertyEntity = new ConceptPropertyEntity();
 					conceptPropertyEntity.code = (conceptPropertyComponent.getCode());
-					//TODO: conceptPropertyEntity.value = (conceptPropertyComponent.getValue());
+					// TODO: conceptPropertyEntity.value = (conceptPropertyComponent.getValue());
 					conceptPropertyEntitys.add(conceptPropertyEntity);
 				}
 				conceptEntity.property = (conceptPropertyEntitys);
@@ -228,7 +228,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 			StringParam _content, StringParam _page) {
 		Parameters retVal = new Parameters();
 		Criteria criteria = null;
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// default
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				null);
@@ -239,7 +239,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 			List<CodeSystemEntity> results = mongo.find(qry, CodeSystemEntity.class);
 			for (CodeSystemEntity codeSystemEntity : results) {
 				Criteria criteria1 = null;
-				criteria = Criteria.where("active").is(true);
+				criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 				criteria1 = Criteria.where("codeSystemId").is(codeSystemEntity.id.toString()).and("parentConceptId")
 						.is("");
 				if (code != null) {
@@ -270,7 +270,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 						for (ConceptPropertyEntity conceptPropertyEntity : properties) {
 							retVal.addParameter().addPart().setName("code")
 									.setValue(new StringType(conceptPropertyEntity.code));
-							//TODO:retVal.addParameter().addPart().setName("value").setValue(conceptPropertyEntity.value);
+							// TODO:retVal.addParameter().addPart().setName("value").setValue(conceptPropertyEntity.value);
 						}
 
 					}
@@ -284,7 +284,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 			List<CodeSystemEntity> results = mongo.find(qry, CodeSystemEntity.class);
 			for (CodeSystemEntity codeSystemEntity : results) {
 				Criteria criteria1 = null;
-				criteria = Criteria.where("active").is(true);
+				criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 				criteria1 = Criteria.where("codeSystemId").is(codeSystemEntity.id.toString()).and("parentConceptId")
 						.is("");
 				if (code != null) {
@@ -318,7 +318,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 						for (ConceptPropertyEntity conceptPropertyEntity : properties) {
 							retVal.addParameter().addPart().setName("code")
 									.setValue(new StringType(conceptPropertyEntity.code));
-							//TOOD:retVal.addParameter().addPart().setName("value").setValue(conceptPropertyEntity.value);
+							// TOOD:retVal.addParameter().addPart().setName("value").setValue(conceptPropertyEntity.value);
 						}
 
 					}
@@ -336,7 +336,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		List<Resource> resources = new ArrayList<>();
 		Criteria criteria = null;
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		if (date != null) {
 			criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "date", date);
 		}
@@ -414,8 +414,8 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 		return CodeSystemEntity.class;
 	}
 
-    @Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return CodeSystem.class;
-    }
+	@Override
+	protected Class<? extends DomainResource> getResourceClass() {
+		return CodeSystem.class;
+	}
 }

@@ -51,8 +51,8 @@ public class DeviceDao extends BaseDao<DeviceEntity, Device> {
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
-			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
 		List<DeviceEntity> deviceEntitys = mongo.find(query, DeviceEntity.class);
 		if (deviceEntitys != null) {
@@ -89,7 +89,7 @@ public class DeviceDao extends BaseDao<DeviceEntity, Device> {
 			TokenParam _security, StringParam _content) {
 		Criteria criteria = Criteria.where("$where").is("1==1");
 		// active
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 
 		if (status != null) {
 			criteria.and("status").is(status.getValue());
