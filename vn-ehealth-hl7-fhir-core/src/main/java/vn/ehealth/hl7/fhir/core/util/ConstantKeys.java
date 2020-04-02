@@ -236,6 +236,16 @@ public class ConstantKeys {
     
     public static final String SP_REQUEST = "request";
     
+    // Query params
+    public static final String QP_FHIRID = "_fhirId";
+    public static final String QP_ACTIVE = "_active";
+    public static final String QP_VERSION = "_version";
+    public static final String QP_CREATED = "_resCreated";
+    public static final String QP_UPDATED = "_resUpdated";
+    public static final String QP_DELETED = "_resDeleted";
+    public static final String QP_FHIRVERSION = "_fhirVersion";
+    
+    
     public static class PatientStaus {
         public static String getTen(int trangThai) {
             String[] tens = { "", "acitve", "remove" };
