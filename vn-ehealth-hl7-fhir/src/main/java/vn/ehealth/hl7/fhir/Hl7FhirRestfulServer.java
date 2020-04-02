@@ -104,7 +104,7 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 		}
 
 		// registering server-level provider
-		registerProvider(new PlainProvider());
+		registerProvider(applicationContext.getBean(PlainProvider.class));
 
 		setResourceProviders(Arrays.asList((IResourceProvider) applicationContext.getBean(CarePlanProvider.class),
 				(IResourceProvider) applicationContext.getBean(ClinicalImpressionProvider.class),
