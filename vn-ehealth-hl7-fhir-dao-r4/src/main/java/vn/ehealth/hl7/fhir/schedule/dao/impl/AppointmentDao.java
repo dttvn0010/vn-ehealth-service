@@ -51,8 +51,8 @@ public class AppointmentDao extends BaseDao<AppointmentEntity, Appointment> {
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
-			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
 		List<AppointmentEntity> appointmentResults = mongo.find(query, AppointmentEntity.class);
 		for (AppointmentEntity appointmentEntity : appointmentResults) {
@@ -88,7 +88,7 @@ public class AppointmentDao extends BaseDao<AppointmentEntity, Appointment> {
 			TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// default
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);

@@ -53,8 +53,8 @@ public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
-			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
 
 		String[] keys = { "patient", "author" };
@@ -99,7 +99,7 @@ public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue
 			StringParam _content) {
 		Criteria criteria = null;
 		// active
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// set param default
 		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, identifier);
 		// author

@@ -50,8 +50,8 @@ public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, Healt
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
-			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
 		List<HealthcareServiceEntity> healthcareServiceResults = mongo.find(query, HealthcareServiceEntity.class);
 		for (HealthcareServiceEntity healthcareServiceEntity : healthcareServiceResults) {
@@ -88,7 +88,7 @@ public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, Healt
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
 		// active
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// category
 		if (category != null) {
 			criteria.and("category").regex(category.getValue());

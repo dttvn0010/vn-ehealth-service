@@ -54,8 +54,8 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
-			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
 
 		String[] keys = { "subject", "encounter", "basedOn", "performer", "resultsInterpreter", "specimen",
@@ -132,7 +132,7 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
 			TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// based-on
 		if (basedOn != null) {
 			if (basedOn.getValue().indexOf("|") == -1) {

@@ -124,7 +124,7 @@ public class DatabaseUtil {
 	public static Criteria addParamDefault2Criteria(Criteria criteria, TokenParam resid, DateRangeParam _lastUpdated,
 			TokenParam _tag, UriParam _profile, TokenParam _security, TokenParam identifier) {
 		if (resid != null) {
-			criteria.and("_fhirId").regex(resid.getValue());
+			criteria.and(ConstantKeys.QP_FHIRID).regex(resid.getValue());
 		}
 		if (_tag != null) {
 			criteria.and("_tag.code.myStringValue").regex(_tag.getValue());
@@ -136,7 +136,7 @@ public class DatabaseUtil {
 			criteria.and("_security.code.myStringValue").regex(_security.getValue());
 		}
 		if (_lastUpdated != null) {
-			criteria = setTypeDateToCriteria(criteria, "resCreated", _lastUpdated);
+			criteria = setTypeDateToCriteria(criteria, ConstantKeys.QP_UPDATED, _lastUpdated);
 		}
 		if (identifier != null) {
 			if (!StringUtils.isBlank(identifier.getSystem()) && !StringUtils.isBlank(identifier.getValue())) {

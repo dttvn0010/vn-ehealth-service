@@ -50,8 +50,8 @@ public class MedicationDispenseDao extends BaseDao<MedicationDispenseEntity, Med
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
-			query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-			query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
 		List<MedicationDispenseEntity> medicationDispenseEntitys = mongo.find(query, MedicationDispenseEntity.class);
 		if (medicationDispenseEntitys != null) {
@@ -89,7 +89,7 @@ public class MedicationDispenseDao extends BaseDao<MedicationDispenseEntity, Med
 			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// status
 		if (status != null) {
 			criteria.and("status").is(status.getValue());

@@ -58,8 +58,8 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
         if (sortParam != null && !sortParam.equals("")) {
             query.with(new Sort(Sort.Direction.DESC, sortParam));
         }else {
-        	query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-        	query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+        	query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+        	query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
         
         String[] keys = {"subject", "encounter", "assessor", "problem", "prognosisReference"};
@@ -122,7 +122,7 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 			StringParam _content) {
 		Criteria criteria = null;
 		// active
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// set param default
 		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
@@ -237,7 +237,7 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 	public ClinicalImpression findNotCache(FhirContext fhirContext, IdType idType) {
 		if (idType != null) {
 			ObjectId objectId = new ObjectId(idType.getIdPart());
-			Query query = Query.query(Criteria.where("_id").is(objectId));
+			Query query = Query.query(Criteria.where(ConstantKeys.QP_FHIRID).is(objectId));
 			ClinicalImpressionEntity entity = mongo.findOne(query, ClinicalImpressionEntity.class);
 			if (entity != null) {
 				return transform(entity);

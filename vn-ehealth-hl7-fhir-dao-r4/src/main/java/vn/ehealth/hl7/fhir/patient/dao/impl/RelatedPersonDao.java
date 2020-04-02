@@ -50,8 +50,8 @@ public class RelatedPersonDao extends BaseDao<RelatedPersonEntity, RelatedPerson
 			if (sortParam != null && !sortParam.equals("")) {
 				query.with(new Sort(Sort.Direction.DESC, sortParam));
 			} else {
-				query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-				query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+				query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+				query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 			}
 			List<RelatedPersonEntity> objResults = mongo.find(query, RelatedPersonEntity.class);
 
@@ -89,7 +89,7 @@ public class RelatedPersonDao extends BaseDao<RelatedPersonEntity, RelatedPerson
 			TokenParam telecom, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
 			TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// default
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);

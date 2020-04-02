@@ -61,8 +61,8 @@ public class ConceptMapDao extends BaseDao<ConceptMapEntity, ConceptMap> {
 			if (sortParam != null && !sortParam.equals("")) {
 				query.with(new Sort(Sort.Direction.DESC, sortParam));
 			} else {
-				query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-				query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+				query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+				query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 			}
 			List<ConceptMapEntity> results = mongo.find(query, ConceptMapEntity.class);
 
@@ -235,7 +235,7 @@ public class ConceptMapDao extends BaseDao<ConceptMapEntity, ConceptMap> {
 			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
-		criteria = Criteria.where("active").is(true);
+		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// set param default
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);
