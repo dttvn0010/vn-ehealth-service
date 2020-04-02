@@ -403,24 +403,24 @@ public class DataConvertUtil {
         if(entity == null) return null;
         
         var meta = new Meta();
-        if(entity.profile != null && entity.profile.size() > 0) {
-            meta.setProfile(FPUtil.transform(entity.profile, x -> new CanonicalType(x)));
+        if(entity._profile != null && entity._profile.size() > 0) {
+            meta.setProfile(FPUtil.transform(entity._profile, x -> new CanonicalType(x)));
         }else {
             meta = new Meta().addProfile(ConstantKeys.ENTITY_PROFILE_V1 + profile);
         }
         
-        meta.setSecurity(FPUtil.transform(entity.security, x -> entityToFhir(x, Coding.class)));
-        meta.setTag(FPUtil.transform(entity.tag, x -> entityToFhir(x, Coding.class)));
+        meta.setSecurity(FPUtil.transform(entity._security, x -> entityToFhir(x, Coding.class)));
+        meta.setTag(FPUtil.transform(entity._tag, x -> entityToFhir(x, Coding.class)));
         
-        if(entity.resDeleted != null) {
-            meta.setLastUpdated(entity.resDeleted);
-        }else if(entity.resUpdated != null) {
-            meta.setLastUpdated(entity.resUpdated);
-        }else if(entity.resCreated != null) {
-            meta.setLastUpdated(entity.resCreated);
+        if(entity._resDeleted != null) {
+            meta.setLastUpdated(entity._resDeleted);
+        }else if(entity._resUpdated != null) {
+            meta.setLastUpdated(entity._resUpdated);
+        }else if(entity._resCreated != null) {
+            meta.setLastUpdated(entity._resCreated);
         }
-        if(entity.version != null) {
-            meta.setVersionId(String.valueOf(entity.version));
+        if(entity._version != null) {
+            meta.setVersionId(String.valueOf(entity._version));
         }
         
         return meta;
@@ -430,33 +430,33 @@ public class DataConvertUtil {
         if(obj != null && ent != null) {
             if(obj.hasMeta()) {
                 if (obj.getMeta().hasProfile()) {
-                    ent.profile = FPUtil.transform(obj.getMeta().getProfile() , x -> x.getValue());
+                    ent._profile = FPUtil.transform(obj.getMeta().getProfile() , x -> x.getValue());
                 }
                 if (obj.getMeta().hasSecurity()) {
-                    ent.security = FPUtil.transform(obj.getMeta().getSecurity(), x -> fhirToEntity(x, BaseCoding.class));
+                    ent._security = FPUtil.transform(obj.getMeta().getSecurity(), x -> fhirToEntity(x, BaseCoding.class));
                 }
                 if (obj.getMeta().hasTag()) {
-                    ent.tag = FPUtil.transform(obj.getMeta().getTag(), x -> fhirToEntity(x, BaseCoding.class));
+                    ent._tag = FPUtil.transform(obj.getMeta().getTag(), x -> fhirToEntity(x, BaseCoding.class));
                 }
             }
             
             if(obj.hasExtension()) {
-                ent.extension = FPUtil.transform(obj.getExtension(), BaseExtension::fromExtension);
+                ent._extension = FPUtil.transform(obj.getExtension(), BaseExtension::fromExtension);
             }
             
             if(obj.hasModifierExtension()) {
-                ent.modifierExtension = FPUtil.transform(obj.getModifierExtension(), BaseExtension::fromExtension);
+                ent._modifierExtension = FPUtil.transform(obj.getModifierExtension(), BaseExtension::fromExtension);
             }
         }
     }
     
     private static void getMetaExt(BaseResource ent, DomainResource obj) {
         if(obj != null && ent != null) {
-            obj.getMeta().setProfile(FPUtil.transform(ent.profile, x -> new CanonicalType(x)));
-            obj.getMeta().setTag(FPUtil.transform(ent.tag, x -> entityToFhir(x, Coding.class)));
-            obj.getMeta().setSecurity(FPUtil.transform(ent.security, x -> entityToFhir(x, Coding.class)));
-            obj.setExtension(FPUtil.transform(ent.extension, BaseExtension::toExtension));
-            obj.setModifierExtension(FPUtil.transform(ent.modifierExtension, BaseExtension::toExtension));
+            obj.getMeta().setProfile(FPUtil.transform(ent._profile, x -> new CanonicalType(x)));
+            obj.getMeta().setTag(FPUtil.transform(ent._tag, x -> entityToFhir(x, Coding.class)));
+            obj.getMeta().setSecurity(FPUtil.transform(ent._security, x -> entityToFhir(x, Coding.class)));
+            obj.setExtension(FPUtil.transform(ent._extension, BaseExtension::toExtension));
+            obj.setModifierExtension(FPUtil.transform(ent._modifierExtension, BaseExtension::toExtension));
         }
     }
         

@@ -145,7 +145,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 			conceptEntity.code = (concept.getCode());
 			conceptEntity.display = (concept.getDisplay());
 			conceptEntity.definition = (concept.getDefinition());
-			conceptEntity.active = (true);
+			conceptEntity._active = (true);
 			conceptEntity.parentConceptId = (parentId);
 			// designation
 			if (concept.hasDesignation()) {
@@ -250,7 +250,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 				conceptresults = concepts(conceptresults, codeSystemEntity.id.toString());
 				for (ConceptEntity conceptEntity : conceptresults) {
 					retVal.addParameter().setName("name").setValue(new StringType(conceptEntity.code));
-					retVal.addParameter().setName("version").setValue(new IntegerType(conceptEntity.version));
+					retVal.addParameter().setName("version").setValue(new IntegerType(conceptEntity._version));
 					retVal.addParameter().setName("display").setValue(new StringType(conceptEntity.display));
 					List<ConceptDesignationEntity> designations = conceptEntity.designation;
 					if (designations != null && designations.size() > 0) {
@@ -298,7 +298,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 				conceptresults = concepts(conceptresults, codeSystemEntity.id.toString());
 				for (ConceptEntity conceptEntity : conceptresults) {
 					retVal.addParameter().setName("name").setValue(new StringType(conceptEntity.code));
-					retVal.addParameter().setName("version").setValue(new IntegerType(conceptEntity.version));
+					retVal.addParameter().setName("version").setValue(new IntegerType(conceptEntity._version));
 					retVal.addParameter().setName("display").setValue(new StringType(conceptEntity.display));
 					List<ConceptDesignationEntity> designations = conceptEntity.designation;
 					if (designations != null && designations.size() > 0) {

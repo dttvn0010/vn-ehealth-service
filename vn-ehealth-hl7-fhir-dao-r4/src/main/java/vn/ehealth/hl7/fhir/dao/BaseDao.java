@@ -39,7 +39,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         if(ent == null) return null;
         var obj = DataConvertUtil.entityToFhir(ent, getResourceClass());
         obj.setMeta(DataConvertUtil.getMeta(ent, getProfile()));
-        obj.setId(ent.fhirId);
+        obj.setId(ent._fhirId);
         return (FHIR) obj;        
     }
     
@@ -47,15 +47,15 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     private ENT createNewEntity(FHIR obj, int version, String fhirId) {
         var ent = DataConvertUtil.fhirToEntity(obj, getEntityClass());
         if (fhirId != null && !fhirId.isEmpty()) {
-            ent.fhirId = (fhirId);
+            ent._fhirId = (fhirId);
         } else {
-            ent.fhirId = (StringUtil.generateUUID());
+            ent._fhirId = (StringUtil.generateUUID());
         }
 
-        ent.active = (true);
-        ent.version = (version);
-        ent.resCreated = (new Date());
-        ent.fhirVersion = "R4";
+        ent._active = (true);
+        ent._version = (version);
+        ent._resCreated = (new Date());
+        ent._fhirVersion = "R4";
         return (ENT) ent;
     }
     
@@ -85,15 +85,15 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         if (entityOld != null && fhirId != null && !fhirId.isEmpty()) {
             
             // remove old entity
-            entityOld.resDeleted = (new Date());
-            entityOld.active = (false);
+            entityOld._resDeleted = (new Date());
+            entityOld._active = (false);
             mongo.save(entityOld);
             
             // save new entity
-            int version = entityOld.version + 1;
+            int version = entityOld._version + 1;
             if (object != null) {
                 var entity = createNewEntity(object, version, fhirId);
-                entity.resUpdated = (new Date());
+                entity._resUpdated = (new Date());
                 mongo.save(entity);
                 return transform(entity);
             }
@@ -127,8 +127,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
             
             var entity = (ENT) mongo.findOne(query, getEntityClass());
             if (entity != null) {
-                entity.active = (false);
-                entity.resDeleted = (new Date());
+                entity._active = (false);
+                entity._resDeleted = (new Date());
                 mongo.save(entity);
                 return transform(entity);
                 

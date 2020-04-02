@@ -187,7 +187,7 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 			valueSetContainEntity.system = (v.getSystem());
 			valueSetContainEntity._abstract = (v.getAbstract());
 			valueSetContainEntity.inactive = (v.getInactive());
-			valueSetContainEntity.version = (Integer.parseInt(v.getVersion()));
+			valueSetContainEntity._version = (Integer.parseInt(v.getVersion()));
 			valueSetContainEntity.display = (v.getDisplay());
 			valueSetContainEntity.valueSetExpansionId = (valueSetExpansionId);
 			valueSetContainEntity.parentContainId = (parentId);
