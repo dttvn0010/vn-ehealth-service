@@ -56,13 +56,13 @@ public class BaseSimpleType extends BaseType {
         if(fhirObj == null) return null;
         
         if(fhirObj instanceof PrimitiveType<?>) {
-            var val = ((PrimitiveType<?>) fhirObj).getValue();
-            
-            if(BasePrimitiveType.isSupported(val)) {
-                return new BasePrimitiveType(val);
+            var primitiveObj = (PrimitiveType<?>) fhirObj; 
+
+            if(BasePrimitiveType.isSupported(primitiveObj.getValue())) {
+                return new BasePrimitiveType(primitiveObj);
             }
             
-            throw new RuntimeException("Unsupport data type:" + val.getClass().getName());
+            throw new RuntimeException("Unsupport data type:" + fhirObj.getClass().getName());
         }
         
         for(var entry : mapClasses.entrySet()) {

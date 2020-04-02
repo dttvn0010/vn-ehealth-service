@@ -4,11 +4,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.hl7.fhir.r4.model.BooleanType;
+import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.DateTimeType;
+import org.hl7.fhir.r4.model.DateType;
 import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.IntegerType;
+import org.hl7.fhir.r4.model.PrimitiveType;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Type;
+import org.hl7.fhir.r4.model.UriType;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -17,13 +21,17 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class BasePrimitiveType extends BaseSimpleType {
 
     public Object value;
+    public String className;
     
     public BasePrimitiveType() {
         
     }
     
-    public BasePrimitiveType(Object value) {
-        this.value = value;
+    public BasePrimitiveType(PrimitiveType<?> obj) {
+        if(obj != null) {
+            this.value = obj.getValue();
+            this.className = obj.getClass().getName();
+        }
     }
     
     public static boolean isSupported(Object val) {
@@ -42,26 +50,38 @@ public class BasePrimitiveType extends BaseSimpleType {
     public Type toFhir() {
         if(value == null) return null;
         
-        if(value instanceof Integer || value instanceof Short) {
-            return new IntegerType((Integer)value);
-            
-        }else if(value instanceof Long 
-                || value instanceof Float 
-                || value instanceof Double
-                || value instanceof BigDecimal) {
-            
-            return new DecimalType((BigDecimal)value);
-            
-        }else if(value instanceof Boolean) {            
-            return new BooleanType((Boolean) value);
-            
-        }else if(value instanceof String) {
-            return new StringType((String) value);
-            
-        }else if(value instanceof Date) {
-            return new DateTimeType((Date) value);            
+        if(IntegerType.class.getName().equals(className)) {
+            return new IntegerType((int) value);
         }
         
-        throw new RuntimeException("Unsupported data type: " + value.getClass().getName());
+        if(DecimalType.class.getName().equals(className)) {
+            return new DecimalType((BigDecimal) value);
+        }
+        
+        if(BooleanType.class.getName().equals(className)) {
+            return new BooleanType((boolean) value);
+        }
+        
+        if(StringType.class.getName().equals(className)) {
+            return new StringType((String) value);
+        }
+        
+        if(UriType.class.getName().equals(className)) {
+            return new UriType((String) value);
+        }
+        
+        if(CanonicalType.class.getName().equals(className)) {
+            return new UriType((String) value);
+        }
+        
+        if(DateType.class.getName().equals(className)) {
+            return new DateType((Date) value);
+        }
+        
+        if(DateTimeType.class.getName().equals(className)) {
+            return new DateTimeType((Date) value);
+        }
+        
+        throw new RuntimeException("Do not know to handle type: " + className);
     }
 }
