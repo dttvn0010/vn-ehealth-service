@@ -18,6 +18,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -37,15 +38,31 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     @SuppressWarnings("unchecked")
     public FHIR transform(ENT ent) {
         if(ent == null) return null;
-        var obj = DataConvertUtil.entityToFhir(ent, getResourceClass());
-        obj.setMeta(DataConvertUtil.getMeta(ent, getProfile()));
-        obj.setId(ent._fhirId);
-        return (FHIR) obj;        
+        try {
+            var obj = DataConvertUtil.entityToFhir(ent, getResourceClass());
+            obj.setMeta(DataConvertUtil.getMeta(ent, getProfile()));
+            obj.setId(ent._fhirId);
+            return (FHIR) obj;
+        }catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Errror================" + getEntityClass() + ",id=" + ent._fhirId);
+        }
+        return null;                
     }
     
     @SuppressWarnings("unchecked")
     private ENT createNewEntity(FHIR obj, int version, String fhirId) {
-        var ent = DataConvertUtil.fhirToEntity(obj, getEntityClass());
+        ENT ent = null;
+        try {
+            ent = (ENT) DataConvertUtil.fhirToEntity(obj, getEntityClass());
+        }catch(Exception e) {
+            e.printStackTrace();
+            var json = FhirContext.forR4().newJsonParser().encodeResourceToString((IBaseResource) obj);
+            System.out.println("Errror===================" + json);
+        }
+        
+        if(ent == null) return null;
+        
         if (fhirId != null && !fhirId.isEmpty()) {
             ent._fhirId = (fhirId);
         } else {
