@@ -18,7 +18,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 public class ScheduleEntity extends BaseResource {
     @Id
     public ObjectId id;
-
+    public Boolean active;
     public List<BaseIdentifier> identifier;
     public List<BaseCodeableConcept> serviceCategory;
     public List<BaseCodeableConcept> serviceType;

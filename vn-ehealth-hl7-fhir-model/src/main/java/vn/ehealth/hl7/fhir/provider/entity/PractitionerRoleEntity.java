@@ -32,6 +32,7 @@ public class PractitionerRoleEntity extends BaseResource {
     
     @Id
     public ObjectId id;
+    public Boolean active;
     public List<BaseIdentifier> identifier;
     public BasePeriod period;
     public BaseReference practitioner;

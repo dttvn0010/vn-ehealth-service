@@ -27,6 +27,7 @@ public class PersonEntity extends BaseResource{
         
     @Id
     public ObjectId id;
+    public Boolean active;
     public List<BaseIdentifier> identifier;
     public List<BaseHumanName> name;
     public List<BaseContactPoint> telecom;

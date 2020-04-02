@@ -27,6 +27,7 @@ public class RelatedPersonEntity extends BaseResource {
     }
     @Id
     public ObjectId id;
+    public Boolean active;
     public List<BaseIdentifier> identifier;
     public BaseReference patient;
     public List<BaseCodeableConcept> relationship;

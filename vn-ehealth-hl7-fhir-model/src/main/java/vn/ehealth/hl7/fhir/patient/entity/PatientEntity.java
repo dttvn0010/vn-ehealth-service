@@ -53,6 +53,7 @@ public class PatientEntity extends BaseResource {
     @Id
     @Indexed(name = "_id_")
     @JsonIgnore public ObjectId id;
+    public Boolean active;
     public List<BaseIdentifier> identifier;    
     public List<BaseHumanName> name;
     public List<BaseContactPoint> telecom;    

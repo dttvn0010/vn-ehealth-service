@@ -38,6 +38,7 @@ public class HealthcareServiceEntity extends BaseResource {
     
     @Id
     public ObjectId id;
+    public Boolean active;
     public List<BaseIdentifier> identifier;
     public BaseReference providedBy;
     public List<BaseCodeableConcept> category;
