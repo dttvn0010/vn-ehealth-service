@@ -71,11 +71,6 @@
         </dependency>
          -->
         <dependency>
-                <groupId>ca.uhn.hapi.fhir</groupId>
-                <artifactId>hapi-fhir-structures-r4</artifactId>
-                <version>${hapi-fhir-version}</version>
-        </dependency>        
-        <dependency>
             <groupId>vn.ehealth</groupId>
             <artifactId>vn-ehealth-hl7-fhir-core</artifactId>
             <version>1.0</version>
