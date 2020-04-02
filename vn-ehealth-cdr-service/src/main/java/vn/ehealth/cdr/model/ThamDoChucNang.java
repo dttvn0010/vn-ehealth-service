@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "emr_tham_do_chuc_nang")
+@Document(collection = "tham_do_chuc_nang")
 public class ThamDoChucNang {
     
     @Id public ObjectId id;    
@@ -25,24 +25,24 @@ public class ThamDoChucNang {
     public int trangThai;
     public String idhis;
     
-    public DanhMuc emrDmThamDoChucNang;
-    public DanhMuc emrDmLoaiThamDoChucNang;
+    public DanhMuc dmThamDoChucNang;
+    public DanhMuc dmLoaiThamDoChucNang;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngayyeucau;
+    public Date ngayYeuCau;
     
-    public CanboYte bacsiyeucau;
-    public String noidungyeucau;
+    public CanboYte bacSiYeuCau;
+    public String noiDungYeuCau;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaythuchien;
+    public Date ngayThucHien;
     
-    public String ketqua;
-    public String ketluan;
-    public String loidan;
-    public CanboYte bacsichuyenkhoa;
+    public String ketQua;
+    public String ketLuan;
+    public String loiDan;
+    public CanboYte bacSiChuyenKhoa;
     
-    public List<FileDinhKem> emrFileDinhKemTdcns = new ArrayList<>();
+    public List<FileDinhKem> dsFileDinhKemTdcn = new ArrayList<>();
     
     public String getId() { 
         return ObjectIdUtil.idToString(id); 

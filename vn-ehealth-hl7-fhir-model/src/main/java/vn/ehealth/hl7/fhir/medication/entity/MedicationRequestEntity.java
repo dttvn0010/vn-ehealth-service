@@ -40,7 +40,7 @@ public class MedicationRequestEntity extends BaseResource {
         public BaseReference performer;
     }
 
-    public class MedicationRequestSubstitution{
+    public static class MedicationRequestSubstitution{
         public BaseType allowed;
         public BaseCodeableConcept reason;
     }

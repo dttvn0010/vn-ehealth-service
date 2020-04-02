@@ -19,7 +19,8 @@ import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.DieuTri;
 import vn.ehealth.cdr.service.DieuTriService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
+import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.cdr.validate.JsonParser;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -33,7 +34,7 @@ public class DieuTriController {
     @Autowired HoSoBenhAnService hoSoBenhAnService;
     
     private JsonParser jsonParser = new JsonParser();
-    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
+    private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @GetMapping("/get_ds_dieutri")
     public ResponseEntity<?> getDsDieutri(@RequestParam("hsba_id") String id) {        
@@ -44,11 +45,12 @@ public class DieuTriController {
     @PostMapping("/create_or_update_dieu_tri")
     public ResponseEntity<?> createOrUpdateDieuTriFromHIS(@RequestBody String jsonSt) {
         try {
+            jsonSt = JsonUtil.preprocess(jsonSt);
             var map = jsonParser.parseJson(jsonSt);
-            var matraodoiHsba = (String) map.get("matraodoiHoSo");
-            var hsba = hoSoBenhAnService.getByMatraodoi(matraodoiHsba).orElseThrow();
+            var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var dtObjList = (List<Object>) map.get("emrDieuTris");
+            var dtObjList = (List<Object>) map.get("dsDieuTri");
             var dtList = dtObjList.stream()
                                 .map(obj -> objectMapper.convertValue(obj, DieuTri.class))
                                 .collect(Collectors.toList());
@@ -65,7 +67,7 @@ public class DieuTriController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }
     }
 }

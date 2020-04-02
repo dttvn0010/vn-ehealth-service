@@ -25,15 +25,15 @@ public class LogService {
     @Autowired MongoTemplate mongoTemplate;
     
     public Log logAction(String objectClass, ObjectId objectId, String maHanhDong, Date ngayThucHien, ObjectId nguoiThucHienId, String noiDung, String ghiChu) {
-        var emrLog = new Log();
-        emrLog.nguoiThucHienId = nguoiThucHienId;
-        emrLog.ngayThucHien = new Date();
-        emrLog.objectId = objectId;
-        emrLog.objectClass = objectClass;
-        emrLog.maHanhDong = maHanhDong;
-        emrLog.ghiChu = ghiChu != null? ghiChu : "";
-        emrLog.noiDung = noiDung;
-        return logRepository.save(emrLog);       
+        var log = new Log();
+        log.nguoiThucHienId = nguoiThucHienId;
+        log.ngayThucHien = new Date();
+        log.objectId = objectId;
+        log.objectClass = objectClass;
+        log.maHanhDong = maHanhDong;
+        log.ghiChu = ghiChu != null? ghiChu : "";
+        log.noiDung = noiDung;
+        return logRepository.save(log);       
     }
     
     public long countLogs(String objectClass, ObjectId objectId, String maHanhDong, boolean asc) {

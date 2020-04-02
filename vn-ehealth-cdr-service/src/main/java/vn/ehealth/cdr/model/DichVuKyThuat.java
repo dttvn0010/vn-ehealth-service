@@ -24,21 +24,21 @@ import vn.ehealth.utils.MongoUtils;
 
 public abstract class DichVuKyThuat {
 	
-	public DanhMuc emrDmKhoaDieuTri;
+	public DanhMuc dmKhoaDieuTri;
 	
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngayyeucau;
+    public Date ngayYeuCau;
     
-    public CanboYte bacsiyeucau;
-    public String noidungyeucau;
+    public CanboYte bacSiYeuCau;
+    public String noiDungYeuCau;
     
-    public CanboYte nguoivietbaocao;
-    public CanboYte nguoidanhgiaketqua;
+    public CanboYte nguoiVietBaoCao;
+    public CanboYte nguoiDanhGiaKetQua;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaygiobaocao; 
+    public Date ngayGioBaoCao; 
     
-    public String ketluan;
+    public String ketLuan;
     
     abstract protected CodeableConcept getCategory();
     
@@ -49,7 +49,7 @@ public abstract class DichVuKyThuat {
 	        var params = mapOf(
 	                        "partOf.reference", (Object) cskbRef.getReference(),
 	                        "type.coding.system", CodeSystemValue.KHOA_DIEU_TRI,
-	                        "type.coding.code", emrDmKhoaDieuTri.ma
+	                        "type.coding.code", dmKhoaDieuTri.ma
                         );
 	        var criteria = MongoUtils.createCriteria(params);
 	        return DaoFactory.getOrganizationDao().getResource(criteria);
@@ -59,10 +59,10 @@ public abstract class DichVuKyThuat {
 	
 	private Encounter getVaoKhoaEncounter(Encounter hsbaEncounter) {
 		if(hsbaEncounter == null 
-			|| emrDmKhoaDieuTri == null) {
+			|| dmKhoaDieuTri == null) {
 			return null;
 		}		
-		var khoaDieuTri = getKhoaDieuTri(hsbaEncounter.getServiceProvider(), emrDmKhoaDieuTri.ma);
+		var khoaDieuTri = getKhoaDieuTri(hsbaEncounter.getServiceProvider(), dmKhoaDieuTri.ma);
 		
 		if(khoaDieuTri != null) {
 		    var parent = (Object) (ResourceType.Encounter + "/" + hsbaEncounter.getId());
@@ -103,9 +103,9 @@ public abstract class DichVuKyThuat {
             serviceRequest.setCategory(listOf(category));
             serviceRequest.setSubject(subject);
             serviceRequest.setEncounter(encounter);            
-            serviceRequest.setAuthoredOn(ngayyeucau);
-            serviceRequest.setRequester(CanboYte.toRef(bacsiyeucau));
-            serviceRequest.setOrderDetail(listOf(FhirUtil.createCodeableConcept(noidungyeucau)));
+            serviceRequest.setAuthoredOn(ngayYeuCau);
+            serviceRequest.setRequester(CanboYte.toRef(bacSiYeuCau));
+            serviceRequest.setOrderDetail(listOf(FhirUtil.createCodeableConcept(noiDungYeuCau)));
         }
         
         if(diagnosticReport != null) {
@@ -113,10 +113,10 @@ public abstract class DichVuKyThuat {
             diagnosticReport.setCategory(listOf(category));
             diagnosticReport.setSubject(subject);
             diagnosticReport.setEncounter(encounter);
-            diagnosticReport.setPerformer(listOf(CanboYte.toRef(nguoivietbaocao)));
-            diagnosticReport.setResultsInterpreter(listOf(CanboYte.toRef(nguoidanhgiaketqua)));            
-            diagnosticReport.setIssued(ngaygiobaocao);
-            diagnosticReport.setConclusion(ketluan);
+            diagnosticReport.setPerformer(listOf(CanboYte.toRef(nguoiVietBaoCao)));
+            diagnosticReport.setResultsInterpreter(listOf(CanboYte.toRef(nguoiDanhGiaKetQua)));            
+            diagnosticReport.setIssued(ngayGioBaoCao);
+            diagnosticReport.setConclusion(ketLuan);
         }
         
         return mapOf(

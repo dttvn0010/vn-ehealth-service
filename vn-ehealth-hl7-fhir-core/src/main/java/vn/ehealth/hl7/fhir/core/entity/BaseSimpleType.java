@@ -10,6 +10,7 @@ import org.hl7.fhir.r4.model.PrimitiveType;
 import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Range;
 import org.hl7.fhir.r4.model.Ratio;
+import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Type;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -29,6 +30,7 @@ public class BaseSimpleType extends BaseType {
             put(Quantity.class, BaseQuantity.class);
             put(Ratio.class, BaseRatio.class);
             put(Range.class, BaseRange.class);
+            put(Reference.class, BaseReference.class);
         }
     };
     

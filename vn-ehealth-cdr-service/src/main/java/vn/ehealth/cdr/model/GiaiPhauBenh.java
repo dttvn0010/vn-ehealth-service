@@ -31,7 +31,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "emr_giai_phau_benh")
+@Document(collection = "giai_phau_benh")
 public class GiaiPhauBenh extends DichVuKyThuat {
 
     @Id public ObjectId id;
@@ -72,31 +72,29 @@ public class GiaiPhauBenh extends DichVuKyThuat {
         this.coSoKhamBenhId = ObjectIdUtil.stringToId(coSoKhamBenhId);
     }
     
-    
-    
     public int trangThai;
     public String idhis;
     
-    public DanhMuc emrDmGiaiPhauBenh;        
-    public DanhMuc emrDmLoaiGiaiPhauBenh;
-    public DanhMuc emrDmViTriLayMau;
-    public DanhMuc emrDmKetQuaGiaiPhauBenh;
+    public DanhMuc dmGiaiPhauBenh;        
+    public DanhMuc dmLoaiGiaiPhauBenh;
+    public DanhMuc dmViTriLayMau;
+    public DanhMuc dmKetQuaGiaiPhauBenh;
     
-    public CanboYte bacsichuyenkhoa;
-    
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaythuchien;
-    
-    public String nhanxetdaithe;
-    public String nhanxetvithe;
-    
-    public DanhMuc emrDmChanDoanGiaiPhau;
-    public String motachandoangiaiphau;
+    public CanboYte bacSiChuyenKhoa;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaylaymausinhthiet;
+    public Date ngayThucHien;
+    
+    public String nhanXetDaiThe;
+    public String nhanXetViThe;
+    
+    public DanhMuc dmChanDoanGiaiPhau;
+    public String motaChanDoanGiaiPhau;
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngayLayMauSinhThiet;
         
-    public List<FileDinhKem> emrFileDinhKemGpbs = new ArrayList<>();
+    public List<FileDinhKem> dsFileDinhKemGpb = new ArrayList<>();
     
     
     @Override
@@ -108,7 +106,7 @@ public class GiaiPhauBenh extends DichVuKyThuat {
 
     @Override
     protected CodeableConcept getCode() {
-        return DanhMuc.toConcept(emrDmGiaiPhauBenh, CodeSystemValue.DICH_VU_KY_THUAT);
+        return DanhMuc.toConcept(dmGiaiPhauBenh, CodeSystemValue.DICH_VU_KY_THUAT);
     }
 
     @Override
@@ -123,21 +121,21 @@ public class GiaiPhauBenh extends DichVuKyThuat {
             
         // Specimen
         specimen.setSubject(procedure.getSubject()); 
-        specimen.setReceivedTime(ngaythuchien);
+        specimen.setReceivedTime(ngayThucHien);
         
         var collection = specimen.getCollection();
-        collection.setCollector(CanboYte.toRef(bacsichuyenkhoa));        
-        collection.setBodySite(DanhMuc.toConcept(emrDmViTriLayMau, CodeSystemValue.VI_TRI_MAU_SINH_THIET));
-        collection.setCollected(new DateTimeType(ngaylaymausinhthiet));
+        collection.setCollector(CanboYte.toRef(bacSiChuyenKhoa));        
+        collection.setBodySite(DanhMuc.toConcept(dmViTriLayMau, CodeSystemValue.VI_TRI_MAU_SINH_THIET));
+        collection.setCollected(new DateTimeType(ngayLayMauSinhThiet));
         
-        var nxDaiTheExt = createExtension(ExtensionURL.DAI_THE_GPB, nhanxetvithe);
-        var nxViTheExt = createExtension(ExtensionURL.VI_THE_GPB, nhanxetdaithe);
+        var nxDaiTheExt = createExtension(ExtensionURL.DAI_THE_GPB, nhanXetViThe);
+        var nxViTheExt = createExtension(ExtensionURL.VI_THE_GPB, nhanXetDaiThe);
         specimen.setExtension(listOf(nxDaiTheExt, nxViTheExt)); 
                     
-        if(emrDmChanDoanGiaiPhau != null) {
+        if(dmChanDoanGiaiPhau != null) {
             var concept = new CodeableConcept();
-            concept.setText(motachandoangiaiphau);
-            concept.setCoding(listOf(DanhMuc.toCoding(emrDmChanDoanGiaiPhau, CodeSystemValue.ICD10)));
+            concept.setText(motaChanDoanGiaiPhau);
+            concept.setCoding(listOf(DanhMuc.toCoding(dmChanDoanGiaiPhau, CodeSystemValue.ICD10)));
             diagnosticReport.getConclusionCode().add(concept);
         }
         

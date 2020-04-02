@@ -19,7 +19,7 @@ import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.ChucNangSong;
 import vn.ehealth.cdr.service.ChucNangSongService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
 import vn.ehealth.cdr.validate.JsonParser;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -29,7 +29,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 public class ChucNangSongController {
 	
 	private JsonParser jsonParser = new JsonParser();
-	private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
+	private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
 
 	@Autowired private ChucNangSongService chucNangSongService;
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
@@ -45,10 +45,10 @@ public class ChucNangSongController {
     public ResponseEntity<?> createOrUpdateChamSocFromHIS(@RequestBody String jsonSt) {
         try {
             var map = jsonParser.parseJson(jsonSt);
-            var matraodoiHsba = (String) map.get("matraodoiHoSo");
-            var hsba = hoSoBenhAnService.getByMatraodoi(matraodoiHsba).orElseThrow();
+            var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var cnsObjList = (List<Object>) map.get("emrChucNangSongs");
+            var cnsObjList = (List<Object>) map.get("dsChucNangSong");
             var cnsList = cnsObjList.stream()
                                 .map(obj -> objectMapper.convertValue(obj, ChucNangSong.class))
                                 .collect(Collectors.toList());
@@ -65,7 +65,7 @@ public class ChucNangSongController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }
     }
 }

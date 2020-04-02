@@ -29,7 +29,7 @@ import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createHumanName;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createIdentifier;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "emr_benh_nhan")
+@Document(collection = "benh_nhan")
 public class BenhNhan {
     
     @Id public ObjectId id;
@@ -38,35 +38,35 @@ public class BenhNhan {
    
     public int trangThai;
     
-    public DanhMuc emrDmGioiTinh;
+    public DanhMuc dmGioiTinh;
     
-    public DanhMuc emrDmDanToc;
+    public DanhMuc dmDanToc;
     
-    public DanhMuc emrDmTonGiao;
+    public DanhMuc dmTonGiao;
     
-    public DanhMuc emrDmQuocGia;
+    public DanhMuc dmQuocGia;
     
-    public DanhMuc emrDmNgheNghiep;
+    public DanhMuc dmNgheNghiep;
     
-    public DanhMuc emrDmPhuongXa;
+    public DanhMuc dmPhuongXa;
     
-    public DanhMuc emrDmQuanHuyen;
+    public DanhMuc dmQuanHuyen;
     
-    public DanhMuc emrDmTinhThanh;
+    public DanhMuc dmTinhThanh;
     
-    public DanhMuc emrDmNgheNghiepBo;
+    public DanhMuc dmNgheNghiepBo;
     
-    public DanhMuc emrDmNgheNghiepMe;
+    public DanhMuc dmNgheNghiepMe;
     
-    public DanhMuc emrDmLoaiDoiTuongTaiChinh;
+    public DanhMuc dmLoaiDoiTuongTaiChinh;
     
-    public String iddinhdanhchinh;
+    public String idDinhDanhChinh;
 
-    public String iddinhdanhphu;
+    public String idDinhDanhPhu;
 
     public String idhis;
 
-    public String tendaydu;
+    public String tenDayDu;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaysinh;
@@ -82,17 +82,17 @@ public class BenhNhan {
     public String sobhyt;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngayhethanthebhyt;
+    public Date ngayHetHanTheBhyt;
 
-    public String hotenbo;
+    public String hoTenBo;
 
-    public String hotenme;
+    public String hoTenMe;
 
-    public String tennguoibaotin;
+    public String tenNguoiBaoTin;
 
-    public String diachinguoibaotin;
+    public String diaChiNguoiBaoTin;
 
-    public String sodienthoainguoibaotin;
+    public String soDienThoaiNguoiBaoTin;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaySinhCuaBo;
@@ -126,17 +126,17 @@ public class BenhNhan {
             obj.addLine(diachi);
         }
         
-        if(emrDmQuanHuyen != null) {
-            obj.setDistrict(emrDmQuanHuyen.ten);
+        if(dmQuanHuyen != null) {
+            obj.setDistrict(dmQuanHuyen.ten);
         }
         
-        if(emrDmTinhThanh != null) {
-            obj.setCity(emrDmTinhThanh.ten);
+        if(dmTinhThanh != null) {
+            obj.setCity(dmTinhThanh.ten);
         }
         
-        var tinhThanhExt = createExtension("city", DanhMuc.toConcept(emrDmTinhThanh, CodeSystemValue.DVHC));        
-        var quanHuyenExt = createExtension("district", DanhMuc.toConcept(emrDmQuanHuyen, CodeSystemValue.DVHC));        
-        var xaPhuongExt = createExtension("ward", DanhMuc.toConcept(emrDmPhuongXa, CodeSystemValue.DVHC));
+        var tinhThanhExt = createExtension("city", DanhMuc.toConcept(dmTinhThanh, CodeSystemValue.DVHC));        
+        var quanHuyenExt = createExtension("district", DanhMuc.toConcept(dmQuanHuyen, CodeSystemValue.DVHC));        
+        var xaPhuongExt = createExtension("ward", DanhMuc.toConcept(dmPhuongXa, CodeSystemValue.DVHC));
         
         var extension = obj.addExtension();
         extension.setUrl(ExtensionURL.DVHC);
@@ -161,23 +161,23 @@ public class BenhNhan {
     public Patient toFhir() {
         
         var obj = new Patient();
-        obj.setName(listOf(createHumanName(tendaydu)));        
+        obj.setName(listOf(createHumanName(tenDayDu)));        
         obj.setBirthDate(ngaysinh);
         
         if(!StringUtils.isBlank(sobhyt)) {
             var mohIdentifier = createIdentifier(sobhyt, IdentifierSystem.DINH_DANH_Y_TE, 
-                                                    null, ngayhethanthebhyt);
+                                                    null, ngayHetHanTheBhyt);
             obj.addIdentifier(mohIdentifier);
         }
         
-        if(!StringUtils.isBlank(iddinhdanhphu)) {
-            var nationalIdentifier = createIdentifier(iddinhdanhphu, IdentifierSystem.CMND);
+        if(!StringUtils.isBlank(idDinhDanhPhu)) {
+            var nationalIdentifier = createIdentifier(idDinhDanhPhu, IdentifierSystem.CMND);
             obj.addIdentifier(nationalIdentifier);
         }
         
         
-        if(emrDmGioiTinh != null) {
-            var genderCode = gioiTinhCodeMap.get(emrDmGioiTinh.ma);
+        if(dmGioiTinh != null) {
+            var genderCode = gioiTinhCodeMap.get(dmGioiTinh.ma);
             obj.setGender(AdministrativeGender.fromCode(genderCode));
         }
         
@@ -190,10 +190,10 @@ public class BenhNhan {
             obj.addTelecom(createContactPoint(email, ContactPointSystem.EMAIL));
         }
 
-        var danTocExt = createExtension(ExtensionURL.DAN_TOC, DanhMuc.toConcept(emrDmDanToc, CodeSystemValue.DAN_TOC));
-        var tonGiaoExt = createExtension(ExtensionURL.TON_GIAO, DanhMuc.toConcept(emrDmTonGiao, CodeSystemValue.TON_GIAO));
-        var ngheNghiepExt = createExtension(ExtensionURL.NGHE_NGHIEP, DanhMuc.toConcept(emrDmNgheNghiep, CodeSystemValue.NGHE_NGHIEP));
-        var quocTichExt = createExtension(ExtensionURL.QUOC_TICH, DanhMuc.toConcept(emrDmQuocGia, CodeSystemValue.QUOC_GIA));
+        var danTocExt = createExtension(ExtensionURL.DAN_TOC, DanhMuc.toConcept(dmDanToc, CodeSystemValue.DAN_TOC));
+        var tonGiaoExt = createExtension(ExtensionURL.TON_GIAO, DanhMuc.toConcept(dmTonGiao, CodeSystemValue.TON_GIAO));
+        var ngheNghiepExt = createExtension(ExtensionURL.NGHE_NGHIEP, DanhMuc.toConcept(dmNgheNghiep, CodeSystemValue.NGHE_NGHIEP));
+        var quocTichExt = createExtension(ExtensionURL.QUOC_TICH, DanhMuc.toConcept(dmQuocGia, CodeSystemValue.QUOC_GIA));
         
         obj.setExtension(listOf(danTocExt, tonGiaoExt, ngheNghiepExt));
         obj.setModifierExtension(listOf(quocTichExt));

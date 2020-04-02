@@ -1,0 +1,73 @@
+{
+  "maTraoDoiHoSo": "180034027",
+  "dsPhauThuatThuThuat": [
+    {
+      "idhis": "1111111",
+      "dsDmMaBenhChanDoanTruoc": [
+        {
+          "ma": "001",
+          "ten": "Chẩn đoán bệnh trước pt 1"
+        },
+        {
+          "ma": "002",
+          "ten": "Chẩn đoán bệnh trước pt 2"
+        }
+      ],
+      "moTaChanDoanTruocPttt": "Mô tả chẩn đoán trước",
+      "dsDmMaBenhChanDoanSau": [
+        {
+          "ma": "001",
+          "ten": "Chẩn đoán bệnh sau pt 1"
+        },
+        {
+          "ma": "002",
+          "ten": "Chẩn đoán bệnh sau pt 2"
+        }
+      ],
+      "moTaChanDoanSauPttt": "Mô tả chẩn đoán sau",
+      "dmPhauThuatThuThuat": {
+        "ma": "001",
+        "ten": "Phẫu thuật thủ thuật"
+      },
+      "ngayGioPttt": "2018-06-29 00:00:00",
+      "bacSiThucHien": "Bác sĩ thực hiện",
+      "bacSiGayMe": "Bác sĩ gây mê",
+      "chiDinhPttt": "Chỉ định",
+      "phuongPhapVoCam": "Phương pháp vô cảm",
+      "luocDoPttt": "Lược đồ",
+      "trinhTuPttt": "Trình tự",
+      "dsThanhVienPttt": [
+        {
+          "dmVaiTro": {
+            "ma": "0001",
+            "ten": "Phẫu thuật viên chính"
+          },
+          "bacsipttt": {
+            "chungChiHanhNghe": "11111",
+            "ten": "Bác sĩ A"
+          }
+        },
+        {
+          "dmVaiTro": {
+            "ma": "0002",
+            "ten": "Gây mê chính"
+          },
+          "bacsipttt": {
+            "chungChiHanhNghe": "11111",
+            "ten": "Bác sĩ B"
+          }
+        }
+      ],
+      "dsFileDinhKemPttt": [
+        {
+          "url": "url file 1",
+          "ten": "Tên file 1"
+        },
+        {
+          "url": "url file 2",
+          "ten": "Tên file 2"
+        }
+      ]
+    }
+  ]
+}

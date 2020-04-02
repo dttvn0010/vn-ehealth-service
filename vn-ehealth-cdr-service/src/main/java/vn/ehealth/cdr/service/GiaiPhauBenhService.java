@@ -51,7 +51,7 @@ public class GiaiPhauBenhService {
                         JsonUtil.dumpObject(gpb), "");
             } 
         }
-        logService.logAction(HoSoBenhAn.class.getName() + ".EmrGiaiPhauBenhList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".GiaiPhauBenhList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
                 "", jsonSt);
     }
 }

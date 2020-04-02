@@ -1,47 +1,47 @@
 {
-	"emrDmGioiTinh": {
+	"dmGioiTinh": {
 		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
 	},
 	
-	"emrDmDanToc": {
+	"dmDanToc": {
 		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
 	},
 	
-	"emrDmQuocGia": {
+	"dmQuocGia": {
 		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
 	},
 	
-	"emrDmNgheNghiep": {
+	"dmNgheNghiep": {
 		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
 	},
 	
-	"emrDmPhuongXa": {
+	"dmPhuongXa": {
 		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
 	},
 	
-	"emrDmQuanHuyen": {
+	"dmQuanHuyen": {
 		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
 	},
 	
-	"emrDmTinhThanh": {
+	"dmTinhThanh": {
 		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
 	},
 	
-	"emrDmNgheNghiepBo": {
+	"dmNgheNghiepBo": {
 		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
 	},
 	
-	"emrDmNgheNghiepMe": {
+	"dmNgheNghiepMe": {
 		"ma": {"type" : "String", "required" : true}, "ten": {"type": "String"}
 	},
 	
-	"iddinhdanhchinh": {"type" : "String", "required" : true},
+	"idDinhDanhChinh": {"type" : "String", "required" : true},
 	
-	"iddinhdanhphu": {"type" : "String"},
+	"idDinhDanhPhu": {"type" : "String"},
 	
 	"idhis": {"type" : "String"},
 	
-	"tendaydu": {"type" : "String"},
+	"tenDayDu": {"type" : "String"},
 	
 	"ngaysinh": {"type" : "Date"},
 	
@@ -51,17 +51,17 @@
 		
 	"sobhyt": {"type" : "String"},
 		
-	"ngayhethanthebhyt": {"type" : "Date"},
+	"ngayHetHanTheBhyt": {"type" : "Date"},
 	
-	"hotenbo": {"type" : "String"},
+	"hoTenBo": {"type" : "String"},
 	
-	"hotenme": {"type" : "String"},
+	"hoTenMe": {"type" : "String"},
 	
-	"tennguoibaotin": {"type" : "String"},
+	"tenNguoiBaoTin": {"type" : "String"},
 	
-	"diachinguoibaotin": {"type" : "String"},
+	"diaChiNguoiBaoTin": {"type" : "String"},
 	
-	"sodienthoainguoibaotin": {"type" : "String"},
+	"soDienThoaiNguoiBaoTin": {"type" : "String"},
 	
 	"ngaySinhCuaBo": {"type" : "Date"},
 	

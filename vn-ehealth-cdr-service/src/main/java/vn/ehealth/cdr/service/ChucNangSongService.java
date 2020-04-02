@@ -47,7 +47,7 @@ public class ChucNangSongService {
             cns = chucNangSongRepository.save(cns);
             cnsList.set(i, cns);
         }
-        logService.logAction(HoSoBenhAn.class.getName() + ".EmrChucNangSongList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".ChucNangSongList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
                 "", jsonSt);
     }
 }

@@ -49,7 +49,7 @@ public class UserService {
         EmrPerson savedEmrPerson = emrPersonRepository.save(emrPerson);
         User user = new User();
         user.coSoKhamBenhId = UserUtil.getCurrentUser().get().coSoKhamBenhId;
-        user.fullName = emrPerson.tendaydu;
+        user.fullName = emrPerson.tenDayDu;
         List<ObjectId> listRoles = new ArrayList<>();
         if (!roleIds.isEmpty()) {
             for (String roleId : roleIds) {
@@ -98,7 +98,7 @@ public class UserService {
     public ListResultDTO<UserDTO> search(String roleId, String keyword, Integer page, Integer pageSize) {
         ListResultDTO<UserDTO> resultDTO;
         List<UserDTO> listUserDTO = new ArrayList<>();
-        List<EmrPerson> rawData = emrPersonRepository.findByEmailOrSodienthoaiOrTendaydu(keyword, keyword, keyword);
+        List<EmrPerson> rawData = emrPersonRepository.findByEmailOrSodienthoaiOrTenDayDu(keyword, keyword, keyword);
         if (rawData != null) {
             rawData.forEach(emrPerson -> {
                 User user = userRepository.findById(emrPerson.userId).orElse(new User());
@@ -148,7 +148,7 @@ public class UserService {
             }
             user.roleIds = listRoles;
             user.username = userUpdateDTO.getEmrPerson().email;
-            user.fullName = userUpdateDTO.getEmrPerson().tendaydu;
+            user.fullName = userUpdateDTO.getEmrPerson().tenDayDu;
             emrPersonRepository.save(userUpdateDTO.getEmrPerson());
             user = userRepository.save(user);
         }

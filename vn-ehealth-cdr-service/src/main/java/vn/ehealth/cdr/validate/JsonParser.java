@@ -19,20 +19,20 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
 
 public class JsonParser {
     
     Logger logger = LoggerFactory.getLogger(JsonParser.class);
     
-    SimpleDateFormat sdf1 = EmrUtils.createSimpleDateFormat("dd/MM/yyyy");
-    SimpleDateFormat sdf1_1 = EmrUtils.createSimpleDateFormat("yyyy-MM-dd");
-    SimpleDateFormat sdf2 = EmrUtils.createSimpleDateFormat("dd/MM/yyyy HH:mm");
-    SimpleDateFormat sdf2_2 = EmrUtils.createSimpleDateFormat("yyyy-MM-dd HH:mm");
-    SimpleDateFormat sdf3 = EmrUtils.createSimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    SimpleDateFormat sdf4 = EmrUtils.createSimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    SimpleDateFormat sdf1 = CDRUtils.createSimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat sdf1_1 = CDRUtils.createSimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat sdf2 = CDRUtils.createSimpleDateFormat("dd/MM/yyyy HH:mm");
+    SimpleDateFormat sdf2_2 = CDRUtils.createSimpleDateFormat("yyyy-MM-dd HH:mm");
+    SimpleDateFormat sdf3 = CDRUtils.createSimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat sdf4 = CDRUtils.createSimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     
-    ObjectMapper mapper = EmrUtils.createObjectMapper();
+    ObjectMapper mapper = CDRUtils.createObjectMapper();
     
     Object parseJsonElement(String field, Optional<JsonNode> jsonElement, @Nonnull JsonNode schemaInfo, List<ErrorMessage> errors) {
         

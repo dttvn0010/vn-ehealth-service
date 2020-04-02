@@ -32,7 +32,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "emr_phau_thuat_thu_thuat")
+@Document(collection = "phau_thuat_thu_thuat")
 public class PhauThuatThuThuat extends DichVuKyThuat {
 
     @Id public ObjectId id;        
@@ -76,47 +76,47 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
     public int trangThai; 
     public String idhis;
     
-    public List<DanhMuc> emrDmMaBenhChandoansaus = new ArrayList<>();
-    public List<DanhMuc> emrDmMaBenhChandoantruocs = new ArrayList<>();
+    public List<DanhMuc> dsDmMaBenhChanDoanSau = new ArrayList<>();
+    public List<DanhMuc> dsDmMaBenhChanDoanTruoc = new ArrayList<>();
     
-    public DanhMuc emrDmMaBenhChandoansau;
-    public DanhMuc emrDmMaBenhChandoantruoc;
+    public DanhMuc dmMaBenhChanDoanSau;
+    public DanhMuc dmMaBenhChanDoanTruoc;
     
-    public DanhMuc emrDmPhauThuThuat;
+    public DanhMuc dmPhauThuatThuThuat;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaygiopttt;
-    public CanboYte bacsithuchien;
-    public CanboYte bacsygayme;
-    public CanboYte thukyghichep;
+    public Date ngayGioPttt;
+    public CanboYte bacSiThucHien;
+    public CanboYte bacSiGayMe;
+    public CanboYte thuKyGhiChep;
     
-    public String chidinhptt;
-    public String phuongphapvocam;
-    public String luocdoptt;
-    public String trinhtuptt;
-    public String ghichu;    
+    public String chiDinhPttt;
+    public String phuongPhapVoCam;
+    public String luocDoPttt;
+    public String trinhTuPttt;
+    public String ghiChu;    
     
-    public String motachandoantruocpt;
-    public String motachandoansaupt;
+    public String moTaChanDoanTruocPttt;
+    public String moTaChanDoanSauPttt;
         
-    public List<FileDinhKem> emrFileDinhKemPttts = new ArrayList<>();
+    public List<FileDinhKem> dsFileDinhKemPttt = new ArrayList<>();
     
     @JsonInclude(Include.NON_NULL)
-    public static class EmrThanhVienPttt {
+    public static class ThanhVienPttt {
 
-        public DanhMuc emrDmVaiTro;        
+        public DanhMuc dmVaiTro;        
         public CanboYte bacsipttt;
         
-        public static ProcedurePerformerComponent toPerformer(EmrThanhVienPttt dto) {
+        public static ProcedurePerformerComponent toPerformer(ThanhVienPttt dto) {
             if(dto == null) return null;
             var performer = new ProcedurePerformerComponent();
-            performer.setFunction(DanhMuc.toConcept(dto.emrDmVaiTro, CodeSystemValue.VAI_TRO_PTTT));
+            performer.setFunction(DanhMuc.toConcept(dto.dmVaiTro, CodeSystemValue.VAI_TRO_PTTT));
             performer.setActor(CanboYte.toRef(dto.bacsipttt));
             return performer;
         }
     }
     
-    public List<EmrThanhVienPttt> emrThanhVienPttts = new ArrayList<>();
+    public List<ThanhVienPttt> dsThanhVienPttt = new ArrayList<>();
     
     @Override
     protected CodeableConcept getCategory() {
@@ -127,7 +127,7 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
 
     @Override
     protected CodeableConcept getCode() {
-        return DanhMuc.toConcept(emrDmPhauThuThuat, CodeSystemValue.DICH_VU_KY_THUAT);
+        return DanhMuc.toConcept(dmPhauThuatThuThuat, CodeSystemValue.DICH_VU_KY_THUAT);
     }
 
     @Override
@@ -139,16 +139,16 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
         var diagnosticReport = (DiagnosticReport) resources.get("diagnosticReport");
         
         if(procedure != null) {
-            procedure.setAsserter(CanboYte.toRef(bacsithuchien));
-            procedure.setRecorder(CanboYte.toRef(thukyghichep));
+            procedure.setAsserter(CanboYte.toRef(bacSiThucHien));
+            procedure.setRecorder(CanboYte.toRef(thuKyGhiChep));
             
-            if(ngaygiopttt != null) {
-                procedure.setPerformed(new DateTimeType(ngaygiopttt));
+            if(ngayGioPttt != null) {
+                procedure.setPerformed(new DateTimeType(ngayGioPttt));
             }
                     
-            procedure.setNote(listOf(createAnnotation(ghichu)));
-            procedure.setExtension(listOf(createExtension(ExtensionURL.TRINH_TU_PTTT, trinhtuptt)));
-            procedure.setPerformer(transform(emrThanhVienPttts, x -> EmrThanhVienPttt.toPerformer(x)));
+            procedure.setNote(listOf(createAnnotation(ghiChu)));
+            procedure.setExtension(listOf(createExtension(ExtensionURL.TRINH_TU_PTTT, trinhTuPttt)));
+            procedure.setPerformer(transform(dsThanhVienPttt, x -> ThanhVienPttt.toPerformer(x)));
         }
             
         return mapOf(

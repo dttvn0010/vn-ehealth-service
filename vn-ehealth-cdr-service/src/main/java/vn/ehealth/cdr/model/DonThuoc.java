@@ -26,7 +26,7 @@ import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "emr_don_thuoc")
+@Document(collection = "don_thuoc")
 public class DonThuoc {
     
     @Id public ObjectId id;    
@@ -37,37 +37,37 @@ public class DonThuoc {
     public String idhis;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaykedon;
-    public CanboYte bacsikedon;
-    public String sodon;
+    public Date ngayKeDon;
+    public CanboYte bacSiKeDon;
+    public String soDon;
     
-    public List<FileDinhKem> emrFileDinhKemDonThuocs = new ArrayList<>();
+    public List<FileDinhKem> dsFileDinhKemDonThuoc = new ArrayList<>();
    
     @JsonInclude(Include.NON_NULL)
-    public static class EmrDonThuocChiTiet {
-        public DanhMuc emrDmThuoc;
-        public DanhMuc emrDmDuongDungThuoc;
-        public DanhMuc emrDmTanXuatDungThuoc;
-        public DanhMuc emrDmChiDanDungThuoc;
+    public static class DonThuocChiTiet {
+        public DanhMuc dmThuoc;
+        public DanhMuc dmDuongDungThuoc;
+        public DanhMuc dmTanSuatDungThuoc;
+        public DanhMuc dmChiDanDungThuoc;
         
         @JsonIgnore
-        public Date ngaykedon;
+        public Date ngayKeDon;
         
         @JsonIgnore
-        public CanboYte bacsikedon;
+        public CanboYte bacSiKeDon;
         
         @JsonIgnore
-        public String sodon;
+        public String soDon;
         
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-        public Date ngaybatdau;
+        public Date ngayBatDau;
         
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-        public Date ngayketthuc;
+        public Date ngayKetThuc;
         
-        public String lieuluongdung;    
-        public String chidandungthuoc;
-        public String bietduoc;
+        public String lieuLuongThuoc;    
+        public String chiDanDungThuoc;
+        public String bietDuoc;
         
         private Integer parseInt(String st) {
             try {
@@ -83,25 +83,25 @@ public class DonThuoc {
             var mRequest = new MedicationRequest();
             mRequest.setSubject(enc.getSubject());
             mRequest.setEncounter(createReference(enc));
-            mRequest.setRequester(CanboYte.toRef(bacsikedon));
-            mRequest.setAuthoredOn(ngaykedon);
-            mRequest.setGroupIdentifier(createIdentifier(sodon, IdentifierSystem.DON_THUOC));
+            mRequest.setRequester(CanboYte.toRef(bacSiKeDon));
+            mRequest.setAuthoredOn(ngayKeDon);
+            mRequest.setGroupIdentifier(createIdentifier(soDon, IdentifierSystem.DON_THUOC));
             
-            mRequest.setMedication(DanhMuc.toConcept(emrDmThuoc, CodeSystemValue.DM_THUOC));
+            mRequest.setMedication(DanhMuc.toConcept(dmThuoc, CodeSystemValue.DM_THUOC));
            
             var dosage = new Dosage();
-            dosage.setText(chidandungthuoc);
-            dosage.setRoute(DanhMuc.toConcept(emrDmDuongDungThuoc, CodeSystemValue.DM_DUONG_DUNG_THUOC));
+            dosage.setText(chiDanDungThuoc);
+            dosage.setRoute(DanhMuc.toConcept(dmDuongDungThuoc, CodeSystemValue.DM_DUONG_DUNG_THUOC));
                 
             //TODO: TanXuat
             
             mRequest.getDosageInstruction().add(dosage);
             
-            var arr = lieuluongdung.split(" ");
-            var soluong = parseInt(arr[0]);
-            if(soluong != null) {
+            var arr = lieuLuongThuoc.split(" ");
+            var soLuong = parseInt(arr[0]);
+            if(soLuong != null) {
                 var quantity = new Quantity();
-                quantity.setValue(soluong);
+                quantity.setValue(soLuong);
                 
                 if(arr.length > 1) {
                     quantity.setUnit(arr[1]);
@@ -109,10 +109,10 @@ public class DonThuoc {
                 mRequest.getDispenseRequest().setQuantity(quantity);
             }
             
-            if(ngaybatdau != null || ngayketthuc != null) {
+            if(ngayBatDau != null || ngayKetThuc != null) {
                 var period = new Period();
-                period.setStart(ngaybatdau);
-                period.setEnd(ngayketthuc);
+                period.setStart(ngayBatDau);
+                period.setEnd(ngayKetThuc);
                 mRequest.getDispenseRequest().setValidityPeriod(period);
             }
             
@@ -120,7 +120,11 @@ public class DonThuoc {
         }
     }
     
-    public List<EmrDonThuocChiTiet> emrDonThuocChiTiets = new ArrayList<>();
+    public List<DonThuocChiTiet> dsDonThuocChiTiet = new ArrayList<>();
+    
+    public String getId() {
+        return ObjectIdUtil.idToString(id);
+    }
     
     public void setId(String id) {
         this.id = ObjectIdUtil.stringToId(id);

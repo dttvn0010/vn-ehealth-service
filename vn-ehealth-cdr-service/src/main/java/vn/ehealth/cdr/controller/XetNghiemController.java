@@ -20,7 +20,8 @@ import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.XetNghiem;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.XetNghiemService;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
+import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.cdr.validate.JsonParser;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -35,7 +36,7 @@ public class XetNghiemController {
 
     private JsonParser jsonParser = new JsonParser();
     
-    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
+    private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @GetMapping("/get_ds_xetnghiem")
     public ResponseEntity<?> getDsXetNghiem(@RequestParam("hsba_id") String id) {
@@ -50,14 +51,14 @@ public class XetNghiemController {
             if(enc == null) return;
             
             for(var xetNghiem : xetNghiemList) {
-                if(xetNghiem.emrXetNghiemDichVus == null) continue;
+                if(xetNghiem.dsDichVuXetNghiem == null) continue;
                 
-                for(var xndv : xetNghiem.emrXetNghiemDichVus) {
-                    xndv.ngayyeucau = xetNghiem.ngayyeucau;
-                    xndv.bacsiyeucau = xetNghiem.bacsiyeucau;
-                    xndv.noidungyeucau = xetNghiem.noidungyeucau;
-                    xndv.ngaythuchien = xetNghiem.ngaythuchien;
-                    xndv.bacsixetnghiem = xetNghiem.bacsixetnghiem;
+                for(var xndv : xetNghiem.dsDichVuXetNghiem) {
+                    xndv.ngayYeuCau = xetNghiem.ngayYeuCau;
+                    xndv.bacSiYeuCau = xetNghiem.bacSiYeuCau;
+                    xndv.noiDungYeuCau = xetNghiem.noiDungYeuCau;
+                    xndv.ngayThucHien = xetNghiem.ngayThucHien;
+                    xndv.bacSiXetNghiem = xetNghiem.bacSiXetNghiem;
                     DichVuKyThuatHelper.saveDichVuKT(enc, xndv);
                 }
             }
@@ -69,25 +70,26 @@ public class XetNghiemController {
     @PostMapping("/create_or_update_xetnghiem")
     public ResponseEntity<?> createOrUpdateXetnghiemFromHIS(@RequestBody String jsonSt) {
         try {
+            jsonSt = JsonUtil.preprocess(jsonSt);
             var map = jsonParser.parseJson(jsonSt);
-            var matraodoiHsba = (String) map.get("matraodoiHoSo");
-            var hsba = hoSoBenhAnService.getByMatraodoi(matraodoiHsba).orElseThrow();
+            var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var xetnghiemList = EmrUtils.getFieldAsList(map, "emrXetNghiems");
+            var xetnghiemList = CDRUtils.getFieldAsList(map, "dsXetNghiem");
             if(xetnghiemList == null) {
-                throw new Exception("emrXetNghiems is null");
+                throw new Exception("dsXetNghiem is null");
             }
             
             for(var xetnghiem: xetnghiemList) {
-                var xndvList = EmrUtils.getFieldAsList(xetnghiem, "emrXetNghiemDichVus");
+                var xndvList = CDRUtils.getFieldAsList(xetnghiem, "dsDichVuXetNghiem");
                 if(xndvList == null) continue;
                 
                 for(var xndv : xndvList) {
-                    var xnkqList = EmrUtils.getFieldAsList(xndv, "emrXetNghiemKetQuas");
+                    var xnkqList = CDRUtils.getFieldAsList(xndv, "dsKetQuaXetNghiem");
                     if(xnkqList == null) continue;
                     
                     for(var xnkq : xnkqList) {
-                        var chisoxn = EmrUtils.getFieldAsObject(xnkq, "emrDmChiSoXetNghiem");
+                        var chisoxn = CDRUtils.getFieldAsObject(xnkq, "dmChiSoXetNghiem");
                         if(chisoxn != null) {
                             var extension = mapOf(
                                 "donvi", chisoxn.getOrDefault("donvi", ""),
@@ -120,7 +122,7 @@ public class XetNghiemController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }
     }    
 }

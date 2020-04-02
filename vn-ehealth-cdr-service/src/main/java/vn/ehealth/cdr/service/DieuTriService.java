@@ -44,7 +44,7 @@ public class DieuTriService {
             dt = dieuTriRepository.save(dt);
             dtList.set(i, dt);
         }         
-        logService.logAction(HoSoBenhAn.class.getName() + ".EmrDieuTriList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".DieuTriList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
                 "", jsonSt);
     }
 }

@@ -1,0 +1,43 @@
+{
+  "maTraoDoiHoSo": "180034027",
+  "chanDoanHinhAnhs": [
+    {
+      "idhis": "11111",
+      "dmChanDoanHinhAnh": {
+        "ma": "001",
+        "ten": "Chẩn đoán hình ảnh"
+      },
+      "dmLoaiChanDoanHinhAnh": {
+        "ma": "001",
+        "ten": "Loại chẩn đoán hình ảnh"
+      },
+	  "dmKhoaDieuTri": {
+		"ma": "01",
+		"ten": "Khoa khám bệnh"
+	  },
+      "ngayYeuCau": "2018-06-29 00:00:00",
+      "bacSiYeuCau": {
+        "chungChiHanhNghe": "11111",
+        "ten": "Bác sĩ A"
+      },
+      "ngayThucHien": "2018-06-29 00:00:00",
+      "bacSiChuyenKhoa": {
+        "chungChiHanhNghe": "11112",
+        "ten": "Bác sĩ B"
+      },
+      "ketQua": "Kết quả",
+      "ketLuan": "Kết luận",
+      "loiDan": "Lời dặn",
+      "dsFileDinhKemCdha": [
+        {
+          "url": "url file 1",
+          "ten": "Tên file 1"
+        },
+        {
+          "url": "url file 2",
+          "ten": "Tên file 2"
+        }
+      ]
+    }
+  ]
+}

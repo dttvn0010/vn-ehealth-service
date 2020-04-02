@@ -20,7 +20,8 @@ import vn.ehealth.cdr.model.ChanDoanHinhAnh;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.service.ChanDoanHinhAnhService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
+import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.cdr.validate.JsonParser;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -30,7 +31,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 public class ChanDoanHinhAnhController {
     
     private JsonParser jsonParser = new JsonParser();
-    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
+    private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @Autowired private ChanDoanHinhAnhService chanDoanHinhAnhService;
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
@@ -57,11 +58,13 @@ public class ChanDoanHinhAnhController {
     @PostMapping("/create_or_update_cdha")
     public ResponseEntity<?> createOrUpdateCdhaFromHIS(@RequestBody String jsonSt) {
         try {
+            jsonSt = JsonUtil.preprocess(jsonSt);
+            jsonSt = JsonUtil.preprocess(jsonSt);
             var map = jsonParser.parseJson(jsonSt);
-            var matraodoiHsba = (String) map.get("matraodoiHoSo");
-            var hsba = hoSoBenhAnService.getByMatraodoi(matraodoiHsba).orElseThrow();
+            var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var cdhaObjList = (List<Object>) map.get("emrChanDoanHinhAnhs");
+            var cdhaObjList = (List<Object>) map.get("dsChanDoanHinhAnh");
             var cdhaList = cdhaObjList.stream()
                                 .map(obj -> objectMapper.convertValue(obj, ChanDoanHinhAnh.class))
                                 .collect(Collectors.toList());
@@ -82,7 +85,7 @@ public class ChanDoanHinhAnhController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }
     }
 }

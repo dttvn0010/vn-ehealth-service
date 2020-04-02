@@ -47,7 +47,7 @@ public class PhauThuatThuThuatService {
             } 
         }
         
-        logService.logAction(HoSoBenhAn.class.getName() + ".EmrPhauThuatThuThuatList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".PhauThuatThuThuatList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
                 "", jsonSt); 
     }    
 }

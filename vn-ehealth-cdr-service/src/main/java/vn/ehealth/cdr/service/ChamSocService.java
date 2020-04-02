@@ -47,7 +47,7 @@ public class ChamSocService {
             csList.set(i, cs);
            
         }      
-        logService.logAction(HoSoBenhAn.class.getName() + ".EmrChamSocList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".ChamSocList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
                 "", jsonSt);
     }
     

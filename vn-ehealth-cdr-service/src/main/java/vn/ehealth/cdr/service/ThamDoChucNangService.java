@@ -47,7 +47,7 @@ public class ThamDoChucNangService {
             } 
         }
         
-        logService.logAction(HoSoBenhAn.class.getName() + ".EmrThamDoChucNangList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".ThamDoChucNangList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
                 "", jsonSt);
     }
     

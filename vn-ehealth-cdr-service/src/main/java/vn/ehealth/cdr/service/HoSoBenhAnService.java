@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import vn.ehealth.auth.service.UserService;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.repository.HoSoBenhAnRepository;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
 import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.MA_HANH_DONG;
@@ -28,8 +28,7 @@ import vn.ehealth.hl7.fhir.core.util.Constants.TRANGTHAI_HOSO;
 @Service
 public class HoSoBenhAnService {
    
-    //private Logger logger = LoggerFactory.getLogger(EmrHoSoBenhAnService.class);
-    private SimpleDateFormat sdf = EmrUtils.createSimpleDateFormat("dd/MM/yyyy HH:mm");
+    private SimpleDateFormat sdf = CDRUtils.createSimpleDateFormat("dd/MM/yyyy HH:mm");
             
     @Autowired private HoSoBenhAnRepository hoSoBenhAnRepository;
     
@@ -38,8 +37,8 @@ public class HoSoBenhAnService {
     
     @Autowired MongoTemplate mongoTemplate;
     
-    public Optional<HoSoBenhAn> getByMatraodoi(String matraodoi) {
-        return hoSoBenhAnRepository.findByMatraodoi(matraodoi);
+    public Optional<HoSoBenhAn> getByMaTraoDoi(String maTraoDoi) {
+        return hoSoBenhAnRepository.findByMaTraoDoi(maTraoDoi);
     }
     
     public List<String> getAllIds() {
@@ -50,19 +49,19 @@ public class HoSoBenhAnService {
         return DataConvertUtil.transform(lst, x -> x.getId());
     }
     
-    public long countHoSo(ObjectId userId, ObjectId coSoKhamBenhId, int trangThai, String mayte) {
+    public long countHoSo(ObjectId userId, ObjectId coSoKhamBenhId, int trangThai, String maYte) {
         var query = new Query(Criteria.where("coSoKhamBenhId").is(coSoKhamBenhId)
                                         .and("trangThai").is(trangThai)
-                                        .and("mayte").regex(mayte)
+                                        .and("maYte").regex(maYte)
                              );
         
         return mongoTemplate.count(query, HoSoBenhAn.class);
     }
     
-    public List<HoSoBenhAn> getDsHoSo(ObjectId userId, ObjectId coSoKhamBenhId, int trangThai, String mayte, int offset, int limit) {
+    public List<HoSoBenhAn> getDsHoSo(ObjectId userId, ObjectId coSoKhamBenhId, int trangThai, String maYte, int offset, int limit) {
         var query = new Query(Criteria.where("coSoKhamBenhId").is(coSoKhamBenhId)
         								.and("trangThai").is(trangThai)
-                                        .and("mayte").regex(mayte)
+                                        .and("maYte").regex(maYte)
                              ).skip(offset).limit(limit);
         
         return mongoTemplate.find(query, HoSoBenhAn.class);
@@ -108,18 +107,18 @@ public class HoSoBenhAnService {
     }
     
     public HoSoBenhAn createOrUpdateFromHIS(ObjectId userId, @Nonnull ObjectId benhNhanId, @Nonnull ObjectId coSoKhamBenhId, @Nonnull HoSoBenhAn hsba, String jsonSt) {
-        hsba.id = hoSoBenhAnRepository.findByMatraodoi(hsba.matraodoi).map(x -> x.id).orElse(null);
+        hsba.id = hoSoBenhAnRepository.findByMaTraoDoi(hsba.maTraoDoi).map(x -> x.id).orElse(null);
         boolean createNew = hsba.id == null;
         
         hsba.benhNhanId = benhNhanId;        
         hsba.coSoKhamBenhId = coSoKhamBenhId;
         
         if(createNew) {
-            hsba.ngaytao = new Date();
-            hsba.nguoitaoId = userId;
+            hsba.ngayTao = new Date();
+            hsba.nguoiTaoId = userId;
         }else {
-            hsba.ngaysua = new Date();
-            hsba.nguoisuaId = userId;
+            hsba.ngaySua = new Date();
+            hsba.nguoiSuaId = userId;
         }
         
         
@@ -143,9 +142,9 @@ public class HoSoBenhAnService {
         hsba.ifPresent(x -> {
             logService.logAction(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.LUU_TRU, new Date(), userId, "", "");            
             x.trangThai = TRANGTHAI_HOSO.DA_LUU;
-            x.nguoiluutruId = userId;
-            x.ngayluutru = new Date();
-            x.maluutru = x.mayte;
+            x.nguoiLuuTruId = userId;
+            x.ngayLuuTru = new Date();
+            x.maLuuTru = x.maYte;
             hoSoBenhAnRepository.save(x);
         });
     }
@@ -155,7 +154,7 @@ public class HoSoBenhAnService {
         hsba.ifPresent(x -> {
             logService.logAction(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.MO_LUU_TRU, new Date(), userId, "", "");            
             x.trangThai = TRANGTHAI_HOSO.CHUA_XULY;
-            x.nguoimoluutruId = userId;
+            x.nguoiMoLuTruId = userId;
             x.ngaymoluutru = new Date();
             hoSoBenhAnRepository.save(x);
         });

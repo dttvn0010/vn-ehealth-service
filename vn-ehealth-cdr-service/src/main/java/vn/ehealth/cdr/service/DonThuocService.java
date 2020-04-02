@@ -52,7 +52,7 @@ public class DonThuocService {
                         JsonUtil.dumpObject(dt), "");
             } 
         }
-        logService.logAction(HoSoBenhAn.class.getName() + ".EmrDonThuocList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".DonThuocList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
                 "", jsonSt);
     }
 }

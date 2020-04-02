@@ -49,7 +49,7 @@ public class ChanDoanHinhAnhService {
                         JsonUtil.dumpObject(cdha), "");
             }
         }
-        logService.logAction(HoSoBenhAn.class.getName() + ".EmrChanDoanHinhAnhList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".ChanDoanHinhAnhList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
                 "", jsonSt);
     }
 }

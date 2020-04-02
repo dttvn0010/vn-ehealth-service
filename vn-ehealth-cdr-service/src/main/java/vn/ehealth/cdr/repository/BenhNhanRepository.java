@@ -9,6 +9,6 @@ import vn.ehealth.cdr.model.BenhNhan;
 
 public interface BenhNhanRepository extends MongoRepository<BenhNhan, ObjectId> {
 
-    public Optional<BenhNhan> findByIddinhdanhchinh(String iddinhdanhchinh);
+    public Optional<BenhNhan> findByIdDinhDanhChinh(String idDinhDanhChinh);
     public Optional<BenhNhan> findByIdhis(String idhis);
 }

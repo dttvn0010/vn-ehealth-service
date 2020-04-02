@@ -23,21 +23,21 @@ public class ServiceFactory implements ApplicationContextAware  {
         ServiceFactory.applicationContext = applicationContext;        
     }
     
-    public static HoSoBenhAnService getEmrHoSoBenhAnService() {
+    public static HoSoBenhAnService getHoSoBenhAnService() {
         if(hoSoBenhAnService == null) {
             hoSoBenhAnService = applicationContext.getBean(HoSoBenhAnService.class);
         }
         return hoSoBenhAnService;
     }
     
-    public static BenhNhanService getEmrBenhNhanService() {
+    public static BenhNhanService getBenhNhanService() {
         if(benhNhanService == null) {
             benhNhanService = applicationContext.getBean(BenhNhanService.class);
         }
         return benhNhanService;
     }
     
-    public static CoSoKhamBenhService getEmrCoSoKhamBenhService() {
+    public static CoSoKhamBenhService getCoSoKhamBenhService() {
         if(coSoKhamBenhService == null) {
             coSoKhamBenhService = applicationContext.getBean(CoSoKhamBenhService.class); 
         }

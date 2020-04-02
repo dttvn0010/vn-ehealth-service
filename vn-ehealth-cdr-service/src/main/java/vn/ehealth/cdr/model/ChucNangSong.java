@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "emr_chuc_nang_song")
+@Document(collection = "chuc_nang_song")
 public class ChucNangSong {
     
     @Id public ObjectId id;        
@@ -25,26 +25,26 @@ public class ChucNangSong {
     public int trangThai;
     public String idhis;
     
-    public DanhMuc emrDmKhoaDieuTri;
+    public DanhMuc dmKhoaDieuTri;
     
-    public String sophieu;
+    public String soPhieu;
     
-    public List<FileDinhKem> emrFileDinhKemChucNangSongs = new ArrayList<>();
+    public List<FileDinhKem> dsFileDinhKemChucNangSong = new ArrayList<>();
     
     @JsonInclude(Include.NON_NULL)
-    public static class EmrChucNangSongChiTiet {
+    public static class ChucNangSongChiTiet {
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-        public Date ngaytheodoi;
+        public Date ngayTheoDoi;
         public Double mach;
-        public Double nhietdo;
-        public Integer huyetapthap;
-        public Integer huyetapcao;
-        public Integer nhiptho;
-        public Double cannang;
-        public CanboYte ytatheodoi;
+        public Double nhietDo;
+        public Integer huyetApThap;
+        public Integer huyetApCao;
+        public Integer nhipTho;
+        public Double canNang;
+        public CanboYte ytaTheoDoi;
     }
     
-    public List<EmrChucNangSongChiTiet> emrChucNangSongChiTiets = new ArrayList<>();
+    public List<ChucNangSongChiTiet> dsChucNangSongChiTiet = new ArrayList<>();
     
     public String getId() { 
         return ObjectIdUtil.idToString(id); 

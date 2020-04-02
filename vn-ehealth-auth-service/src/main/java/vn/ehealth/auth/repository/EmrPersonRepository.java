@@ -8,5 +8,5 @@ import vn.ehealth.auth.model.EmrPerson;
 import java.util.List;
 
 public interface EmrPersonRepository extends MongoRepository<EmrPerson, ObjectId> {
-    List<EmrPerson> findByEmailOrSodienthoaiOrTendaydu(String email, String sodienthoai, String tenDayDu);
+    List<EmrPerson> findByEmailOrSodienthoaiOrTenDayDu(String email, String sodienthoai, String tenDayDu);
 }

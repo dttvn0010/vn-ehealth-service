@@ -19,7 +19,8 @@ import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.ChamSoc;
 import vn.ehealth.cdr.service.ChamSocService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
+import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.cdr.validate.JsonParser;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -35,7 +36,7 @@ public class ChamSocController {
     @Autowired 
     private HoSoBenhAnService hoSoBenhAnService;
     
-    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
+    private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @GetMapping("/get_ds_chamsoc")
     public ResponseEntity<?> getDsChamSoc(@RequestParam("hsba_id") String id) {
@@ -47,10 +48,11 @@ public class ChamSocController {
     @PostMapping("/create_or_update_cham_soc")
     public ResponseEntity<?> createOrUpdateChamSocFromHIS(@RequestBody String jsonSt) {
         try {
+            jsonSt = JsonUtil.preprocess(jsonSt);
             var map = jsonParser.parseJson(jsonSt);
-            var matraodoiHsba = (String) map.get("matraodoiHoSo");
-            var hsba = hoSoBenhAnService.getByMatraodoi(matraodoiHsba).orElseThrow(); 
-            var csObjList = (List<Object>) map.get("emrChamSocs");
+            var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow(); 
+            var csObjList = (List<Object>) map.get("dsChamSoc");
             var csList = csObjList.stream()
                                 .map(obj -> objectMapper.convertValue(obj, ChamSoc.class))
                                 .collect(Collectors.toList());
@@ -67,7 +69,7 @@ public class ChamSocController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }
     }
 }

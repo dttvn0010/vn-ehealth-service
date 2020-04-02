@@ -29,7 +29,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "emr_xet_nghiem")
+@Document(collection = "xet_nghiem")
 public class XetNghiem {
     
     @Id public ObjectId id;        
@@ -39,39 +39,39 @@ public class XetNghiem {
     public int trangThai;
     public String idhis;
     
-    public DanhMuc emrDmLoaiXetNghiem;
+    public DanhMuc dmLoaiXetNghiem;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngayyeucau;
+    public Date ngayYeuCau;
     
-    public CanboYte bacsiyeucau;
-    public String noidungyeucau;
+    public CanboYte bacSiYeuCau;
+    public String noiDungYeuCau;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaythuchien;
+    public Date ngayThucHien;
     
-    public CanboYte bacsixetnghiem;    
-    public String nhanxet;
+    public CanboYte bacSiXetNghiem;    
+    public String nhanXet;
     
-    public List<FileDinhKem> emrFileDinhKemXetNghiems = new ArrayList<>();
+    public List<FileDinhKem> dsFileDinhKemXetNghiem = new ArrayList<>();
     
     @JsonInclude(Include.NON_NULL)
-    public static class EmrXetNghiemDichVu extends DichVuKyThuat {
+    public static class XetNghiemDichVu extends DichVuKyThuat {
         
-        public Date ngaythuchien;
+        public Date ngayThucHien;
         
-        public CanboYte bacsixetnghiem;
+        public CanboYte bacSiXetNghiem;
                 
-        public DanhMuc emrDmXetNghiem;
-        public List<EmrXetNghiemKetQua> emrXetNghiemKetQuas = new ArrayList<EmrXetNghiemKetQua>();
+        public DanhMuc dmXetNghiem;
+        public List<XetNghiemKetQua> dsKetQuaXetNghiem = new ArrayList<XetNghiemKetQua>();
         
         @JsonInclude(Include.NON_NULL)
-        public static class EmrXetNghiemKetQua {
-            public DanhMuc emrDmDichKetQuaXetNghiem;
+        public static class XetNghiemKetQua {
+            public DanhMuc dmDichKetQuaXetNghiem;
             
-            public DanhMuc emrDmChiSoXetNghiem;
+            public DanhMuc dmChiSoXetNghiem;
 
-            public String giatrido;
+            public String giaTriDo;
         }
 
         @Override
@@ -83,7 +83,7 @@ public class XetNghiem {
 
         @Override
         protected CodeableConcept getCode() {
-            return DanhMuc.toConcept(emrDmXetNghiem, CodeSystemValue.DICH_VU_KY_THUAT);
+            return DanhMuc.toConcept(dmXetNghiem, CodeSystemValue.DICH_VU_KY_THUAT);
         }
 
         @Override
@@ -96,25 +96,25 @@ public class XetNghiem {
             
             // Procedure
             if(procedure != null) {
-                procedure.setAsserter(CanboYte.toRef(bacsixetnghiem));
+                procedure.setAsserter(CanboYte.toRef(bacSiXetNghiem));
                 
-                if(ngaythuchien != null) {
-                    procedure.setPerformed(new DateTimeType(ngaythuchien));
+                if(ngayThucHien != null) {
+                    procedure.setPerformed(new DateTimeType(ngayThucHien));
                 }
             }
             
             // Observations
             var observations = new ArrayList<Observation>();
-            if(emrXetNghiemKetQuas != null) {
-                for(var xnkq : emrXetNghiemKetQuas) {
+            if(dsKetQuaXetNghiem != null) {
+                for(var xnkq : dsKetQuaXetNghiem) {
                     var obs = new Observation();
                     obs.setSubject(serviceRequest.getSubject());
                     obs.setEncounter(serviceRequest.getEncounter());
                     
-                    obs.setCode(DanhMuc.toConcept(xnkq.emrDmChiSoXetNghiem, CodeSystemValue.CHI_SO_XET_NGHIEM));
-                    obs.setValue(new StringType(xnkq.giatrido));
-                    obs.setIssued(ngaythuchien);
-                    obs.setPerformer(listOf(CanboYte.toRef(bacsixetnghiem)));
+                    obs.setCode(DanhMuc.toConcept(xnkq.dmChiSoXetNghiem, CodeSystemValue.CHI_SO_XET_NGHIEM));
+                    obs.setValue(new StringType(xnkq.giaTriDo));
+                    obs.setIssued(ngayThucHien);
+                    obs.setPerformer(listOf(CanboYte.toRef(bacSiXetNghiem)));
                     observations.add(obs);
                 }
             }
@@ -128,7 +128,7 @@ public class XetNghiem {
         } 
     }
     
-    public List<EmrXetNghiemDichVu> emrXetNghiemDichVus = new ArrayList<>();
+    public List<XetNghiemDichVu> dsDichVuXetNghiem = new ArrayList<>();
     
     public String getId() { 
         return ObjectIdUtil.idToString(id); 

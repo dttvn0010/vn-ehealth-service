@@ -20,7 +20,8 @@ import vn.ehealth.cdr.model.DonThuoc;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.service.DonThuocService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
+import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.cdr.validate.JsonParser;
 import vn.ehealth.hl7.fhir.medication.dao.impl.MedicationRequestDao;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -35,7 +36,7 @@ public class DonThuocController {
     @Autowired private MedicationRequestDao medicationRequestDao;
     
     private JsonParser jsonParser = new JsonParser();
-    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
+    private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @GetMapping("/get_ds_donthuoc")
     public ResponseEntity<?> getDsDonThuoc(@RequestParam("hsba_id") String id) {
@@ -51,12 +52,12 @@ public class DonThuocController {
             if(enc == null) return;
             
             for(var donthuoc : donThuocList) {
-                if(donthuoc.emrDonThuocChiTiets == null) continue;                
+                if(donthuoc.dsDonThuocChiTiet == null) continue;                
                 
-                for(var dtct : donthuoc.emrDonThuocChiTiets) {
-                    dtct.bacsikedon = donthuoc.bacsikedon;
-                    dtct.ngaykedon = donthuoc.ngaykedon;
-                    dtct.sodon = donthuoc.sodon;
+                for(var dtct : donthuoc.dsDonThuocChiTiet) {
+                    dtct.bacSiKeDon = donthuoc.bacSiKeDon;
+                    dtct.ngayKeDon = donthuoc.ngayKeDon;
+                    dtct.soDon = donthuoc.soDon;
                     var medReq = dtct.toFHir(enc);
                     medicationRequestDao.create(medReq);
                 }
@@ -70,11 +71,12 @@ public class DonThuocController {
     @PostMapping("/create_or_update_don_thuoc")
     public ResponseEntity<?> createOrUpdateDonThuocFromHIS(@RequestBody String jsonSt) {
         try {
+            jsonSt = JsonUtil.preprocess(jsonSt);
             var map = jsonParser.parseJson(jsonSt);
-            var matraodoiHsba = (String) map.get("matraodoiHoSo");
-            var hsba = hoSoBenhAnService.getByMatraodoi(matraodoiHsba).orElseThrow();
+            var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var dtObjList = (List<Object>) map.get("emrDonThuocs");
+            var dtObjList = (List<Object>) map.get("dsDonThuoc");
             var dtList = dtObjList.stream()
                                 .map(obj -> objectMapper.convertValue(obj, DonThuoc.class))
                                 .collect(Collectors.toList());
@@ -92,7 +94,7 @@ public class DonThuocController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }
     }    
 }

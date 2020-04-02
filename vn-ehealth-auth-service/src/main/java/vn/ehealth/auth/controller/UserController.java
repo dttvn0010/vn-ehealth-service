@@ -57,8 +57,8 @@ public class UserController {
                 errors.add(mapOf("field", "email", "message", messages.getProperty("error.email.required")));
             }
 
-            if (StringUtils.isEmpty(userRequestDTO.emrPerson.tendaydu)) {
-                errors.add(mapOf("field", "tendaydu", "message", messages.getProperty("error.tendaydu.required")));
+            if (StringUtils.isEmpty(userRequestDTO.emrPerson.tenDayDu)) {
+                errors.add(mapOf("field", "tenDayDu", "message", messages.getProperty("error.tenDayDu.required")));
             }
 
             if (errors.size() > 0) {
@@ -70,7 +70,7 @@ public class UserController {
             var user = userService.createUser(userRequestDTO.emrPerson, userRequestDTO.roleIds, password);
             var mailSubject = messages.getProperty("mail.subject");
             var mailContent = messages.getProperty("mail.content")
-                    .replace("[$NAME$]", userRequestDTO.emrPerson.tendaydu)
+                    .replace("[$NAME$]", userRequestDTO.emrPerson.tenDayDu)
                     .replace("[$EMAIL$]", userRequestDTO.emrPerson.email)
                     .replace("[$PASSWORD$]", password);
 
@@ -125,8 +125,8 @@ public class UserController {
                 errors.add(mapOf("field", "email", "message", messages.getProperty("error.email.required")));
             }
 
-            if (StringUtils.isEmpty(userUpdateDTO.getEmrPerson().tendaydu)) {
-                errors.add(mapOf("field", "tendaydu", "message", messages.getProperty("error.tendaydu.required")));
+            if (StringUtils.isEmpty(userUpdateDTO.getEmrPerson().tenDayDu)) {
+                errors.add(mapOf("field", "tenDayDu", "message", messages.getProperty("error.tenDayDu.required")));
             }
 
             if (errors.size() > 0) {

@@ -1,0 +1,38 @@
+{
+  "maTraoDoiHoSo": "18.052294",
+  "dsChucNangSong": [
+    {
+      "idhis": "1111",
+      "dmKhoaDieuTri": {
+        "ma": "001",
+        "ten": "Khoa điều trị"
+      },
+      "soPhieu": "Số phiếu theo dõi",
+      "dsChucNangSongChiTiet": [
+        {
+          "ngayTheoDoi": "2018-06-29 00:00:00",
+          "mach": 60,
+          "nhietDo": 37,
+          "huyetApThap": 120,
+          "huyetApCao": 70,
+          "nhipTho": 20,
+          "canNang": 60,
+          "ytaTheoDoi": {
+            "chungChiHanhNghe": "11112",
+            "ten": "Y tá theo dõi"
+          }
+        }
+      ],
+      "dsFileDinhKemChucNangSong": [
+        {
+          "url": "url file 1",
+          "ten": "Tên file 1"
+        },
+        {
+          "url": "url file 2",
+          "ten": "Tên file 2"
+        }
+      ]
+    }
+  ]
+}

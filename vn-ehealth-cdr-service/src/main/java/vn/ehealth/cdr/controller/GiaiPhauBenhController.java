@@ -20,7 +20,8 @@ import vn.ehealth.cdr.model.GiaiPhauBenh;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.service.GiaiPhauBenhService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
+import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.cdr.validate.JsonParser;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -33,7 +34,7 @@ public class GiaiPhauBenhController {
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     
     private JsonParser jsonParser = new JsonParser();
-    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
+    private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @GetMapping("/get_ds_gpb")
     public ResponseEntity<?> getDsGiaiPhauBenh(@RequestParam("hsba_id") String id) {
@@ -63,11 +64,12 @@ public class GiaiPhauBenhController {
     @PostMapping("/create_or_update_gpb")
     public ResponseEntity<?> createOrUpdateGpbFromHIS(@RequestBody String jsonSt) {
         try {
+            jsonSt = JsonUtil.preprocess(jsonSt);
             var map = jsonParser.parseJson(jsonSt);
-            var matraodoiHsba = (String) map.get("matraodoiHoSo");
-            var hsba = hoSoBenhAnService.getByMatraodoi(matraodoiHsba).orElseThrow();
+            var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var gpbObjList = (List<Object>) map.get("emrGiaiPhauBenhs");
+            var gpbObjList = (List<Object>) map.get("dsGiaiPhauBenh");
             var gpbList = gpbObjList.stream()
                                 .map(obj -> objectMapper.convertValue(obj, GiaiPhauBenh.class))
                                 .collect(Collectors.toList());
@@ -87,7 +89,7 @@ public class GiaiPhauBenhController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }
     }
 }

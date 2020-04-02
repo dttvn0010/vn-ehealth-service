@@ -5,6 +5,7 @@ import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,163 +33,157 @@ import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createIdentifier;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createPeriod;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection="emr_ho_so_benh_an")
+@Document(collection = "ho_so_benh_an")
 public class HoSoBenhAn {    
     
     @JsonInclude(Include.NON_NULL)
     public static class QuanLyNguoiBenh {
 
-        public DanhMuc emrDmNoiGioiThieu;
-        public DanhMuc emrDmLoaiDoiTuongTaiChinh;
-        public DanhMuc emrDmLoaiRaVien;
-        public DanhMuc emrDmNoiTrucTiepVao;
-        public DanhMuc emrDmLoaiChuyenVien;
-        public DanhMuc emrDmCoSoKhamBenh;
-        public DanhMuc emrDmLoaiVaoVien;        
-        public String sovaovien;
+        public DanhMuc dmNoiGioiThieu;
+        public DanhMuc dmLoaiDoiTuongTaiChinh;
+        public DanhMuc dmLoaiRaVien;
+        public DanhMuc dmNoiTrucTiepVao;
+        public DanhMuc dmLoaiChuyenVien;
+        public DanhMuc dmCoSoKhamBenh;
+        public DanhMuc dmLoaiVaoVien;        
+        public String soVaoVien;
 
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-        public Date ngaygiovaovien;
+        public Date ngayGioVaoVien;
         
-        public Integer vaovienlanthu;
+        public Integer vaoVienLanThu;
         
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-        public Date ngaygioravien;
+        public Date ngayGioRaVien;
         
-        public CanboYte bacsikham;
-        public Integer tongsongaydieutri;
-        public CanboYte bacsichoravien;
-        public String noichuyenden;
+        public CanboYte bacSiKham;
+        public Integer tongSoNgayDieuTri;
+        public CanboYte bacSiChoRaVien;
+        public String noiChuyenDen;
         
     }
     
     @JsonInclude(Include.NON_NULL)
     public static class TinhTrangRaVien {
 
-        public DanhMuc emrDmMaBenhNguyennhantuvong;        
-        public DanhMuc emrDmKetQuaDieuTri;        
-        public DanhMuc emrDmYhctKetQuaDieuTri;        
-        public DanhMuc emrDmMaBenhGiaiphaututhi;            
-        public DanhMuc emrDmKetQuaGiaiPhauBenh;      
-        public DanhMuc emrDmThoiDiemTuVong;       
-        public DanhMuc emrDmLyDoTuVong;
+        public DanhMuc dmMaBenhNguyenNhanTuVong;        
+        public DanhMuc dmKetQuaDieuTri;        
+        public DanhMuc dmYhctKetQuaDieuTri;        
+        public DanhMuc dmMaBenhGiaiPhauTuThi;            
+        public DanhMuc dmKetQuaGiaiPhauBenh;      
+        public DanhMuc dmLyDoTuVong;       
+        public DanhMuc dmThoiDiemTuVong;
         
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-        public Date ngaygiotuvong;
+        public Date ngayGioTuVong;
 
-        public Boolean khamnghiemtuthi;
-        public String motanguyennhantuvong;
-        public String motagiaiphaututhi;
+        public Boolean khamNghiemTuThi;
+        public String moTaNguyenNhanTuVong;
+        public String moTaGiaiPhauTuThi;
     }
     
     @JsonInclude(Include.NON_NULL)
     public static class VaoKhoa {
 
-        public DanhMuc emrDmKhoaDieuTri;
+        public DanhMuc dmKhoaDieuTri;
         
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-        public Date ngaygiovaokhoa;
+        public Date ngayGioVaoKhoa;
 
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-        public Date ngayketthucdieutri;
+        public Date ngayKetThucDieuTri;
 
-        public String tenkhoa;
+        public String tenKhoa;
 
-        public CanboYte bacsidieutri;
+        public CanboYte bacSiDieuTri;
 
         public String phong;
 
         public String giuong;
 
-        public Integer songaydieutri;
+        public Integer soNgayDieuTri;
 
-        public String tentruongkhoa;
+        public String tenTruongKhoa;
     }
     
     @JsonInclude(Include.NON_NULL)    
-    public static class EmrToDieuTri {
+    public static class ToDieuTri {
         public String ma;
         public String ten;
-        public int soluong;
+        public int soLuong;
     }
     
     
     @Id public ObjectId id;
             
-    public DanhMuc emrDmLoaiBenhAn;    
+    public DanhMuc dmLoaiBenhAn;    
     public ObjectId benhNhanId;    
     public ObjectId coSoKhamBenhId;
-    
-    @JsonIgnore
-    private Map<String, Object> _emrBenhNhan;
-    
-    @JsonIgnore
-    private Map<String, Object> _emrCoSoKhamBenh;
-        
+           
     public int nguonDuLieu;    
     public int trangThai;
-    public String mayte;
-    public String maluutru;
-    public String matraodoi;
+    public String maYte;
+    public String maLuuTru;
+    public String maTraoDoi;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaytiepnhan;
+    public Date ngayTiepNhan;
     
-    public String nguoitiepnhan;
-    
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaytao;
-    
-    public ObjectId nguoitaoId;
+    public String nguoiTiepNhan;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaysua;
+    public Date ngayTao;
     
-    public ObjectId nguoisuaId;
+    public ObjectId nguoiTaoId;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngayluutru;
+    public Date ngaySua;
     
-    public ObjectId nguoiluutruId;
+    public ObjectId nguoiSuaId;
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngayLuuTru;
+    
+    public ObjectId nguoiLuuTruId;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaymoluutru;
     
-    public ObjectId nguoimoluutruId;    
+    public ObjectId nguoiMoLuTruId;    
     
-    public QuanLyNguoiBenh emrQuanLyNguoiBenh;
+    public QuanLyNguoiBenh quanLyNguoiBenh;
     
-    public TinhTrangRaVien emrTinhTrangRaVien;
+    public TinhTrangRaVien tinhTrangRaVien;
     
-    public Map<String, Object> emrBenhAn;
+    public Map<String, Object> benhAn;
         
-    public List<VaoKhoa> emrVaoKhoas;
+    public List<VaoKhoa> dsVaoKhoa = new ArrayList<>();
     
-    public Map<String, Object> emrChanDoan;
+    public Map<String, Object> chanDoan = new HashMap<>();;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaykybenhan;
+    public Date ngayKyBenhAn;
     
-    public CanboYte bacsylambenhan;
+    public CanboYte bacSyLamBenhAn;
     
-    public String nguoigiaohoso;
+    public String nguoiGiaoHoSo;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaygiaohoso;
+    public Date ngayGiaoHoSo;
 
-    public String nguoinhanhoso;
+    public String nguoiNhanHoSo;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaynhanhoso;
 
-    public CanboYte bacsydieutri;
+    public CanboYte bacSyDieuTri;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaybacsydieutriky;
+    public Date ngaybacSyDieuTriky;
     
-    public List<EmrToDieuTri> sotodieutri = new ArrayList<>();
+    public List<ToDieuTri> soToDieuTri = new ArrayList<>();
     
-    public List<FileDinhKem> emrFileDinhKems = new ArrayList<>();
+    public List<FileDinhKem> dsFileDinhKem = new ArrayList<>();
         
     public String getId() {
         return ObjectIdUtil.idToString(id);
@@ -197,23 +192,15 @@ public class HoSoBenhAn {
     public void setId(String id) { 
         this.id = ObjectIdUtil.stringToId(id);
     }
-    
-    public DanhMuc getEmrDmLoaiBenhAn() {
-        return emrDmLoaiBenhAn;
-    }
-    
+       
     public String getBenhNhanId() {
         return ObjectIdUtil.idToString(benhNhanId);
     }
     
-    public BenhNhan getEmrBenhNhan() {
-        return ServiceFactory.getEmrBenhNhanService().getById(benhNhanId).orElse(null);
+    public BenhNhan getBenhNhan() {
+        return ServiceFactory.getBenhNhanService().getById(benhNhanId).orElse(null);
     }
-    
-    public void setEmrBenhNhan(Map<String, Object> emrBenhNhan) {
-        this._emrBenhNhan = emrBenhNhan;
-    }
-    
+      
     public void setBenhNhanId(String benhNhanId) {
         this.benhNhanId = ObjectIdUtil.stringToId(benhNhanId);
     }
@@ -222,52 +209,48 @@ public class HoSoBenhAn {
         return ObjectIdUtil.idToString(coSoKhamBenhId);
     }
     
-    public CoSoKhamBenh getEmrCoSoKhamBenh() {
-        return ServiceFactory.getEmrCoSoKhamBenhService().getById(coSoKhamBenhId).orElse(null);
+    public CoSoKhamBenh getCoSoKhamBenh() {
+        return ServiceFactory.getCoSoKhamBenhService().getById(coSoKhamBenhId).orElse(null);
     }
-    
-    public void setEmrCoSoKhamBenh(Map<String, Object> emrCoSoKhamBenh) {
-        this._emrCoSoKhamBenh = emrCoSoKhamBenh;
-    }
-    
+     
     public void setCoSoKhamBenhId(String coSoKhamBenhId) {
         this.coSoKhamBenhId = ObjectIdUtil.stringToId(coSoKhamBenhId);
     }
     
-    public String getNguoitaoId() {
-        return ObjectIdUtil.idToString(nguoitaoId);
+    public String getNguoiTaoId() {
+        return ObjectIdUtil.idToString(nguoiTaoId);
     }
     
-    public void setNguoitaoId(String nguoitaoId) {
-        this.nguoitaoId = ObjectIdUtil.stringToId(nguoitaoId);
+    public void setNguoiTaoId(String nguoiTaoId) {
+        this.nguoiTaoId = ObjectIdUtil.stringToId(nguoiTaoId);
     }
     
-    public String getNguoisuaId() {
-        return ObjectIdUtil.idToString(nguoisuaId);
+    public String getNguoiSuaId() {
+        return ObjectIdUtil.idToString(nguoiSuaId);
     }
     
-    public void setNguoisuaId(String nguoisuaId) {
-        this.nguoitaoId = ObjectIdUtil.stringToId(nguoisuaId);
+    public void setNguoiSuaId(String nguoisuaId) {
+        this.nguoiSuaId = ObjectIdUtil.stringToId(nguoisuaId);
     }
     
-    public String getNguoiluutruId() {
-        return ObjectIdUtil.idToString(nguoiluutruId);
+    public String getNguoiLuuTruId() {
+        return ObjectIdUtil.idToString(nguoiLuuTruId);
     }
     
-    public void setNguoiluutruId(String nguoiluutruId) {
-        this.nguoiluutruId = ObjectIdUtil.stringToId(nguoiluutruId);
+    public void setNguoiLuuTruId(String nguoiLuuTruId) {
+        this.nguoiLuuTruId = ObjectIdUtil.stringToId(nguoiLuuTruId);
     }
     
-    public String getNguoimoluutruId() {
-        return ObjectIdUtil.idToString(nguoimoluutruId);
+    public String getNguoiMoLuuTruId() {
+        return ObjectIdUtil.idToString(nguoiMoLuTruId);
     }
     
-    public void setNguoimoluutruId(String nguoimoluutruId) {
-        this.nguoimoluutruId = ObjectIdUtil.stringToId(nguoimoluutruId);
+    public void setNguoiMoLuuTruId(String nguoiMoLuTruId) {
+        this.nguoiMoLuTruId = ObjectIdUtil.stringToId(nguoiMoLuTruId);
     }
     
     @JsonInclude(Include.NON_NULL)
-    public static class EmrTuoiBenhNhan {
+    public static class TuoiBenhNhan {
         final public static int YEAR = 1;
         final public static int MONTH = 2;
         final public static int DAY = 3;
@@ -275,27 +258,27 @@ public class HoSoBenhAn {
         public Integer tuoi;
         public Integer donvi;
         
-        public EmrTuoiBenhNhan() {
+        public TuoiBenhNhan() {
         }
         
-        public EmrTuoiBenhNhan(int tuoi, int donvi) {
+        public TuoiBenhNhan(int tuoi, int donvi) {
             this.tuoi = tuoi;
             this.donvi = donvi;                
         }
     }
     
-    public EmrTuoiBenhNhan getTuoiBenhNhan() {
-        var emrBenhNhan = ServiceFactory.getEmrBenhNhanService().getById(benhNhanId).orElseThrow();
+    public TuoiBenhNhan getTuoiBenhNhan() {
+        var benhNhan = ServiceFactory.getBenhNhanService().getById(benhNhanId).orElseThrow();
         
-        if(emrBenhNhan == null
-            || emrBenhNhan.ngaysinh == null
-            || emrQuanLyNguoiBenh == null 
-            || emrQuanLyNguoiBenh.ngaygioravien == null) {
-            return new EmrTuoiBenhNhan();
+        if(benhNhan == null
+            || benhNhan.ngaysinh == null
+            || quanLyNguoiBenh == null 
+            || quanLyNguoiBenh.ngayGioRaVien == null) {
+            return new TuoiBenhNhan();
         }
         
-        var d1 = new java.sql.Date(emrBenhNhan.ngaysinh.getTime()).toLocalDate();
-        var d2 = new java.sql.Date(emrQuanLyNguoiBenh.ngaygioravien.getTime()).toLocalDate();
+        var d1 = new java.sql.Date(benhNhan.ngaysinh.getTime()).toLocalDate();
+        var d2 = new java.sql.Date(quanLyNguoiBenh.ngayGioRaVien.getTime()).toLocalDate();
         
         var m1 = YearMonth.from(d1);
         var m2 = YearMonth.from(d2);
@@ -314,23 +297,23 @@ public class HoSoBenhAn {
             years -= 1;
         
         if(months < 1) {
-            return new EmrTuoiBenhNhan(days, EmrTuoiBenhNhan.DAY);
+            return new TuoiBenhNhan(days, TuoiBenhNhan.DAY);
         }else if(months < 36) {
-            return new EmrTuoiBenhNhan(months, EmrTuoiBenhNhan.MONTH);
+            return new TuoiBenhNhan(months, TuoiBenhNhan.MONTH);
         }else {            
-            return new EmrTuoiBenhNhan(years, EmrTuoiBenhNhan.YEAR);
+            return new TuoiBenhNhan(years, TuoiBenhNhan.YEAR);
         }
     }
 
     public String getKhoaRaVien() {
         
-        if(emrVaoKhoas != null && emrVaoKhoas.size() > 0) {
-            var emrKhoaRaVien = emrVaoKhoas.get(emrVaoKhoas.size() - 1);
-            var khoaRaVien = emrKhoaRaVien.tenkhoa;
-            if(StringUtils.isEmpty(khoaRaVien) && emrKhoaRaVien.emrDmKhoaDieuTri != null) {
-                khoaRaVien = emrKhoaRaVien.emrDmKhoaDieuTri.ten;
+        if(dsVaoKhoa != null && dsVaoKhoa.size() > 0) {
+            var khoaRaVien = dsVaoKhoa.get(dsVaoKhoa.size() - 1);
+            var tenKhoaRaVien = khoaRaVien.tenKhoa;
+            if(StringUtils.isEmpty(tenKhoaRaVien) && khoaRaVien.dmKhoaDieuTri != null) {
+                tenKhoaRaVien = khoaRaVien.dmKhoaDieuTri.ten;
             }
-            return khoaRaVien;
+            return tenKhoaRaVien;
         }
         
         return "";
@@ -339,7 +322,7 @@ public class HoSoBenhAn {
     @JsonIgnore
     public Encounter getEncounterInDB() {
     	var params = mapOf(
-    	                "identifier.value", (Object) mayte,
+    	                "identifier.value", (Object) maYte,
     	                "identifier.system", IdentifierSystem.MA_HO_SO    	                
 	                );
     	
@@ -349,40 +332,40 @@ public class HoSoBenhAn {
     
     @JsonIgnore
     public List<Encounter> toFhir() {
-        var emrBenhNhan = getEmrBenhNhan();
-        var emrCoSoKhamBenh = getEmrCoSoKhamBenh();        
-        if(emrBenhNhan == null || emrCoSoKhamBenh == null) return null;
+        var benhNhan = getBenhNhan();
+        var coSoKhamBenh = getCoSoKhamBenh();        
+        if(benhNhan == null || coSoKhamBenh == null) return null;
         
-        var patient = emrBenhNhan.getPatientInDB();
-        var serviceProvider = emrCoSoKhamBenh.getOrganizationInDB();        
+        var patient = benhNhan.getPatientInDB();
+        var serviceProvider = coSoKhamBenh.getOrganizationInDB();        
         if(patient == null || serviceProvider == null) return new ArrayList<>();
         
         var enc = new Encounter();
-        enc.setIdentifier(listOf(createIdentifier(mayte, IdentifierSystem.MA_HO_SO)));        
+        enc.setIdentifier(listOf(createIdentifier(maYte, IdentifierSystem.MA_HO_SO)));        
         enc.setSubject(FhirUtil.createReference(patient));
         enc.setServiceProvider(FhirUtil.createReference(serviceProvider));        
         
-        if(emrQuanLyNguoiBenh != null) {
-            enc.setPeriod(createPeriod(emrQuanLyNguoiBenh.ngaygioravien, emrQuanLyNguoiBenh.ngaygioravien));
+        if(quanLyNguoiBenh != null) {
+            enc.setPeriod(createPeriod(quanLyNguoiBenh.ngayGioRaVien, quanLyNguoiBenh.ngayGioRaVien));
         }
         
-        var loaiBenhAn = DanhMuc.toConcept(emrDmLoaiBenhAn, CodeSystemValue.LOAI_KHAM_BENH);
+        var loaiBenhAn = DanhMuc.toConcept(dmLoaiBenhAn, CodeSystemValue.LOAI_KHAM_BENH);
         enc.setType(listOf(loaiBenhAn));
         
         var lst = listOf(enc);
         
-        if(emrVaoKhoas != null) {
-            for(var vk : emrVaoKhoas) {                
+        if(dsVaoKhoa != null) {
+            for(var vk : dsVaoKhoa) {                
                 var vkEnc = new Encounter();
                 vkEnc.setSubject(enc.getSubject());
-                var type = DanhMuc.toConcept(vk.emrDmKhoaDieuTri, CodeSystemValue.KHOA_DIEU_TRI);
+                var type = DanhMuc.toConcept(vk.dmKhoaDieuTri, CodeSystemValue.KHOA_DIEU_TRI);
                 vkEnc.setType(listOf(type));
                 vkEnc.setServiceProvider(vkEnc.getServiceProvider());
-                vkEnc.setPeriod(createPeriod(vk.ngaygiovaokhoa, vk.ngayketthucdieutri));
+                vkEnc.setPeriod(createPeriod(vk.ngayGioVaoKhoa, vk.ngayKetThucDieuTri));
                 
-                if(vk.bacsidieutri != null) {
+                if(vk.bacSiDieuTri != null) {
                     var participant = vkEnc.addParticipant();
-                    participant.setIndividual(CanboYte.toRef(bacsydieutri));         
+                    participant.setIndividual(CanboYte.toRef(bacSyDieuTri));         
                 }
                 lst.add(vkEnc);
             }

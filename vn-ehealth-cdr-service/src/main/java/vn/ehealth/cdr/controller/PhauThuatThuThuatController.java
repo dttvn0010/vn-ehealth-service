@@ -20,7 +20,8 @@ import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.PhauThuatThuThuat;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.PhauThuatThuThuatService;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
+import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.cdr.validate.JsonParser;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -32,7 +33,7 @@ public class PhauThuatThuThuatController {
     @Autowired private PhauThuatThuThuatService phauThuatThuThuatService;
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     
-    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
+    private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     private JsonParser jsonParser = new JsonParser();    
     
     @GetMapping("/get_ds_pttt")
@@ -57,11 +58,12 @@ public class PhauThuatThuThuatController {
     @PostMapping("/create_or_update_pttt")
     public ResponseEntity<?> createOrUpdatePtttFromHIS(@RequestBody String jsonSt) {
         try {
+            jsonSt = JsonUtil.preprocess(jsonSt);
             var map = jsonParser.parseJson(jsonSt);
-            var matraodoiHsba = (String) map.get("matraodoiHoSo");
-            var hsba = hoSoBenhAnService.getByMatraodoi(matraodoiHsba).orElseThrow();
+            var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var ptttObjList = (List<Object>) map.get("emrPhauThuatThuThuats");
+            var ptttObjList = (List<Object>) map.get("dsPhauThuatThuThuat");
             var ptttList = ptttObjList.stream()
                                 .map(obj -> objectMapper.convertValue(obj, PhauThuatThuThuat.class))
                                 .collect(Collectors.toList());
@@ -81,7 +83,7 @@ public class PhauThuatThuThuatController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }
     }
 }

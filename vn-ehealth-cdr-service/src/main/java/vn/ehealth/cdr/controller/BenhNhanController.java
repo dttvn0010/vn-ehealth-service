@@ -18,7 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.BenhNhan;
 import vn.ehealth.cdr.service.BenhNhanService;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
+import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.cdr.validate.JsonParser;
 import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -28,7 +29,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 public class BenhNhanController {
     
     private JsonParser jsonParser = new JsonParser();
-    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
+    private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @Autowired private BenhNhanService benhNhanService;
     @Autowired private PatientDao patientDao;
@@ -42,8 +43,8 @@ public class BenhNhanController {
     public ResponseEntity<?> searchBenhNhan(@RequestParam String keyword, 
                                             @RequestParam Optional<Integer> start, 
                                             @RequestParam Optional<Integer> count) {
-        var emrBenhNhans = benhNhanService.searchBenhNhan(keyword, start.orElse(-1), count.orElse(-1));
-        return ResponseEntity.ok(emrBenhNhans);
+        var benhNhans = benhNhanService.searchBenhNhan(keyword, start.orElse(-1), count.orElse(-1));
+        return ResponseEntity.ok(benhNhans);
     }
     
     @GetMapping("/get_benhnhan_by_id")
@@ -52,11 +53,11 @@ public class BenhNhanController {
         return ResponseEntity.of(benhNhan);
     }
     
-    private void saveToFhirDb(BenhNhan emrBenhNhan) {
+    private void saveToFhirDb(BenhNhan benhNhan) {
         try {
-            if(emrBenhNhan == null) return;
-            var patientDb = emrBenhNhan.getPatientInDB();
-            var patient = emrBenhNhan.toFhir();
+            if(benhNhan == null) return;
+            var patientDb = benhNhan.getPatientInDB();
+            var patient = benhNhan.toFhir();
             if(patientDb != null) {
                 patientDao.update(patient, patientDb.getIdElement());
             }else {
@@ -70,32 +71,33 @@ public class BenhNhanController {
     @PostMapping("/create_or_update_benhnhan")
     public ResponseEntity<?> createOrUpdateBenhNhan(@RequestBody String jsonSt) {
         try {
+            jsonSt = JsonUtil.preprocess(jsonSt);
             var map = jsonParser.parseJson(jsonSt);
-            var emrBenhNhan = objectMapper.convertValue(map, BenhNhan.class);
-            if(StringUtils.isEmpty(emrBenhNhan.iddinhdanhchinh)) {
-                emrBenhNhan.iddinhdanhchinh = emrBenhNhan.idhis;
+            var benhNhan = objectMapper.convertValue(map, BenhNhan.class);
+            if(StringUtils.isEmpty(benhNhan.idDinhDanhChinh)) {
+                benhNhan.idDinhDanhChinh = benhNhan.idhis;
             }
             
-            if(StringUtils.isEmpty(emrBenhNhan.iddinhdanhchinh)) {
-                throw new RuntimeException("Empty iddinhdanhchinh");
+            if(StringUtils.isEmpty(benhNhan.idDinhDanhChinh)) {
+                throw new RuntimeException("Empty idDinhDanhChinh");
             }
             
             var user = UserUtil.getCurrentUser();
             var userId = user.map(x -> x.id).orElse(null);
             
-            emrBenhNhan = benhNhanService.createOrUpdate(userId, emrBenhNhan, jsonSt);
+            benhNhan = benhNhanService.createOrUpdate(userId, benhNhan, jsonSt);
             
             // Save to FhirDB
-            saveToFhirDb(emrBenhNhan);
+            saveToFhirDb(benhNhan);
             
             var result = mapOf(
                 "success" , true,
-                "emrBenhNhan", emrBenhNhan 
+                "benhNhan", benhNhan 
             );
                     
             return ResponseEntity.ok(result);
         }catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }        
     }
 }

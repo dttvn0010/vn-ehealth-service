@@ -45,7 +45,7 @@ public class HoiChanService {
             hcList.set(i, hc);
         }
         
-        logService.logAction(HoSoBenhAn.class.getName() + ".EmrHoiChanList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".HoiChanList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
                 "", jsonSt);        
     }
 }

@@ -1,0 +1,48 @@
+{
+  "maTraoDoiHoSo": "180034027",
+  "dsGiaiPhauBenh": [
+    {
+      "idhis": "1111111",
+      "dmGiaiPhauBenh": {
+        "ma": "001",
+        "ten": "Giải phẫu bệnh"
+      },
+      "dmLoaiGiaiPhauBenh": {
+        "ma": "001",
+        "ten": "Loại giải phẫu bệnh "
+      },
+      "dmViTriLayMau": {
+        "ma": "001",
+        "ten": "Vị trị lấy mẫu"
+      },
+      "dmKetQuaGiaiPhauBenh": {
+        "ma": "001",
+        "ten": "Kết quả giải phẫu"
+      },
+      "ngayYeuCau": "2018-06-29 00:00:00",
+      "bacSiYeuCau": {
+        "chungChiHanhNghe": "11111",
+        "ten": "Bác sĩ yêu cầu"
+      },
+      "bacSiChuyenKhoa": {
+        "chungChiHanhNghe": "11112",
+        "ten": "Bác sĩ thực hiện"
+      },
+      "ngayThucHien": "2018-06-29 00:00:00",
+      "nhanXetDaiThe": "Nhận xét đại thể",
+      "nhanXetViThe": "Nhận xét vi thể",
+      "motaChanDoanGiaiPhau": "Mô tả chẩn đoán giải phẫu",
+      "ngayLayMauSinhThiet": "2018-06-29 00:00:00",
+      "dsFileDinhKemGpb": [
+        {
+          "url": "url file 1",
+          "ten": "Tên file 1"
+        },
+        {
+          "url": "url file 2",
+          "ten": "Tên file 2"
+        }
+      ]
+    }
+  ]
+}

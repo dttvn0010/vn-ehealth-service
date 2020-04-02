@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "emr_log")
+@Document(collection = "log")
 public class Log {
     
     @Id public ObjectId id;

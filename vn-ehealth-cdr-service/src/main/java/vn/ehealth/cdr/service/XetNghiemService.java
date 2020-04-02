@@ -50,7 +50,7 @@ public class XetNghiemService {
                         JsonUtil.dumpObject(xetnghiem), "");
             }
         }
-        logService.logAction(HoSoBenhAn.class.getName() + ".EmrXetNghiemList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".XetNghiemList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
                 "", jsonSt);
     }
 }

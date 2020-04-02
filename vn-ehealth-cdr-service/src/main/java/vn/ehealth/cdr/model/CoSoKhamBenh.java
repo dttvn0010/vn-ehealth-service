@@ -16,7 +16,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createIdentifier;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "emr_co_so_kham_benh")
+@Document(collection = "co_so_kham_benh")
 public class CoSoKhamBenh {
 
     @Id    
@@ -25,10 +25,10 @@ public class CoSoKhamBenh {
     public String getId() { return id != null? id.toHexString() : null; }
     
     public int trangThai;
-    public DanhMuc emrDmPhuongXa;
-    public DanhMuc emrDmQuanHuyen;
-    public DanhMuc emrDmTinhThanh;
-    public DanhMuc emrDmCoSoKhamBenh;
+    public DanhMuc dmPhuongXa;
+    public DanhMuc dmQuanHuyen;
+    public DanhMuc dmTinhThanh;
+    public DanhMuc dmCoSoKhamBenh;
     
     public String ma;
     

@@ -4,16 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Properties;
-
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.ResourceType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +25,8 @@ import vn.ehealth.cdr.service.BenhNhanService;
 import vn.ehealth.cdr.service.CoSoKhamBenhService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.LogService;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
+import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.cdr.validate.JsonParser;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
@@ -39,32 +34,14 @@ import vn.ehealth.utils.MongoUtils;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
-import java.io.*;
-
 @RestController
 @RequestMapping("/api/hsba")
 public class HoSoBenhAnController {
-    
-    private static Logger logger = LoggerFactory.getLogger(HoSoBenhAnController.class);
-    
-    @Value("${server.upload.path}")
-    private String uploadPath;
-    
-    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
+
+    private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     private JsonParser jsonParser = new JsonParser();
-    
-    private static Properties fieldsConvertProp = new Properties();
-        
-    static {
-        try {
-            fieldsConvertProp.load(new ClassPathResource("fields_convert.properties").getInputStream());
-        } catch (IOException e) {
-            logger.error("Cannot read fieldsConvert properties", e);
-        }
-        
-    }
-    
+       
     @Autowired private HoSoBenhAnService hoSoBenhAnService;    
     @Autowired private BenhNhanService benhNhanService;
     @Autowired private CoSoKhamBenhService coSoKhamBenhService;
@@ -74,14 +51,14 @@ public class HoSoBenhAnController {
     @Autowired UserService userService;
 
     @GetMapping("/count_ds_hs")
-    public ResponseEntity<?> countHsba(@RequestParam int trangthai, @RequestParam String mayte) {
+    public ResponseEntity<?> countHsba(@RequestParam int trangthai, @RequestParam String maYte) {
         try {
             var user = UserUtil.getCurrentUser();
-            var count = hoSoBenhAnService.countHoSo(user.get().id, user.get().coSoKhamBenhId, trangthai, mayte);
+            var count = hoSoBenhAnService.countHoSo(user.get().id, user.get().coSoKhamBenhId, trangthai, maYte);
             return ResponseEntity.ok(count);
             
         }catch (Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }        
     }
     
@@ -97,17 +74,17 @@ public class HoSoBenhAnController {
     
     @GetMapping("/get_ds_hs")
     public ResponseEntity<?> getDsHsba(@RequestParam int trangthai ,
-                                                @RequestParam String mayte,
+                                                @RequestParam String maYte,
                                                 @RequestParam int start, 
                                                 @RequestParam int count) {
         
         try {
             var user = UserUtil.getCurrentUser();    
-            var result = hoSoBenhAnService.getDsHoSo(user.get().id, user.get().coSoKhamBenhId, trangthai, mayte, start, count);
+            var result = hoSoBenhAnService.getDsHoSo(user.get().id, user.get().coSoKhamBenhId, trangthai, maYte, start, count);
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }        
     }
     
@@ -170,16 +147,7 @@ public class HoSoBenhAnController {
             return ResponseEntity.ok(mapOf("success", false, "error", error));
         }
     }
-    
-    private String preprocessJsonFields(String jsonSt) {
-        for(var entry: fieldsConvertProp.entrySet()) {
-            String field = (String) entry.getKey();
-            String fieldReplace = (String) entry.getValue();
-            jsonSt = jsonSt.replace("\"" + field + "\"", "\"" + fieldReplace + "\"");
-        }
-        return jsonSt;
-    }
-    
+
     private List<Encounter> getVkEncounterList(Encounter hsbaEncounter) {
         if(hsbaEncounter != null) {
             var parent = (Object) (ResourceType.Encounter + "/" + hsbaEncounter.getId());
@@ -223,39 +191,38 @@ public class HoSoBenhAnController {
     @PostMapping("/create_or_update_hsba")
     public ResponseEntity<?> createOrUpdateHsbaHIS(@RequestBody String jsonSt) {        
         
-        jsonSt = preprocessJsonFields(jsonSt);
-        
         try {
+            jsonSt = JsonUtil.preprocess(jsonSt);
             var map = jsonParser.parseJson(jsonSt);
             
-            var benhNhan = (Map<String, Object>) map.get("emrBenhNhan");
-            String idhis = (String) benhNhan.get("idhis");
-            var emrBenhNhan = benhNhanService.getByIdhis(idhis);
-            if(emrBenhNhan.isEmpty()) {
-                throw new Exception(String.format("emrBenhNhan with idhis %s not found, please create this patient first", idhis));
+            var benhNhanMap = (Map<String, Object>) map.get("benhNhan");
+            String idhis = (String) benhNhanMap.get("idhis");
+            var benhNhan = benhNhanService.getByIdhis(idhis);
+            if(benhNhan.isEmpty()) {
+                throw new Exception(String.format("benhNhan with idhis %s not found, please create this patient first", idhis));
             }
             
-            var coSoKhamBenh = (Map<String, Object>) map.get("emrCoSoKhamBenh");            
-            var emrCoSoKhamBenh = coSoKhamBenhService.getByMa((String) coSoKhamBenh.get("ma")).orElseThrow();
+            var coSoKhamBenhMap = (Map<String, Object>) map.get("coSoKhamBenh");            
+            var coSoKhamBenh = coSoKhamBenhService.getByMa((String) coSoKhamBenhMap.get("ma")).orElseThrow();
             
         	var hsba = objectMapper.convertValue(map, HoSoBenhAn.class);
             var user = UserUtil.getCurrentUser();
             var userId = user.map(x -> x.id).orElse(null);
             
-            hsba = hoSoBenhAnService.createOrUpdateFromHIS(userId, emrBenhNhan.get().id, emrCoSoKhamBenh.id, hsba, jsonSt);
+            hsba = hoSoBenhAnService.createOrUpdateFromHIS(userId, benhNhan.get().id, coSoKhamBenh.id, hsba, jsonSt);
             
             // save to FHIR db
             saveToFhirDb(hsba);
             
             var result = mapOf(
                 "success" , true,
-                "emrHoSoBenhAn", hsba  
+                "hoSoBenhAn", hsba  
             );
             
             return ResponseEntity.ok(result);
         
         } catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }
     }
 }

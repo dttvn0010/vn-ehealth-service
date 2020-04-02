@@ -26,7 +26,10 @@ public class DanhMuc {
     
     public Map<String, Object> extension;
     
+    @JsonIgnore
     public String maNhom;
+    
+    @JsonIgnore
     public String phienBan;
     
     public static Coding toCoding(DanhMuc dto, String maNhom) {

@@ -1,0 +1,322 @@
+{
+    "benhNhan": {
+        "idhis": "5400525",
+        "tenDayDu": "LÊ HỒNG PHÚC"
+    },
+    "coSoKhamBenh": {
+        "ma": "5980",
+        "ten": "Bệnh viện Đa khoa Trung ương Cần Thơ"
+    },
+    "maTraoDoi": "11101006",
+    "maYte": "180034029",
+    "ngayTiepNhan": "2018-07-31 09:26:00",
+    "nguoiTiepNhan": "Người tiếp nhận",
+    "dmLoaiBenhAn": {
+        "ma": "13",
+        "ten": "Bệnh án ung bướu"
+    },
+    "quanLyNguoiBenh": {
+        "ngayGioVaoVien": "2018-06-28 05:06:00",
+        "dmNoiTrucTiepVao": {
+            "ma": "01",
+            "ten": "Nơi trực tiếp vào"
+        },
+        "dmNoiGioiThieu": {
+            "ma": "01",
+            "ten": "Nơi giới thiệu"
+        },
+        "vaoVienLanThu": 2,
+        "dmLoaiChuyenVien": {
+            "ma": "01",
+            "ten": "Loại chuyển viện"
+        },
+        "noiChuyenDen": "Nơi chuyển đến",
+        "ngayGioRaVien": "2018-06-29 04:06:00",
+        "dmLoaiRaVien": {
+            "ma": "01",
+            "ten": "Loại ra viện"
+        },
+        "tongSoNgayDieuTri": 10
+    },
+    "dsVaoKhoa": [
+        {
+            "dmKhoaDieuTri": {
+                "ma": "01",
+                "ten": "Khoa điều trị 1"
+            },
+            "ngayGioVaoKhoa": "2018-06-29 00:00:00",
+            "ngayKetThucDieuTri": "2018-06-29 00:00:00",
+            "tenKhoa": "Tên khoa",
+            "bacSiDieuTri": {
+                "chungChiHanhNghe": "1111",
+                "ten": "Bác sĩ điều trị"
+            },
+            "phong": "Phòng",
+            "giuong": "Giường",
+            "soNgayDieuTri": 10,
+            "tenTruongKhoa": "Tên trưởng khoa"
+        },
+        {
+            "dmKhoaDieuTri": {
+                "ma": "02",
+                "ten": "Khoa điều trị 2"
+            },
+            "ngayGioVaoKhoa": "2018-06-29 00:00:00",
+            "ngayKetThucDieuTri": "2018-06-29 00:00:00",
+            "tenKhoa": "Tên khoa",
+            "bacSiDieuTri": {
+                "chungChiHanhNghe": "1111",
+                "ten": "Bác sĩ điều trị"
+            },
+            "phong": "Phòng",
+            "giuong": "Giường",
+            "soNgayDieuTri": 10,
+            "tenTruongKhoa": "Tên trưởng khoa"
+        }
+    ],
+    "chanDoan": {
+        "dmMaBenhChanDoanNoiDen": {
+            "ma": "01",
+            "ten": "Bệnh chẩn đoán nơi đến"
+        },
+        "moTaChanDoanNoiDen": "Mô tả chẩn đoán nơi đến",
+        "dmMaBenhChanDoanKkb": {
+            "ma": "01",
+            "ten": "Bệnh chẩn đoán khi khám bệnh"
+        },
+        "moTaChanDoanKkb": "Mô tả chẩn đoán khi khám bệnh",
+        "dmMaBenhChanDoanDieuTriChinh": {
+            "ma": "01",
+            "ten": "Bệnh chẩn đoán điều trị chính",
+            "T": "T1",
+            "N": "N1",
+            "M": "M1",
+            "giaidoan": 1
+        },
+        "moTaChanDoanDieuTriChinh": "Mô tả chẩn đoán điều trị chính",
+        "dsDmMaBenhChanDoanDieuTriKemTheo": [
+            {
+                "ma": "01",
+                "ten": "Bệnh chẩn đoán điều trị kèm theo 1"
+            },
+            {
+                "ma": "02",
+                "ten": "Bệnh chẩn đoán điều trị kèm theo 2"
+            }
+        ],
+        "moTaChanDoanDieuTriKemTheo": "Mô tả chẩn đoán điều trị kèm theo",
+        "dmMaBenhChanDoanDieuTriPhanBiet": {
+            "ma": "01",
+            "ten": "Bệnh chẩn đoán điều trị phân biệt"
+        },
+        "moTaChanDoanDieuTriPhanBiet": "Mô tả chẩn đoán điều trị phân biệt",
+        "biTaiBien": false,
+        "biBienChung": false,
+        "dmLyDoTaiBienBienChung": {
+            "ma": "001",
+            "ten": "Lý do tai biến biến chứng"
+        },
+        "tongSoNgaySauPt": 10,
+        "tongSoLanPt": 2,
+        "dmMaBenhChanDoanRaVienChinh": {
+            "ma": "01",
+            "ten": "Bệnh chẩn đoán ra viện chính",
+            "T": "T1",
+            "N": "N1",
+            "M": "M1",
+            "giaidoan": 1
+        },
+        "moTaChanDoanRaVienChinh": "Mô tả chẩn đoán ra viện chính",
+        "dsDmMaBenhChanDoanRaVienKemTheo": [
+            {
+                "ma": "01",
+                "ten": "Bệnh chẩn đoán ra viện kèm theo 1"
+            },
+            {
+                "ma": "02",
+                "ten": "Bệnh chẩn đoán ra viện kèm theo 2"
+            }
+        ],
+        "moTaChanDoanRaVienKemTheo": "Mô tả chẩn đoán ra viện kèm theo",
+        "dmMaBenhChanDoanRaVienNguyenNhan": {
+            "ma": "01",
+            "ten": "Chẩn đoán ra viện nguyên nhân"
+        },
+        "moTaChanDoanRaVienNguyenNhan": "Mô tả chẩn đoán ra nguyên nhân",
+        "dmMaBenhChanDoanTruocpts": [
+            {
+                "ma": "01",
+                "ten": "Chẩn đoán ra trước phẫu thuật 1"
+            },
+            {
+                "ma": "02",
+                "ten": "Chẩn đoán ra trước phẫu thuật 2"
+            }
+        ],
+        "moTaChanDoanTruocPttt": "Mô tả chẩn đoán trước phẫu thuật",
+        "dmMaBenhChanDoanSaupts": [
+            {
+                "ma": "01",
+                "ten": "Chẩn đoán ra trước sau thuật 1"
+            },
+            {
+                "ma": "01",
+                "ten": "Chẩn đoán ra trước sau thuật 2"
+            }
+        ],
+        "moTaChanDoanSauPttt": "Mô tả chẩn đoán sau phẫu thuật"
+    },
+    "tinhTrangRaVien": {
+        "dmKetQuaDieuTri": {
+            "ma": "01",
+            "ten": "Kết quả điều trị"
+        },
+        "dmKetQuaGiaiPhauBenh": {
+            "ma": "01",
+            "ten": "Kết quả giải phẫu bệnh"
+        },
+        "ngayGioTuVong": "2018-06-29 00:00:00",
+        "dmLyDoTuVong": {
+            "ma": "01",
+            "ten": "Lý do tử vong(Bệnh/Tai biến/Khác)"
+        },
+        "dmThoiDiemTuVong": {
+            "ma": "01",
+            "ten": "Thời điểm tử vong"
+        },
+        "dmMaBenhNguyenNhanTuVong": {
+            "ma": "01",
+            "ten": "Bệnh gây tử vong"
+        },
+        "moTaNguyenNhanTuVong": "Mô tả bệnh gây tử vong",
+        "khamNghiemTuThi": false,
+        "dmMaBenhGiaiPhauTuThi": {
+            "ma": "01",
+            "ten": "Bệnh giải phẫu tử thi"
+        },
+        "moTaGiaiPhauTuThi": "Mô tả bệnh giải phẫu tử thi"
+    },
+    "benhAn": {
+        "lydovaovien": "Lý do vào viện",
+        "hoibenh": {
+            "quatrinhbenhly": "Quá trình bệnh lý",
+            "tiensubenh": {
+                "tiensubanthan": "Tiền sử bản thân",
+                "diung": "24 tháng",
+                "matuy": "",
+                "ruoubia": "36 tháng",
+                "thuocla": "",
+                "thuoclao": "",
+                "dacdiemkhac": "",
+                "tiensugiadinh": "Tiền sử gia đình"
+            }
+        },
+        "khambenh": {
+            "toanthan": "Toàn thân",
+            "mach": 60,
+            "nhietDo": 37,
+            "huyetApCao": 120,
+            "huyetApThap": 70,
+            "nhipTho": 20,
+            "canNang": 60,
+            "benhngoaikhoa": "Bệnh ngoại khoa",
+            "thankinh": "Thần kinh",
+            "tuanhoan": "Tuần hoàn",
+            "hohap": "Hô hấp",
+            "tieuhoa": "Tiêu hóa",
+            "coxuongkhop": "Cơ xương khớp",
+            "tietnieu": "Tiết niệu",
+            "taimuihong": "Tai mũi họng",
+            "sinhduc": "Sinh dục",
+            "coquankhac": "Bệnh lý khác",
+            "xetnghiemcanlamsang": "Các xét nghiệm cận lâm sàng cần làm",
+            "tomtat": "Tóm tắt bệnh án"
+        },
+        "tienluong": "Tiên lượng",
+        "huongDieuTri": "Hướng điều trị",
+        "tongket": {
+            "dienbienlamsang": "Diễn biến lâm sàng",
+            "canlamsang": {
+                "xnmau": "Xét nghiệm máu",
+                "xntebao": "Xét nghiệm tế bào",
+                "xnblgp": "Xét nghiệm BLGP",
+                "xquang": "XQuang",
+                "sieuam": "Siêu âm",
+                "xnkhac": "Xét nghiệm khác"
+            },
+            "phuongphapdieutri": {
+                "dmKieuDieutri": {
+                    "ma": "01",
+                    "ten": "Điều trị triệt để"
+                },
+                "tiaxatienphautaiu": "Tia xạ tiền phẫu thuật tại u",
+                "tiaxatienphautaihach": "Tia xạ tiền phẫu thuật tại hạch",
+                "tiaxadonthuantaiu": "Tia xạ đơn thuần tại u",
+                "tiaxadonthuantaihach": "Tia xạ đơn thuần tại hạch",
+                "phauthuatu": "Phẫu thuật",
+                "tiaxahauphautaiu": "Tia xạ hậu phẫu thuật tại u",
+                "tiaxahauphautaihach": "Tia xạ hậu phẫu thuật tại hạch",
+                "hoachat": "Hóa chất(phác đồ)",
+                "sodot": 1,
+                "dmDapUng": {
+                    "ma": "01",
+                    "ten": "Không đáp ứng"
+                },
+                "dieutrikhac": "Điều trị khác"
+            },
+            "tinhtrangnguoibenh": "Tình trạng người bệnh",
+            "chidandieutri": "Hướng điều trị tiếp theo"
+        }
+    },
+    "bacSyLamBenhAn": {
+        "chungChiHanhNghe": "11111",
+        "ten": "Bác sỹ làm bệnh án"
+    },
+    "ngayKyBenhAn": "2018-06-29 00:00:00",
+    "nguoiGiaoHoSo": "Người giao hồ sơ",
+    "ngayGiaoHoSo": "2018-06-29 00:00:00",
+    "nguoiNhanHoSo": "Người nhận hồ sơ",
+    "ngaynhanhoso": "2018-06-29 00:00:00",
+    "bacSyDieuTri": {
+        "ten": "Bác sỹ điều trị",
+        "chungChiHanhNghe": "1111"
+    },
+    "ngaybacSyDieuTriky": "2018-06-29 00:00:00",
+    "soToDieuTri": [
+        {
+            "ma": "01",
+            "ten": "X - Quang",
+            "soLuong": 1
+        },
+        {
+            "ma": "02",
+            "ten": "CT Scanner",
+            "soLuong": 1
+        },
+        {
+            "ma": "03",
+            "ten": "Siêu âm",
+            "soLuong": 1
+        },
+        {
+            "ma": "04",
+            "ten": "Xét nghiệm",
+            "soLuong": 1
+        },
+        {
+            "ma": "99",
+            "ten": "Khác",
+            "soLuong": 1
+        }
+    ],
+    "dsFileDinhKem": [
+        {
+            "url": "url file 1",
+            "ten": "Tên file 1"
+        },
+        {
+            "url": "url file 2",
+            "ten": "Tên file 2"
+        }
+    ]
+}

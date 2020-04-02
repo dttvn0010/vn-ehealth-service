@@ -19,7 +19,8 @@ import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.HinhAnhTonThuong;
 import vn.ehealth.cdr.service.HinhAnhTonThuongService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
+import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.cdr.validate.JsonParser;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -32,7 +33,7 @@ public class HinhAnhTonThuongController {
     @Autowired HoSoBenhAnService hoSoBenhAnService;
     
     private JsonParser jsonParser = new JsonParser();
-    private ObjectMapper objectMapper = EmrUtils.createObjectMapper();
+    private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
 
     @GetMapping("/get_hatt")
     public ResponseEntity<?> getHatt(@RequestParam("hatt_id") String id) {
@@ -50,11 +51,12 @@ public class HinhAnhTonThuongController {
     @PostMapping("/create_or_update_hatt")
     public ResponseEntity<?> createOrUpdateChamSocFromHIS(@RequestBody String jsonSt) {
         try {
+            jsonSt = JsonUtil.preprocess(jsonSt);
             var map = jsonParser.parseJson(jsonSt);
-            var matraodoiHsba = (String) map.get("matraodoiHoSo");
-            var hsba = hoSoBenhAnService.getByMatraodoi(matraodoiHsba).orElseThrow();
+            var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var hattObjList = (List<Object>) map.get("emrHinhAnhTonThuongs");
+            var hattObjList = (List<Object>) map.get("dsHinhAnhTonThuong");
             var hattList = hattObjList.stream()
                                 .map(obj -> objectMapper.convertValue(obj, HinhAnhTonThuong.class))
                                 .collect(Collectors.toList());
@@ -71,7 +73,7 @@ public class HinhAnhTonThuongController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }
     }
 }

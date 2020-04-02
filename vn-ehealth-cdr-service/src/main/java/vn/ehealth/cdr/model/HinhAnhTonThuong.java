@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "emr_hinh_anh_ton_thuong")
+@Document(collection = "hinh_anh_ton_thuong")
 public class HinhAnhTonThuong {
     
     @Id public ObjectId id;    
@@ -23,11 +23,11 @@ public class HinhAnhTonThuong {
     public int trangThai;
     public String idhis;
     
-    public String anhtonthuong;
-    public String motatonthuong;
-    public String dinhdanganh;
+    public String anhTonThuong;
+    public String moTaTonThuong;
+    public String dinhDangAnh;
     
-    public List<FileDinhKem> emrFileDinhKemHatts = new ArrayList<>();
+    public List<FileDinhKem> dsFileDinhKemHatt = new ArrayList<>();
     
     public String getId() { 
         return ObjectIdUtil.idToString(id); 

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.cdr.model.CoSoKhamBenh;
 import vn.ehealth.cdr.service.CoSoKhamBenhService;
-import vn.ehealth.cdr.utils.EmrUtils;
+import vn.ehealth.cdr.utils.CDRUtils;
 import vn.ehealth.hl7.fhir.provider.dao.impl.OrganizationDao;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -50,7 +50,7 @@ public class CoSoKhamBenhController {
             return ResponseEntity.ok(result);            
             
         }catch(Exception e) {
-            return EmrUtils.errorResponse(e);
+            return CDRUtils.errorResponse(e);
         }
     }
 }

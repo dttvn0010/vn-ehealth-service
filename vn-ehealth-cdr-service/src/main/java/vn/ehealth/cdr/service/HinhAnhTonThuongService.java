@@ -61,7 +61,7 @@ public class HinhAnhTonThuongService {
                         JsonUtil.dumpObject(hatt), "");
             } 
         }
-        logService.logAction(HoSoBenhAn.class.getName() + ".EmrHinhAnhTonThuongList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".HinhAnhTonThuongList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
                 "", jsonSt);
     }
 }

@@ -37,7 +37,7 @@ public class EmrPerson {
     
     public String getId() { return id != null? id.toHexString() : null; }
     
-    public String tendaydu;
+    public String tenDayDu;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaysinh;
     public String email;
@@ -46,14 +46,14 @@ public class EmrPerson {
     public String noilamviec;
     public String diachi;
 
-    public DanhMucDTO emrDmGioiTinh;
-    public DanhMucDTO emrDmDanToc;
-    public DanhMucDTO emrDmTonGiao;
-    public DanhMucDTO emrDmQuocGia;
-    public DanhMucDTO emrDmNgheNghiep;
-    public DanhMucDTO emrDmPhuongXa;
-    public DanhMucDTO emrDmQuanHuyen;
-    public DanhMucDTO emrDmTinhThanh;
+    public DanhMucDTO dmGioiTinh;
+    public DanhMucDTO dmDanToc;
+    public DanhMucDTO dmTonGiao;
+    public DanhMucDTO dmQuocGia;
+    public DanhMucDTO dmNgheNghiep;
+    public DanhMucDTO dmPhuongXa;
+    public DanhMucDTO dmQuanHuyen;
+    public DanhMucDTO dmTinhThanh;
     
     public ObjectId userId;
     
@@ -76,17 +76,17 @@ public class EmrPerson {
             obj.addLine(diachi);
         }
         
-        if(emrDmQuanHuyen != null) {
-            obj.setDistrict(emrDmQuanHuyen.ten);
+        if(dmQuanHuyen != null) {
+            obj.setDistrict(dmQuanHuyen.ten);
         }
         
-        if(emrDmTinhThanh != null) {
-            obj.setCity(emrDmTinhThanh.ten);
+        if(dmTinhThanh != null) {
+            obj.setCity(dmTinhThanh.ten);
         }
         
-        var tinhThanhExt = createExtension("city", DanhMucDTO.toConcept(emrDmTinhThanh, CodeSystemValue.DVHC));        
-        var quanHuyenExt = createExtension("district", DanhMucDTO.toConcept(emrDmQuanHuyen, CodeSystemValue.DVHC));        
-        var xaPhuongExt = createExtension("ward", DanhMucDTO.toConcept(emrDmPhuongXa, CodeSystemValue.DVHC));
+        var tinhThanhExt = createExtension("city", DanhMucDTO.toConcept(dmTinhThanh, CodeSystemValue.DVHC));        
+        var quanHuyenExt = createExtension("district", DanhMucDTO.toConcept(dmQuanHuyen, CodeSystemValue.DVHC));        
+        var xaPhuongExt = createExtension("ward", DanhMucDTO.toConcept(dmPhuongXa, CodeSystemValue.DVHC));
         
         var extension = obj.addExtension();
         extension.setUrl(ExtensionURL.DVHC);
@@ -100,7 +100,7 @@ public class EmrPerson {
     public Person toFhir() {
         
         var obj = new Person();
-        obj.setName(listOf(createHumanName(tendaydu)));        
+        obj.setName(listOf(createHumanName(tenDayDu)));        
         obj.setBirthDate(ngaysinh);
         
         if(!StringUtils.isBlank(cmnd)) {
@@ -109,8 +109,8 @@ public class EmrPerson {
         }
         
         
-        if(emrDmGioiTinh != null) {
-            var genderCode = gioiTinhCodeMap.get(emrDmGioiTinh.ma);
+        if(dmGioiTinh != null) {
+            var genderCode = gioiTinhCodeMap.get(dmGioiTinh.ma);
             obj.setGender(AdministrativeGender.fromCode(genderCode));
         }
         
@@ -123,10 +123,10 @@ public class EmrPerson {
             obj.addTelecom(createContactPoint(email, ContactPointSystem.EMAIL));
         }
 
-        var danTocExt = createExtension(ExtensionURL.DAN_TOC, DanhMucDTO.toConcept(emrDmDanToc, CodeSystemValue.DAN_TOC));
-        var tonGiaoExt = createExtension(ExtensionURL.TON_GIAO, DanhMucDTO.toConcept(emrDmTonGiao, CodeSystemValue.TON_GIAO));
-        var ngheNghiepExt = createExtension(ExtensionURL.NGHE_NGHIEP, DanhMucDTO.toConcept(emrDmNgheNghiep, CodeSystemValue.NGHE_NGHIEP));
-        var quocTichExt = createExtension(ExtensionURL.QUOC_TICH, DanhMucDTO.toConcept(emrDmQuocGia, CodeSystemValue.QUOC_GIA));
+        var danTocExt = createExtension(ExtensionURL.DAN_TOC, DanhMucDTO.toConcept(dmDanToc, CodeSystemValue.DAN_TOC));
+        var tonGiaoExt = createExtension(ExtensionURL.TON_GIAO, DanhMucDTO.toConcept(dmTonGiao, CodeSystemValue.TON_GIAO));
+        var ngheNghiepExt = createExtension(ExtensionURL.NGHE_NGHIEP, DanhMucDTO.toConcept(dmNgheNghiep, CodeSystemValue.NGHE_NGHIEP));
+        var quocTichExt = createExtension(ExtensionURL.QUOC_TICH, DanhMucDTO.toConcept(dmQuocGia, CodeSystemValue.QUOC_GIA));
         
         obj.setExtension(listOf(danTocExt, tonGiaoExt, ngheNghiepExt));
         obj.setModifierExtension(listOf(quocTichExt));

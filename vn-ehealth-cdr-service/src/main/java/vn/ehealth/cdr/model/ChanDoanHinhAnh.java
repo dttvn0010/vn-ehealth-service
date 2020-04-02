@@ -29,7 +29,7 @@ import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.Constants.LoaiDichVuKT;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "emr_chan_doan_hinh_anh")
+@Document(collection = "chan_doan_hinh_anh")
 public class ChanDoanHinhAnh extends DichVuKyThuat {
 
     @Id public ObjectId id;  
@@ -73,17 +73,17 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
     public int trangThai;
     public String idhis;
     
-    public DanhMuc emrDmLoaiChanDoanHinhAnh;    
-    public DanhMuc emrDmChanDoanHinhAnh;
+    public DanhMuc dmLoaiChanDoanHinhAnh;    
+    public DanhMuc dmChanDoanHinhAnh;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaythuchien;
+    public Date ngayThucHien;
     
-    public CanboYte bacsichuyenkhoa;
-    public String loidan;
-    public String ketqua;
+    public CanboYte bacSiChuyenKhoa;
+    public String loiDan;
+    public String ketQua;
         
-    public List<FileDinhKem> emrFileDinhKemCdhas = new ArrayList<>();
+    public List<FileDinhKem> dsFileDinhKemCdha = new ArrayList<>();
     
     @Override
     protected CodeableConcept getCategory() {
@@ -94,7 +94,7 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
 
     @Override
     protected CodeableConcept getCode() {
-        return DanhMuc.toConcept(emrDmChanDoanHinhAnh, CodeSystemValue.DICH_VU_KY_THUAT);
+        return DanhMuc.toConcept(dmChanDoanHinhAnh, CodeSystemValue.DICH_VU_KY_THUAT);
     }
 
     @Override
@@ -108,14 +108,14 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
       
         // Procedure
         if(procedure != null) {
-            procedure.setAsserter(CanboYte.toRef(bacsichuyenkhoa));
+            procedure.setAsserter(CanboYte.toRef(bacSiChuyenKhoa));
             
-            if(ngaythuchien != null) {
-                procedure.setPerformed(new DateTimeType(ngaythuchien));
+            if(ngayThucHien != null) {
+                procedure.setPerformed(new DateTimeType(ngayThucHien));
             }
                     
-            procedure.setOutcome(createCodeableConcept(ketqua));
-            procedure.setFollowUp(listOf(createCodeableConcept(loidan)));
+            procedure.setOutcome(createCodeableConcept(ketQua));
+            procedure.setFollowUp(listOf(createCodeableConcept(loiDan)));
         }
             
         return mapOf(
