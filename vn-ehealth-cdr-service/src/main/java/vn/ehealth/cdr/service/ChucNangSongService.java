@@ -34,7 +34,7 @@ public class ChucNangSongService {
         return chucNangSongRepository.findByHoSoBenhAnIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);
     }
     
-    public void createOrUpdateFromHIS(ObjectId userId, @Nonnull HoSoBenhAn hsba, @Nonnull List<ChucNangSong> cnsList, @Nonnull List<Object> cnsObjList, String jsonSt) {
+    public void createOrUpdateFromHIS( @Nonnull HoSoBenhAn hsba, @Nonnull List<ChucNangSong> cnsList, @Nonnull List<Object> cnsObjList, String jsonSt) {
         for(int i = 0; i < cnsList.size(); i++) {
             var cns = cnsList.get(i);
             if(cns.idhis != null) {
@@ -47,7 +47,7 @@ public class ChucNangSongService {
             cns = chucNangSongRepository.save(cns);
             cnsList.set(i, cns);
         }
-        logService.logAction(HoSoBenhAn.class.getName() + ".ChucNangSongList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".ChucNangSongList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), null, 
                 "", jsonSt);
     }
 }

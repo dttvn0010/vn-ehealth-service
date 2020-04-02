@@ -33,7 +33,7 @@ public class ChamSocService {
         return chamSocRepository.findByHoSoBenhAnIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);
     }
     
-    public void createOrUpdateFromHIS(ObjectId userId, @Nonnull HoSoBenhAn hsba, @Nonnull List<ChamSoc> csList, List<Object> csObjList, String jsonSt) {
+    public void createOrUpdateFromHIS(@Nonnull HoSoBenhAn hsba, @Nonnull List<ChamSoc> csList, List<Object> csObjList, String jsonSt) {
         for(int i = 0; i < csList.size(); i++) {
             var cs = csList.get(i);
             if(cs.idhis != null) {
@@ -47,7 +47,7 @@ public class ChamSocService {
             csList.set(i, cs);
            
         }      
-        logService.logAction(HoSoBenhAn.class.getName() + ".ChamSocList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".ChamSocList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), null, 
                 "", jsonSt);
     }
     

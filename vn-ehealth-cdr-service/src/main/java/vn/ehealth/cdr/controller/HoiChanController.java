@@ -1,8 +1,5 @@
 package vn.ehealth.cdr.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.HoiChan;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.HoiChanService;
-import vn.ehealth.cdr.utils.CDRUtils;
-import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.cdr.validate.JsonParser;
-
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+import vn.ehealth.cdr.utils.*;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 @RestController
 @RequestMapping("/api/hoichan")
@@ -32,7 +26,6 @@ public class HoiChanController {
     private HoiChanService hoiChanService;
     @Autowired HoSoBenhAnService hoSoBenhAnService;
     
-    private JsonParser jsonParser = new JsonParser();
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @GetMapping("/get_ds_hoichan")
@@ -41,25 +34,19 @@ public class HoiChanController {
         return ResponseEntity.ok(hoichanList);
     }
     
-    @SuppressWarnings("unchecked")
     @PostMapping("/create_or_update_hoi_chan")
     public ResponseEntity<?> createOrUpdateHoiChanFromHIS(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = jsonParser.parseJson(jsonSt);
+            var map = JsonUtil.parseJson(jsonSt);
             var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
             var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var hcObjList = (List<Object>) map.get("dsHoiChan");
-            var hcList = hcObjList.stream()
-                                .map(obj -> objectMapper.convertValue(obj, HoiChan.class))
-                                .collect(Collectors.toList());
-            var user = UserUtil.getCurrentUser();
-            var userId = user.map(x -> x.id).orElse(null);
+            var hcObjList = CDRUtils.getFieldAsList(map, "dsHoiChan");
+            var hcList = FPUtil.transform(hcObjList, x -> objectMapper.convertValue(x, HoiChan.class));
+            hoiChanService.createOrUpdateFromHIS(hsba, hcList, hcObjList, jsonSt);
             
-            hoiChanService.createOrUpdateFromHIS(userId, hsba, hcList, hcObjList, jsonSt);
-            
-            var result = mapOf(
+            var result = DataConvertUtil.mapOf(
                 "success" , true,
                 "hcList", hcList  
             );

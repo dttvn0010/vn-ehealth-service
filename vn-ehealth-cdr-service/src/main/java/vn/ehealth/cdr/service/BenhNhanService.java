@@ -28,7 +28,7 @@ public class BenhNhanService {
     @Autowired 
     private LogService logService;
     
-    public BenhNhan createOrUpdate(ObjectId userId, BenhNhan benhNhan, String jsonSt) {
+    public BenhNhan createOrUpdate(BenhNhan benhNhan, String jsonSt) {
         boolean createNew = benhNhan.id == null;
         
         benhNhan.id = benhNhanRepository
@@ -38,11 +38,11 @@ public class BenhNhanService {
         benhNhan = benhNhanRepository.save(benhNhan);
         
         if(createNew) {
-            logService.logAction(BenhNhan.class.getName(), benhNhan.id, MA_HANH_DONG.TAO_MOI, new Date(), userId, 
+            logService.logAction(BenhNhan.class.getName(), benhNhan.id, MA_HANH_DONG.TAO_MOI, new Date(), null, 
                                         "", jsonSt);
         }
         
-        logService.logAction(BenhNhan.class.getName(), benhNhan.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(BenhNhan.class.getName(), benhNhan.id, MA_HANH_DONG.CHINH_SUA, new Date(), null, 
                                     JsonUtil.dumpObject(benhNhan), jsonSt);
         
         return benhNhan;

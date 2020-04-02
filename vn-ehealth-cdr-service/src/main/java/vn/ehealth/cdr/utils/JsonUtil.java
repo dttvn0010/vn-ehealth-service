@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonUtil {
@@ -70,4 +72,9 @@ public class JsonUtil {
          return null;
      }
      
+     @SuppressWarnings("unchecked")
+     public static Map<String, Object> parseJson(String jsonSt) throws JsonParseException, JsonMappingException, IOException {
+         mapper.setDateFormat(sdf);
+         return mapper.readValue(jsonSt, Map.class);
+     }
 }

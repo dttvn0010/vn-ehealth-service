@@ -1,8 +1,6 @@
 package vn.ehealth.cdr.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.DonThuoc;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.service.DonThuocService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.CDRUtils;
-import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.cdr.validate.JsonParser;
+import vn.ehealth.cdr.utils.*;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.medication.dao.impl.MedicationRequestDao;
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 
 @RestController
@@ -35,7 +31,6 @@ public class DonThuocController {
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     @Autowired private MedicationRequestDao medicationRequestDao;
     
-    private JsonParser jsonParser = new JsonParser();
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @GetMapping("/get_ds_donthuoc")
@@ -67,26 +62,21 @@ public class DonThuocController {
         }
     }
     
-    @SuppressWarnings("unchecked")
     @PostMapping("/create_or_update_don_thuoc")
     public ResponseEntity<?> createOrUpdateDonThuocFromHIS(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = jsonParser.parseJson(jsonSt);
+            var map = JsonUtil.parseJson(jsonSt);
             var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
             var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var dtObjList = (List<Object>) map.get("dsDonThuoc");
-            var dtList = dtObjList.stream()
-                                .map(obj -> objectMapper.convertValue(obj, DonThuoc.class))
-                                .collect(Collectors.toList());
-            var user = UserUtil.getCurrentUser();
-            var userId = user.map(x -> x.id).orElse(null);
-            donThuocService.createOrUpdateFromHIS(userId, hsba, dtList, jsonSt);
+            var dtObjList = CDRUtils.getFieldAsList(map, "dsDonThuoc");
+            var dtList = FPUtil.transform(dtObjList, x -> objectMapper.convertValue(x, DonThuoc.class));
+            donThuocService.createOrUpdateFromHIS(hsba, dtList, jsonSt);
             
             saveToFhirDb(hsba, dtList);
             
-            var result = mapOf(
+            var result = DataConvertUtil.mapOf(
                 "success" , true,
                 "dtList", dtList  
             );

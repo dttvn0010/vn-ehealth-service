@@ -1,8 +1,5 @@
 package vn.ehealth.cdr.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.ChamSoc;
 import vn.ehealth.cdr.service.ChamSocService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.CDRUtils;
-import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.cdr.validate.JsonParser;
+import vn.ehealth.cdr.utils.*;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
@@ -29,12 +24,8 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 @RequestMapping("/api/chamsoc")
 public class ChamSocController {
     
-	private JsonParser jsonParser = new JsonParser();
-   
-    @Autowired 
-    private ChamSocService chamSocService;
-    @Autowired 
-    private HoSoBenhAnService hoSoBenhAnService;
+    @Autowired private ChamSocService chamSocService;
+    @Autowired private HoSoBenhAnService hoSoBenhAnService;
     
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
@@ -44,22 +35,17 @@ public class ChamSocController {
         return ResponseEntity.ok(chamSocService.getByHoSoBenhAnId(new ObjectId(id)));
     }
     
-    @SuppressWarnings("unchecked")
     @PostMapping("/create_or_update_cham_soc")
     public ResponseEntity<?> createOrUpdateChamSocFromHIS(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = jsonParser.parseJson(jsonSt);
+            var map = JsonUtil.parseJson(jsonSt);
             var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
             var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow(); 
-            var csObjList = (List<Object>) map.get("dsChamSoc");
-            var csList = csObjList.stream()
-                                .map(obj -> objectMapper.convertValue(obj, ChamSoc.class))
-                                .collect(Collectors.toList());
-            var user = UserUtil.getCurrentUser();
-            var userId = user.map(x -> x.id).orElse(null);
-            
-            chamSocService.createOrUpdateFromHIS(userId, hsba, csList, csObjList, jsonSt);
+            var csObjList = CDRUtils.getFieldAsList(map, "dsChamSoc");
+            var csList = FPUtil.transform(csObjList, x -> objectMapper.convertValue(x, ChamSoc.class));
+              
+            chamSocService.createOrUpdateFromHIS(hsba, csList, csObjList, jsonSt);
             
             var result = mapOf(
                 "success" , true,

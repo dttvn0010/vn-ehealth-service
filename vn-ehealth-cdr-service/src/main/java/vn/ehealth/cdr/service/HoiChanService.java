@@ -31,7 +31,7 @@ public class HoiChanService {
         return hoiChanRepository.findByHoSoBenhAnIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);
     }
     
-    public void createOrUpdateFromHIS(ObjectId userId, @Nonnull HoSoBenhAn hsba, @Nonnull List<HoiChan> hcList, @Nonnull List<Object> hcObjList, String jsonSt) {
+    public void createOrUpdateFromHIS(@Nonnull HoSoBenhAn hsba, @Nonnull List<HoiChan> hcList, @Nonnull List<Object> hcObjList, String jsonSt) {
         for(int i = 0; i < hcList.size(); i++) {
             var hc = hcList.get(i);
             if(hc.idhis != null) {
@@ -45,7 +45,7 @@ public class HoiChanService {
             hcList.set(i, hc);
         }
         
-        logService.logAction(HoSoBenhAn.class.getName() + ".HoiChanList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".HoiChanList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), null, 
                 "", jsonSt);        
     }
 }

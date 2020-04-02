@@ -25,9 +25,7 @@ import vn.ehealth.cdr.service.BenhNhanService;
 import vn.ehealth.cdr.service.CoSoKhamBenhService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.LogService;
-import vn.ehealth.cdr.utils.CDRUtils;
-import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.cdr.validate.JsonParser;
+import vn.ehealth.cdr.utils.*;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 import vn.ehealth.utils.MongoUtils;
@@ -40,8 +38,6 @@ public class HoSoBenhAnController {
 
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
-    private JsonParser jsonParser = new JsonParser();
-       
     @Autowired private HoSoBenhAnService hoSoBenhAnService;    
     @Autowired private BenhNhanService benhNhanService;
     @Autowired private CoSoKhamBenhService coSoKhamBenhService;
@@ -193,7 +189,7 @@ public class HoSoBenhAnController {
         
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = jsonParser.parseJson(jsonSt);
+            var map = JsonUtil.parseJson(jsonSt);
             
             var benhNhanMap = (Map<String, Object>) map.get("benhNhan");
             String idhis = (String) benhNhanMap.get("idhis");
@@ -206,10 +202,7 @@ public class HoSoBenhAnController {
             var coSoKhamBenh = coSoKhamBenhService.getByMa((String) coSoKhamBenhMap.get("ma")).orElseThrow();
             
         	var hsba = objectMapper.convertValue(map, HoSoBenhAn.class);
-            var user = UserUtil.getCurrentUser();
-            var userId = user.map(x -> x.id).orElse(null);
-            
-            hsba = hoSoBenhAnService.createOrUpdateFromHIS(userId, benhNhan.get().id, coSoKhamBenh.id, hsba, jsonSt);
+            hsba = hoSoBenhAnService.createOrUpdateFromHIS(benhNhan.get().id, coSoKhamBenh.id, hsba, jsonSt);
             
             // save to FHIR db
             saveToFhirDb(hsba);

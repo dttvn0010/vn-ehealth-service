@@ -15,16 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.PhauThuatThuThuat;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.PhauThuatThuThuatService;
-import vn.ehealth.cdr.utils.CDRUtils;
-import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.cdr.validate.JsonParser;
-
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+import vn.ehealth.cdr.utils.*;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 
 @RestController
 @RequestMapping("/api/pttt")
@@ -34,8 +30,7 @@ public class PhauThuatThuThuatController {
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
-    private JsonParser jsonParser = new JsonParser();    
-    
+
     @GetMapping("/get_ds_pttt")
     public ResponseEntity<?> getDsPhauThuatThuThuat(@RequestParam("hsba_id") String id) {
         var ptttList = phauThuatThuThuatService.getByHoSoBenhAnId(new ObjectId(id));
@@ -59,7 +54,7 @@ public class PhauThuatThuThuatController {
     public ResponseEntity<?> createOrUpdatePtttFromHIS(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = jsonParser.parseJson(jsonSt);
+            var map = JsonUtil.parseJson(jsonSt);
             var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
             var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
@@ -67,15 +62,13 @@ public class PhauThuatThuThuatController {
             var ptttList = ptttObjList.stream()
                                 .map(obj -> objectMapper.convertValue(obj, PhauThuatThuThuat.class))
                                 .collect(Collectors.toList());
-            var user = UserUtil.getCurrentUser();
-            var userId = user.map(x -> x.id).orElse(null);
             
-            phauThuatThuThuatService.createOrUpdateFromHIS(userId, hsba, ptttList, jsonSt);
+            phauThuatThuThuatService.createOrUpdateFromHIS(hsba, ptttList, jsonSt);
             
             // save to FHIR db
             saveToFhirDb(hsba, ptttList);
                         
-            var result = mapOf(
+            var result = DataConvertUtil.mapOf(
                 "success" , true,
                 "ptttList", ptttList  
             );

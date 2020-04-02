@@ -1,8 +1,6 @@
 package vn.ehealth.cdr.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.ChanDoanHinhAnh;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.service.ChanDoanHinhAnhService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.CDRUtils;
-import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.cdr.validate.JsonParser;
+import vn.ehealth.cdr.utils.*;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
@@ -30,7 +26,6 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 @RequestMapping("/api/cdha")
 public class ChanDoanHinhAnhController {
     
-    private JsonParser jsonParser = new JsonParser();
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @Autowired private ChanDoanHinhAnhService chanDoanHinhAnhService;
@@ -54,25 +49,18 @@ public class ChanDoanHinhAnhController {
         }
     }    
     
-    @SuppressWarnings("unchecked")
     @PostMapping("/create_or_update_cdha")
     public ResponseEntity<?> createOrUpdateCdhaFromHIS(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = jsonParser.parseJson(jsonSt);
+            var map = JsonUtil.parseJson(jsonSt);
             var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
             var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var cdhaObjList = (List<Object>) map.get("dsChanDoanHinhAnh");
-            var cdhaList = cdhaObjList.stream()
-                                .map(obj -> objectMapper.convertValue(obj, ChanDoanHinhAnh.class))
-                                .collect(Collectors.toList());
+            var cdhaObjList = CDRUtils.getFieldAsList(map, "dsChanDoanHinhAnh");
+            var cdhaList = FPUtil.transform(cdhaObjList, x -> objectMapper.convertValue(x, ChanDoanHinhAnh.class));
             
-            var user = UserUtil.getCurrentUser();
-            var userId = user.map(x -> x.id).orElse(null);
-            
-            chanDoanHinhAnhService.createOrUpdateFromHIS(userId, hsba, cdhaList, jsonSt);
+            chanDoanHinhAnhService.createOrUpdateFromHIS(hsba, cdhaList, jsonSt);
             
             // save to FHIR db
             saveToFhirDb(hsba, cdhaList);

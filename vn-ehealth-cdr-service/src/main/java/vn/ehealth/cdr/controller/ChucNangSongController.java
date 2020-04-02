@@ -1,8 +1,5 @@
 package vn.ehealth.cdr.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.ChucNangSong;
 import vn.ehealth.cdr.service.ChucNangSongService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.CDRUtils;
-import vn.ehealth.cdr.validate.JsonParser;
+import vn.ehealth.cdr.utils.*;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/chucnangsong")
 public class ChucNangSongController {
-	
-	private JsonParser jsonParser = new JsonParser();
 	private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
 
 	@Autowired private ChucNangSongService chucNangSongService;
@@ -40,22 +34,18 @@ public class ChucNangSongController {
     }
 
     
-    @SuppressWarnings("unchecked")
     @PostMapping("/create_or_update_chuc_nang_song")
     public ResponseEntity<?> createOrUpdateChamSocFromHIS(@RequestBody String jsonSt) {
         try {
-            var map = jsonParser.parseJson(jsonSt);
+            jsonSt = JsonUtil.preprocess(jsonSt);
+            var map = JsonUtil.parseJson(jsonSt);
             var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
             var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var cnsObjList = (List<Object>) map.get("dsChucNangSong");
-            var cnsList = cnsObjList.stream()
-                                .map(obj -> objectMapper.convertValue(obj, ChucNangSong.class))
-                                .collect(Collectors.toList());
-            var user = UserUtil.getCurrentUser();
-            var userId = user.map(x -> x.id).orElse(null);            
+            var cnsObjList = CDRUtils.getFieldAsList(map, "dsChucNangSong");
+            var cnsList = FPUtil.transform(cnsObjList, x -> objectMapper.convertValue(x, ChucNangSong.class));
             
-            chucNangSongService.createOrUpdateFromHIS(userId, hsba, cnsList, cnsObjList, jsonSt);
+            chucNangSongService.createOrUpdateFromHIS(hsba, cnsList, cnsObjList, jsonSt);
             
             var result = mapOf(
                 "success" , true,

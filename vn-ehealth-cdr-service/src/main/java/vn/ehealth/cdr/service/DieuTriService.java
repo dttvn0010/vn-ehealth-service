@@ -31,7 +31,7 @@ public class DieuTriService {
         return dieuTriRepository.findByHoSoBenhAnIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);        
     }
         
-    public void createOrUpdateFromHIS(ObjectId userId, @Nonnull HoSoBenhAn hsba, @Nonnull List<DieuTri> dtList, @Nonnull List<Object> dtObjList, String jsonSt) {
+    public void createOrUpdateFromHIS(@Nonnull HoSoBenhAn hsba, @Nonnull List<DieuTri> dtList, @Nonnull List<Object> dtObjList, String jsonSt) {
         for(int i = 0; i < dtList.size(); i++) {
             var dt = dtList.get(i);
             if(dt.idhis != null) {
@@ -44,7 +44,7 @@ public class DieuTriService {
             dt = dieuTriRepository.save(dt);
             dtList.set(i, dt);
         }         
-        logService.logAction(HoSoBenhAn.class.getName() + ".DieuTriList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".DieuTriList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), null, 
                 "", jsonSt);
     }
 }

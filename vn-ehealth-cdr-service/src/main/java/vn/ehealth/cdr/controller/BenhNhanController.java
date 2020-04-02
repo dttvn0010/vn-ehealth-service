@@ -15,20 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.BenhNhan;
 import vn.ehealth.cdr.service.BenhNhanService;
-import vn.ehealth.cdr.utils.CDRUtils;
-import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.cdr.validate.JsonParser;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+import vn.ehealth.cdr.utils.*;
 
 @RestController
 @RequestMapping("/api/benh_nhan")
 public class BenhNhanController {
     
-    private JsonParser jsonParser = new JsonParser();
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @Autowired private BenhNhanService benhNhanService;
@@ -72,7 +68,7 @@ public class BenhNhanController {
     public ResponseEntity<?> createOrUpdateBenhNhan(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = jsonParser.parseJson(jsonSt);
+            var map = JsonUtil.parseJson(jsonSt);
             var benhNhan = objectMapper.convertValue(map, BenhNhan.class);
             if(StringUtils.isEmpty(benhNhan.idDinhDanhChinh)) {
                 benhNhan.idDinhDanhChinh = benhNhan.idhis;
@@ -82,15 +78,12 @@ public class BenhNhanController {
                 throw new RuntimeException("Empty idDinhDanhChinh");
             }
             
-            var user = UserUtil.getCurrentUser();
-            var userId = user.map(x -> x.id).orElse(null);
-            
-            benhNhan = benhNhanService.createOrUpdate(userId, benhNhan, jsonSt);
+            benhNhan = benhNhanService.createOrUpdate(benhNhan, jsonSt);
             
             // Save to FhirDB
             saveToFhirDb(benhNhan);
             
-            var result = mapOf(
+            var result = DataConvertUtil.mapOf(
                 "success" , true,
                 "benhNhan", benhNhan 
             );

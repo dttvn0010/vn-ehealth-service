@@ -1,8 +1,5 @@
 package vn.ehealth.cdr.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.HinhAnhTonThuong;
 import vn.ehealth.cdr.service.HinhAnhTonThuongService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.CDRUtils;
-import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.cdr.validate.JsonParser;
-
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+import vn.ehealth.cdr.utils.*;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 @RestController
 @RequestMapping("/api/hatt")
 public class HinhAnhTonThuongController {
-    @Autowired 
-    private HinhAnhTonThuongService hinhAnhTonThuongService;
-    @Autowired HoSoBenhAnService hoSoBenhAnService;
+    @Autowired private HinhAnhTonThuongService hinhAnhTonThuongService;
+    @Autowired private HoSoBenhAnService hoSoBenhAnService;
     
-    private JsonParser jsonParser = new JsonParser();
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
 
     @GetMapping("/get_hatt")
@@ -47,25 +39,20 @@ public class HinhAnhTonThuongController {
         return ResponseEntity.ok(hattList);
     }
     
-    @SuppressWarnings("unchecked")
     @PostMapping("/create_or_update_hatt")
     public ResponseEntity<?> createOrUpdateChamSocFromHIS(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = jsonParser.parseJson(jsonSt);
+            var map = JsonUtil.parseJson(jsonSt);
             var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
             var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var hattObjList = (List<Object>) map.get("dsHinhAnhTonThuong");
-            var hattList = hattObjList.stream()
-                                .map(obj -> objectMapper.convertValue(obj, HinhAnhTonThuong.class))
-                                .collect(Collectors.toList());
-            var user = UserUtil.getCurrentUser();
-            var userId = user.map(x -> x.id).orElse(null);
+            var hattObjList = CDRUtils.getFieldAsList(map, "dsHinhAnhTonThuong");
+            var hattList = FPUtil.transform(hattObjList, x -> objectMapper.convertValue(x, HinhAnhTonThuong.class));
             
-            hinhAnhTonThuongService.createOrUpdateFromHIS(userId, hsba, hattList, jsonSt);
+            hinhAnhTonThuongService.createOrUpdateFromHIS(hsba, hattList, jsonSt);
             
-            var result = mapOf(
+            var result = DataConvertUtil.mapOf(
                 "success" , true,
                 "hattList", hattList  
             );

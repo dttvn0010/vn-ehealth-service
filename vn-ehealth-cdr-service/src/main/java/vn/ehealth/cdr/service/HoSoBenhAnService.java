@@ -106,7 +106,7 @@ public class HoSoBenhAnService {
         return result;
     }
     
-    public HoSoBenhAn createOrUpdateFromHIS(ObjectId userId, @Nonnull ObjectId benhNhanId, @Nonnull ObjectId coSoKhamBenhId, @Nonnull HoSoBenhAn hsba, String jsonSt) {
+    public HoSoBenhAn createOrUpdateFromHIS(@Nonnull ObjectId benhNhanId, @Nonnull ObjectId coSoKhamBenhId, @Nonnull HoSoBenhAn hsba, String jsonSt) {
         hsba.id = hoSoBenhAnRepository.findByMaTraoDoi(hsba.maTraoDoi).map(x -> x.id).orElse(null);
         boolean createNew = hsba.id == null;
         
@@ -115,10 +115,10 @@ public class HoSoBenhAnService {
         
         if(createNew) {
             hsba.ngayTao = new Date();
-            hsba.nguoiTaoId = userId;
+            hsba.nguoiTaoId = null;
         }else {
             hsba.ngaySua = new Date();
-            hsba.nguoiSuaId = userId;
+            hsba.nguoiSuaId = null;
         }
         
         
@@ -127,12 +127,12 @@ public class HoSoBenhAnService {
         hsba = hoSoBenhAnRepository.save(hsba);
 
         if(createNew) {
-            logService.logAction(HoSoBenhAn.class.getName(), hsba.id, MA_HANH_DONG.TAO_MOI, new Date(), userId, 
-                                        "", jsonSt);
+            logService.logAction(HoSoBenhAn.class.getName(), hsba.id, MA_HANH_DONG.TAO_MOI, new Date(),  
+                                     null, "", jsonSt);
         }
         
-        logService.logAction(HoSoBenhAn.class.getName(), hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
-                                    JsonUtil.dumpObject(hsba), jsonSt);
+        logService.logAction(HoSoBenhAn.class.getName(), hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), 
+                                    null, JsonUtil.dumpObject(hsba), jsonSt);
         
         return hsba;
     }

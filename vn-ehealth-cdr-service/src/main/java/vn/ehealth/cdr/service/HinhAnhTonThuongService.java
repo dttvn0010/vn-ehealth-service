@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import vn.ehealth.cdr.model.HinhAnhTonThuong;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.repository.HinhAnhTonThuongRepository;
-import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.MA_HANH_DONG;
 import vn.ehealth.hl7.fhir.core.util.Constants.TRANGTHAI_DULIEU;
 
@@ -41,27 +40,19 @@ public class HinhAnhTonThuongService {
         });
     }  
     
-    public void createOrUpdateFromHIS(ObjectId userId, @Nonnull HoSoBenhAn hsba, @Nonnull List<HinhAnhTonThuong> hattList, String jsonSt) {
+    public void createOrUpdateFromHIS(@Nonnull HoSoBenhAn hsba, @Nonnull List<HinhAnhTonThuong> hattList, String jsonSt) {
         for(int i = 0; i < hattList.size(); i++) {
             var hatt = hattList.get(i);
             if(hatt.idhis != null) {
             	hatt.id = hinhAnhTonThuongRepository.findByIdhis(hatt.idhis).map(x -> x.id).orElse(null);
             }
-            var check = hatt.id;
             hatt.hoSoBenhAnId = hsba.id;
             hatt.benhNhanId = hsba.benhNhanId;
             hatt.coSoKhamBenhId = hsba.coSoKhamBenhId;
             hatt = hinhAnhTonThuongRepository.save(hatt);
             hattList.set(i, hatt);
-            if(check == null) {
-                logService.logAction(HinhAnhTonThuong.class.getName(), hatt.id, MA_HANH_DONG.TAO_MOI, new Date(), userId, 
-                		JsonUtil.dumpObject(hatt), "");
-            } else {
-            	logService.logAction(HinhAnhTonThuong.class.getName(), hatt.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
-                        JsonUtil.dumpObject(hatt), "");
-            } 
         }
-        logService.logAction(HoSoBenhAn.class.getName() + ".HinhAnhTonThuongList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), userId, 
+        logService.logAction(HoSoBenhAn.class.getName() + ".HinhAnhTonThuongList", hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), null, 
                 "", jsonSt);
     }
 }

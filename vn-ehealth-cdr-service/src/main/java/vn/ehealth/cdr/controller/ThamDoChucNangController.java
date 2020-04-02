@@ -1,8 +1,5 @@
 package vn.ehealth.cdr.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.ThamDoChucNang;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.ThamDoChucNangService;
-import vn.ehealth.cdr.utils.CDRUtils;
-import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.cdr.validate.JsonParser;
-
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
+import vn.ehealth.cdr.utils.*;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 @RestController
 @RequestMapping("/api/tdcn")
@@ -33,7 +27,6 @@ public class ThamDoChucNangController {
     private ThamDoChucNangService thamDoChucNangService;
     @Autowired HoSoBenhAnService hoSoBenhAnService;
     
-    private JsonParser jsonParser = new JsonParser();
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @GetMapping("/get_ds_tdcn")
@@ -42,25 +35,19 @@ public class ThamDoChucNangController {
         return ResponseEntity.ok(tdcnList);
     }
         
-    @SuppressWarnings("unchecked")
     @PostMapping("/create_or_update_tdcn")
     public ResponseEntity<?> createOrUpdateTdcnFromHIS(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = jsonParser.parseJson(jsonSt);
+            var map = JsonUtil.parseJson(jsonSt);
             var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
             var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var tdcnObjList = (List<Object>) map.get("dsThamDoChucNang");
-            var tdcnList = tdcnObjList.stream()
-                                .map(obj -> objectMapper.convertValue(obj, ThamDoChucNang.class))
-                                .collect(Collectors.toList());
-            var user = UserUtil.getCurrentUser();
-            var userId = user.map(x -> x.id).orElse(null);
+            var tdcnObjList = CDRUtils.getFieldAsList(map, "dsThamDoChucNang");
+            var tdcnList = FPUtil.transform(tdcnObjList, x -> objectMapper.convertValue(x, ThamDoChucNang.class));
+            thamDoChucNangService.createOrUpdateFromHIS(hsba, tdcnList, jsonSt);
             
-            thamDoChucNangService.createOrUpdateFromHIS(userId, hsba, tdcnList, jsonSt);
-            
-            var result = mapOf(
+            var result = DataConvertUtil.mapOf(
                 "success" , true,
                 "tdcnList", tdcnList  
             );

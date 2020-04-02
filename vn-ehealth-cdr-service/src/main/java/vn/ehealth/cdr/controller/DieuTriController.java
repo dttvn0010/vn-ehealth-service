@@ -1,8 +1,5 @@
 package vn.ehealth.cdr.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.DieuTri;
 import vn.ehealth.cdr.service.DieuTriService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.utils.CDRUtils;
-import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.cdr.validate.JsonParser;
+import vn.ehealth.cdr.utils.*;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
@@ -29,11 +24,9 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 @RequestMapping("/api/dieutri")
 public class DieuTriController {
     
-    @Autowired 
-    private DieuTriService dieuTriService;
-    @Autowired HoSoBenhAnService hoSoBenhAnService;
+    @Autowired private DieuTriService dieuTriService;
+    @Autowired private HoSoBenhAnService hoSoBenhAnService;
     
-    private JsonParser jsonParser = new JsonParser();
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @GetMapping("/get_ds_dieutri")
@@ -41,23 +34,17 @@ public class DieuTriController {
         return ResponseEntity.ok(dieuTriService.getByHoSoBenhAnId(new ObjectId(id)));
     }
     
-    @SuppressWarnings("unchecked")
     @PostMapping("/create_or_update_dieu_tri")
     public ResponseEntity<?> createOrUpdateDieuTriFromHIS(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = jsonParser.parseJson(jsonSt);
+            var map = JsonUtil.parseJson(jsonSt);
             var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
             var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var dtObjList = (List<Object>) map.get("dsDieuTri");
-            var dtList = dtObjList.stream()
-                                .map(obj -> objectMapper.convertValue(obj, DieuTri.class))
-                                .collect(Collectors.toList());
-            var user = UserUtil.getCurrentUser();
-            var userId = user.map(x -> x.id).orElse(null);
-            
-            dieuTriService.createOrUpdateFromHIS(userId, hsba, dtList, dtObjList, jsonSt);
+            var dtObjList = CDRUtils.getFieldAsList(map, "dsDieuTri");
+            var dtList = FPUtil.transform(dtObjList, x -> objectMapper.convertValue(x, DieuTri.class));
+            dieuTriService.createOrUpdateFromHIS(hsba, dtList, dtObjList, jsonSt);
             
             var result = mapOf(
                 "success" , true,

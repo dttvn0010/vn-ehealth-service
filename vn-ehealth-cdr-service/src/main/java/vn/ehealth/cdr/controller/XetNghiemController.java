@@ -1,8 +1,6 @@
 package vn.ehealth.cdr.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.XetNghiem;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.XetNghiemService;
 import vn.ehealth.cdr.utils.CDRUtils;
 import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.cdr.validate.JsonParser;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
@@ -34,8 +31,6 @@ public class XetNghiemController {
     
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
 
-    private JsonParser jsonParser = new JsonParser();
-    
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @GetMapping("/get_ds_xetnghiem")
@@ -71,16 +66,16 @@ public class XetNghiemController {
     public ResponseEntity<?> createOrUpdateXetnghiemFromHIS(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = jsonParser.parseJson(jsonSt);
+            var map = JsonUtil.parseJson(jsonSt);
             var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
             var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
             
-            var xetnghiemList = CDRUtils.getFieldAsList(map, "dsXetNghiem");
-            if(xetnghiemList == null) {
+            var xnObjList = CDRUtils.getFieldAsList(map, "dsXetNghiem");
+            if(xnObjList == null) {
                 throw new Exception("dsXetNghiem is null");
             }
             
-            for(var xetnghiem: xetnghiemList) {
+            for(var xetnghiem: xnObjList) {
                 var xndvList = CDRUtils.getFieldAsList(xetnghiem, "dsDichVuXetNghiem");
                 if(xndvList == null) continue;
                 
@@ -103,20 +98,17 @@ public class XetNghiemController {
                 }
             }
             
-            var xetnghiemModelList = xetnghiemList.stream()
-                                .map(obj -> objectMapper.convertValue(obj, XetNghiem.class))
-                                .collect(Collectors.toList());
-            var user = UserUtil.getCurrentUser();
-            var userId = user.map(x -> x.id).orElse(null);
+            var xetnghiemList = FPUtil.transform(xnObjList,
+                                        x -> objectMapper.convertValue(x, XetNghiem.class));
             
-            xetNghiemService.createOrUpdateFromHIS(userId, hsba, xetnghiemModelList, jsonSt);
+            xetNghiemService.createOrUpdateFromHIS(hsba, xetnghiemList, jsonSt);
             
             // save to FHIR db
-            saveToFhirDb(hsba, xetnghiemModelList);
+            saveToFhirDb(hsba, xetnghiemList);
             
             var result = mapOf(
                 "success" , true,
-                "xetnghiemList", xetnghiemModelList  
+                "xetnghiemList", xetnghiemList  
             );
             
             return ResponseEntity.ok(result);

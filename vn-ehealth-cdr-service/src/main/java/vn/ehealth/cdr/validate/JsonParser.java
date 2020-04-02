@@ -1,6 +1,5 @@
 package vn.ehealth.cdr.validate;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,8 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -169,8 +166,8 @@ public class JsonParser {
         for(var objKey : objKeys) {
             String field = !StringUtils.isEmpty(parentField)? parentField + "." + objKey : objKey;;
             if(!keys.contains(objKey)) {
-                //errors.add(new ErrorMessage(field, ErrorMessage.Code.NOT_ALLOW_FIELD, 
-                //                String.format("Not allowed fields : \"%s\"", field)));
+                errors.add(new ErrorMessage(field, ErrorMessage.Code.NOT_ALLOW_FIELD, 
+                                String.format("Not allowed fields : \"%s\"", field)));
             }
         }
         
@@ -237,11 +234,5 @@ public class JsonParser {
         
         return new HashMap<String, Object>();
     
-    }
-    
-    @SuppressWarnings("unchecked")
-	public Map<String, Object> parseJson(String jsonSt) throws JsonParseException, JsonMappingException, IOException {
-    	mapper.setDateFormat(sdf3);
-    	return mapper.readValue(jsonSt, Map.class);
     }
 }
