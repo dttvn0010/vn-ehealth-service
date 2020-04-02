@@ -124,16 +124,16 @@ public class DatabaseUtil {
 	public static Criteria addParamDefault2Criteria(Criteria criteria, TokenParam resid, DateRangeParam _lastUpdated,
 			TokenParam _tag, UriParam _profile, TokenParam _security, TokenParam identifier) {
 		if (resid != null) {
-			criteria.and(ConstantKeys.SP_FHIR_ID).regex(resid.getValue());
+			criteria.and("_fhirId").regex(resid.getValue());
 		}
 		if (_tag != null) {
-			criteria.and("tag.code.myStringValue").regex(_tag.getValue());
+			criteria.and("_tag.code.myStringValue").regex(_tag.getValue());
 		}
 		if (_profile != null) {
-			criteria.and("profile.myStringValue").regex(_profile.getValue());
+			criteria.and("_profile.myStringValue").regex(_profile.getValue());
 		}
 		if (_security != null) {
-			criteria.and("security.code.myStringValue").regex(_security.getValue());
+			criteria.and("_security.code.myStringValue").regex(_security.getValue());
 		}
 		if (_lastUpdated != null) {
 			criteria = setTypeDateToCriteria(criteria, "resCreated", _lastUpdated);

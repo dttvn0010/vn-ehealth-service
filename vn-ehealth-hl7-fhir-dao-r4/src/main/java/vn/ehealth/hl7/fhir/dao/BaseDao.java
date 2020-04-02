@@ -93,9 +93,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         String fhirId = "";
         if (idType != null && idType.hasIdPart()) {
             fhirId = idType.getIdPart();
-            Query query = Query.query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId)
-                               .and(ConstantKeys.SP_ACTIVE).is(true))
-                               .withHint("idx_by_fhirId-active");
+            Query query = Query.query(Criteria.where("_fhirId").is(fhirId)
+                               .and("_active").is(true));
             
             entityOld = (ENT) mongo.findOne(query, getEntityClass());
         }
@@ -123,8 +122,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     public FHIR read(IdType idType) {
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
-            Query query = Query.query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId)
-                                .and(ConstantKeys.SP_ACTIVE).is(true));
+            Query query = Query.query(Criteria.where("_fhirId").is(fhirId)
+                    .and("_active").is(true));
             
             var entity = (ENT) mongo.findOne(query, getEntityClass());
             if (entity != null) {
@@ -139,8 +138,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     public FHIR remove(IdType idType) {
         if (idType != null && idType.hasIdPart()) {
             String fhirId = idType.getIdPart();
-            Query query = Query.query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId)
-                                .and(ConstantKeys.SP_ACTIVE).is(true));
+            Query query = Query.query(Criteria.where("_fhirId").is(fhirId)
+                    .and("_active").is(true));
             
             var entity = (ENT) mongo.findOne(query, getEntityClass());
             if (entity != null) {
@@ -160,8 +159,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
             String fhirId = idType.getIdPart();
             Integer version = Integer.valueOf(idType.getVersionIdPart());
             if (version != null) {
-                Query query = Query.query(Criteria.where(ConstantKeys.SP_FHIR_ID).is(fhirId)
-                                    .and(ConstantKeys.SP_VERSION).is(version));
+                Query query = Query.query(Criteria.where("_fhirId").is(fhirId)
+                                   .and("_version").is(version));
                 var entity = (ENT) mongo.findOne(query, getEntityClass());
                 if (entity != null) {
                     return transform(entity);
@@ -179,15 +178,15 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         criteria = Criteria.where("$where").is("1==1");
         if (theId != null && theId.hasIdPart()) {
             String fhirId = theId.getIdPart();
-            criteria.and(ConstantKeys.SP_FHIR_ID).is(fhirId);
+            criteria.and("_fhirId").is(fhirId);
         }
         if (theAt != null) {
-            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "resUpdated", theAt);
+            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "_resUpdated", theAt);
         }
         if (theSince != null) {
             Date dateParam = theSince.getValue();
             // criteria.and("resCreated").gte(dateParam).lte(dateNow);
-            criteria.and("resCreated").gte(dateParam);
+            criteria.and("_resCreated").gte(dateParam);
         }
         if (criteria != null) {
             Query qry = Query.query(criteria);
@@ -195,8 +194,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
             pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
                     count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
             qry.with(pageableRequest);
-            qry.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-            qry.with(new Sort(Sort.Direction.DESC, "resCreated"));
+            qry.with(new Sort(Sort.Direction.DESC, "_resUpdated"));
+            qry.with(new Sort(Sort.Direction.DESC, "_resCreated"));
 
             var result = mongo.find(qry, getEntityClass());
             Date cal = new Date();
@@ -217,15 +216,15 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         criteria = Criteria.where("$where").is("1==1");
         if (theId != null && theId.hasIdPart()) {
             String fhirId = theId.getIdPart();
-            criteria.and(ConstantKeys.SP_FHIR_ID).is(fhirId);
+            criteria.and("_fhirId").is(fhirId);
         }
         if (theAt != null) {
-            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "resUpdated", theAt);
+            criteria = DatabaseUtil.setTypeDateToCriteria(criteria, "_resUpdated", theAt);
         }
         if (theSince != null) {
             Date dateParam = theSince.getValue();
             // criteria.and("resCreated").gte(dateParam).lte(dateNow);
-            criteria.and("resCreated").gte(dateParam);
+            criteria.and("_resCreated").gte(dateParam);
         }
         if (criteria != null) {
             Query qry = Query.query(criteria);
@@ -245,9 +244,9 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     @SuppressWarnings("unchecked")
     public List<FHIR> searchResource(Criteria criteria, Boolean active, int start, int count, Sort sort) {
         if(active != null) {
-            criteria.and("active").is(active);
+            criteria.and("_active").is(active);
         }else {
-            criteria.and("active").is(true);
+            criteria.and("_active").is(true);
         }
                 
         var query = Query.query(criteria);
@@ -255,8 +254,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
         if(sort != null) {
             query.with(sort);
         }else {
-            query.with(new Sort(Sort.Direction.DESC, "resUpdated"));
-            query.with(new Sort(Sort.Direction.DESC, "resCreated"));
+            query.with(new Sort(Sort.Direction.DESC, "_resUpdated"));
+            query.with(new Sort(Sort.Direction.DESC, "_resCreated"));
         }
         
         if(start >= 0) query.skip(start);
@@ -279,14 +278,14 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
     
     @SuppressWarnings("unchecked")
     public FHIR getResource(Criteria criteria) {
-        criteria.and("active").is(true);
+        criteria.and("_active").is(true);
         var query = Query.query(criteria);        
         var ent = (ENT) mongo.findOne(query, getEntityClass());
         return transform(ent);
     }
     
     public int countResource(Criteria criteria) {
-        criteria.and("active").is(true);
+        criteria.and("_active").is(true);
         var query = Query.query(criteria);
         int count = (int) mongo.count(query, getEntityClass());
         return count;
