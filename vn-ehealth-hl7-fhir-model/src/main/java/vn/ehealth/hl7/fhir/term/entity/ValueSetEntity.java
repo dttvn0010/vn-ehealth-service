@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 /**
  * @author SONVT24
@@ -63,7 +64,7 @@ public class ValueSetEntity extends BaseResource {
     
     public static class ValueSetExpansionParameter {
         protected String name;
-        @JsonIgnore protected Object value;
+        @JsonIgnore protected BaseType value;
     }
     
     public static class ValueSetExpansion {
