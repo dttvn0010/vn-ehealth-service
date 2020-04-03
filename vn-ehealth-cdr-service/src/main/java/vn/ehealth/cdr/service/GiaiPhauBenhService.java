@@ -8,7 +8,6 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import vn.ehealth.auth.service.UserService;
 import vn.ehealth.cdr.model.GiaiPhauBenh;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.repository.GiaiPhauBenhRepository;
@@ -18,12 +17,9 @@ import vn.ehealth.hl7.fhir.core.util.Constants.TRANGTHAI_DULIEU;
 @Service
 public class GiaiPhauBenhService {
 
-    @Autowired 
-    private GiaiPhauBenhRepository giaiPhauBenhRepository;
+    @Autowired private GiaiPhauBenhRepository giaiPhauBenhRepository;
     
-    @Autowired LogService logService;
-    
-    @Autowired UserService userService;
+    @Autowired private LogService logService;
     
     public List<GiaiPhauBenh> getByHoSoBenhAnId(ObjectId hoSoBenhAnId) {
         return giaiPhauBenhRepository.findByHoSoBenhAnIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);

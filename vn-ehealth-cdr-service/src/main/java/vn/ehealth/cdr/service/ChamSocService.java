@@ -10,7 +10,6 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import vn.ehealth.auth.service.UserService;
 import vn.ehealth.cdr.model.ChamSoc;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.repository.ChamSocRepository;
@@ -24,7 +23,6 @@ public class ChamSocService {
     
     @Autowired private LogService logService;
     
-    @Autowired UserService userService;
     public Optional<ChamSoc> getById(ObjectId id) {
         return chamSocRepository.findById(id);
     }

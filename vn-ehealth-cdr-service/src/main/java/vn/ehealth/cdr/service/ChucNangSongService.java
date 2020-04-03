@@ -10,7 +10,6 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import vn.ehealth.auth.service.UserService;
 import vn.ehealth.cdr.model.ChucNangSong;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.repository.ChucNangSongRepository;
@@ -24,7 +23,6 @@ public class ChucNangSongService {
     private ChucNangSongRepository chucNangSongRepository;
     
     @Autowired private LogService logService;
-    @Autowired UserService userService;
     
     public Optional<ChucNangSong> getById(ObjectId id) {
         return chucNangSongRepository.findById(id);

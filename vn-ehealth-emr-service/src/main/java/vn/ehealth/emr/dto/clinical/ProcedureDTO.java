@@ -46,6 +46,7 @@ public class ProcedureDTO extends BaseDTO{
     public List<ProcedurePerformerDTO> performer;
     public List<ConceptDTO> bodySite;
     public ConceptDTO outcome;
+    public ConceptDTO followUp;
     public ReferenceDTO diagnosticReport;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -67,6 +68,7 @@ public class ProcedureDTO extends BaseDTO{
         dto.performer = transform(obj.getPerformer(), ProcedurePerformerDTO::fromFhir);
         dto.bodySite = transform(obj.getBodySite(), ConceptDTO::fromFhir);
         dto.outcome = ConceptDTO.fromFhir(obj.getOutcome());
+        dto.followUp = ConceptDTO.fromFhir(obj.getFollowUpFirstRep());
         dto.diagnosticReport = ReferenceDTO.fromFhir(obj.getReportFirstRep());
         
         if(obj.hasPerformedDateTimeType()) {

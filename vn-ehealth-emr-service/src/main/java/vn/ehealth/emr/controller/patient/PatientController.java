@@ -3,10 +3,13 @@ package vn.ehealth.emr.controller.patient;
 import java.util.HashMap;
 import java.util.Optional;
 
+import org.hl7.fhir.r4.model.IdType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,4 +66,21 @@ public class PatientController {
         }        
     }
   
+    @GetMapping("/get_by_id/{id}")
+    public ResponseEntity<?> getById(@PathVariable String id, @RequestParam Optional<Boolean> viewEntity) {
+        
+        var patient = patientDao.read(new IdType(id));
+        
+        if(patient == null) {
+            return new ResponseEntity<>("No patient found", HttpStatus.NOT_FOUND);
+        }
+        
+        if(viewEntity.orElse(false)) {
+            var ent = fhirToEntity(patient, PatientEntity.class);
+            return ResponseEntity.ok(ent);
+        }else {
+            var dto = PatientDTO.fromFhir(patient);
+            return ResponseEntity.ok(dto);
+        }
+    }
 }

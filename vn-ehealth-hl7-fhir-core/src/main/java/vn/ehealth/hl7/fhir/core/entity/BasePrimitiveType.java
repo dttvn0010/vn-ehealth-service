@@ -72,7 +72,6 @@ public class BasePrimitiveType extends BaseSimpleType {
         
         if(DecimalType.class.getName().equals(className)) {
             if(value instanceof String) {
-                System.out.println("??????===========================" + value + "," + className);
                 return new DecimalType(Double.valueOf((String) value));
             }
             return new DecimalType((BigDecimal) value);

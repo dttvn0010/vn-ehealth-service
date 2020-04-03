@@ -58,8 +58,8 @@ public class BenhNhanService {
     
     public long countBenhNhan(String keyword) {     
         var criteria =  new Criteria().orOperator(
-                Criteria.where("tenDayDu").regex(keyword),
-                Criteria.where("idDinhDanhChinh").regex(keyword)
+                Criteria.where("tenDayDu").regex(keyword, "i"),
+                Criteria.where("idDinhDanhChinh").regex(keyword, "i")
              );
         
         return mongoTemplate.count(new Query(criteria), BenhNhan.class);
@@ -67,8 +67,8 @@ public class BenhNhanService {
     
     public List<BenhNhan> searchBenhNhan(String keyword, int offset, int limit) {        
         var criteria =  new Criteria().orOperator(
-                Criteria.where("tenDayDu").regex(keyword),
-                Criteria.where("idDinhDanhChinh").regex(keyword)
+                Criteria.where("tenDayDu").regex(keyword, "i"),
+                Criteria.where("idDinhDanhChinh").regex(keyword, "i")
              );
         var query = new Query(criteria);
         if(limit > 0 && offset > 0) {

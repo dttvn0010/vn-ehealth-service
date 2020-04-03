@@ -8,7 +8,6 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import vn.ehealth.auth.service.UserService;
 import vn.ehealth.cdr.model.ChanDoanHinhAnh;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.repository.ChanDoanHinhAnhRepository;
@@ -22,9 +21,7 @@ public class ChanDoanHinhAnhService {
 	@Autowired 
     private ChanDoanHinhAnhRepository chanDoanHinhAnhRepository;
     
-    @Autowired LogService logService;
-    
-    @Autowired UserService userService;
+    @Autowired private LogService logService;
     
     public List<ChanDoanHinhAnh> getByHoSoBenhAnId(ObjectId hoSoBenhAnId) {
         return chanDoanHinhAnhRepository.findByHoSoBenhAnIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);
