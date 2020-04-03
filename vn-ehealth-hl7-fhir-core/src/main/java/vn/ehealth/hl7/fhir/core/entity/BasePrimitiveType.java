@@ -6,10 +6,13 @@ import java.util.Date;
 import org.hl7.fhir.r4.model.Base64BinaryType;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.CanonicalType;
+import org.hl7.fhir.r4.model.CodeType;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DateType;
 import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.IntegerType;
+import org.hl7.fhir.r4.model.MarkdownType;
+import org.hl7.fhir.r4.model.PositiveIntType;
 import org.hl7.fhir.r4.model.PrimitiveType;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Type;
@@ -61,6 +64,10 @@ public class BasePrimitiveType extends BaseSimpleType {
             return new UnsignedIntType((int) value);
         }
         
+        if(PositiveIntType.class.getName().equals(className)) {
+            return new PositiveIntType((int) value);
+        }
+        
         if(DecimalType.class.getName().equals(className)) {
             return new DecimalType((BigDecimal) value);
         }
@@ -79,6 +86,14 @@ public class BasePrimitiveType extends BaseSimpleType {
         
         if(CanonicalType.class.getName().equals(className)) {
             return new UriType((String) value);
+        }
+        
+        if(MarkdownType.class.getName().equals(className)) {
+            return new MarkdownType((String) value);
+        }
+        
+        if(CodeType.class.getName().equals(className)) {
+            return new CodeType((String) value);
         }
         
         if(DateType.class.getName().equals(className)) {

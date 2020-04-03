@@ -178,6 +178,13 @@ public class ModelVerification {
         
         // term
         check(CodeSystemEntity.class, CodeSystem.class);
+        check(CodeSystemEntity.CodeSystemFilter.class, CodeSystem.CodeSystemFilterComponent.class);
+        check(CodeSystemEntity.Property.class, CodeSystem.PropertyComponent.class);
+        check(CodeSystemEntity.ConceptDefinitionDesignation.class, CodeSystem.ConceptDefinitionDesignationComponent.class);
+        check(CodeSystemEntity.ConceptProperty.class, CodeSystem.ConceptPropertyComponent.class);
+        check(CodeSystemEntity.ConceptDefinition.class, CodeSystem.ConceptDefinitionComponent.class);
+        
+        
         check(ConceptMapEntity.OtherElement.class, ConceptMap.OtherElementComponent.class);
         check(ConceptMapEntity.TargetElement.class, ConceptMap.TargetElementComponent.class);
         check(ConceptMapEntity.SourceElement.class, ConceptMap.SourceElementComponent.class);
@@ -192,8 +199,7 @@ public class ModelVerification {
         check(ValueSetEntity.ValueSetCompose.class, ValueSet.ValueSetComposeComponent.class);
         check(ValueSetEntity.ValueSetExpansionParameter.class, ValueSet.ValueSetExpansionParameterComponent.class);
         check(ValueSetEntity.ValueSetExpansion.class, ValueSet.ValueSetExpansionComponent.class);
-        
-        
+               
         
         // person
         check(PersonEntity.class, Person.class);

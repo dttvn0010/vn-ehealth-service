@@ -1,17 +1,14 @@
 package vn.ehealth.hl7.fhir.term.entity;
 
-import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
-import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
-import vn.ehealth.hl7.fhir.core.entity.BaseUsageContext;
+import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 /**
  * @author SONVT24
@@ -22,12 +19,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseUsageContext;
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class CodeSystemEntity extends BaseResource {
     
-    public static class ContactDetail {
-        public String name;
-        public List<BaseContactPoint> telecom;
-    }
-    
-    public static class Filter{
+    public static class CodeSystemFilter{
 
         public String code;
         public String description;
@@ -35,7 +27,7 @@ public class CodeSystemEntity extends BaseResource {
         public String value;
     }
 
-    public static class CodeSystemProperty{
+    public static class Property{
 
         public String code;
         public String uri;
@@ -43,10 +35,44 @@ public class CodeSystemEntity extends BaseResource {
         public String type;
     }
     
+    public static class ConceptDefinitionDesignation {
+        public String language;
+        public String use;
+        public String value;
+    }
+    
+    public static class ConceptProperty {
+        public String code;
+        public BaseType value;
+    }
+    
+    public static class ConceptDefinition {
+        public String code;
+        public String display;
+        public String definition;
+        public List<ConceptDefinitionDesignation> designation;
+        public List<ConceptProperty> property;
+        public List<ConceptDefinition> concept;
+    }
+    
     @Id
     public ObjectId id;
-    public String url;
     public List<BaseIdentifier> identifier;
+    public String purpose;
+    public String copyright;
+    public Boolean caseSensitive;
+    public String valueSet;
+    public String hierarchyMeaning;
+    public Boolean compositional;
+    public Boolean versionNeeded;
+    public String content;
+    public String supplements;
+    public Integer count;
+    public List<CodeSystemFilter> filter;
+    public List<Property> property;
+    public List<ConceptDefinition> concept;
+    
+    /*
     public String name;
     public String title;
     public String status;
@@ -57,17 +83,5 @@ public class CodeSystemEntity extends BaseResource {
     public String description;
     public List<BaseUsageContext> useContext;
     public List<BaseCodeableConcept> jurisdiction;
-    public String purpose;
-    public String copyright;
-    public boolean caseSensitive;
-    public String valueSet;
-    public String hierarchyMeaning;
-    public boolean compositional;
-    public boolean versionNeeded;
-    public String content;
-    public String supplements;
-    public Integer count;
-    public List<Filter> filter;
-    public List<CodeSystemProperty> property;
-    public List<ConceptEntity> concept;
+    */
 }

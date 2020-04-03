@@ -47,8 +47,8 @@ public class ImmunizationEntity extends BaseResource {
         public String series;
         public BaseReference authority;
         public List<BaseCodeableConcept> targetDisease;
-        @JsonIgnore protected Object doseNumber;
-        @JsonIgnore protected Object seriesDoses;
+        @JsonIgnore protected BaseType doseNumber;
+        @JsonIgnore protected BaseType seriesDoses;
     }
     
     @Id
