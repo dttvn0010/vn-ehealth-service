@@ -2,7 +2,11 @@ package vn.ehealth.cdr.controller;
 
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import vn.ehealth.cdr.controller.helper.PatientHelper;
 import vn.ehealth.cdr.model.BenhNhan;
 import vn.ehealth.cdr.service.BenhNhanService;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
@@ -25,9 +30,12 @@ import vn.ehealth.cdr.utils.*;
 @RequestMapping("/api/benh_nhan")
 public class BenhNhanController {
     
+    private Logger log = LoggerFactory.getLogger(BenhNhanController.class);
+    
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @Autowired private BenhNhanService benhNhanService;
+    @Autowired private PatientHelper patientHelper;
     @Autowired private PatientDao patientDao;
     
     @GetMapping("/count_benhnhan")
@@ -49,18 +57,26 @@ public class BenhNhanController {
         return ResponseEntity.of(benhNhan);
     }
     
+    private void removeOldFhirData(@Nonnull BenhNhan benhNhan) {
+        var patient = patientHelper.getPatientBySobhyt(benhNhan.sobhyt);
+        if(patient != null) {
+            patientDao.remove(patient.getIdElement());
+        }
+    }
+    
     private void saveToFhirDb(BenhNhan benhNhan) {
-        try {
-            if(benhNhan == null) return;
-            var patientDb = benhNhan.getPatientInDB();
+        if(benhNhan == null) return;
+        
+        try {                        
             var patient = benhNhan.toFhir();
-            if(patientDb != null) {
-                patientDao.update(patient, patientDb.getIdElement());
-            }else {
+            
+            if(patient != null) {
+                removeOldFhirData(benhNhan);
                 patientDao.create(patient);
             }
+            
         }catch(Exception e) {
-            e.printStackTrace();
+            log.error("Cannot save benhNhan id=" + benhNhan.getId() + " to fhir DB", e);
         }
     }
 

@@ -2,6 +2,8 @@ package vn.ehealth.cdr.controller;
 
 import java.util.List;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import vn.ehealth.cdr.controller.helper.EncounterHelper;
+import vn.ehealth.cdr.controller.helper.ProcedureHelper;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.XetNghiem;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
@@ -27,9 +31,13 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 @RequestMapping("/api/xetnghiem")
 public class XetNghiemController {
     
-    @Autowired private XetNghiemService xetNghiemService;
+    private Logger log = LoggerFactory.getLogger(XetNghiemController.class);
     
+    @Autowired private XetNghiemService xetNghiemService;    
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
+    
+    @Autowired private ProcedureHelper procedureHelper;
+    @Autowired private EncounterHelper encounterHelper;
 
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
@@ -42,7 +50,7 @@ public class XetNghiemController {
     private void saveToFhirDb(HoSoBenhAn hsba, List<XetNghiem> xetNghiemList) {
         if(hsba == null) return;
         try {
-            var enc = hsba.getEncounterInDB();
+            var enc = encounterHelper.getEncounterByMaHsba(hsba.maYte);
             if(enc == null) return;
             
             for(var xetNghiem : xetNghiemList) {
@@ -54,11 +62,11 @@ public class XetNghiemController {
                     xndv.noiDungYeuCau = xetNghiem.noiDungYeuCau;
                     xndv.ngayThucHien = xetNghiem.ngayThucHien;
                     xndv.bacSiXetNghiem = xetNghiem.bacSiXetNghiem;
-                    DichVuKyThuatHelper.saveDichVuKT(enc, xndv);
+                    procedureHelper.saveDVKT(enc, xndv);
                 }
             }
         }catch(Exception e) {
-            e.printStackTrace();
+            log.error("Cannot save xetnghiem from hsba id=" + hsba.getId() + " to fhir DB", e);
         }
     }
     

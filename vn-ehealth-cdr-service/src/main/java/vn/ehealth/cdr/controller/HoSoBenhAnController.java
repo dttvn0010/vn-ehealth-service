@@ -1,12 +1,14 @@
 package vn.ehealth.cdr.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import javax.annotation.Nonnull;
+
 import org.bson.types.ObjectId;
-import org.hl7.fhir.r4.model.Encounter;
-import org.hl7.fhir.r4.model.ResourceType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.auth.service.UserService;
 import vn.ehealth.auth.utils.UserUtil;
+import vn.ehealth.cdr.controller.helper.EncounterHelper;
+import vn.ehealth.cdr.controller.helper.OrganizationHelper;
+import vn.ehealth.cdr.controller.helper.PatientHelper;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.service.BenhNhanService;
 import vn.ehealth.cdr.service.CoSoKhamBenhService;
@@ -28,8 +33,6 @@ import vn.ehealth.cdr.service.LogService;
 import vn.ehealth.cdr.utils.*;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
-import vn.ehealth.utils.MongoUtils;
-
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
@@ -43,8 +46,11 @@ public class HoSoBenhAnController {
     @Autowired private CoSoKhamBenhService coSoKhamBenhService;
     @Autowired private LogService logService;
     @Autowired private EncounterDao encounterDao; 
+    @Autowired private PatientHelper patientHelper;
+    @Autowired private OrganizationHelper organizationHelper;
+    @Autowired private EncounterHelper encounterHelper;
     
-    @Autowired UserService userService;
+    private Logger log = LoggerFactory.getLogger(HoSoBenhAnController.class);
 
     @GetMapping("/count_ds_hs")
     public ResponseEntity<?> countHsba(@RequestParam int trangthai, @RequestParam String maYte) {
@@ -143,35 +149,39 @@ public class HoSoBenhAnController {
             return ResponseEntity.ok(mapOf("success", false, "error", error));
         }
     }
-
-    private List<Encounter> getVkEncounterList(Encounter hsbaEncounter) {
-        if(hsbaEncounter != null) {
-            var parent = (Object) (ResourceType.Encounter + "/" + hsbaEncounter.getId());
-            var params = mapOf("partOf.reference", parent);    
-            return encounterDao.searchResource(MongoUtils.createCriteria(params));
-        }
+    
+    private void removeOldFhirData(@Nonnull HoSoBenhAn hsba) {
+        var hsbaEncounter = encounterHelper.getEncounterByMaHsba(hsba.maYte);
         
-        return new ArrayList<>();
+        if(hsbaEncounter != null) {
+            var vkEncounters = encounterHelper.getVkEncounterList(hsbaEncounter);
+            vkEncounters.forEach(x -> encounterDao.remove(x.getIdElement()));
+            encounterDao.remove(hsbaEncounter.getIdElement());
+        }
     }
     
     private void saveToFhirDb(HoSoBenhAn hsba) {
         if(hsba == null) return;
         
         try {
-            var encounterDb = hsba.getEncounterInDB();
-            if(encounterDb != null) {
-                var oldVkEncounters = getVkEncounterList(encounterDb);
-                oldVkEncounters.forEach(x -> encounterDao.remove(x.getIdElement()));
-            }
+            var benhNhan = hsba.getBenhNhan();
+            var cskb = hsba.getCoSoKhamBenh();
             
-            var encounters = hsba.toFhir();
-            if(encounters.size() > 0) {
+            if(benhNhan == null || cskb == null) return;
+            
+            var patient = patientHelper.getPatientBySobhyt(benhNhan.sobhyt);
+            var serviceProvider = organizationHelper.getOrganizationByMa(cskb.ma);
+            
+            var encounters = hsba.toFhir(patient, serviceProvider);
+            
+            if(encounters != null && encounters.size() > 0) {
+                // Remove old data
+                removeOldFhirData(hsba);
+                
+                // Create new data
                 var hsbaEncounter = encounters.get(0);
-                if(encounterDb != null) {
-                    hsbaEncounter = encounterDao.update(hsbaEncounter, encounterDb.getIdElement());
-                }else {
-                    hsbaEncounter = encounterDao.create(hsbaEncounter);
-                }
+                hsbaEncounter = encounterDao.create(hsbaEncounter);
+                
                 for(int i = 1; i < encounters.size(); i++) {
                     var vkEnc = encounters.get(i);
                     vkEnc.setPartOf(FhirUtil.createReference(hsbaEncounter));
@@ -179,7 +189,7 @@ public class HoSoBenhAnController {
                 }
             }
         }catch(Exception e) {
-            e.printStackTrace();
+            log.error("Cannot save hsba id=" + hsba.getId() + " to fhir DB"); 
         }
     }
     

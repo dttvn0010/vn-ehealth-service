@@ -2,6 +2,8 @@ package vn.ehealth.cdr.controller;
 
 import java.util.List;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import vn.ehealth.cdr.controller.helper.EncounterHelper;
+import vn.ehealth.cdr.controller.helper.ProcedureHelper;
 import vn.ehealth.cdr.model.GiaiPhauBenh;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.service.GiaiPhauBenhService;
@@ -27,6 +31,11 @@ public class GiaiPhauBenhController {
     
     @Autowired private GiaiPhauBenhService giaiPhauBenhService;
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
+    
+    @Autowired private ProcedureHelper procedureHelper;
+    @Autowired private EncounterHelper encounterHelper;
+    
+    private Logger log = LoggerFactory.getLogger(GiaiPhauBenhController.class);
     
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
@@ -44,13 +53,14 @@ public class GiaiPhauBenhController {
     
     private void saveToFhirDb(HoSoBenhAn hsba, List<GiaiPhauBenh> gpbList) {
         if(hsba == null) return;
+        
         try {
-            var enc = hsba.getEncounterInDB();
+            var enc = encounterHelper.getEncounterByMaHsba(hsba.maYte);
             if(enc != null) {
-                gpbList.forEach(x -> DichVuKyThuatHelper.saveDichVuKT(enc, x));
+                gpbList.forEach(x -> procedureHelper.saveDVKT(enc, x));
             }
         }catch(Exception e) {
-            e.printStackTrace();
+            log.error("Cannot save gpb from hsba id=" + hsba.getId() + " to fhir DB", e);
         }
     }
     

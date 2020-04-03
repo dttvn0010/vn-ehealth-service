@@ -2,6 +2,8 @@ package vn.ehealth.cdr.controller;
 
 import java.util.List;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import vn.ehealth.cdr.controller.helper.EncounterHelper;
+import vn.ehealth.cdr.controller.helper.ProcedureHelper;
 import vn.ehealth.cdr.model.ChanDoanHinhAnh;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.service.ChanDoanHinhAnhService;
@@ -31,6 +35,11 @@ public class ChanDoanHinhAnhController {
     @Autowired private ChanDoanHinhAnhService chanDoanHinhAnhService;
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     
+    @Autowired private ProcedureHelper procedureHelper;
+    @Autowired private EncounterHelper encounterHelper;
+    
+    private Logger log = LoggerFactory.getLogger(ChanDoanHinhAnhController.class);
+            
     @GetMapping("/get_ds_cdha")
     public ResponseEntity<?> getDsChanDoanHinhAnh(@RequestParam("hsba_id") String hsbaId) {
         var cdhaList = chanDoanHinhAnhService.getByHoSoBenhAnId(new ObjectId(hsbaId));
@@ -39,13 +48,14 @@ public class ChanDoanHinhAnhController {
     
     private void saveToFhirDb(HoSoBenhAn hsba, List<ChanDoanHinhAnh> cdhaList) {
         if(hsba == null) return;
+        
         try {
-            var enc = hsba.getEncounterInDB();
+            var enc = encounterHelper.getEncounterByMaHsba(hsba.maYte);
             if(enc != null) {
-                cdhaList.forEach(x -> DichVuKyThuatHelper.saveDichVuKT(enc, x));
+                cdhaList.forEach(x -> procedureHelper.saveDVKT(enc, x));
             }
         }catch(Exception e) {
-            e.printStackTrace();
+            log.error("Cannot save cdha from hsba id=" + hsba.getId() + " to fhir DB", e);
         }
     }    
     

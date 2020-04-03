@@ -19,14 +19,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
-import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
-import vn.ehealth.utils.MongoUtils;
-
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
-import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createContactPoint;
-import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createExtension;
-import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createHumanName;
-import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createIdentifier;
+import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "benh_nhan")
@@ -104,6 +98,7 @@ public class BenhNhan {
     
     public String trinhDoVanHoaCuaMe;
     
+    @JsonIgnore
     public ObjectId emrPersonId;
     
     private static Map<String, String> gioiTinhCodeMap = mapOf(
@@ -146,18 +141,6 @@ public class BenhNhan {
         return obj;
     }
    
-    @JsonIgnore
-    public Patient getPatientInDB() {
-        var params = mapOf( 
-                            "identifier.value", (Object) sobhyt,
-                            "identifier.system",  IdentifierSystem.DINH_DANH_Y_TE                            
-                        );
-        
-        var criteria = MongoUtils.createCriteria(params);
-        return DaoFactory.getPatientDao().getResource(criteria);
-    }
-    
-    @JsonIgnore
     public Patient toFhir() {
         
         var obj = new Patient();

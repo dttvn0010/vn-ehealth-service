@@ -2,6 +2,8 @@ package vn.ehealth.cdr.controller;
 
 import java.util.List;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import vn.ehealth.cdr.controller.helper.EncounterHelper;
 import vn.ehealth.cdr.model.DonThuoc;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.service.DonThuocService;
@@ -27,11 +30,15 @@ import vn.ehealth.hl7.fhir.medication.dao.impl.MedicationRequestDao;
 @RequestMapping("/api/donthuoc")
 public class DonThuocController {
     
+    private Logger log = LoggerFactory.getLogger(DonThuocController.class);
+    
     @Autowired private DonThuocService donThuocService;
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     @Autowired private MedicationRequestDao medicationRequestDao;
+    @Autowired private EncounterHelper encounterHelper;
     
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
+    
     
     @GetMapping("/get_ds_donthuoc")
     public ResponseEntity<?> getDsDonThuoc(@RequestParam("hsba_id") String id) {
@@ -43,7 +50,7 @@ public class DonThuocController {
         if(hsba == null) return;
         
         try {
-            var enc = hsba.getEncounterInDB();
+            var enc = encounterHelper.getEncounterByMaHsba(hsba.maYte);
             if(enc == null) return;
             
             for(var donthuoc : donThuocList) {
@@ -58,8 +65,8 @@ public class DonThuocController {
                 }
             }
         }catch(Exception e) {
-            e.printStackTrace();
-        }
+            log.error("Cannot save donthuoc from hsba id=" + hsba.getId() + " to fhir DB", e);
+        }        
     }
     
     @PostMapping("/create_or_update_don_thuoc")

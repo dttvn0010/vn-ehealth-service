@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Encounter;
@@ -24,6 +25,8 @@ import vn.ehealth.utils.MongoUtils;
 
 public abstract class DichVuKyThuat {
 	
+    public String idhis;
+    
 	public DanhMuc dmKhoaDieuTri;
 	
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -40,9 +43,9 @@ public abstract class DichVuKyThuat {
     
     public String ketLuan;
     
-    abstract protected CodeableConcept getCategory();
+    abstract public CodeableConcept getCategory();
     
-    abstract protected CodeableConcept getCode();
+    abstract public CodeableConcept getCode();
     
 	private Organization getKhoaDieuTri(Reference cskbRef, String maKhoa) {
 	    if(cskbRef != null && cskbRef.hasReference()) {
@@ -91,33 +94,41 @@ public abstract class DichVuKyThuat {
         var subject = enc.getSubject();
         var encounter = FhirUtil.createReference(enc);
         
-        if(procedure != null) {
-            procedure.setCategory(category);
-            procedure.setCode(code);
-            procedure.setSubject(subject);        
-            procedure.setEncounter(encounter);
+        // Procedure
+        
+        String loaiDVKT = "";
+        if(category != null && category.hasCoding()) {
+            loaiDVKT = category.getCodingFirstRep().getCode();
         }
         
-        if(serviceRequest != null) {
-            serviceRequest.setCode(code);
-            serviceRequest.setCategory(listOf(category));
-            serviceRequest.setSubject(subject);
-            serviceRequest.setEncounter(encounter);            
-            serviceRequest.setAuthoredOn(ngayYeuCau);
-            serviceRequest.setRequester(CanboYte.toRef(bacSiYeuCau));
-            serviceRequest.setOrderDetail(listOf(FhirUtil.createCodeableConcept(noiDungYeuCau)));
+        if(idhis != null && !StringUtils.isBlank(loaiDVKT)) {
+            var identifier = loaiDVKT + "/" + idhis;
+            procedure.setIdentifier(listOf(FhirUtil.createIdentifier(identifier, "")));
         }
         
-        if(diagnosticReport != null) {
-            diagnosticReport.setCode(code);
-            diagnosticReport.setCategory(listOf(category));
-            diagnosticReport.setSubject(subject);
-            diagnosticReport.setEncounter(encounter);
-            diagnosticReport.setPerformer(listOf(CanboYte.toRef(nguoiVietBaoCao)));
-            diagnosticReport.setResultsInterpreter(listOf(CanboYte.toRef(nguoiDanhGiaKetQua)));            
-            diagnosticReport.setIssued(ngayGioBaoCao);
-            diagnosticReport.setConclusion(ketLuan);
-        }
+        procedure.setCategory(category);
+        procedure.setCode(code);
+        procedure.setSubject(subject);        
+        procedure.setEncounter(encounter);
+        
+        // Service request
+        serviceRequest.setCode(code);
+        serviceRequest.setCategory(listOf(category));
+        serviceRequest.setSubject(subject);
+        serviceRequest.setEncounter(encounter);            
+        serviceRequest.setAuthoredOn(ngayYeuCau);
+        serviceRequest.setRequester(CanboYte.toRef(bacSiYeuCau));
+        serviceRequest.setOrderDetail(listOf(FhirUtil.createCodeableConcept(noiDungYeuCau)));
+        
+        // Diagnostic report
+        diagnosticReport.setCode(code);
+        diagnosticReport.setCategory(listOf(category));
+        diagnosticReport.setSubject(subject);
+        diagnosticReport.setEncounter(encounter);
+        diagnosticReport.setPerformer(listOf(CanboYte.toRef(nguoiVietBaoCao)));
+        diagnosticReport.setResultsInterpreter(listOf(CanboYte.toRef(nguoiDanhGiaKetQua)));            
+        diagnosticReport.setIssued(ngayGioBaoCao);
+        diagnosticReport.setConclusion(ketLuan);
         
         return mapOf(
                 "serviceRequest", serviceRequest,

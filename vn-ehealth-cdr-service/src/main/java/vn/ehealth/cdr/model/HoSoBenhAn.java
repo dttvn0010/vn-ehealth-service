@@ -11,12 +11,13 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Encounter;
+import org.hl7.fhir.r4.model.Organization;
+import org.hl7.fhir.r4.model.Patient;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -25,9 +26,6 @@ import vn.ehealth.cdr.utils.ObjectIdUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
-import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
-import vn.ehealth.utils.MongoUtils;
-
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createIdentifier;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createPeriod;
@@ -319,25 +317,7 @@ public class HoSoBenhAn {
         return "";
     }
     
-    @JsonIgnore
-    public Encounter getEncounterInDB() {
-    	var params = mapOf(
-    	                "identifier.value", (Object) maYte,
-    	                "identifier.system", IdentifierSystem.MA_HO_SO    	                
-	                );
-    	
-    	var criteria = MongoUtils.createCriteria(params);
-    	return DaoFactory.getEncounterDao().getResource(criteria);    	
-    }
-    
-    @JsonIgnore
-    public List<Encounter> toFhir() {
-        var benhNhan = getBenhNhan();
-        var coSoKhamBenh = getCoSoKhamBenh();        
-        if(benhNhan == null || coSoKhamBenh == null) return null;
-        
-        var patient = benhNhan.getPatientInDB();
-        var serviceProvider = coSoKhamBenh.getOrganizationInDB();        
+    public List<Encounter> toFhir(Patient patient, Organization serviceProvider) {
         if(patient == null || serviceProvider == null) return new ArrayList<>();
         
         var enc = new Encounter();

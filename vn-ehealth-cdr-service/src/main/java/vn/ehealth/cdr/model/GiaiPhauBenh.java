@@ -17,6 +17,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -73,7 +74,6 @@ public class GiaiPhauBenh extends DichVuKyThuat {
     }
     
     public int trangThai;
-    public String idhis;
     
     public DanhMuc dmGiaiPhauBenh;        
     public DanhMuc dmLoaiGiaiPhauBenh;
@@ -97,15 +97,15 @@ public class GiaiPhauBenh extends DichVuKyThuat {
     public List<FileDinhKem> dsFileDinhKemGpb = new ArrayList<>();
     
     
-    @Override
-    protected CodeableConcept getCategory() {
+    @JsonIgnore
+    public CodeableConcept getCategory() {
         return createCodeableConcept(LoaiDichVuKT.GIAI_PHAU_BENH, 
                 MessageUtils.get("text.XRC"), 
                 CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
     }
 
-    @Override
-    protected CodeableConcept getCode() {
+    @JsonIgnore
+    public CodeableConcept getCode() {
         return DanhMuc.toConcept(dmGiaiPhauBenh, CodeSystemValue.DICH_VU_KY_THUAT);
     }
 

@@ -17,6 +17,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -74,7 +75,6 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
     }
     
     public int trangThai; 
-    public String idhis;
     
     public List<DanhMuc> dsDmMaBenhChanDoanSau = new ArrayList<>();
     public List<DanhMuc> dsDmMaBenhChanDoanTruoc = new ArrayList<>();
@@ -105,28 +105,28 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
     public static class ThanhVienPttt {
 
         public DanhMuc dmVaiTro;        
-        public CanboYte bacsipttt;
+        public CanboYte bacSiPttt;
         
         public static ProcedurePerformerComponent toPerformer(ThanhVienPttt dto) {
             if(dto == null) return null;
             var performer = new ProcedurePerformerComponent();
             performer.setFunction(DanhMuc.toConcept(dto.dmVaiTro, CodeSystemValue.VAI_TRO_PTTT));
-            performer.setActor(CanboYte.toRef(dto.bacsipttt));
+            performer.setActor(CanboYte.toRef(dto.bacSiPttt));
             return performer;
         }
     }
     
     public List<ThanhVienPttt> dsThanhVienPttt = new ArrayList<>();
     
-    @Override
-    protected CodeableConcept getCategory() {
+    @JsonIgnore
+    public CodeableConcept getCategory() {
         return createCodeableConcept(LoaiDichVuKT.PHAU_THUAT_THU_THUAT, 
                 MessageUtils.get("text.SUR"), 
                 CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
     }
 
-    @Override
-    protected CodeableConcept getCode() {
+    @JsonIgnore
+    public CodeableConcept getCode() {
         return DanhMuc.toConcept(dmPhauThuatThuThuat, CodeSystemValue.DICH_VU_KY_THUAT);
     }
 

@@ -12,12 +12,14 @@ import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Procedure;
+import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.StringType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -63,26 +65,35 @@ public class XetNghiem {
         public CanboYte bacSiXetNghiem;
                 
         public DanhMuc dmXetNghiem;
+        
         public List<XetNghiemKetQua> dsKetQuaXetNghiem = new ArrayList<XetNghiemKetQua>();
         
-        @JsonInclude(Include.NON_NULL)
         public static class XetNghiemKetQua {
+            
+            @JsonInclude(Include.NON_NULL)
+            public static class GiaiThamChieu {
+                public double giaTriTren;
+                public double giaTriDuoi;
+            }
+            
             public DanhMuc dmDichKetQuaXetNghiem;
             
             public DanhMuc dmChiSoXetNghiem;
 
             public String giaTriDo;
+            
+            public GiaiThamChieu thamChieu;
         }
-
-        @Override
-        protected CodeableConcept getCategory() {
+        
+        @JsonIgnore
+        public CodeableConcept getCategory() {
             return createCodeableConcept(LoaiDichVuKT.XET_NGHIEM, 
                     MessageUtils.get("text.LAB"), 
                     CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
         }
 
-        @Override
-        protected CodeableConcept getCode() {
+        @JsonIgnore
+        public CodeableConcept getCode() {
             return DanhMuc.toConcept(dmXetNghiem, CodeSystemValue.DICH_VU_KY_THUAT);
         }
 
@@ -110,8 +121,18 @@ public class XetNghiem {
                     var obs = new Observation();
                     obs.setSubject(serviceRequest.getSubject());
                     obs.setEncounter(serviceRequest.getEncounter());
-                    
+
                     obs.setCode(DanhMuc.toConcept(xnkq.dmChiSoXetNghiem, CodeSystemValue.CHI_SO_XET_NGHIEM));
+                    
+                    var interpConcept = DanhMuc.toConcept(xnkq.dmDichKetQuaXetNghiem, CodeSystemValue.DICH_KET_QUA_XET_NGHIEM);
+                    obs.addInterpretation(interpConcept);
+                    
+                    if(xnkq.thamChieu != null) {
+                        var range = obs.addReferenceRange();
+                        range.setLow(new Quantity(xnkq.thamChieu.giaTriDuoi));
+                        range.setHigh(new Quantity(xnkq.thamChieu.giaTriTren));
+                    }
+                    
                     obs.setValue(new StringType(xnkq.giaTriDo));
                     obs.setIssued(ngayThucHien);
                     obs.setPerformer(listOf(CanboYte.toRef(bacSiXetNghiem)));

@@ -1,5 +1,6 @@
 package vn.ehealth.emr.dto.diagnostic;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.hl7.fhir.r4.model.Observation;
@@ -16,9 +17,16 @@ import vn.ehealth.emr.dto.ReferenceDTO;
 @JsonInclude(Include.NON_NULL)
 public class ObservationDTO extends BaseDTO{
 
+    public static class ObservationReferenceRangeDTO {
+        BigDecimal low;
+        BigDecimal high;
+    }
+    
     public ReferenceDTO patient;
     public ReferenceDTO encounter;
     public ConceptDTO code;
+    public ConceptDTO interpretation;
+    public ObservationReferenceRangeDTO referenceRange;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date issued;
@@ -41,6 +49,21 @@ public class ObservationDTO extends BaseDTO{
         
         if(obj.getValue() instanceof PrimitiveType) {
             dto.value = ((PrimitiveType<?>) obj.getValue()).getValueAsString();
+        }
+        
+        dto.interpretation = ConceptDTO.fromFhir(obj.getInterpretationFirstRep());
+        
+        if(obj.hasReferenceRange()) {
+            var range = obj.getReferenceRangeFirstRep();
+            dto.referenceRange = new ObservationReferenceRangeDTO();
+            
+            if(range.hasLow()) {
+                dto.referenceRange.low = range.getLow().getValue();                
+            }
+            
+            if(range.hasHigh()) {
+                dto.referenceRange.high = range.getHigh().getValue();
+            }
         }
         
         return dto;
