@@ -20,6 +20,7 @@ import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Range;
 import org.hl7.fhir.r4.model.Ratio;
 import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.SampledData;
 import org.hl7.fhir.r4.model.Timing;
 import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.UsageContext;
@@ -60,6 +61,7 @@ public class BaseType {
             put(Ratio.class, BaseRatio.class);            
             put(Timing.class, BaseTiming.class);
             put(UsageContext.class, UsageContext.class);
+            put(SampledData.class, BaseSampledData.class);
             
         }        
     };

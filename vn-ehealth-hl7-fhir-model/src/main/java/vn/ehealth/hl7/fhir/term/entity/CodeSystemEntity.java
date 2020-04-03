@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
@@ -37,7 +38,7 @@ public class CodeSystemEntity extends BaseResource {
     
     public static class ConceptDefinitionDesignation {
         public String language;
-        public String use;
+        public BaseCoding use;
         public String value;
     }
     

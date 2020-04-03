@@ -49,6 +49,8 @@ public class ModelVerification {
         check(BaseTiming.class, Timing.class);
         check(BaseTiming.BaseTimingRepeat.class, Timing.TimingRepeatComponent.class);
         check(BaseUsageContext.class, UsageContext.class);
+        check(BaseAge.class, Age.class);
+        check(BaseSampledData.class, SampledData.class);
         
         // clinical
         check(AllergyIntoleranceEntity.class, AllergyIntolerance.class);

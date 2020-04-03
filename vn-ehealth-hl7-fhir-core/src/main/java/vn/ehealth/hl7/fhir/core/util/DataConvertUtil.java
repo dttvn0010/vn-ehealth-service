@@ -280,13 +280,25 @@ public class DataConvertUtil {
     private static Object getFhirFieldValue(Object obj, String fieldName) {
         if(obj == null) return null;
         try {
-            var getter = getGetter(obj.getClass(), fieldName);
             
             var hasFieldMethod = getHasFieldMethod(obj.getClass(), fieldName);
             Boolean hasField = true;
             if(hasFieldMethod != null) hasField = (Boolean) hasFieldMethod.invoke(obj);
             
             if(hasField != null && hasField) {
+                
+                if(fieldName.endsWith("_")) {
+                    String modifiedFieldName = fieldName.substring(0, fieldName.length()-1);
+                    var getter = getGetter(obj.getClass(), modifiedFieldName);
+                    try {
+                        return getter.invoke(obj);
+                    }catch(Exception e) {
+                        logger.error(String.format("Fail to execute method %s for class %s", 
+                                        getter.getName(), obj.getClass().getName()));
+                    }
+                }
+                
+                var getter = getGetter(obj.getClass(), fieldName);
                 return getter.invoke(obj);
             }
             return null;
