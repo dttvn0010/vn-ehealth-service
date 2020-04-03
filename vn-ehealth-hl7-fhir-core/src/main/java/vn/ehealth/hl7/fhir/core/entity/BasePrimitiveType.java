@@ -10,6 +10,7 @@ import org.hl7.fhir.r4.model.CodeType;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DateType;
 import org.hl7.fhir.r4.model.DecimalType;
+import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.MarkdownType;
 import org.hl7.fhir.r4.model.PositiveIntType;
@@ -114,6 +115,10 @@ public class BasePrimitiveType extends BaseSimpleType {
         
         if(DateTimeType.class.getName().equals(className)) {
             return new DateTimeType((Date) value);
+        }
+        
+        if(InstantType.class.getName().equals(className)) {
+            return new InstantType((Date) value);
         }
         
         if(Base64BinaryType.class.getName().equals(className)) {
