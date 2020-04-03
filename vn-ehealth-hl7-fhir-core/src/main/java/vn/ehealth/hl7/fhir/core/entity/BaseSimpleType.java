@@ -3,8 +3,10 @@ package vn.ehealth.hl7.fhir.core.entity;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hl7.fhir.r4.model.Age;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.Duration;
 import org.hl7.fhir.r4.model.Period;
 import org.hl7.fhir.r4.model.PrimitiveType;
 import org.hl7.fhir.r4.model.Quantity;
@@ -31,6 +33,8 @@ public class BaseSimpleType extends BaseType {
             put(Ratio.class, BaseRatio.class);
             put(Range.class, BaseRange.class);
             put(Reference.class, BaseReference.class);
+            put(Duration.class, BaseDuration.class);
+            put(Age.class, BaseAge.class);
         }
     };
     

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.hl7.fhir.r4.model.Address;
+import org.hl7.fhir.r4.model.Age;
 import org.hl7.fhir.r4.model.Annotation;
 import org.hl7.fhir.r4.model.Attachment;
 import org.hl7.fhir.r4.model.CodeableConcept;
@@ -40,6 +41,9 @@ public class BaseType {
             put(Quantity.class, BaseQuantity.class);
             put(Ratio.class, BaseRatio.class);
             put(Range.class, BaseRange.class);
+            put(Duration.class, BaseDuration.class);
+            put(Reference.class, BaseReference.class);
+            put(Age.class, BaseAge.class);
             
             put(Address.class, BaseAddress.class);            
             put(Annotation.class, BaseAnnotation.class);
@@ -47,15 +51,13 @@ public class BaseType {
             put(CodeableConcept.class, BaseCodeableConcept.class);
             put(Coding.class, BaseCoding.class);
             put(ContactPoint.class, BaseContactPoint.class);
-            put(Dosage.class, BaseDosage.class);
-            put(Duration.class, BaseDuration.class);
+            put(Dosage.class, BaseDosage.class);            
             put(HumanName.class, BaseHumanName.class);
             put(Identifier.class, BaseIdentifier.class);
             put(Period.class, BasePeriod.class);
             put(Quantity.class, BaseQuantity.class);
             put(Range.class, BaseRange.class);
-            put(Ratio.class, BaseRatio.class);
-            put(Reference.class, BaseReference.class);
+            put(Ratio.class, BaseRatio.class);            
             put(Timing.class, BaseTiming.class);
             put(UsageContext.class, UsageContext.class);
             

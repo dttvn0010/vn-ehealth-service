@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
+import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseRatio;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -32,12 +33,14 @@ public class MedicationEntity extends BaseResource {
     
     @Id
     public ObjectId id;
+    public List<BaseIdentifier> identifier; 
     public BaseCodeableConcept code;
     public String status;
     //public Boolean isBrand;
     //public Boolean isOverTheCounter;
     public BaseReference manufacturer;
     public BaseCodeableConcept form;
+    public BaseRatio amount;
     public MedicationBatch batch;
     
     public List<MedicationIngredient> ingredient;

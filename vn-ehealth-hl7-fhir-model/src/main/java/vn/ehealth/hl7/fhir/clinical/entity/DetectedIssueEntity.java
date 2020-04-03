@@ -26,7 +26,7 @@ public class DetectedIssueEntity extends BaseResource {
     }
     
     public static class DetectedIssueEvidence {
-        public BaseCodeableConcept code;
+        public List<BaseCodeableConcept> code;
         public List<BaseReference> detail;
     }
     

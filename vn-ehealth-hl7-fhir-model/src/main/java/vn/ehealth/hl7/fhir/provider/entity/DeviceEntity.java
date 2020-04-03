@@ -29,7 +29,7 @@ public class DeviceEntity extends BaseResource {
         public String name;
         public String jurisdiction;
         public String carrierHRF;
-        public String carrierAIDC;
+        public byte[] carrierAIDC;
         public String issuer;
         public String entryType;
     }

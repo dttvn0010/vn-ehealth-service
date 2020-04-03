@@ -116,6 +116,7 @@ public class ModelVerification {
         check(EpisodeOfCareEntity.Diagnosis.class, EpisodeOfCare.DiagnosisComponent.class);
         
         // medication
+        check(MedicationEntity.class, Medication.class);
         check(ImmunizationEntity.class, Immunization.class);
         check(ImmunizationEntity.ImmunizationPerformer.class, Immunization.ImmunizationPerformerComponent.class);
         check(ImmunizationEntity.ImmunizationReaction.class, Immunization.ImmunizationReactionComponent.class);

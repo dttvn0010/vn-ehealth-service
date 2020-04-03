@@ -51,7 +51,7 @@ public class EncounterEntity extends BaseResource{
         public Integer rank;
     }
     
-    public class Hospitalization{
+    public static class Hospitalization{
         public BaseIdentifier preAdmissionIdentifier;
         public BaseReference origin;
         public BaseCodeableConcept admitSource;
@@ -75,7 +75,7 @@ public class EncounterEntity extends BaseResource{
     public BaseCodeableConcept priority;
     public BaseReference subject;
     public List<BaseReference> episodeOfCare;
-    public BaseReference basedOn;
+    public List<BaseReference> basedOn;
     public List<BaseReference> reasonReference;
     public List<EncounterParticipant> participant;
     public List<BaseReference> appointment;
