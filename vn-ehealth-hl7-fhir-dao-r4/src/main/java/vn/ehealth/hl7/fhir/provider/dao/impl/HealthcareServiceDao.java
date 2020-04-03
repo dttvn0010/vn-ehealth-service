@@ -84,6 +84,7 @@ public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, Healt
 			StringParam programname, TokenParam type, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
 			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
+		criteria = Criteria.where("$where").is("1==1");
 		// default
 		criteria = DatabaseUtil.addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
 				identifier);

@@ -126,9 +126,17 @@ public class DataConvertUtil {
         
         for(var method : clazz.getMethods()) {
             if(method.getParameterCount() != 1) continue;            
-            if(!setterName.equals(method.getName())) continue;
             
-            methods.add(method);
+            if(setterName.equals(method.getName())){            
+                methods.add(method);
+            }
+            
+            if(fieldName.endsWith("_")) {
+                var modifiedSetterName = setterName.substring(0, setterName.length()-1);
+                if(modifiedSetterName.equals(method.getName())){            
+                    methods.add(method);
+                }
+            }
         }
         return methods;
     }

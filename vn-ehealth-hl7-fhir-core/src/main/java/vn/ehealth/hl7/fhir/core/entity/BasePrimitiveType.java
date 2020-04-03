@@ -15,6 +15,7 @@ import org.hl7.fhir.r4.model.MarkdownType;
 import org.hl7.fhir.r4.model.PositiveIntType;
 import org.hl7.fhir.r4.model.PrimitiveType;
 import org.hl7.fhir.r4.model.StringType;
+import org.hl7.fhir.r4.model.TimeType;
 import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.UnsignedIntType;
 import org.hl7.fhir.r4.model.UriType;
@@ -36,6 +37,10 @@ public class BasePrimitiveType extends BaseSimpleType {
         if(obj != null) {
             this.value = obj.getValue();
             this.className = obj.getClass().getName();
+            
+            if(value instanceof String) {
+                System.out.println("???????===========================" + value + "," + className);
+            }
         }
     }
     
@@ -69,6 +74,9 @@ public class BasePrimitiveType extends BaseSimpleType {
         }
         
         if(DecimalType.class.getName().equals(className)) {
+            if(value instanceof String) {
+                System.out.println("===========================" + value + "," + className);
+            }
             return new DecimalType((BigDecimal) value);
         }
         
@@ -94,6 +102,10 @@ public class BasePrimitiveType extends BaseSimpleType {
         
         if(CodeType.class.getName().equals(className)) {
             return new CodeType((String) value);
+        }
+        
+        if(TimeType.class.getName().equals(className)) {
+            return new TimeType((String) value);
         }
         
         if(DateType.class.getName().equals(className)) {
