@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -31,9 +32,10 @@ public class AppointmentResponseDao extends BaseDao<AppointmentResponseEntity, A
 	@SuppressWarnings("deprecation")
 	public List<Resource> search(FhirContext fhirContext, ReferenceParam actor, TokenParam identifier,
 			ReferenceParam appointment, ReferenceParam location, ReferenceParam patient, ReferenceParam practitioner,
-			TokenParam partStatus, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
-			TokenParam _query, TokenParam _security, StringParam _content, StringParam _page, String sortParam,
-			Integer count) {
+			TokenParam partStatus,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count) {
 
 		List<Resource> resources = new ArrayList<>();
 
@@ -44,7 +46,8 @@ public class AppointmentResponseDao extends BaseDao<AppointmentResponseEntity, A
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -147,9 +150,9 @@ public class AppointmentResponseDao extends BaseDao<AppointmentResponseEntity, A
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return AppointmentResponse.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return AppointmentResponse.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

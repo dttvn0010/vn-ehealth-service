@@ -34,9 +34,10 @@ public class ImmunizationDao extends BaseDao<ImmunizationEntity, Immunization> {
 			TokenParam identifier, ReferenceParam location, StringParam lotNumber, ReferenceParam manufacturer,
 			TokenParam notgiven, ReferenceParam patient, ReferenceParam practitioner, ReferenceParam reaction,
 			DateRangeParam reactionDate, TokenParam reason, TokenParam reasonNotGiven, TokenParam status,
-			TokenParam vaccineCode, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
-			TokenParam _query, TokenParam _security, StringParam _content, StringParam _page, String sortParam,
-			Integer count) {
+			TokenParam vaccineCode,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count) {
 		List<Resource> resources = new ArrayList<>();
 		Criteria criteria = setParamToCriteria(date, doseSequence, identifier, location, lotNumber, manufacturer,
 				notgiven, patient, practitioner, reaction, reactionDate, reason, reasonNotGiven, status, vaccineCode,
@@ -46,7 +47,8 @@ public class ImmunizationDao extends BaseDao<ImmunizationEntity, Immunization> {
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -196,9 +198,9 @@ public class ImmunizationDao extends BaseDao<ImmunizationEntity, Immunization> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return Immunization.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return Immunization.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

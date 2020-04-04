@@ -26,6 +26,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -84,7 +85,7 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
-			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count,
+			@OptionalParam(name = ConstantKeys.SP_PAGE) NumberParam _page, @Sort SortSpec theSort, @Count Integer count,
 			@IncludeParam(allow = { "AllergyIntorance:patient", "AllergyIntorance:encounter",
 					"*" }) Set<Include> includes)
 			throws OperationOutcomeException {
@@ -93,7 +94,7 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 					new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
 		} else {
-			List<IBaseResource> results = new ArrayList<IBaseResource>();			
+			List<IBaseResource> results = new ArrayList<IBaseResource>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
 				results = baseDao.search(encounter, asserter, category, clinicalStatus, code, criticality, date,
@@ -115,9 +116,9 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(baseDao.countMatchesAdvancedTotal(encounter,
-							asserter, category, clinicalStatus, code, criticality, date, identifier, lastDate,
-							manifestation, onset, patient, recorder, route, severity, type, verificationStatus,
+					return Integer.parseInt(String.valueOf(baseDao.countMatchesAdvancedTotal(encounter, asserter,
+							category, clinicalStatus, code, criticality, date, identifier, lastDate, manifestation,
+							onset, patient, recorder, route, severity, type, verificationStatus,
 							// COMMON PARAMS
 							resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
 				}
@@ -176,8 +177,8 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = baseDao.countMatchesAdvancedTotal(encounter, asserter, category, clinicalStatus, code,
-				criticality, date, identifier, lastDate, manifestation, onset, patient, recorder, route, severity, type,
+		long total = baseDao.countMatchesAdvancedTotal(encounter, asserter, category, clinicalStatus, code, criticality,
+				date, identifier, lastDate, manifestation, onset, patient, recorder, route, severity, type,
 				verificationStatus,
 				// COMMON PARAMS
 				resid, _lastUpdated, _tag, _profile, _query, _security, _content);

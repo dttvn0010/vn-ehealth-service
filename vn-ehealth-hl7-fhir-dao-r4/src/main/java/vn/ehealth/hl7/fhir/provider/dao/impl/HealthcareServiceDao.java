@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -31,9 +32,10 @@ public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, Healt
 	@SuppressWarnings("deprecation")
 	public List<Resource> search(FhirContext fhirContext, TokenParam category, TokenParam characteristic,
 			ReferenceParam endpoint, TokenParam identifier, ReferenceParam location, StringParam name,
-			ReferenceParam organization, StringParam programname, TokenParam type, TokenParam resid,
-			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-			StringParam _content, StringParam _page, String sortParam, Integer count) {
+			ReferenceParam organization, StringParam programname, TokenParam type,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count) {
 		List<Resource> resources = new ArrayList<>();
 		Criteria criteria = null;
 		criteria = setParamToCriteria(category, characteristic, endpoint, identifier, location, name, organization,
@@ -44,7 +46,8 @@ public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, Healt
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -146,9 +149,9 @@ public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, Healt
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return HealthcareService.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return HealthcareService.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

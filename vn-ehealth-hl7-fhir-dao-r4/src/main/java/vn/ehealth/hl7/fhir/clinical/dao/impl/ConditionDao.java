@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.QuantityParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
@@ -41,9 +42,11 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 			TokenParam code, ReferenceParam context, ReferenceParam Condition, TokenParam evidence,
 			ReferenceParam evidenceDetail, TokenParam identifier, QuantityParam onsetAge, DateRangeParam onsetDate,
 			StringParam onsetInfo, ReferenceParam patient, TokenParam severity, TokenParam stage,
-			ReferenceParam subject, TokenParam verificationStatus, TokenParam resid, DateRangeParam _lastUpdated,
-			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content,
-			StringParam _page, String sortParam, Integer count, Set<Include> includes) {
+			ReferenceParam subject, TokenParam verificationStatus,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count,
+			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<>();
 		Criteria criteria = setParamToCriteria(abatementAge, abatementBoolean, abatementDate, abatementString,
 				assertedDate, asserter, bodySite, category, clinicalStatus, code, context, Condition, evidence,
@@ -54,14 +57,15 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
 			query.with(new Sort(Sort.Direction.DESC, sortParam));
 		} else {
-        	query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
-        	query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
 
 		String[] keys = { "subject", "encounter", "asserter", "recorder" };
@@ -264,10 +268,10 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return Condition.class;
-    }
-	
+	protected Class<? extends DomainResource> getResourceClass() {
+		return Condition.class;
+	}
+
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return ConditionEntity.class;

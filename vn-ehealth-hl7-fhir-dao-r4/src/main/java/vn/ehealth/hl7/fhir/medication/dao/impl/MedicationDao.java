@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -33,9 +34,10 @@ public class MedicationDao extends BaseDao<MedicationEntity, Medication> {
 	public List<Resource> search(FhirContext fhirContext, TokenParam code, TokenParam container, TokenParam form,
 			ReferenceParam ingredient, TokenParam ingredientCode, ReferenceParam manufacturer,
 			TokenParam overTheCounter, ReferenceParam packageItem, TokenParam packageItemCode, TokenParam status,
+			TokenParam hospital, StringParam productName, StringParam medicationType,
+			// COMMON
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
-			TokenParam _security, StringParam _content, TokenParam hospital, StringParam productName,
-			StringParam medicationType, StringParam _page, String sortParam, Integer count) {
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count) {
 		List<Resource> resources = new ArrayList<>();
 		Criteria criteria = setParamToCriteria(code, container, form, ingredient, ingredientCode, manufacturer,
 				overTheCounter, packageItem, packageItemCode, status, resid, _lastUpdated, _tag, _profile, _query,
@@ -45,7 +47,8 @@ public class MedicationDao extends BaseDao<MedicationEntity, Medication> {
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -182,9 +185,9 @@ public class MedicationDao extends BaseDao<MedicationEntity, Medication> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return Medication.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return Medication.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

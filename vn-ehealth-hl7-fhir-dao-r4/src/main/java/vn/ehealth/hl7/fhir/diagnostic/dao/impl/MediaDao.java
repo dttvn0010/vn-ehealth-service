@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -36,9 +37,9 @@ public class MediaDao extends BaseDao<MediaEntity, Media> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return Media.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return Media.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
@@ -52,7 +53,7 @@ public class MediaDao extends BaseDao<MediaEntity, Media> {
 			TokenParam view,
 			// COMMON PARAMS
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
-			TokenParam _security, StringParam _content, StringParam _page, String sortParam, Integer count,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count,
 			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<>();
 		Criteria criteria = setParamToCriteria(basedOn, created, device, encounter, identifier, modality, operator,
@@ -64,7 +65,8 @@ public class MediaDao extends BaseDao<MediaEntity, Media> {
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {

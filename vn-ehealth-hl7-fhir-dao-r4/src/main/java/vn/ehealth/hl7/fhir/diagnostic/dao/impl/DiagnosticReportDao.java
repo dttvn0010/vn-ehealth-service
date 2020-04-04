@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -36,9 +37,11 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
 			TokenParam code, ReferenceParam conetext, DateRangeParam date, TokenParam diagnosis,
 			ReferenceParam encounter, TokenParam identifier, ReferenceParam image, DateRangeParam issued,
 			ReferenceParam patient, ReferenceParam performer, ReferenceParam result, ReferenceParam specimen,
-			TokenParam status, ReferenceParam subject, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
-			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content, StringParam _page,
-			String sortParam, Integer count, Set<Include> includes) {
+			TokenParam status, ReferenceParam subject,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count,
+			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<>();
 		Criteria criteria = setParamToCriteria(basedOn, category, code, conetext, date, diagnosis, encounter,
 				identifier, image, issued, patient, performer, result, specimen, status, subject, resid, _lastUpdated,
@@ -48,7 +51,8 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -155,9 +159,9 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return DiagnosticReport.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return DiagnosticReport.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
@@ -32,9 +33,11 @@ import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 public class ImagingStudyDao extends BaseDao<ImagingStudyEntity, ImagingStudy> {
 
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(FhirContext fhirContext, TokenParam resid, DateRangeParam _lastUpdated,
-			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content,
-			StringParam _page, String sortParam, Integer count, Set<Include> includes) {
+	public List<IBaseResource> search(FhirContext fhirContext,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count,
+			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<>();
 		Criteria criteria = setParamToCriteria(resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		Query query = new Query();
@@ -42,7 +45,8 @@ public class ImagingStudyDao extends BaseDao<ImagingStudyEntity, ImagingStudy> {
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -130,9 +134,9 @@ public class ImagingStudyDao extends BaseDao<ImagingStudyEntity, ImagingStudy> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return ImagingStudy.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return ImagingStudy.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

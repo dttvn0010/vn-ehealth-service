@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -34,9 +35,11 @@ public class GoalDao extends BaseDao<GoalEntity, Goal> {
 	@SuppressWarnings("deprecation")
 	public List<IBaseResource> search(FhirContext fhirContext, TokenParam category, TokenParam identifier,
 			ReferenceParam patient, DateRangeParam startDate, TokenParam status, ReferenceParam subject,
-			DateRangeParam targetDate, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
-			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content, StringParam _page,
-			String sortParam, Integer count, Set<Include> includes) {
+			DateRangeParam targetDate,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count,
+			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<>();
 		Criteria criteria = setParamToCriteria(category, identifier, patient, startDate, status, subject, targetDate,
 				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
@@ -45,7 +48,8 @@ public class GoalDao extends BaseDao<GoalEntity, Goal> {
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -155,9 +159,9 @@ public class GoalDao extends BaseDao<GoalEntity, Goal> {
 		return GoalEntity.class;
 	}
 
-    @Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return Goal.class;
-    }
+	@Override
+	protected Class<? extends DomainResource> getResourceClass() {
+		return Goal.class;
+	}
 
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
@@ -44,9 +45,10 @@ public class ConceptMapDao extends BaseDao<ConceptMapEntity, ConceptMap> {
 	public List<Resource> search(FhirContext ctx, DateRangeParam date, UriParam dependson, StringParam description,
 			TokenParam identifier, TokenParam jurisdiction, StringParam name, UriParam other, UriParam product,
 			StringParam publisher, TokenParam code, UriParam source, TokenParam status, UriParam target,
-			StringParam title, UriParam url, TokenParam version, TokenParam resid, DateRangeParam _lastUpdated,
-			TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content,
-			StringParam _page, String sortParam, Integer count) {
+			StringParam title, UriParam url, TokenParam version,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count) {
 		List<Resource> resources = new ArrayList<>();
 		Criteria criteria = setParamToCriteria(date, dependson, description, identifier, jurisdiction, name, other,
 				product, publisher, code, source, status, target, title, url, version, resid, _lastUpdated, _tag,
@@ -55,7 +57,8 @@ public class ConceptMapDao extends BaseDao<ConceptMapEntity, ConceptMap> {
 		if (criteria != null) {
 			Query query = Query.query(criteria);
 			Pageable pageableRequest;
-			pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+			pageableRequest = new PageRequest(
+					_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 					count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 			query.with(pageableRequest);
 			if (sortParam != null && !sortParam.equals("")) {
@@ -86,7 +89,7 @@ public class ConceptMapDao extends BaseDao<ConceptMapEntity, ConceptMap> {
 						groupElementEntity.unmapped = (unMapped);
 						groupTmps.add(groupElementEntity);
 					}
-					//TODO: conceptMapEntity.group = (groupTmps);
+					// TODO: conceptMapEntity.group = (groupTmps);
 					ConceptMap conceptMap = transform(conceptMapEntity);
 					resources.add(conceptMap);
 				}
@@ -284,9 +287,9 @@ public class ConceptMapDao extends BaseDao<ConceptMapEntity, ConceptMap> {
 		return ConceptMapEntity.class;
 	}
 
-    @Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return ConceptMap.class;
-    }
+	@Override
+	protected Class<? extends DomainResource> getResourceClass() {
+		return ConceptMap.class;
+	}
 
 }

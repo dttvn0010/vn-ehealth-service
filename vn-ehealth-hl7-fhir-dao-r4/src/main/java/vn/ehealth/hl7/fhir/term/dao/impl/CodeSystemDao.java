@@ -22,6 +22,7 @@ import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
@@ -48,9 +49,10 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 	public List<Resource> search(FhirContext fhirContext, DateRangeParam date, TokenParam identifier, StringParam name,
 			TokenParam code, TokenParam contentMode, StringParam description, TokenParam jurisdiction,
 			TokenParam language, StringParam publisher, TokenParam status, UriParam system, StringParam title,
-			UriParam url, TokenParam version, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
-			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content, StringParam _page,
-			String sortParam, Integer count) {
+			UriParam url, TokenParam version,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count) {
 		List<Resource> resources = new ArrayList<>();
 		Criteria criteria = null;
 		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
@@ -95,7 +97,8 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 		if (criteria != null) {
 			Query query = Query.query(criteria);
 			Pageable pageableRequest;
-			pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+			pageableRequest = new PageRequest(
+					_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 					count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 			query.with(pageableRequest);
 			if (sortParam != null && !sortParam.equals("")) {
@@ -223,9 +226,11 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 	}
 
 	public Parameters getLookupParams(TokenParam code, UriParam system, StringParam version, Coding coding,
-			DateRangeParam date, TokenParam displayLanguage, TokenParam property, TokenParam resid,
+			DateRangeParam date, TokenParam displayLanguage, TokenParam property, 
+			// COMMON
+			TokenParam resid,
 			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-			StringParam _content, StringParam _page) {
+			StringParam _content) {
 		Parameters retVal = new Parameters();
 		Criteria criteria = null;
 		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);

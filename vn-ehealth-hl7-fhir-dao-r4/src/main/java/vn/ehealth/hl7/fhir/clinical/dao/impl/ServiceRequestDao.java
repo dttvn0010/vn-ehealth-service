@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -39,8 +40,9 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
 			TokenParam code, ReferenceParam context, DateRangeParam date, ReferenceParam definition,
 			ReferenceParam encounter, TokenParam identifier, ReferenceParam location, ReferenceParam partOf,
 			ReferenceParam patient, ReferenceParam performer, TokenParam status, ReferenceParam subject,
+			// COMMON
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
-			TokenParam _security, StringParam _content, StringParam _page, String sortParam, Integer count,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count,
 			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
 		Criteria criteria = setParamToCriteria(basedOn, category, code, context, date, definition, encounter,
@@ -51,7 +53,8 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -271,9 +274,9 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return ServiceRequest.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return ServiceRequest.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

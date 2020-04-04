@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -32,9 +33,10 @@ public class DeviceDao extends BaseDao<DeviceEntity, Device> {
 	public List<Resource> search(FhirContext ctx, StringParam deviceName, TokenParam identifier,
 			ReferenceParam location, StringParam manufacturer, StringParam model, ReferenceParam organization,
 			ReferenceParam patient, StringParam udiCarrier, StringParam udiDi, UriParam url, TokenParam status,
-			TokenParam type, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
-			TokenParam _query, TokenParam _security, StringParam _content, StringParam _page, String sortParam,
-			Integer count) {
+			TokenParam type,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count) {
 
 		List<Resource> resources = new ArrayList<>();
 		Criteria criteria = setParamToCriteria(deviceName, identifier, location, manufacturer, model, organization,
@@ -45,7 +47,8 @@ public class DeviceDao extends BaseDao<DeviceEntity, Device> {
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -159,9 +162,9 @@ public class DeviceDao extends BaseDao<DeviceEntity, Device> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return Device.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return Device.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

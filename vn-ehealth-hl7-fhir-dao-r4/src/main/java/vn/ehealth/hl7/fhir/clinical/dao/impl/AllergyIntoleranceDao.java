@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -41,25 +42,25 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 	protected Class<? extends BaseResource> getEntityClass() {
 		return AllergyIntoleranceEntity.class;
 	}
-	
+
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return AllergyIntolerance.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return AllergyIntolerance.class;
+	}
 
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(TokenParam encounter, ReferenceParam asserter,
-			TokenParam category, TokenParam clinicalStatus, TokenParam code, TokenParam criticality,
-			DateRangeParam date, TokenParam identifier, DateRangeParam lastDate, TokenParam manifestation,
-			DateRangeParam onset, ReferenceParam patient, ReferenceParam recorder, TokenParam route,
-			TokenParam severity, TokenParam type, TokenParam verificationStatus,
+	public List<IBaseResource> search(TokenParam encounter, ReferenceParam asserter, TokenParam category,
+			TokenParam clinicalStatus, TokenParam code, TokenParam criticality, DateRangeParam date,
+			TokenParam identifier, DateRangeParam lastDate, TokenParam manifestation, DateRangeParam onset,
+			ReferenceParam patient, ReferenceParam recorder, TokenParam route, TokenParam severity, TokenParam type,
+			TokenParam verificationStatus,
 			// COMMON PARAMS
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
-			TokenParam _security, StringParam _content, StringParam _page, String sortParam, Integer count,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count,
 			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
-		Criteria criteria = setParamToCriteria(encounter, asserter, category, clinicalStatus, code, criticality,
-				date, identifier, lastDate, manifestation, onset, patient, recorder, route, severity, type,
+		Criteria criteria = setParamToCriteria(encounter, asserter, category, clinicalStatus, code, criticality, date,
+				identifier, lastDate, manifestation, onset, patient, recorder, route, severity, type,
 				verificationStatus,
 				// COMMON PARAMS
 				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
@@ -68,7 +69,8 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -77,49 +79,49 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
 			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
-		
-		String[] keys = {"patient", "encounter", "asserter", "asserter",  "recorder"};
 
-        var includeMap = getIncludeMap(ResourceType.AllergyIntolerance, keys, includes);
-        
+		String[] keys = { "patient", "encounter", "asserter", "asserter", "recorder" };
+
+		var includeMap = getIncludeMap(ResourceType.AllergyIntolerance, keys, includes);
+
 		List<AllergyIntoleranceEntity> entitys = mongo.find(query, AllergyIntoleranceEntity.class);
 		if (entitys != null && entitys.size() > 0) {
 			for (AllergyIntoleranceEntity item : entitys) {
 				AllergyIntolerance obj = transform(item);
-				
-				if(includeMap.get("patient") && obj.hasPatient()) {
-				    setReferenceResource(obj.getPatient());
+
+				if (includeMap.get("patient") && obj.hasPatient()) {
+					setReferenceResource(obj.getPatient());
 				}
-				
-				if(includeMap.get("encounter") && obj.hasEncounter()) {
-				    setReferenceResource(obj.getEncounter());
+
+				if (includeMap.get("encounter") && obj.hasEncounter()) {
+					setReferenceResource(obj.getEncounter());
 				}
-				
-				if(includeMap.get("asserter") && obj.hasAsserter()) {
-				    setReferenceResource(obj.getAsserter());
+
+				if (includeMap.get("asserter") && obj.hasAsserter()) {
+					setReferenceResource(obj.getAsserter());
 				}
-				
-				if(includeMap.get("recorder") && obj.hasRecorder()) {
-                    setReferenceResource(obj.getRecorder());
-                }
-				
+
+				if (includeMap.get("recorder") && obj.hasRecorder()) {
+					setReferenceResource(obj.getRecorder());
+				}
+
 				resources.add(obj);
 			}
-		} 
+		}
 		return null;
 	}
 
-	public long countMatchesAdvancedTotal(TokenParam encounter, ReferenceParam asserter,
-			TokenParam category, TokenParam clinicalStatus, TokenParam code, TokenParam criticality,
-			DateRangeParam date, TokenParam identifier, DateRangeParam lastDate, TokenParam manifestation,
-			DateRangeParam onset, ReferenceParam patient, ReferenceParam recorder, TokenParam route,
-			TokenParam severity, TokenParam type, TokenParam verificationStatus,
+	public long countMatchesAdvancedTotal(TokenParam encounter, ReferenceParam asserter, TokenParam category,
+			TokenParam clinicalStatus, TokenParam code, TokenParam criticality, DateRangeParam date,
+			TokenParam identifier, DateRangeParam lastDate, TokenParam manifestation, DateRangeParam onset,
+			ReferenceParam patient, ReferenceParam recorder, TokenParam route, TokenParam severity, TokenParam type,
+			TokenParam verificationStatus,
 			// COMMON PARAMS
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
 			TokenParam _security, StringParam _content) {
 		long total = 0;
-		Criteria criteria = setParamToCriteria(encounter, asserter, category, clinicalStatus, code, criticality,
-				date, identifier, lastDate, manifestation, onset, patient, recorder, route, severity, type,
+		Criteria criteria = setParamToCriteria(encounter, asserter, category, clinicalStatus, code, criticality, date,
+				identifier, lastDate, manifestation, onset, patient, recorder, route, severity, type,
 				verificationStatus,
 				// COMMON PARAMS
 				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
@@ -131,11 +133,11 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 		return total;
 	}
 
-	private Criteria setParamToCriteria(TokenParam encounter, ReferenceParam asserter,
-			TokenParam category, TokenParam clinicalStatus, TokenParam code, TokenParam criticality,
-			DateRangeParam date, TokenParam identifier, DateRangeParam lastDate, TokenParam manifestation,
-			DateRangeParam onset, ReferenceParam patient, ReferenceParam recorder, TokenParam route,
-			TokenParam severity, TokenParam type, TokenParam verificationStatus,
+	private Criteria setParamToCriteria(TokenParam encounter, ReferenceParam asserter, TokenParam category,
+			TokenParam clinicalStatus, TokenParam code, TokenParam criticality, DateRangeParam date,
+			TokenParam identifier, DateRangeParam lastDate, TokenParam manifestation, DateRangeParam onset,
+			ReferenceParam patient, ReferenceParam recorder, TokenParam route, TokenParam severity, TokenParam type,
+			TokenParam verificationStatus,
 			// COMMON PARAMS
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
 			TokenParam _security, StringParam _content) {
@@ -143,8 +145,7 @@ public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, All
 		// active
 		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// set param default
-		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
-				identifier);
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, identifier);
 //		// category
 //		if (category != null) {
 //			criteria.and("category.coding.code.myStringValue").is(category.getValue());

@@ -21,7 +21,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.NumberParam;
-import ca.uhn.fhir.rest.param.StringParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
@@ -196,7 +195,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
 		}
 		if (criteria != null) {
 			Query qry = Query.query(criteria);
-			if (_page != null && count > 0) {
+			if (_page != null && _page.getValue().intValue() > 0 && count > 0) {
 				Pageable pageableRequest;
 				pageableRequest = new PageRequest(
 						_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,

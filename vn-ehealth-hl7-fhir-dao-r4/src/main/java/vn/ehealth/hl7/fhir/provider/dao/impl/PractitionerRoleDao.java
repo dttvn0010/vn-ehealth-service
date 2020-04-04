@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -31,9 +32,10 @@ public class PractitionerRoleDao extends BaseDao<PractitionerRoleEntity, Practit
 	public List<Resource> search(FhirContext fhirContext, DateRangeParam date, TokenParam email,
 			ReferenceParam endpoint, TokenParam identifier, ReferenceParam location, ReferenceParam organization,
 			TokenParam phone, ReferenceParam practitioner, TokenParam role, ReferenceParam service,
-			TokenParam specialty, TokenParam telecom, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
-			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content, StringParam _page,
-			String sortParam, Integer count) {
+			TokenParam specialty, TokenParam telecom,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count) {
 		List<Resource> resources = new ArrayList<>();
 		Criteria criteria = null;
 		criteria = setParamToCriteria(date, email, endpoint, identifier, location, organization, phone, practitioner,
@@ -43,7 +45,8 @@ public class PractitionerRoleDao extends BaseDao<PractitionerRoleEntity, Practit
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -162,9 +165,9 @@ public class PractitionerRoleDao extends BaseDao<PractitionerRoleEntity, Practit
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return PractitionerRole.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return PractitionerRole.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

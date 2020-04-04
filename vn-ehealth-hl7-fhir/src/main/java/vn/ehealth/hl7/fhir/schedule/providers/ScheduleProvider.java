@@ -24,6 +24,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -52,42 +53,13 @@ public class ScheduleProvider extends BaseController<ScheduleEntity, Schedule> i
 		return Schedule.class;
 	}
 
-//	@Create
-//	public MethodOutcome create(HttpServletRequest theRequest, @ResourceParam Schedule obj) {
-//
-//		log.debug("Create Schedule Provider called");
-//
-//		MethodOutcome method = new MethodOutcome();
-//		method.setCreated(true);
-//		OperationOutcome opOutcome = new OperationOutcome();
-//		method.setOperationOutcome(opOutcome);
-//		Schedule mongoSchedule = null;
-//		try {
-//			mongoSchedule = scheduleDao.create(obj);
-//			List<String> myString = new ArrayList<>();
-//			myString.add("Schedule/" + mongoSchedule.getIdElement());
-//			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
-//					"urn:uuid: " + mongoSchedule.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
-//			method.setId(mongoSchedule.getIdElement());
-//			method.setResource(mongoSchedule);
-//		} catch (Exception ex) {
-//			if (ex instanceof OperationOutcomeException) {
-//				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-//				method.setOperationOutcome(outcomeException.getOutcome());
-//			} else {
-//				log.error(ex.getMessage());
-//				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-//			}
-//		}
-//		return method;
-//	}
-
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
 			@OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
 			@OptionalParam(name = ConstantKeys.SP_TYPE) TokenParam type,
+			// COMMON
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
 			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
@@ -95,7 +67,7 @@ public class ScheduleProvider extends BaseController<ScheduleEntity, Schedule> i
 			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
-			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
+			@OptionalParam(name = ConstantKeys.SP_PAGE) NumberParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(

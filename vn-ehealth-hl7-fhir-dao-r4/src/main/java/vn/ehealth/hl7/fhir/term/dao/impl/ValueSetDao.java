@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
@@ -47,8 +48,9 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 	public List<Resource> search(FhirContext fhirContext, DateRangeParam date, StringParam description,
 			UriParam expansion, TokenParam identifier, TokenParam jurisdiction, StringParam name, StringParam publisher,
 			UriParam reference, TokenParam status, StringParam title, UriParam url, TokenParam version,
+			// COMMON
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
-			TokenParam _security, StringParam _content, StringParam _page, String sortParam, Integer count) {
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count) {
 		List<Resource> resources = new ArrayList<>();
 
 		Criteria criteria = null;
@@ -91,7 +93,8 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 		if (criteria != null) {
 			Query query = Query.query(criteria);
 			Pageable pageableRequest;
-			pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+			pageableRequest = new PageRequest(
+					_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 					count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 			query.with(pageableRequest);
 			if (sortParam != null && !sortParam.equals("")) {
@@ -197,7 +200,8 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 				for (ConceptReferenceDesignationComponent conceptReferenceDesignationComponent : v.getDesignation()) {
 					ConceptReferenceDesignationEntity conceptDesignationEntity = new ConceptReferenceDesignationEntity();
 					conceptDesignationEntity.language = (conceptReferenceDesignationComponent.getLanguage());
-					conceptDesignationEntity.use = DataConvertUtil.fhirToEntity(conceptReferenceDesignationComponent.getUse(), BaseCoding.class);
+					conceptDesignationEntity.use = DataConvertUtil
+							.fhirToEntity(conceptReferenceDesignationComponent.getUse(), BaseCoding.class);
 					conceptDesignationEntity.value = (conceptReferenceDesignationComponent.getValue());
 					conceptDesignationEntitys.add(conceptDesignationEntity);
 				}
@@ -394,19 +398,19 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 		}
 		return resources.size();
 	}
-	
+
 	@Override
-    protected String getProfile() {
-        return "CarePlan-v1.0";
-    }
+	protected String getProfile() {
+		return "CarePlan-v1.0";
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return ValueSetEntity.class;
 	}
 
-    @Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return ValueSet.class;
-    }
+	@Override
+	protected Class<? extends DomainResource> getResourceClass() {
+		return ValueSet.class;
+	}
 }

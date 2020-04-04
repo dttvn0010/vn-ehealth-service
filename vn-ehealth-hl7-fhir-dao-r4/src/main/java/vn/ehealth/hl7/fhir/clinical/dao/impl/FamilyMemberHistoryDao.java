@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -43,9 +44,9 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return FamilyMemberHistory.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return FamilyMemberHistory.class;
+	}
 
 	@SuppressWarnings("deprecation")
 	public List<IBaseResource> search(TokenParam code, DateRangeParam date, TokenParam identifier,
@@ -53,7 +54,7 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 			TokenParam relationship, TokenParam gender, TokenParam status,
 			// Common
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
-			TokenParam _security, StringParam _content, StringParam _page, String sortParam, Integer count,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count,
 			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
 		Criteria criteria = setParamToCriteria(code, date, identifier, patient, status, resid, _lastUpdated, _tag,
@@ -63,7 +64,8 @@ public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, F
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
