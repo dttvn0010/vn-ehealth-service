@@ -27,7 +27,7 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.dao.iPlainDao;
+import vn.ehealth.hl7.fhir.dao.impl.PlainDao;
 
 @Component
 public class PlainProvider {
@@ -39,7 +39,7 @@ public class PlainProvider {
 	FhirContext fhirContext;
 
 	@Autowired
-	iPlainDao baseDao;
+	PlainDao baseDao;
 
 	@History
 	public IBundleProvider getServerHistory(@OptionalParam(name = "_since") InstantType theSince,
@@ -53,7 +53,7 @@ public class PlainProvider {
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
 		} else {
 			List<IBaseResource> results = new ArrayList<IBaseResource>();
-//			results = baseDao.history(theSince, theAt);
+			results = baseDao.history(theSince, theAt);
 			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x
 			// -> x);
 			final List<IBaseResource> finalResults = results;
@@ -91,6 +91,7 @@ public class PlainProvider {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	@Transaction
 	public IBundleProvider transaction(@TransactionParam Bundle theInput) {
 		for (BundleEntryComponent nextEntry : theInput.getEntry()) {

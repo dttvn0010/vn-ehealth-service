@@ -6,7 +6,10 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
@@ -21,7 +24,8 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class MedicationStatementEntity extends BaseResource {
     @Id
-    public ObjectId id;
+    @Indexed(name = "_id_")
+    @JsonIgnore public ObjectId id;
     public List<BaseIdentifier> identifier;
     public List<BaseReference> basedOn;
     public List<BaseReference> partOf;

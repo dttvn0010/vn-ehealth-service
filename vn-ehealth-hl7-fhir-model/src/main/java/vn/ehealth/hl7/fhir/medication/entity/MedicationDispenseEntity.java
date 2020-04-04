@@ -6,7 +6,10 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
@@ -36,7 +39,8 @@ public class MedicationDispenseEntity extends BaseResource {
 
     
     @Id
-    public ObjectId id;
+    @Indexed(name = "_id_")
+    @JsonIgnore public ObjectId id;
     public List<BaseIdentifier> identifier;
     public List<BaseReference> partOf;
     public String status;

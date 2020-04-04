@@ -40,6 +40,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -60,9 +61,10 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 			TokenParam language, TokenParam phone, TokenParam telecom, ReferenceParam generalPractitioner,
 			ReferenceParam link, ReferenceParam organization, DateRangeParam birthDate, DateRangeParam deathDate,
 			StringParam address, StringParam addressCity, StringParam addressCountry, StringParam addressState,
-			StringParam familyName, StringParam givenName, StringParam name, StringParam phonetic, TokenParam resid,
-			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-			StringParam _content, StringParam _page, String sortParam, Integer count) {
+			StringParam familyName, StringParam givenName, StringParam name, StringParam phonetic,
+			// COMMON PARAMs
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count) {
 
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
 
@@ -74,7 +76,8 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 		if (criteria != null) {
 			Query qry = Query.query(criteria);
 			Pageable pageableRequest;
-			pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+			pageableRequest = new PageRequest(
+					_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 					count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 			qry.with(pageableRequest);
 			if (!sortParam.equals("")) {
@@ -102,14 +105,14 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 //        return resources;
 //    }
 
-	public long findMatchesAdvancedTotal(FhirContext ctx, TokenParam addressUse,
-			TokenParam animalBreed, TokenParam animalSpecies, TokenParam deceased, TokenParam email, TokenParam gender,
-			TokenParam identifier, TokenParam language, TokenParam phone, TokenParam telecom,
-			ReferenceParam generalPractitioner, ReferenceParam link, ReferenceParam organization,
-			DateRangeParam birthDate, DateRangeParam deathDate, StringParam address, StringParam addressCity,
-			StringParam addressCountry, StringParam addressState, StringParam familyName, StringParam givenName,
-			StringParam name, StringParam phonetic, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
-			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
+	public long findMatchesAdvancedTotal(FhirContext ctx, TokenParam addressUse, TokenParam animalBreed,
+			TokenParam animalSpecies, TokenParam deceased, TokenParam email, TokenParam gender, TokenParam identifier,
+			TokenParam language, TokenParam phone, TokenParam telecom, ReferenceParam generalPractitioner,
+			ReferenceParam link, ReferenceParam organization, DateRangeParam birthDate, DateRangeParam deathDate,
+			StringParam address, StringParam addressCity, StringParam addressCountry, StringParam addressState,
+			StringParam familyName, StringParam givenName, StringParam name, StringParam phonetic, TokenParam resid,
+			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
+			StringParam _content) {
 
 		long count = 0;
 		Criteria criteria = setParamToCriteria(addressUse, animalBreed, animalSpecies, deceased, email, gender,
@@ -125,12 +128,12 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 		return count;
 	}
 
-	private Criteria setParamToCriteria(TokenParam addressUse, TokenParam animalBreed,
-			TokenParam animalSpecies, TokenParam deceased, TokenParam email, TokenParam gender, TokenParam identifier,
-			TokenParam language, TokenParam phone, TokenParam telecom, ReferenceParam generalPractitioner,
-			ReferenceParam link, ReferenceParam organization, DateRangeParam birthDate, DateRangeParam deathDate,
-			StringParam address, StringParam addressCity, StringParam addressCountry, StringParam addressState,
-			StringParam familyName, StringParam givenName, StringParam name, StringParam phonetic, TokenParam resid,
+	private Criteria setParamToCriteria(TokenParam addressUse, TokenParam animalBreed, TokenParam animalSpecies,
+			TokenParam deceased, TokenParam email, TokenParam gender, TokenParam identifier, TokenParam language,
+			TokenParam phone, TokenParam telecom, ReferenceParam generalPractitioner, ReferenceParam link,
+			ReferenceParam organization, DateRangeParam birthDate, DateRangeParam deathDate, StringParam address,
+			StringParam addressCity, StringParam addressCountry, StringParam addressState, StringParam familyName,
+			StringParam givenName, StringParam name, StringParam phonetic, TokenParam resid,
 			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
 			StringParam _content) {
 		Criteria criteria = null;
@@ -401,9 +404,9 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return Patient.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return Patient.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

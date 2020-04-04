@@ -5,7 +5,10 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
@@ -31,7 +34,8 @@ public class PractitionerRoleEntity extends BaseResource {
     }
     
     @Id
-    public ObjectId id;
+    @Indexed(name = "_id_")
+    @JsonIgnore public ObjectId id;
     public Boolean active;
     public List<BaseIdentifier> identifier;
     public BasePeriod period;

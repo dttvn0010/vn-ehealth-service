@@ -6,6 +6,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,6 +29,7 @@ public class DiagnosticReportEntity extends BaseResource {
     }
     
     @Id
+    @Indexed(name = "_id_")
     @JsonIgnore public ObjectId id;
     public List<BaseIdentifier> identifier;
     public List<BaseReference> basedOn;
