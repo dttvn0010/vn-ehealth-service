@@ -19,6 +19,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.NumberParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -77,7 +78,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
 		ent._version = (version);
 		ent._resCreated = (new Date());
 		ent._resUpdated = (new Date());
-		ent._fhirVersion = "R4";
+		ent._fhirVersion = FhirVersionEnum.R4.toString();
 		return (ENT) ent;
 	}
 
