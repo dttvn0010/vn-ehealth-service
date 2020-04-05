@@ -85,7 +85,7 @@ public class NutritionOrderDao extends BaseDao<NutritionOrderEntity, NutritionOr
 				resources.add(obj);
 			}
 		}
-		return null;
+		return resources;
 	}
 
 	public long countMatchesAdvancedTotal(

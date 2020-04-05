@@ -28,12 +28,12 @@ public class SpecimenEntity extends BaseResource {
     
     public static class SpecimenCollection {
         public BaseReference collector;
-        public BaseType collected;
+        @JsonIgnore public BaseType collected;
         public BaseDuration duration;
         public BaseQuantity quantity;
         public BaseCodeableConcept method;
         public BaseCodeableConcept bodySite;
-        public BaseType fastingStatus;
+        @JsonIgnore public BaseType fastingStatus;
     }
     
     public static class SpecimenProcessing {
@@ -49,7 +49,7 @@ public class SpecimenEntity extends BaseResource {
         public BaseCodeableConcept type;
         public BaseQuantity capacity;
         public BaseQuantity specimenQuantity;
-        public BaseType additive;        
+        @JsonIgnore public BaseType additive;        
     }
     
     @Id

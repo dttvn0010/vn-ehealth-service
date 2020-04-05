@@ -27,7 +27,7 @@ public class BundleEntity extends BaseResource {
     public BaseIdentifier identifier;
     public String type;
     public Date timestamp;
-    public Integer total;    
+    public int total;    
     public List<BundleLink> link;
     public List<BundleEntry> entry;
     public BaseSignature signature;

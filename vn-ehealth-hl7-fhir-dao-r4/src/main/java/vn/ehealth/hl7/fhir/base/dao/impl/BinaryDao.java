@@ -86,7 +86,7 @@ public class BinaryDao extends BaseDao<BinaryEntity, Binary> {
 				resources.add(obj);
 			}
 		}
-		return null;
+		return resources;
 	}
 
 	public long countMatchesAdvancedTotal(

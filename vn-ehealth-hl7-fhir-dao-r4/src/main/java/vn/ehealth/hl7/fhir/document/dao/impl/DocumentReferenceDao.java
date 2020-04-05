@@ -86,7 +86,7 @@ public class DocumentReferenceDao extends BaseDao<DocumentReferenceEntity, Docum
 				resources.add(obj);
 			}
 		}
-		return null;
+		return resources;
 	}
 
 	public long countMatchesAdvancedTotal(

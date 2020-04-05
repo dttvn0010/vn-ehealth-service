@@ -85,7 +85,7 @@ public class CompositionDao extends BaseDao<CompositionEntity, Composition> {
 				resources.add(obj);
 			}
 		}
-		return null;
+		return resources;
 	}
 
 	public long countMatchesAdvancedTotal(

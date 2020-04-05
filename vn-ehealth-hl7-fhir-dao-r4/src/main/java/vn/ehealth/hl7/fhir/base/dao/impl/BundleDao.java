@@ -84,7 +84,7 @@ public class BundleDao extends BaseDao<BundleEntity, Bundle> {
 				resources.add(obj);
 			}
 		}
-		return null;
+		return resources;
 	}
 
 	public long countMatchesAdvancedTotal(

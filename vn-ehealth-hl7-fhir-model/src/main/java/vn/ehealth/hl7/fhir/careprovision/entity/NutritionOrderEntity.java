@@ -17,6 +17,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseTiming;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 @Document(collection = "nutritionOrder")
@@ -47,7 +48,7 @@ public class NutritionOrderEntity extends BaseResource {
 
 	public static class NutritionOrderOralDiet {
 		public List<BaseCodeableConcept> type;
-		public List<Date> schedule;
+		public List<BaseTiming> schedule;
 		public List<OralDietNutrient> nutrient;
 		public List<OralDietTexture> texture;
 		public List<BaseCodeableConcept> fluidConsistencyType;
@@ -67,7 +68,7 @@ public class NutritionOrderEntity extends BaseResource {
 	public static class NutritionOrderSupplement {
 		public BaseCodeableConcept type;
 		public String productName;
-		public List<Date> schedule;
+		public List<BaseTiming> schedule;
 		public BaseQuantity quantity;
 		public String instruction;
 	}
@@ -84,7 +85,7 @@ public class NutritionOrderEntity extends BaseResource {
 		public String administrationInstruction;
 
 		public static class EnteralFormulaAdministration {
-			public Date schedule;
+			public BaseTiming schedule;
 			public BaseQuantity quantity;
 			public BaseType rate;
 		}

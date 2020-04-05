@@ -86,7 +86,7 @@ public class DocumentManifestDao extends BaseDao<DocumentManifestEntity, Documen
 				resources.add(obj);
 			}
 		}
-		return null;
+		return resources;
 	}
 
 	public long countMatchesAdvancedTotal(
