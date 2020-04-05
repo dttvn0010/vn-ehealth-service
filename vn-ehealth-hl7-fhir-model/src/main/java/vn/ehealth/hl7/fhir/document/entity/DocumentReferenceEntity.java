@@ -17,11 +17,12 @@ import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
 @Document(collection = "documentReference")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
-public class DocumentReferenceEntity {
-	
+public class DocumentReferenceEntity extends BaseResource {
+
 	@Id
 	@Indexed(name = "_id_")
 	@JsonIgnore
@@ -42,17 +43,17 @@ public class DocumentReferenceEntity {
 	public List<BaseCodeableConcept> securityLabel;
 	public List<DocumentReferenceContent> content;
 	public DocumentReferenceContext context;
-	
+
 	public static class DocumentReferenceRelatesTo {
 		public String code;
 		public BaseReference target;
 	}
-	
+
 	public static class DocumentReferenceContent {
 		public BaseAttachment attachment;
 		public BaseCoding format;
 	}
-	
+
 	public static class DocumentReferenceContext {
 		public List<BaseReference> encounter;
 		public List<BaseCodeableConcept> event;

@@ -7,6 +7,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.InstantType;
+import org.hl7.fhir.r4.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -28,7 +29,7 @@ import vn.ehealth.hl7.fhir.core.util.StringUtil;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 
-public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResource> {
+public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 	@Autowired
 	protected MongoOperations mongo;
 
@@ -36,7 +37,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends DomainResou
 
 	abstract protected Class<? extends BaseResource> getEntityClass();
 
-	abstract protected Class<? extends DomainResource> getResourceClass();
+	abstract protected Class<? extends Resource> getResourceClass();
 
 	@SuppressWarnings("unchecked")
 	public FHIR transform(ENT ent) {

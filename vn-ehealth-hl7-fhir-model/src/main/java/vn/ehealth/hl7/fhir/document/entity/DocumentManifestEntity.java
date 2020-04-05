@@ -14,10 +14,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
 @Document(collection = "documentManifest")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
-public class DocumentManifestEntity {
+public class DocumentManifestEntity extends BaseResource {
 
 	@Id
 	@Indexed(name = "_id_")
@@ -35,7 +36,7 @@ public class DocumentManifestEntity {
 	public String description;
 	public List<BaseReference> content;
 	public List<DocumentManifestRelated> related;
-	
+
 	public static class DocumentManifestRelated {
 		public BaseIdentifier identifier;
 		public BaseReference ref;
