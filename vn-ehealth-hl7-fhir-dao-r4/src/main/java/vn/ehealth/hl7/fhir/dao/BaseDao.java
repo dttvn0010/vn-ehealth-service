@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.Resource;
@@ -205,8 +204,8 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 				qry.with(pageableRequest);
 			}
 
-			qry.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
-			qry.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
+			qry.with(new Sort(Sort.Direction.ASC, ConstantKeys.QP_UPDATED));
+			qry.with(new Sort(Sort.Direction.ASC, ConstantKeys.QP_CREATED));
 
 			var result = mongo.find(qry, getEntityClass());
 			for (var ent : result) {

@@ -141,6 +141,37 @@ public class PlainDao {
 		if (medias != null && medias.size() > 0) {
 			resources.addAll(medias);
 		}
+		// Binary
+		List<IBaseResource> binarys = DaoFactory.getBinaryDao().getHistory(null, theSince, theAt, null, 0);
+		if (binarys != null && binarys.size() > 0) {
+			resources.addAll(binarys);
+		}
+		// Bundle
+		List<IBaseResource> bundles = DaoFactory.getBundleDao().getHistory(null, theSince, theAt, null, 0);
+		if (bundles != null && bundles.size() > 0) {
+			resources.addAll(bundles);
+		}
+		// Composition
+		List<IBaseResource> compositions = DaoFactory.getCompositionDao().getHistory(null, theSince, theAt, null, 0);
+		if (compositions != null && compositions.size() > 0) {
+			resources.addAll(compositions);
+		}
+		// DocumentManifest
+		List<IBaseResource> documentManifest = DaoFactory.getDocumentManifestDao().getHistory(null, theSince, theAt, null, 0);
+		if (documentManifest != null && documentManifest.size() > 0) {
+			resources.addAll(documentManifest);
+		}
+		// DocumentReference
+		List<IBaseResource> documentReferences = DaoFactory.getDocumentReferenceDao().getHistory(null, theSince, theAt, null, 0);
+		if (documentReferences != null && documentReferences.size() > 0) {
+			resources.addAll(documentReferences);
+		}
+		// NutritionOrder
+		List<IBaseResource> nutritionOrders = DaoFactory.getNutritionOrderDao().getHistory(null, theSince, theAt, null, 0);
+		if (nutritionOrders != null && nutritionOrders.size() > 0) {
+			resources.addAll(nutritionOrders);
+		}
+				
 		return resources;
 	}
 

@@ -28,9 +28,9 @@ public class BundleEntity extends BaseResource {
     public String type;
     public Date timestamp;
     public Integer total;    
-    public BaseSignature signature;
     public List<BundleLink> link;
     public List<BundleEntry> entry;
+    public BaseSignature signature;
     
     public static class BundleLink {
     	public String relation;
@@ -41,6 +41,9 @@ public class BundleEntity extends BaseResource {
     	public List<BundleLink> link;
     	public String fullUrl;
     	public IBaseResource resource;
+    	public BundleEntrySearch search;
+    	public BundleEntryRequest request;
+    	public BundleEntryResponse response;
     	
     	public static class BundleEntrySearch {
     		public String mode;

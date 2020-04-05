@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseDuration;
@@ -52,7 +54,7 @@ public class SpecimenEntity extends BaseResource {
     
     @Id
     @Indexed(name = "_id_")
-    public ObjectId id;
+    @JsonIgnore public ObjectId id;
     public List<BaseIdentifier> identifier;
     public BaseIdentifier accessionIdentifier;
     public String status;

@@ -160,8 +160,8 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 				(IResourceProvider) applicationContext.getBean(NutritionOrderProvider.class)));
 		setServerConformanceProvider(new Hl7FhirServerConformanceProvider());
 
-		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
-		registerInterceptor(loggingInterceptor);
+//		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
+//		registerInterceptor(loggingInterceptor);
 
 		/*
 		 * Use a narrative generator. This is a completely optional step, but can be

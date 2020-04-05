@@ -31,7 +31,7 @@ public class CompositionEntity extends BaseResource {
 	public String status;
 	public BaseCodeableConcept type;
 	public List<BaseCodeableConcept> category;
-	public BaseReference patient;
+	public BaseReference subject;
 	public BaseReference encounter;
 	public Date date;
 	public List<BaseReference> author;
@@ -55,7 +55,7 @@ public class CompositionEntity extends BaseResource {
 	}
 
 	public static class CompositionEvent {
-		public List<String> code;
+		public List<BaseCodeableConcept> code;
 		public BasePeriod period;
 		public List<BaseReference> detail;
 	}
