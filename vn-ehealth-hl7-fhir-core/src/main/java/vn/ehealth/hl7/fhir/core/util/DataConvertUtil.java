@@ -101,6 +101,13 @@ public class DataConvertUtil {
         return null;
     }
     
+    public static String joinString(List<String> lst, String delimiter) {
+        if(lst == null) return null;
+        
+        return lst.stream()
+                    .collect(Collectors.joining(delimiter));
+    }
+    
 
     private static Method getMethod(Class<?> clazz, String methodName, Class<?>...paramsType) {
         try {

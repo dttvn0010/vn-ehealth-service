@@ -2,14 +2,14 @@ package vn.ehealth.cdr.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,14 +22,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vn.ehealth.auth.utils.UserUtil;
+import vn.ehealth.cda.CDAUtils;
+import vn.ehealth.cda.TemplateUtils;
 import vn.ehealth.cdr.controller.helper.EncounterHelper;
 import vn.ehealth.cdr.controller.helper.OrganizationHelper;
 import vn.ehealth.cdr.controller.helper.PatientHelper;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.service.BenhNhanService;
 import vn.ehealth.cdr.service.CoSoKhamBenhService;
+import vn.ehealth.cdr.service.DonThuocService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.LogService;
+import vn.ehealth.cdr.service.PhauThuatThuThuatService;
+import vn.ehealth.cdr.service.XetNghiemService;
 import vn.ehealth.cdr.utils.*;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
@@ -44,6 +49,10 @@ public class HoSoBenhAnController {
     @Autowired private HoSoBenhAnService hoSoBenhAnService;    
     @Autowired private BenhNhanService benhNhanService;
     @Autowired private CoSoKhamBenhService coSoKhamBenhService;
+    @Autowired private PhauThuatThuThuatService phauThuatThuThuatService;
+    @Autowired private XetNghiemService xetNghiemService;
+    @Autowired private DonThuocService donThuocService;
+    
     @Autowired private LogService logService;
     @Autowired private EncounterDao encounterDao; 
     @Autowired private PatientHelper patientHelper;
@@ -120,9 +129,9 @@ public class HoSoBenhAnController {
             var user = UserUtil.getCurrentUser();
             hoSoBenhAnService.archiveHsba(new ObjectId(id), user.get().id);
             return ResponseEntity.ok(mapOf("success", true));
+            
         }catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            return ResponseEntity.ok(mapOf("success", false, "error", error));
+            return CDRUtils.errorResponse(e);
         }
     }
     
@@ -132,9 +141,44 @@ public class HoSoBenhAnController {
             var user = UserUtil.getCurrentUser();            
             hoSoBenhAnService.unArchiveHsba(new ObjectId(id), user.get().id);
             return ResponseEntity.ok(mapOf("success", true));
+            
         }catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            return ResponseEntity.ok(mapOf("success", false, "error", error));
+            return CDRUtils.errorResponse(e);
+        }
+    }
+    
+    @GetMapping("/export_cda/{id}")
+    public ResponseEntity<?> exportCDA(@PathVariable("id") String id) {
+        try {
+            var hsbaId = new ObjectId(id);
+            var hsba = hoSoBenhAnService.getById(hsbaId).orElseThrow();
+            
+            var dsPttt = phauThuatThuThuatService.getByHoSoBenhAnId(hsbaId);
+            var dsXetNghiem = xetNghiemService.getByHoSoBenhAnId(hsbaId);
+            var dsDonThuoc = donThuocService.getByHoSoBenhAnId(hsbaId);
+            
+            var data = mapOf(
+                "utils", TemplateUtils.class,
+                "hsba", JsonUtil.objectToMap(hsba),
+                "benhNhan", JsonUtil.objectToMap(hsba.getBenhNhan()),
+                "cskb", JsonUtil.objectToMap(hsba.getCoSoKhamBenh()),
+                "dsPttt", transform(dsPttt, x -> JsonUtil.objectToMap(x)) ,
+                "dsXetNghiem", transform(dsXetNghiem, x -> JsonUtil.objectToMap(x)),
+                "dsDonThuoc", transform(dsDonThuoc, x -> JsonUtil.objectToMap(x))
+            );
+            
+            var xml = CDAUtils.getClinicalDocument(JsonUtil.objectToMap(data));
+            var xmlBytes = xml.getBytes();
+            var resource = new ByteArrayResource(xmlBytes);
+            
+            return ResponseEntity.ok()
+                    .contentLength(xmlBytes.length)
+                    .contentType(MediaType.parseMediaType("application/xml"))
+                    .header("Content-disposition", "attachment; filename=cda_" + id + ".xml")
+                    .body(resource);
+            
+        }catch(Exception e) {
+            return CDRUtils.errorResponse(e);
         }
     }
     
@@ -144,9 +188,9 @@ public class HoSoBenhAnController {
             var user = UserUtil.getCurrentUser();
             hoSoBenhAnService.deleteHsba(new ObjectId(id), user.get().id);
             return ResponseEntity.ok(mapOf("success", true));
+            
         }catch(Exception e) {
-            var error = Optional.ofNullable(e.getMessage()).orElse("Unknown error");
-            return ResponseEntity.ok(mapOf("success", false, "error", error));
+            return CDRUtils.errorResponse(e);
         }
     }
     
@@ -203,16 +247,22 @@ public class HoSoBenhAnController {
             
             var benhNhanMap = (Map<String, Object>) map.get("benhNhan");
             String idhis = (String) benhNhanMap.get("idhis");
-            var benhNhan = benhNhanService.getByIdhis(idhis);
-            if(benhNhan.isEmpty()) {
+            var benhNhan = benhNhanService.getByIdhis(idhis).orElse(null);
+            
+            if(benhNhan == null) {
                 throw new Exception(String.format("benhNhan with idhis %s not found, please create this patient first", idhis));
             }
             
-            var coSoKhamBenhMap = (Map<String, Object>) map.get("coSoKhamBenh");            
-            var coSoKhamBenh = coSoKhamBenhService.getByMa((String) coSoKhamBenhMap.get("ma")).orElseThrow();
+            var coSoKhamBenhMap = (Map<String, Object>) map.get("coSoKhamBenh");
+            String maCskb = (String) coSoKhamBenhMap.get("ma");
+            var coSoKhamBenh = coSoKhamBenhService.getByMa(maCskb).orElse(null);
+            
+            if(coSoKhamBenh == null) {
+                throw new Exception(String.format("coSoKhamBenh with ma=%s not found", maCskb));
+            }
             
         	var hsba = objectMapper.convertValue(map, HoSoBenhAn.class);
-            hsba = hoSoBenhAnService.createOrUpdateFromHIS(benhNhan.get().id, coSoKhamBenh.id, hsba, jsonSt);
+            hsba = hoSoBenhAnService.createOrUpdateFromHIS(benhNhan.id, coSoKhamBenh.id, hsba, jsonSt);
             
             // save to FHIR db
             saveToFhirDb(hsba);

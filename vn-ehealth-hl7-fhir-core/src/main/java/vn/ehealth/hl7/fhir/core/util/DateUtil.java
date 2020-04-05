@@ -38,8 +38,8 @@ public class DateUtil {
     public static final String DATE_FORMAT_D_M_Y ="dd/MM/yyyy";
     public static final String DATE_FORMAT_D_M_Y_H_M_S ="dd/MM/yyyy HH:mm:ss";
     public static final String DATE_FORMAT_D_M_Y_H_M ="dd/MM/yyyy HH:mm";    
-    public static final String DATE_FORMAT_Y_M_D="yyyymmdd";
-    public static final String DATE_DB_FORMAT_Y_M_D="yyyy-mm-dd";
+    public static final String DATE_FORMAT_Y_M_D="yyyyMMdd";
+    public static final String DATE_DB_FORMAT_Y_M_D="yyyy-MM-dd";
     public static final String DATE_DB_FORMAT_Y_M_D_H="yyyy-MM-dd HH:mm:ss";
     public static final String DATE_FORMAT_H_M_D_M_Y="HH:mm dd/MM/yyyy";        
     public static final String DATE_FORMAT_YYYY="yyyy";        

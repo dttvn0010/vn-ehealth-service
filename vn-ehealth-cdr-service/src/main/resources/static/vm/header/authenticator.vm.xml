@@ -1,0 +1,14 @@
+<authenticator>
+   <time value="$!utils.formatDate($!hsba.quanLyNguoiBenh.ngayGioRaVien)"/>
+   <signatureCode code="S"/>
+   
+   <assignedEntity>
+     <id root="$utils.randomUUID()"/>
+     
+     <assignedPerson>
+       #set($khoaRaVien = $!utils.atList($!hsba.dsVaoKhoa, -1))
+       <name>$!khoaRaVien.tenTruongKhoa</name>
+     </assignedPerson>
+   </assignedEntity>
+   
+ </authenticator>

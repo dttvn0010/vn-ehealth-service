@@ -1,0 +1,12 @@
+<legalAuthenticator>
+    <time value="$!utils.formatDate($!hsba.ngayKyBenhAn)"/>
+    <signatureCode code="S"/>
+    
+    <assignedEntity>
+      <id root="$!utils.randomUUID()"/>
+      <assignedPerson>
+        <name>$!hsba.bacSyLamBenhAn.ten</name>
+      </assignedPerson>
+    </assignedEntity>
+    
+  </legalAuthenticator>

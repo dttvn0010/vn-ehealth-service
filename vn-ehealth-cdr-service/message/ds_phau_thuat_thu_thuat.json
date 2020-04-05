@@ -3,7 +3,7 @@
   "dsPhauThuatThuThuat": [
     {
       "idhis": "1111111",
-      "dsDmMaBenhChanDoanTruoc": [
+      "dsDmMaBenhChanDoanTruocPttt": [
         {
           "ma": "001",
           "ten": "Chẩn đoán bệnh trước pt 1"
@@ -14,7 +14,7 @@
         }
       ],
       "moTaChanDoanTruocPttt": "Mô tả chẩn đoán trước",
-      "dsDmMaBenhChanDoanSau": [
+      "dsDmMaBenhChanDoanSauPttt": [
         {
           "ma": "001",
           "ten": "Chẩn đoán bệnh sau pt 1"
@@ -30,8 +30,8 @@
         "ten": "Phẫu thuật thủ thuật"
       },
       "ngayGioPttt": "2018-06-29 00:00:00",
-      "bacSiThucHien": "Bác sĩ thực hiện",
-      "bacSiGayMe": "Bác sĩ gây mê",
+      "bacSiThucHien":{"ten": "Bác sĩ thực hiện","chungChiHanhNghe": "11111"},
+      "bacSiGayMe":{"ten": "Bác sĩ gây mê", "chungChiHanhNghe": "11112"},
       "chiDinhPttt": "Chỉ định",
       "phuongPhapVoCam": "Phương pháp vô cảm",
       "luocDoPttt": "Lược đồ",
@@ -42,7 +42,7 @@
             "ma": "0001",
             "ten": "Phẫu thuật viên chính"
           },
-          "bacsipttt": {
+          "bacSiPttt": {
             "chungChiHanhNghe": "11111",
             "ten": "Bác sĩ A"
           }
@@ -52,7 +52,7 @@
             "ma": "0002",
             "ten": "Gây mê chính"
           },
-          "bacsipttt": {
+          "bacSiPttt": {
             "chungChiHanhNghe": "11111",
             "ten": "Bác sĩ B"
           }

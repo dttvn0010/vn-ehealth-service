@@ -1,0 +1,134 @@
+<component>
+   <section>
+     <templateId root="2.16.840.1.113883.3.6000.4.7"/>
+     <id root="$utils.randomUUID()"/>
+     
+     <code code="30954-2" 
+     	   codeSystem="2.16.840.1.113883.6.1" 
+     	   codeSystemName="LOINC" 
+     	   displayName="RELEVANT DIAGNOSTIC TESTS AND/OR LABORATORY DATA"
+     	   />
+     
+     <title>XÉT NGHIỆM</title>
+     
+     <text>
+     	#if($!dsXetNghiem.size() > 0)
+     	<table>
+     		<thead>
+	     		<tr>
+	     			<th rowspan="2">Dịch vụ xét nghiệm</th>
+	     			<th rowspan="2">Ngày giờ xét nghiệm</th>
+	     			<th rowspan="2">Bác sĩ xét nghiệm</th>
+	     			<th colspan="3">Kết quả xét nghiệm</th>
+	     		</tr>
+	     		<tr>
+	     			<th>Chỉ số xét nghiệm</th>
+	     			<th>Giá trị đo</th>
+	     			<th>Đơn vị</th>
+	     		</tr>
+     		</thead>
+     		
+     		<tbody>
+     		#foreach($xetNghiem in $dsXetNghiem)
+	     		#foreach($dvxn in $xetNghiem.dsDichVuXetNghiem)
+		     		<tr>
+		     			<td rowspan="$!dvxn.dsKetQuaXetNghiem.size()">$!dvxn.dmXetNghiem.ten</td>
+		     			<td rowspan="$!dvxn.dsKetQuaXetNghiem.size()">$!xetNghiem.ngayThucHien</td>
+		     			<td rowspan="$!dvxn.dsKetQuaXetNghiem.size()">$!xetNghiem.bacSiXetNghiem.ten</td>
+		     			
+		     			#set($kqxn = $!utils.atList($!dvxn.dsKetQuaXetNghiem, 0))
+		     			<td>$!kqxn.dmChiSoXetNghiem.ten</td>
+	     				<td>$!kqxn.giaTriDo</td>
+	     				<td>$!kqxn.dmChiSoXetNghiem.donVi</td>
+		     		</tr>
+		     		#foreach($kqxn in $!utils.subList($!dvxn.dsKetQuaXetNghiem, 1))
+		     			<tr>
+		     				<td>$!kqxn.dmChiSoXetNghiem.ten</td>
+		     				<td>$!kqxn.giaTriDo</td>
+		     				<td>$!kqxn.dmChiSoXetNghiem.donVi</td>
+		     			</tr>
+		     		#end
+		     	#end
+     		#end
+     		</tbody>
+     	</table>
+     	#end
+     </text>
+     
+     #foreach($xetNghiem in $dsXetNghiem)
+     <entry typeCode="DRIV">
+       <act classCode="ACT" moodCode="EVN">
+          <templateId root="2.16.840.1.113883.3.6000.5.24"/>
+          <id root="$utils.randomUUID()"/>
+          
+          <code code="400999005" 
+          		codeSystem="2.16.840.1.113883.6.96" 
+          		codeSystemName="SNOMED CT" 
+          		displayName="Procedure requested"/>
+          
+          <effectiveTime value="20180628000000"/>
+          
+          <performer>
+          
+            <assignedEntity>
+              <templateId root="2.16.840.1.113883.3.6000.5.11.2"/>
+              <id root="$utils.randomUUID()"/>
+              
+              <code code="405279007" 
+              		codeSystem="2.16.840.1.113883.6.96" 
+              		codeSystemName="SNOMED CT" 
+              		displayName="Attending physician"
+              		/>
+              		
+              <assignedPerson>
+                <name>$!xetNghiem.bacSiXetNghiem.ten</name>
+              </assignedPerson>
+            </assignedEntity>
+            
+          </performer>
+         	
+          #foreach($dvxn in $xetNghiem.dsDichVuXetNghiem)
+          <entryRelationship typeCode="COMP">
+          
+            <act classCode="ACT" moodCode="RQO">
+              <templateId root="2.16.840.1.113883.3.6000.5.24.1"/>
+              <id root="$utils.randomUUID()"/>
+              
+              #set($dm=$!dvxn.dmXetNghiem)         
+         	  <code code="$!dm.ma"
+		         	codeSystem="2.16.840.1.113883.3.6000.1.5"
+		         	displayName="$!dm.ten"/>
+		       
+              #foreach($kqxn in $dvxn.dsKetQuaXetNghiem)
+              <entryRelationship typeCode="COMP">
+                <organizer classCode="BATTERY" moodCode="EVN">
+                  <templateId root="2.16.840.1.113883.3.6000.5.25"/>
+                  <statusCode code="completed"/>
+                  
+                  <component>
+                    <observation classCode="OBS" moodCode="EVN">
+                      <templateId root="2.16.840.1.113883.3.6000.5.25.1"/>
+                      
+                      #set($dm=$!kqxn.dmChiSoXetNghiem)         
+		         	  <code code="$!dm.ma"
+				         	codeSystem="2.16.840.1.113883.6.1"
+				         	displayName="$!dm.ten"/>
+				       
+				       #if(! $!utils.isBlank($!kqxn.giaTriDo))  	
+                       	 <value xsi:type="ST">$!kqxn.giaTriDo</value>
+                       #end
+                    </observation>
+                  </component>
+                  
+                </organizer>
+              </entryRelationship>
+              #end              
+            </act>            
+          </entryRelationship>
+          #end          
+        </act>     
+     </entry>
+     #end      
+   </section>
+ </component>
+ 

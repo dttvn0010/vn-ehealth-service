@@ -60,6 +60,7 @@ public class XetNghiem {
     @JsonInclude(Include.NON_NULL)
     public static class XetNghiemDichVu extends DichVuKyThuat {
         
+        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
         public Date ngayThucHien;
         
         public CanboYte bacSiXetNghiem;

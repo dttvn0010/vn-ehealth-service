@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.Dosage;
 import org.hl7.fhir.r4.model.Encounter;
@@ -22,6 +23,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
+import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
+
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
 
@@ -45,6 +49,33 @@ public class DonThuoc {
    
     @JsonInclude(Include.NON_NULL)
     public static class DonThuocChiTiet {
+        
+        public static class LieuLuongDungThuoc {
+            public Integer soLuong;
+            public String donVi;
+            
+            public LieuLuongDungThuoc() {
+                
+            }
+            
+            public LieuLuongDungThuoc(String lieuLuong) {
+                if(lieuLuong == null) return;
+                
+                var items = List.of(lieuLuong.split(" "));
+                items = FPUtil.filter(items, x -> !StringUtils.isBlank(x));
+                
+                try {
+                    this.soLuong = Integer.parseInt(items.get(0));
+                }catch(NumberFormatException e) {
+                    
+                }
+                
+                if(this.soLuong != null && items.size() > 0) {
+                    this.donVi = DataConvertUtil.joinString(items.subList(1, items.size()), " ");
+                }                
+            }
+        }
+        
         public DanhMuc dmThuoc;
         public DanhMuc dmDuongDungThuoc;
         public DanhMuc dmTanSuatDungThuoc;
@@ -65,18 +96,10 @@ public class DonThuoc {
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
         public Date ngayKetThuc;
         
-        public String lieuLuongThuoc;    
+        public LieuLuongDungThuoc lieuLuongThuoc;    
         public String chiDanDungThuoc;
         public String bietDuoc;
-        
-        private Integer parseInt(String st) {
-            try {
-                return Integer.parseInt(st);
-            }catch(NumberFormatException e) {
-                return null;
-            }
-        }
-        
+      
         public MedicationRequest toFHir(Encounter enc) {
             if(enc == null) return null;
             
@@ -97,15 +120,11 @@ public class DonThuoc {
             
             mRequest.getDosageInstruction().add(dosage);
             
-            var arr = lieuLuongThuoc.split(" ");
-            var soLuong = parseInt(arr[0]);
-            if(soLuong != null) {
+            if(lieuLuongThuoc.soLuong != null) {
                 var quantity = new Quantity();
-                quantity.setValue(soLuong);
+                quantity.setValue(lieuLuongThuoc.soLuong);
+                quantity.setUnit(lieuLuongThuoc.donVi);                
                 
-                if(arr.length > 1) {
-                    quantity.setUnit(arr[1]);
-                }
                 mRequest.getDispenseRequest().setQuantity(quantity);
             }
             

@@ -35,7 +35,8 @@ public class PatientController {
                             mapOf3("name.text", "$regex", x),
                             mapOf3("name.family", "$regex", x),
                             mapOf3("name.given", "$regex", x),
-                            mapOf3("telecom.value", "$regex", x)
+                            mapOf3("telecom.value", "$regex", x),
+                            mapOf3("identifier.value", "$regex", x)
                     ));
         });
         

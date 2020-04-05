@@ -76,11 +76,11 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
     
     public int trangThai; 
     
-    public List<DanhMuc> dsDmMaBenhChanDoanSau = new ArrayList<>();
-    public List<DanhMuc> dsDmMaBenhChanDoanTruoc = new ArrayList<>();
+    public List<DanhMuc> dsDmMaBenhChanDoanSauPttt = new ArrayList<>();
+    public List<DanhMuc> dsDmMaBenhChanDoanTruocPttt = new ArrayList<>();
     
-    public DanhMuc dmMaBenhChanDoanSau;
-    public DanhMuc dmMaBenhChanDoanTruoc;
+    public DanhMuc dmMaBenhChanDoanSauPttt;
+    public DanhMuc dmMaBenhChanDoanTruocPttt;
     
     public DanhMuc dmPhauThuatThuThuat;
     

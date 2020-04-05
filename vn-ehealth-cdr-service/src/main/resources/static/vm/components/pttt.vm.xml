@@ -1,0 +1,205 @@
+<component>
+   <section>
+     <templateId root="2.16.840.1.113883.3.6000.4.8"/>
+     <id root="$utils.randomUUID()"/>
+     
+     <code code="47519-4" 
+     	   codeSystem="2.16.840.1.113883.6.1" 
+     	   codeSystemName="LOINC" 
+     	   displayName="PROCEDURES"
+     	   />
+     
+     <title>PHẪU THUẬT THỦ THUẬT</title>
+     
+     <text>
+     	#if($!dsPttt.size() > 0)
+     	<table>
+     		<thead>
+	     		<tr>
+	     			<th rowspan="2">Phẫu thuật/thủ thuật</th>
+	     			<th rowspan="2">Ngày giờ phẫu thuật/thủ thuật</th>
+	     			<th rowspan="2">Bác sĩ thực hiện</th>
+	     			<th colspan="2">Các bác sĩ trong hội đồng phẫu thuật/thủ thuật</th>
+	     		</tr>
+	     		<tr>
+	     			<th>Tên bác sĩ</th>
+	     			<th>Vai trò</th>
+	     		</tr>
+     		</thead>
+     		
+     		<tbody>
+     			#foreach($pttt in $dsPttt)
+		     		<tr>
+		     			<td rowspan="$!pttt.dsThanhVienPttt.size()">$!pttt.dmPhauThuatThuThuat.ten</td>
+		     			<td rowspan="$!pttt.dsThanhVienPttt.size()">$!pttt.ngayGioPttt</td>
+		     			<td rowspan="$!pttt.dsThanhVienPttt.size()">$!pttt.bacSiThucHien.ten</td>
+		     			
+		     			#set($tv = $!utils.atList($!pttt.dsThanhVienPttt, 0))		     			
+		     			<td>$!tv.bacSiPttt.ten</td>
+	     				<td>$!tv.dmVaiTro.ten</td>    			
+		     		</tr>
+		     		#foreach($tv in $!utils.subList($!pttt.dsThanhVienPttt, 1))
+		     			<tr>
+		     				<td>$!tv.bacSiPttt.ten</td>
+		     				<td>$!tv.dmVaiTro.ten</td>
+		     			</tr>
+		     		#end	     		
+     			#end
+     		</tbody>
+     	</table>
+     	#end
+     </text>
+     
+     #foreach($pttt in $dsPttt)
+     <entry>
+       <procedure classCode="PROC" moodCode="EVN">
+         <templateId root="2.16.840.1.113883.3.6000.5.18"/>
+         <id root="$utils.randomUUID()"/>
+         
+         #set($dm=$!pttt.dmPhauThuatThuThuat)         
+          <code code="$!dm.ma"
+         		codeSystem="2.16.840.1.113883.3.6000.1.5"
+         		displayName="$!dm.ten"/>
+                			          
+         <effectiveTime value="$!utils.formatDate($!pttt.ngayGioPttt)"/>
+         
+         <performer>
+           <assignedEntity>
+             <templateId root="2.16.840.1.113883.3.6000.5.11.5"/>
+             <id root="$utils.randomUUID()"/>
+             
+             <code code="304292004" 
+             		codeSystem="2.16.840.1.113883.6.96" 
+             		codeSystemName="SNOMED CT" 
+             		displayName="Surgeon"
+             		/>
+             
+             <assignedPerson>
+               <name>$!pttt.bacSiThucHien.ten</name>
+             </assignedPerson>
+             
+           </assignedEntity>
+         </performer>
+         
+         #foreach($tv in $!pttt.dsThanhVienPttt)
+         <performer>
+           <assignedEntity>
+             <templateId root="2.16.840.1.113883.3.6000.5.11.7"/>
+             <id root="$utils.randomUUID()"/>
+             
+             <code code="158967008" 
+             		codeSystem="2.16.840.1.113883.6.96" 
+             		codeSystemName="SNOMED CT" 
+             		displayName="Consultant physician">
+               <originalText>$!tv.dmVaiTro.ma</originalText>
+             </code>
+             <assignedPerson>
+               <name>$!tv.bacSiPttt.ten</name>
+             </assignedPerson>
+           </assignedEntity>
+         </performer>
+         #end
+         
+         <entryRelationship typeCode="COMP">
+           <observation classCode="OBS" moodCode="EVN">
+             <templateId root="2.16.840.1.113883.3.6000.5.1.5"/>
+             
+             <code code="8720-5" 
+             		codeSystem="2.16.840.1.113883.6.1" 
+             		codeSystemName="LOINC" 
+             		displayName="Preoperative diagnosis"/>
+             
+             $!utils.createText($!pttt.moTaChanDoanTruocPttt)
+             
+             #set($dm=$!pttt.dmMaBenhChanDoanTruocPttt)
+             <value xsi:type="CD" 
+            		code="$!dm.ma"
+            		codeSystem="2.16.840.1.113883.3.6000.6.3"
+            		displayName="$!dm.ten"/>
+            		
+           </observation>
+         </entryRelationship>
+         
+         <entryRelationship typeCode="COMP">
+           <observation classCode="OBS" moodCode="EVN">
+             <templateId root="2.16.840.1.113883.3.6000.5.1.6"/>
+             
+             <code code="8719-7" 
+             	   codeSystem="2.16.840.1.113883.6.1" 
+             	   codeSystemName="LOINC" 
+             	   displayName="Postoperative diagnosis"/>
+             
+             $!utils.createText($!pttt.moTaChanDoanSauPttt)
+             
+             #set($dm=$!pttt.dmMaBenhChanDoanSauPttt)
+             <value xsi:type="CD" 
+            		code="$!dm.ma"
+            		codeSystem="2.16.840.1.113883.3.6000.6.3"
+            		displayName="$!dm.ten"/>             
+           </observation>
+         </entryRelationship>
+         
+         <entryRelationship typeCode="COMP">
+           <act classCode="ACT" moodCode="EVN">
+             <templateId root="2.16.840.1.113883.3.6000.5.18.1"/>
+             <id root="$utils.randomUUID()"/>
+             
+             <code code="59768-2" 
+             	   codeSystem="2.16.840.1.113883.6.1" 
+             	   codeSystemName="LOINC" 
+             	   displayName="PROCEDURE INDICATIONS"/>
+             
+             $!utils.createText($!pttt.chiDinhPttt)
+           </act>
+         </entryRelationship>
+         
+         <entryRelationship typeCode="COMP">
+           <act classCode="ACT" moodCode="EVN">
+             <templateId root="2.16.840.1.113883.3.6000.5.18.2"/>
+             <id root="$utils.randomUUID()"/>
+             
+             <code code="59774-0" 
+             	   codeSystem="2.16.840.1.113883.6.1" 
+             	   codeSystemName="LOINC" 
+             	   displayName="Anesthesia"
+             	   />
+             	                
+             $!utils.createText($!pttt.phuongPhapVoCam)
+           </act>
+         </entryRelationship>
+         
+         <entryRelationship typeCode="COMP">
+           <act classCode="ACT" moodCode="EVN">
+             <templateId root="2.16.840.1.113883.3.6000.5.18.5"/>
+             <id root="$utils.randomUUID()"/>
+             
+             <code code="67184-2" 
+             	   codeSystem="2.16.840.1.113883.6.1" 
+             	   codeSystemName="LOINC" 
+             	   displayName="PROCEDURE CHART"
+             	   />
+             	   
+             $!utils.createText($!pttt.luocDoPttt)
+           </act>
+         </entryRelationship>
+         
+         <entryRelationship typeCode="COMP">
+           <act classCode="ACT" moodCode="EVN">
+             <templateId root="2.16.840.1.113883.3.6000.5.18.4"/>
+             <id root="$utils.randomUUID()"/>
+             
+             <code code="29554-3" 
+             	   codeSystem="2.16.840.1.113883.6.1" 
+             	   codeSystemName="LOINC" 
+             	   displayName="PROCEDURE DESCRIPTION"
+             	   />
+             
+             $!utils.createText($!pttt.trinhTuPttt)
+           </act>
+         </entryRelationship>
+       </procedure>
+     </entry>
+     #end     
+   </section>
+ </component>
+      

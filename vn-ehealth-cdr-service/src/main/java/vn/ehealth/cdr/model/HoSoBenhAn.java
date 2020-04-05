@@ -5,7 +5,6 @@ import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -104,6 +103,39 @@ public class HoSoBenhAn {
         public String tenTruongKhoa;
     }
     
+    @JsonInclude(Include.NON_NULL)
+    public static class ChanDoan {
+        public DanhMuc dmMaBenhChanDoanNoiDen;
+        public String moTaChanDoanNoiDen;
+        
+        public DanhMuc dmMaBenhChanDoanKkb;
+        public String moTaChanDoanKkb;
+        
+        public DanhMuc dmMaBenhChanDoanDieuTriChinh;
+        public String moTaChanDoanDieuTriChinh;
+        
+        public List<DanhMuc> dsDmMaBenhChanDoanDieuTriKemTheo = new ArrayList<>();
+        public String moTaChanDoanDieuTriKemTheo;
+        
+        public DanhMuc dmMaBenhChanDoanDieuTriPhanBiet;
+        public String moTaChanDoanDieuTriPhanBiet;
+        
+        public DanhMuc dmMaBenhChanDoanRaVienChinh;
+        public String moTaChanDoanRaVienChinh;
+                
+        public List<DanhMuc> dsDmMaBenhChanDoanRaVienKemTheo = new ArrayList<>();
+        public String moTaChanDoanRaVienKemTheo;
+        
+        public DanhMuc dmMaBenhChanDoanRaVienNguyenNhan;
+        public String moTaChanDoanRaVienNguyenNhan;
+        
+        public DanhMuc dmMaBenhChanDoanTruocPttt;
+        public String moTaChanDoanTruocPttt;
+        
+        public DanhMuc dmMaBenhChanDoanSauPttt;
+        public String moTaChanDoanSauPttt;
+    }
+    
     @JsonInclude(Include.NON_NULL)    
     public static class ToDieuTri {
         public String ma;
@@ -157,7 +189,7 @@ public class HoSoBenhAn {
         
     public List<VaoKhoa> dsVaoKhoa = new ArrayList<>();
     
-    public Map<String, Object> chanDoan = new HashMap<>();;
+    public ChanDoan chanDoan;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayKyBenhAn;
@@ -266,7 +298,7 @@ public class HoSoBenhAn {
     }
     
     public TuoiBenhNhan getTuoiBenhNhan() {
-        var benhNhan = ServiceFactory.getBenhNhanService().getById(benhNhanId).orElseThrow();
+        var benhNhan = getBenhNhan();
         
         if(benhNhan == null
             || benhNhan.ngaysinh == null

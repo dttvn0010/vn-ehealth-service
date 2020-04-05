@@ -41,7 +41,11 @@ public class ThamDoChucNangController {
             jsonSt = JsonUtil.preprocess(jsonSt);
             var map = JsonUtil.parseJson(jsonSt);
             var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
-            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElseThrow();
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElse(null);
+            
+            if(hsba == null) {
+                throw new Exception(String.format("hoSoBenhAn maTraoDoi=%s not found", maTraoDoiHsba));
+            }
             
             var tdcnObjList = CDRUtils.getFieldAsList(map, "dsThamDoChucNang");
             var tdcnList = FPUtil.transform(tdcnObjList, x -> objectMapper.convertValue(x, ThamDoChucNang.class));

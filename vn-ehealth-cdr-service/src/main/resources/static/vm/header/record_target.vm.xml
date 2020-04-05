@@ -1,0 +1,54 @@
+<recordTarget>
+    <patientRole>      
+      	<id root="2.16.840.1.113883.3.6000.1.6"/>
+      
+	  	#if($!utils.isBlank($!benhNhan.idDinhDanhPhu))
+      		<id root="2.16.840.1.113883.3.6000.1.7" extension="$benhNhan.idDinhDanhPhu"/>
+	  	#end
+      
+		#if($!utils.isBlank($!benhNhan.idDinhDanhChinh))
+      		<id root="2.16.840.1.113883.3.6000.1.8" extension="$benhNhan.idDinhDanhChinh"/>
+		#end
+      
+		#if($!utils.isBlank($!benhNhan.idhis))
+      		<id root="2.16.840.1.113883.3.6000.1.9" extension="$!benhNhan.idhis"/>
+		#end
+      
+      <addr>
+      	<streetAddressLine>$!{benhNhan.diachi}</streetAddressLine>
+      	<precinct>$!benhNhan.dmQuanHuyen.ma</precinct>
+      	<city>$!benhNhan.dmTinhThanh.ma</city>
+      	<direction>$!benhNhan.diachi</direction>
+      </addr>
+      
+      <patient>
+        <id root="2.16.840.1.113883.3.6000.3.1"/>
+        
+        <name>$!benhNhan.tenDayDu</name>        
+        <administrativeGenderCode code="$!benhNhan.dmGioiTinh.ma" codeSystem="2.16.840.1.113883.3.6000.5.1"/>
+        <birthTime value="$!utils.formatDate($!benhNhan.ngaysinh)"/>
+        
+        #set($dm=$!benhNhan.dmTonGiao)         
+     	<raceCode code="$!dm.ma"
+        	  	  displayName="$!dm.ten"/>
+        
+        #set($dm=$!benhNhan.dmDanToc)         
+     	<ethnicGroupCode code="$!dm.ma"
+        	  			 codeSystem="2.16.840.1.113883.3.6000.1.1"
+        	  			 displayName="$!dm.ten"/>
+     
+        <guardian>
+          <addr>$!benhNhan.diaChiNguoiBaoTin</addr>
+          
+          #if(! $!utils.isBlank($!benhNhan.soDienThoaiNguoiBaoTin))
+          	<telecom value="$!benhNhan.soDienThoaiNguoiBaoTin"/>
+          #end
+          
+          <guardianPerson>
+            <name>$!benhNhan.tenNguoiBaoTin</name>
+          </guardianPerson>
+        </guardian>
+        
+      </patient>
+    </patientRole>
+  </recordTarget>
