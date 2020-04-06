@@ -31,6 +31,10 @@ public class DonThuocService {
         return donThuocRepository.findByHoSoBenhAnIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);
     }
     
+    public List<DonThuoc> getByBenhNhanId(ObjectId benhNhanId) {
+        return donThuocRepository.findByBenhNhanIdAndTrangThai(benhNhanId, TRANGTHAI_DULIEU.DEFAULT);
+    }
+    
     public void createOrUpdateFromHIS(@Nonnull HoSoBenhAn hsba, @Nonnull List<DonThuoc> dtList, String jsonSt) {
         for(int i = 0; i < dtList.size(); i++) {
             var dt = dtList.get(i);

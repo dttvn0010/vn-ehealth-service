@@ -48,6 +48,18 @@ public class XetNghiemController {
         return ResponseEntity.ok(xetnghiemList);
     }
     
+    @GetMapping("/get_ds_xetnghiem_by_bn")
+    public ResponseEntity<?> getDsXetNghiemByBn(@RequestParam String benhNhanId) {
+        var lst = xetNghiemService.getByBenhNhanId(new ObjectId(benhNhanId));
+        
+        var result = transform(lst, x -> {
+           var hsba =  hoSoBenhAnService.getById(x.hoSoBenhAnId);
+           return mapOf("xetnghiem", x, "hsba", hsba);
+        });
+        
+        return ResponseEntity.ok(result);
+    }
+    
     private void saveToFhirDb(HoSoBenhAn hsba, List<XetNghiem> xetNghiemList) {
         if(hsba == null) return;
         try {

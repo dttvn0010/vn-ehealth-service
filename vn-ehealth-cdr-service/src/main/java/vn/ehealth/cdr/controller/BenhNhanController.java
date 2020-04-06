@@ -22,10 +22,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import vn.ehealth.cdr.controller.helper.PatientHelper;
 import vn.ehealth.cdr.model.BenhNhan;
 import vn.ehealth.cdr.service.BenhNhanService;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
 import vn.ehealth.cdr.utils.*;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/benh_nhan")
@@ -56,6 +56,13 @@ public class BenhNhanController {
     public ResponseEntity<?> getBenhNhan(@RequestParam String id) {
         var benhNhan = benhNhanService.getById(new ObjectId(id));
         return ResponseEntity.of(benhNhan);
+    }
+    
+    @GetMapping("/get_id_by_sobhyte")
+    public ResponseEntity<?> getIdBySobhyt(@RequestParam String sobhyt) {
+        var benhNhan = benhNhanService.getBySobhyt(sobhyt);
+        var id = benhNhan.map(x -> x.getId()).orElse("");
+        return ResponseEntity.ok(mapOf("id", id));
     }
     
     private void removeOldFhirData(@Nonnull BenhNhan benhNhan) {
@@ -100,7 +107,7 @@ public class BenhNhanController {
             // Save to FhirDB
             saveToFhirDb(benhNhan);
             
-            var result = DataConvertUtil.mapOf(
+            var result = mapOf(
                 "success" , true,
                 "benhNhan", benhNhan 
             );

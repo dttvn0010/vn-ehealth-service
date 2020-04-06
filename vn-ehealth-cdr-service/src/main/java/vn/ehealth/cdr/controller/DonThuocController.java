@@ -1,5 +1,8 @@
 package vn.ehealth.cdr.controller;
 
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.transform;
+
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -50,6 +53,18 @@ public class DonThuocController {
     public ResponseEntity<?> getDsDonThuoc(@RequestParam("hsba_id") String id) {
         var donthuocList = donThuocService.getByHoSoBenhAnId(new ObjectId(id));
         return ResponseEntity.ok(donthuocList);
+    }
+    
+    @GetMapping("/get_ds_donthuoc_by_bn")
+    public ResponseEntity<?> getDsDonThuocByBn(@RequestParam String benhNhanId) {
+        var lst = donThuocService.getByBenhNhanId(new ObjectId(benhNhanId));
+        
+        var result = transform(lst, x -> {
+            var hsba =  hoSoBenhAnService.getById(x.hoSoBenhAnId);
+            return mapOf("donthuoc", x, "hsba", hsba);
+         });
+        
+        return ResponseEntity.ok(result);
     }
     
     private void saveToFhirDb(HoSoBenhAn hsba, @Nonnull List<DonThuoc> donThuocList) {

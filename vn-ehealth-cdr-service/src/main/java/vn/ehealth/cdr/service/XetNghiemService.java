@@ -25,6 +25,10 @@ public class XetNghiemService {
         return xetNghiemRepository.findByHoSoBenhAnIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);
     }
     
+    public List<XetNghiem> getByBenhNhanId(ObjectId benhNhanId) {
+        return xetNghiemRepository.findByBenhNhanIdAndTrangThai(benhNhanId, TRANGTHAI_DULIEU.DEFAULT);
+    }
+    
     public void createOrUpdateFromHIS(@Nonnull HoSoBenhAn hsba, @Nonnull List<XetNghiem> xetnghiemList, String jsonSt) {
         for(int i = 0; i < xetnghiemList.size(); i++) {
             var xetnghiem = xetnghiemList.get(i);

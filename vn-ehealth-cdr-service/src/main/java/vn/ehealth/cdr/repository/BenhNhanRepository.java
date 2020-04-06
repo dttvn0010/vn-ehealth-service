@@ -11,4 +11,5 @@ public interface BenhNhanRepository extends MongoRepository<BenhNhan, ObjectId> 
 
     public Optional<BenhNhan> findByIdDinhDanhChinh(String idDinhDanhChinh);
     public Optional<BenhNhan> findByIdhis(String idhis);
+    public Optional<BenhNhan> findBySobhyt(String sobhyt);
 }

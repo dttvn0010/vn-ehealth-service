@@ -56,6 +56,10 @@ public class BenhNhanService {
     	return benhNhanRepository.findByIdhis(idhis);
     }
     
+    public Optional<BenhNhan> getBySobhyt(String sobhyt) {
+        return benhNhanRepository.findBySobhyt(sobhyt);
+    }
+    
     public long countBenhNhan(String keyword) {     
         var criteria =  new Criteria().orOperator(
                 Criteria.where("tenDayDu").regex(keyword, "i"),
