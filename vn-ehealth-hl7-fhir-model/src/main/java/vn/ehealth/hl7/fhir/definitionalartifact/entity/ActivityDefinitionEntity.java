@@ -19,12 +19,13 @@ import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseRelatedArtifact;
+import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 import vn.ehealth.hl7.fhir.core.entity.BaseUsageContext;
 
 @Document(collection = "activityDefinition")
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
-public class ActivityDefinitionEntity {
+public class ActivityDefinitionEntity extends BaseResource {
 
 	@Id
 	@Indexed(name = "_id_")
