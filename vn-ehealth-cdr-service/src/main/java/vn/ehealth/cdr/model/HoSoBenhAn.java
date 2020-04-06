@@ -286,14 +286,14 @@ public class HoSoBenhAn {
         final public static int DAY = 3;
         
         public Integer tuoi;
-        public Integer donvi;
+        public Integer donVi;
         
         public TuoiBenhNhan() {
         }
         
         public TuoiBenhNhan(int tuoi, int donvi) {
             this.tuoi = tuoi;
-            this.donvi = donvi;                
+            this.donVi = donvi;                
         }
     }
     
