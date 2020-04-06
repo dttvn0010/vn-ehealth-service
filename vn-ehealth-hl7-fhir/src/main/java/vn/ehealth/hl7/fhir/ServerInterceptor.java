@@ -100,7 +100,7 @@ public class ServerInterceptor extends InterceptorAdapter {
 							theServletResponse.getWriter().append(
 									ctx.newJsonParser().encodeResourceToString(theException.getOperationOutcome()));
 							theServletResponse.getWriter().close();
-							return true;
+							return false;
 						}
 
 					}
