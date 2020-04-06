@@ -358,7 +358,7 @@ public class HoSoBenhAn {
         enc.setServiceProvider(FhirUtil.createReference(serviceProvider));        
         
         if(quanLyNguoiBenh != null) {
-            enc.setPeriod(createPeriod(quanLyNguoiBenh.ngayGioRaVien, quanLyNguoiBenh.ngayGioRaVien));
+            enc.setPeriod(createPeriod(quanLyNguoiBenh.ngayGioVaoVien, quanLyNguoiBenh.ngayGioRaVien));
         }
         
         var loaiBenhAn = DanhMuc.toConcept(dmLoaiBenhAn, CodeSystemValue.LOAI_KHAM_BENH);
