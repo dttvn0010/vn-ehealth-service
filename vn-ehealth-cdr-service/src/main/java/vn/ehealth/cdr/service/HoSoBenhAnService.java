@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -59,10 +60,12 @@ public class HoSoBenhAnService {
     }
     
     public List<HoSoBenhAn> getDsHoSo(ObjectId userId, ObjectId coSoKhamBenhId, int trangThai, String maYte, int offset, int limit) {
+        var sort = new Sort(Sort.Direction.DESC, "ngayTao");
+        
         var query = new Query(Criteria.where("coSoKhamBenhId").is(coSoKhamBenhId)
         								.and("trangThai").is(trangThai)
                                         .and("maYte").regex(maYte)
-                             ).skip(offset).limit(limit);
+                             ).with(sort).skip(offset).limit(limit);
         
         return mongoTemplate.find(query, HoSoBenhAn.class);
     }
