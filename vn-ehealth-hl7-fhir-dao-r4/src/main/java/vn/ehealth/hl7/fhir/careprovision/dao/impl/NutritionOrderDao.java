@@ -32,8 +32,7 @@ public class NutritionOrderDao extends BaseDao<NutritionOrderEntity, NutritionOr
 
 	@Override
 	protected String getProfile() {
-		// TODO Auto-generated method stub
-		return null;
+		return "NutritionOrder-v1.0";
 	}
 
 	@Override

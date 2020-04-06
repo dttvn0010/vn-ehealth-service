@@ -31,19 +31,16 @@ public class BinaryDao extends BaseDao<BinaryEntity, Binary> {
 
 	@Override
 	protected String getProfile() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Binary-v1.0";
 	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
-		// TODO Auto-generated method stub
 		return BinaryEntity.class;
 	}
 
 	@Override
 	protected Class<? extends Resource> getResourceClass() {
-		// TODO Auto-generated method stub
 		return Binary.class;
 	}
 

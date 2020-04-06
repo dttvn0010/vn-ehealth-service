@@ -32,8 +32,7 @@ public class DocumentManifestDao extends BaseDao<DocumentManifestEntity, Documen
 
 	@Override
 	protected String getProfile() {
-		// TODO Auto-generated method stub
-		return null;
+		return "DocumentManifest-v1.0";
 	}
 
 	@Override

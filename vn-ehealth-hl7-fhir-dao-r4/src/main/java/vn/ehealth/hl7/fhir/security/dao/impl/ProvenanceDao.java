@@ -1,4 +1,4 @@
-package vn.ehealth.hl7.fhir.document.dao.impl;
+package vn.ehealth.hl7.fhir.security.dao.impl;
 
 import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.addParamDefault2Criteria;
 
@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.Composition;
 import org.hl7.fhir.r4.model.DomainResource;
+import org.hl7.fhir.r4.model.Provenance;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,24 +25,24 @@ import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.document.entity.CompositionEntity;
+import vn.ehealth.hl7.fhir.security.entity.ProvenanceEntity;
 
 @Repository
-public class CompositionDao extends BaseDao<CompositionEntity, Composition> {
+public class ProvenanceDao extends BaseDao<ProvenanceEntity, Provenance> {
 
 	@Override
 	protected String getProfile() {
-		return "Composition-v1.0";
+		return "Provenance-v1.0";
 	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
-		return CompositionEntity.class;
+		return ProvenanceEntity.class;
 	}
 
 	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
-		return Composition.class;
+		return Provenance.class;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -76,11 +76,11 @@ public class CompositionDao extends BaseDao<CompositionEntity, Composition> {
 //
 //		var includeMap = getIncludeMap(ResourceType.Bundle, keys, includes);
 
-		List<CompositionEntity> entitys = mongo.find(query, CompositionEntity.class);
+		List<ProvenanceEntity> entitys = mongo.find(query, ProvenanceEntity.class);
 		if (entitys != null && entitys.size() > 0) {
-			for (CompositionEntity item : entitys) {
-				Composition obj = transform(item);
-				
+			for (ProvenanceEntity item : entitys) {
+				Provenance obj = transform(item);
+
 				resources.add(obj);
 			}
 		}
@@ -99,7 +99,7 @@ public class CompositionDao extends BaseDao<CompositionEntity, Composition> {
 		if (criteria != null) {
 			query = Query.query(criteria);
 		}
-		total = mongo.count(query, CompositionEntity.class);
+		total = mongo.count(query, ProvenanceEntity.class);
 		return total;
 	}
 
@@ -112,7 +112,7 @@ public class CompositionDao extends BaseDao<CompositionEntity, Composition> {
 		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// set param default
 		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, null);
-		
+
 		return criteria;
 	}
 }
