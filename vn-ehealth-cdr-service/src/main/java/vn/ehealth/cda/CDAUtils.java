@@ -14,6 +14,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.w3c.dom.Node;
 
 public class CDAUtils {
@@ -70,10 +72,11 @@ public class CDAUtils {
     private static String getTemplateString(String templatePath, Map<String, Object> _data) {
         var engine = new VelocityEngine();
         engine.setProperty("directive.set.null.allowed", true);
-        engine.setProperty("file.resource.loader.path", "");
+        engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+        engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+        engine.init();
         
-        var resourcePath = CDAUtils.class.getClassLoader().getResource(VM_PATH + templatePath);
-        var template = engine.getTemplate(resourcePath.getPath(), "UTF-8" );
+        var template = engine.getTemplate(VM_PATH + templatePath, "UTF-8" );
         var data = new HashMap<>(_data);
         var writer = new StringWriter();
         template.merge(new VelocityContext(data), writer );
@@ -83,7 +86,9 @@ public class CDAUtils {
     public static String getClinicalDocument(Map<String, Object> _data) {
         VelocityEngine engine = new VelocityEngine();
         engine.setProperty("directive.set.null.allowed", true);
-        engine.setProperty("file.resource.loader.path", "");
+        engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+        engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+        engine.init();
         
         var data = new HashMap<>(_data);
         data.put("recordTarget", getTemplateString("header/record_target.vm.xml", data));
@@ -100,8 +105,7 @@ public class CDAUtils {
         data.put("phauThuatThuThuatComp", getTemplateString("components/pttt.vm.xml", data));
         data.put("donThuocComp", getTemplateString("components/donthuoc.vm.xml", data));
         
-        var resourcePath = CDAUtils.class.getClassLoader().getResource(VM_PATH + "document.vm.xml");
-        var template = engine.getTemplate(resourcePath.getPath(), "UTF-8" );
+        var template = engine.getTemplate(VM_PATH + "document.vm.xml", "UTF-8" );
         var writer = new StringWriter();
 
         template.merge(new VelocityContext(data), writer );
