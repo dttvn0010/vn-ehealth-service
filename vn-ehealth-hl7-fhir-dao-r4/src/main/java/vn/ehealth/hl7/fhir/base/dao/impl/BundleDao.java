@@ -31,8 +31,7 @@ public class BundleDao extends BaseDao<BundleEntity, Bundle> {
 
 	@Override
 	protected String getProfile() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Bundle-v1.0";
 	}
 
 	@Override

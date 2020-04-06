@@ -8,7 +8,11 @@ import org.springframework.stereotype.Component;
 
 import vn.ehealth.hl7.fhir.base.dao.impl.BinaryDao;
 import vn.ehealth.hl7.fhir.base.dao.impl.BundleDao;
+import vn.ehealth.hl7.fhir.base.dao.impl.SubscriptionDao;
 import vn.ehealth.hl7.fhir.careprovision.dao.impl.NutritionOrderDao;
+import vn.ehealth.hl7.fhir.careprovision.dao.impl.RequestGroupDao;
+import vn.ehealth.hl7.fhir.careprovision.dao.impl.RiskAssessmentDao;
+import vn.ehealth.hl7.fhir.careprovision.dao.impl.VisionPrescriptionDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.AllergyIntoleranceDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.CarePlanDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ClinicalImpressionDao;
@@ -19,10 +23,15 @@ import vn.ehealth.hl7.fhir.clinical.dao.impl.GoalDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ProcedureDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.definitionalartifact.dao.impl.ActivityDefinitionDao;
+import vn.ehealth.hl7.fhir.definitionalartifact.dao.impl.PlanDefinitionDao;
+import vn.ehealth.hl7.fhir.definitionalartifact.dao.impl.QuestionnaireDao;
+import vn.ehealth.hl7.fhir.diagnostic.dao.impl.BodyStructureDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.DiagnosticReportDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ImagingStudyDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.MediaDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ObservationDao;
+import vn.ehealth.hl7.fhir.diagnostic.dao.impl.QuestionnaireResponseDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.SpecimenDao;
 import vn.ehealth.hl7.fhir.document.dao.impl.CompositionDao;
 import vn.ehealth.hl7.fhir.document.dao.impl.DocumentManifestDao;
@@ -38,6 +47,7 @@ import vn.ehealth.hl7.fhir.medication.dao.impl.MedicationRequestDao;
 import vn.ehealth.hl7.fhir.medication.dao.impl.MedicationStatementDao;
 import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
 import vn.ehealth.hl7.fhir.patient.dao.impl.RelatedPersonDao;
+import vn.ehealth.hl7.fhir.product.dao.impl.SubstanceDao;
 import vn.ehealth.hl7.fhir.provider.dao.impl.DeviceDao;
 import vn.ehealth.hl7.fhir.provider.dao.impl.HealthcareServiceDao;
 import vn.ehealth.hl7.fhir.provider.dao.impl.LocationDao;
@@ -48,10 +58,15 @@ import vn.ehealth.hl7.fhir.schedule.dao.impl.AppointmentDao;
 import vn.ehealth.hl7.fhir.schedule.dao.impl.AppointmentResponseDao;
 import vn.ehealth.hl7.fhir.schedule.dao.impl.ScheduleDao;
 import vn.ehealth.hl7.fhir.schedule.dao.impl.SlotDao;
+import vn.ehealth.hl7.fhir.security.dao.impl.AuditEventDao;
+import vn.ehealth.hl7.fhir.security.dao.impl.ConsentDao;
+import vn.ehealth.hl7.fhir.security.dao.impl.ProvenanceDao;
 import vn.ehealth.hl7.fhir.term.dao.impl.CodeSystemDao;
 import vn.ehealth.hl7.fhir.term.dao.impl.ConceptMapDao;
 import vn.ehealth.hl7.fhir.term.dao.impl.ValueSetDao;
+import vn.ehealth.hl7.fhir.user.dao.impl.GroupDao;
 import vn.ehealth.hl7.fhir.user.dao.impl.PersonDao;
+import vn.ehealth.hl7.fhir.workflow.dao.impl.TaskDao;
 
 @Component
 public class DaoFactory implements ApplicationContextAware {
@@ -109,12 +124,32 @@ public class DaoFactory implements ApplicationContextAware {
     
     private static BinaryDao binaryDao;
     private static BundleDao bundleDao;
+    private static SubscriptionDao subscriptionDao;
     
     private static CompositionDao compositionDao;
     private static DocumentManifestDao documentManifestDao;
     private static DocumentReferenceDao documentReferenceDao;
     
     private static NutritionOrderDao nutritionOrderDao;
+    private static RequestGroupDao requestGroupDao;
+    private static RiskAssessmentDao riskAssessmentDao;
+    private static VisionPrescriptionDao visionPrescriptionDao;
+    
+    private static ActivityDefinitionDao activityDefinitionDao;
+    private static PlanDefinitionDao planDefinitionDao;
+    private static QuestionnaireDao questionnaireDao;
+    
+    private static BodyStructureDao bodyStructureDao;
+    private static QuestionnaireResponseDao questionnaireResponseDao;
+    
+    private static AuditEventDao auditEventDao;
+    private static ConsentDao consentDao;
+    private static ProvenanceDao provenanceDao;
+    
+    private static GroupDao groupDao;
+    private static SubstanceDao substanceDao;
+    private static TaskDao taskDao;
+    
 	
 	public static BaseDao<?,?> getDaoByType(ResourceType resourceType) {		
 		switch (resourceType) {
@@ -163,6 +198,21 @@ public class DaoFactory implements ApplicationContextAware {
 		case DocumentManifest: return getDocumentManifestDao();
 		case DocumentReference: return getDocumentReferenceDao();
 		case NutritionOrder: return getNutritionOrderDao();
+		case Subscription: return getSubscriptionDao();
+		case RequestGroup: return getRequestGroupDao();
+		case RiskAssessment: return getRiskAssessmentDao();
+		case VisionPrescription: return getVisionPrescriptionDao();
+		case ActivityDefinition: return getActivityDefinitionDao();
+		case PlanDefinition: return getPlanDefinitionDao();
+		case Questionnaire: return getQuestionnaireDao();
+		case QuestionnaireResponse: return getQuestionnaireResponseDao();
+		case BodyStructure: return getBodyStructureDao();
+		case Substance: return getSubstanceDao();
+		case AuditEvent: return getAuditEventDao();
+		case Consent: return getConsentDao();
+		case Provenance: return getProvenanceDao();
+		case Group: return getGroupDao();
+		case Task: return getTaskDao();		
 		
 		default: return null;
 		}
@@ -486,5 +536,110 @@ public class DaoFactory implements ApplicationContextAware {
         	nutritionOrderDao = applicationContext.getBean(NutritionOrderDao.class);
         }
         return nutritionOrderDao;
+    }
+    
+    public static SubscriptionDao getSubscriptionDao() {
+        if(subscriptionDao == null) {
+        	subscriptionDao = applicationContext.getBean(SubscriptionDao.class);
+        }
+        return subscriptionDao;
+    }
+    
+    public static RequestGroupDao getRequestGroupDao() {
+        if(requestGroupDao == null) {
+        	requestGroupDao = applicationContext.getBean(RequestGroupDao.class);
+        }
+        return requestGroupDao;
+    }
+    
+    public static RiskAssessmentDao getRiskAssessmentDao() {
+        if(riskAssessmentDao == null) {
+        	riskAssessmentDao = applicationContext.getBean(RiskAssessmentDao.class);
+        }
+        return riskAssessmentDao;
+    }
+    
+    public static VisionPrescriptionDao getVisionPrescriptionDao() {
+        if(visionPrescriptionDao == null) {
+        	visionPrescriptionDao = applicationContext.getBean(VisionPrescriptionDao.class);
+        }
+        return visionPrescriptionDao;
+    }
+    
+    public static ActivityDefinitionDao getActivityDefinitionDao() {
+        if(activityDefinitionDao == null) {
+        	activityDefinitionDao = applicationContext.getBean(ActivityDefinitionDao.class);
+        }
+        return activityDefinitionDao;
+    }
+    
+    public static PlanDefinitionDao getPlanDefinitionDao() {
+        if(planDefinitionDao == null) {
+        	planDefinitionDao = applicationContext.getBean(PlanDefinitionDao.class);
+        }
+        return planDefinitionDao;
+    }
+    
+    public static QuestionnaireDao getQuestionnaireDao() {
+        if(questionnaireDao == null) {
+        	questionnaireDao = applicationContext.getBean(QuestionnaireDao.class);
+        }
+        return questionnaireDao;
+    }
+    
+    public static BodyStructureDao getBodyStructureDao() {
+        if(bodyStructureDao == null) {
+        	bodyStructureDao = applicationContext.getBean(BodyStructureDao.class);
+        }
+        return bodyStructureDao;
+    }
+    
+    public static QuestionnaireResponseDao getQuestionnaireResponseDao() {
+        if(questionnaireResponseDao == null) {
+        	questionnaireResponseDao = applicationContext.getBean(QuestionnaireResponseDao.class);
+        }
+        return questionnaireResponseDao;
+    }
+    
+    public static SubstanceDao getSubstanceDao() {
+        if(substanceDao == null) {
+        	substanceDao = applicationContext.getBean(SubstanceDao.class);
+        }
+        return substanceDao;
+    }
+    
+    public static AuditEventDao getAuditEventDao() {
+        if(auditEventDao == null) {
+        	auditEventDao = applicationContext.getBean(AuditEventDao.class);
+        }
+        return auditEventDao;
+    }
+    
+    public static ConsentDao getConsentDao() {
+        if(consentDao == null) {
+        	consentDao = applicationContext.getBean(ConsentDao.class);
+        }
+        return consentDao;
+    }
+    
+    public static ProvenanceDao getProvenanceDao() {
+        if(provenanceDao == null) {
+        	provenanceDao = applicationContext.getBean(ProvenanceDao.class);
+        }
+        return provenanceDao;
+    }
+    
+    public static GroupDao getGroupDao() {
+        if(groupDao == null) {
+        	groupDao = applicationContext.getBean(GroupDao.class);
+        }
+        return groupDao;
+    }
+    
+    public static TaskDao getTaskDao() {
+        if(taskDao == null) {
+        	taskDao = applicationContext.getBean(TaskDao.class);
+        }
+        return taskDao;
     }
 }

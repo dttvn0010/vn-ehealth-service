@@ -32,8 +32,7 @@ public class DocumentReferenceDao extends BaseDao<DocumentReferenceEntity, Docum
 
 	@Override
 	protected String getProfile() {
-		// TODO Auto-generated method stub
-		return null;
+		return "DocumentReference-v1.0";
 	}
 
 	@Override

@@ -30,7 +30,11 @@ import ca.uhn.fhir.util.VersionUtil;
 import ca.uhn.fhir.validation.ResultSeverityEnum;
 import vn.ehealth.hl7.fhir.base.providers.BinaryProvider;
 import vn.ehealth.hl7.fhir.base.providers.BundleProvider;
+import vn.ehealth.hl7.fhir.base.providers.SubscriptionProvider;
 import vn.ehealth.hl7.fhir.careprovision.providers.NutritionOrderProvider;
+import vn.ehealth.hl7.fhir.careprovision.providers.RequestGroupProvider;
+import vn.ehealth.hl7.fhir.careprovision.providers.RiskAssessmentProvider;
+import vn.ehealth.hl7.fhir.careprovision.providers.VisionPrescriptionProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.AllergyIntoleranceProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.CarePlanProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.ClinicalImpressionProvider;
@@ -42,11 +46,16 @@ import vn.ehealth.hl7.fhir.clinical.providers.ProcedureProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.ServiceRequestProvider;
 //import vn.ehealth.hl7.fhir.clinical.providers.ServiceRequestProvider;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
+import vn.ehealth.hl7.fhir.definitionalartifact.providers.ActivityDefinitionProvider;
+import vn.ehealth.hl7.fhir.definitionalartifact.providers.PlanDefinitionProvider;
+import vn.ehealth.hl7.fhir.definitionalartifact.providers.QuestionnaireProvider;
+import vn.ehealth.hl7.fhir.diagnostic.providers.BodyStructureProvider;
 //import vn.ehealth.hl7.fhir.core.oauth2.ServerInterceptor;
 import vn.ehealth.hl7.fhir.diagnostic.providers.DiagnosticReportProvider;
 import vn.ehealth.hl7.fhir.diagnostic.providers.ImagingStudyProvider;
 import vn.ehealth.hl7.fhir.diagnostic.providers.MediaProvider;
 import vn.ehealth.hl7.fhir.diagnostic.providers.ObservationProvider;
+import vn.ehealth.hl7.fhir.diagnostic.providers.QuestionnaireResponseProvider;
 import vn.ehealth.hl7.fhir.diagnostic.providers.SpecimenProvider;
 import vn.ehealth.hl7.fhir.document.providers.CompositionProvider;
 import vn.ehealth.hl7.fhir.document.providers.DocumentManifestProvider;
@@ -62,6 +71,7 @@ import vn.ehealth.hl7.fhir.medication.providers.MedicationRequestProvider;
 import vn.ehealth.hl7.fhir.medication.providers.MedicationStatementProvider;
 import vn.ehealth.hl7.fhir.patient.providers.PatientProvider;
 import vn.ehealth.hl7.fhir.patient.providers.RelatedPersonProvider;
+import vn.ehealth.hl7.fhir.product.providers.SubstanceProvider;
 import vn.ehealth.hl7.fhir.provider.providers.DeviceProvider;
 import vn.ehealth.hl7.fhir.provider.providers.HealthcareServiceProvider;
 import vn.ehealth.hl7.fhir.provider.providers.LocationProvider;
@@ -74,10 +84,15 @@ import vn.ehealth.hl7.fhir.schedule.providers.AppointmentProvider;
 import vn.ehealth.hl7.fhir.schedule.providers.AppointmentResponseProvider;
 import vn.ehealth.hl7.fhir.schedule.providers.ScheduleProvider;
 import vn.ehealth.hl7.fhir.schedule.providers.SlotProvider;
+import vn.ehealth.hl7.fhir.security.providers.AuditEventProvider;
+import vn.ehealth.hl7.fhir.security.providers.ConsentProvider;
+import vn.ehealth.hl7.fhir.security.providers.ProvenanceProvider;
 import vn.ehealth.hl7.fhir.term.providers.CodeSystemProvider;
 import vn.ehealth.hl7.fhir.term.providers.ConceptMapProvider;
 import vn.ehealth.hl7.fhir.term.providers.ValueSetProvider;
+import vn.ehealth.hl7.fhir.user.providers.GroupProvider;
 import vn.ehealth.hl7.fhir.user.providers.PersonProvider;
+import vn.ehealth.hl7.fhir.workflow.providers.TaskProvider;
 
 public class Hl7FhirRestfulServer extends RestfulServer {
 	private static final long serialVersionUID = 1L;
@@ -157,7 +172,23 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 				(IResourceProvider) applicationContext.getBean(CompositionProvider.class),
 				(IResourceProvider) applicationContext.getBean(DocumentManifestProvider.class),
 				(IResourceProvider) applicationContext.getBean(DocumentReferenceProvider.class),
-				(IResourceProvider) applicationContext.getBean(NutritionOrderProvider.class)));
+				(IResourceProvider) applicationContext.getBean(NutritionOrderProvider.class),
+				// Add 2020/04/06
+				(IResourceProvider) applicationContext.getBean(SubscriptionProvider.class),
+				(IResourceProvider) applicationContext.getBean(RequestGroupProvider.class),
+				(IResourceProvider) applicationContext.getBean(RiskAssessmentProvider.class),
+				(IResourceProvider) applicationContext.getBean(VisionPrescriptionProvider.class),
+				(IResourceProvider) applicationContext.getBean(ActivityDefinitionProvider.class),
+				(IResourceProvider) applicationContext.getBean(PlanDefinitionProvider.class),
+				(IResourceProvider) applicationContext.getBean(QuestionnaireProvider.class),
+				(IResourceProvider) applicationContext.getBean(BodyStructureProvider.class),
+				(IResourceProvider) applicationContext.getBean(QuestionnaireResponseProvider.class),
+				(IResourceProvider) applicationContext.getBean(SubstanceProvider.class),
+				(IResourceProvider) applicationContext.getBean(AuditEventProvider.class),
+				(IResourceProvider) applicationContext.getBean(ConsentProvider.class),
+				(IResourceProvider) applicationContext.getBean(ProvenanceProvider.class),
+				(IResourceProvider) applicationContext.getBean(GroupProvider.class),
+				(IResourceProvider) applicationContext.getBean(TaskProvider.class)));
 		setServerConformanceProvider(new Hl7FhirServerConformanceProvider());
 
 //		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
