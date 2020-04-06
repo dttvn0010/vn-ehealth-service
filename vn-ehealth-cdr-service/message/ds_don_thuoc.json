@@ -1,5 +1,5 @@
 {
-  "maTraoDoiHoSo": "18.052294",
+  "maTraoDoiHoSo": "180034025",
   "dsDonThuoc": [
     {
       "idhis": "11111",
@@ -8,7 +8,7 @@
         "chungChiHanhNghe": "11111",
         "ten": "Bác sĩ kê đơn"
       },
-      "soDon": "Số đơn",
+      "soDon": "100001",
       "dsDonThuocChiTiet": [
         {
           "dmThuoc": {
@@ -29,7 +29,7 @@
           },
           "ngayBatDau": "2018-06-29 00:00:00",
           "ngayKetThuc": "2018-06-29 00:00:00",
-          "lieuLuongThuoc": "Liều lượng",
+          "lieuLuongThuoc":  {"soLuong": 1 ,"donVi": "viên"},
           "chiDanDungThuoc": "Chỉ dẫn dùng thuốc",
           "bietDuoc": "Biệt dược"
         }

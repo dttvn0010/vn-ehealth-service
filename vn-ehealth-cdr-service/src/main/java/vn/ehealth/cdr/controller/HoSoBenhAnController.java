@@ -36,7 +36,9 @@ import vn.ehealth.cdr.service.LogService;
 import vn.ehealth.cdr.service.PhauThuatThuThuatService;
 import vn.ehealth.cdr.service.XetNghiemService;
 import vn.ehealth.cdr.utils.*;
+import vn.ehealth.hl7.fhir.core.common.UnAuthorizedException;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
+import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
@@ -64,12 +66,17 @@ public class HoSoBenhAnController {
     @GetMapping("/count_ds_hs")
     public ResponseEntity<?> countHsba(@RequestParam int trangthai, @RequestParam String maYte) {
         try {
-            var user = UserUtil.getCurrentUser();
-            var count = hoSoBenhAnService.countHoSo(user.get().id, user.get().coSoKhamBenhId, trangthai, maYte);
+            var user = UserUtil.getCurrentUser().orElse(null);
+            
+            if(user == null) {
+                throw new UnAuthorizedException();
+            }
+            
+            var count = hoSoBenhAnService.countHoSo(user.id, user.coSoKhamBenhId, trangthai, maYte);
             return ResponseEntity.ok(count);
             
         }catch (Exception e) {
-            return CDRUtils.errorResponse(e);
+            return ResponseUtil.errorResponse(e);
         }        
     }
     
@@ -90,12 +97,17 @@ public class HoSoBenhAnController {
                                                 @RequestParam int count) {
         
         try {
-            var user = UserUtil.getCurrentUser();    
-            var result = hoSoBenhAnService.getDsHoSo(user.get().id, user.get().coSoKhamBenhId, trangthai, maYte, start, count);
+            var user = UserUtil.getCurrentUser().orElse(null);
+            
+            if(user == null) {
+                throw new UnAuthorizedException();
+            }
+            
+            var result = hoSoBenhAnService.getDsHoSo(user.id, user.coSoKhamBenhId, trangthai, maYte, start, count);
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return CDRUtils.errorResponse(e);
+            return ResponseUtil.errorResponse(e);
         }        
     }
     
@@ -131,7 +143,7 @@ public class HoSoBenhAnController {
             return ResponseEntity.ok(mapOf("success", true));
             
         }catch(Exception e) {
-            return CDRUtils.errorResponse(e);
+            return ResponseUtil.errorResponse(e);
         }
     }
     
@@ -143,7 +155,7 @@ public class HoSoBenhAnController {
             return ResponseEntity.ok(mapOf("success", true));
             
         }catch(Exception e) {
-            return CDRUtils.errorResponse(e);
+            return ResponseUtil.errorResponse(e);
         }
     }
     
@@ -178,7 +190,7 @@ public class HoSoBenhAnController {
                     .body(resource);
             
         }catch(Exception e) {
-            return CDRUtils.errorResponse(e);
+            return ResponseUtil.errorResponse(e);
         }
     }
     
@@ -190,7 +202,7 @@ public class HoSoBenhAnController {
             return ResponseEntity.ok(mapOf("success", true));
             
         }catch(Exception e) {
-            return CDRUtils.errorResponse(e);
+            return ResponseUtil.errorResponse(e);
         }
     }
     
@@ -275,7 +287,7 @@ public class HoSoBenhAnController {
             return ResponseEntity.ok(result);
         
         } catch(Exception e) {
-            return CDRUtils.errorResponse(e);
+            return ResponseUtil.errorResponse(e);
         }
     }
 }

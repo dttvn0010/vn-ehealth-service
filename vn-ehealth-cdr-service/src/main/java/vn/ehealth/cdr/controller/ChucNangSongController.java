@@ -17,6 +17,7 @@ import vn.ehealth.cdr.service.ChucNangSongService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.utils.*;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
+import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
@@ -59,7 +60,7 @@ public class ChucNangSongController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return CDRUtils.errorResponse(e);
+            return ResponseUtil.errorResponse(e);
         }
     }
 }

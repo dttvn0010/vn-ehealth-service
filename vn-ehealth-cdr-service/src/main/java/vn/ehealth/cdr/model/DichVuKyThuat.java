@@ -101,7 +101,7 @@ public abstract class DichVuKyThuat {
             loaiDVKT = category.getCodingFirstRep().getCode();
         }
         
-        if(idhis != null && !StringUtils.isBlank(loaiDVKT)) {
+        if(!StringUtils.isBlank(idhis) && !StringUtils.isBlank(loaiDVKT)) {
             var identifier = loaiDVKT + "/" + idhis;
             procedure.setIdentifier(listOf(FhirUtil.createIdentifier(identifier, "")));
         }

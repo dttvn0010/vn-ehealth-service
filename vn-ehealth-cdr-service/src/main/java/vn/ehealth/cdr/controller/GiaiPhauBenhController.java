@@ -24,6 +24,7 @@ import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.utils.*;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
+import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 
 @RestController
 @RequestMapping("/api/gpb")
@@ -91,7 +92,7 @@ public class GiaiPhauBenhController {
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
-            return CDRUtils.errorResponse(e);
+            return ResponseUtil.errorResponse(e);
         }
     }
 }

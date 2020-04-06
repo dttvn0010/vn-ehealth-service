@@ -23,6 +23,7 @@ import vn.ehealth.cdr.controller.helper.PatientHelper;
 import vn.ehealth.cdr.model.BenhNhan;
 import vn.ehealth.cdr.service.BenhNhanService;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
 import vn.ehealth.cdr.utils.*;
 
@@ -106,7 +107,7 @@ public class BenhNhanController {
                     
             return ResponseEntity.ok(result);
         }catch(Exception e) {
-            return CDRUtils.errorResponse(e);
+            return ResponseUtil.errorResponse(e);
         }        
     }
 }
