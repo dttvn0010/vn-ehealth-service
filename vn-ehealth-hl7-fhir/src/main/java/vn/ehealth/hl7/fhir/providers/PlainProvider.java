@@ -27,7 +27,7 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
-import vn.ehealth.hl7.fhir.dao.iPlainDao;
+import vn.ehealth.hl7.fhir.dao.impl.PlainDao;
 
 @Component
 public class PlainProvider {
@@ -39,58 +39,51 @@ public class PlainProvider {
 	FhirContext fhirContext;
 
 	@Autowired
-	iPlainDao baseDao;
+	PlainDao baseDao;
 
 	@History
 	public IBundleProvider getServerHistory(@OptionalParam(name = "_since") InstantType theSince,
-			@OptionalParam(name = "_at") DateRangeParam theAt,
-			// Search result parameters
-			@Count Integer count) throws OperationOutcomeException {
+			@OptionalParam(name = "_at") DateRangeParam theAt) throws OperationOutcomeException {
 		log.debug("Search Plain Provider called");
-		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
-			throw OperationOutcomeFactory.buildOperationOutcomeException(
-					new ResourceNotFoundException("Can not load more than " + ConstantKeys.DEFAULT_PAGE_MAX_SIZE),
-					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTSUPPORTED);
-		} else {
-			List<IBaseResource> results = new ArrayList<IBaseResource>();
-//			results = baseDao.history(theSince, theAt);
-			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x
-			// -> x);
-			final List<IBaseResource> finalResults = results;
+		List<IBaseResource> results = new ArrayList<IBaseResource>();
+		results = baseDao.history(theSince, theAt);
+		// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x
+		// -> x);
+		final List<IBaseResource> finalResults = results;
 
-			return new IBundleProvider() {
+		return new IBundleProvider() {
 
-				@Override
-				public Integer size() {
-					return finalResults.size();
-				}
+			@Override
+			public Integer size() {
+				return finalResults.size();
+			}
 
-				@Override
-				public Integer preferredPageSize() {
-					return finalResults.size();
-				}
+			@Override
+			public Integer preferredPageSize() {
+				return finalResults.size();
+			}
 
-				@Override
-				public String getUuid() {
-					// TODO Auto-generated method stub
-					return null;
-				}
+			@Override
+			public String getUuid() {
+				// TODO Auto-generated method stub
+				return null;
+			}
 
-				@Override
-				public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
-					// TODO Auto-generated method stub
-					return finalResults;
-				}
+			@Override
+			public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
+				// TODO Auto-generated method stub
+				return finalResults;
+			}
 
-				@Override
-				public IPrimitiveType<Date> getPublished() {
-					// TODO Auto-generated method stub
-					return null;
-				}
-			};
-		}
+			@Override
+			public IPrimitiveType<Date> getPublished() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
 	}
 
+	@SuppressWarnings("unused")
 	@Transaction
 	public IBundleProvider transaction(@TransactionParam Bundle theInput) {
 		for (BundleEntryComponent nextEntry : theInput.getEntry()) {

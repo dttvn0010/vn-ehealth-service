@@ -38,9 +38,11 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 			ReferenceParam incomingreferral, NumberParam length, ReferenceParam location, DateRangeParam locationPeriod,
 			ReferenceParam partOf, ReferenceParam participant, TokenParam participantType, ReferenceParam patient,
 			ReferenceParam practitioner, TokenParam reason, ReferenceParam serviceProvider,
-			TokenParam specialArrangement, TokenParam status, ReferenceParam subject, TokenParam type, TokenParam resid,
-			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-			StringParam _content, StringParam _page, String sortParam, Integer count, Set<Include> includes) {
+			TokenParam specialArrangement, TokenParam status, ReferenceParam subject, TokenParam type,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count,
+			Set<Include> includes) {
 
 		List<IBaseResource> resources = new ArrayList<>();
 		Criteria criteria = setParamToCriteria(appointment, _class, date, diagnosis, episodeofcare, identifier,
@@ -52,7 +54,8 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -326,9 +329,9 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return Encounter.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return Encounter.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

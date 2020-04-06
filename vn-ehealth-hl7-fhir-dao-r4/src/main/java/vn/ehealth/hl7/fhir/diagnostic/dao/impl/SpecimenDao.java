@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -34,9 +35,11 @@ import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 @Repository
 public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(FhirContext fhirContext, ReferenceParam request, TokenParam resid,
-			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-			StringParam _content, StringParam _page, String sortParam, Integer count, Set<Include> includes) {
+	public List<IBaseResource> search(FhirContext fhirContext, ReferenceParam request,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count,
+			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<>();
 		Criteria criteria = setParamToCriteria(request, resid, _lastUpdated, _tag, _profile, _query, _security,
 				_content);
@@ -45,7 +48,8 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -120,9 +124,9 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return Specimen.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return Specimen.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

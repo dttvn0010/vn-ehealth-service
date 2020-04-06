@@ -6,6 +6,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import vn.ehealth.hl7.fhir.base.dao.impl.BinaryDao;
+import vn.ehealth.hl7.fhir.base.dao.impl.BundleDao;
+import vn.ehealth.hl7.fhir.careprovision.dao.impl.NutritionOrderDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.AllergyIntoleranceDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.CarePlanDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ClinicalImpressionDao;
@@ -21,6 +24,9 @@ import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ImagingStudyDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.MediaDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.ObservationDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.SpecimenDao;
+import vn.ehealth.hl7.fhir.document.dao.impl.CompositionDao;
+import vn.ehealth.hl7.fhir.document.dao.impl.DocumentManifestDao;
+import vn.ehealth.hl7.fhir.document.dao.impl.DocumentReferenceDao;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.CareTeamDao;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EpisodeOfCareDao;
@@ -101,6 +107,14 @@ public class DaoFactory implements ApplicationContextAware {
     private static FamilyMemberHistoryDao familyMemberHistoryDao;
     private static MediaDao mediaDao;
     
+    private static BinaryDao binaryDao;
+    private static BundleDao bundleDao;
+    
+    private static CompositionDao compositionDao;
+    private static DocumentManifestDao documentManifestDao;
+    private static DocumentReferenceDao documentReferenceDao;
+    
+    private static NutritionOrderDao nutritionOrderDao;
 	
 	public static BaseDao<?,?> getDaoByType(ResourceType resourceType) {		
 		switch (resourceType) {
@@ -143,6 +157,13 @@ public class DaoFactory implements ApplicationContextAware {
 		case AllergyIntolerance: return getAllergyIntoleranceDao();
 		case FamilyMemberHistory: return getFamilyMemberHistoryDao();
 		case Media: return getMediaDao();
+		case Binary: return getBinaryDao();
+		case Bundle: return getBundleDao();
+		case Composition: return getCompositionDao();
+		case DocumentManifest: return getDocumentManifestDao();
+		case DocumentReference: return getDocumentReferenceDao();
+		case NutritionOrder: return getNutritionOrderDao();
+		
 		default: return null;
 		}
 	}
@@ -423,5 +444,47 @@ public class DaoFactory implements ApplicationContextAware {
         	mediaDao = applicationContext.getBean(MediaDao.class);
         }
         return mediaDao;
+    }
+    
+    public static BinaryDao getBinaryDao() {
+        if(binaryDao == null) {
+        	binaryDao = applicationContext.getBean(BinaryDao.class);
+        }
+        return binaryDao;
+    }
+    
+    public static BundleDao getBundleDao() {
+        if(bundleDao == null) {
+        	bundleDao = applicationContext.getBean(BundleDao.class);
+        }
+        return bundleDao;
+    }
+    
+    public static CompositionDao getCompositionDao() {
+        if(compositionDao == null) {
+        	compositionDao = applicationContext.getBean(CompositionDao.class);
+        }
+        return compositionDao;
+    }
+    
+    public static DocumentManifestDao getDocumentManifestDao() {
+        if(documentManifestDao == null) {
+        	documentManifestDao = applicationContext.getBean(DocumentManifestDao.class);
+        }
+        return documentManifestDao;
+    }
+    
+    public static DocumentReferenceDao getDocumentReferenceDao() {
+        if(documentReferenceDao == null) {
+        	documentReferenceDao = applicationContext.getBean(DocumentReferenceDao.class);
+        }
+        return documentReferenceDao;
+    }
+    
+    public static NutritionOrderDao getNutritionOrderDao() {
+        if(nutritionOrderDao == null) {
+        	nutritionOrderDao = applicationContext.getBean(NutritionOrderDao.class);
+        }
+        return nutritionOrderDao;
     }
 }

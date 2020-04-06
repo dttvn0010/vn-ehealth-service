@@ -7,7 +7,10 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
@@ -20,17 +23,17 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "specimen")
-@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1', 'request.reference':1, 'basedOn.reference':1, 'subject.reference':1}", name = "index_by_default")
+@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1'}", name = "index_by_default")
 public class SpecimenEntity extends BaseResource {
     
     public static class SpecimenCollection {
         public BaseReference collector;
-        public BaseType collected;
+        @JsonIgnore public BaseType collected;
         public BaseDuration duration;
         public BaseQuantity quantity;
         public BaseCodeableConcept method;
         public BaseCodeableConcept bodySite;
-        public BaseType fastingStatus;
+        @JsonIgnore public BaseType fastingStatus;
     }
     
     public static class SpecimenProcessing {
@@ -46,11 +49,12 @@ public class SpecimenEntity extends BaseResource {
         public BaseCodeableConcept type;
         public BaseQuantity capacity;
         public BaseQuantity specimenQuantity;
-        public BaseType additive;        
+        @JsonIgnore public BaseType additive;        
     }
     
     @Id
-    public ObjectId id;
+    @Indexed(name = "_id_")
+    @JsonIgnore public ObjectId id;
     public List<BaseIdentifier> identifier;
     public BaseIdentifier accessionIdentifier;
     public String status;

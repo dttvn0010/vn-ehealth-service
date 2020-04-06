@@ -28,6 +28,9 @@ import ca.uhn.fhir.rest.server.interceptor.RequestValidatingInterceptor;
 import ca.uhn.fhir.rest.server.interceptor.ResponseHighlighterInterceptor;
 import ca.uhn.fhir.util.VersionUtil;
 import ca.uhn.fhir.validation.ResultSeverityEnum;
+import vn.ehealth.hl7.fhir.base.providers.BinaryProvider;
+import vn.ehealth.hl7.fhir.base.providers.BundleProvider;
+import vn.ehealth.hl7.fhir.careprovision.providers.NutritionOrderProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.AllergyIntoleranceProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.CarePlanProvider;
 import vn.ehealth.hl7.fhir.clinical.providers.ClinicalImpressionProvider;
@@ -45,6 +48,9 @@ import vn.ehealth.hl7.fhir.diagnostic.providers.ImagingStudyProvider;
 import vn.ehealth.hl7.fhir.diagnostic.providers.MediaProvider;
 import vn.ehealth.hl7.fhir.diagnostic.providers.ObservationProvider;
 import vn.ehealth.hl7.fhir.diagnostic.providers.SpecimenProvider;
+import vn.ehealth.hl7.fhir.document.providers.CompositionProvider;
+import vn.ehealth.hl7.fhir.document.providers.DocumentManifestProvider;
+import vn.ehealth.hl7.fhir.document.providers.DocumentReferenceProvider;
 import vn.ehealth.hl7.fhir.ehr.providers.CareTeamProvider;
 import vn.ehealth.hl7.fhir.ehr.providers.EncounterProvider;
 import vn.ehealth.hl7.fhir.ehr.providers.EpisodeOfCareProvider;
@@ -144,11 +150,18 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 				(IResourceProvider) applicationContext.getBean(ServiceRequestProvider.class),
 				(IResourceProvider) applicationContext.getBean(FamilyMemberHistoryProvider.class),
 				(IResourceProvider) applicationContext.getBean(AllergyIntoleranceProvider.class),
-				(IResourceProvider) applicationContext.getBean(MediaProvider.class)));
+				(IResourceProvider) applicationContext.getBean(MediaProvider.class),
+				// Add 2020/04/05
+				(IResourceProvider) applicationContext.getBean(BinaryProvider.class),
+				(IResourceProvider) applicationContext.getBean(BundleProvider.class),
+				(IResourceProvider) applicationContext.getBean(CompositionProvider.class),
+				(IResourceProvider) applicationContext.getBean(DocumentManifestProvider.class),
+				(IResourceProvider) applicationContext.getBean(DocumentReferenceProvider.class),
+				(IResourceProvider) applicationContext.getBean(NutritionOrderProvider.class)));
 		setServerConformanceProvider(new Hl7FhirServerConformanceProvider());
 
-		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
-		registerInterceptor(loggingInterceptor);		
+//		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
+//		registerInterceptor(loggingInterceptor);
 
 		/*
 		 * Use a narrative generator. This is a completely optional step, but can be

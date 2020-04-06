@@ -24,6 +24,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -61,6 +62,10 @@ public class MedicationProvider extends BaseController<MedicationEntity, Medicat
 			@OptionalParam(name = ConstantKeys.SP_PACKAGE_ITEM) ReferenceParam packageItem,
 			@OptionalParam(name = ConstantKeys.SP_PACKAGE_ITEM_CODE) TokenParam packageItemCode,
 			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+			@OptionalParam(name = "hospital") TokenParam hospital,
+			@OptionalParam(name = "productName") StringParam productName,
+			@OptionalParam(name = "medicationType") StringParam medicationType,
+			// COMMON
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
 			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
@@ -68,10 +73,7 @@ public class MedicationProvider extends BaseController<MedicationEntity, Medicat
 			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
-			@OptionalParam(name = "hospital") TokenParam hospital,
-			@OptionalParam(name = "productName") StringParam productName,
-			@OptionalParam(name = "medicationType") StringParam medicationType,
-			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
+			@OptionalParam(name = ConstantKeys.SP_PAGE) NumberParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
@@ -82,13 +84,13 @@ public class MedicationProvider extends BaseController<MedicationEntity, Medicat
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
 				results = medicationDao.search(fhirContext, code, container, form, ingredient, ingredientCode,
-						manufacturer, overTheCounter, packageItem, packageItemCode, status, resid, _lastUpdated, _tag,
-						_profile, _query, _security, _content, hospital, productName, medicationType, _page, sortParam,
-						count);
+						manufacturer, overTheCounter, packageItem, packageItemCode, status, hospital, productName,
+						medicationType, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
+						sortParam, count);
 			} else
 				results = medicationDao.search(fhirContext, code, container, form, ingredient, ingredientCode,
-						manufacturer, overTheCounter, packageItem, packageItemCode, status, resid, _lastUpdated, _tag,
-						_profile, _query, _security, _content, hospital, productName, medicationType, _page, null,
+						manufacturer, overTheCounter, packageItem, packageItemCode, status, hospital, productName,
+						medicationType, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null,
 						count);
 			final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x -> x);
 

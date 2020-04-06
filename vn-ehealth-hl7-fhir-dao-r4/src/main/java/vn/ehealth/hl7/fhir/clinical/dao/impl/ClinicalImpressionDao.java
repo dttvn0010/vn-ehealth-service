@@ -22,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -36,76 +37,78 @@ import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, ClinicalImpression> {
 
 	@SuppressWarnings("deprecation")
-	public List<IBaseResource> search(FhirContext fhirContext, ReferenceParam action,
-			ReferenceParam assessor, ReferenceParam context, DateRangeParam date, TokenParam findingCode,
-			ReferenceParam findingRef, TokenParam identifier, ReferenceParam investigation, ReferenceParam patient,
-			ReferenceParam previous, ReferenceParam problem, TokenParam status, ReferenceParam subject,
+	public List<IBaseResource> search(FhirContext fhirContext, ReferenceParam action, ReferenceParam assessor,
+			ReferenceParam context, DateRangeParam date, TokenParam findingCode, ReferenceParam findingRef,
+			TokenParam identifier, ReferenceParam investigation, ReferenceParam patient, ReferenceParam previous,
+			ReferenceParam problem, TokenParam status, ReferenceParam subject,
+			// COMMON
 			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
-			TokenParam _security, StringParam _content, StringParam _page, String sortParam, Integer count,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count,
 			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<>();
-		Criteria criteria = setParamToCriteria(action, assessor, context, date, findingCode, findingRef,
-				identifier, investigation, patient, previous, problem, status, subject, resid, _lastUpdated, _tag,
-				_profile, _query, _security, _content);
+		Criteria criteria = setParamToCriteria(action, assessor, context, date, findingCode, findingRef, identifier,
+				investigation, patient, previous, problem, status, subject, resid, _lastUpdated, _tag, _profile, _query,
+				_security, _content);
 		Query query = new Query();
 		if (criteria != null) {
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
-        if (sortParam != null && !sortParam.equals("")) {
-            query.with(new Sort(Sort.Direction.DESC, sortParam));
-        }else {
-        	query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
-        	query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
+		if (sortParam != null && !sortParam.equals("")) {
+			query.with(new Sort(Sort.Direction.DESC, sortParam));
+		} else {
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_UPDATED));
+			query.with(new Sort(Sort.Direction.DESC, ConstantKeys.QP_CREATED));
 		}
-        
-        String[] keys = {"subject", "encounter", "assessor", "problem", "prognosisReference"};
 
-        var includeMap = getIncludeMap(ResourceType.ClinicalImpression, keys, includes);
-        
+		String[] keys = { "subject", "encounter", "assessor", "problem", "prognosisReference" };
+
+		var includeMap = getIncludeMap(ResourceType.ClinicalImpression, keys, includes);
+
 		List<ClinicalImpressionEntity> clinicalImpressionEntitys = mongo.find(query, ClinicalImpressionEntity.class);
 		if (clinicalImpressionEntitys != null) {
 			for (ClinicalImpressionEntity item : clinicalImpressionEntitys) {
 				ClinicalImpression obj = transform(item);
-				
-                if(includeMap.get("subject") && obj.hasSubject()) {
-                    setReferenceResource(obj.getSubject());
-                }
-                
-                if(includeMap.get("encounter") && obj.hasEncounter()) {
-                    setReferenceResource(obj.getEncounter());
-                }
-                
-                if(includeMap.get("assessor") && obj.hasAssessor()) {
-                    setReferenceResource(obj.getAssessor());
-                }
-                
-                if(includeMap.get("problem") && obj.hasProblem()) {
-                    setReferenceResource(obj.getProblem());
-                }
-                
-                if(includeMap.get("prognosisReference") && obj.hasPrognosisReference()) {
-                    setReferenceResource(obj.getPrognosisReference());
-                }
+
+				if (includeMap.get("subject") && obj.hasSubject()) {
+					setReferenceResource(obj.getSubject());
+				}
+
+				if (includeMap.get("encounter") && obj.hasEncounter()) {
+					setReferenceResource(obj.getEncounter());
+				}
+
+				if (includeMap.get("assessor") && obj.hasAssessor()) {
+					setReferenceResource(obj.getAssessor());
+				}
+
+				if (includeMap.get("problem") && obj.hasProblem()) {
+					setReferenceResource(obj.getProblem());
+				}
+
+				if (includeMap.get("prognosisReference") && obj.hasPrognosisReference()) {
+					setReferenceResource(obj.getPrognosisReference());
+				}
 				resources.add(obj);
 			}
 		}
 		return resources;
 	}
 
-	public long countMatchesAdvancedTotal(FhirContext fhirContext, ReferenceParam action,
-			ReferenceParam assessor, ReferenceParam context, DateRangeParam date, TokenParam findingCode,
-			ReferenceParam findingRef, TokenParam identifier, ReferenceParam investigation, ReferenceParam patient,
-			ReferenceParam previous, ReferenceParam problem, TokenParam status, ReferenceParam subject,
-			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
-			TokenParam _security, StringParam _content) {
+	public long countMatchesAdvancedTotal(FhirContext fhirContext, ReferenceParam action, ReferenceParam assessor,
+			ReferenceParam context, DateRangeParam date, TokenParam findingCode, ReferenceParam findingRef,
+			TokenParam identifier, ReferenceParam investigation, ReferenceParam patient, ReferenceParam previous,
+			ReferenceParam problem, TokenParam status, ReferenceParam subject, TokenParam resid,
+			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
+			StringParam _content) {
 		long total = 0;
-		Criteria criteria = setParamToCriteria(action, assessor, context, date, findingCode, findingRef,
-				identifier, investigation, patient, previous, problem, status, subject, resid, _lastUpdated, _tag,
-				_profile, _query, _security, _content);
+		Criteria criteria = setParamToCriteria(action, assessor, context, date, findingCode, findingRef, identifier,
+				investigation, patient, previous, problem, status, subject, resid, _lastUpdated, _tag, _profile, _query,
+				_security, _content);
 		Query query = new Query();
 		if (criteria != null) {
 			query = Query.query(criteria);
@@ -114,18 +117,16 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 		return total;
 	}
 
-	private Criteria setParamToCriteria(ReferenceParam action, ReferenceParam assessor,
-			ReferenceParam context, DateRangeParam date, TokenParam findingCode, ReferenceParam findingRef,
-			TokenParam identifier, ReferenceParam investigation, ReferenceParam patient, ReferenceParam previous,
-			ReferenceParam problem, TokenParam status, ReferenceParam subject, TokenParam resid,
-			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-			StringParam _content) {
+	private Criteria setParamToCriteria(ReferenceParam action, ReferenceParam assessor, ReferenceParam context,
+			DateRangeParam date, TokenParam findingCode, ReferenceParam findingRef, TokenParam identifier,
+			ReferenceParam investigation, ReferenceParam patient, ReferenceParam previous, ReferenceParam problem,
+			TokenParam status, ReferenceParam subject, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag,
+			UriParam _profile, TokenParam _query, TokenParam _security, StringParam _content) {
 		Criteria criteria = null;
 		// active
 		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// set param default
-		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security,
-				identifier);
+		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, identifier);
 		// action
 		if (action != null) {
 			if (action.getValue().indexOf("|") == -1) {
@@ -252,9 +253,9 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return ClinicalImpression.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return ClinicalImpression.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

@@ -4,7 +4,10 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
@@ -17,7 +20,8 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
 public class TargetElementEntity extends BaseResource{
     @Id
-    public ObjectId id;
+    @Indexed(name = "_id_")
+    @JsonIgnore public ObjectId id;
     public String elementEntityID;
     public String code;
     public String display;

@@ -28,6 +28,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
@@ -76,14 +77,15 @@ public class CodeSystemProvider extends BaseController<CodeSystemEntity, CodeSys
 			@OptionalParam(name = ConstantKeys.SP_TITLE) StringParam title,
 			@OptionalParam(name = ConstantKeys.SP_URL) UriParam url,
 			@OptionalParam(name = ConstantKeys.SP_VERSION) TokenParam version,
-			// Parameters for all resources
+			// COMMON
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = "_lastUpdated") DateRangeParam _lastUpdated,
-			@OptionalParam(name = "_tag") TokenParam _tag, @OptionalParam(name = "_profile") UriParam _profile,
-			@OptionalParam(name = "_query") TokenParam _query, @OptionalParam(name = "_security") TokenParam _security,
-			@OptionalParam(name = "_content") StringParam _content,
-			// Search result parameters
-			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
+			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
+			@OptionalParam(name = ConstantKeys.SP_PAGE) NumberParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {
 		log.debug("search CodeSystem Provider called");
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
@@ -145,18 +147,18 @@ public class CodeSystemProvider extends BaseController<CodeSystemEntity, CodeSys
 			@OperationParam(name = "coding") Coding coding, @OperationParam(name = "date") DateRangeParam date,
 			@OperationParam(name = "displayLanguage") TokenParam displayLanguage,
 			@OperationParam(name = "property") TokenParam property,
-			// Parameters for all resources
+			// COMMON
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = "_lastUpdated") DateRangeParam _lastUpdated,
-			@OptionalParam(name = "_tag") TokenParam _tag, @OptionalParam(name = "_profile") UriParam _profile,
-			@OptionalParam(name = "_query") TokenParam _query, @OptionalParam(name = "_security") TokenParam _security,
-			@OptionalParam(name = "_content") StringParam _content,
-			// Search result parameters
-			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page) {
+			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 
 		Parameters retVal = new Parameters();
 		retVal = codeSystemDao.getLookupParams(code, system, version, coding, date, displayLanguage, property, resid,
-				_lastUpdated, _tag, _profile, _query, _security, _content, _page);
+				_lastUpdated, _tag, _profile, _query, _security, _content);
 		return retVal;
 	}
 
@@ -176,12 +178,14 @@ public class CodeSystemProvider extends BaseController<CodeSystemEntity, CodeSys
 			@OptionalParam(name = ConstantKeys.SP_TITLE) StringParam title,
 			@OptionalParam(name = ConstantKeys.SP_URL) UriParam url,
 			@OptionalParam(name = ConstantKeys.SP_VERSION) TokenParam version,
-			// Parameters for all resources
+			// COMMON
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = "_lastUpdated") DateRangeParam _lastUpdated,
-			@OptionalParam(name = "_tag") TokenParam _tag, @OptionalParam(name = "_profile") UriParam _profile,
-			@OptionalParam(name = "_query") TokenParam _query, @OptionalParam(name = "_security") TokenParam _security,
-			@OptionalParam(name = "_content") StringParam _content) {
+			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = codeSystemDao.findMatchesAdvancedTotal(fhirContext, date, identifier, name, code, contentMode,
 				description, jurisdiction, language, publisher, status, system, title, url, version, resid,

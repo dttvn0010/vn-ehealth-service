@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
@@ -41,9 +42,11 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 			ReferenceParam encounter, TokenParam identifier, TokenParam method, ReferenceParam patient,
 			ReferenceParam performer, ReferenceParam relatedTarget, TokenParam relatedType, ReferenceParam specimen,
 			TokenParam status, ReferenceParam subject, TokenParam valueConcept, DateRangeParam valueDate,
-			StringParam valueString, TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile,
-			TokenParam _query, TokenParam _security, StringParam _content, StringParam _page, String sortParam,
-			Integer count, Set<Include> includes) {
+			StringParam valueString,
+			// COMMON
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content, NumberParam _page, String sortParam, Integer count,
+			Set<Include> includes) {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
 
 		Criteria criteria = setParamToCriteria(basedOn, category, code, comboCode, comboDataAbsentReason,
@@ -56,7 +59,8 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 			query = Query.query(criteria);
 		}
 		Pageable pageableRequest;
-		pageableRequest = new PageRequest(_page != null ? Integer.valueOf(_page.getValue()) : ConstantKeys.PAGE,
+		pageableRequest = new PageRequest(
+				_page != null ? Integer.valueOf(_page.getValue().intValue()) : ConstantKeys.PAGE,
 				count != null ? count : ConstantKeys.DEFAULT_PAGE_SIZE);
 		query.with(pageableRequest);
 		if (sortParam != null && !sortParam.equals("")) {
@@ -159,16 +163,16 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 				criteria.and("subject.identifier.system").is(ref[0]).and("subject.identifier.value").is(ref[1]);
 			}
 		}
-		//basedOn
+		// basedOn
 		if (basedOn != null) {
-            if (basedOn.getValue().indexOf("|") == -1) {
-                criteria.orOperator(Criteria.where("basedOn.reference").is(basedOn.getValue()),
-                        Criteria.where("basedOn.display").is(basedOn.getValue()));
-            } else {
-                String[] ref = basedOn.getValue().split("\\|");
-                criteria.and("basedOn.identifier.system").is(ref[0]).and("basedOn.identifier.value").is(ref[1]);
-            }
-        }
+			if (basedOn.getValue().indexOf("|") == -1) {
+				criteria.orOperator(Criteria.where("basedOn.reference").is(basedOn.getValue()),
+						Criteria.where("basedOn.display").is(basedOn.getValue()));
+			} else {
+				String[] ref = basedOn.getValue().split("\\|");
+				criteria.and("basedOn.identifier.system").is(ref[0]).and("basedOn.identifier.value").is(ref[1]);
+			}
+		}
 		// encounter
 		if (encounter != null) {
 			if (encounter.getValue().indexOf("|") == -1) {
@@ -205,9 +209,9 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 	}
 
 	@Override
-    protected Class<? extends DomainResource> getResourceClass() {
-        return Observation.class;
-    }
+	protected Class<? extends DomainResource> getResourceClass() {
+		return Observation.class;
+	}
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {

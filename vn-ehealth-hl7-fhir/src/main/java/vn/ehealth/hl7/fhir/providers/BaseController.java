@@ -14,6 +14,7 @@ import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
 import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
+import org.hl7.fhir.r4.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.PatchTypeEnum;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
-import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.ProviderResponseLibrary;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
@@ -42,7 +43,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 
-public abstract class BaseController<ENT extends BaseResource, FHIR extends DomainResource> {
+public abstract class BaseController<ENT extends BaseResource, FHIR extends Resource> {
 
 	private static final Logger log = LoggerFactory.getLogger(BaseController.class);
 
@@ -174,7 +175,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
 	@History
 	public IBundleProvider getInstanceHistory(@IdParam IdType theId,
 			@OptionalParam(name = "_since") InstantType theSince, @OptionalParam(name = "_at") DateRangeParam theAt,
-			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Count Integer count) {
+			@OptionalParam(name = ConstantKeys.SP_PAGE) NumberParam _page, @Count Integer count) {
 
 		FHIR object = null;
 		if (theId.hasVersionIdPart()) {
@@ -196,7 +197,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
 
 			@Override
 			public Integer size() {
-				return getDao().countHistory(theId, theSince, theAt, _page, count);
+				return getDao().countHistory(theId, theSince, theAt);
 			}
 
 			@Override
@@ -227,7 +228,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
 	@History
 	public IBundleProvider getResourceHistory(@OptionalParam(name = "_since") InstantType theSince,
 			@OptionalParam(name = "_at") DateRangeParam theAt,
-			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Count Integer count) {
+			@OptionalParam(name = ConstantKeys.SP_PAGE) NumberParam _page, @Count Integer count) {
 		List<IBaseResource> results = new ArrayList<>();
 		results = getDao().getHistory(null, theSince, theAt, _page, count);
 		final List<IBaseResource> finalResults = results;
@@ -236,7 +237,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Doma
 
 			@Override
 			public Integer size() {
-				return getDao().countHistory(null, theSince, theAt, _page, count);
+				return getDao().countHistory(null, theSince, theAt);
 			}
 
 			@Override

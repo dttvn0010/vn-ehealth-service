@@ -24,6 +24,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -65,6 +66,7 @@ public class RelatedPersonProvider extends BaseController<RelatedPersonEntity, R
 			@OptionalParam(name = ConstantKeys.SP_PHONE) TokenParam phone,
 			@OptionalParam(name = ConstantKeys.SP_PHONETIC) StringParam phonetic,
 			@OptionalParam(name = ConstantKeys.SP_TELECOM) TokenParam telecom,
+			// COMMON
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
 			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
@@ -73,7 +75,7 @@ public class RelatedPersonProvider extends BaseController<RelatedPersonEntity, R
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
 			// Search result parameters
-			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
+			@OptionalParam(name = ConstantKeys.SP_PAGE) NumberParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {
 		// log.debug("Search RelatedPerson Provider called");
 		// String permissionAccept = PatientOauth2Keys.RelatedPersonOauth2.RELATED_LIST;

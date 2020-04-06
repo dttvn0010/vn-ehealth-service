@@ -76,7 +76,7 @@ public class ImmunizationProvider extends BaseController<ImmunizationEntity, Imm
 			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
-			@OptionalParam(name = ConstantKeys.SP_PAGE) StringParam _page, @Sort SortSpec theSort, @Count Integer count)
+			@OptionalParam(name = ConstantKeys.SP_PAGE) NumberParam _page, @Sort SortSpec theSort, @Count Integer count)
 			throws OperationOutcomeException {
 		if (count != null && count > ConstantKeys.DEFAULT_PAGE_MAX_SIZE) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(

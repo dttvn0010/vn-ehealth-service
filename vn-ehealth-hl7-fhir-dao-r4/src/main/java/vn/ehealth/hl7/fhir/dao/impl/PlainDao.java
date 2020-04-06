@@ -4,162 +4,174 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.AllergyIntolerance;
-import org.hl7.fhir.r4.model.CarePlan;
-import org.hl7.fhir.r4.model.CareTeam;
-import org.hl7.fhir.r4.model.Condition;
-import org.hl7.fhir.r4.model.DetectedIssue;
-import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.Encounter;
-import org.hl7.fhir.r4.model.EpisodeOfCare;
-import org.hl7.fhir.r4.model.FamilyMemberHistory;
-import org.hl7.fhir.r4.model.Goal;
-import org.hl7.fhir.r4.model.ImagingStudy;
-import org.hl7.fhir.r4.model.Immunization;
 import org.hl7.fhir.r4.model.InstantType;
-import org.hl7.fhir.r4.model.Media;
-import org.hl7.fhir.r4.model.MedicationAdministration;
-import org.hl7.fhir.r4.model.MedicationDispense;
-import org.hl7.fhir.r4.model.MedicationRequest;
-import org.hl7.fhir.r4.model.MedicationStatement;
-import org.hl7.fhir.r4.model.Observation;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.Procedure;
-import org.hl7.fhir.r4.model.RelatedPerson;
-import org.hl7.fhir.r4.model.ServiceRequest;
-import org.hl7.fhir.r4.model.Specimen;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.stereotype.Service;
-
+import org.springframework.stereotype.Repository;
 import ca.uhn.fhir.rest.param.DateRangeParam;
-import vn.ehealth.hl7.fhir.dao.iPlainDao;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 
-@Service
-public class PlainDao implements iPlainDao{
+@Repository
+public class PlainDao {
 
 	public List<IBaseResource> history(InstantType theSince, DateRangeParam theAt) {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
-		Criteria criteria = Criteria.where("$where").is("1==1");
 
 		// Patient
-		List<Patient> patients = DaoFactory.getPatientDao().findByCriteria(criteria);
+		List<IBaseResource> patients = DaoFactory.getPatientDao().getHistory(null, theSince, theAt, null, 0);
 		if (patients != null && patients.size() > 0) {
 			resources.addAll(patients);
 		}
 		// Encounter
-		List<Encounter> enconters = DaoFactory.getEncounterDao().findByCriteria(criteria);
+		List<IBaseResource> enconters = DaoFactory.getEncounterDao().getHistory(null, theSince, theAt, null, 0);
 		if (enconters != null && enconters.size() > 0) {
 			resources.addAll(enconters);
 		}
 		// EpisodeOfCare
-		List<EpisodeOfCare> episodeOfCares = DaoFactory.getEpisodeOfCareDao().findByCriteria(criteria);
+		List<IBaseResource> episodeOfCares = DaoFactory.getEpisodeOfCareDao().getHistory(null, theSince, theAt, null,
+				0);
 		if (episodeOfCares != null && episodeOfCares.size() > 0) {
 			resources.addAll(episodeOfCares);
 		}
 		// CarePlan
-		List<CarePlan> carePlans = DaoFactory.getCarePlanDao().findByCriteria(criteria);
+		List<IBaseResource> carePlans = DaoFactory.getCarePlanDao().getHistory(null, theSince, theAt, null, 0);
 		if (carePlans != null && carePlans.size() > 0) {
 			resources.addAll(carePlans);
 		}
 		// Condition
-		List<Condition> conditions = DaoFactory.getConditionDao().findByCriteria(criteria);
+		List<IBaseResource> conditions = DaoFactory.getConditionDao().getHistory(null, theSince, theAt, null, 0);
 		if (conditions != null && conditions.size() > 0) {
 			resources.addAll(conditions);
 		}
 		// DetectedIssue
-		List<DetectedIssue> detectedIssues = DaoFactory.getDetectedIssueDao().findByCriteria(criteria);
+		List<IBaseResource> detectedIssues = DaoFactory.getDetectedIssueDao().getHistory(null, theSince, theAt, null,
+				0);
 		if (detectedIssues != null && detectedIssues.size() > 0) {
 			resources.addAll(detectedIssues);
 		}
 		// Goal
-		List<Goal> goals = DaoFactory.getGoalDao().findByCriteria(criteria);
+		List<IBaseResource> goals = DaoFactory.getGoalDao().getHistory(null, theSince, theAt, null, 0);
 		if (goals != null && goals.size() > 0) {
 			resources.addAll(goals);
 		}
 		// Procedure
-		List<Procedure> procedures = DaoFactory.getProcedureDao().findByCriteria(criteria);
+		List<IBaseResource> procedures = DaoFactory.getProcedureDao().getHistory(null, theSince, theAt, null, 0);
 		if (procedures != null && procedures.size() > 0) {
 			resources.addAll(procedures);
 		}
 		// ServiceRequest
-		List<ServiceRequest> serviceRequests = DaoFactory.getServiceRequestDao().findByCriteria(criteria);
+		List<IBaseResource> serviceRequests = DaoFactory.getServiceRequestDao().getHistory(null, theSince, theAt, null,
+				0);
 		if (serviceRequests != null && serviceRequests.size() > 0) {
 			resources.addAll(serviceRequests);
 		}
 		// DiagnosticReport
-		List<DiagnosticReport> diagnosticReports = DaoFactory.getDiagnosticReportDao().findByCriteria(criteria);
+		List<IBaseResource> diagnosticReports = DaoFactory.getDiagnosticReportDao().getHistory(null, theSince, theAt,
+				null, 0);
 		if (diagnosticReports != null && diagnosticReports.size() > 0) {
 			resources.addAll(diagnosticReports);
 		}
 		// ImagingStudy
-		List<ImagingStudy> imagingStudys = DaoFactory.getImagingStudyDao().findByCriteria(criteria);
+		List<IBaseResource> imagingStudys = DaoFactory.getImagingStudyDao().getHistory(null, theSince, theAt, null, 0);
 		if (imagingStudys != null && imagingStudys.size() > 0) {
 			resources.addAll(imagingStudys);
 		}
 		// Specimen
-		List<Specimen> specimens = DaoFactory.getSpecimenDao().findByCriteria(criteria);
+		List<IBaseResource> specimens = DaoFactory.getSpecimenDao().getHistory(null, theSince, theAt, null, 0);
 		if (specimens != null && specimens.size() > 0) {
 			resources.addAll(specimens);
 		}
 		// CareTeam
-		List<CareTeam> careTeams = DaoFactory.getCareTeamDao().findByCriteria(criteria);
+		List<IBaseResource> careTeams = DaoFactory.getCareTeamDao().getHistory(null, theSince, theAt, null, 0);
 		if (careTeams != null && careTeams.size() > 0) {
 			resources.addAll(careTeams);
 		}
 		// Immunization
-		List<Immunization> immunizations = DaoFactory.getImmunizationDao().findByCriteria(criteria);
+		List<IBaseResource> immunizations = DaoFactory.getImmunizationDao().getHistory(null, theSince, theAt, null, 0);
 		if (immunizations != null && immunizations.size() > 0) {
 			resources.addAll(immunizations);
 		}
 		// MedicationAdministration
-		List<MedicationAdministration> medicationAdministrations = DaoFactory.getMedicationAdministrationDao()
-				.findByCriteria(criteria);
+		List<IBaseResource> medicationAdministrations = DaoFactory.getMedicationAdministrationDao().getHistory(null,
+				theSince, theAt, null, 0);
 		if (medicationAdministrations != null && medicationAdministrations.size() > 0) {
 			resources.addAll(medicationAdministrations);
 		}
 		// MedicationDispense
-		List<MedicationDispense> medicationDispenses = DaoFactory.getMedicationDispenseDao().findByCriteria(criteria);
+		List<IBaseResource> medicationDispenses = DaoFactory.getMedicationDispenseDao().getHistory(null, theSince,
+				theAt, null, 0);
 		if (medicationDispenses != null && medicationDispenses.size() > 0) {
 			resources.addAll(medicationDispenses);
 		}
 		// MedicationRequest
-		List<MedicationRequest> medicationRequests = DaoFactory.getMedicationRequestDao().findByCriteria(criteria);
+		List<IBaseResource> medicationRequests = DaoFactory.getMedicationRequestDao().getHistory(null, theSince, theAt,
+				null, 0);
 		if (medicationRequests != null && medicationRequests.size() > 0) {
 			resources.addAll(medicationRequests);
 		}
 		// MedicationStatement
-		List<MedicationStatement> medicationStatements = DaoFactory.getMedicationStatementDao()
-				.findByCriteria(criteria);
+		List<IBaseResource> medicationStatements = DaoFactory.getMedicationStatementDao().getHistory(null, theSince,
+				theAt, null, 0);
 		if (medicationStatements != null && medicationStatements.size() > 0) {
 			resources.addAll(medicationStatements);
 		}
 		// RelatedPerson
-		List<RelatedPerson> relatedPersons = DaoFactory.getRelatedPersonDao().findByCriteria(criteria);
+		List<IBaseResource> relatedPersons = DaoFactory.getRelatedPersonDao().getHistory(null, theSince, theAt, null,
+				0);
 		if (relatedPersons != null && relatedPersons.size() > 0) {
 			resources.addAll(relatedPersons);
 		}
 		// Observation
-		List<Observation> observations = DaoFactory.getObservationDao().findByCriteria(criteria);
+		List<IBaseResource> observations = DaoFactory.getObservationDao().getHistory(null, theSince, theAt, null, 0);
 		if (observations != null && observations.size() > 0) {
 			resources.addAll(observations);
 		}
 		// FamilyMemberHistory
-		List<FamilyMemberHistory> familyMemberHistorys = DaoFactory.getFamilyMemberHistoryDao()
-				.findByCriteria(criteria);
+		List<IBaseResource> familyMemberHistorys = DaoFactory.getFamilyMemberHistoryDao().getHistory(null, theSince,
+				theAt, null, 0);
 		if (familyMemberHistorys != null && familyMemberHistorys.size() > 0) {
 			resources.addAll(familyMemberHistorys);
 		}
 		// AllergyIntolerance
-		List<AllergyIntolerance> allergyIntolerances = DaoFactory.getAllergyIntoleranceDao().findByCriteria(criteria);
+		List<IBaseResource> allergyIntolerances = DaoFactory.getAllergyIntoleranceDao().getHistory(null, theSince,
+				theAt, null, 0);
 		if (allergyIntolerances != null && allergyIntolerances.size() > 0) {
 			resources.addAll(allergyIntolerances);
 		}
 		// Media
-		List<Media> medias = DaoFactory.getMediaDao().findByCriteria(criteria);
+		List<IBaseResource> medias = DaoFactory.getMediaDao().getHistory(null, theSince, theAt, null, 0);
 		if (medias != null && medias.size() > 0) {
 			resources.addAll(medias);
 		}
+		// Binary
+		List<IBaseResource> binarys = DaoFactory.getBinaryDao().getHistory(null, theSince, theAt, null, 0);
+		if (binarys != null && binarys.size() > 0) {
+			resources.addAll(binarys);
+		}
+		// Bundle
+		List<IBaseResource> bundles = DaoFactory.getBundleDao().getHistory(null, theSince, theAt, null, 0);
+		if (bundles != null && bundles.size() > 0) {
+			resources.addAll(bundles);
+		}
+		// Composition
+		List<IBaseResource> compositions = DaoFactory.getCompositionDao().getHistory(null, theSince, theAt, null, 0);
+		if (compositions != null && compositions.size() > 0) {
+			resources.addAll(compositions);
+		}
+		// DocumentManifest
+		List<IBaseResource> documentManifest = DaoFactory.getDocumentManifestDao().getHistory(null, theSince, theAt, null, 0);
+		if (documentManifest != null && documentManifest.size() > 0) {
+			resources.addAll(documentManifest);
+		}
+		// DocumentReference
+		List<IBaseResource> documentReferences = DaoFactory.getDocumentReferenceDao().getHistory(null, theSince, theAt, null, 0);
+		if (documentReferences != null && documentReferences.size() > 0) {
+			resources.addAll(documentReferences);
+		}
+		// NutritionOrder
+		List<IBaseResource> nutritionOrders = DaoFactory.getNutritionOrderDao().getHistory(null, theSince, theAt, null, 0);
+		if (nutritionOrders != null && nutritionOrders.size() > 0) {
+			resources.addAll(nutritionOrders);
+		}
+				
 		return resources;
 	}
 
