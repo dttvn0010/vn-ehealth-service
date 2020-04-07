@@ -1,4 +1,4 @@
-package vn.ehealth.hl7.fhir;
+package vn.ehealth.hl7.fhir.factory;
 
 import ca.uhn.fhir.rest.server.interceptor.InterceptorAdapter;
 import ca.uhn.fhir.context.FhirContext;

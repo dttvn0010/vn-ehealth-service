@@ -36,12 +36,12 @@ import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import vn.ehealth.hl7.fhir.ProviderResponseLibrary;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.factory.ProviderResponseLibrary;
 
 public abstract class BaseController<ENT extends BaseResource, FHIR extends Resource> {
 
@@ -66,13 +66,14 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 			method.setId(newObj.getIdElement());
 			method.setResource(newObj);
 		} catch (Exception ex) {
-			if (ex instanceof OperationOutcomeException) {
-				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-				method.setOperationOutcome(outcomeException.getOutcome());
-			} else {
-				log.error(ex.getMessage());
-				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-			}
+//			if (ex instanceof OperationOutcomeException) {
+//				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
+//				method.setOperationOutcome(outcomeException.getOutcome());
+//			} else {
+//				log.error(ex.getMessage());
+//				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
+//			}
+			ProviderResponseLibrary.handleException(method,ex);
 		}
 		return method;
 	}

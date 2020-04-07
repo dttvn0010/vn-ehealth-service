@@ -1,4 +1,4 @@
-package vn.ehealth.hl7.fhir;
+package vn.ehealth.hl7.fhir.factory;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
