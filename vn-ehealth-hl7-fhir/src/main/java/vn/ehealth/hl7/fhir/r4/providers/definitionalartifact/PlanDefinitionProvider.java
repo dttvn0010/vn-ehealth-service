@@ -32,13 +32,13 @@ import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import vn.ehealth.hl7.fhir.controller.BaseController;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.definitionalartifact.dao.impl.PlanDefinitionDao;
 import vn.ehealth.hl7.fhir.definitionalartifact.entity.PlanDefinitionEntity;
 import vn.ehealth.hl7.fhir.factory.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.factory.OperationOutcomeFactory;
-import vn.ehealth.hl7.fhir.providers.BaseController;
 
 @Component
 public class PlanDefinitionProvider extends BaseController<PlanDefinitionEntity, PlanDefinition>

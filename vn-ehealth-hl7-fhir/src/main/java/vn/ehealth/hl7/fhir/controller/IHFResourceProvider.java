@@ -1,4 +1,4 @@
-package vn.ehealth.hl7.fhir.providers;
+package vn.ehealth.hl7.fhir.controller;
 
 import ca.uhn.fhir.rest.server.IResourceProvider;
 

@@ -35,11 +35,11 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.AllergyIntoleranceDao;
 import vn.ehealth.hl7.fhir.clinical.entity.AllergyIntoleranceEntity;
+import vn.ehealth.hl7.fhir.controller.BaseController;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.factory.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.factory.OperationOutcomeFactory;
-import vn.ehealth.hl7.fhir.providers.BaseController;
 
 @Component
 public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranceEntity, AllergyIntolerance>
