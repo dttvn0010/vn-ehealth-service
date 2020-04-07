@@ -30,8 +30,8 @@ import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.utils.*;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
-import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.medication.dao.impl.MedicationRequestDao;
+import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 
 
 @RestController

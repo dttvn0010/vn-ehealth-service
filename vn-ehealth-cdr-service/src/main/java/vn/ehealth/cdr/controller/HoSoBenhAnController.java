@@ -38,8 +38,9 @@ import vn.ehealth.cdr.service.XetNghiemService;
 import vn.ehealth.cdr.utils.*;
 import vn.ehealth.hl7.fhir.core.common.UnAuthorizedException;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
-import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
+import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
+
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController

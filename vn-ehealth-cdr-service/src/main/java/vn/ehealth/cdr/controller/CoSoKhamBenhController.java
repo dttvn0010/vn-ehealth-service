@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.cdr.model.CoSoKhamBenh;
 import vn.ehealth.cdr.service.CoSoKhamBenhService;
-import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.provider.dao.impl.OrganizationDao;
+import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
