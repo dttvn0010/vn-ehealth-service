@@ -171,7 +171,82 @@ public class PlainDao {
 		if (nutritionOrders != null && nutritionOrders.size() > 0) {
 			resources.addAll(nutritionOrders);
 		}
-				
+		// subscriptions
+		List<IBaseResource> subscriptions = DaoFactory.getSubscriptionDao().getHistory(null, theSince, theAt, null, 0);
+		if (subscriptions != null && subscriptions.size() > 0) {
+			resources.addAll(subscriptions);
+		}
+		// requestGroups
+		List<IBaseResource> requestGroups = DaoFactory.getRequestGroupDao().getHistory(null, theSince, theAt, null, 0);
+		if (requestGroups != null && requestGroups.size() > 0) {
+			resources.addAll(requestGroups);
+		}
+		// riskAssessments
+		List<IBaseResource> riskAssessments = DaoFactory.getRiskAssessmentDao().getHistory(null, theSince, theAt, null, 0);
+		if (riskAssessments != null && riskAssessments.size() > 0) {
+			resources.addAll(riskAssessments);
+		}
+		// visionPrescriptions
+		List<IBaseResource> visionPrescriptions = DaoFactory.getVisionPrescriptionDao().getHistory(null, theSince, theAt, null, 0);
+		if (visionPrescriptions != null && visionPrescriptions.size() > 0) {
+			resources.addAll(visionPrescriptions);
+		}
+		// activityDefinitions
+		List<IBaseResource> activityDefinitions = DaoFactory.getActivityDefinitionDao().getHistory(null, theSince, theAt, null, 0);
+		if (activityDefinitions != null && activityDefinitions.size() > 0) {
+			resources.addAll(activityDefinitions);
+		}
+		// planDefinitions
+		List<IBaseResource> planDefinitions = DaoFactory.getPlanDefinitionDao().getHistory(null, theSince, theAt, null, 0);
+		if (planDefinitions != null && planDefinitions.size() > 0) {
+			resources.addAll(planDefinitions);
+		}
+		// questionnaires
+		List<IBaseResource> questionnaires = DaoFactory.getQuestionnaireDao().getHistory(null, theSince, theAt, null, 0);
+		if (questionnaires != null && questionnaires.size() > 0) {
+			resources.addAll(questionnaires);
+		}
+		// bodyStructures
+		List<IBaseResource> bodyStructures = DaoFactory.getBodyStructureDao().getHistory(null, theSince, theAt, null, 0);
+		if (bodyStructures != null && bodyStructures.size() > 0) {
+			resources.addAll(bodyStructures);
+		}
+		// questionnaireResponses
+		List<IBaseResource> questionnaireResponses = DaoFactory.getQuestionnaireResponseDao().getHistory(null, theSince, theAt, null, 0);
+		if (questionnaireResponses != null && questionnaireResponses.size() > 0) {
+			resources.addAll(questionnaireResponses);
+		}
+		// substances
+		List<IBaseResource> substances = DaoFactory.getSubstanceDao().getHistory(null, theSince, theAt, null, 0);
+		if (substances != null && substances.size() > 0) {
+			resources.addAll(substances);
+		}
+		// auditEvents
+		List<IBaseResource> auditEvents = DaoFactory.getAuditEventDao().getHistory(null, theSince, theAt, null, 0);
+		if (auditEvents != null && auditEvents.size() > 0) {
+			resources.addAll(auditEvents);
+		}
+		// consents
+		List<IBaseResource> consents = DaoFactory.getConsentDao().getHistory(null, theSince, theAt, null, 0);
+		if (consents != null && consents.size() > 0) {
+			resources.addAll(consents);
+		}
+		// provenances
+		List<IBaseResource> provenances = DaoFactory.getProvenanceDao().getHistory(null, theSince, theAt, null, 0);
+		if (provenances != null && provenances.size() > 0) {
+			resources.addAll(provenances);
+		}
+		// groups
+		List<IBaseResource> groups = DaoFactory.getGroupDao().getHistory(null, theSince, theAt, null, 0);
+		if (groups != null && groups.size() > 0) {
+			resources.addAll(groups);
+		}
+		// tasks
+		List<IBaseResource> tasks = DaoFactory.getTaskDao().getHistory(null, theSince, theAt, null, 0);
+		if (tasks != null && tasks.size() > 0) {
+			resources.addAll(tasks);
+		}
+		
 		return resources;
 	}
 
