@@ -111,7 +111,7 @@ public class PlanDefinitionEntity extends BaseResource {
 		public List<PlanDefinitionAction> action;
 
 		public static class PlanDefinitionActionCondition {
-			public String code;
+			public String kind;
 			public BaseExpression expression;
 		}
 
@@ -128,7 +128,7 @@ public class PlanDefinitionEntity extends BaseResource {
 
 		public static class PlanDefinitionActionDynamicValue {
 			public String path;
-			public String expression;
+			public BaseExpression expression;
 		}
 	}
 

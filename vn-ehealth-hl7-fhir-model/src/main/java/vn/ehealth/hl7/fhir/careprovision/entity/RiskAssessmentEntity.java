@@ -40,7 +40,7 @@ public class RiskAssessmentEntity extends BaseResource{
 	public BaseReference performer;
 	public List<BaseCodeableConcept> reasonCode;
 	public List<BaseReference> reasonReference;
-	public List<BaseReference> basic;
+	public List<BaseReference> basis;
 	public List<RiskAssessmentPrediction> prediction;
 	public String mitigation;
 	public List<BaseAnnotation> note;
@@ -51,5 +51,6 @@ public class RiskAssessmentEntity extends BaseResource{
 		public BaseCodeableConcept qualitativeRisk;
 		public BigDecimal relativeRisk;
 		public BaseType when;
+		public String rationale;
 	}
 }

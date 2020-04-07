@@ -36,7 +36,7 @@ public class AuditEventEntity extends BaseResource {
 	public List<BaseCodeableConcept> purposeOfEvent;
 	public List<AuditEventAgent> agent;
 	public AuditEventSource source;
-	public AuditEventEntry entity;
+	public List<AuditEventEntry> entity;
 
 	public static class AuditEventAgent {
 		public BaseCodeableConcept type;
@@ -44,7 +44,7 @@ public class AuditEventEntity extends BaseResource {
 		public BaseReference who;
 		public String altId;
 		public String name;
-		public boolean requester;
+		public boolean requestor;
 		public BaseReference location;
 		public List<String> policy;
 		public BaseCoding media;
@@ -58,7 +58,7 @@ public class AuditEventEntity extends BaseResource {
 	}
 	
 	public static class AuditEventSource {
-		public String source;
+		public String site;
 		public BaseReference observer;
 		public List<BaseCoding> type;
 	}

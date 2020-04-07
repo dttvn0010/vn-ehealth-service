@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseSignature;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 @Document(collection = "provenance")
@@ -34,6 +35,7 @@ public class ProvenanceEntity extends BaseResource {
 	public BaseCodeableConcept activity;
 	public List<ProvenanceAgent> agent;
 	public List<ProvenanceEntry> entity;
+	public List<BaseSignature> signature;
 	
 	public static class ProvenanceAgent {
 		public BaseCodeableConcept type;

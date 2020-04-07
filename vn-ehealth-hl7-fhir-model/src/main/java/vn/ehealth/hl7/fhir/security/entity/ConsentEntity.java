@@ -32,7 +32,7 @@ public class ConsentEntity extends BaseResource {
 	public BaseCodeableConcept scope;
 	public List<BaseCodeableConcept> category;
 	public BaseReference patient;
-	public Date datetime;
+	public Date dateTime;
 	public List<BaseReference> performer;
 	public List<BaseReference> organization;
 	public BaseType source;
