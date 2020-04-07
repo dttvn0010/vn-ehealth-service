@@ -34,12 +34,12 @@ import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.providers.BaseController;
-import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
-import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 import vn.ehealth.hl7.fhir.ehr.entity.EncounterEntity;
+import vn.ehealth.hl7.fhir.factory.OperationOutcomeException;
+import vn.ehealth.hl7.fhir.factory.OperationOutcomeFactory;
 
 @Component
 public class EncounterProvider extends BaseController<EncounterEntity, Encounter> implements IResourceProvider {

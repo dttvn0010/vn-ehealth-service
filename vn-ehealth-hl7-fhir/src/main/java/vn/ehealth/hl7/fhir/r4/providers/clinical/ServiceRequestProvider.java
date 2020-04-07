@@ -35,11 +35,11 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.providers.BaseController;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
-import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
-import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.diagnostic.entity.ServiceRequestEntity;
+import vn.ehealth.hl7.fhir.factory.OperationOutcomeException;
+import vn.ehealth.hl7.fhir.factory.OperationOutcomeFactory;
 
 @Component
 public class ServiceRequestProvider extends BaseController<ServiceRequestEntity, ServiceRequest>

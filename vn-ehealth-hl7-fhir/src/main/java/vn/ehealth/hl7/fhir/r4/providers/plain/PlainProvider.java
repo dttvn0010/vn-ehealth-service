@@ -24,10 +24,10 @@ import ca.uhn.fhir.rest.annotation.TransactionParam;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
-import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.impl.PlainDao;
+import vn.ehealth.hl7.fhir.factory.OperationOutcomeException;
+import vn.ehealth.hl7.fhir.factory.OperationOutcomeFactory;
 
 @Component
 public class PlainProvider {

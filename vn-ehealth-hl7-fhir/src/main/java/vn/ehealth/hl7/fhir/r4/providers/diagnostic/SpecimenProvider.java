@@ -34,12 +34,12 @@ import ca.uhn.fhir.rest.param.UriParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.providers.BaseController;
-import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
-import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.diagnostic.dao.impl.SpecimenDao;
 import vn.ehealth.hl7.fhir.diagnostic.entity.SpecimenEntity;
+import vn.ehealth.hl7.fhir.factory.OperationOutcomeException;
+import vn.ehealth.hl7.fhir.factory.OperationOutcomeFactory;
 
 @Component
 public class SpecimenProvider extends BaseController<SpecimenEntity, Specimen> implements IResourceProvider {

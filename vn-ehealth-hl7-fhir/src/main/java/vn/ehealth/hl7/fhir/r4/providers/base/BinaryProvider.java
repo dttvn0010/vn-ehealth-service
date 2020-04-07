@@ -34,10 +34,10 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.base.dao.impl.BinaryDao;
 import vn.ehealth.hl7.fhir.base.entity.BinaryEntity;
-import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
-import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.factory.OperationOutcomeException;
+import vn.ehealth.hl7.fhir.factory.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.providers.BaseController;
 
 @Component

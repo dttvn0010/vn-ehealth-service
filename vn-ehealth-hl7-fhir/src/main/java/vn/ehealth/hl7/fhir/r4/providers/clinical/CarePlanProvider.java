@@ -36,10 +36,10 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.providers.BaseController;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.CarePlanDao;
 import vn.ehealth.hl7.fhir.clinical.entity.CarePlanEntity;
-import vn.ehealth.hl7.fhir.core.common.OperationOutcomeException;
-import vn.ehealth.hl7.fhir.core.common.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
+import vn.ehealth.hl7.fhir.factory.OperationOutcomeException;
+import vn.ehealth.hl7.fhir.factory.OperationOutcomeFactory;
 
 @Component
 public class CarePlanProvider extends BaseController<CarePlanEntity, CarePlan> implements IResourceProvider {
