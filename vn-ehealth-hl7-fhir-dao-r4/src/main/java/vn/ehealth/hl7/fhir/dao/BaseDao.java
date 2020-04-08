@@ -82,7 +82,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 		return (ENT) ent;
 	}
 
-	public FHIR create(FHIR object) {
+	public FHIR create(FHIR object) throws Exception {
 		int version = ConstantKeys.VERSION_1;
 		if (object != null) {
 			var entity = createNewEntity(object, version, null);
@@ -94,7 +94,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 
 	@SuppressWarnings("unchecked")
 	@CachePut(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType", condition = "#idType!=null")
-	public FHIR update(FHIR object, IdType idType) {
+	public FHIR update(FHIR object, IdType idType) throws Exception {
 		ENT entityOld = null;
 		String fhirId = "";
 		if (idType != null && idType.hasIdPart()) {

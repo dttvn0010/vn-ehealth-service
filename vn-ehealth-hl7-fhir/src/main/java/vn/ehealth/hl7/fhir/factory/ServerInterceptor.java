@@ -148,6 +148,7 @@ public class ServerInterceptor extends InterceptorAdapter {
 			String header = headers.nextElement();
 			log.debug("Header  = " + header + "=" + theRequest.getHeader(header));
 		}
+
 		// Perform any string substitutions from the message format
 		StrLookup<?> lookup = new MyLookup(theRequest, theRequestDetails);
 		StrSubstitutor subs = new StrSubstitutor(lookup, "${", "}", '\\');

@@ -31,6 +31,7 @@ import ca.uhn.fhir.validation.ResultSeverityEnum;
 import vn.ehealth.hl7.fhir.controller.Hl7FhirServerConformanceProvider;
 //import vn.ehealth.hl7.fhir.clinical.providers.ServiceRequestProvider;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
+import vn.ehealth.hl7.fhir.factory.ServerInterceptor;
 import vn.ehealth.hl7.fhir.r4.providers.base.BinaryProvider;
 import vn.ehealth.hl7.fhir.r4.providers.base.BundleProvider;
 import vn.ehealth.hl7.fhir.r4.providers.base.SubscriptionProvider;
@@ -190,8 +191,8 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 				(IResourceProvider) applicationContext.getBean(TaskProvider.class)));
 		setServerConformanceProvider(new Hl7FhirServerConformanceProvider());
 
-//		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
-//		registerInterceptor(loggingInterceptor);
+		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
+		registerInterceptor(loggingInterceptor);
 
 		/*
 		 * Use a narrative generator. This is a completely optional step, but can be
