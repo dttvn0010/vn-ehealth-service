@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ca.uhn.fhir.model.valueset.BundleTypeEnum;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
@@ -212,8 +213,8 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 		return retVal;
 	}
 
-	@Operation(name = "$everything", idempotent = true)
-	public IBundleProvider getEverything(@IdParam IdType thePatientId,
+	@Operation(name = "$everything", idempotent = true, bundleType = BundleTypeEnum.SEARCHSET)
+	public IBundleProvider getEverything(HttpServletRequest request, @IdParam IdType thePatientId,
 			@OperationParam(name = "start") DateParam theStart, @OperationParam(name = "end") DateParam theEnd) {
 		List<IBaseResource> results = new ArrayList<IBaseResource>();
 		// Populate bundle with matching resources
@@ -224,7 +225,7 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 					new ResourceNotFoundException("No " + thePatientId.getValue() + " found"),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
 		}
-		
+
 		// return list
 		final List<IBaseResource> finalResults = results;
 

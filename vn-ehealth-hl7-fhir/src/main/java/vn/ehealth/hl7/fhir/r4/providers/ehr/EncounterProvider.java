@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.model.valueset.BundleTypeEnum;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
@@ -97,18 +98,17 @@ public class EncounterProvider extends BaseController<EncounterEntity, Encounter
 			List<IBaseResource> results = new ArrayList<>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = baseDao.search(fhirContext, appointment, _class, date, diagnosis, episodeofcare,
-						identifier, incomingreferral, length, location, locationPeriod, partOf, participant,
-						participantType, patient, practitioner, reason, serviceProvider, specialArrangement, status,
-						subject, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
-						sortParam, count, includes);
+				results = baseDao.search(fhirContext, appointment, _class, date, diagnosis, episodeofcare, identifier,
+						incomingreferral, length, location, locationPeriod, partOf, participant, participantType,
+						patient, practitioner, reason, serviceProvider, specialArrangement, status, subject, type,
+						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count,
+						includes);
 				// return results;
 			} else
-				results = baseDao.search(fhirContext, appointment, _class, date, diagnosis, episodeofcare,
-						identifier, incomingreferral, length, location, locationPeriod, partOf, participant,
-						participantType, patient, practitioner, reason, serviceProvider, specialArrangement, status,
-						subject, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null,
-						count, includes);
+				results = baseDao.search(fhirContext, appointment, _class, date, diagnosis, episodeofcare, identifier,
+						incomingreferral, length, location, locationPeriod, partOf, participant, participantType,
+						patient, practitioner, reason, serviceProvider, specialArrangement, status, subject, type,
+						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count, includes);
 			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x
 			// -> x);
 			final List<IBaseResource> finalResults = results;
@@ -194,8 +194,8 @@ public class EncounterProvider extends BaseController<EncounterEntity, Encounter
 		return baseDao;
 	}
 
-	@Operation(name = "$everything", idempotent = true)
-	public IBundleProvider getEverything(@IdParam IdType theId,
+	@Operation(name = "$everything", idempotent = true, bundleType = BundleTypeEnum.SEARCHSET)
+	public IBundleProvider getEverything(HttpServletRequest request, @IdParam IdType theId,
 			@OperationParam(name = "start") DateParam theStart, @OperationParam(name = "end") DateParam theEnd) {
 		List<IBaseResource> results = new ArrayList<IBaseResource>();
 		// Populate bundle with matching resources
@@ -206,7 +206,7 @@ public class EncounterProvider extends BaseController<EncounterEntity, Encounter
 					new ResourceNotFoundException("No " + theId.getValue() + " found"),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
 		}
-		
+
 		// return list
 		final List<IBaseResource> finalResults = results;
 
