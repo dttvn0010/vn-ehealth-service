@@ -7,14 +7,10 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
-import org.hl7.fhir.r4.model.Bundle.BundleType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Parameters;
-import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
@@ -22,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.model.valueset.BundleTypeEnum;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
@@ -180,9 +177,8 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 		return retVal;
 	}
 
-	@Operation(name = "$document", idempotent = true)
-	public Bundle generate(@IdParam IdType theId) {
-
+	@Operation(name = "$document", idempotent = true, bundleType = BundleTypeEnum.DOCUMENT)
+	public IBundleProvider generate(HttpServletRequest request, @IdParam IdType theId) {
 		List<IBaseResource> results = new ArrayList<IBaseResource>();
 		// Populate bundle with matching resources
 
@@ -192,16 +188,39 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 					new ResourceNotFoundException("No " + theId.getValue() + " found"),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
 		}
-		// return list
-		Bundle bundle = new Bundle();
-		bundle.setType(BundleType.DOCUMENT);
-		for (IBaseResource item : results) {
-			BundleEntryComponent entry = new BundleEntryComponent();
-			entry.setResource((Resource) item);
-			entry.setFullUrl(item.getIdElement().getBaseUrl());
-		}
 
-		return bundle;
+		final List<IBaseResource> finalResults = results;
+
+		return new IBundleProvider() {
+
+			@Override
+			public Integer size() {
+				return finalResults.size();
+			}
+
+			@Override
+			public Integer preferredPageSize() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String getUuid() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
+				return finalResults;
+			}
+
+			@Override
+			public IPrimitiveType<Date> getPublished() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
 	}
 
 	@Override
