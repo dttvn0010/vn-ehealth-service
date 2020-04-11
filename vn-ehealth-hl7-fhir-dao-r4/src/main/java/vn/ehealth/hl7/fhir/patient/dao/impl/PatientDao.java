@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.AllergyIntolerance;
+import org.hl7.fhir.r4.model.BodyStructure;
 import org.hl7.fhir.r4.model.CarePlan;
 import org.hl7.fhir.r4.model.CareTeam;
+import org.hl7.fhir.r4.model.Composition;
 import org.hl7.fhir.r4.model.Condition;
 import org.hl7.fhir.r4.model.DetectedIssue;
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.DocumentReference;
 import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.EpisodeOfCare;
@@ -22,12 +25,16 @@ import org.hl7.fhir.r4.model.MedicationAdministration;
 import org.hl7.fhir.r4.model.MedicationDispense;
 import org.hl7.fhir.r4.model.MedicationRequest;
 import org.hl7.fhir.r4.model.MedicationStatement;
+import org.hl7.fhir.r4.model.NutritionOrder;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Procedure;
+import org.hl7.fhir.r4.model.QuestionnaireResponse;
 import org.hl7.fhir.r4.model.RelatedPerson;
+import org.hl7.fhir.r4.model.RiskAssessment;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.Specimen;
+import org.hl7.fhir.r4.model.VisionPrescription;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -256,20 +263,20 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 		return criteria;
 	}
 
-	public List<IBaseResource> getEverything(@IdParam IdType thePatientId, DateParam theStart, DateParam theEnd) {
+	public List<IBaseResource> getEverything(@IdParam IdType theId, DateParam theStart, DateParam theEnd) {
 
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
 
-		if (thePatientId != null) {
-			Patient patient = read(thePatientId);
+		if (theId != null) {
+			Patient patient = read(theId);
 			if (patient != null) {
 				resources.add(patient);
 				// active
 				Criteria criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 				// criteria.and("subject.reference").is(thePatientId.asStringValue());
 				criteria.andOperator(
-						new Criteria().orOperator(Criteria.where("subject.reference").is(thePatientId.asStringValue()),
-								Criteria.where("patient.reference").is(thePatientId.asStringValue())));
+						new Criteria().orOperator(Criteria.where("subject.reference").is(theId.asStringValue()),
+								Criteria.where("patient.reference").is(theId.asStringValue())));
 				if (theStart != null) {
 					criteria.and(ConstantKeys.QP_UPDATED).gte(theStart.getValue());
 				}
@@ -392,10 +399,46 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 				if (medias != null && medias.size() > 0) {
 					resources.addAll(medias);
 				}
-			}
-		}
+				// NutritionOrder
+				List<NutritionOrder> nutritionOrders = DaoFactory.getNutritionOrderDao().findByCriteria(criteria);
+				if (nutritionOrders != null && nutritionOrders.size() > 0) {
+					resources.addAll(nutritionOrders);
+				}
+				// RiskAssessment
+				List<RiskAssessment> riskAssessments = DaoFactory.getRiskAssessmentDao().findByCriteria(criteria);
+				if (riskAssessments != null && riskAssessments.size() > 0) {
+					resources.addAll(riskAssessments);
+				}
+				// VisionPrescription
+				List<VisionPrescription> visionPrescriptions = DaoFactory.getVisionPrescriptionDao().findByCriteria(criteria);
+				if (visionPrescriptions != null && visionPrescriptions.size() > 0) {
+					resources.addAll(visionPrescriptions);
+				}
+				// BodyStructure
+				List<BodyStructure> bodyStructures = DaoFactory.getBodyStructureDao().findByCriteria(criteria);
+				if (bodyStructures != null && bodyStructures.size() > 0) {
+					resources.addAll(bodyStructures);
+				}
+				// QuestionnaireResponse
+				List<QuestionnaireResponse> questionnaireResponses = DaoFactory.getQuestionnaireResponseDao().findByCriteria(criteria);
+				if (questionnaireResponses != null && questionnaireResponses.size() > 0) {
+					resources.addAll(questionnaireResponses);
+				}
+				// Composition
+				List<Composition> compositions = DaoFactory.getCompositionDao().findByCriteria(criteria);
+				if (compositions != null && compositions.size() > 0) {
+					resources.addAll(compositions);
+				}
+				// DocumentReference
+				List<DocumentReference> documentReferences = DaoFactory.getDocumentReferenceDao().findByCriteria(criteria);
+				if (documentReferences != null && documentReferences.size() > 0) {
+					resources.addAll(documentReferences);
+				}
 
-		return resources;
+				return resources;
+			}
+		} 
+		return null;
 	}
 
 	@Override

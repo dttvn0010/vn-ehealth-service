@@ -9,15 +9,21 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
+import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Composition;
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Parameters;
+import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
+import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.r4.model.Bundle.BundleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.Count;
+import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
@@ -138,5 +144,29 @@ public class CompositionProvider extends BaseController<CompositionEntity, Compo
 				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
+	}
+
+	@Operation(name = "$document", idempotent = true)
+	public Bundle generate(@IdParam IdType theId) {
+
+		List<IBaseResource> results = new ArrayList<IBaseResource>();
+		// Populate bundle with matching resources
+
+		results = baseDao.generate(theId);
+		if (results == null) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No " + theId.getValue() + " found"),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		}
+		// return list
+		Bundle bundle = new Bundle();
+		bundle.setType(BundleType.DOCUMENT);
+		for (IBaseResource item : results) {
+			BundleEntryComponent entry = new BundleEntryComponent();
+			entry.setResource((Resource) item);
+			entry.setFullUrl(item.getIdElement().getBaseUrl());
+		}
+
+		return bundle;
 	}
 }

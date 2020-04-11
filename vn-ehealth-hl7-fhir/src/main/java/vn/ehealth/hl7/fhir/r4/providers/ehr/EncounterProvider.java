@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.r4.model.Encounter;
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.StringType;
@@ -18,13 +19,16 @@ import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.Count;
+import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
@@ -45,7 +49,7 @@ import vn.ehealth.hl7.fhir.factory.OperationOutcomeFactory;
 public class EncounterProvider extends BaseController<EncounterEntity, Encounter> implements IResourceProvider {
 
 	@Autowired
-	EncounterDao encounterDao;
+	EncounterDao baseDao;
 
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
@@ -93,14 +97,14 @@ public class EncounterProvider extends BaseController<EncounterEntity, Encounter
 			List<IBaseResource> results = new ArrayList<>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = encounterDao.search(fhirContext, appointment, _class, date, diagnosis, episodeofcare,
+				results = baseDao.search(fhirContext, appointment, _class, date, diagnosis, episodeofcare,
 						identifier, incomingreferral, length, location, locationPeriod, partOf, participant,
 						participantType, patient, practitioner, reason, serviceProvider, specialArrangement, status,
 						subject, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page,
 						sortParam, count, includes);
 				// return results;
 			} else
-				results = encounterDao.search(fhirContext, appointment, _class, date, diagnosis, episodeofcare,
+				results = baseDao.search(fhirContext, appointment, _class, date, diagnosis, episodeofcare,
 						identifier, incomingreferral, length, location, locationPeriod, partOf, participant,
 						participantType, patient, practitioner, reason, serviceProvider, specialArrangement, status,
 						subject, type, resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null,
@@ -113,7 +117,7 @@ public class EncounterProvider extends BaseController<EncounterEntity, Encounter
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(encounterDao.getTotal(fhirContext, appointment, _class, date,
+					return Integer.parseInt(String.valueOf(baseDao.getTotal(fhirContext, appointment, _class, date,
 							diagnosis, episodeofcare, identifier, incomingreferral, length, location, locationPeriod,
 							partOf, participant, participantType, patient, practitioner, reason, serviceProvider,
 							specialArrangement, status, subject, type, resid, _lastUpdated, _tag, _profile, _query,
@@ -177,7 +181,7 @@ public class EncounterProvider extends BaseController<EncounterEntity, Encounter
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = encounterDao.getTotal(fhirContext, appointment, _class, date, diagnosis, episodeofcare, identifier,
+		long total = baseDao.getTotal(fhirContext, appointment, _class, date, diagnosis, episodeofcare, identifier,
 				incomingreferral, length, location, locationPeriod, partOf, participant, participantType, patient,
 				practitioner, reason, serviceProvider, specialArrangement, status, subject, type, resid, _lastUpdated,
 				_tag, _profile, _query, _security, _content);
@@ -187,6 +191,55 @@ public class EncounterProvider extends BaseController<EncounterEntity, Encounter
 
 	@Override
 	protected BaseDao<EncounterEntity, Encounter> getDao() {
-		return encounterDao;
+		return baseDao;
+	}
+
+	@Operation(name = "$everything", idempotent = true)
+	public IBundleProvider getEverything(@IdParam IdType theId,
+			@OperationParam(name = "start") DateParam theStart, @OperationParam(name = "end") DateParam theEnd) {
+		List<IBaseResource> results = new ArrayList<IBaseResource>();
+		// Populate bundle with matching resources
+
+		results = baseDao.getEverything(theId, theStart, theEnd);
+		if (results == null) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No " + theId.getValue() + " found"),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		}
+		
+		// return list
+		final List<IBaseResource> finalResults = results;
+
+		return new IBundleProvider() {
+
+			@Override
+			public Integer size() {
+				return finalResults.size();
+			}
+
+			@Override
+			public Integer preferredPageSize() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String getUuid() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
+				// TODO Auto-generated method stub
+				return finalResults;
+			}
+
+			@Override
+			public IPrimitiveType<Date> getPublished() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
 	}
 }

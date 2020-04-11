@@ -7,9 +7,14 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.r4.model.Bundle.BundleType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Parameters;
+import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
@@ -18,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.Count;
+import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
@@ -46,7 +52,7 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 		implements IResourceProvider {
 
 	@Autowired
-	DiagnosticReportDao diagnosticReportDao;
+	DiagnosticReportDao baseDao;
 
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
@@ -93,15 +99,14 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 			List<IBaseResource> results = new ArrayList<>();
 			if (theSort != null) {
 				String sortParam = theSort.getParamName();
-				results = diagnosticReportDao.search(fhirContext, basedOn, category, code, context, date, diagnosis,
-						encounter, identifier, image, issued, patient, performer, result, specimen, status, subject,
-						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count,
-						includes);
+				results = baseDao.search(fhirContext, basedOn, category, code, context, date, diagnosis, encounter,
+						identifier, image, issued, patient, performer, result, specimen, status, subject, resid,
+						_lastUpdated, _tag, _profile, _query, _security, _content, _page, sortParam, count, includes);
 				// return results;
 			} else
-				results = diagnosticReportDao.search(fhirContext, basedOn, category, code, context, date, diagnosis,
-						encounter, identifier, image, issued, patient, performer, result, specimen, status, subject,
-						resid, _lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count, includes);
+				results = baseDao.search(fhirContext, basedOn, category, code, context, date, diagnosis, encounter,
+						identifier, image, issued, patient, performer, result, specimen, status, subject, resid,
+						_lastUpdated, _tag, _profile, _query, _security, _content, _page, null, count, includes);
 			// final List<IBaseResource> finalResults = DataConvertUtil.transform(results, x
 			// -> x);
 			final List<IBaseResource> finalResults = results;
@@ -110,10 +115,10 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String.valueOf(diagnosticReportDao.countMatchesAdvancedTotal(fhirContext,
-							basedOn, category, code, context, date, diagnosis, encounter, identifier, image, issued,
-							patient, performer, result, specimen, status, subject, resid, _lastUpdated, _tag, _profile,
-							_query, _security, _content)));
+					return Integer.parseInt(String.valueOf(baseDao.countMatchesAdvancedTotal(fhirContext, basedOn,
+							category, code, context, date, diagnosis, encounter, identifier, image, issued, patient,
+							performer, result, specimen, status, subject, resid, _lastUpdated, _tag, _profile, _query,
+							_security, _content)));
 				}
 
 				@Override
@@ -168,15 +173,39 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
 			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
-		long total = diagnosticReportDao.countMatchesAdvancedTotal(fhirContext, basedOn, category, code, conetext, date,
-				diagnosis, encounter, identifier, image, issued, patient, performer, result, specimen, status, subject,
-				resid, _lastUpdated, _tag, _profile, _query, _security, _content);
+		long total = baseDao.countMatchesAdvancedTotal(fhirContext, basedOn, category, code, conetext, date, diagnosis,
+				encounter, identifier, image, issued, patient, performer, result, specimen, status, subject, resid,
+				_lastUpdated, _tag, _profile, _query, _security, _content);
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
 
+	@Operation(name = "$document", idempotent = true)
+	public Bundle generate(@IdParam IdType theId) {
+
+		List<IBaseResource> results = new ArrayList<IBaseResource>();
+		// Populate bundle with matching resources
+
+		results = baseDao.generate(theId);
+		if (results == null) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No " + theId.getValue() + " found"),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		}
+		// return list
+		Bundle bundle = new Bundle();
+		bundle.setType(BundleType.DOCUMENT);
+		for (IBaseResource item : results) {
+			BundleEntryComponent entry = new BundleEntryComponent();
+			entry.setResource((Resource) item);
+			entry.setFullUrl(item.getIdElement().getBaseUrl());
+		}
+
+		return bundle;
+	}
+
 	@Override
 	protected BaseDao<DiagnosticReportEntity, DiagnosticReport> getDao() {
-		return diagnosticReportDao;
+		return baseDao;
 	}
 }

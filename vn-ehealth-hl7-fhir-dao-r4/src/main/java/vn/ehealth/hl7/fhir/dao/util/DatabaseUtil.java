@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ResourceType;
@@ -379,10 +380,23 @@ public class DatabaseUtil {
 			ref.setResource(getResourceFromReference(ref));
 		}
 	}
+	public static void setReferenceResource(List<IBaseResource> lst, Reference ref) {
+		if(ref != null) {
+			ref.setResource(getResourceFromReference(ref));
+			if (ref.getResource() != null)
+				lst.add(ref.getResource());
+		}
+	}
 	
 	public static void setReferenceResource(List<Reference> refs) {
 		if(refs != null) {
 			refs.forEach(x -> setReferenceResource(x));
+		}
+	}
+	
+	public static void setReferenceResource(List<IBaseResource> lst, List<Reference> refs) {
+		if(refs != null) {
+			refs.forEach(x -> setReferenceResource(lst, x));
 		}
 	}
 	

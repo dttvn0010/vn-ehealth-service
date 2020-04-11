@@ -7,6 +7,7 @@ import java.util.Set;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.DomainResource;
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
@@ -151,6 +153,50 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
 		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, identifier);
 
 		return criteria;
+	}
+
+	public List<IBaseResource> generate(@IdParam IdType theId) {
+		List<IBaseResource> resources = new ArrayList<IBaseResource>();
+		if (theId != null) {
+			DiagnosticReport obj = read(theId);
+			if (obj != null) {
+				resources.add(obj);
+
+				if (obj.hasSubject()) {
+					setReferenceResource(resources, obj.getSubject());
+				}
+
+				if (obj.hasEncounter()) {
+					setReferenceResource(resources, obj.getEncounter());
+				}
+
+				if (obj.hasBasedOn()) {
+					setReferenceResource(resources, obj.getBasedOn());
+				}
+
+				if (obj.hasPerformer()) {
+					setReferenceResource(resources, obj.getPerformer());
+				}
+
+				if (obj.hasResultsInterpreter()) {
+					setReferenceResource(resources, obj.getResultsInterpreter());
+				}
+
+				if (obj.hasSpecimen()) {
+					setReferenceResource(resources, obj.getSpecimen());
+				}
+
+				if (obj.hasImagingStudy()) {
+					setReferenceResource(resources, obj.getImagingStudy());
+				}
+
+				if (obj.hasMedia()) {
+					obj.getMedia().forEach(x -> setReferenceResource(x.getLink()));
+				}
+				return resources;
+			}
+		}
+		return null;
 	}
 
 	@Override

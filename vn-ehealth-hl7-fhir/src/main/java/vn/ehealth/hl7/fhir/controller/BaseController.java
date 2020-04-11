@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
-import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.OperationOutcome;
@@ -39,7 +38,6 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
-import vn.ehealth.hl7.fhir.factory.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.factory.OperationOutcomeFactory;
 import vn.ehealth.hl7.fhir.factory.ProviderResponseLibrary;
 
