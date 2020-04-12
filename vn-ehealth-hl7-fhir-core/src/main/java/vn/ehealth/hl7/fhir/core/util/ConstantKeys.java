@@ -235,6 +235,7 @@ public class ConstantKeys {
     public static final String SP_OBSERVATION_MAX = "max";
     
     public static final String SP_REQUEST = "request";
+    public static final String SP_PERSIST = "persist";
     
     // Query params
     public static final String QP_FHIRID = "_fhirId";

@@ -178,10 +178,11 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 	}
 
 	@Operation(name = "$document", idempotent = true, bundleType = BundleTypeEnum.DOCUMENT)
-	public IBundleProvider generate(HttpServletRequest request, @IdParam IdType theId) {
+	public IBundleProvider generate(HttpServletRequest request, @IdParam IdType theId,
+			@OptionalParam(name = ConstantKeys.SP_PERSIST) StringParam persist) {
 		List<IBaseResource> results = new ArrayList<IBaseResource>();
 		// Populate bundle with matching resources
-
+		System.out.println("========================="  + persist);
 		results = baseDao.generate(theId);
 		if (results == null) {
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
