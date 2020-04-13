@@ -52,6 +52,12 @@ public class ProcedureProvider extends BaseController<ProcedureEntity, Procedure
 		return Procedure.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchProcedure(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,

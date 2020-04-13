@@ -53,6 +53,12 @@ public class ClinicalImpressionProvider extends BaseController<ClinicalImpressio
 		return ClinicalImpression.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchClinicalImpression(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ASSESSOR) ReferenceParam assessor,

@@ -52,6 +52,12 @@ public class MedicationStatementProvider extends BaseController<MedicationStatem
 		return MedicationStatement.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchMedicationStatement(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,

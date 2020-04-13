@@ -53,6 +53,12 @@ public class ScheduleProvider extends BaseController<ScheduleEntity, Schedule> i
 		return Schedule.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,

@@ -52,6 +52,12 @@ public class EpisodeOfCareProvider extends BaseController<EpisodeOfCareEntity, E
 		return EpisodeOfCare.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchEpisodeOfCare(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_CARE_MANAGER) ReferenceParam careManager,

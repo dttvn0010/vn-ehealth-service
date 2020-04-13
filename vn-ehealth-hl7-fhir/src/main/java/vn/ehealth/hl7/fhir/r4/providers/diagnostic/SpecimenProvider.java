@@ -52,6 +52,12 @@ public class SpecimenProvider extends BaseController<SpecimenEntity, Specimen> i
 		return Specimen.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchSpecimen(HttpServletRequest _request,
 			@OptionalParam(name = Specimen.SP_ACCESSION) TokenParam accession,

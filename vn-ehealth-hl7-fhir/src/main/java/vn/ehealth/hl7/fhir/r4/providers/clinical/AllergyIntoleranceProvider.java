@@ -58,6 +58,12 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 		return baseDao;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
 			@OptionalParam(name = AllergyIntolerance.SP_ASSERTER) ReferenceParam asserter,

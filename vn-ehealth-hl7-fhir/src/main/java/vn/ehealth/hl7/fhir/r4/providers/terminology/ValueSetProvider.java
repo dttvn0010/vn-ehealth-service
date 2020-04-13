@@ -54,6 +54,12 @@ public class ValueSetProvider extends BaseController<ValueSetEntity, ValueSet> i
 	@Autowired
 	ValueSetDao valueSetDao;
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchValueSet(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,

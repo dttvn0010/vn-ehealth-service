@@ -200,11 +200,6 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return DiagnosticReport.class;
 	}

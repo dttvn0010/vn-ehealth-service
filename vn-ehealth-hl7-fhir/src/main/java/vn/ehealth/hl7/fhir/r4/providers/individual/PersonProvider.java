@@ -50,6 +50,12 @@ public class PersonProvider extends BaseController<PersonEntity, Person> impleme
 		return Person.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchPerson(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,

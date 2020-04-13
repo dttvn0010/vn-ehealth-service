@@ -148,11 +148,6 @@ public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return DetectedIssue.class;
 	}

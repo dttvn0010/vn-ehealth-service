@@ -53,6 +53,12 @@ public class ImagingStudyProvider extends BaseController<ImagingStudyEntity, Ima
 		return ImagingStudy.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchImagingStudy(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,

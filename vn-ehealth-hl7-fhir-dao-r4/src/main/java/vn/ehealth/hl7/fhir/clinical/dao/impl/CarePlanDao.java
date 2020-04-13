@@ -295,11 +295,6 @@ public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return CarePlan.class;
 	}

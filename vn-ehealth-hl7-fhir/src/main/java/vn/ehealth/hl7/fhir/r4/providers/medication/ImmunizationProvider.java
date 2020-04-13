@@ -51,6 +51,12 @@ public class ImmunizationProvider extends BaseController<ImmunizationEntity, Imm
 		return Immunization.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchImmunization(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,

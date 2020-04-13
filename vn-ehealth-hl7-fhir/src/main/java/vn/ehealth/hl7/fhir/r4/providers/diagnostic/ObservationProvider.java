@@ -55,6 +55,12 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 		return Observation.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchObservation(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,

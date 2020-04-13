@@ -278,11 +278,6 @@ public class ConceptMapDao extends BaseDao<ConceptMapEntity, ConceptMap> {
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return ConceptMapEntity.class;
 	}

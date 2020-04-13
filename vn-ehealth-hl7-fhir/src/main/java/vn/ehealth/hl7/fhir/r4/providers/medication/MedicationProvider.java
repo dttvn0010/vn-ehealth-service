@@ -50,6 +50,12 @@ public class MedicationProvider extends BaseController<MedicationEntity, Medicat
 		return Medication.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchMedication(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,

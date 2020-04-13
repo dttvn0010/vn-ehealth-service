@@ -58,6 +58,12 @@ public class FamilyMemberHistoryProvider extends BaseController<FamilyMemberHist
 		return baseDao;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
 			@OptionalParam(name = FamilyMemberHistory.SP_CODE) TokenParam code,

@@ -151,11 +151,6 @@ public class CareTeamDao extends BaseDao<CareTeamEntity, CareTeam> {
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return CareTeam.class;
 	}

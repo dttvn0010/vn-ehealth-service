@@ -34,11 +34,6 @@ import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 public class AllergyIntoleranceDao extends BaseDao<AllergyIntoleranceEntity, AllergyIntolerance> {
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return AllergyIntoleranceEntity.class;
 	}

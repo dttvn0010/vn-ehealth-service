@@ -410,7 +410,8 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 					resources.addAll(riskAssessments);
 				}
 				// VisionPrescription
-				List<VisionPrescription> visionPrescriptions = DaoFactory.getVisionPrescriptionDao().findByCriteria(criteria);
+				List<VisionPrescription> visionPrescriptions = DaoFactory.getVisionPrescriptionDao()
+						.findByCriteria(criteria);
 				if (visionPrescriptions != null && visionPrescriptions.size() > 0) {
 					resources.addAll(visionPrescriptions);
 				}
@@ -420,7 +421,8 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 					resources.addAll(bodyStructures);
 				}
 				// QuestionnaireResponse
-				List<QuestionnaireResponse> questionnaireResponses = DaoFactory.getQuestionnaireResponseDao().findByCriteria(criteria);
+				List<QuestionnaireResponse> questionnaireResponses = DaoFactory.getQuestionnaireResponseDao()
+						.findByCriteria(criteria);
 				if (questionnaireResponses != null && questionnaireResponses.size() > 0) {
 					resources.addAll(questionnaireResponses);
 				}
@@ -430,19 +432,15 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 					resources.addAll(compositions);
 				}
 				// DocumentReference
-				List<DocumentReference> documentReferences = DaoFactory.getDocumentReferenceDao().findByCriteria(criteria);
+				List<DocumentReference> documentReferences = DaoFactory.getDocumentReferenceDao()
+						.findByCriteria(criteria);
 				if (documentReferences != null && documentReferences.size() > 0) {
 					resources.addAll(documentReferences);
 				}
 
 				return resources;
 			}
-		} 
-		return null;
-	}
-
-	@Override
-	protected List<String> getProfile() {
+		}
 		return null;
 	}
 

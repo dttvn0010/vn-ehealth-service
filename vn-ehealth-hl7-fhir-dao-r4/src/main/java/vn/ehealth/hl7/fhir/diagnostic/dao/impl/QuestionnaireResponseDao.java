@@ -31,11 +31,6 @@ import vn.ehealth.hl7.fhir.diagnostic.entity.QuestionnaireResponseEntity;
 public class QuestionnaireResponseDao extends BaseDao<QuestionnaireResponseEntity, QuestionnaireResponse> {
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return QuestionnaireResponseEntity.class;
 	}

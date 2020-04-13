@@ -129,11 +129,6 @@ public class ImagingStudyDao extends BaseDao<ImagingStudyEntity, ImagingStudy> {
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return ImagingStudy.class;
 	}

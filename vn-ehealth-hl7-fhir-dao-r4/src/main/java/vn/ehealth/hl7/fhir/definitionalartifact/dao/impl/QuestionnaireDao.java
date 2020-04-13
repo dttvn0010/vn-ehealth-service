@@ -28,12 +28,7 @@ import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.definitionalartifact.entity.QuestionnaireEntity;
 
 @Repository
-public class QuestionnaireDao  extends BaseDao<QuestionnaireEntity, Questionnaire> {
-
-	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
+public class QuestionnaireDao extends BaseDao<QuestionnaireEntity, Questionnaire> {
 
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
@@ -44,7 +39,6 @@ public class QuestionnaireDao  extends BaseDao<QuestionnaireEntity, Questionnair
 	protected Class<? extends DomainResource> getResourceClass() {
 		return Questionnaire.class;
 	}
-
 
 	@SuppressWarnings("deprecation")
 	public List<IBaseResource> search(
@@ -81,7 +75,7 @@ public class QuestionnaireDao  extends BaseDao<QuestionnaireEntity, Questionnair
 		if (entitys != null && entitys.size() > 0) {
 			for (QuestionnaireEntity item : entitys) {
 				Questionnaire obj = transform(item);
-				
+
 				resources.add(obj);
 			}
 		}
@@ -113,7 +107,7 @@ public class QuestionnaireDao  extends BaseDao<QuestionnaireEntity, Questionnair
 		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// set param default
 		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, null);
-		
+
 		return criteria;
 	}
 }

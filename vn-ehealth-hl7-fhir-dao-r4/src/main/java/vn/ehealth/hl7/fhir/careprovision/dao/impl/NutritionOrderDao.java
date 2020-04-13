@@ -31,11 +31,6 @@ import vn.ehealth.hl7.fhir.dao.BaseDao;
 public class NutritionOrderDao extends BaseDao<NutritionOrderEntity, NutritionOrder> {
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return NutritionOrderEntity.class;
 	}
@@ -80,7 +75,7 @@ public class NutritionOrderDao extends BaseDao<NutritionOrderEntity, NutritionOr
 		if (entitys != null && entitys.size() > 0) {
 			for (NutritionOrderEntity item : entitys) {
 				NutritionOrder obj = transform(item);
-				
+
 				resources.add(obj);
 			}
 		}
@@ -112,7 +107,7 @@ public class NutritionOrderDao extends BaseDao<NutritionOrderEntity, NutritionOr
 		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// set param default
 		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, null);
-		
+
 		return criteria;
 	}
 

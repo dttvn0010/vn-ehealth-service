@@ -32,7 +32,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 	@Autowired
 	protected MongoOperations mongo;
 
-	abstract protected List<String> getProfile();
+//	abstract protected List<String> getProfile();
 
 	abstract protected Class<? extends BaseResource> getEntityClass();
 
@@ -58,7 +58,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 	private ENT createNewEntity(FHIR obj, int version, String fhirId) {
 		ENT ent = null;
 		try {
-			ent = (ENT) DataConvertUtil.fhirToEntity(obj, getEntityClass(), getProfile());
+			ent = (ENT) DataConvertUtil.fhirToEntity(obj, getEntityClass());
 		} catch (Exception e) {
 			e.printStackTrace();
 			var json = FhirContext.forR4().newJsonParser().encodeResourceToString((IBaseResource) obj);

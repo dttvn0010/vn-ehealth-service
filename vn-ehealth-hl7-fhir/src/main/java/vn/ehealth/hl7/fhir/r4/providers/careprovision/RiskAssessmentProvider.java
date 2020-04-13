@@ -57,6 +57,12 @@ public class RiskAssessmentProvider extends BaseController<RiskAssessmentEntity,
 		return baseDao;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
 			// COMMON PARAMS

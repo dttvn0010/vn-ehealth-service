@@ -53,6 +53,12 @@ public class ConditionProvider extends BaseController<ConditionEntity, Condition
 		return Condition.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchCondition(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ABATEMENT_AGE) QuantityParam abatementAge,

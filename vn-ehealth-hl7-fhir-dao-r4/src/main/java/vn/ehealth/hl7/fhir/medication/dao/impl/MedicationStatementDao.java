@@ -171,11 +171,6 @@ public class MedicationStatementDao extends BaseDao<MedicationStatementEntity, M
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return MedicationStatement.class;
 	}

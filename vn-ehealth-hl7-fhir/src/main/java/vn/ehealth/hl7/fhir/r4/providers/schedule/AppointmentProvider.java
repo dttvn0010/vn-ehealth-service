@@ -50,6 +50,12 @@ public class AppointmentProvider extends BaseController<AppointmentEntity, Appoi
 		return Appointment.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchAppointment(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,

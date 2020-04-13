@@ -31,11 +31,6 @@ import vn.ehealth.hl7.fhir.dao.BaseDao;
 public class VisionPrescriptionDao extends BaseDao<VisionPrescriptionEntity, VisionPrescription> {
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return VisionPrescriptionEntity.class;
 	}

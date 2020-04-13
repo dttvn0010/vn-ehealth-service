@@ -31,11 +31,6 @@ import vn.ehealth.hl7.fhir.definitionalartifact.entity.PlanDefinitionEntity;
 public class PlanDefinitionDao extends BaseDao<PlanDefinitionEntity, PlanDefinition> {
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return PlanDefinitionEntity.class;
 	}

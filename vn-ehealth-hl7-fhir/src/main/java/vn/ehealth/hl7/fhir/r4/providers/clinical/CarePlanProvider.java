@@ -52,6 +52,12 @@ public class CarePlanProvider extends BaseController<CarePlanEntity, CarePlan> i
 		return CarePlan.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchCarePlan(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTIVITY_CODE) TokenParam activityCode,

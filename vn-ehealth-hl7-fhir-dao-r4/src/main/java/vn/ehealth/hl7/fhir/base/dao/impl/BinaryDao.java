@@ -30,11 +30,6 @@ import vn.ehealth.hl7.fhir.dao.BaseDao;
 public class BinaryDao extends BaseDao<BinaryEntity, Binary> {
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return BinaryEntity.class;
 	}
@@ -79,7 +74,7 @@ public class BinaryDao extends BaseDao<BinaryEntity, Binary> {
 		if (entitys != null && entitys.size() > 0) {
 			for (BinaryEntity item : entitys) {
 				Binary obj = transform(item);
-				
+
 				resources.add(obj);
 			}
 		}
@@ -111,7 +106,7 @@ public class BinaryDao extends BaseDao<BinaryEntity, Binary> {
 		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// set param default
 		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, null);
-		
+
 		return criteria;
 	}
 

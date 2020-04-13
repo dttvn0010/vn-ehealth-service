@@ -56,6 +56,12 @@ public class OrganizationProvider extends BaseController<OrganizationEntity, Org
 		return Organization.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchOrganization(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,

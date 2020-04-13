@@ -57,6 +57,12 @@ public class EncounterProvider extends BaseController<EncounterEntity, Encounter
 		return Encounter.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchEncounter(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_APPOINTMENT) ReferenceParam appointment,

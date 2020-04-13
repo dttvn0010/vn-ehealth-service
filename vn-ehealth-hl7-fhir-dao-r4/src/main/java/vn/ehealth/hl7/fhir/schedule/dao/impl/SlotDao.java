@@ -107,11 +107,6 @@ public class SlotDao extends BaseDao<SlotEntity, Slot> {
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return Slot.class;
 	}

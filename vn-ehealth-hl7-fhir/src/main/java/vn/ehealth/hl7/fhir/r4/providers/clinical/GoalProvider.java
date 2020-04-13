@@ -51,6 +51,12 @@ public class GoalProvider extends BaseController<GoalEntity, Goal> implements IR
 		return Goal.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchGoal(HttpServletRequest request,
 			@OptionalParam(name = Goal.SP_ACHIEVEMENT_STATUS) TokenParam achievementStatus,

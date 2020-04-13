@@ -56,6 +56,12 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 		return DiagnosticReport.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchDiagnosticReport(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,

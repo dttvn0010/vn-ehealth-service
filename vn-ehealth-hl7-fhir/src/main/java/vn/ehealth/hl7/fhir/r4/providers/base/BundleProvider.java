@@ -41,11 +41,11 @@ import vn.ehealth.hl7.fhir.factory.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.factory.OperationOutcomeFactory;
 
 @Component
-public class BundleProvider extends BaseController<BundleEntity, Bundle> implements IResourceProvider{
+public class BundleProvider extends BaseController<BundleEntity, Bundle> implements IResourceProvider {
 
 	@Autowired
 	BundleDao baseDao;
-	
+
 	@Override
 	public Class<? extends IBaseResource> getResourceType() {
 		return Bundle.class;
@@ -54,6 +54,12 @@ public class BundleProvider extends BaseController<BundleEntity, Bundle> impleme
 	@Override
 	protected BaseDao<BundleEntity, Bundle> getDao() {
 		return baseDao;
+	}
+
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Search

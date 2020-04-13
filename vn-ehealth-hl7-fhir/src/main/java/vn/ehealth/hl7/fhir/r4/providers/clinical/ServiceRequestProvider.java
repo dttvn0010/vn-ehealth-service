@@ -53,6 +53,12 @@ public class ServiceRequestProvider extends BaseController<ServiceRequestEntity,
 		return ServiceRequest.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
 			@OptionalParam(name = ServiceRequest.SP_AUTHORED) DateRangeParam authored,

@@ -64,6 +64,12 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 		return Patient.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchPatient(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS_USE) TokenParam addressUse,

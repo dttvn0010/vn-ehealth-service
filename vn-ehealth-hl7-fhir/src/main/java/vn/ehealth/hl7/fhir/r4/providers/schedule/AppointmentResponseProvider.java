@@ -51,6 +51,12 @@ public class AppointmentResponseProvider extends BaseController<AppointmentRespo
 		return AppointmentResponse.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchSlot(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,

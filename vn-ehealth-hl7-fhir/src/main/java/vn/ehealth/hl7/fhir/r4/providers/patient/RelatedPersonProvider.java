@@ -51,6 +51,12 @@ public class RelatedPersonProvider extends BaseController<RelatedPersonEntity, R
 		return RelatedPerson.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,

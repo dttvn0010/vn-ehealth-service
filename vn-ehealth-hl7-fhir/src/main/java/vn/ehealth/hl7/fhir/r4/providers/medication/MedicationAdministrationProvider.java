@@ -52,6 +52,12 @@ public class MedicationAdministrationProvider
 		return MedicationAdministration.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchMedicationAdministration(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,

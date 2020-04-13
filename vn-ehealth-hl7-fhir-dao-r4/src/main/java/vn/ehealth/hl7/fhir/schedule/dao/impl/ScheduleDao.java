@@ -115,11 +115,6 @@ public class ScheduleDao extends BaseDao<ScheduleEntity, Schedule> {
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return Schedule.class;
 	}

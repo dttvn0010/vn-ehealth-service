@@ -180,11 +180,6 @@ public class AppointmentDao extends BaseDao<AppointmentEntity, Appointment> {
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return Appointment.class;
 	}

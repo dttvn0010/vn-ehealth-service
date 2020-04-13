@@ -31,11 +31,6 @@ import vn.ehealth.hl7.fhir.definitionalartifact.entity.ActivityDefinitionEntity;
 public class ActivityDefinitionDao extends BaseDao<ActivityDefinitionEntity, ActivityDefinition> {
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return ActivityDefinitionEntity.class;
 	}

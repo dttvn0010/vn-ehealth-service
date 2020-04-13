@@ -160,11 +160,6 @@ public class PractitionerRoleDao extends BaseDao<PractitionerRoleEntity, Practit
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-	
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return PractitionerRole.class;
 	}

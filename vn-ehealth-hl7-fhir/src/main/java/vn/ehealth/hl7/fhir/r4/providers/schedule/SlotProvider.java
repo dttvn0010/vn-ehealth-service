@@ -54,6 +54,12 @@ public class SlotProvider extends BaseController<SlotEntity, Slot> implements IR
 		return Slot.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider search(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,

@@ -59,6 +59,12 @@ public class CodeSystemProvider extends BaseController<CodeSystemEntity, CodeSys
 	@Autowired
 	CodeSystemDao codeSystemDao;
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private static final Logger log = LoggerFactory.getLogger(CodeSystemProvider.class);
 
 	@Search

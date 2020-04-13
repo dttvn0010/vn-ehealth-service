@@ -31,11 +31,6 @@ import vn.ehealth.hl7.fhir.security.entity.AuditEventEntity;
 public class AuditEventDao extends BaseDao<AuditEventEntity, AuditEvent> {
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return AuditEventEntity.class;
 	}

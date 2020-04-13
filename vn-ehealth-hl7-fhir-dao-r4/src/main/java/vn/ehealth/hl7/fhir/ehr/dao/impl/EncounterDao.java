@@ -355,11 +355,6 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return Encounter.class;
 	}
@@ -368,7 +363,7 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 	protected Class<? extends BaseResource> getEntityClass() {
 		return EncounterEntity.class;
 	}
-	
+
 	public List<IBaseResource> getEverything(@IdParam IdType theId, DateParam theStart, DateParam theEnd) {
 
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
@@ -377,7 +372,7 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 			Encounter object = read(theId);
 			if (object != null) {
 				resources.add(object);
-				
+
 				// active
 				Criteria criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 				// criteria.and("subject.reference").is(thePatientId.asStringValue());
@@ -506,7 +501,8 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 					resources.addAll(riskAssessments);
 				}
 				// VisionPrescription
-				List<VisionPrescription> visionPrescriptions = DaoFactory.getVisionPrescriptionDao().findByCriteria(criteria);
+				List<VisionPrescription> visionPrescriptions = DaoFactory.getVisionPrescriptionDao()
+						.findByCriteria(criteria);
 				if (visionPrescriptions != null && visionPrescriptions.size() > 0) {
 					resources.addAll(visionPrescriptions);
 				}
@@ -516,7 +512,8 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 					resources.addAll(bodyStructures);
 				}
 				// QuestionnaireResponse
-				List<QuestionnaireResponse> questionnaireResponses = DaoFactory.getQuestionnaireResponseDao().findByCriteria(criteria);
+				List<QuestionnaireResponse> questionnaireResponses = DaoFactory.getQuestionnaireResponseDao()
+						.findByCriteria(criteria);
 				if (questionnaireResponses != null && questionnaireResponses.size() > 0) {
 					resources.addAll(questionnaireResponses);
 				}
@@ -526,11 +523,12 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 					resources.addAll(compositions);
 				}
 				// DocumentReference
-				List<DocumentReference> documentReferences = DaoFactory.getDocumentReferenceDao().findByCriteria(criteria);
+				List<DocumentReference> documentReferences = DaoFactory.getDocumentReferenceDao()
+						.findByCriteria(criteria);
 				if (documentReferences != null && documentReferences.size() > 0) {
 					resources.addAll(documentReferences);
 				}
-				
+
 				return resources;
 			}
 		}

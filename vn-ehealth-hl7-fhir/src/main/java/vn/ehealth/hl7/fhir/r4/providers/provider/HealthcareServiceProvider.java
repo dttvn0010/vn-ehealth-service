@@ -52,6 +52,12 @@ public class HealthcareServiceProvider extends BaseController<HealthcareServiceE
 		return HealthcareService.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchHealthcareService(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,

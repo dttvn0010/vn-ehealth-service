@@ -31,11 +31,6 @@ import vn.ehealth.hl7.fhir.document.entity.DocumentManifestEntity;
 public class DocumentManifestDao extends BaseDao<DocumentManifestEntity, DocumentManifest> {
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return DocumentManifestEntity.class;
 	}
@@ -44,7 +39,6 @@ public class DocumentManifestDao extends BaseDao<DocumentManifestEntity, Documen
 	protected Class<? extends DomainResource> getResourceClass() {
 		return DocumentManifest.class;
 	}
-
 
 	@SuppressWarnings("deprecation")
 	public List<IBaseResource> search(
@@ -81,7 +75,7 @@ public class DocumentManifestDao extends BaseDao<DocumentManifestEntity, Documen
 		if (entitys != null && entitys.size() > 0) {
 			for (DocumentManifestEntity item : entitys) {
 				DocumentManifest obj = transform(item);
-				
+
 				resources.add(obj);
 			}
 		}
@@ -113,7 +107,7 @@ public class DocumentManifestDao extends BaseDao<DocumentManifestEntity, Documen
 		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
 		// set param default
 		criteria = addParamDefault2Criteria(criteria, resid, _lastUpdated, _tag, _profile, _security, null);
-		
+
 		return criteria;
 	}
 }

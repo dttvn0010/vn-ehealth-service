@@ -51,6 +51,12 @@ public class PractitionerProvider extends BaseController<PractitionerEntity, Pra
 		return Practitioner.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchPractitioner(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,

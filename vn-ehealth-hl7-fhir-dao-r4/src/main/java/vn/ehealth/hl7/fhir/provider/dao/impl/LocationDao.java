@@ -205,11 +205,6 @@ public class LocationDao extends BaseDao<LocationEntity, Location> {
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return Location.class;
 	}

@@ -31,11 +31,6 @@ import vn.ehealth.hl7.fhir.diagnostic.entity.BodyStructureEntity;
 public class BodyStructureDao extends BaseDao<BodyStructureEntity, BodyStructure> {
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-	
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return BodyStructureEntity.class;
 	}

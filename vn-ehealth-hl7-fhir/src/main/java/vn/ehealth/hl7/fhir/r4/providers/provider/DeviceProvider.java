@@ -51,6 +51,12 @@ public class DeviceProvider extends BaseController<DeviceEntity, Device> impleme
 		return Device.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchDevice(HttpServletRequest request,
 			@OptionalParam(name = "device-name") StringParam deviceName,

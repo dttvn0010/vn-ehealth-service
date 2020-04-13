@@ -277,11 +277,6 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return Procedure.class;
 	}

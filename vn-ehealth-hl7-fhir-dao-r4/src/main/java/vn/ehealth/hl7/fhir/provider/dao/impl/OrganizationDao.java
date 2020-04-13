@@ -142,11 +142,6 @@ public class OrganizationDao extends BaseDao<OrganizationEntity, Organization> {
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends DomainResource> getResourceClass() {
 		return Organization.class;
 	}

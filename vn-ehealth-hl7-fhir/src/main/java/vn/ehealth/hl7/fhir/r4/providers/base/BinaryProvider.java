@@ -139,4 +139,10 @@ public class BinaryProvider extends BaseController<BinaryEntity, Binary> impleme
 		retVal.addParameter().setName("total").setValue(new StringType(String.valueOf(total)));
 		return retVal;
 	}
+
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

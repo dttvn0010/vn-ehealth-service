@@ -150,11 +150,6 @@ public class GoalDao extends BaseDao<GoalEntity, Goal> {
 	}
 
 	@Override
-	protected List<String> getProfile() {
-		return null;
-	}
-
-	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return GoalEntity.class;
 	}

@@ -158,7 +158,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 					ConceptDesignationEntity conceptDesignationEntity = new ConceptDesignationEntity();
 					conceptDesignationEntity.language = (conceptDefinitionDesignationComponent.getLanguage());
 					conceptDesignationEntity.use = DataConvertUtil
-							.fhirToEntity(conceptDefinitionDesignationComponent.getUse(), BaseCoding.class, getProfile());
+							.fhirToEntity(conceptDefinitionDesignationComponent.getUse(), BaseCoding.class);
 					conceptDesignationEntity.value = (conceptDefinitionDesignationComponent.getValue());
 					conceptDesignationEntitys.add(conceptDesignationEntity);
 				}
@@ -226,11 +226,10 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 	}
 
 	public Parameters getLookupParams(TokenParam code, UriParam system, StringParam version, Coding coding,
-			DateRangeParam date, TokenParam displayLanguage, TokenParam property, 
+			DateRangeParam date, TokenParam displayLanguage, TokenParam property,
 			// COMMON
-			TokenParam resid,
-			DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query, TokenParam _security,
-			StringParam _content) {
+			TokenParam resid, DateRangeParam _lastUpdated, TokenParam _tag, UriParam _profile, TokenParam _query,
+			TokenParam _security, StringParam _content) {
 		Parameters retVal = new Parameters();
 		Criteria criteria = null;
 		criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
@@ -407,11 +406,6 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 			}
 		}
 		return resources.size();
-	}
-
-	@Override
-	protected List<String> getProfile() {
-		return null;
 	}
 
 	@Override

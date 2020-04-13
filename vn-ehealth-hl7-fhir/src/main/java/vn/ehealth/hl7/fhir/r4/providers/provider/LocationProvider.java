@@ -51,6 +51,12 @@ public class LocationProvider extends BaseController<LocationEntity, Location> i
 		return Location.class;
 	}
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Search
 	public IBundleProvider searchLocation(HttpServletRequest request,
 			@OptionalParam(name = "address") StringParam address,
@@ -64,7 +70,7 @@ public class LocationProvider extends BaseController<LocationEntity, Location> i
 			@OptionalParam(name = "operational-status") TokenParam operationalStatus,
 			@OptionalParam(name = "organization") ReferenceParam organization,
 			@OptionalParam(name = "partof") ReferenceParam partof, @OptionalParam(name = "status") TokenParam status,
-			@OptionalParam(name = "type") TokenParam type,			
+			@OptionalParam(name = "type") TokenParam type,
 			// COMMON
 			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
 			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,

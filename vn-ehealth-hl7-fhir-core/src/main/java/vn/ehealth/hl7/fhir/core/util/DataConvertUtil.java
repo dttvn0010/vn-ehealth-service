@@ -265,7 +265,7 @@ public class DataConvertUtil {
 				cvtVal = BaseType.fromFhir((Type) fhirVal);
 				field.set(ent, cvtVal);
 			} else {
-				cvtVal = fhirToEntity(fhirVal, fieldType, null);
+				cvtVal = fhirToEntity(fhirVal, fieldType);
 			}
 
 			field.set(ent, cvtVal);
@@ -286,7 +286,7 @@ public class DataConvertUtil {
 
 			var listType = (ParameterizedType) field.getGenericType();
 			var itemType = (Class<?>) (listType.getActualTypeArguments()[0]);
-			var cvtVal = FPUtil.transform(fhirVal, x -> fhirToEntity(x, itemType, null));
+			var cvtVal = FPUtil.transform(fhirVal, x -> fhirToEntity(x, itemType));
 			field.set(ent, cvtVal);
 		} catch (Exception e) {
 			throw new RuntimeException(
@@ -462,26 +462,18 @@ public class DataConvertUtil {
 		return meta;
 	}
 
-	private static void setMetaExt(DomainResource obj, BaseResource ent, List<String> profiles) {
+	private static void setMetaExt(DomainResource obj, BaseResource ent) {
 		if (obj != null && ent != null) {
 			if (obj.hasMeta()) {
 				if (obj.getMeta().hasProfile()) {
 					ent._profile = FPUtil.transform(obj.getMeta().getProfile(), x -> x.getValue());
 				}
-				if (!profiles.isEmpty()) {
-//                	ent._profile.addAll(profiles); 
-					for (String item : profiles) {
-						if (!ent._profile.contains(item))
-							ent._profile.add(item);
-					}
-				}
 				if (obj.getMeta().hasSecurity()) {
 					ent._security = FPUtil.transform(obj.getMeta().getSecurity(),
-							x -> fhirToEntity(x, BaseCoding.class, profiles));
+							x -> fhirToEntity(x, BaseCoding.class));
 				}
 				if (obj.getMeta().hasTag()) {
-					ent._tag = FPUtil.transform(obj.getMeta().getTag(),
-							x -> fhirToEntity(x, BaseCoding.class, profiles));
+					ent._tag = FPUtil.transform(obj.getMeta().getTag(), x -> fhirToEntity(x, BaseCoding.class));
 				}
 			}
 
@@ -506,7 +498,7 @@ public class DataConvertUtil {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T fhirToEntity(Object obj, Class<T> entType, List<String> profiles) {
+	public static <T> T fhirToEntity(Object obj, Class<T> entType) {
 		if (obj == null || entType == null)
 			return null;
 
@@ -550,7 +542,7 @@ public class DataConvertUtil {
 			}
 
 			if (obj instanceof DomainResource && ent instanceof BaseResource) {
-				setMetaExt((DomainResource) obj, (BaseResource) ent, profiles);
+				setMetaExt((DomainResource) obj, (BaseResource) ent);
 			}
 
 			if (obj instanceof Type && ent instanceof BaseComplexType) {

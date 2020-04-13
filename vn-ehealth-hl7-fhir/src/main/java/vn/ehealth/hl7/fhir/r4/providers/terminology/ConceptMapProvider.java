@@ -60,6 +60,12 @@ public class ConceptMapProvider extends BaseController<ConceptMapEntity, Concept
 
 	private static final Logger log = LoggerFactory.getLogger(ConceptMapProvider.class);
 
+	@Override
+	protected List<String> getProfile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	@Search
 	public IBundleProvider searchConceptMap(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
