@@ -285,7 +285,9 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 	@Validate
 	public MethodOutcome validate(@ResourceParam IBaseResource object,
 			@OptionalParam(name = ConstantKeys.SP_PROFILE) StringParam theProfile) {
-		log.debug("Validating profile : " + theProfile);
+		if (theProfile != null) {
+			log.debug("Validating profile: " + theProfile.getValueNotNull());
+		}
 		// This method returns a MethodOutcome object
 		MethodOutcome method = new MethodOutcome();
 
@@ -305,7 +307,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 		validator.registerValidatorModule(module);
 
 		ValidationOptions options = new ValidationOptions();
-		options.addProfileIfNotBlank(theProfile.getValue());
+		options.addProfileIfNotBlank(theProfile != null ? theProfile.getValueNotNull() : "");
 
 		ValidationResult result = validator.validateWithResult(object, options);
 
