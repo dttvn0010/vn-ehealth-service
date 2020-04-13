@@ -17,6 +17,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.narrative.DefaultThymeleafNarrativeGenerator;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
+import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.server.ETagSupportEnum;
 import ca.uhn.fhir.rest.server.FifoMemoryPagingProvider;
@@ -118,8 +119,10 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 		super.initialize();
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 
-		FhirVersionEnum fhirVersion = FhirVersionEnum.R4;
-		setFhirContext(new FhirContext(fhirVersion));
+		FhirContext ctx = FhirContext.forR4();
+		ctx.setParserErrorHandler(new StrictErrorHandler());
+
+		setFhirContext(ctx);
 
 		if (serverBase != null && !serverBase.isEmpty()) {
 			setServerAddressStrategy(new HardcodedServerAddressStrategy(serverBase));
@@ -194,8 +197,11 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 
 //		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
 //		registerInterceptor(loggingInterceptor);
-		
-		/* Register Interceptor for allow/deny operations based on role/permission of users   */
+
+		/*
+		 * Register Interceptor for allow/deny operations based on role/permission of
+		 * users
+		 */
 //		ServerAuthorizationInterceptor authorizationInterceptor = new ServerAuthorizationInterceptor();
 //		registerInterceptor(authorizationInterceptor);
 

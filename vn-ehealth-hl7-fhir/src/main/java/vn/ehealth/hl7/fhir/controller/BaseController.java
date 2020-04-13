@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
+import org.hl7.fhir.r4.hapi.validation.FhirInstanceValidator;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.OperationOutcome;
@@ -29,12 +30,19 @@ import ca.uhn.fhir.rest.annotation.Patch;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Update;
+import ca.uhn.fhir.rest.annotation.Validate;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.PatchTypeEnum;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.NumberParam;
+import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
+import ca.uhn.fhir.validation.FhirValidator;
+import ca.uhn.fhir.validation.IValidatorModule;
+import ca.uhn.fhir.validation.ValidationOptions;
+import ca.uhn.fhir.validation.ValidationResult;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
@@ -64,14 +72,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 			method.setId(newObj.getIdElement());
 			method.setResource(newObj);
 		} catch (Exception ex) {
-//			if (ex instanceof OperationOutcomeException) {
-//				OperationOutcomeException outcomeException = (OperationOutcomeException) ex;
-//				method.setOperationOutcome(outcomeException.getOutcome());
-//			} else {
-//				log.error(ex.getMessage());
-//				method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome(ex.getMessage()));
-//			}
-			ProviderResponseLibrary.handleException(method,ex);
+			ProviderResponseLibrary.handleException(method, ex);
 		}
 		return method;
 	}
@@ -130,6 +131,17 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 		method.setCreated(false);
 
 		FHIR old = null;
+		String versionId = null;
+		if (theId.hasVersionIdPart()) {
+			versionId = theId.getVersionIdPart();
+		} else if (object.hasMeta() && object.getMeta().hasVersionId()) {
+			versionId = object.getMeta().getVersionId();
+		}
+		if (versionId == null) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceVersionConflictException("Resource have no version, stop processing!!!"),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.INVALID);
+		}
 		if (theId.hasVersionIdPart()) {
 			old = getDao().readOrVread(theId);
 		} else {
@@ -139,6 +151,11 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 			throw OperationOutcomeFactory.buildOperationOutcomeException(
 					new ResourceNotFoundException("No " + theId.getValue() + " found"),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		} else if (!versionId.equals(old.getMeta().getVersionId())) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("Found version " + versionId + ".Expected resource version "
+							+ old.getMeta().getVersionId()),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.CONFLICT);
 		}
 
 		FHIR newObject = null;
@@ -262,5 +279,38 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 				return null;
 			}
 		};
+	}
+
+	@SuppressWarnings("deprecation")
+	@Validate
+	public MethodOutcome validate(@ResourceParam IBaseResource object,
+			@OptionalParam(name = ConstantKeys.SP_PROFILE) StringParam theProfile) {
+		log.debug("Validating profile : " + theProfile);
+		// This method returns a MethodOutcome object
+		MethodOutcome method = new MethodOutcome();
+
+		// Create a validation support chain
+//		ValidationSupportChain validationSupportChain = new ValidationSupportChain(
+//		   new DefaultProfileValidationSupport(ctx),
+//		   new InMemoryTerminologyServerValidationSupport(ctx),
+//		   new CommonCodeSystemsTerminologyService(ctx)
+//		);
+
+		// Ask the context for a validator
+		FhirValidator validator = fhirContext.newValidator();
+
+		// Create a validation module and register it
+		IValidatorModule module = new FhirInstanceValidator();
+
+		validator.registerValidatorModule(module);
+
+		ValidationOptions options = new ValidationOptions();
+		options.addProfileIfNotBlank(theProfile.getValue());
+
+		ValidationResult result = validator.validateWithResult(object, options);
+
+		method.setOperationOutcome(result.getOperationOutcome());
+
+		return method;
 	}
 }
