@@ -248,8 +248,8 @@ public class ClinicalImpressionDao extends BaseDao<ClinicalImpressionEntity, Cli
 	}
 
 	@Override
-	protected String getProfile() {
-		return "ClinicalImpression-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

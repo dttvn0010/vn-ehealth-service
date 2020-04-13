@@ -32,7 +32,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 	@Autowired
 	protected MongoOperations mongo;
 
-	abstract protected String getProfile();
+	abstract protected List<String> getProfile();
 
 	abstract protected Class<? extends BaseResource> getEntityClass();
 
@@ -44,7 +44,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 			return null;
 		try {
 			var obj = DataConvertUtil.entityToFhir(ent, getResourceClass());
-			obj.setMeta(DataConvertUtil.getMeta(ent, getProfile()));
+			obj.setMeta(DataConvertUtil.getMeta(ent));
 			obj.setId(ent._fhirId);
 			return (FHIR) obj;
 		} catch (Exception e) {
@@ -58,7 +58,7 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 	private ENT createNewEntity(FHIR obj, int version, String fhirId) {
 		ENT ent = null;
 		try {
-			ent = (ENT) DataConvertUtil.fhirToEntity(obj, getEntityClass());
+			ent = (ENT) DataConvertUtil.fhirToEntity(obj, getEntityClass(), getProfile());
 		} catch (Exception e) {
 			e.printStackTrace();
 			var json = FhirContext.forR4().newJsonParser().encodeResourceToString((IBaseResource) obj);

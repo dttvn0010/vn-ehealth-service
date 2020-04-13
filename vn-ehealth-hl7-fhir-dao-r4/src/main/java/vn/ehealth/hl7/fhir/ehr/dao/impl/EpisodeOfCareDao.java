@@ -164,8 +164,8 @@ public class EpisodeOfCareDao extends BaseDao<EpisodeOfCareEntity, EpisodeOfCare
 	}
 
 	@Override
-	protected String getProfile() {
-		return "EpisodeOfCare-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

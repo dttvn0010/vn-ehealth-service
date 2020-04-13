@@ -263,8 +263,8 @@ public class ConditionDao extends BaseDao<ConditionEntity, Condition> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Condition-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

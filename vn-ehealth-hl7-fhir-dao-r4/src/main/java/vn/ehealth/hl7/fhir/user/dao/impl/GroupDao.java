@@ -31,8 +31,8 @@ import vn.ehealth.hl7.fhir.user.entity.GroupEntity;
 public class GroupDao extends BaseDao<GroupEntity, Group> {
 
 	@Override
-	protected String getProfile() {
-		return "Group-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

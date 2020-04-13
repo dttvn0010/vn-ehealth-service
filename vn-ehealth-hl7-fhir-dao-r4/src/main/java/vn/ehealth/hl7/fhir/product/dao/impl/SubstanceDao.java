@@ -31,10 +31,10 @@ import vn.ehealth.hl7.fhir.product.entity.SubstanceEntity;
 public class SubstanceDao extends BaseDao<SubstanceEntity, Substance> {
 
 	@Override
-	protected String getProfile() {
-		return "Substance-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
-
+	
 	@Override
 	protected Class<? extends BaseResource> getEntityClass() {
 		return SubstanceEntity.class;

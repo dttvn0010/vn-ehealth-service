@@ -31,8 +31,8 @@ import vn.ehealth.hl7.fhir.security.entity.ProvenanceEntity;
 public class ProvenanceDao extends BaseDao<ProvenanceEntity, Provenance> {
 
 	@Override
-	protected String getProfile() {
-		return "Provenance-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

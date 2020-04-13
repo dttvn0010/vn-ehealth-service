@@ -177,8 +177,8 @@ public class PractitionerDao extends BaseDao<PractitionerEntity, Practitioner> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Practitioner-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

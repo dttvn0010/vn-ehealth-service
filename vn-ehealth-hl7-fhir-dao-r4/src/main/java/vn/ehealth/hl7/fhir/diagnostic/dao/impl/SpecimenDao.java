@@ -119,8 +119,8 @@ public class SpecimenDao extends BaseDao<SpecimenEntity, Specimen> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Specimen-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

@@ -31,8 +31,8 @@ import vn.ehealth.hl7.fhir.dao.BaseDao;
 public class RequestGroupDao extends BaseDao<RequestGroupEntity, RequestGroup> {
 
 	@Override
-	protected String getProfile() {
-		return "RequestGroup-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

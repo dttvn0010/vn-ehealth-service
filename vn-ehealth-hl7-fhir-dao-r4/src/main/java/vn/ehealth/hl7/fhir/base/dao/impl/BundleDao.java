@@ -30,8 +30,8 @@ import vn.ehealth.hl7.fhir.dao.BaseDao;
 public class BundleDao extends BaseDao<BundleEntity, Bundle> {
 
 	@Override
-	protected String getProfile() {
-		return "Bundle-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

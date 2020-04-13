@@ -31,8 +31,8 @@ import vn.ehealth.hl7.fhir.dao.BaseDao;
 public class NutritionOrderDao extends BaseDao<NutritionOrderEntity, NutritionOrder> {
 
 	@Override
-	protected String getProfile() {
-		return "NutritionOrder-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

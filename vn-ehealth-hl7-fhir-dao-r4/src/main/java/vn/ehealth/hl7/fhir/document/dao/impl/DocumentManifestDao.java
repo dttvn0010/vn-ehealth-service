@@ -31,8 +31,8 @@ import vn.ehealth.hl7.fhir.document.entity.DocumentManifestEntity;
 public class DocumentManifestDao extends BaseDao<DocumentManifestEntity, DocumentManifest> {
 
 	@Override
-	protected String getProfile() {
-		return "DocumentManifest-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

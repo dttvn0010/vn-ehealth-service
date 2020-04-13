@@ -276,8 +276,9 @@ public class ProcedureDao extends BaseDao<ProcedureEntity, Procedure> {
 		return criteria;
 	}
 
-	protected String getProfile() {
-		return "Procedure-v1.0";
+	@Override
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

@@ -30,8 +30,8 @@ import vn.ehealth.hl7.fhir.dao.BaseDao;
 public class BinaryDao extends BaseDao<BinaryEntity, Binary> {
 
 	@Override
-	protected String getProfile() {
-		return "Binary-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

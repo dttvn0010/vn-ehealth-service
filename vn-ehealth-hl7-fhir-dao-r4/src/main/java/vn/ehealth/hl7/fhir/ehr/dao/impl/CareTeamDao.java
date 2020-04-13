@@ -151,8 +151,8 @@ public class CareTeamDao extends BaseDao<CareTeamEntity, CareTeam> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "CareTeam-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

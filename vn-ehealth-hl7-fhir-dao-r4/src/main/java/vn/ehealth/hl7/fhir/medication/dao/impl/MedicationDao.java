@@ -180,8 +180,8 @@ public class MedicationDao extends BaseDao<MedicationEntity, Medication> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Medication-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

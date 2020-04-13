@@ -31,8 +31,8 @@ import vn.ehealth.hl7.fhir.security.entity.ConsentEntity;
 public class ConsentDao extends BaseDao<ConsentEntity, Consent> {
 
 	@Override
-	protected String getProfile() {
-		return "Consent-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

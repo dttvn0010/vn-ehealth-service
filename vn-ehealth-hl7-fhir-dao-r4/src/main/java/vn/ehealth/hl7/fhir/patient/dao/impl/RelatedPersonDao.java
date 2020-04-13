@@ -136,8 +136,8 @@ public class RelatedPersonDao extends BaseDao<RelatedPersonEntity, RelatedPerson
 	}
 
 	@Override
-	protected String getProfile() {
-		return "RelatedPerson-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

@@ -145,8 +145,8 @@ public class AppointmentResponseDao extends BaseDao<AppointmentResponseEntity, A
 	}
 
 	@Override
-	protected String getProfile() {
-		return "AppointmentResponse-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

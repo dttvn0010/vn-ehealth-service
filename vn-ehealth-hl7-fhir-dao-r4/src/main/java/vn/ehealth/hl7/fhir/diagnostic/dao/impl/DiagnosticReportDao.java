@@ -200,8 +200,8 @@ public class DiagnosticReportDao extends BaseDao<DiagnosticReportEntity, Diagnos
 	}
 
 	@Override
-	protected String getProfile() {
-		return "DiagnosticReport-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

@@ -204,8 +204,8 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Observation-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

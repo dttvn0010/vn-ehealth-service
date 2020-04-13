@@ -31,8 +31,8 @@ import vn.ehealth.hl7.fhir.diagnostic.entity.QuestionnaireResponseEntity;
 public class QuestionnaireResponseDao extends BaseDao<QuestionnaireResponseEntity, QuestionnaireResponse> {
 
 	@Override
-	protected String getProfile() {
-		return "QuestionnaireResponse-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

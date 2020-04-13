@@ -34,8 +34,8 @@ import static vn.ehealth.hl7.fhir.dao.util.DatabaseUtil.*;
 public class FamilyMemberHistoryDao extends BaseDao<FamilyMemberHistoryEntity, FamilyMemberHistory> {
 
 	@Override
-	protected String getProfile() {
-		return "FamilyMemberHistory-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

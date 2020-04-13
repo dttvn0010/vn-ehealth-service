@@ -150,8 +150,8 @@ public class GoalDao extends BaseDao<GoalEntity, Goal> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Goal-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

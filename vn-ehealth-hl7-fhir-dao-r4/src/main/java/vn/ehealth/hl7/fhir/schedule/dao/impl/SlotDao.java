@@ -107,8 +107,8 @@ public class SlotDao extends BaseDao<SlotEntity, Slot> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Slot-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

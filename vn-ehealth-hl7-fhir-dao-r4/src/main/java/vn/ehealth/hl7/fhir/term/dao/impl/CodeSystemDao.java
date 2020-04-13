@@ -158,7 +158,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 					ConceptDesignationEntity conceptDesignationEntity = new ConceptDesignationEntity();
 					conceptDesignationEntity.language = (conceptDefinitionDesignationComponent.getLanguage());
 					conceptDesignationEntity.use = DataConvertUtil
-							.fhirToEntity(conceptDefinitionDesignationComponent.getUse(), BaseCoding.class);
+							.fhirToEntity(conceptDefinitionDesignationComponent.getUse(), BaseCoding.class, getProfile());
 					conceptDesignationEntity.value = (conceptDefinitionDesignationComponent.getValue());
 					conceptDesignationEntitys.add(conceptDesignationEntity);
 				}
@@ -410,8 +410,8 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "CodeSystem-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

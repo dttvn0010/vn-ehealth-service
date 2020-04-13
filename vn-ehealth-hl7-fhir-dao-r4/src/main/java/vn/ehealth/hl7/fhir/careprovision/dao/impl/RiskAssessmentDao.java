@@ -31,8 +31,8 @@ import vn.ehealth.hl7.fhir.dao.BaseDao;
 public class RiskAssessmentDao extends BaseDao<RiskAssessmentEntity, RiskAssessment> {
 
 	@Override
-	protected String getProfile() {
-		return "RiskAssessment-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

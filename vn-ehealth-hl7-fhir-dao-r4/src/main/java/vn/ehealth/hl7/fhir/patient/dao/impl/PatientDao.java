@@ -442,8 +442,8 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Patient-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

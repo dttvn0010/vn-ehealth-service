@@ -134,8 +134,8 @@ public class PersonDao extends BaseDao<PersonEntity, Person> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Person-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

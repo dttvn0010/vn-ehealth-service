@@ -201,7 +201,7 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 					ConceptReferenceDesignationEntity conceptDesignationEntity = new ConceptReferenceDesignationEntity();
 					conceptDesignationEntity.language = (conceptReferenceDesignationComponent.getLanguage());
 					conceptDesignationEntity.use = DataConvertUtil
-							.fhirToEntity(conceptReferenceDesignationComponent.getUse(), BaseCoding.class);
+							.fhirToEntity(conceptReferenceDesignationComponent.getUse(), BaseCoding.class, getProfile());
 					conceptDesignationEntity.value = (conceptReferenceDesignationComponent.getValue());
 					conceptDesignationEntitys.add(conceptDesignationEntity);
 				}
@@ -400,8 +400,8 @@ public class ValueSetDao extends BaseDao<ValueSetEntity, ValueSet> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "CarePlan-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

@@ -295,8 +295,8 @@ public class CarePlanDao extends BaseDao<CarePlanEntity, CarePlan> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "CarePlan-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

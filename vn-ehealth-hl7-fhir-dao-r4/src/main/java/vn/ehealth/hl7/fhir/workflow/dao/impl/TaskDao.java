@@ -31,8 +31,8 @@ import vn.ehealth.hl7.fhir.workflow.entity.TaskEntity;
 public class TaskDao extends BaseDao<TaskEntity, Task> {
 
 	@Override
-	protected String getProfile() {
-		return "Task-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

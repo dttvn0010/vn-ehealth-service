@@ -32,8 +32,8 @@ import vn.ehealth.hl7.fhir.diagnostic.entity.MediaEntity;
 public class MediaDao extends BaseDao<MediaEntity, Media> {
 
 	@Override
-	protected String getProfile() {
-		return "Media-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

@@ -148,8 +148,8 @@ public class DetectedIssueDao extends BaseDao<DetectedIssueEntity, DetectedIssue
 	}
 
 	@Override
-	protected String getProfile() {
-		return "DetectedIssue-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

@@ -144,8 +144,8 @@ public class HealthcareServiceDao extends BaseDao<HealthcareServiceEntity, Healt
 	}
 
 	@Override
-	protected String getProfile() {
-		return "HealthcareService-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

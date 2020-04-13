@@ -269,8 +269,8 @@ public class ServiceRequestDao extends BaseDao<ServiceRequestEntity, ServiceRequ
 	}
 
 	@Override
-	protected String getProfile() {
-		return "ServiceRequest-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

@@ -115,8 +115,8 @@ public class ScheduleDao extends BaseDao<ScheduleEntity, Schedule> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Schedule-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

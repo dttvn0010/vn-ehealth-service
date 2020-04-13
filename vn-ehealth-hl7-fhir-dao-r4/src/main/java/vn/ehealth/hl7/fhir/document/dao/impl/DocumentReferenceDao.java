@@ -31,8 +31,8 @@ import vn.ehealth.hl7.fhir.document.entity.DocumentReferenceEntity;
 public class DocumentReferenceDao extends BaseDao<DocumentReferenceEntity, DocumentReference> {
 
 	@Override
-	protected String getProfile() {
-		return "DocumentReference-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

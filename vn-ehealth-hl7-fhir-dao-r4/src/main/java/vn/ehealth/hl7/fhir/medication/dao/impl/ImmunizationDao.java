@@ -193,8 +193,8 @@ public class ImmunizationDao extends BaseDao<ImmunizationEntity, Immunization> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Immunization-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

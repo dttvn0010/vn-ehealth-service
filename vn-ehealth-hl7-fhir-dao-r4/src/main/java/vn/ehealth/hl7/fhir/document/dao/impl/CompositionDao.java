@@ -35,8 +35,8 @@ import vn.ehealth.hl7.fhir.document.entity.CompositionEntity;
 public class CompositionDao extends BaseDao<CompositionEntity, Composition> {
 
 	@Override
-	protected String getProfile() {
-		return "Composition-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

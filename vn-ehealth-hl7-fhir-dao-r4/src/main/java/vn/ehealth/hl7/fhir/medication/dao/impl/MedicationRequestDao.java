@@ -187,8 +187,8 @@ public class MedicationRequestDao extends BaseDao<MedicationRequestEntity, Medic
 	}
 
 	@Override
-	protected String getProfile() {
-		return "MedicationRequest-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

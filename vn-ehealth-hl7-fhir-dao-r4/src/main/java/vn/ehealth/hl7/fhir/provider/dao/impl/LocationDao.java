@@ -205,8 +205,8 @@ public class LocationDao extends BaseDao<LocationEntity, Location> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Location-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

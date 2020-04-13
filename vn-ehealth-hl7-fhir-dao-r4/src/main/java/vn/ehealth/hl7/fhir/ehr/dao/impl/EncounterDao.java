@@ -355,8 +355,8 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Encounter-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

@@ -142,8 +142,8 @@ public class OrganizationDao extends BaseDao<OrganizationEntity, Organization> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Organization-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override

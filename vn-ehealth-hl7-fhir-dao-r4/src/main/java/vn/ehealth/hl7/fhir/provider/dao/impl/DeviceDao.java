@@ -157,8 +157,8 @@ public class DeviceDao extends BaseDao<DeviceEntity, Device> {
 	}
 
 	@Override
-	protected String getProfile() {
-		return "Device-v1.0";
+	protected List<String> getProfile() {
+		return null;
 	}
 
 	@Override
