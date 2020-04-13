@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
+import org.hl7.fhir.r4.hapi.ctx.DefaultProfileValidationSupport;
+import org.hl7.fhir.r4.hapi.validation.CachingValidationSupport;
 import org.hl7.fhir.r4.hapi.validation.FhirInstanceValidator;
+import org.hl7.fhir.r4.hapi.validation.ValidationSupportChain;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.OperationOutcome;
@@ -40,7 +43,6 @@ import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
 import ca.uhn.fhir.validation.FhirValidator;
-import ca.uhn.fhir.validation.IValidatorModule;
 import ca.uhn.fhir.validation.ValidationOptions;
 import ca.uhn.fhir.validation.ValidationResult;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
@@ -297,18 +299,41 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 //		   new InMemoryTerminologyServerValidationSupport(ctx),
 //		   new CommonCodeSystemsTerminologyService(ctx)
 //		);
+				
+		// Create a chain that will hold our modules
+		ValidationSupportChain supportChain = new ValidationSupportChain();
 
+		DefaultProfileValidationSupport defaultSupport = new DefaultProfileValidationSupport();
+		supportChain.addValidationSupport(defaultSupport);
+		
+//		// Create a PrePopulatedValidationSupport which can be used to load custom definitions.
+//		// In this example we're loading two things, but in a real scenario we might
+//		// load many StructureDefinitions, ValueSets, CodeSystems, etc.
+//		PrePopulatedValidationSupport prePopulatedSupport = new PrePopulatedValidationSupport();
+//		prePopulatedSupport.addStructureDefinition(someStructureDefnition);
+//		prePopulatedSupport.addValueSet(someValueSet);
+//		supportChain.addValidationSupport(prePopulatedSupport);
+		
+//		// Create a module that uses a remote terminology service
+//		RemoteTerminologyServiceValidationSupport remoteTermSvc = new RemoteTerminologyServiceValidationSupport(ctx);
+//		remoteTermSvc.setBaseUrl("http://hapi.fhir.org/baseR4");
+//		supportChain.addValidationSupport(remoteTermSvc);
+				
+		// Wrap the chain in a cache to improve performance
+		CachingValidationSupport cache = new CachingValidationSupport(supportChain);
+		
 		// Ask the context for a validator
 		FhirValidator validator = fhirContext.newValidator();
 
 		// Create a validation module and register it
-		IValidatorModule module = new FhirInstanceValidator();
+		FhirInstanceValidator module = new FhirInstanceValidator(cache);
 
 		validator.registerValidatorModule(module);
 
 		ValidationOptions options = new ValidationOptions();
 		options.addProfileIfNotBlank(theProfile != null ? theProfile.getValueNotNull() : "");
 
+		// Perform the validation
 		ValidationResult result = validator.validateWithResult(object, options);
 
 		method.setOperationOutcome(result.getOperationOutcome());
