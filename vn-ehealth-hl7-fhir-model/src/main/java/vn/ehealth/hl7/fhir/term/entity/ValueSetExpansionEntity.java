@@ -21,7 +21,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
  * @version 1.0
  */
 @Document(collection = "valueSetExpansion")
-@CompoundIndex(def = "{'fhirId':1,'active':1,'version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class ValueSetExpansionEntity extends BaseResource {
     public static class ValueSetExpansionParameter {
         public String name;

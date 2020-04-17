@@ -53,6 +53,9 @@ public class MongoUtils {
                         case "$gte":
                             criteria.and(key).gte(opVal);
                             
+                        case "$ne":
+                            criteria.and(key).ne(opVal);
+                            
                         case "$lt":
                             criteria.and(key).lt(opVal);
                         
