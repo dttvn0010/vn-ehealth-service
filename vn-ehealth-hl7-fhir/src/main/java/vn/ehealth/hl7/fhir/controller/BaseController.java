@@ -300,7 +300,8 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 	@SuppressWarnings("deprecation")
 	@Validate
 	public MethodOutcome validate(@ResourceParam IBaseResource object,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) StringParam theProfile) {
+			@OptionalParam(name = "mode") StringParam theMode,
+			@OptionalParam(name = "profile") StringParam theProfile) {
 		if (theProfile != null) {
 			log.debug("Validating profile: " + theProfile.getValueNotNull());
 		}

@@ -258,7 +258,7 @@ public class ConstantKeys {
     }
 
     public static final int VERSION_1 = 1;
-    public static final String ENTITY_PROFILE_V1 = "https://fhir.emr.vncom/R4/StructureDefinition/";
+    public static final String ENTITY_PROFILE_V1 = "https://fhir.emr.com.vn/R4/StructureDefinition/";
     public static final String VALUESETCOMPOSE_TYPE_INCLUDE = "include";
     public static final String VALUESETCOMPOSE_TYPE_EXCLUDE = "exclude";
     public static final String NOT_PRESENT   = "not-present";
