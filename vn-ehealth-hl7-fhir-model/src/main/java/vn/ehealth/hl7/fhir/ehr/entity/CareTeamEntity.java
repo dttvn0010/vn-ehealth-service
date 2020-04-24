@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -19,7 +20,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class CareTeamEntity extends BaseResource{
     
-    public static class CareTeamParticipant {
+    public static class CareTeamParticipant extends BaseBackboneElement {
         public List<BaseCodeableConcept> role;
         public BaseReference member;
         public BaseReference onBehalfOf;

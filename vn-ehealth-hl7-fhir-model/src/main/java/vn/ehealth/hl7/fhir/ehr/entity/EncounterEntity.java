@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseDuration;
@@ -20,7 +22,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1, 'serviceProvider.reference':1, 'partOf.reference':1, 'episodeOfCare.reference':1, 'subject.reference':1}", name = "index_by_default")
 public class EncounterEntity extends BaseResource{
     
-    public static class EncounterLocation {
+    public static class EncounterLocation extends BaseBackboneElement {
         public BaseReference location;
         public String status;
         public BaseCodeableConcept physicalType;
@@ -28,31 +30,31 @@ public class EncounterEntity extends BaseResource{
         
     }
     
-    public static class StatusHistory{
+    public static class StatusHistory extends BaseBackboneElement{
         public String status;
         public BasePeriod period;
     }
     
-    public static class ClassHistory{
+    public static class ClassHistory extends BaseBackboneElement{
         public BaseCoding class_;
         public BasePeriod period;
         
     }
     
-    public static class EncounterParticipant {
+    public static class EncounterParticipant extends BaseBackboneElement {
         public List<BaseCodeableConcept> type;
         public BasePeriod period;
         public BaseReference individual;
         
     }
     
-    public static class Diagnosis {
+    public static class Diagnosis extends BaseBackboneElement {
         public BaseReference condition;
         public BaseCodeableConcept use;
         public Integer rank;
     }
     
-    public static class Hospitalization{
+    public static class Hospitalization extends BaseBackboneElement{
         public BaseIdentifier preAdmissionIdentifier;
         public BaseReference origin;
         public BaseCodeableConcept admitSource;

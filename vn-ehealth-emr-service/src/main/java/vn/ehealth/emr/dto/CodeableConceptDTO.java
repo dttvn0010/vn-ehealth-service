@@ -6,15 +6,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-public class ConceptDTO {
+public class CodeableConceptDTO {
 
     public String text;
     public String code;
     
-    public static ConceptDTO fromFhir(CodeableConcept obj) {
+    public static CodeableConceptDTO fromFhir(CodeableConcept obj) {
         if(obj == null) return null;
         
-        var dto = new ConceptDTO();
+        var dto = new CodeableConceptDTO();
         if(obj.hasCoding()) {
             dto.code = obj.getCodingFirstRep().getCode();
             dto.text = obj.getCodingFirstRep().getDisplay();

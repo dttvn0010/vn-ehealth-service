@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import vn.ehealth.emr.dto.BaseDTO;
-import vn.ehealth.emr.dto.ConceptDTO;
+import vn.ehealth.emr.dto.CodeableConceptDTO;
 import vn.ehealth.emr.dto.ReferenceDTO;
 
 @JsonInclude(Include.NON_NULL)
@@ -19,8 +19,8 @@ public class DiagnosticReportDTO extends BaseDTO{
     public Date issued;
     public ReferenceDTO patient;
     public ReferenceDTO encounter;
-    public ConceptDTO category;
-    public ConceptDTO code;
+    public CodeableConceptDTO category;
+    public CodeableConceptDTO code;
     public ReferenceDTO performer;
     public ReferenceDTO resultsInterpreter;
     public ReferenceDTO specimen;
@@ -34,8 +34,8 @@ public class DiagnosticReportDTO extends BaseDTO{
         dto.issued = obj.getIssued();
         dto.patient = ReferenceDTO.fromFhir(obj.getSubject());
         dto.encounter = ReferenceDTO.fromFhir(obj.getEncounter());
-        dto.category = ConceptDTO.fromFhir(obj.getCategoryFirstRep());
-        dto.code = ConceptDTO.fromFhir(obj.getCode());
+        dto.category = CodeableConceptDTO.fromFhir(obj.getCategoryFirstRep());
+        dto.code = CodeableConceptDTO.fromFhir(obj.getCode());
         dto.performer = ReferenceDTO.fromFhir(obj.getPerformerFirstRep());
         dto.resultsInterpreter = ReferenceDTO.fromFhir(obj.getResultFirstRep());
         dto.specimen = ReferenceDTO.fromFhir(obj.getSpecimenFirstRep());

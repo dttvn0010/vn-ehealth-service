@@ -15,7 +15,7 @@ import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.emr.dto.AddressDTO;
 import vn.ehealth.emr.dto.BaseDTO;
-import vn.ehealth.emr.dto.ConceptDTO;
+import vn.ehealth.emr.dto.CodeableConceptDTO;
 import vn.ehealth.emr.dto.HumanNameDTO;
 import vn.ehealth.emr.dto.IdentifierDTO;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
@@ -33,10 +33,10 @@ public class PatientDTO extends BaseDTO {
     public String nationalId;
     public AddressDTO address;
     public String gender;
-    public ConceptDTO race;
-    public ConceptDTO ethnics;
-    public ConceptDTO jobTitle;
-    public ConceptDTO nationality;
+    public CodeableConceptDTO race;
+    public CodeableConceptDTO ethnics;
+    public CodeableConceptDTO jobTitle;
+    public CodeableConceptDTO nationality;
     public String email;
     public String phone;
     
@@ -72,22 +72,22 @@ public class PatientDTO extends BaseDTO {
         
         var ext = FhirUtil.findExtensionByURL(obj.getExtension(), ExtensionURL.DAN_TOC);
         if(ext != null && ext.getValue() instanceof CodeableConcept) {
-            dto.race = ConceptDTO.fromFhir((CodeableConcept) ext.getValue());
+            dto.race = CodeableConceptDTO.fromFhir((CodeableConcept) ext.getValue());
         }
         
         ext = FhirUtil.findExtensionByURL(obj.getExtension(), ExtensionURL.TON_GIAO);
         if(ext != null && ext.getValue() instanceof CodeableConcept) {
-            dto.ethnics = ConceptDTO.fromFhir((CodeableConcept) ext.getValue());
+            dto.ethnics = CodeableConceptDTO.fromFhir((CodeableConcept) ext.getValue());
         }
         
         ext = FhirUtil.findExtensionByURL(obj.getExtension(), ExtensionURL.NGHE_NGHIEP);
         if(ext != null && ext.getValue() instanceof CodeableConcept) {
-            dto.jobTitle = ConceptDTO.fromFhir((CodeableConcept) ext.getValue());
+            dto.jobTitle = CodeableConceptDTO.fromFhir((CodeableConcept) ext.getValue());
         }
         
         ext = FhirUtil.findExtensionByURL(obj.getModifierExtension(), ExtensionURL.QUOC_TICH);
         if(ext != null && ext.getValue() instanceof CodeableConcept) {
-            dto.nationality = ConceptDTO.fromFhir((CodeableConcept) ext.getValue());
+            dto.nationality = CodeableConceptDTO.fromFhir((CodeableConcept) ext.getValue());
         }
         
         var phone = FPUtil.findFirst(obj.getTelecom(), 

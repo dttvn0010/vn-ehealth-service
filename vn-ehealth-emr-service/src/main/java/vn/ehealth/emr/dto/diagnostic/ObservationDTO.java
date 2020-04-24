@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import vn.ehealth.emr.dto.BaseDTO;
-import vn.ehealth.emr.dto.ConceptDTO;
+import vn.ehealth.emr.dto.CodeableConceptDTO;
 import vn.ehealth.emr.dto.ReferenceDTO;
 
 @JsonInclude(Include.NON_NULL)
@@ -24,8 +24,8 @@ public class ObservationDTO extends BaseDTO{
     
     public ReferenceDTO patient;
     public ReferenceDTO encounter;
-    public ConceptDTO code;
-    public ConceptDTO interpretation;
+    public CodeableConceptDTO code;
+    public CodeableConceptDTO interpretation;
     public ObservationReferenceRangeDTO referenceRange;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -43,7 +43,7 @@ public class ObservationDTO extends BaseDTO{
         
         dto.patient = ReferenceDTO.fromFhir(obj.getSubject());
         dto.encounter = ReferenceDTO.fromFhir(obj.getEncounter());
-        dto.code = ConceptDTO.fromFhir(obj.getCode());
+        dto.code = CodeableConceptDTO.fromFhir(obj.getCode());
         dto.issued = obj.getIssued();
         dto.performer = ReferenceDTO.fromFhir(obj.getPerformerFirstRep());
         
@@ -51,7 +51,7 @@ public class ObservationDTO extends BaseDTO{
             dto.value = ((PrimitiveType<?>) obj.getValue()).getValueAsString();
         }
         
-        dto.interpretation = ConceptDTO.fromFhir(obj.getInterpretationFirstRep());
+        dto.interpretation = CodeableConceptDTO.fromFhir(obj.getInterpretationFirstRep());
         
         if(obj.hasReferenceRange()) {
             var range = obj.getReferenceRangeFirstRep();

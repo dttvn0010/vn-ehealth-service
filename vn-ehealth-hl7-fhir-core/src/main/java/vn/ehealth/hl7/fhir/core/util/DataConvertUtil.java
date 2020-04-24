@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DomainResource;
+import org.hl7.fhir.r4.model.Element;
 import org.hl7.fhir.r4.model.Meta;
 import org.hl7.fhir.r4.model.Type;
 import org.slf4j.Logger;
@@ -211,13 +212,17 @@ public class DataConvertUtil {
 
 	public static List<Field> getAnnotedFields(Class<?> fhirType) {
 		var fields = new ArrayList<Field>();
-
-		for (var field : fhirType.getDeclaredFields()) {
-			var anns = Arrays.asList(field.getAnnotations());
-
-			if (FPUtil.anyMatch(anns, x -> x instanceof Child)) {
-				fields.add(field);
+		Class<?> clazz = fhirType;
+		
+		while(clazz != null && !DomainResource.class.equals(clazz) && !Element.class.equals(clazz)) {
+			for (var field : clazz.getDeclaredFields()) {
+				var anns = Arrays.asList(field.getAnnotations());
+	
+				if (FPUtil.anyMatch(anns, x -> x instanceof Child)) {
+					fields.add(field);
+				}
 			}
+			clazz = clazz.getSuperclass();
 		}
 
 		return fields;
@@ -478,11 +483,11 @@ public class DataConvertUtil {
 			}
 
 			if (obj.hasExtension()) {
-				ent._extension = FPUtil.transform(obj.getExtension(), BaseExtension::fromExtension);
+				ent.extension = FPUtil.transform(obj.getExtension(), BaseExtension::fromExtension);
 			}
 
 			if (obj.hasModifierExtension()) {
-				ent._modifierExtension = FPUtil.transform(obj.getModifierExtension(), BaseExtension::fromExtension);
+				ent.modifierExtension = FPUtil.transform(obj.getModifierExtension(), BaseExtension::fromExtension);
 			}
 		}
 	}
@@ -492,8 +497,8 @@ public class DataConvertUtil {
 			obj.getMeta().setProfile(FPUtil.transform(ent._profile, x -> new CanonicalType(x)));
 			obj.getMeta().setTag(FPUtil.transform(ent._tag, x -> entityToFhir(x, Coding.class)));
 			obj.getMeta().setSecurity(FPUtil.transform(ent._security, x -> entityToFhir(x, Coding.class)));
-			obj.setExtension(FPUtil.transform(ent._extension, BaseExtension::toExtension));
-			obj.setModifierExtension(FPUtil.transform(ent._modifierExtension, BaseExtension::toExtension));
+			obj.setExtension(FPUtil.transform(ent.extension, BaseExtension::toExtension));
+			obj.setModifierExtension(FPUtil.transform(ent.modifierExtension, BaseExtension::toExtension));
 		}
 	}
 

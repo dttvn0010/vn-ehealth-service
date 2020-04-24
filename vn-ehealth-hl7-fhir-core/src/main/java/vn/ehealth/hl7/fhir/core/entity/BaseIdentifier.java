@@ -1,7 +1,5 @@
 package vn.ehealth.hl7.fhir.core.entity;
 
-import org.hl7.fhir.r4.model.Identifier.IdentifierUse;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -18,6 +16,6 @@ public class BaseIdentifier extends BaseComplexType {
     
     public BaseReference assigner;
 
-    public IdentifierUse use;
+    public String use;
       
 }

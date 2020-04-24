@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
@@ -24,7 +25,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1, 'basedOn.reference':1, 'subject.reference':1, 'encounter.reference':1}", name = "index_by_default")
 public class ObservationEntity extends BaseResource {
     
-    public static class ObservationReferenceRange {
+    public static class ObservationReferenceRange extends BaseBackboneElement {
 
         public BaseQuantity low;
         public BaseQuantity high;
@@ -34,7 +35,7 @@ public class ObservationEntity extends BaseResource {
         public String text;
     }
     
-    public static class ObservationComponent {
+    public static class ObservationComponent extends BaseBackboneElement {
         public BaseCodeableConcept code;
         public BaseType value;
         public BaseCodeableConcept dataAbsentReason;

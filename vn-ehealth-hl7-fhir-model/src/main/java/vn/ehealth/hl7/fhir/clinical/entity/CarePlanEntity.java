@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BasePeriod;
@@ -24,7 +25,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class CarePlanEntity extends BaseResource {
     
-    public static class CarePlanActivityDetail {
+    public static class CarePlanActivityDetail extends BaseBackboneElement {
         public String kind;
         public List<String> instantiatesCanonical;
         public List<String> instantiatesUri;
@@ -45,7 +46,7 @@ public class CarePlanEntity extends BaseResource {
         public String description;
     }
     
-    public static class CarePlanActivity {        
+    public static class CarePlanActivity extends BaseBackboneElement {        
         public List<BaseCodeableConcept> outcomeCodeableConcept;
         public List<BaseReference> outcomeReference;
         public List<BaseAnnotation> progress;

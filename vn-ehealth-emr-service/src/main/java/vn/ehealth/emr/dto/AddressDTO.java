@@ -13,9 +13,9 @@ import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 public class AddressDTO {
 
     public String text;
-    public ConceptDTO city;
-    public ConceptDTO district;
-    public ConceptDTO ward;
+    public CodeableConceptDTO city;
+    public CodeableConceptDTO district;
+    public CodeableConceptDTO ward;
     
     public static AddressDTO fromFhir(Address obj) {
         if(obj == null) return null;
@@ -29,17 +29,17 @@ public class AddressDTO {
         if(extension != null && extension.hasExtension()) {
             var ext = FhirUtil.findExtensionByURL(extension.getExtension(), "city");
             if(ext != null && ext.getValue() instanceof CodeableConcept) {
-                dto.city = ConceptDTO.fromFhir((CodeableConcept) ext.getValue());
+                dto.city = CodeableConceptDTO.fromFhir((CodeableConcept) ext.getValue());
             }
             
             ext = FhirUtil.findExtensionByURL(extension.getExtension(), "district");
             if(ext != null && ext.getValue() instanceof CodeableConcept) {
-                dto.district = ConceptDTO.fromFhir((CodeableConcept) ext.getValue());
+                dto.district = CodeableConceptDTO.fromFhir((CodeableConcept) ext.getValue());
             }
             
             ext = FhirUtil.findExtensionByURL(extension.getExtension(), "ward");
             if(ext != null && ext.getValue() instanceof CodeableConcept) {
-                dto.ward = ConceptDTO.fromFhir((CodeableConcept) ext.getValue());
+                dto.ward = CodeableConceptDTO.fromFhir((CodeableConcept) ext.getValue());
             }
         }
         

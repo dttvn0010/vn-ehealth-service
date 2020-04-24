@@ -10,9 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
-import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseMetadataResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 /**
@@ -22,21 +23,21 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
  */
 @Document(collection = "valueSet")
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
-public class ValueSetEntity extends BaseResource {
+public class ValueSetEntity extends BaseMetadataResource {
     
-    public static class ConceptReferenceDesignation {
+    public static class ConceptReferenceDesignation extends BaseBackboneElement {
         protected String language;
         protected BaseCoding use;
         protected String value;
     }
   
-    public static class ConceptReference {
+    public static class ConceptReference extends BaseBackboneElement {
         protected String code;
         protected String display;
         protected List<ConceptReferenceDesignation> designation;
     }
     
-    public static class ConceptSet  {
+    public static class ConceptSet extends BaseBackboneElement {
         protected String system;
         protected String version;
         protected List<ConceptReference> concept;
@@ -44,7 +45,7 @@ public class ValueSetEntity extends BaseResource {
         protected List<String> valueSet;
     }
     
-    public static class ValueSetExpansionContains {
+    public static class ValueSetExpansionContains extends BaseBackboneElement {
         protected String system;
         protected Boolean abstract_;
         protected Boolean inactive;
@@ -56,19 +57,19 @@ public class ValueSetEntity extends BaseResource {
 
     }
     
-    public static class ValueSetCompose {
+    public static class ValueSetCompose extends BaseBackboneElement {
         protected Date lockedDate;
         protected Boolean inactive;
         protected List<ConceptSet> include;
         protected List<ConceptSet> exclude;
     }
     
-    public static class ValueSetExpansionParameter {
+    public static class ValueSetExpansionParameter extends BaseBackboneElement {
         protected String name;
         @JsonIgnore protected BaseType value;
     }
     
-    public static class ValueSetExpansion {
+    public static class ValueSetExpansion extends BaseBackboneElement {
         protected String identifier;
         protected Date timestamp;
         protected Integer total;

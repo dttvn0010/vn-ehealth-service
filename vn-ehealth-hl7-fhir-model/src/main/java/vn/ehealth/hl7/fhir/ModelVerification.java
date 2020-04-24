@@ -20,9 +20,11 @@ public class ModelVerification {
         System.out.println("Validating class " + entType.getName() + " agaist class " + fhirType.getName());
         var fields = DataConvertUtil.getAnnotedFields(fhirType);
         for(var field : fields) {
-            if(DataConvertUtil.getEntField(entType, field.getName()) == null) {
+        	String fieldName = field.getName();
+        	
+            if(DataConvertUtil.getEntField(entType, fieldName) == null) {
                 System.err.println(String.format("Missing field \"%s\" for class : %s",
-                        field.getName(), entType.getName()));
+                		fieldName, entType.getName()));
             }
         }
     }
@@ -149,6 +151,10 @@ public class ModelVerification {
         // provider
         check(DeviceEntity.class, Device.class);
         check(DeviceEntity.DeviceUdiCarrier.class, Device.DeviceUdiCarrierComponent.class);
+        check(DeviceEntity.DeviceDeviceName.class, Device.DeviceDeviceNameComponent.class);
+        check(DeviceEntity.DeviceProperty.class, Device.DevicePropertyComponent.class);
+        check(DeviceEntity.DeviceSpecialization.class, Device.DeviceSpecializationComponent.class);
+        check(DeviceEntity.DeviceVersion.class, Device.DeviceVersionComponent.class);
         
         check(HealthcareServiceEntity.class, HealthcareService.class);
         check(HealthcareServiceEntity.HealthcareServiceNotAvailable.class, HealthcareService.HealthcareServiceNotAvailableComponent.class);
@@ -158,6 +164,7 @@ public class ModelVerification {
         
         check(LocationEntity.class, Location.class);
         check(LocationEntity.LocationPosition.class, Location.LocationPositionComponent.class);
+        check(LocationEntity.LocationHoursOfOperation.class, Location.LocationHoursOfOperationComponent.class);
         
         check(OrganizationEntity.class, Organization.class);
         check(OrganizationEntity.OrganizationContact.class, Organization.OrganizationContactComponent.class);
@@ -182,11 +189,11 @@ public class ModelVerification {
         check(CodeSystemEntity.class, CodeSystem.class);
         check(CodeSystemEntity.CodeSystemFilter.class, CodeSystem.CodeSystemFilterComponent.class);
         check(CodeSystemEntity.Property.class, CodeSystem.PropertyComponent.class);
-        check(CodeSystemEntity.ConceptDefinitionDesignation.class, CodeSystem.ConceptDefinitionDesignationComponent.class);
-        check(CodeSystemEntity.ConceptProperty.class, CodeSystem.ConceptPropertyComponent.class);
-        check(CodeSystemEntity.ConceptDefinition.class, CodeSystem.ConceptDefinitionComponent.class);
-        
-        
+        check(ConceptEntity.class, CodeSystem.ConceptDefinitionComponent.class);
+        check(ConceptEntity.ConceptDefinitionDesignation.class, CodeSystem.ConceptDefinitionDesignationComponent.class);
+        check(ConceptEntity.ConceptProperty.class, CodeSystem.ConceptPropertyComponent.class);
+                        
+        check(ConceptMapEntity.class, ConceptMap.class);
         check(ConceptMapEntity.OtherElement.class, ConceptMap.OtherElementComponent.class);
         check(ConceptMapEntity.TargetElement.class, ConceptMap.TargetElementComponent.class);
         check(ConceptMapEntity.SourceElement.class, ConceptMap.SourceElementComponent.class);

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import vn.ehealth.emr.dto.BaseDTO;
-import vn.ehealth.emr.dto.ConceptDTO;
+import vn.ehealth.emr.dto.CodeableConceptDTO;
 import vn.ehealth.emr.dto.ReferenceDTO;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -20,7 +20,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 public class ProcedureDTO extends BaseDTO{
     
     public static class ProcedurePerformerDTO {
-        public ConceptDTO function;
+        public CodeableConceptDTO function;
         public ReferenceDTO actor;
         public ReferenceDTO onBehalfOf;
         
@@ -28,7 +28,7 @@ public class ProcedureDTO extends BaseDTO{
             if(obj == null) return null;
             
             var dto = new ProcedurePerformerDTO();
-            dto.function = ConceptDTO.fromFhir(obj.getFunction());
+            dto.function = CodeableConceptDTO.fromFhir(obj.getFunction());
             dto.actor = ReferenceDTO.fromFhir(obj.getActor());
             dto.onBehalfOf = ReferenceDTO.fromFhir(obj.getOnBehalfOf());
             
@@ -37,16 +37,16 @@ public class ProcedureDTO extends BaseDTO{
     }
     
     public ReferenceDTO serviceRequest;
-    public ConceptDTO category;
-    public ConceptDTO code;
+    public CodeableConceptDTO category;
+    public CodeableConceptDTO code;
     public ReferenceDTO patient;
     public ReferenceDTO encounter;
     public ReferenceDTO recorder;
     public ReferenceDTO asserter;
     public List<ProcedurePerformerDTO> performer;
-    public List<ConceptDTO> bodySite;
-    public ConceptDTO outcome;
-    public ConceptDTO followUp;
+    public List<CodeableConceptDTO> bodySite;
+    public CodeableConceptDTO outcome;
+    public CodeableConceptDTO followUp;
     public ReferenceDTO diagnosticReport;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -59,16 +59,16 @@ public class ProcedureDTO extends BaseDTO{
         
         dto.id = obj.getId();
         dto.serviceRequest = ReferenceDTO.fromFhir(obj.getBasedOnFirstRep());
-        dto.category = ConceptDTO.fromFhir(obj.getCategory());
-        dto.code = ConceptDTO.fromFhir(obj.getCode());
+        dto.category = CodeableConceptDTO.fromFhir(obj.getCategory());
+        dto.code = CodeableConceptDTO.fromFhir(obj.getCode());
         dto.patient = ReferenceDTO.fromFhir(obj.getSubject());
         dto.encounter = ReferenceDTO.fromFhir(obj.getEncounter());
         dto.recorder = ReferenceDTO.fromFhir(obj.getRecorder());
         dto.asserter = ReferenceDTO.fromFhir(obj.getAsserter());
         dto.performer = transform(obj.getPerformer(), ProcedurePerformerDTO::fromFhir);
-        dto.bodySite = transform(obj.getBodySite(), ConceptDTO::fromFhir);
-        dto.outcome = ConceptDTO.fromFhir(obj.getOutcome());
-        dto.followUp = ConceptDTO.fromFhir(obj.getFollowUpFirstRep());
+        dto.bodySite = transform(obj.getBodySite(), CodeableConceptDTO::fromFhir);
+        dto.outcome = CodeableConceptDTO.fromFhir(obj.getOutcome());
+        dto.followUp = CodeableConceptDTO.fromFhir(obj.getFollowUpFirstRep());
         dto.diagnosticReport = ReferenceDTO.fromFhir(obj.getReportFirstRep());
         
         if(obj.hasPerformedDateTimeType()) {

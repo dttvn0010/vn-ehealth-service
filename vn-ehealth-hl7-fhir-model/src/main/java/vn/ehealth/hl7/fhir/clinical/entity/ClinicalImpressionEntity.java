@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -24,13 +25,13 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class ClinicalImpressionEntity extends BaseResource {
 
-    public static class ClinicalImpressionInvestigation {
+    public static class ClinicalImpressionInvestigation extends BaseBackboneElement{
 
         public BaseCodeableConcept code;
         public List<BaseReference> item;
     }
     
-    public static class ClinicalImpressionFinding {
+    public static class ClinicalImpressionFinding extends BaseBackboneElement {
         public BaseCodeableConcept itemCodeableConcept;
         public BaseReference itemReference;
         public String basis;

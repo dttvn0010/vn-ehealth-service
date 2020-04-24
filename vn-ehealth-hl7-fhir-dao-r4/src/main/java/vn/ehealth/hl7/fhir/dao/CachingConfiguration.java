@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableCaching
 public class CachingConfiguration extends CachingConfigurerSupport {
 
-    final static String CACHE_RESOLVER_NAME = "simpleCacheResolver";
+    final public static String CACHE_RESOLVER_NAME = "simpleCacheResolver";
 
     @Bean
     @Override

@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
@@ -22,13 +23,13 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class LocationEntity extends BaseResource{
     
-    public static class LocationPosition {
+    public static class LocationPosition extends BaseBackboneElement {
         protected BigDecimal longitude;
         protected BigDecimal latitude;
         protected BigDecimal altitude;
     }
     
-    public static class LocationHoursOfOperation  {
+    public static class LocationHoursOfOperation extends BaseBackboneElement {
         protected List<String> daysOfWeek;
         protected Boolean allDay;
         protected String openingTime;

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-public class BaseDosage extends BaseComplexType {
+public class BaseDosage extends BaseBackboneType {
     
     @JsonInclude(Include.NON_NULL)
     public static class BaseDosageDoseAndRate {

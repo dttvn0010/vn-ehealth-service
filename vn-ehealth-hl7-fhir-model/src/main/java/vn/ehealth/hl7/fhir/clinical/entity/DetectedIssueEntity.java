@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseReference;
@@ -21,14 +22,14 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class DetectedIssueEntity extends BaseResource {
     
-    public static class DetectedIssueMitigation {
+    public static class DetectedIssueMitigation extends BaseBackboneElement {
         public BaseCodeableConcept action;
         public Date date;
         public BaseReference author;
         
     }
     
-    public static class DetectedIssueEvidence {
+    public static class DetectedIssueEvidence extends BaseBackboneElement {
         public List<BaseCodeableConcept> code;
         public List<BaseReference> detail;
     }

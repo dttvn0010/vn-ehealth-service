@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseHumanName;
@@ -24,7 +25,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class PractitionerEntity extends BaseResource {
     
-    public static class PractitionerQualification {
+    public static class PractitionerQualification extends BaseBackboneElement {
         public List<BaseIdentifier> identifier;
         public BaseCodeableConcept code;
         public BasePeriod period;

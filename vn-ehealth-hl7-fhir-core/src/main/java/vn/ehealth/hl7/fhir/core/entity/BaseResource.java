@@ -20,7 +20,7 @@ public abstract class BaseResource {
     @JsonIgnore public boolean _active;
     @JsonIgnore public List<BaseCoding> _security;
     @JsonIgnore public List<BaseCoding> _tag;
-    public List<BaseExtension> _extension;
-    public List<BaseExtension> _modifierExtension;
+    public List<BaseExtension> extension;
+    public List<BaseExtension> modifierExtension;
     public String _fhirId;
 }

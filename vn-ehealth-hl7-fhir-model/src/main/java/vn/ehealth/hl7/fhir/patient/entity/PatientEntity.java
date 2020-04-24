@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseHumanName;
@@ -30,17 +31,17 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class PatientEntity extends BaseResource {
     
-    public static class PatientCommunication {
+    public static class PatientCommunication extends BaseBackboneElement{
         public BaseCodeableConcept language;
         public Boolean preferred;
     }
     
-    public static class PatientLink {
+    public static class PatientLink extends BaseBackboneElement{
         public BaseReference other;
         public String type;
     }
     
-    public static class Contact {
+    public static class Contact extends BaseBackboneElement{
         protected List<BaseCodeableConcept> relationship;
         protected BaseHumanName name;
         protected List<BaseContactPoint> telecom;

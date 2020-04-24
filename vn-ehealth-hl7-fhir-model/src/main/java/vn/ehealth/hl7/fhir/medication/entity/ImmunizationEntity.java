@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
 import vn.ehealth.hl7.fhir.core.entity.BaseQuantity;
@@ -23,28 +24,28 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class ImmunizationEntity extends BaseResource {
     
-    public static class ImmunizationPerformer {
+    public static class ImmunizationPerformer extends BaseBackboneElement {
 
         public BaseCodeableConcept function;
         public BaseReference actor;
         
     }
     
-    public static class ImmunizationReaction {
+    public static class ImmunizationReaction extends BaseBackboneElement {
 
         public Date date;
         public BaseReference detail;
         public boolean reported;
         
     }
-    public static class ImmunizationEducation {
+    public static class ImmunizationEducation extends BaseBackboneElement {
         public String documentType;
         public String reference;
         public Date publicationDate;
         public Date presentationDate;
     }
     
-    public static class ImmunizationProtocolApplied {
+    public static class ImmunizationProtocolApplied extends BaseBackboneElement {
         public String series;
         public BaseReference authority;
         public List<BaseCodeableConcept> targetDisease;

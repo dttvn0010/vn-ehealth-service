@@ -18,7 +18,6 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.NumberParam;
@@ -42,29 +41,15 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 	public FHIR transform(ENT ent) {
 		if (ent == null)
 			return null;
-		try {
-			var obj = DataConvertUtil.entityToFhir(ent, getResourceClass());
-			obj.setMeta(DataConvertUtil.getMeta(ent));
-			obj.setId(ent._fhirId);
-			return (FHIR) obj;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Errror================" + getEntityClass() + ",id=" + ent._fhirId);
-		}
-		return null;
+		var obj = DataConvertUtil.entityToFhir(ent, getResourceClass());
+		obj.setMeta(DataConvertUtil.getMeta(ent));
+		obj.setId(ent._fhirId);
+		return (FHIR) obj;
 	}
 
 	@SuppressWarnings("unchecked")
 	private ENT createNewEntity(FHIR obj, int version, String fhirId) {
-		ENT ent = null;
-		try {
-			ent = (ENT) DataConvertUtil.fhirToEntity(obj, getEntityClass());
-		} catch (Exception e) {
-			e.printStackTrace();
-			var json = FhirContext.forR4().newJsonParser().encodeResourceToString((IBaseResource) obj);
-			System.out.println("Errror===================" + json);
-		}
-
+		ENT ent = (ENT) DataConvertUtil.fhirToEntity(obj, getEntityClass());
 		if (ent == null)
 			return null;
 
@@ -238,16 +223,15 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 		}
 		return retVal;
 	}
-
+	
 	@SuppressWarnings("unchecked")
-	public List<FHIR> findByCriteria(Criteria criteria) {
+	public List<ENT> findEntityByCriteria(Criteria criteria) {
 		var query = Query.query(criteria);
-		var lst = mongo.find(query, getEntityClass());
-		return DataConvertUtil.transform(lst, x -> transform((ENT) x));
+		return (List<ENT>) mongo.find(query, getEntityClass());		
 	}
-
+	
 	@SuppressWarnings("unchecked")
-	public List<FHIR> searchResource(Criteria criteria, Boolean active, int start, int count, Sort sort) {
+	public List<ENT> searchEntity(Criteria criteria, Boolean active, int start, int count, Sort sort) {
 		if (active != null) {
 			criteria.and(ConstantKeys.QP_ACTIVE).is(active);
 		} else {
@@ -267,7 +251,41 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 			query.skip(start);
 		if (count >= 0)
 			query.limit(count);
-		var lst = (List<ENT>) mongo.find(query, getEntityClass());
+		return (List<ENT>) mongo.find(query, getEntityClass());
+	}
+	
+	public List<ENT> searchEntity(Criteria criteria, int start, int count, Sort sort) {
+		return searchEntity(criteria, null, start, count, sort);
+	}
+
+	public List<ENT> searchEntity(Criteria criteria, int start, int count) {
+		return searchEntity(criteria, start, count, null);
+	}
+
+	public List<ENT> searchEntity(Criteria criteria) {
+		return searchEntity(criteria, -1, -1);
+	}
+
+	@SuppressWarnings("unchecked")
+	public ENT getEntity(Criteria criteria) {
+		criteria.and(ConstantKeys.QP_ACTIVE).is(true);
+		var query = Query.query(criteria);
+		return (ENT) mongo.findOne(query, getEntityClass());
+	}
+
+	public int countEntity(Criteria criteria) {
+		criteria.and(ConstantKeys.QP_ACTIVE).is(true);
+		var query = Query.query(criteria);
+		return (int) mongo.count(query, getEntityClass());
+	}
+
+	public List<FHIR> findByCriteria(Criteria criteria) {
+		var lst = findEntityByCriteria(criteria);
+		return DataConvertUtil.transform(lst, x -> transform((ENT) x));
+	}
+
+	public List<FHIR> searchResource(Criteria criteria, Boolean active, int start, int count, Sort sort) {		
+		var lst = searchEntity(criteria, active, start, count, sort);
 		return DataConvertUtil.transform(lst, x -> transform((ENT) x));
 	}
 
@@ -283,18 +301,12 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 		return searchResource(criteria, -1, -1);
 	}
 
-	@SuppressWarnings("unchecked")
-	public FHIR getResource(Criteria criteria) {
-		criteria.and(ConstantKeys.QP_ACTIVE).is(true);
-		var query = Query.query(criteria);
-		var ent = (ENT) mongo.findOne(query, getEntityClass());
+	public FHIR getResource(Criteria criteria) {		
+		var ent = getEntity(criteria);
 		return transform(ent);
 	}
 
 	public int countResource(Criteria criteria) {
-		criteria.and(ConstantKeys.QP_ACTIVE).is(true);
-		var query = Query.query(criteria);
-		int count = (int) mongo.count(query, getEntityClass());
-		return count;
-	}
+		return countEntity(criteria);
+	}	
 }

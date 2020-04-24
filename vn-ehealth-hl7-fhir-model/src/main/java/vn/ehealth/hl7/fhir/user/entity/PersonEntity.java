@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAddress;
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseHumanName;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -19,7 +20,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class PersonEntity extends BaseResource{
     
-    public static class PersonLink{
+    public static class PersonLink extends BaseBackboneElement{
         public BaseReference target;
         public String assurance;    
         

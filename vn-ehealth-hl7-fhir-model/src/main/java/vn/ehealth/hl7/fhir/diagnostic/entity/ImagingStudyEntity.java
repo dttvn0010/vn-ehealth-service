@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -21,19 +22,19 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class ImagingStudyEntity extends BaseResource {
     
-    public static class ImagingStudySeriesPerformer {
+    public static class ImagingStudySeriesPerformer extends BaseBackboneElement {
         public BaseReference actor;
         public BaseCodeableConcept function;
     }
     
-    public static class ImagingStudySeriesInstance {
+    public static class ImagingStudySeriesInstance extends BaseBackboneElement {
         public String uid;
         public int number;
         public BaseCoding sopClass;
         public String title;
     }
     
-    public static class ImagingStudySeries {
+    public static class ImagingStudySeries extends BaseBackboneElement {
         public String uid;
         public int number;
         public BaseCoding modality;

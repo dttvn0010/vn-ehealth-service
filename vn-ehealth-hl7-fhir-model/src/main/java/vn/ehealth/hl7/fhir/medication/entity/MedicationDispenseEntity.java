@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseDosage;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -25,12 +26,12 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class MedicationDispenseEntity extends BaseResource {
     
-    public static class MedicationDispensePerformer {
+    public static class MedicationDispensePerformer extends BaseBackboneElement {
         public BaseReference actor;
         public BaseCodeableConcept function;
     }
     
-    public static class MedicationDispenseSubstitution {
+    public static class MedicationDispenseSubstitution extends BaseBackboneElement {
         public boolean wasSubstituted;
         public BaseCodeableConcept type;
         public List<BaseCodeableConcept> reason;

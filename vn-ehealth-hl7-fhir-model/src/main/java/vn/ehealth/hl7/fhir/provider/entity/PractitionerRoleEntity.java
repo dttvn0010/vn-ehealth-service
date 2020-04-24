@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -21,14 +22,14 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class PractitionerRoleEntity extends BaseResource {
     
-    public static class PractitionerRoleAvailableTime{
+    public static class PractitionerRoleAvailableTime extends BaseBackboneElement {
         public List<String> daysOfWeek;
         public Boolean allDay;
         public String availableStartTime;
         public String availableEndTime;
     }
     
-    public static class PractitionerRoleNotAvailable{
+    public static class PractitionerRoleNotAvailable extends BaseBackboneElement {
         protected String description;
         protected BasePeriod during;
     }

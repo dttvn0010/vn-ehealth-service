@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAnnotation;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -27,7 +28,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class DeviceEntity extends BaseResource {
     
-    public static class DeviceUdiCarrier {
+    public static class DeviceUdiCarrier extends BaseBackboneElement{
         public String deviceIdentifier;
         public String name;
         public String jurisdiction;
@@ -37,23 +38,23 @@ public class DeviceEntity extends BaseResource {
         public String entryType;
     }
     
-    public static class DeviceDeviceName {
+    public static class DeviceDeviceName extends BaseBackboneElement {
         public String name;
         public String type;
     }
     
-    public static class DeviceSpecialization {
+    public static class DeviceSpecialization extends BaseBackboneElement {
         public BaseCodeableConcept systemType;
         public String version;
     }
     
-    public static class DeviceProperty {
+    public static class DeviceProperty extends BaseBackboneElement {
         public BaseCodeableConcept type;
         public List<BaseQuantity> valueQuantity;
         public List<BaseCodeableConcept> valueCode;
     }
     
-    public static class DeviceVersion {
+    public static class DeviceVersion extends BaseBackboneElement {
         public BaseCodeableConcept type;
         public BaseIdentifier component;
         public String value;

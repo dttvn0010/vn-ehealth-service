@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import vn.ehealth.hl7.fhir.core.entity.BaseAttachment;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactPoint;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -22,19 +23,19 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class HealthcareServiceEntity extends BaseResource {
     
-    public static class HealthcareServiceNotAvailable {
+    public static class HealthcareServiceNotAvailable extends BaseBackboneElement {
         public String description;
         public BasePeriod during;
     }
     
-    public static class HealthcareServiceAvailableTime {
+    public static class HealthcareServiceAvailableTime extends BaseBackboneElement {
         public List<String> daysOfWeek;
         public Boolean allDay;
         public String availableStartTime;
         public String availableEndTime;
     }
     
-    public static class HealthcareServiceEligibility{
+    public static class HealthcareServiceEligibility extends BaseBackboneElement{
         public BaseCodeableConcept code;
         public String comment;
     }

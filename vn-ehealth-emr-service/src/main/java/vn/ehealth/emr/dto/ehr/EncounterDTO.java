@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.emr.dto.BaseDTO;
-import vn.ehealth.emr.dto.ConceptDTO;
+import vn.ehealth.emr.dto.CodeableConceptDTO;
 import vn.ehealth.emr.dto.ReferenceDTO;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
@@ -19,7 +19,7 @@ import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 @JsonInclude(Include.NON_NULL)
 public class EncounterDTO extends BaseDTO{
     
-    public ConceptDTO type;
+    public CodeableConceptDTO type;
     public String mohNumber;
     public ReferenceDTO patient;
     public ReferenceDTO serviceProvider;
@@ -41,10 +41,10 @@ public class EncounterDTO extends BaseDTO{
         
         if(obj.hasPartOf() && obj.getPartOf().hasReference()) {
             var type = FhirUtil.findConceptBySystem(obj.getType(), CodeSystemValue.LOAI_KHAM_BENH);
-            dto.type = ConceptDTO.fromFhir(type);
+            dto.type = CodeableConceptDTO.fromFhir(type);
         }else {
             var type = FhirUtil.findConceptBySystem(obj.getType(), CodeSystemValue.KHOA_DIEU_TRI);
-            dto.type = ConceptDTO.fromFhir(type);
+            dto.type = CodeableConceptDTO.fromFhir(type);
         }
         
         var mohId = FPUtil.findFirst(obj.getIdentifier(), 

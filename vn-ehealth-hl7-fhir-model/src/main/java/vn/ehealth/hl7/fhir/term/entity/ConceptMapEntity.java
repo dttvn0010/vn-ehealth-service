@@ -9,8 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
-import vn.ehealth.hl7.fhir.core.entity.BaseResource;
+import vn.ehealth.hl7.fhir.core.entity.BaseMetadataResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
@@ -21,16 +22,16 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
  */
 @Document(collection = "conceptMap")
 @CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
-public class ConceptMapEntity extends BaseResource {
+public class ConceptMapEntity extends BaseMetadataResource {
 
-    public static class OtherElement {
+    public static class OtherElement extends BaseBackboneElement {
         protected String property;
         protected String system;
         protected String value;
         protected String display;
     }
     
-    public static class TargetElement {        
+    public static class TargetElement extends BaseBackboneElement {        
         protected String code;
         protected String display;
         protected String equivalence;
@@ -39,13 +40,13 @@ public class ConceptMapEntity extends BaseResource {
         protected List<OtherElement> product;
     }
     
-    public static class SourceElement {
+    public static class SourceElement extends BaseBackboneElement {
         protected String code;
         protected String display;
         protected List<TargetElement> target;
     }
     
-    public static class ConceptMapGroupUnmapped {
+    public static class ConceptMapGroupUnmapped extends BaseBackboneElement {
         
         protected String mode;
         protected String code;
@@ -53,7 +54,7 @@ public class ConceptMapEntity extends BaseResource {
         protected String url;
     }
     
-    public static class ConceptMapGroup {
+    public static class ConceptMapGroup extends BaseBackboneElement {
         protected String source;
         protected String sourceVersion;
         protected String target;

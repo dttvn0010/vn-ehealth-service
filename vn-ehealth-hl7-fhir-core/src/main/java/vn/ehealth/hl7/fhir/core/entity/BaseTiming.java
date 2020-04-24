@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;;
 
 @JsonInclude(Include.NON_NULL)
-public class BaseTiming extends BaseComplexType {
+public class BaseTiming extends BaseBackboneType {
     
     public static class BaseTimingRepeat {
         public BaseSimpleType bounds;
