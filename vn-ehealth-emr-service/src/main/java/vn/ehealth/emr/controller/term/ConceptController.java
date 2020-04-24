@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 import org.hl7.fhir.r4.model.CodeSystem;
+import org.hl7.fhir.r4.model.Enumerations.PublicationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +28,10 @@ public class ConceptController {
 	@Autowired private CodeSystemDao codeSystemDao;
 	@Autowired private ConceptDao conceptDao;
 	
-	private CodeSystem getCodeSystemByUrl(String url) {
-		var params = mapOf("url", (Object) url);
-		var criteria = MongoUtils.createCriteria(params);
-		return codeSystemDao.getResource(criteria);
-	}
-	
 	private Criteria createCritera(String codeSystemUrl, Optional<String> keyword) {
 		var params = new HashMap<String, Object>();
 		
-		var codeSytem = getCodeSystemByUrl(codeSystemUrl);
+		var codeSytem = codeSystemDao.getByUrl(codeSystemUrl);
 		if(codeSytem == null) {
 			return null;
 		}
