@@ -25,6 +25,8 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 @RequestMapping("/api/concept")
 public class ConceptController {
 
+	final private static int MAX_RECORDS = 100;
+	
 	@Autowired private CodeSystemDao codeSystemDao;
 	@Autowired private ConceptDao conceptDao;
 	
@@ -69,6 +71,9 @@ public class ConceptController {
 		var criteria = createCritera(codeSystemUrl, keyword);
 		if(criteria != null) {
 			var lstEnt = conceptDao.searchEntity(criteria);
+			if(lstEnt.size() > MAX_RECORDS) {
+				lstEnt = lstEnt.subList(0, MAX_RECORDS);
+			}
 			
 			if(viewEntity.orElse(false)) {
 				return ResponseEntity.ok(lstEnt);

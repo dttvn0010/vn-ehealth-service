@@ -6,12 +6,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.CodeSystem;
-import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
+import org.hl7.fhir.r4.model.OperationOutcome.IssueSeverity;
+import org.hl7.fhir.r4.model.OperationOutcome.IssueType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.instance.model.api.IPrimitiveType;
 import org.slf4j.Logger;
@@ -20,11 +23,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.annotation.Count;
+import ca.uhn.fhir.rest.annotation.Create;
+import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Operation;
 import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
+import ca.uhn.fhir.rest.annotation.Read;
+import ca.uhn.fhir.rest.annotation.ResourceParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
@@ -40,6 +48,7 @@ import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.factory.OperationOutcomeException;
 import vn.ehealth.hl7.fhir.factory.OperationOutcomeFactory;
+import vn.ehealth.hl7.fhir.factory.ProviderResponseLibrary;
 import vn.ehealth.hl7.fhir.term.dao.impl.CodeSystemDao;
 import vn.ehealth.hl7.fhir.term.entity.CodeSystemEntity;
 
@@ -67,6 +76,49 @@ public class CodeSystemProvider extends BaseController<CodeSystemEntity, CodeSys
 
 	private static final Logger log = LoggerFactory.getLogger(CodeSystemProvider.class);
 
+	@Create
+	public MethodOutcome create(HttpServletRequest theRequest, @ResourceParam CodeSystem object) {
+		MethodOutcome method = new MethodOutcome();
+		method.setCreated(true);
+		CodeSystem newObj = null;
+		try {
+			if(getProfile() != null) {
+				if (object.hasMeta() && object.getMeta().hasProfile()) {
+					for (String item : getProfile()) {
+						if (!object.getMeta().hasProfile(item))
+							object.getMeta().getProfile().add(new CanonicalType(item));
+					}
+				} else {
+					for (String item : getProfile()) {
+						object.getMeta().getProfile().add(new CanonicalType(item));
+					}
+				}
+			}			
+
+			newObj = getDao().create(object);
+			List<String> myString = new ArrayList<>();
+			myString.add("urn:uuid:" + newObj.getIdElement());
+			method.setOperationOutcome(OperationOutcomeFactory.createOperationOutcome("Create succsess",
+					"urn:uuid:" + newObj.getId(), IssueSeverity.INFORMATION, IssueType.VALUE, myString));
+			method.setId(newObj.getIdElement());
+			method.setResource(newObj);
+		} catch (Exception ex) {
+			ProviderResponseLibrary.handleException(method, ex);
+		}
+		return method;
+	}
+	
+	@Read
+	public CodeSystem read(HttpServletRequest request, @IdParam IdType theId) {
+		var object = getDao().read(theId);
+		if (object == null) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No " + theId.getValue() + " found"),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		}
+		return object;
+	}
+	
 	@Search
 	public IBundleProvider searchCodeSystem(HttpServletRequest request,
 			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
@@ -115,10 +167,9 @@ public class CodeSystemProvider extends BaseController<CodeSystemEntity, CodeSys
 
 				@Override
 				public Integer size() {
-					return Integer.parseInt(String
-							.valueOf(codeSystemDao.findMatchesAdvancedTotal(fhirContext, date, identifier, name, code,
-									contentMode, description, jurisdiction, language, publisher, status, system, title,
-									url, version, resid, _lastUpdated, _tag, _profile, _query, _security, _content)));
+					return (int) codeSystemDao.findMatchesAdvancedTotal(fhirContext, date, identifier, name, code,
+							contentMode, description, jurisdiction, language, publisher, status, system, title,
+							url, version, resid, _lastUpdated, _tag, _profile, _query, _security, _content);
 				}
 
 				@Override
@@ -148,23 +199,14 @@ public class CodeSystemProvider extends BaseController<CodeSystemEntity, CodeSys
 	}
 
 	@Operation(name = "$lookup", idempotent = true)
-	public Parameters findMatchesAdvanced(@OperationParam(name = "code") TokenParam code,
+	public Parameters lookUp(@OperationParam(name = "code") StringParam code,
 			@OperationParam(name = "system") UriParam system, @OperationParam(name = "version") StringParam version,
-			@OperationParam(name = "coding") Coding coding, @OperationParam(name = "date") DateRangeParam date,
+			@OperationParam(name = "coding") TokenParam coding, @OperationParam(name = "date") DateRangeParam date,
 			@OperationParam(name = "displayLanguage") TokenParam displayLanguage,
-			@OperationParam(name = "property") TokenParam property,
-			// COMMON
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = "property") TokenParam property) {
 
 		Parameters retVal = new Parameters();
-		retVal = codeSystemDao.getLookupParams(code, system, version, coding, date, displayLanguage, property, resid,
-				_lastUpdated, _tag, _profile, _query, _security, _content);
+		retVal = codeSystemDao.lookUp(code, system, version, coding, date, displayLanguage, property);
 		return retVal;
 	}
 

@@ -69,14 +69,16 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 		method.setCreated(true);
 		FHIR newObj = null;
 		try {
-			if (object.hasMeta() && object.getMeta().hasProfile()) {
-				for (String item : getProfile()) {
-					if (!object.getMeta().hasProfile(item))
+			if(getProfile() != null) {
+				if (object.hasMeta() && object.getMeta().hasProfile()) {
+					for (String item : getProfile()) {
+						if (!object.getMeta().hasProfile(item))
+							object.getMeta().getProfile().add(new CanonicalType(item));
+					}
+				} else {
+					for (String item : getProfile()) {
 						object.getMeta().getProfile().add(new CanonicalType(item));
-				}
-			} else if (!getProfile().isEmpty()) {
-				for (String item : getProfile()) {
-					object.getMeta().getProfile().add(new CanonicalType(item));
+					}
 				}
 			}
 
