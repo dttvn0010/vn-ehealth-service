@@ -3,16 +3,21 @@ package vn.ehealth.hl7.fhir.term.dao.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.CodeSystem;
+import org.hl7.fhir.r4.model.CodeType;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.Enumerations.PublicationStatus;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
+import org.hl7.fhir.r4.model.UriType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +37,7 @@ import ca.uhn.fhir.rest.param.UriParam;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
 import vn.ehealth.hl7.fhir.dao.BaseDao;
 import vn.ehealth.hl7.fhir.dao.CachingConfiguration;
@@ -251,9 +257,9 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 								.and("codeSystemId").is(codeSystem.getId())
 								.and("code").regex(codeString);
 		
-		var conceptEntList = mongo.find(Query.query(criteria), ConceptEntity.class);
+		var conceptEntity = mongo.findOne(Query.query(criteria), ConceptEntity.class);
 		
-		for (var conceptEntity : conceptEntList) {
+		if(conceptEntity != null) {
 			retVal.addParameter().setName("name").setValue(new StringType(conceptEntity.code));
 			retVal.addParameter().setName("version").setValue(new StringType(conceptEntity.version));
 			retVal.addParameter().setName("display").setValue(new StringType(conceptEntity.display));
@@ -276,15 +282,80 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 				var propVal = retVal.addParameter().setName("property");
 				
 				for (var conceptPropertyEntity : properties) {
-					propVal.addPart().setName("code")
-							.setValue(new StringType(conceptPropertyEntity.code));
-					
-					propVal.addPart().setName("value")
+					propVal.addPart()
+							.setName(conceptPropertyEntity.code)
 							.setValue(BaseType.toFhir(conceptPropertyEntity.value));
+					
 				}
 
 			}
+		}		
+		
+		return retVal;
+	}
+	
+	public Parameters findMatches(Parameters params) {
+		Parameters retVal = new Parameters();
+		var codeSystemUrlParam = FPUtil.findFirst(params.getParameter(), x -> ConstantKeys.SP_SYSTEM.equals(x.getName()));
+		if(codeSystemUrlParam == null) return null;
+		String codeSystemUrl = ((UriType) codeSystemUrlParam.getValue()).getValue();
+		
+		var codeSystem = getByUrl(codeSystemUrl);
+		if(codeSystem == null) {
+			return null;
 		}
+				
+		var criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true)
+								.and("codeSystemId").is(codeSystem.getId());
+		
+		boolean exact = false;
+		for(var param : params.getParameter()) {
+			if(ConstantKeys.SP_EXACT.equals(param.getName())) {
+				exact = ((BooleanType) param.getValue()).getValue();
+			}
+			
+			if(ConstantKeys.SP_PROPERTY.equals(param.getName())) {
+				String propertyCode = "";
+				Object propertyValue = null;;
+				
+				for(var part : param.getPart()) {
+					if(ConstantKeys.SP_CODE.equals(part.getName())) {
+						propertyCode = ((CodeType) part.getValue()).getValue();
+					}
+					
+					if(ConstantKeys.SP_VALUE.equals(part.getName())) {
+						if(part.getValue() instanceof IntegerType) {
+							propertyValue = ((IntegerType) part.getValue()).getValue();
+						}else {
+							propertyValue = part.getValue().primitiveValue();
+						}
+					}
+				}
+				
+				if(!StringUtils.isEmpty(propertyCode)) {
+					if(exact) {
+						criteria.and("property.code").is(propertyCode).and("property.value.value").is(propertyValue);
+					}else {
+						criteria.and("property.code").is(propertyCode).and("property.value.value").regex(String.valueOf(propertyValue));
+					}
+				}
+			}
+		}
+		
+		var conceptEntityList = mongo.find(Query.query(criteria), ConceptEntity.class);
+		
+		var match = retVal.addParameter();
+		match.setName("match");
+		
+		for(var conceptEntity : conceptEntityList) {
+			var part = match.addPart();
+			part.setName("code");
+			var code = new Coding();
+			code.setCode(conceptEntity.code);
+			code.setDisplay(conceptEntity.display);
+			code.setSystem(codeSystemUrl);
+			part.setValue(code);
+		}								
 		
 		return retVal;
 	}

@@ -3,6 +3,7 @@ package vn.ehealth.hl7.fhir.r4.providers.terminology;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -209,6 +210,15 @@ public class CodeSystemProvider extends BaseController<CodeSystemEntity, CodeSys
 		retVal = codeSystemDao.lookUp(code, system, version, coding, date, displayLanguage, property);
 		return retVal;
 	}
+	
+	@Operation(name = "$find-matches")
+	public Parameters findMatches(@ResourceParam Parameters params) {
+		
+		Parameters retVal = new Parameters();
+		retVal = codeSystemDao.findMatches(params);
+		return retVal; 
+	}
+	
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,

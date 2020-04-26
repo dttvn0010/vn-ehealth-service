@@ -186,6 +186,7 @@ public class ConstantKeys {
     public static final String SP_RELATED_TARGET = "related-target";
     public static final String SP_RELATED_TYPE = "related-type";
     public static final String SP_SPECIMEN = "specimen";
+    public static final String SP_VALUE = "value";
     public static final String SP_VALUE_CONCEPT = "value-concept";
     public static final String SP_VALUE_DATE="value-date";
     public static final String SP_VALUE_QUANTITY = "value-quantity";
@@ -236,6 +237,8 @@ public class ConstantKeys {
     
     public static final String SP_REQUEST = "request";
     public static final String SP_PERSIST = "persist";
+    
+    public static final String SP_EXACT = "exact";
     
     // Query params
     public static final String QP_FHIRID = "_fhirId";
