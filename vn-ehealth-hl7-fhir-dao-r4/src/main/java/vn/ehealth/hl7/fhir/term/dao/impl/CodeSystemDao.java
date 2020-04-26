@@ -346,9 +346,11 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 				
 				if(!StringUtils.isEmpty(propertyCode)) {
 					if(exact) {
-						criteria.and("property.code").is(propertyCode).and("property.value.value").is(propertyValue);
+						criteria.and("property.code").is(propertyCode)
+								.and("property.value.value").is(propertyValue);
 					}else {
-						criteria.and("property.code").is(propertyCode).and("property.value.value").regex(String.valueOf(propertyValue));
+						criteria.and("property.code").is(propertyCode)
+								.and("property.value.value").regex(String.valueOf(propertyValue), "i");
 					}
 				}
 			}
