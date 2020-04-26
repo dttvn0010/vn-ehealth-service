@@ -3,8 +3,6 @@ package vn.ehealth.hl7.fhir.r4.providers.terminology;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.hl7.fhir.r4.model.CanonicalType;

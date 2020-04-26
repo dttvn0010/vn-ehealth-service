@@ -3,8 +3,6 @@ package vn.ehealth.hl7.fhir.term.dao.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.CodeSystem;
@@ -34,6 +32,7 @@ import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
+import vn.ehealth.hl7.fhir.core.entity.BasePrimitiveType;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
@@ -106,6 +105,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 			}else {
 				object.setVersion(String.valueOf(1));
 			}
+						
 			object.setStatus(PublicationStatus.ACTIVE);
 			object.setDate(new Date());
 			var entity = createNewEntity(object, ConstantKeys.VERSION_1, null);
@@ -116,6 +116,18 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 					conceptEntity.codeSystemId = entity._fhirId;
 					conceptEntity.status = PublicationStatus.ACTIVE.toCode();
 					conceptEntity.date = object.getDate();
+					
+					String slug = conceptEntity.display + " (" + conceptEntity.code + ")";
+					var slugProp = new ConceptEntity.ConceptProperty();
+					slugProp.code = "slug";
+					slugProp.value = new BasePrimitiveType(new StringType(slug));
+					
+					if(conceptEntity.property == null) {
+						conceptEntity.property = List.of(slugProp);
+					}else {
+						conceptEntity.property.add(slugProp);
+					}
+					
 					conceptDao.create(conceptEntity);
 				}
 			}
