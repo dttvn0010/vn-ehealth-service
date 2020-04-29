@@ -67,7 +67,7 @@ public class CodeSystemController {
 	}
 	
 	@GetMapping("/find_match")
-	public ResponseEntity<?> findMatch(@RequestParam String codeSystemUrl, String keyword) {
+	public ResponseEntity<?> findMatch(@RequestParam String codeSystemUrl, String keyword, @RequestParam Optional<Integer> limit) {
 	    Parameters params = new Parameters();
 	    
 	    var systemParam = params.addParameter();
@@ -98,6 +98,10 @@ public class CodeSystemController {
 	        for(var part : match.getPart()) {
 	            var code = (Coding) part.getValue();
 	            conceptDTOList.add(ConceptDTO.fromCode(code));
+	            
+	            if(limit.isPresent() && conceptDTOList.size() >= limit.get()) {
+	                break;
+	            }
 	        }
 	    }
 	    
