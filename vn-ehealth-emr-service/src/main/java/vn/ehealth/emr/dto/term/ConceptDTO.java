@@ -106,7 +106,7 @@ public class ConceptDTO {
 	    
 	    var dto = new ConceptDTO();
 	    dto.code = code.getCode();
-	    dto.display = code.getDisplay();
+	    dto.display = code.getDisplay() + " (" + dto.code + ")";
 	    return dto;
 	}
 }
