@@ -11,6 +11,7 @@ import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.CodeSystem.PropertyType;
+import org.hl7.fhir.r4.model.Coding;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -98,5 +99,14 @@ public class ConceptDTO {
 		dto.display = ent.display;
 		dto.property = transform(ent.property, ConceptPropertyDTO::fromEntity);
 		return dto;
+	}
+	
+	public static ConceptDTO fromCode(Coding code) {
+	    if(code == null) return null;
+	    
+	    var dto = new ConceptDTO();
+	    dto.code = code.getCode();
+	    dto.display = code.getDisplay();
+	    return dto;
 	}
 }
