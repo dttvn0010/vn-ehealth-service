@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.dto.term.CodeSystemDTO;
 import vn.ehealth.emr.dto.term.ConceptDTO;
+import vn.ehealth.hl7.fhir.core.util.FhirUtil;
+import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.term.dao.impl.CodeSystemDao;
 import vn.ehealth.hl7.fhir.term.entity.CodeSystemEntity;
 import vn.ehealth.utils.MongoUtils;
@@ -67,45 +69,50 @@ public class CodeSystemController {
 	}
 	
 	@GetMapping("/find_match")
-	public ResponseEntity<?> findMatch(@RequestParam String codeSystemUrl, String keyword, @RequestParam Optional<Integer> limit) {
-	    Parameters params = new Parameters();
-	    
-	    var systemParam = params.addParameter();
-	    systemParam.setName("system").setValue(new UriType(codeSystemUrl));
-	    
-	    var exactParam = params.addParameter();
-	    exactParam.setName("exact").setValue(new BooleanType(false));
-	    
-	    var propParam = params.addParameter();
-	    propParam.setName("property");
-	    
-	    var codePart = propParam.addPart();
-	    codePart.setName("code").setValue(new CodeType("slug"));
-	    
-	    var valuePart = propParam.addPart();
-	    valuePart.setName("value").setValue(new StringType(keyword));
-	    
-	    var result = codeSystemDao.findMatches(params);
-	    
-	    var match = result.getParameter()
-	                      .stream()
-	                      .filter(x -> "match".equals(x.getName()))
-	                      .findFirst()
-	                      .orElse(null);
-	    	    
-	    List<ConceptDTO> conceptDTOList = new ArrayList<>();
-	    if(match != null) {
-	        for(var part : match.getPart()) {
-	            var code = (Coding) part.getValue();
-	            conceptDTOList.add(ConceptDTO.fromCode(code));
-	            
-	            if(limit.isPresent() && conceptDTOList.size() >= limit.get()) {
-	                break;
-	            }
-	        }
+	public ResponseEntity<?> findMatch(@RequestParam String codeSystemId, String keyword, @RequestParam Optional<Integer> limit) {
+	    try {
+    	    var codeSystem = codeSystemDao.read(FhirUtil.createIdType(codeSystemId));
+    	    Parameters params = new Parameters();
+    	    
+    	    var systemParam = params.addParameter();
+    	    systemParam.setName("system").setValue(new UriType(codeSystem.getUrl()));
+    	    
+    	    var exactParam = params.addParameter();
+    	    exactParam.setName("exact").setValue(new BooleanType(false));
+    	    
+    	    var propParam = params.addParameter();
+    	    propParam.setName("property");
+    	    
+    	    var codePart = propParam.addPart();
+    	    codePart.setName("code").setValue(new CodeType("slug"));
+    	    
+    	    var valuePart = propParam.addPart();
+    	    valuePart.setName("value").setValue(new StringType(keyword));
+    	    
+    	    var result = codeSystemDao.findMatches(params);
+    	    
+    	    var match = result.getParameter()
+    	                      .stream()
+    	                      .filter(x -> "match".equals(x.getName()))
+    	                      .findFirst()
+    	                      .orElse(null);
+    	    	    
+    	    List<ConceptDTO> conceptDTOList = new ArrayList<>();
+    	    if(match != null) {
+    	        for(var part : match.getPart()) {
+    	            var code = (Coding) part.getValue();
+    	            conceptDTOList.add(ConceptDTO.fromCode(code));
+    	            
+    	            if(limit.isPresent() && conceptDTOList.size() >= limit.get()) {
+    	                break;
+    	            }
+    	        }
+    	    }
+    	    
+    	    return ResponseEntity.ok(conceptDTOList);	
+	    }catch(Exception e) {
+	        return ResponseUtil.errorResponse(e);
 	    }
-	    
-	    return ResponseEntity.ok(conceptDTOList);	    
 	}
 	
 }
