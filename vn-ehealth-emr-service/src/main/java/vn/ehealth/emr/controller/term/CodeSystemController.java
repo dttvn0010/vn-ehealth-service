@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.CodeType;
 import org.hl7.fhir.r4.model.Coding;
@@ -69,13 +70,20 @@ public class CodeSystemController {
 	}
 	
 	@GetMapping("/find_match")
-	public ResponseEntity<?> findMatch(@RequestParam String codeSystemId, String keyword, @RequestParam Optional<Integer> limit) {
+	public ResponseEntity<?> findMatch(@RequestParam Optional<String> codeSystemId,
+	        @RequestParam Optional<String> codeSystemUrl,
+	        String keyword, @RequestParam Optional<Integer> limit) {
 	    try {
-    	    var codeSystem = codeSystemDao.read(FhirUtil.createIdType(codeSystemId));
+	        String system = codeSystemUrl.orElse("");
+	        if(StringUtils.isBlank(system)) {
+	            var codeSystem = codeSystemDao.read(FhirUtil.createIdType(codeSystemId.orElseThrow()));
+	            system = codeSystem.getUrl();
+	        }
+    	    
     	    Parameters params = new Parameters();
     	    
     	    var systemParam = params.addParameter();
-    	    systemParam.setName("system").setValue(new UriType(codeSystem.getUrl()));
+    	    systemParam.setName("system").setValue(new UriType(system));
     	    
     	    var exactParam = params.addParameter();
     	    exactParam.setName("exact").setValue(new BooleanType(false));
