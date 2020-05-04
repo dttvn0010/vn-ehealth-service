@@ -7,10 +7,12 @@ import org.hl7.fhir.r4.model.CodeSystem;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import vn.ehealth.emr.dto.BaseDTO;
+
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @JsonInclude(Include.NON_NULL)
-public class CodeSystemDTO {
+public class CodeSystemDTO extends BaseDTO {
 
 	@JsonInclude(Include.NON_NULL)
 	public static class CodeSystemPropertyDTO {
@@ -34,6 +36,7 @@ public class CodeSystemDTO {
 		if(obj == null) return null;
 		
 		var dto = new CodeSystemDTO();
+		dto.id = obj.getId();
 		dto.url = obj.getUrl();
 		dto.name = obj.getName();
 		dto.description = obj.getDescription();
