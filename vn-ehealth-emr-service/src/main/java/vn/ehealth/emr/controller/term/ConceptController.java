@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
-import org.hl7.fhir.r4.model.CodeSystem;
-import org.hl7.fhir.r4.model.Enumerations.PublicationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.ResponseEntity;
