@@ -1,7 +1,11 @@
 package vn.ehealth.hl7.fhir.core.entity;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.annotation.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,5 +26,12 @@ public abstract class BaseResource {
     @JsonIgnore public List<BaseCoding> _tag;
     public List<BaseExtension> extension;
     public List<BaseExtension> modifierExtension;
-    public String _fhirId;
+    @JsonIgnore public String _fhirId;
+    
+    @Transient
+    public Map<String, Object> computes = new HashMap<>();
+    
+    public String getFhirId() {
+    	return _fhirId;
+    }
 }

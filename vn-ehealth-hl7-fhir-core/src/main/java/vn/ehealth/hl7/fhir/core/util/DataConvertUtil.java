@@ -17,6 +17,7 @@ import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Element;
 import org.hl7.fhir.r4.model.Meta;
+import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseSimpleType;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 import vn.ehealth.hl7.fhir.core.entity.SimpleExtension;
+import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 
 public class DataConvertUtil {
 	private static Logger logger = LoggerFactory.getLogger(DataConvertUtil.class);
@@ -469,6 +471,8 @@ public class DataConvertUtil {
 
 	private static void setMetaExt(DomainResource obj, BaseResource ent) {
 		if (obj != null && ent != null) {
+			ent._fhirId = obj.getId();
+			
 			if (obj.hasMeta()) {
 				if (obj.getMeta().hasProfile()) {
 					ent._profile = FPUtil.transform(obj.getMeta().getProfile(), x -> x.getValue());
@@ -556,6 +560,10 @@ public class DataConvertUtil {
 					((BaseComplexType) ent).extension = FPUtil.transform(resource.getExtension(),
 							SimpleExtension::fromExtension);
 				}
+			}
+			
+			if(obj instanceof Reference && ent instanceof BaseReference) {
+				((BaseReference) ent).resource = ((Reference) obj).getResource();
 			}
 
 			return (T) ent;

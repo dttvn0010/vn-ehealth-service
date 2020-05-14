@@ -4,8 +4,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import vn.ehealth.hl7.fhir.core.entity.BaseExtension;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 public class EmrUtils {
 
@@ -26,5 +31,9 @@ public class EmrUtils {
     public static Map<String, Object> getFieldAsObject(Object obj, String key) {
         var map = (Map<String, Object>) obj;
         return (Map<String, Object>) map.get(key);
+    }
+    
+    public static BaseExtension findExtensionByURL(List<BaseExtension> lst, @Nonnull String url) {
+        return FPUtil.findFirst(lst, x -> url.equals(x.url));
     }
 }

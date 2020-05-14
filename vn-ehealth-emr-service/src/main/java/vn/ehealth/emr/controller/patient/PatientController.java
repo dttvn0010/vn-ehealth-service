@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.dto.patient.PatientDTO;
 import vn.ehealth.hl7.fhir.patient.dao.impl.PatientDao;
-import vn.ehealth.hl7.fhir.patient.entity.PatientEntity;
 import vn.ehealth.utils.MongoUtils;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -51,24 +50,18 @@ public class PatientController {
     
     @GetMapping("/list")
     public ResponseEntity<?> list(@RequestParam Optional<String> keyword,
-                                    @RequestParam Optional<Boolean> viewEntity,
                                     @RequestParam Optional<Integer> start,
                                     @RequestParam Optional<Integer> count) {
       
         var criteria = createCritera(keyword);
         var lst = patientDao.searchResource(criteria, start.orElse(-1), count.orElse(-1));
         
-        if(viewEntity.orElse(false)) {
-            var lstEnt = transform(lst, x -> fhirToEntity(x, PatientEntity.class));
-            return ResponseEntity.ok(lstEnt);
-        }else {
-            var lstDto = transform(lst, PatientDTO::fromFhir);
-            return ResponseEntity.ok(lstDto);
-        }        
+        var lstDto = transform(lst, PatientDTO::fromFhir);
+        return ResponseEntity.ok(lstDto);
     }
   
     @GetMapping("/get_by_id/{id}")
-    public ResponseEntity<?> getById(@PathVariable String id, @RequestParam Optional<Boolean> viewEntity) {
+    public ResponseEntity<?> getById(@PathVariable String id) {
         
         var patient = patientDao.read(new IdType(id));
         
@@ -76,12 +69,7 @@ public class PatientController {
             return new ResponseEntity<>("No patient found", HttpStatus.NOT_FOUND);
         }
         
-        if(viewEntity.orElse(false)) {
-            var ent = fhirToEntity(patient, PatientEntity.class);
-            return ResponseEntity.ok(ent);
-        }else {
-            var dto = PatientDTO.fromFhir(patient);
-            return ResponseEntity.ok(dto);
-        }
+        var dto = PatientDTO.fromFhir(patient);
+        return ResponseEntity.ok(dto);
     }
 }
