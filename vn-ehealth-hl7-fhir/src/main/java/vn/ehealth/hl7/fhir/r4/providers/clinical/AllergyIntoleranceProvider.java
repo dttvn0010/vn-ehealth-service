@@ -20,6 +20,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -157,31 +158,31 @@ public class AllergyIntoleranceProvider extends BaseController<AllergyIntoleranc
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ENCOUNTER) TokenParam encounter,
-			@OptionalParam(name = AllergyIntolerance.SP_ASSERTER) ReferenceParam asserter,
-			@OptionalParam(name = AllergyIntolerance.SP_CATEGORY) TokenParam category,
-			@OptionalParam(name = AllergyIntolerance.SP_CLINICAL_STATUS) TokenParam clinicalStatus,
-			@OptionalParam(name = AllergyIntolerance.SP_CODE) TokenParam code,
-			@OptionalParam(name = AllergyIntolerance.SP_CRITICALITY) TokenParam criticality,
-			@OptionalParam(name = AllergyIntolerance.SP_DATE) DateRangeParam date,
-			@OptionalParam(name = AllergyIntolerance.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = AllergyIntolerance.SP_LAST_DATE) DateRangeParam lastDate,
-			@OptionalParam(name = AllergyIntolerance.SP_MANIFESTATION) TokenParam manifestation,
-			@OptionalParam(name = AllergyIntolerance.SP_ONSET) DateRangeParam onset,
-			@OptionalParam(name = AllergyIntolerance.SP_PATIENT) ReferenceParam patient,
-			@OptionalParam(name = AllergyIntolerance.SP_RECORDER) ReferenceParam recorder,
-			@OptionalParam(name = AllergyIntolerance.SP_ROUTE) TokenParam route,
-			@OptionalParam(name = AllergyIntolerance.SP_SEVERITY) TokenParam severity,
-			@OptionalParam(name = AllergyIntolerance.SP_TYPE) TokenParam type,
-			@OptionalParam(name = AllergyIntolerance.SP_VERIFICATION_STATUS) TokenParam verificationStatus,
+			@OperationParam(name = ConstantKeys.SP_ENCOUNTER) TokenParam encounter,
+			@OperationParam(name = AllergyIntolerance.SP_ASSERTER) ReferenceParam asserter,
+			@OperationParam(name = AllergyIntolerance.SP_CATEGORY) TokenParam category,
+			@OperationParam(name = AllergyIntolerance.SP_CLINICAL_STATUS) TokenParam clinicalStatus,
+			@OperationParam(name = AllergyIntolerance.SP_CODE) TokenParam code,
+			@OperationParam(name = AllergyIntolerance.SP_CRITICALITY) TokenParam criticality,
+			@OperationParam(name = AllergyIntolerance.SP_DATE) DateRangeParam date,
+			@OperationParam(name = AllergyIntolerance.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = AllergyIntolerance.SP_LAST_DATE) DateRangeParam lastDate,
+			@OperationParam(name = AllergyIntolerance.SP_MANIFESTATION) TokenParam manifestation,
+			@OperationParam(name = AllergyIntolerance.SP_ONSET) DateRangeParam onset,
+			@OperationParam(name = AllergyIntolerance.SP_PATIENT) ReferenceParam patient,
+			@OperationParam(name = AllergyIntolerance.SP_RECORDER) ReferenceParam recorder,
+			@OperationParam(name = AllergyIntolerance.SP_ROUTE) TokenParam route,
+			@OperationParam(name = AllergyIntolerance.SP_SEVERITY) TokenParam severity,
+			@OperationParam(name = AllergyIntolerance.SP_TYPE) TokenParam type,
+			@OperationParam(name = AllergyIntolerance.SP_VERIFICATION_STATUS) TokenParam verificationStatus,
 			// COMMON PARAMS
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = baseDao.countMatchesAdvancedTotal(encounter, asserter, category, clinicalStatus, code, criticality,
 				date, identifier, lastDate, manifestation, onset, patient, recorder, route, severity, type,

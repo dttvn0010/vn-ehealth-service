@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -141,26 +142,26 @@ public class ValueSetProvider extends BaseController<ValueSetEntity, ValueSet> i
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
-			@OptionalParam(name = ConstantKeys.SP_DESCRIPTION) StringParam description,
-			@OptionalParam(name = ConstantKeys.SP_EXPANSION) UriParam expansion,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = ConstantKeys.SP_JURIS) TokenParam jurisdiction,
-			@OptionalParam(name = ConstantKeys.SP_NAME) StringParam name,
-			@OptionalParam(name = ConstantKeys.SP_PUBLISHER) StringParam publisher,
-			@OptionalParam(name = ConstantKeys.SP_REFERENCE) UriParam reference,
-			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
-			@OptionalParam(name = ConstantKeys.SP_TITLE) StringParam title,
-			@OptionalParam(name = ConstantKeys.SP_URL) UriParam url,
-			@OptionalParam(name = ConstantKeys.SP_VERSION) TokenParam version,
+			@OperationParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
+			@OperationParam(name = ConstantKeys.SP_DESCRIPTION) StringParam description,
+			@OperationParam(name = ConstantKeys.SP_EXPANSION) UriParam expansion,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = ConstantKeys.SP_JURIS) TokenParam jurisdiction,
+			@OperationParam(name = ConstantKeys.SP_NAME) StringParam name,
+			@OperationParam(name = ConstantKeys.SP_PUBLISHER) StringParam publisher,
+			@OperationParam(name = ConstantKeys.SP_REFERENCE) UriParam reference,
+			@OperationParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+			@OperationParam(name = ConstantKeys.SP_TITLE) StringParam title,
+			@OperationParam(name = ConstantKeys.SP_URL) UriParam url,
+			@OperationParam(name = ConstantKeys.SP_VERSION) TokenParam version,
 			// COMMON
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = valueSetDao.getTotal(fhirContext, date, description, expansion, identifier, jurisdiction, name,
 				publisher, reference, status, title, url, version, resid, _lastUpdated, _tag, _profile, _query,

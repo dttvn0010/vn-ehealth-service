@@ -20,6 +20,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -149,26 +150,26 @@ public class MediaProvider extends BaseController<MediaEntity, Media> implements
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = Media.SP_BASED_ON) ReferenceParam basedOn,
-			@OptionalParam(name = Media.SP_CREATED) DateRangeParam created,
-			@OptionalParam(name = Media.SP_DEVICE) ReferenceParam device,
-			@OptionalParam(name = Media.SP_ENCOUNTER) ReferenceParam encounter,
-			@OptionalParam(name = Media.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = Media.SP_MODALITY) TokenParam modality,
-			@OptionalParam(name = Media.SP_OPERATOR) ReferenceParam operator,
-			@OptionalParam(name = Media.SP_PATIENT) ReferenceParam patient,
-			@OptionalParam(name = Media.SP_SITE) TokenParam site,
-			@OptionalParam(name = Media.SP_STATUS) TokenParam status,
-			@OptionalParam(name = Media.SP_SUBJECT) ReferenceParam subject,
-			@OptionalParam(name = Media.SP_TYPE) TokenParam type, @OptionalParam(name = Media.SP_VIEW) TokenParam view,
+			@OperationParam(name = Media.SP_BASED_ON) ReferenceParam basedOn,
+			@OperationParam(name = Media.SP_CREATED) DateRangeParam created,
+			@OperationParam(name = Media.SP_DEVICE) ReferenceParam device,
+			@OperationParam(name = Media.SP_ENCOUNTER) ReferenceParam encounter,
+			@OperationParam(name = Media.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = Media.SP_MODALITY) TokenParam modality,
+			@OperationParam(name = Media.SP_OPERATOR) ReferenceParam operator,
+			@OperationParam(name = Media.SP_PATIENT) ReferenceParam patient,
+			@OperationParam(name = Media.SP_SITE) TokenParam site,
+			@OperationParam(name = Media.SP_STATUS) TokenParam status,
+			@OperationParam(name = Media.SP_SUBJECT) ReferenceParam subject,
+			@OperationParam(name = Media.SP_TYPE) TokenParam type, @OperationParam(name = Media.SP_VIEW) TokenParam view,
 			// COMMON PARAMS
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = baseDao.countMatchesAdvancedTotal(basedOn, created, device, encounter, identifier, modality,
 				operator, patient, site, status, subject, type, view,

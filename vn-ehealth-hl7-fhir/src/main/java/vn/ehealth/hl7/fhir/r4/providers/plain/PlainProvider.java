@@ -88,31 +88,31 @@ public class PlainProvider {
 		Bundle retVal = new Bundle();
 		// Populate return bundle
 		return new IBundleProvider() {
-			
+
 			@Override
 			public Integer size() {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
+
 			@Override
 			public Integer preferredPageSize() {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
+
 			@Override
 			public String getUuid() {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
+
 			@Override
 			public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
+
 			@Override
 			public IPrimitiveType<Date> getPublished() {
 				// TODO Auto-generated method stub

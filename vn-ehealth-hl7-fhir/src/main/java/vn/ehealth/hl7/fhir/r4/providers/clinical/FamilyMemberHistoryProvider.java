@@ -20,6 +20,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -145,24 +146,24 @@ public class FamilyMemberHistoryProvider extends BaseController<FamilyMemberHist
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = FamilyMemberHistory.SP_CODE) TokenParam code,
-			@OptionalParam(name = FamilyMemberHistory.SP_DATE) DateRangeParam date,
-			@OptionalParam(name = FamilyMemberHistory.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = FamilyMemberHistory.SP_INSTANTIATES_CANONICAL) ReferenceParam instantiatesCanonical,
-			@OptionalParam(name = FamilyMemberHistory.SP_INSTANTIATES_URI) UriParam instantiatesUri,
-			@OptionalParam(name = FamilyMemberHistory.SP_PATIENT) ReferenceParam patient,
-			@OptionalParam(name = FamilyMemberHistory.SP_RELATIONSHIP) TokenParam relationship,
-			@OptionalParam(name = FamilyMemberHistory.SP_GENDER) TokenParam gender,
-			@OptionalParam(name = FamilyMemberHistory.SP_STATUS) TokenParam status,
+			@OperationParam(name = FamilyMemberHistory.SP_CODE) TokenParam code,
+			@OperationParam(name = FamilyMemberHistory.SP_DATE) DateRangeParam date,
+			@OperationParam(name = FamilyMemberHistory.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = FamilyMemberHistory.SP_INSTANTIATES_CANONICAL) ReferenceParam instantiatesCanonical,
+			@OperationParam(name = FamilyMemberHistory.SP_INSTANTIATES_URI) UriParam instantiatesUri,
+			@OperationParam(name = FamilyMemberHistory.SP_PATIENT) ReferenceParam patient,
+			@OperationParam(name = FamilyMemberHistory.SP_RELATIONSHIP) TokenParam relationship,
+			@OperationParam(name = ConstantKeys.SP_SEX) TokenParam gender,
+			@OperationParam(name = FamilyMemberHistory.SP_STATUS) TokenParam status,
 
 			// Common
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = baseDao.countMatchesAdvancedTotal(code, date, identifier, instantiatesCanonical, instantiatesUri,
 				patient, relationship, gender, status,

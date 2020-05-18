@@ -20,6 +20,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -146,26 +147,26 @@ public class ClinicalImpressionProvider extends BaseController<ClinicalImpressio
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTION) ReferenceParam action,
-			@OptionalParam(name = ConstantKeys.SP_ASSESSOR) ReferenceParam assessor,
-			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
-			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
-			@OptionalParam(name = ConstantKeys.SP_FINDING_CODE) TokenParam findingCode,
-			@OptionalParam(name = ConstantKeys.SP_FINDING_REF) ReferenceParam findingRef,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = ConstantKeys.SP_INVESTIGATION) ReferenceParam investigation,
-			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
-			@OptionalParam(name = ConstantKeys.SP_PREVIOUS) ReferenceParam previous,
-			@OptionalParam(name = ConstantKeys.SP_PROBLEM) ReferenceParam problem,
-			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
-			@OptionalParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = ConstantKeys.SP_ACTION) ReferenceParam action,
+			@OperationParam(name = ConstantKeys.SP_ASSESSOR) ReferenceParam assessor,
+			@OperationParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
+			@OperationParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
+			@OperationParam(name = ConstantKeys.SP_FINDING_CODE) TokenParam findingCode,
+			@OperationParam(name = ConstantKeys.SP_FINDING_REF) ReferenceParam findingRef,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = ConstantKeys.SP_INVESTIGATION) ReferenceParam investigation,
+			@OperationParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OperationParam(name = ConstantKeys.SP_PREVIOUS) ReferenceParam previous,
+			@OperationParam(name = ConstantKeys.SP_PROBLEM) ReferenceParam problem,
+			@OperationParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+			@OperationParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = clinicalImpressionDao.countMatchesAdvancedTotal(fhirContext, action, assessor, context, date,
 				findingCode, findingRef, identifier, investigation, patient, previous, problem, status, subject, resid,

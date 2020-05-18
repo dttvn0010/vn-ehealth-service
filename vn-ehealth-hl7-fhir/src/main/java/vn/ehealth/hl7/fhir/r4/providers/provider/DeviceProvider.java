@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -133,23 +134,25 @@ public class DeviceProvider extends BaseController<DeviceEntity, Device> impleme
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = "device-name") StringParam deviceName,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = "location") ReferenceParam location,
-			@OptionalParam(name = "manufacturer") StringParam manufacturer,
-			@OptionalParam(name = "model") StringParam model,
-			@OptionalParam(name = "organization") ReferenceParam organization,
-			@OptionalParam(name = "patient") ReferenceParam patient,
-			@OptionalParam(name = "udi-carrier") StringParam udiCarrier,
-			@OptionalParam(name = "udi-di") StringParam udiDi, @OptionalParam(name = "url") UriParam url,
-			@OptionalParam(name = "status") TokenParam status, @OptionalParam(name = "type") TokenParam type,
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = "device-name") StringParam deviceName,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = "location") ReferenceParam location,
+			@OperationParam(name = "manufacturer") StringParam manufacturer,
+			@OperationParam(name = "model") StringParam model,
+			@OperationParam(name = "organization") ReferenceParam organization,
+			@OperationParam(name = "patient") ReferenceParam patient,
+			@OperationParam(name = "udi-carrier") StringParam udiCarrier,
+			@OperationParam(name = "udi-di") StringParam udiDi, 
+			@OperationParam(name = "url") UriParam url,
+			@OperationParam(name = "status") TokenParam status, 
+			@OperationParam(name = "type") TokenParam type,
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = deviceDao.findMatchesAdvancedTotal(fhirContext, deviceName, identifier, location, manufacturer,
 				model, organization, patient, udiCarrier, udiDi, url, status, type, resid, _lastUpdated, _tag, _profile,

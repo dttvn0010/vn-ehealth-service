@@ -23,6 +23,7 @@ import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -152,29 +153,29 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
-			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
-			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
-			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam conetext,
-			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
-			@OptionalParam(name = ConstantKeys.SP_DIAGNOSIS) TokenParam diagnosis,
-			@OptionalParam(name = ConstantKeys.SP_ENCOUNTER) ReferenceParam encounter,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = ConstantKeys.SP_IMAGE) ReferenceParam image,
-			@OptionalParam(name = ConstantKeys.SP_ISSUED) DateRangeParam issued,
-			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
-			@OptionalParam(name = ConstantKeys.SP_PERFORMER) ReferenceParam performer,
-			@OptionalParam(name = ConstantKeys.SP_RESULT) ReferenceParam result,
-			@OptionalParam(name = ConstantKeys.SP_SPECIMEN) ReferenceParam specimen,
-			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
-			@OptionalParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
+			@OperationParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
+			@OperationParam(name = ConstantKeys.SP_CODE) TokenParam code,
+			@OperationParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam conetext,
+			@OperationParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
+			@OperationParam(name = ConstantKeys.SP_DIAGNOSIS) TokenParam diagnosis,
+			@OperationParam(name = ConstantKeys.SP_ENCOUNTER) ReferenceParam encounter,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = ConstantKeys.SP_IMAGE) ReferenceParam image,
+			@OperationParam(name = ConstantKeys.SP_ISSUED) DateRangeParam issued,
+			@OperationParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OperationParam(name = ConstantKeys.SP_PERFORMER) ReferenceParam performer,
+			@OperationParam(name = ConstantKeys.SP_RESULT) ReferenceParam result,
+			@OperationParam(name = ConstantKeys.SP_SPECIMEN) ReferenceParam specimen,
+			@OperationParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+			@OperationParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = baseDao.countMatchesAdvancedTotal(fhirContext, basedOn, category, code, conetext, date, diagnosis,
 				encounter, identifier, image, issued, patient, performer, result, specimen, status, subject, resid,
@@ -185,7 +186,7 @@ public class DiagnosticReportProvider extends BaseController<DiagnosticReportEnt
 
 	@Operation(name = "$document", idempotent = true, bundleType = BundleTypeEnum.DOCUMENT)
 	public IBundleProvider generate(HttpServletRequest request, @IdParam IdType theId,
-			@OptionalParam(name = ConstantKeys.SP_PERSIST) StringParam persist) {
+			@OperationParam(name = ConstantKeys.SP_PERSIST) StringParam persist) {
 		List<IBaseResource> results = new ArrayList<IBaseResource>();
 		// Populate bundle with matching resources
 		System.out.println("========================="  + persist);

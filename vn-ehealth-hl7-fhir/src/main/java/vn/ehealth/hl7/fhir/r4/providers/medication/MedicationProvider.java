@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -137,27 +138,28 @@ public class MedicationProvider extends BaseController<MedicationEntity, Medicat
 	}
 
 	@Operation(name = "$total", idempotent = true)
-	public Parameters getTotal(HttpServletRequest request, @OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
-			@OptionalParam(name = ConstantKeys.SP_CONTAINER) TokenParam container,
-			@OptionalParam(name = ConstantKeys.SP_FORM) TokenParam form,
-			@OptionalParam(name = ConstantKeys.SP_INGREDIENT) ReferenceParam ingredient,
-			@OptionalParam(name = ConstantKeys.SP_INGREDIENT_CODE) TokenParam ingredientCode,
-			@OptionalParam(name = ConstantKeys.SP_MANUFACTURER) ReferenceParam manufacturer,
-			@OptionalParam(name = ConstantKeys.SP_OVER_THE_COUNTER) TokenParam overTheCounter,
-			@OptionalParam(name = ConstantKeys.SP_PACKAGE_ITEM) ReferenceParam packageItem,
-			@OptionalParam(name = ConstantKeys.SP_PACKAGE_ITEM_CODE) TokenParam packageItemCode,
-			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+	public Parameters getTotal(HttpServletRequest request, 
+			@OperationParam(name = ConstantKeys.SP_CODE) TokenParam code,
+			@OperationParam(name = ConstantKeys.SP_CONTAINER) TokenParam container,
+			@OperationParam(name = ConstantKeys.SP_FORM) TokenParam form,
+			@OperationParam(name = ConstantKeys.SP_INGREDIENT) ReferenceParam ingredient,
+			@OperationParam(name = ConstantKeys.SP_INGREDIENT_CODE) TokenParam ingredientCode,
+			@OperationParam(name = ConstantKeys.SP_MANUFACTURER) ReferenceParam manufacturer,
+			@OperationParam(name = ConstantKeys.SP_OVER_THE_COUNTER) TokenParam overTheCounter,
+			@OperationParam(name = ConstantKeys.SP_PACKAGE_ITEM) ReferenceParam packageItem,
+			@OperationParam(name = ConstantKeys.SP_PACKAGE_ITEM_CODE) TokenParam packageItemCode,
+			@OperationParam(name = ConstantKeys.SP_STATUS) TokenParam status,
 			// dung chung
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
-			@OptionalParam(name = "hospital") TokenParam hospital,
-			@OptionalParam(name = "productName") StringParam productName,
-			@OptionalParam(name = "medicationType") StringParam medicationType) {
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content,
+			@OperationParam(name = "hospital") TokenParam hospital,
+			@OperationParam(name = "productName") StringParam productName,
+			@OperationParam(name = "medicationType") StringParam medicationType) {
 		Parameters retVal = new Parameters();
 		long total = medicationDao.countMatchesAdvancedTotal(fhirContext, code, container, form, ingredient,
 				ingredientCode, manufacturer, overTheCounter, packageItem, packageItemCode, status, resid, _lastUpdated,
