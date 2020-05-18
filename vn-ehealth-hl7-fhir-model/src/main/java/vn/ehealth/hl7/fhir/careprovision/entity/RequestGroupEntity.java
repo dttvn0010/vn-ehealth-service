@@ -21,7 +21,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 @Document(collection = "requestGroup")
-@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
+//@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class RequestGroupEntity extends BaseResource {
 
 	@Id

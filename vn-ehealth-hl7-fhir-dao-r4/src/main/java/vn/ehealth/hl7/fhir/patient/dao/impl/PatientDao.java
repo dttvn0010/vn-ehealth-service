@@ -268,21 +268,24 @@ public class PatientDao extends BaseDao<PatientEntity, Patient> {
 		List<IBaseResource> resources = new ArrayList<IBaseResource>();
 
 		if (theId != null) {
-			Patient patient = read(theId);
-			if (patient != null) {
-				resources.add(patient);
+			Patient object = read(theId);
+			if (object != null) {
+				resources.add(object);
+				String objRef = "Patient/" + object.getId();
+
 				// active
 				Criteria criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
-				// criteria.and("subject.reference").is(thePatientId.asStringValue());
-				criteria.andOperator(
-						new Criteria().orOperator(Criteria.where("subject.reference").is(theId.asStringValue()),
-								Criteria.where("patient.reference").is(theId.asStringValue())));
+//				criteria.and("subject.reference").is(patientRef);
+//				criteria.and("patient.reference").is(theId.asStringValue());
+				criteria.andOperator(new Criteria().orOperator(Criteria.where("subject.reference").is(objRef),
+						Criteria.where("patient.reference").is(objRef)));
 				if (theStart != null) {
 					criteria.and(ConstantKeys.QP_UPDATED).gte(theStart.getValue());
 				}
 				if (theEnd != null) {
 					criteria.and(ConstantKeys.QP_UPDATED).lte(theEnd.getValue());
 				}
+
 				// Encounter
 				List<Encounter> encounters = DaoFactory.getEncounterDao().findByCriteria(criteria);
 				if (encounters != null && encounters.size() > 0) {

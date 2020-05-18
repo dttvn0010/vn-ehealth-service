@@ -17,7 +17,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
 @Document(collection = "person")
-@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
+//@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class PersonEntity extends BaseResource{
     
     public static class PersonLink extends BaseBackboneElement{

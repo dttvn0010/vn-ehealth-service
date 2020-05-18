@@ -28,7 +28,6 @@ import org.hl7.fhir.r4.model.MedicationRequest;
 import org.hl7.fhir.r4.model.MedicationStatement;
 import org.hl7.fhir.r4.model.NutritionOrder;
 import org.hl7.fhir.r4.model.Observation;
-import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.QuestionnaireResponse;
 import org.hl7.fhir.r4.model.ResourceType;
@@ -372,22 +371,23 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 			Encounter object = read(theId);
 			if (object != null) {
 				resources.add(object);
+				String objRef = "Encounter/" + object.getId();
 
 				// active
 				Criteria criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true);
-				// criteria.and("subject.reference").is(thePatientId.asStringValue());
-				criteria.andOperator(
-						new Criteria().orOperator(Criteria.where("encounter.reference").is(theId.asStringValue())));
+				criteria.and("encounter.reference").is(objRef);
+//				criteria.andOperator(
+//						new Criteria().orOperator(Criteria.where("encounter.reference").is(theId.asStringValue())));
 				if (theStart != null) {
 					criteria.and(ConstantKeys.QP_UPDATED).gte(theStart.getValue());
 				}
 				if (theEnd != null) {
 					criteria.and(ConstantKeys.QP_UPDATED).lte(theEnd.getValue());
 				}
+
 				// Patient
-				List<Patient> patients = DaoFactory.getPatientDao().findByCriteria(criteria);
-				if (patients != null && patients.size() > 0) {
-					resources.addAll(patients);
+				if (object.hasSubject()) {
+					resources.add(getResourceFromReference(object.getSubject()));
 				}
 				// CarePlan
 				List<CarePlan> carePlans = DaoFactory.getCarePlanDao().findByCriteria(criteria);
