@@ -30,6 +30,7 @@ import org.hl7.fhir.r4.model.NutritionOrder;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.QuestionnaireResponse;
+import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.RiskAssessment;
 import org.hl7.fhir.r4.model.ServiceRequest;
@@ -109,6 +110,7 @@ public class EncounterDao extends BaseDao<EncounterEntity, Encounter> {
 
 				if (includeMap.get("subject") && obj.hasSubject()) {
 					setReferenceResource(obj.getSubject());
+					obj.addContained((Resource)obj.getSubject().getResource());
 				}
 
 				if (includeMap.get("episodeOfCare") && obj.hasEpisodeOfCare()) {

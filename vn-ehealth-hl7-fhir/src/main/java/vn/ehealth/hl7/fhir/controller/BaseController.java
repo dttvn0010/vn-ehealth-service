@@ -350,6 +350,13 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 		ValidationOptions options = new ValidationOptions();
 		options.addProfileIfNotBlank(theProfile != null ? theProfile.getValueNotNull() : "");
 
+		if (object.getMeta() != null && object.getMeta().getProfile() != null
+				&& object.getMeta().getProfile().size() > 0) {
+			for (IPrimitiveType<String> item : object.getMeta().getProfile()) {
+				options.addProfile(item.toString());
+			}
+		}
+
 		// Perform the validation
 		ValidationResult result = validator.validateWithResult(object, options);
 

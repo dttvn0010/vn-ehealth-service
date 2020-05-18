@@ -209,11 +209,12 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 
 	@Operation(name = "$lastn", idempotent = true)
 	public IBundleProvider getLastNObservation(HttpServletRequest request,
-			@RequiredParam(name = ConstantKeys.SP_OBSERVATION_MAX) NumberParam maxItem,
 			@RequiredParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
 			@RequiredParam(name = ConstantKeys.SP_CODE) TokenOrListParam code,
+			@RequiredParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
 			@OperationParam(name = ConstantKeys.SP_ENCOUNTER) ReferenceParam encounter,
 			@OperationParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OperationParam(name = ConstantKeys.SP_OBSERVATION_MAX) NumberParam maxItem,
 			@OperationParam(name = ConstantKeys.SP_ACTIVE) TokenParam active,
 			@OperationParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
 			@OperationParam(name = ConstantKeys.SP_COMBO_CODE) TokenParam comboCode,
@@ -233,7 +234,6 @@ public class ObservationProvider extends BaseController<ObservationEntity, Obser
 			@OperationParam(name = ConstantKeys.SP_RELATED_TYPE) TokenParam relatedType,
 			@OperationParam(name = ConstantKeys.SP_SPECIMEN) ReferenceParam specimen,
 			@OperationParam(name = ConstantKeys.SP_STATUS) TokenParam status,
-			@RequiredParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
 			@OperationParam(name = ConstantKeys.SP_VALUE_CONCEPT) TokenParam valueConcept,
 			@OperationParam(name = ConstantKeys.SP_VALUE_DATE) DateRangeParam valueDate,
 			@OperationParam(name = ConstantKeys.SP_VALUE_STRING) StringParam valueString,
