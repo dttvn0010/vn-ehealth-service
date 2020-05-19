@@ -50,6 +50,7 @@ import vn.ehealth.hl7.fhir.r4.providers.clinical.FamilyMemberHistoryProvider;
 import vn.ehealth.hl7.fhir.r4.providers.clinical.GoalProvider;
 import vn.ehealth.hl7.fhir.r4.providers.clinical.ProcedureProvider;
 import vn.ehealth.hl7.fhir.r4.providers.clinical.ServiceRequestProvider;
+import vn.ehealth.hl7.fhir.r4.providers.conformance.StructureDefinitonProvider;
 import vn.ehealth.hl7.fhir.r4.providers.definitionalartifact.ActivityDefinitionProvider;
 import vn.ehealth.hl7.fhir.r4.providers.definitionalartifact.PlanDefinitionProvider;
 import vn.ehealth.hl7.fhir.r4.providers.definitionalartifact.QuestionnaireProvider;
@@ -170,14 +171,14 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 				(IResourceProvider) applicationContext.getBean(FamilyMemberHistoryProvider.class),
 				(IResourceProvider) applicationContext.getBean(AllergyIntoleranceProvider.class),
 				(IResourceProvider) applicationContext.getBean(MediaProvider.class),
-				// Add 2020/04/05
+				// Add 2020/04/05 by PhongNH
 				(IResourceProvider) applicationContext.getBean(BinaryProvider.class),
 				(IResourceProvider) applicationContext.getBean(BundleProvider.class),
 				(IResourceProvider) applicationContext.getBean(CompositionProvider.class),
 				(IResourceProvider) applicationContext.getBean(DocumentManifestProvider.class),
 				(IResourceProvider) applicationContext.getBean(DocumentReferenceProvider.class),
 				(IResourceProvider) applicationContext.getBean(NutritionOrderProvider.class),
-				// Add 2020/04/06
+				// Add 2020/04/06 by PhongNH
 				(IResourceProvider) applicationContext.getBean(SubscriptionProvider.class),
 				(IResourceProvider) applicationContext.getBean(RequestGroupProvider.class),
 				(IResourceProvider) applicationContext.getBean(RiskAssessmentProvider.class),
@@ -192,7 +193,10 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 				(IResourceProvider) applicationContext.getBean(ConsentProvider.class),
 				(IResourceProvider) applicationContext.getBean(ProvenanceProvider.class),
 				(IResourceProvider) applicationContext.getBean(GroupProvider.class),
-				(IResourceProvider) applicationContext.getBean(TaskProvider.class)));
+				(IResourceProvider) applicationContext.getBean(TaskProvider.class),
+				// Add 2020/05/19 by PhongNH
+				(IResourceProvider) applicationContext.getBean(StructureDefinitonProvider.class)
+				));
 		setServerConformanceProvider(new Hl7FhirServerConformanceProvider());
 
 //		ServerInterceptor loggingInterceptor = new ServerInterceptor(ourLog);
