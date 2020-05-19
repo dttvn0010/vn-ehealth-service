@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
 public class BaseComplexType extends BaseType {
-
-    public List<SimpleExtension> extension;
-    
+	public List<SimpleExtension> extension;
+	public List<SimpleExtension> modifierExtension;
 }

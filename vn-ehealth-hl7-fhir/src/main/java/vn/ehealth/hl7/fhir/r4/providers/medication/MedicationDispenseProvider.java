@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -140,28 +141,29 @@ public class MedicationDispenseProvider extends BaseController<MedicationDispens
 	}
 
 	@Operation(name = "$total", idempotent = true)
-	public Parameters getTotal(HttpServletRequest request, @OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
-			@OptionalParam(name = ConstantKeys.SP_TYPE) TokenParam type,
-			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
-			@OptionalParam(name = ConstantKeys.SP_DESTINATION) ReferenceParam destination,
-			@OptionalParam(name = ConstantKeys.SP_MEDICATION) ReferenceParam medication,
-			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
-			@OptionalParam(name = ConstantKeys.SP_PERFORMER) ReferenceParam performer,
-			@OptionalParam(name = ConstantKeys.SP_PRESCRIPTION) ReferenceParam prescription,
-			@OptionalParam(name = ConstantKeys.SP_RECEIVER) ReferenceParam receiver,
-			@OptionalParam(name = ConstantKeys.SP_RESPONSIBLEPARTY) ReferenceParam responsibleparty,
-			@OptionalParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
-			@OptionalParam(name = ConstantKeys.SP_WHENHANDEDOVER) ReferenceParam whenhandedover,
-			@OptionalParam(name = ConstantKeys.SP_WHENPREPARED) DateRangeParam whenprepared,
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+	public Parameters getTotal(HttpServletRequest request,
+			@OperationParam(name = ConstantKeys.SP_CODE) TokenParam code,
+			@OperationParam(name = ConstantKeys.SP_TYPE) TokenParam type,
+			@OperationParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
+			@OperationParam(name = ConstantKeys.SP_DESTINATION) ReferenceParam destination,
+			@OperationParam(name = ConstantKeys.SP_MEDICATION) ReferenceParam medication,
+			@OperationParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OperationParam(name = ConstantKeys.SP_PERFORMER) ReferenceParam performer,
+			@OperationParam(name = ConstantKeys.SP_PRESCRIPTION) ReferenceParam prescription,
+			@OperationParam(name = ConstantKeys.SP_RECEIVER) ReferenceParam receiver,
+			@OperationParam(name = ConstantKeys.SP_RESPONSIBLEPARTY) ReferenceParam responsibleparty,
+			@OperationParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
+			@OperationParam(name = ConstantKeys.SP_WHENHANDEDOVER) ReferenceParam whenhandedover,
+			@OperationParam(name = ConstantKeys.SP_WHENPREPARED) DateRangeParam whenprepared,
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = medicationDispenseDao.countMatchesAdvancedTotal(fhirContext, code, type, status, identifier,
 				context, destination, medication, patient, performer, prescription, receiver, responsibleparty, subject,

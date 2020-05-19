@@ -176,38 +176,38 @@ public class PatientProvider extends BaseController<PatientEntity, Patient> impl
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = "address-use") TokenParam addressUse,
-			@OptionalParam(name = "animal-breed") TokenParam animalBreed,
-			@OptionalParam(name = "animal-species") TokenParam animalSpecies,
-			@OptionalParam(name = "deceased") TokenParam deceased, @OptionalParam(name = "email") TokenParam email,
-			@OptionalParam(name = "gender") TokenParam gender,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = "language") TokenParam language,
-			@OptionalParam(name = ConstantKeys.SP_PHONE) TokenParam phone,
-			@OptionalParam(name = ConstantKeys.SP_TELECOM) TokenParam telecom,
+			@OperationParam(name = "address-use") TokenParam addressUse,
+			@OperationParam(name = "animal-breed") TokenParam animalBreed,
+			@OperationParam(name = "animal-species") TokenParam animalSpecies,
+			@OperationParam(name = "deceased") TokenParam deceased, @OperationParam(name = "email") TokenParam email,
+			@OperationParam(name = "gender") TokenParam gender,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = "language") TokenParam language,
+			@OperationParam(name = ConstantKeys.SP_PHONE) TokenParam phone,
+			@OperationParam(name = ConstantKeys.SP_TELECOM) TokenParam telecom,
 
-			@OptionalParam(name = "general-practitioner") ReferenceParam generalPractitioner,
-			@OptionalParam(name = "link") ReferenceParam link,
-			@OptionalParam(name = "organization") ReferenceParam organization,
+			@OperationParam(name = "general-practitioner") ReferenceParam generalPractitioner,
+			@OperationParam(name = "link") ReferenceParam link,
+			@OperationParam(name = "organization") ReferenceParam organization,
 
-			@OptionalParam(name = ConstantKeys.SP_BIRTHDATE) DateRangeParam birthDate,
-			@OptionalParam(name = "death-date") DateRangeParam deathDate,
+			@OperationParam(name = ConstantKeys.SP_BIRTHDATE) DateRangeParam birthDate,
+			@OperationParam(name = "death-date") DateRangeParam deathDate,
 
-			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
-			@OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
-			@OptionalParam(name = ConstantKeys.SP_ADDRESSCOUNTRY) StringParam addressCountry,
-			@OptionalParam(name = ConstantKeys.SP_ADDRESSSTATE) StringParam addressState,
-			@OptionalParam(name = ConstantKeys.SP_FAMILY) StringParam familyName,
-			@OptionalParam(name = ConstantKeys.SP_GIVEN) StringParam givenName,
-			@OptionalParam(name = ConstantKeys.SP_NAME) StringParam name,
-			@OptionalParam(name = ConstantKeys.SP_PHONETIC) StringParam phonetic,
+			@OperationParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
+			@OperationParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
+			@OperationParam(name = ConstantKeys.SP_ADDRESSCOUNTRY) StringParam addressCountry,
+			@OperationParam(name = ConstantKeys.SP_ADDRESSSTATE) StringParam addressState,
+			@OperationParam(name = ConstantKeys.SP_FAMILY) StringParam familyName,
+			@OperationParam(name = ConstantKeys.SP_GIVEN) StringParam givenName,
+			@OperationParam(name = ConstantKeys.SP_NAME) StringParam name,
+			@OperationParam(name = ConstantKeys.SP_PHONETIC) StringParam phonetic,
 
 			// Parameters for all resources
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = "_lastUpdated") DateRangeParam _lastUpdated,
-			@OptionalParam(name = "_tag") TokenParam _tag, @OptionalParam(name = "_profile") UriParam _profile,
-			@OptionalParam(name = "_query") TokenParam _query, @OptionalParam(name = "_security") TokenParam _security,
-			@OptionalParam(name = "_content") StringParam _content
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = "_lastUpdated") DateRangeParam _lastUpdated,
+			@OperationParam(name = "_tag") TokenParam _tag, @OperationParam(name = "_profile") UriParam _profile,
+			@OperationParam(name = "_query") TokenParam _query, @OperationParam(name = "_security") TokenParam _security,
+			@OperationParam(name = "_content") StringParam _content
 	// Search result parameters
 	) {
 		Parameters retVal = new Parameters();

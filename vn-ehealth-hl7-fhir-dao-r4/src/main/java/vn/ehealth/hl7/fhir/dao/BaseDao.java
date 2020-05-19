@@ -225,20 +225,17 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ENT> findEntityByCriteria(Criteria criteria) {
-		var query = Query.query(criteria);
+	public List<ENT> findEntityByQuery(Query query) {
 		return (List<ENT>) mongo.find(query, getEntityClass());		
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ENT> searchEntity(Criteria criteria, Boolean active, int start, int count, Sort sort) {
+	public List<ENT> searchEntity(Query query, Boolean active, int start, int count, Sort sort) {
 		if (active != null) {
-			criteria.and(ConstantKeys.QP_ACTIVE).is(active);
+			query.addCriteria(Criteria.where(ConstantKeys.QP_ACTIVE).is(active));
 		} else {
-			criteria.and(ConstantKeys.QP_ACTIVE).is(true);
+			query.addCriteria(Criteria.where(ConstantKeys.QP_ACTIVE).is(true));
 		}
-
-		var query = Query.query(criteria);
 
 		if (sort != null) {
 			query.with(sort);
@@ -254,59 +251,127 @@ public abstract class BaseDao<ENT extends BaseResource, FHIR extends Resource> {
 		return (List<ENT>) mongo.find(query, getEntityClass());
 	}
 	
-	public List<ENT> searchEntity(Criteria criteria, int start, int count, Sort sort) {
-		return searchEntity(criteria, null, start, count, sort);
+	public List<ENT> searchEntity(Query query, int start, int count, Sort sort) {
+		return searchEntity(query, null, start, count, sort);
 	}
 
-	public List<ENT> searchEntity(Criteria criteria, int start, int count) {
-		return searchEntity(criteria, start, count, null);
+	public List<ENT> searchEntity(Query query,  int start, int count) {
+		return searchEntity(query, start, count, null);
 	}
 
-	public List<ENT> searchEntity(Criteria criteria) {
-		return searchEntity(criteria, -1, -1);
+	public List<ENT> searchEntity(Query query) {
+		return searchEntity(query, -1, -1);
 	}
 
 	@SuppressWarnings("unchecked")
-	public ENT getEntity(Criteria criteria) {
-		criteria.and(ConstantKeys.QP_ACTIVE).is(true);
-		var query = Query.query(criteria);
+	public ENT getEntity(Query query) {
+		query.addCriteria(Criteria.where(ConstantKeys.QP_ACTIVE).is(true));
 		return (ENT) mongo.findOne(query, getEntityClass());
 	}
 
-	public int countEntity(Criteria criteria) {
-		criteria.and(ConstantKeys.QP_ACTIVE).is(true);
-		var query = Query.query(criteria);
+	public int countEntity(Query query) {
+		query.addCriteria(Criteria.where(ConstantKeys.QP_ACTIVE).is(true));
 		return (int) mongo.count(query, getEntityClass());
 	}
+	
+	public List<ENT> findEntityByCriteria(Criteria criteria) {
+		var query = Query.query(criteria);
+		return findEntityByQuery(query);		
+	}
+	
+	public List<ENT> searchEntity(Criteria criteria, Boolean active, int start, int count, Sort sort) {
+		var query = Query.query(criteria);
+		return searchEntity(query, active, start, count, sort);
+	}
+	
+	public List<ENT> searchEntity(Criteria criteria, int start, int count, Sort sort) {
+		var query = Query.query(criteria);
+		return searchEntity(query, start, count, sort);
+	}
 
-	public List<FHIR> findByCriteria(Criteria criteria) {
-		var lst = findEntityByCriteria(criteria);
+	public List<ENT> searchEntity(Criteria criteria, int start, int count) {
+		var query = Query.query(criteria);
+		return searchEntity(query, start, count);
+	}
+
+	public List<ENT> searchEntity(Criteria criteria) {
+		var query = Query.query(criteria);
+		return searchEntity(query);
+	}
+
+	public ENT getEntity(Criteria criteria) {
+		var query = Query.query(criteria);
+		return getEntity(query);
+	}
+
+	public int countEntity(Criteria criteria) {
+		var query = Query.query(criteria);
+		return countEntity(query);
+	}
+	
+	public List<FHIR> findByQuery(Query query) {
+		var lst = findEntityByQuery(query);
 		return DataConvertUtil.transform(lst, x -> transform((ENT) x));
 	}
 
-	public List<FHIR> searchResource(Criteria criteria, Boolean active, int start, int count, Sort sort) {		
-		var lst = searchEntity(criteria, active, start, count, sort);
+	public List<FHIR> searchResource(Query query, Boolean active, int start, int count, Sort sort) {		
+		var lst = searchEntity(query, active, start, count, sort);
 		return DataConvertUtil.transform(lst, x -> transform((ENT) x));
 	}
 
-	public List<FHIR> searchResource(Criteria criteria, int start, int count, Sort sort) {
-		return searchResource(criteria, null, start, count, sort);
+	public List<FHIR> searchResource(Query query, int start, int count, Sort sort) {
+		return searchResource(query, null, start, count, sort);
 	}
 
-	public List<FHIR> searchResource(Criteria criteria, int start, int count) {
-		return searchResource(criteria, start, count, null);
+	public List<FHIR> searchResource(Query query, int start, int count) {
+		return searchResource(query, start, count, null);
 	}
 
-	public List<FHIR> searchResource(Criteria criteria) {
-		return searchResource(criteria, -1, -1);
+	public List<FHIR> searchResource(Query query) {
+		return searchResource(query, -1, -1);
 	}
 
-	public FHIR getResource(Criteria criteria) {		
-		var ent = getEntity(criteria);
+	public FHIR getResource(Query query) {		
+		var ent = getEntity(query);
 		return transform(ent);
 	}
 
+	public int countResource(Query query) {
+		return countEntity(query);
+	}
+
+	public List<FHIR> findByCriteria(Criteria criteria) {
+		var query = Query.query(criteria);
+		return findByQuery(query);
+	}
+
+	public List<FHIR> searchResource(Criteria criteria, Boolean active, int start, int count, Sort sort) {
+		var query = Query.query(criteria);
+		return searchResource(query, active, start, count, sort);
+	}
+
+	public List<FHIR> searchResource(Criteria criteria, int start, int count, Sort sort) {
+		var query = Query.query(criteria);
+		return searchResource(query,  start, count, sort);
+	}
+
+	public List<FHIR> searchResource(Criteria criteria, int start, int count) {
+		var query = Query.query(criteria);
+		return searchResource(query,  start, count);
+	}
+
+	public List<FHIR> searchResource(Criteria criteria) {
+		var query = Query.query(criteria);
+		return searchResource(query);
+	}
+
+	public FHIR getResource(Criteria criteria) {		
+		var query = Query.query(criteria);
+		return getResource(query);
+	}
+
 	public int countResource(Criteria criteria) {
-		return countEntity(criteria);
+		var query = Query.query(criteria);
+		return countResource(query);
 	}	
 }

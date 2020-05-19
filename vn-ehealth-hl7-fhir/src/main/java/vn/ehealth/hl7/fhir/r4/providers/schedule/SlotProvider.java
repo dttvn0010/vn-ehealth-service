@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -129,18 +130,18 @@ public class SlotProvider extends BaseController<SlotEntity, Slot> implements IR
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = ConstantKeys.SP_SCHEDULE) ReferenceParam schedule,
-			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
-			@OptionalParam(name = ConstantKeys.SP_SLOT_TYPE) TokenParam slotType,
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = ConstantKeys.SP_SCHEDULE) ReferenceParam schedule,
+			@OperationParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
+			@OperationParam(name = ConstantKeys.SP_SLOT_TYPE) TokenParam slotType,
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = slotDao.findMatchesAdvancedTotal(fhirContext, status, identifier, schedule, date, slotType, resid,
 				_lastUpdated, _tag, _profile, _query, _security, _content);

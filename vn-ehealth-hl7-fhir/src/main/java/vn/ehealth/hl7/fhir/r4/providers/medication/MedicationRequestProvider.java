@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -136,26 +137,27 @@ public class MedicationRequestProvider extends BaseController<MedicationRequestE
 	}
 
 	@Operation(name = "$total", idempotent = true)
-	public Parameters getTotal(HttpServletRequest request, @OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
-			@OptionalParam(name = "category") TokenParam category,
-			@OptionalParam(name = "identifier") TokenParam identifier,
-			@OptionalParam(name = "intent") TokenParam intent, @OptionalParam(name = "priority") TokenParam priority,
-			@OptionalParam(name = "status") TokenParam status, @OptionalParam(name = "subject") ReferenceParam subject,
-			@OptionalParam(name = "requester") ReferenceParam requester,
-			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
-			@OptionalParam(name = "medication") ReferenceParam medication,
-			@OptionalParam(name = "context") ReferenceParam context,
-			@OptionalParam(name = "intended-dispenser") ReferenceParam intendedDispenser,
-			@OptionalParam(name = "authoredon") DateRangeParam authoredon,
-			@OptionalParam(name = "date") DateRangeParam date,
+	public Parameters getTotal(HttpServletRequest request, 
+			@OperationParam(name = ConstantKeys.SP_CODE) TokenParam code,
+			@OperationParam(name = "category") TokenParam category,
+			@OperationParam(name = "identifier") TokenParam identifier,
+			@OperationParam(name = "intent") TokenParam intent, @OperationParam(name = "priority") TokenParam priority,
+			@OperationParam(name = "status") TokenParam status, @OperationParam(name = "subject") ReferenceParam subject,
+			@OperationParam(name = "requester") ReferenceParam requester,
+			@OperationParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OperationParam(name = "medication") ReferenceParam medication,
+			@OperationParam(name = "context") ReferenceParam context,
+			@OperationParam(name = "intended-dispenser") ReferenceParam intendedDispenser,
+			@OperationParam(name = "authoredon") DateRangeParam authoredon,
+			@OperationParam(name = "date") DateRangeParam date,
 			// dung chung
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = medicationRequestDao.countMatchesAdvancedTotal(fhirContext, code, category, identifier, intent,
 				priority, status, subject, requester, patient, medication, context, intendedDispenser, authoredon, date,

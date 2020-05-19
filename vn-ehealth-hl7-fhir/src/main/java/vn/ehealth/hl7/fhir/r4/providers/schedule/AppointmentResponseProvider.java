@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -130,20 +131,20 @@ public class AppointmentResponseProvider extends BaseController<AppointmentRespo
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = ConstantKeys.SP_APPOINTMENT) ReferenceParam appointment,
-			@OptionalParam(name = ConstantKeys.SP_LOCALTION) ReferenceParam location,
-			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
-			@OptionalParam(name = ConstantKeys.SP_PRACTITIONER) ReferenceParam practitioner,
-			@OptionalParam(name = ConstantKeys.SP_PART_STATUS) TokenParam partStatus,
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = ConstantKeys.SP_ACTOR) ReferenceParam actor,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = ConstantKeys.SP_APPOINTMENT) ReferenceParam appointment,
+			@OperationParam(name = ConstantKeys.SP_LOCALTION) ReferenceParam location,
+			@OperationParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OperationParam(name = ConstantKeys.SP_PRACTITIONER) ReferenceParam practitioner,
+			@OperationParam(name = ConstantKeys.SP_PART_STATUS) TokenParam partStatus,
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = appointmentResponseDao.findMatchesAdvancedTotal(fhirContext, actor, identifier, appointment,
 				location, patient, practitioner, partStatus, resid, _lastUpdated, _tag, _profile, _query, _security,

@@ -20,6 +20,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -154,27 +155,27 @@ public class ServiceRequestProvider extends BaseController<ServiceRequestEntity,
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
-			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
-			@OptionalParam(name = ConstantKeys.SP_CODE) TokenParam code,
-			@OptionalParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
-			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
-			@OptionalParam(name = ConstantKeys.SP_DEFINITION) ReferenceParam definition,
-			@OptionalParam(name = ConstantKeys.SP_ENCOUNTER) ReferenceParam encounter,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = ConstantKeys.SP_LOCALTION) ReferenceParam location,
-			@OptionalParam(name = ConstantKeys.SP_PARTOF) ReferenceParam partOf,
-			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
-			@OptionalParam(name = ConstantKeys.SP_PERFORMER) ReferenceParam performer,
-			@OptionalParam(name = ConstantKeys.SP_STATUS) TokenParam status,
-			@OptionalParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = ConstantKeys.SP_BASED_ON) ReferenceParam basedOn,
+			@OperationParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
+			@OperationParam(name = ConstantKeys.SP_CODE) TokenParam code,
+			@OperationParam(name = ConstantKeys.SP_CONTEXT) ReferenceParam context,
+			@OperationParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
+			@OperationParam(name = ConstantKeys.SP_DEFINITION) ReferenceParam definition,
+			@OperationParam(name = ConstantKeys.SP_ENCOUNTER) ReferenceParam encounter,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = ConstantKeys.SP_LOCALTION) ReferenceParam location,
+			@OperationParam(name = ConstantKeys.SP_PARTOF) ReferenceParam partOf,
+			@OperationParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OperationParam(name = ConstantKeys.SP_PERFORMER) ReferenceParam performer,
+			@OperationParam(name = ConstantKeys.SP_STATUS) TokenParam status,
+			@OperationParam(name = ConstantKeys.SP_SUBJECT) ReferenceParam subject,
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = baseDao.countMatchesAdvancedTotal(fhirContext, basedOn, category, code, context, date, definition,
 				encounter, identifier, location, partOf, patient, performer, status, subject, resid, _lastUpdated, _tag,

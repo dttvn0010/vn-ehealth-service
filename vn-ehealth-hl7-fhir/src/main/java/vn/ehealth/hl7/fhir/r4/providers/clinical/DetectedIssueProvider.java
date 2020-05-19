@@ -20,6 +20,7 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.IncludeParam;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -135,19 +136,19 @@ public class DetectedIssueProvider extends BaseController<DetectedIssueEntity, D
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters getTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_AUTHOR) ReferenceParam author,
-			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
-			@OptionalParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = ConstantKeys.SP_IMPLICATED) ReferenceParam implicated,
-			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = ConstantKeys.SP_AUTHOR) ReferenceParam author,
+			@OperationParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
+			@OperationParam(name = ConstantKeys.SP_DATE) DateRangeParam date,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = ConstantKeys.SP_IMPLICATED) ReferenceParam implicated,
+			@OperationParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = detectedIssueDao.countMatchesAdvancedTotal(fhirContext, author, category, date, identifier,
 				implicated, patient, resid, _lastUpdated, _tag, _profile, _query, _security, _content);

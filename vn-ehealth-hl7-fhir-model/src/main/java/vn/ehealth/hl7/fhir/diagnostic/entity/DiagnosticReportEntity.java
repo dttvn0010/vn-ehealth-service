@@ -20,7 +20,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "diagnosticReport")
-@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1, 'basedOn.reference':1, 'subject.reference':1, 'encounter.reference':1}", name = "index_by_default")
+//@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1, 'basedOn.reference':1, 'subject.reference':1, 'encounter.reference':1}", name = "index_by_default")
 public class DiagnosticReportEntity extends BaseResource {
 
     public static class DiagnosticReportMedia extends BaseBackboneElement {

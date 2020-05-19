@@ -22,7 +22,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
  * */
 
 @Document(collection = "concept")
-@CompoundIndex(def = "{'_fhirId':1,'codeSystemId':1,'_active':1,'_version':1}", name = "index_by_default")
+//@CompoundIndex(def = "{'_fhirId':1,'codeSystemId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class ConceptEntity extends BaseMetadataResource {
     
 	public static class ConceptDefinitionDesignation extends BaseBackboneElement{

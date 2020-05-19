@@ -11,6 +11,7 @@ import org.hl7.fhir.instance.model.api.IPrimitiveType;
 import org.hl7.fhir.r4.hapi.ctx.DefaultProfileValidationSupport;
 import org.hl7.fhir.r4.hapi.validation.CachingValidationSupport;
 import org.hl7.fhir.r4.hapi.validation.FhirInstanceValidator;
+import org.hl7.fhir.r4.hapi.validation.PrePopulatedValidationSupport;
 import org.hl7.fhir.r4.hapi.validation.ValidationSupportChain;
 import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.IdType;
@@ -41,6 +42,7 @@ import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
 import ca.uhn.fhir.validation.FhirValidator;
@@ -60,6 +62,8 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 
 	abstract protected List<String> getProfile();
 
+	abstract public Class<? extends IBaseResource> getResourceType();
+
 	@Autowired
 	protected FhirContext fhirContext;
 
@@ -69,7 +73,7 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 		method.setCreated(true);
 		FHIR newObj = null;
 		try {
-			if(getProfile() != null) {
+			if (getProfile() != null) {
 				if (object.hasMeta() && object.getMeta().hasProfile()) {
 					for (String item : getProfile()) {
 						if (!object.getMeta().hasProfile(item))
@@ -304,6 +308,17 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 	public MethodOutcome validate(@ResourceParam IBaseResource object,
 			@OptionalParam(name = "mode") StringParam theMode,
 			@OptionalParam(name = "profile") StringParam theProfile) {
+		log.debug("------------------ Object: " + object.fhirType());
+		log.debug("------------------ FHIR: " + getResourceType());
+
+		if (!getResourceType().toString().endsWith(object.fhirType())) {
+			log.error("Invalid Resource Type. Expect " + getResourceType() + ", but found " + object.fhirType());
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new InvalidRequestException(
+							"Invalid Resource Type. Expect " + getResourceType() + ", but found " + object.fhirType()),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.INVALID);
+		}
+
 		if (theProfile != null) {
 			log.debug("Validating profile: " + theProfile.getValueNotNull());
 		}
@@ -349,6 +364,83 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 
 		ValidationOptions options = new ValidationOptions();
 		options.addProfileIfNotBlank(theProfile != null ? theProfile.getValueNotNull() : "");
+
+		if (object.getMeta() != null && object.getMeta().getProfile() != null
+				&& object.getMeta().getProfile().size() > 0) {
+			for (IPrimitiveType<String> item : object.getMeta().getProfile()) {
+				options.addProfile(item.toString());
+			}
+		}
+
+		// Perform the validation
+		ValidationResult result = validator.validateWithResult(object, options);
+
+		method.setOperationOutcome(result.getOperationOutcome());
+
+		return method;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Validate
+	public MethodOutcome validate(@IdParam IdType theId, @OptionalParam(name = "mode") StringParam theMode,
+			@OptionalParam(name = "profile") StringParam theProfile) {
+		FHIR object = null;
+		if (theId.hasVersionIdPart()) {
+			object = getDao().readOrVread(theId);
+		} else {
+			object = getDao().read(theId);
+		}
+		if (object == null) {
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new ResourceNotFoundException("No " + theId.getValue() + " found"),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
+		}
+
+		if (theProfile != null) {
+			log.debug("Validating profile: " + theProfile.getValueNotNull());
+		}
+		// This method returns a MethodOutcome object
+		MethodOutcome method = new MethodOutcome();
+
+		// Create a chain that will hold our modules
+		ValidationSupportChain supportChain = new ValidationSupportChain();
+
+		DefaultProfileValidationSupport defaultSupport = new DefaultProfileValidationSupport();
+		supportChain.addValidationSupport(defaultSupport);
+
+//		// Create a PrePopulatedValidationSupport which can be used to load custom definitions.
+//		// In this example we're loading two things, but in a real scenario we might
+//		// load many StructureDefinitions, ValueSets, CodeSystems, etc.
+		PrePopulatedValidationSupport prePopulatedSupport = new PrePopulatedValidationSupport();
+//		prePopulatedSupport.addStructureDefinition(someStructureDefnition);
+//		prePopulatedSupport.addValueSet(someValueSet);
+		supportChain.addValidationSupport(prePopulatedSupport);
+
+//		// Create a module that uses a remote terminology service
+//		RemoteTerminologyServiceValidationSupport remoteTermSvc = new RemoteTerminologyServiceValidationSupport(ctx);
+//		remoteTermSvc.setBaseUrl("http://hapi.fhir.org/baseR4");
+//		supportChain.addValidationSupport(remoteTermSvc);
+
+		// Wrap the chain in a cache to improve performance
+		CachingValidationSupport cache = new CachingValidationSupport(supportChain);
+
+		// Ask the context for a validator
+		FhirValidator validator = fhirContext.newValidator();
+
+		// Create a validation module and register it
+		FhirInstanceValidator module = new FhirInstanceValidator(cache);
+
+		validator.registerValidatorModule(module);
+
+		ValidationOptions options = new ValidationOptions();
+		options.addProfileIfNotBlank(theProfile != null ? theProfile.getValueNotNull() : "");
+
+		if (object.getMeta() != null && object.getMeta().getProfile() != null
+				&& object.getMeta().getProfile().size() > 0) {
+			for (IPrimitiveType<String> item : object.getMeta().getProfile()) {
+				options.addProfile(item.toString());
+			}
+		}
 
 		// Perform the validation
 		ValidationResult result = validator.validateWithResult(object, options);

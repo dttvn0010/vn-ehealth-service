@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -135,22 +136,22 @@ public class HealthcareServiceProvider extends BaseController<HealthcareServiceE
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
-			@OptionalParam(name = ConstantKeys.SP_CHARACTERISTIC) TokenParam characteristic,
-			@OptionalParam(name = ConstantKeys.SP_ENDPOINT) ReferenceParam endpoint,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = ConstantKeys.SP_LOCALTION) ReferenceParam location,
-			@OptionalParam(name = ConstantKeys.SP_NAME) StringParam name,
-			@OptionalParam(name = ConstantKeys.SP_ORG) ReferenceParam organization,
-			@OptionalParam(name = ConstantKeys.SP_PROGRAMNAME) StringParam programname,
-			@OptionalParam(name = ConstantKeys.SP_TYPE) TokenParam type,
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = ConstantKeys.SP_CATEGORY) TokenParam category,
+			@OperationParam(name = ConstantKeys.SP_CHARACTERISTIC) TokenParam characteristic,
+			@OperationParam(name = ConstantKeys.SP_ENDPOINT) ReferenceParam endpoint,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = ConstantKeys.SP_LOCALTION) ReferenceParam location,
+			@OperationParam(name = ConstantKeys.SP_NAME) StringParam name,
+			@OperationParam(name = ConstantKeys.SP_ORG) ReferenceParam organization,
+			@OperationParam(name = ConstantKeys.SP_PROGRAMNAME) StringParam programname,
+			@OperationParam(name = ConstantKeys.SP_TYPE) TokenParam type,
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = healthcareServiceDao.countMatchesAdvancedTotal(fhirContext, category, characteristic, endpoint,
 				identifier, location, name, organization, programname, type, resid, _lastUpdated, _tag, _profile,

@@ -23,7 +23,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "medicationDispense")
-@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
+//@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class MedicationDispenseEntity extends BaseResource {
     
     public static class MedicationDispensePerformer extends BaseBackboneElement {

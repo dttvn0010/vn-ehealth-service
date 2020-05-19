@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -136,26 +137,26 @@ public class PersonProvider extends BaseController<PersonEntity, Person> impleme
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
-			@OptionalParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
-			@OptionalParam(name = ConstantKeys.SP_ADDRESSCOUNTRY) StringParam addressCountry,
-			@OptionalParam(name = ConstantKeys.SP_ADDRESSSTATE) StringParam addressState,
-			@OptionalParam(name = ConstantKeys.SP_BIRTHDATE) DateRangeParam birthDate,
-			@OptionalParam(name = ConstantKeys.SP_EMAIL) TokenParam email,
-			@OptionalParam(name = ConstantKeys.SP_GENDER) StringParam gender,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = ConstantKeys.SP_NAME) StringParam name,
-			@OptionalParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
-			@OptionalParam(name = ConstantKeys.SP_PHONE) TokenParam phone,
-			@OptionalParam(name = ConstantKeys.SP_PHONETIC) StringParam phonetic,
-			@OptionalParam(name = ConstantKeys.SP_TELECOM) TokenParam telecom,
+			@OperationParam(name = ConstantKeys.SP_ADDRESS) StringParam address,
+			@OperationParam(name = ConstantKeys.SP_ADDDRESSCITY) StringParam addressCity,
+			@OperationParam(name = ConstantKeys.SP_ADDRESSCOUNTRY) StringParam addressCountry,
+			@OperationParam(name = ConstantKeys.SP_ADDRESSSTATE) StringParam addressState,
+			@OperationParam(name = ConstantKeys.SP_BIRTHDATE) DateRangeParam birthDate,
+			@OperationParam(name = ConstantKeys.SP_EMAIL) TokenParam email,
+			@OperationParam(name = ConstantKeys.SP_GENDER) StringParam gender,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = ConstantKeys.SP_NAME) StringParam name,
+			@OperationParam(name = ConstantKeys.SP_PATIENT) ReferenceParam patient,
+			@OperationParam(name = ConstantKeys.SP_PHONE) TokenParam phone,
+			@OperationParam(name = ConstantKeys.SP_PHONETIC) StringParam phonetic,
+			@OperationParam(name = ConstantKeys.SP_TELECOM) TokenParam telecom,
 			// Parameters for all resources
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = "_lastUpdated") DateRangeParam _lastUpdated,
-			@OptionalParam(name = "_tag") TokenParam _tag, @OptionalParam(name = "_profile") UriParam _profile,
-			@OptionalParam(name = "_query") TokenParam _query, @OptionalParam(name = "_security") TokenParam _security,
-			@OptionalParam(name = "_content") StringParam _content,
-			@OptionalParam(name = "organization") ReferenceParam managingOrg) {
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = "_lastUpdated") DateRangeParam _lastUpdated,
+			@OperationParam(name = "_tag") TokenParam _tag, @OperationParam(name = "_profile") UriParam _profile,
+			@OperationParam(name = "_query") TokenParam _query, @OperationParam(name = "_security") TokenParam _security,
+			@OperationParam(name = "_content") StringParam _content,
+			@OperationParam(name = "organization") ReferenceParam managingOrg) {
 		Parameters retVal = new Parameters();
 		long total = personDao.findMatchesAdvancedTotal(fhirContext, address, addressCity, addressCountry, addressState,
 				birthDate, email, gender, identifier, name, patient, phone, phonetic, telecom, resid, _lastUpdated,

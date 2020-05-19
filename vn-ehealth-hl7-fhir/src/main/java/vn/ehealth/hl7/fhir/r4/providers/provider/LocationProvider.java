@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.Operation;
+import ca.uhn.fhir.rest.annotation.OperationParam;
 import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Sort;
@@ -136,25 +137,27 @@ public class LocationProvider extends BaseController<LocationEntity, Location> i
 
 	@Operation(name = "$total", idempotent = true)
 	public Parameters findMatchesAdvancedTotal(HttpServletRequest request,
-			@OptionalParam(name = "address") StringParam address,
-			@OptionalParam(name = "address-city") StringParam addressCity,
-			@OptionalParam(name = "address-country") StringParam addressCountry,
-			@OptionalParam(name = "address-state") StringParam addressState,
-			@OptionalParam(name = "endpoint") ReferenceParam endpoint,
-			@OptionalParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
-			@OptionalParam(name = "name") StringParam name, @OptionalParam(name = "near") TokenParam near,
-			@OptionalParam(name = "near-distance") QuantityParam nearDistance,
-			@OptionalParam(name = "operational-status") TokenParam operationalStatus,
-			@OptionalParam(name = "organization") ReferenceParam organization,
-			@OptionalParam(name = "partof") ReferenceParam partof, @OptionalParam(name = "status") TokenParam status,
-			@OptionalParam(name = "type") TokenParam type,
-			@OptionalParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
-			@OptionalParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
-			@OptionalParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
-			@OptionalParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
-			@OptionalParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
-			@OptionalParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
-			@OptionalParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
+			@OperationParam(name = "address") StringParam address,
+			@OperationParam(name = "address-city") StringParam addressCity,
+			@OperationParam(name = "address-country") StringParam addressCountry,
+			@OperationParam(name = "address-state") StringParam addressState,
+			@OperationParam(name = "endpoint") ReferenceParam endpoint,
+			@OperationParam(name = ConstantKeys.SP_IDENTIFIER) TokenParam identifier,
+			@OperationParam(name = "name") StringParam name, 
+			@OperationParam(name = "near") TokenParam near,
+			@OperationParam(name = "near-distance") QuantityParam nearDistance,
+			@OperationParam(name = "operational-status") TokenParam operationalStatus,
+			@OperationParam(name = "organization") ReferenceParam organization,
+			@OperationParam(name = "partof") ReferenceParam partof, 
+			@OperationParam(name = "status") TokenParam status,
+			@OperationParam(name = "type") TokenParam type,
+			@OperationParam(name = ConstantKeys.SP_RES_ID) TokenParam resid,
+			@OperationParam(name = ConstantKeys.SP_LAST_UPDATE) DateRangeParam _lastUpdated,
+			@OperationParam(name = ConstantKeys.SP_TAG) TokenParam _tag,
+			@OperationParam(name = ConstantKeys.SP_PROFILE) UriParam _profile,
+			@OperationParam(name = ConstantKeys.SP_QUERY) TokenParam _query,
+			@OperationParam(name = ConstantKeys.SP_SECURITY) TokenParam _security,
+			@OperationParam(name = ConstantKeys.SP_CONTENT) StringParam _content) {
 		Parameters retVal = new Parameters();
 		long total = locationDao.findMatchesAdvancedTotal(fhirContext, address, addressCity, addressCountry,
 				addressState, endpoint, identifier, name, near, nearDistance, operationalStatus, organization, partof,
