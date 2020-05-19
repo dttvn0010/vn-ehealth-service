@@ -88,7 +88,7 @@ public class DataConvertUtil {
 		return m;
 	}
 
-	public static <T> Map<String, Map<String, T>> mapOf3(String keyLevel1, String keyLevel2, T value) {
+	public static  Map<String, Object> mapOf3(String keyLevel1, String keyLevel2, Object value) {
 		if (value != null) {
 			return Map.of(keyLevel1, Map.of(keyLevel2, value));
 		}
