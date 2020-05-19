@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +27,7 @@ public class ProcedureController {
 
     @Autowired private ProcedureDao procedureDao; 
     
-    private Criteria createCriteria(Optional<String> patientId, Optional<String> serviceTypeCode) {
+    private Query createQuery(Optional<String> patientId, Optional<String> serviceTypeCode) {
         var params =  new HashMap<String, Object>();
         patientId.ifPresent(x -> params.put("subject.reference", ResourceType.Patient + "/" + x));
         
@@ -36,14 +36,14 @@ public class ProcedureController {
             params.put("category.coding.system", CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
         };
         
-        return MongoUtils.createCriteria(params);
+        return MongoUtils.createQuery(params);
     }
     
     @GetMapping("/count")
     public long count(@RequestParam Optional<String> patientId,
                             @RequestParam Optional<String> serviceTypeCode) {
         
-        var criteria = createCriteria(patientId, serviceTypeCode);
+        var criteria = createQuery(patientId, serviceTypeCode);
         return procedureDao.countResource(criteria);
     }
     
@@ -56,7 +56,7 @@ public class ProcedureController {
                             @RequestParam Optional<Integer> start,
                             @RequestParam Optional<Integer> count) {
        
-        var criteria = createCriteria(patientId, serviceTypeCode);
+        var criteria = createQuery(patientId, serviceTypeCode);
         var lst = procedureDao.searchResource(criteria, start.orElse(-1), count.orElse(-1));
         
         lst.forEach(x -> DatabaseUtil.setReferenceResource(x.getBasedOn()));

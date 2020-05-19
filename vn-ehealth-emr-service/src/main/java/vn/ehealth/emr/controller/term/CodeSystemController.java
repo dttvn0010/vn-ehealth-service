@@ -12,7 +12,7 @@ import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.UriType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,19 +35,19 @@ public class CodeSystemController {
 
 	@Autowired private CodeSystemDao codeSystemDao;
 	
-	private Criteria createCriteria(Optional<String> keyword) {
+	private Query createQuery(Optional<String> keyword) {
 	    var params = mapOf("status", (Object) "active");
 	    
 	    keyword.ifPresent(x -> {
 	        params.putAll(mapOf3("name", "$regex", x));
 	    });
 	    
-	    return MongoUtils.createCriteria(params);
+	    return MongoUtils.createQuery(params);
 	}
 	
 	@GetMapping("/count")
 	public int count(@RequestParam Optional<String> keyword) {
-		var criteria = createCriteria(keyword);
+		var criteria = createQuery(keyword);
 		return codeSystemDao.countResource(criteria);
 	}
 	
@@ -57,7 +57,7 @@ public class CodeSystemController {
 								@RequestParam Optional<Integer> start,
                                 @RequestParam Optional<Integer> count) {
 		
-	    var criteria = createCriteria(keyword);
+	    var criteria = createQuery(keyword);
 		var lst = codeSystemDao.searchResource(criteria);
 		
 		if(viewEntity.orElse(false)) {

@@ -78,8 +78,8 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 	
 	private CodeSystemEntity getEntityByUrl(String url) {
 		var params = mapOf("url", (Object) url, "status", PublicationStatus.ACTIVE.toCode());
-		var criteria = MongoUtils.createCriteria(params);
-		return getEntity(criteria);
+		var query = MongoUtils.createQuery(params);
+		return getEntity(query);
 	}
 	
 	public CodeSystem getByUrl(String url) {

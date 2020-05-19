@@ -77,8 +77,7 @@ public class ConceptDao  {
 	@Cacheable(value="Concept", key = "#id")
 	public ConceptEntity read(String id) {
 		var params = mapOf(ConstantKeys.QP_FHIRID, (Object) id, ConstantKeys.QP_ACTIVE , true);
-		var criteria = MongoUtils.createCriteria(params);
-		var query = Query.query(criteria);
+		var query = MongoUtils.createQuery(params);
 		return mongo.findOne(query, ConceptEntity.class);
 	}
 
@@ -96,19 +95,17 @@ public class ConceptDao  {
 
 	public List<ConceptEntity> getByCodeSystem(String codeSystemId) {
 		var params = mapOf("codeSystemId", (Object) codeSystemId, ConstantKeys.QP_ACTIVE , true);
-		var criteria = MongoUtils.createCriteria(params);
-		var query = Query.query(criteria);
+		var query = MongoUtils.createQuery(params);
 		return mongo.find(query, ConceptEntity.class);
 	}
 	
-	public List<ConceptEntity> searchEntity(Criteria criteria, Boolean active, int start, int count, Sort sort) {
+	public List<ConceptEntity> searchEntity(Query query, Boolean active, int start, int count, Sort sort) {
 		if (active != null) {
-			criteria.and(ConstantKeys.QP_ACTIVE).is(active);
+			query.addCriteria(Criteria.where(ConstantKeys.QP_ACTIVE).is(active));
 		} else {
-			criteria.and(ConstantKeys.QP_ACTIVE).is(true);
+			query.addCriteria(Criteria.where(ConstantKeys.QP_ACTIVE).is(true));
 		}
 
-		var query = Query.query(criteria);
 
 		if (sort != null) {
 			query.with(sort);
@@ -124,16 +121,16 @@ public class ConceptDao  {
 		return mongo.find(query, ConceptEntity.class);
 	}
 	
-	public List<ConceptEntity> searchEntity(Criteria criteria, int start, int count, Sort sort) {
-		return searchEntity(criteria, null, start, count, sort);
+	public List<ConceptEntity> searchEntity(Query query, int start, int count, Sort sort) {
+		return searchEntity(query, null, start, count, sort);
 	}
 
-	public List<ConceptEntity> searchEntity(Criteria criteria, int start, int count) {
-		return searchEntity(criteria, start, count, null);
+	public List<ConceptEntity> searchEntity(Query query, int start, int count) {
+		return searchEntity(query, start, count, null);
 	}
 
-	public List<ConceptEntity> searchEntity(Criteria criteria) {
-		return searchEntity(criteria, -1, -1);
+	public List<ConceptEntity> searchEntity(Query query) {
+		return searchEntity(query, -1, -1);
 	}
 
 	public ConceptEntity getEntity(Criteria criteria) {
@@ -142,9 +139,8 @@ public class ConceptDao  {
 		return mongo.findOne(query, ConceptEntity.class);
 	}
 
-	public int countEntity(Criteria criteria) {
-		criteria.and(ConstantKeys.QP_ACTIVE).is(true);
-		var query = Query.query(criteria);
+	public int countEntity(Query query) {
+		query.addCriteria(Criteria.where(ConstantKeys.QP_ACTIVE).is(true));
 		return (int) mongo.count(query, ConceptEntity.class);
 	}
 }

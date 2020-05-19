@@ -38,6 +38,8 @@ public class PatientDTO extends PatientEntity {
     }
 
     public static PatientDTO fromFhir(Patient obj) {
+    	if(obj == null) return null;
+    	
         var dto = fhirToEntity(obj, PatientDTO.class);
         dto.computes.put("age", dto.computeAge());
         return dto;

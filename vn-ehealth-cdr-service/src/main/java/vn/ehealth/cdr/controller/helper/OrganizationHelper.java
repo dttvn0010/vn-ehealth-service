@@ -21,7 +21,7 @@ public class OrganizationHelper {
                 "identifier.value", maCskb
             );
 
-        var criteria = MongoUtils.createCriteria(params);
-        return organizationDao.getResource(criteria);
+        var query = MongoUtils.createQuery(params);
+        return organizationDao.getResource(query);
     }
 }

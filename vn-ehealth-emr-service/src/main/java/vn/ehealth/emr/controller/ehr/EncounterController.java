@@ -9,7 +9,7 @@ import java.util.Optional;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -90,16 +90,16 @@ public class EncounterController {
         }
     }
     
-    private Criteria createCriteria(Optional<String> patientId) {
+    private Query createQuery(Optional<String> patientId) {
         var params =  mapOf("partOf.reference", (Object) null);
         patientId.ifPresent(x -> params.put("subject.reference", ResourceType.Patient + "/" + x));
-        return MongoUtils.createCriteria(params);
+        return MongoUtils.createQuery(params);
     }
     
     @GetMapping("/count_hsba")
     public long count(@RequestParam Optional<String> patientId) {
         
-        var criteria = createCriteria(patientId);
+        var criteria = createQuery(patientId);
         return encounterDao.countResource(criteria);
     }
    
@@ -111,7 +111,7 @@ public class EncounterController {
                                 @RequestParam Optional<Integer> start,
                                 @RequestParam Optional<Integer> count) {
         
-        var criteria = createCriteria(patientId);
+        var criteria = createQuery(patientId);
         var encList = encounterDao.searchResource(criteria, start.orElse(-1), count.orElse(-1));
 
         if(includePatient.orElse(false)) {

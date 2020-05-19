@@ -54,8 +54,8 @@ public abstract class DichVuKyThuat {
 	                        "type.coding.system", CodeSystemValue.KHOA_DIEU_TRI,
 	                        "type.coding.code", dmKhoaDieuTri.ma
                         );
-	        var criteria = MongoUtils.createCriteria(params);
-	        return DaoFactory.getOrganizationDao().getResource(criteria);
+	        var query = MongoUtils.createQuery(params);
+	        return DaoFactory.getOrganizationDao().getResource(query);
 	    }
 	    return null;	    
 	}
@@ -70,8 +70,8 @@ public abstract class DichVuKyThuat {
 		if(khoaDieuTri != null) {
 		    var parent = (Object) (ResourceType.Encounter + "/" + hsbaEncounter.getId());
 		    var params = mapOf("partOf.reference", parent);
-			var criteria = MongoUtils.createCriteria(params);
-			return DaoFactory.getEncounterDao().getResource(criteria);
+			var query = MongoUtils.createQuery(params);
+			return DaoFactory.getEncounterDao().getResource(query);
 		}
     	return null;
 	}

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.hl7.fhir.r4.model.IdType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,25 +26,24 @@ public class PatientController {
     
     @Autowired private PatientDao patientDao;
     
-    private Criteria createCritera(Optional<String> keyword) {
+    private Query createQuery(Optional<String> keyword) {
         var params =  new HashMap<String, Object>();
 
         keyword.ifPresent(x -> {
             params.put("$or", listOf(
-                            mapOf3("name.text", "$regex", x),
-                            mapOf3("name.family", "$regex", x),
-                            mapOf3("name.given", "$regex", x),
-                            mapOf3("telecom.value", "$regex", x),
-                            mapOf3("identifier.value", "$regex", x)
+                            mapOf("name.text", mapOf("$regex", x, "$options", "i")),
+                            mapOf("name.family", mapOf("$regex", x, "$options", "i")),
+                            mapOf("name.given", mapOf("$regex", x, "$options", "i")),
+                            mapOf("identifier.value", mapOf("$regex", x, "$options", "i"))                            
                     ));
         });
         
-        return MongoUtils.createCriteria(params);
+        return MongoUtils.createQuery(params);
     }
     
     @GetMapping("/count")
     public long count(@RequestParam Optional<String> keyword) {
-        var criteria = createCritera(keyword);
+        var criteria = createQuery(keyword);
         return patientDao.countResource(criteria);
     }
     
@@ -53,7 +52,7 @@ public class PatientController {
                                     @RequestParam Optional<Integer> start,
                                     @RequestParam Optional<Integer> count) {
       
-        var criteria = createCritera(keyword);
+        var criteria = createQuery(keyword);
         var lst = patientDao.searchResource(criteria, start.orElse(-1), count.orElse(-1));
         
         var lstDto = transform(lst, PatientDTO::fromFhir);

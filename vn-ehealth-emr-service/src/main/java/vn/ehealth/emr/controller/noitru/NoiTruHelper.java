@@ -28,7 +28,7 @@ public class NoiTruHelper {
     	
         var params =  mapOf3("status", "$in", status);
         params.put("subject.reference", ResourceType.Patient + "/" + patientId);
-        return encounterDao.getResource(MongoUtils.createCriteria(params));        
+        return encounterDao.getResource(MongoUtils.createQuery(params));        
 	}
 	
 }

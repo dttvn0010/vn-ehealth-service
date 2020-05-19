@@ -24,7 +24,7 @@ public class MedicationRequestHelper {
                         "groupIdentifier.value", soDon
                     );
         
-        return medicationRequestDao.searchResource(MongoUtils.createCriteria(params));
+        return medicationRequestDao.searchResource(MongoUtils.createQuery(params));
     }
     
 }

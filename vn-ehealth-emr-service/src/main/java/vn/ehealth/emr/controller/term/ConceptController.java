@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +29,7 @@ public class ConceptController {
 	@Autowired private CodeSystemDao codeSystemDao;
 	@Autowired private ConceptDao conceptDao;
 	
-	private Criteria createCritera(String codeSystemUrl, Optional<String> keyword) {
+	private Query createQuery(String codeSystemUrl, Optional<String> keyword) {
 		var params = new HashMap<String, Object>();
 		
 		var codeSytem = codeSystemDao.getByUrl(codeSystemUrl);
@@ -46,13 +47,13 @@ public class ConceptController {
 		               );
         	});
 		
-		return MongoUtils.createCriteria(params);
+		return MongoUtils.createQuery(params);
 	}
 	
 	@GetMapping("/count")
 	public int count(String codeSystemUrl, Optional<String> keyword) {
 		
-		var criteria = createCritera(codeSystemUrl, keyword);
+		var criteria = createQuery(codeSystemUrl, keyword);
 		if(criteria != null) {
 			return conceptDao.countEntity(criteria);
 		}
@@ -66,9 +67,9 @@ public class ConceptController {
 								@RequestParam Optional<Integer> start,
 					            @RequestParam Optional<Integer> count) {
 		
-		var criteria = createCritera(codeSystemUrl, keyword);
-		if(criteria != null) {
-			var lstEnt = conceptDao.searchEntity(criteria);
+		var query = createQuery(codeSystemUrl, keyword);
+		if(query != null) {
+			var lstEnt = conceptDao.searchEntity(query);
 			if(lstEnt.size() > MAX_RECORDS) {
 				lstEnt = lstEnt.subList(0, MAX_RECORDS);
 			}

@@ -2,13 +2,14 @@ package vn.ehealth.emr.controller.noitru;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import org.hl7.fhir.r4.model.Encounter.EncounterStatus;
 import org.hl7.fhir.r4.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,14 +28,14 @@ public class DanhSachBenhNhanController {
 
 @Autowired private EncounterDao encounterDao;
        
-    private Criteria createCriteria(Optional<String> falcutyCode, Optional<String> chiefComplaintICD, Optional<String> keyword) {
+    private Query createQuery(Optional<String> falcutyCode, Optional<String> chiefComplaintICD, Optional<String> keyword) {
     	var status = List.of(
     		EncounterStatus.ARRIVED,
     		EncounterStatus.TRIAGED,
     		EncounterStatus.INPROGRESS
     	);
     	
-        var params =  mapOf3("status", "$in", status);
+        var params = new HashMap<String, Object>();  //mapOf3("status", "$in", status);
         
         if(falcutyCode.isPresent()) {
         	params.put("extension.value.display", mapOf("$regex", "(" + falcutyCode.get() + ")"));
@@ -48,13 +49,13 @@ public class DanhSachBenhNhanController {
         	params.put("subject.display", mapOf("$regex", keyword.get()));
         }
         
-        return MongoUtils.createCriteria(params);
+        return MongoUtils.createQuery(params);
     }
     
     @GetMapping("/count")
     public long count(@RequestParam Optional<String> falcutyCode, Optional<String> chiefComplaintICD, Optional<String> keyword) {
     	
-        var criteria = createCriteria(falcutyCode, chiefComplaintICD, keyword);
+        var criteria = createQuery(falcutyCode, chiefComplaintICD, keyword);
         return encounterDao.countResource(criteria);
     }
    
@@ -66,7 +67,7 @@ public class DanhSachBenhNhanController {
                                 @RequestParam Optional<Integer> start,
                                 @RequestParam Optional<Integer> count) {
         
-        var criteria = createCriteria(falcutyCode, chiefComplaintICD, keyword);
+        var criteria = createQuery(falcutyCode, chiefComplaintICD, keyword);
         var encList = encounterDao.searchResource(criteria, start.orElse(-1), count.orElse(-1));
 
         encList.forEach(x -> DatabaseUtil.setReferenceResource(x.getSubject()));

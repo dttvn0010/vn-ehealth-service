@@ -22,7 +22,7 @@ public class PatientHelper {
                 "identifier.system",  IdentifierSystem.DINH_DANH_Y_TE                            
             );
 
-        var criteria = MongoUtils.createCriteria(params);
-        return patientDao.getResource(criteria);
+        var query = MongoUtils.createQuery(params);
+        return patientDao.getResource(query);
     }
 }

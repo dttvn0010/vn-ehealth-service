@@ -102,20 +102,20 @@ public class ProcedureHelper {
 		var ref = (Object) (ResourceType.ServiceRequest + "/" + serviceRequestId);
 		var params = mapOf("basedOn.reference", ref);
 
-		return observationDao.searchResource(MongoUtils.createCriteria(params));
+		return observationDao.searchResource(MongoUtils.createQuery(params));
 	}
 
 	private Specimen getSpecimenByServiceRequest(String serviceRequestId) {
 		var ref = (Object) (ResourceType.ServiceRequest + "/" + serviceRequestId);
 		var params = mapOf("request.reference", ref);
 
-		return specimenDao.getResource(MongoUtils.createCriteria(params));
+		return specimenDao.getResource(MongoUtils.createQuery(params));
 	}
 
 	public Procedure getProcedureByTypeAndIdhis(String loaiDVKT, String idhis) {
 		var ref = (Object) (loaiDVKT + "/" + idhis);
 		var params = mapOf("identifier.value", ref);
-		return procedureDao.getResource(MongoUtils.createCriteria(params));
+		return procedureDao.getResource(MongoUtils.createQuery(params));
 	}
 
 	public void removeOldData(DichVuKyThuat dto) {

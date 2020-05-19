@@ -53,8 +53,8 @@ public class CoSoKhamBenh {
                         "identifier.value", ma
                     );
         
-        var criteria = MongoUtils.createCriteria(params);
-        return DaoFactory.getOrganizationDao().getResource(criteria);
+        var query = MongoUtils.createQuery(params);
+        return DaoFactory.getOrganizationDao().getResource(query);
     }
     
     @JsonIgnore

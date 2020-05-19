@@ -25,15 +25,15 @@ public class EncounterHelper {
                 "identifier.system", IdentifierSystem.MA_HO_SO                      
             );
 
-        var criteria = MongoUtils.createCriteria(params);
-        return encounterDao.getResource(criteria);
+        var query = MongoUtils.createQuery(params);
+        return encounterDao.getResource(query);
     }
     
     public List<Encounter> getVkEncounterList(Encounter hsbaEncounter) {
         if(hsbaEncounter != null) {
             var parent = (Object) (ResourceType.Encounter + "/" + hsbaEncounter.getId());
             var params = mapOf("partOf.reference", parent);    
-            return encounterDao.searchResource(MongoUtils.createCriteria(params));
+            return encounterDao.searchResource(MongoUtils.createQuery(params));
         }
         
         return new ArrayList<>();
