@@ -11,6 +11,7 @@ import org.hl7.fhir.instance.model.api.IPrimitiveType;
 import org.hl7.fhir.r4.hapi.ctx.DefaultProfileValidationSupport;
 import org.hl7.fhir.r4.hapi.validation.CachingValidationSupport;
 import org.hl7.fhir.r4.hapi.validation.FhirInstanceValidator;
+import org.hl7.fhir.r4.hapi.validation.PrePopulatedValidationSupport;
 import org.hl7.fhir.r4.hapi.validation.ValidationSupportChain;
 import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.IdType;
@@ -41,6 +42,7 @@ import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceVersionConflictException;
 import ca.uhn.fhir.validation.FhirValidator;
@@ -59,6 +61,8 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 	abstract protected BaseDao<ENT, FHIR> getDao();
 
 	abstract protected List<String> getProfile();
+
+	abstract public Class<? extends IBaseResource> getResourceType();
 
 	@Autowired
 	protected FhirContext fhirContext;
@@ -304,6 +308,17 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 	public MethodOutcome validate(@ResourceParam IBaseResource object,
 			@OptionalParam(name = "mode") StringParam theMode,
 			@OptionalParam(name = "profile") StringParam theProfile) {
+		log.debug("------------------ Object: " + object.fhirType());
+		log.debug("------------------ FHIR: " + getResourceType());
+
+		if (!getResourceType().toString().endsWith(object.fhirType())) {
+			log.error("Invalid Resource Type. Expect " + getResourceType() + ", but found " + object.fhirType());
+			throw OperationOutcomeFactory.buildOperationOutcomeException(
+					new InvalidRequestException(
+							"Invalid Resource Type. Expect " + getResourceType() + ", but found " + object.fhirType()),
+					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.INVALID);
+		}
+
 		if (theProfile != null) {
 			log.debug("Validating profile: " + theProfile.getValueNotNull());
 		}
@@ -380,19 +395,12 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 					new ResourceNotFoundException("No " + theId.getValue() + " found"),
 					OperationOutcome.IssueSeverity.ERROR, OperationOutcome.IssueType.NOTFOUND);
 		}
-		
+
 		if (theProfile != null) {
 			log.debug("Validating profile: " + theProfile.getValueNotNull());
 		}
 		// This method returns a MethodOutcome object
 		MethodOutcome method = new MethodOutcome();
-
-		// Create a validation support chain
-//		ValidationSupportChain validationSupportChain = new ValidationSupportChain(
-//		   new DefaultProfileValidationSupport(ctx),
-//		   new InMemoryTerminologyServerValidationSupport(ctx),
-//		   new CommonCodeSystemsTerminologyService(ctx)
-//		);
 
 		// Create a chain that will hold our modules
 		ValidationSupportChain supportChain = new ValidationSupportChain();
@@ -403,10 +411,10 @@ public abstract class BaseController<ENT extends BaseResource, FHIR extends Reso
 //		// Create a PrePopulatedValidationSupport which can be used to load custom definitions.
 //		// In this example we're loading two things, but in a real scenario we might
 //		// load many StructureDefinitions, ValueSets, CodeSystems, etc.
-//		PrePopulatedValidationSupport prePopulatedSupport = new PrePopulatedValidationSupport();
+		PrePopulatedValidationSupport prePopulatedSupport = new PrePopulatedValidationSupport();
 //		prePopulatedSupport.addStructureDefinition(someStructureDefnition);
 //		prePopulatedSupport.addValueSet(someValueSet);
-//		supportChain.addValidationSupport(prePopulatedSupport);
+		supportChain.addValidationSupport(prePopulatedSupport);
 
 //		// Create a module that uses a remote terminology service
 //		RemoteTerminologyServiceValidationSupport remoteTermSvc = new RemoteTerminologyServiceValidationSupport(ctx);

@@ -22,7 +22,8 @@ public class OperationOutcomeFactory {
         operationOutcome.addIssue()
                 .setSeverity(OperationOutcome.IssueSeverity.ERROR)
                 .setCode(issueType)
-                .setDetails(codeableConcept);
+                .setDetails(codeableConcept)
+                .setDiagnostics(exception.getMessage());
 
        // operationOutcome.getMeta()
        //         .addProfile(SystemURL.SD_GPC_OPERATIONOUTCOME);
