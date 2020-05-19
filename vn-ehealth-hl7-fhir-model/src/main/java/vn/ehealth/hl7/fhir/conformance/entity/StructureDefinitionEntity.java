@@ -10,8 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneType;
 import vn.ehealth.hl7.fhir.core.entity.BaseCodeableConcept;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
+import vn.ehealth.hl7.fhir.core.entity.BaseComplexType;
 import vn.ehealth.hl7.fhir.core.entity.BaseContactDetail;
 import vn.ehealth.hl7.fhir.core.entity.BaseElementDefinition;
 import vn.ehealth.hl7.fhir.core.entity.BaseIdentifier;
@@ -31,7 +33,7 @@ public class StructureDefinitionEntity extends BaseResource {
 	public String version;
 	public String name;
 	public String title;
-	public String code;
+	public String status;
 	public Boolean experimental;
 	public Date date;
 	public String publisher;
@@ -45,7 +47,7 @@ public class StructureDefinitionEntity extends BaseResource {
 	public String fhirVersion;
 	public List<StructureDefinitionMappingComponent> mapping;
 	public String kind;
-	public Boolean _abstract;
+	public Boolean abstract_;
 	public List<StructureDefinitionContextComponent> context;
 	public List<String> contextInvariant;
 	public String type;
@@ -53,25 +55,24 @@ public class StructureDefinitionEntity extends BaseResource {
 	public String derivation;
 	public StructureDefinitionSnapshotComponent snapshot;
 	public StructureDefinitionSnapshotComponent differential;
-	
-	
-	public static class StructureDefinitionMappingComponent {
-		public String id;
+
+	public static class StructureDefinitionMappingComponent extends BaseBackboneType {
+		public String identity;
 		public String uri;
 		public String name;
 		public String comment;
 	}
-	
-	public static class StructureDefinitionContextComponent {
+
+	public static class StructureDefinitionContextComponent extends BaseBackboneType {
 		public String type;
 		public String expression;
 	}
-	
-	public static class StructureDefinitionSnapshotComponent {
+
+	public static class StructureDefinitionSnapshotComponent extends BaseBackboneType {
 		public List<BaseElementDefinition> element;
 	}
-	
-	public static class StructureDefinitionDifferentialComponent {
+
+	public static class StructureDefinitionDifferentialComponent extends BaseBackboneType {
 		public List<BaseElementDefinition> element;
 	}
 }

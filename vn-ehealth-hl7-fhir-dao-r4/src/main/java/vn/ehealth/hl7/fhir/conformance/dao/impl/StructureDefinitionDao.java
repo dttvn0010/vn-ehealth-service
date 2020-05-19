@@ -96,7 +96,7 @@ public class StructureDefinitionDao extends BaseDao<StructureDefinitionEntity, S
 		if (criteria != null) {
 			query = Query.query(criteria);
 		}
-		total = mongo.count(query, ActivityDefinitionEntity.class);
+		total = mongo.count(query, StructureDefinitionEntity.class);
 		return total;
 	}
 
