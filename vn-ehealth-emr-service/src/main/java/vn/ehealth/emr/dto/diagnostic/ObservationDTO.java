@@ -14,4 +14,8 @@ public class ObservationDTO extends ObservationEntity{
         
     	return DataConvertUtil.fhirToEntity(obj, ObservationDTO.class);
     }
+    
+    public static Observation toFhir(ObservationDTO dto) {
+    	return DataConvertUtil.entityToFhir(dto, Observation.class);
+    }
 }

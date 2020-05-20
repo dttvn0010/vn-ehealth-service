@@ -25,6 +25,7 @@ public class User {
     public String fullName;
     public ObjectId emrPersonId;
     public String fhirPersonId;
+    public String fhirPractitionerId;
     
     @Transient public List<Role> roles;
     
