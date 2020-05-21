@@ -146,8 +146,9 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 		// subject
 		if (subject != null) {
 			if (subject.getValue().indexOf("|") == -1) {
-				criteria.orOperator(Criteria.where("subject.reference").is(subject.getValue()),
-						Criteria.where("subject.display").is(subject.getValue()));
+//				criteria.orOperator(Criteria.where("subject.reference").is(subject.getValue()),
+//						Criteria.where("subject.display").is(subject.getValue()));
+				criteria.and("subject.reference").is("Patient/" + subject.getValue());
 			} else {
 				String[] ref = subject.getValue().split("\\|");
 				criteria.and("subject.identifier.system").is(ref[0]).and("subject.identifier.value").is(ref[1]);
@@ -156,8 +157,9 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 		// patient
 		if (patient != null) {
 			if (patient.getValue().indexOf("|") == -1) {
-				criteria.orOperator(Criteria.where("subject.reference").is("Patient/" + patient.getValue()),
-						Criteria.where("subject.display").is(patient.getValue()));
+//				criteria.orOperator(Criteria.where("subject.reference").is("Patient/" + patient.getValue()),
+//						Criteria.where("subject.display").is(patient.getValue()));
+				criteria.and("subject.reference").is("Patient/" + patient.getValue());
 			} else {
 				String[] ref = patient.getValue().split("\\|");
 				criteria.and("subject.identifier.system").is(ref[0]).and("subject.identifier.value").is(ref[1]);
@@ -176,8 +178,9 @@ public class ObservationDao extends BaseDao<ObservationEntity, Observation> {
 		// encounter
 		if (encounter != null) {
 			if (encounter.getValue().indexOf("|") == -1) {
-				criteria.orOperator(Criteria.where("context.reference").is(encounter.getValue()),
-						Criteria.where("context.display").is(encounter.getValue()));
+//				criteria.orOperator(Criteria.where("context.reference").is(encounter.getValue()),
+//						Criteria.where("context.display").is(encounter.getValue()));
+				criteria.and("context.reference").is(encounter.getValue());
 			} else {
 				String[] ref = encounter.getValue().split("\\|");
 				criteria.and("context.identifier.system").is(ref[0]).and("context.identifier.value").is(ref[1]);
