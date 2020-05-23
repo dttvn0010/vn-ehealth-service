@@ -32,7 +32,6 @@ import ca.uhn.fhir.rest.param.NumberParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.param.UriParam;
-import vn.ehealth.hl7.fhir.core.entity.BasePrimitiveType;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 import vn.ehealth.hl7.fhir.core.entity.BaseType;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
@@ -115,19 +114,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 				for(var conceptEntity : entity.concept) {
 					conceptEntity.codeSystemId = entity._fhirId;
 					conceptEntity.status = PublicationStatus.ACTIVE.toCode();
-					conceptEntity.date = object.getDate();
-					
-					String slug = conceptEntity.display + " (" + conceptEntity.code + ")";
-					var slugProp = new ConceptEntity.ConceptProperty();
-					slugProp.code = "slug";
-					slugProp.value = new BasePrimitiveType(new StringType(slug));
-					
-					if(conceptEntity.property == null) {
-						conceptEntity.property = List.of(slugProp);
-					}else {
-						conceptEntity.property.add(slugProp);
-					}
-					
+					conceptEntity.date = object.getDate();					
 					conceptDao.create(conceptEntity);
 				}
 			}
