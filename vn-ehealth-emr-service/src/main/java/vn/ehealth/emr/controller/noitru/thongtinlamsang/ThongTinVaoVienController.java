@@ -6,10 +6,10 @@ import org.hl7.fhir.r4.model.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.auth.utils.UserUtil;
@@ -31,8 +31,8 @@ public class ThongTinVaoVienController {
 	@Autowired private PractitionerDao practitionerDao;
 	@Autowired private ObservationHelper observationHelper;
 	
-	@GetMapping("/get/{encounterId}")
-	public ResponseEntity<?> getThongTinVaoVien(@PathVariable String encounterId) {
+	@GetMapping("/get")
+	public ResponseEntity<?> getThongTinVaoVien(@RequestParam String encounterId) {
 		
 		var lyDoVaoVienObs = observationHelper.getLastObservation(encounterId, ThongTinVaoVien.LY_DO_VAO_VIEN);
 		var vaoNgayThuObs = observationHelper.getLastObservation(encounterId, ThongTinVaoVien.VAO_NGAY_THU);
@@ -54,8 +54,8 @@ public class ThongTinVaoVienController {
 		public String vaoLanThu;
 	}
 	
-	@PostMapping("/save/{encounterId}")
-	public ResponseEntity<?> saveThongTinVaoVien(@PathVariable String encounterId, 
+	@PostMapping("/save")
+	public ResponseEntity<?> saveThongTinVaoVien(@RequestParam String encounterId, 
 								@RequestBody ThongTinVaoVienBody body) {
 		try {
 			var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));

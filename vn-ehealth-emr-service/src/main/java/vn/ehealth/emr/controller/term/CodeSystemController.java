@@ -15,15 +15,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.dto.term.CodeSystemDTO;
 import vn.ehealth.emr.dto.term.ConceptDTO;
+import vn.ehealth.hl7.fhir.core.entity.BasePrimitiveType;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.term.dao.impl.CodeSystemDao;
+import vn.ehealth.hl7.fhir.term.dao.impl.ConceptDao;
 import vn.ehealth.hl7.fhir.term.entity.CodeSystemEntity;
 import vn.ehealth.utils.MongoUtils;
 
@@ -34,6 +38,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 public class CodeSystemController {
 
 	@Autowired private CodeSystemDao codeSystemDao;
+	@Autowired private ConceptDao conceptDao;
 	
 	private Query createQuery(Optional<String> keyword) {
 	    var params = mapOf("status", (Object) "active");
@@ -122,5 +127,19 @@ public class CodeSystemController {
 	        return ResponseUtil.errorResponse(e);
 	    }
 	}
+	
+	@GetMapping("/get_items")
+	public ResponseEntity<?> getItems(@RequestParam String codeSystemUrl) {
+		var codeSystem = codeSystemDao.getByUrl(codeSystemUrl);
+		var result = new ArrayList<>();
+		if(codeSystem != null) {
+			var concepts = conceptDao.getByCodeSystem(codeSystem.getId());
+			for(var concept : concepts) {
+				result.add(mapOf("code", concept.code, "display", concept.display));
+			}
+		}
+		
+		return ResponseEntity.ok(result);		
+	}	
 	
 }

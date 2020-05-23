@@ -10,6 +10,12 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @JsonInclude(Include.NON_NULL)
 public class EncounterDTO extends EncounterEntity {
+	
+	public static class DiagnosisDTO extends EncounterEntity.Diagnosis {
+		public static DiagnosisDTO fromFhir(Encounter.DiagnosisComponent obj) {
+			return fhirToEntity(obj, DiagnosisDTO.class);
+		}
+	}
     
     public static EncounterDTO fromFhir(Encounter obj) {
         return  fhirToEntity(obj, EncounterDTO.class);
