@@ -51,7 +51,9 @@ public class ObservationController {
 			obs.setSubject(enc.getSubject());
 			obs.setIssued(new Date());
 			if(practitioner != null) {
-				obs.setPerformer(List.of(FhirUtil.createReference(practitioner)));
+				var ref = FhirUtil.createReference(practitioner);
+				ref.setDisplay(practitioner.getNameFirstRep().getText());
+				obs.setPerformer(List.of());
 			}
 			observationDao.create(obs);
 		}catch(Exception e) {
