@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.emr.dto.base.CodingDTO;
+import vn.ehealth.emr.dto.clinical.ConditionDTO;
 import vn.ehealth.emr.dto.ehr.EncounterDTO.DiagnosisDTO;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ConditionDao;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
@@ -47,9 +49,29 @@ public class ChanDoanController {
 		
 		for(var diagnosis : encounter.getDiagnosis()) {
 			var diagnosisDTO = DiagnosisDTO.fromFhir(diagnosis);
+			var condition = conditionDao.read(FhirUtil.createIdType(diagnosis.getCondition()));
+			diagnosisDTO.computes.put("condition", ConditionDTO.fromFhir(condition));
+			result.add(diagnosisDTO);
 		}
 		
 		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping("/delete")
+	public ResponseEntity<?> deleteChanDoan(@RequestParam String encounterId,
+								@RequestParam String conditionRef) {
+		try {
+			var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
+			conditionDao.remove(FhirUtil.createIdType(conditionRef));
+			var diagnosis = FPUtil.filter(encounter.getDiagnosis(), 
+								x -> !conditionRef.equals(x.getCondition().getReference()));
+			
+			encounter.setDiagnosis(diagnosis);
+			encounterDao.update(encounter, encounter.getIdElement());
+			return ResponseEntity.ok(mapOf("success", true));
+		}catch(Exception e) {
+			return ResponseUtil.errorResponse(e);
+		}
 	}
 	
 	@PostMapping("/add")

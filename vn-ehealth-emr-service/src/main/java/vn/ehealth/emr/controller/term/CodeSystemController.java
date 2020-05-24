@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -134,8 +133,20 @@ public class CodeSystemController {
 		var result = new ArrayList<>();
 		if(codeSystem != null) {
 			var concepts = conceptDao.getByCodeSystem(codeSystem.getId());
-			for(var concept : concepts) {
-				result.add(mapOf("code", concept.code, "display", concept.display));
+			for(var concept : concepts) {				
+				var item = mapOf("code", concept.code, "display", concept.display);
+				var vnDisplayProp = FPUtil.findFirst(concept.property, x -> "vn_display".equals(x.code));
+				if(vnDisplayProp != null) {
+					String vnDisplay = String.valueOf(((BasePrimitiveType)vnDisplayProp.value).value);
+					if(!org.apache.commons.lang.StringUtils.isEmpty(vnDisplay)) {
+						int pos = vnDisplay.lastIndexOf('|');
+						if(pos > 0) {
+							vnDisplay = vnDisplay.substring(0, pos).strip();
+						}
+						item.put("vn_display", vnDisplay);
+					}
+				}
+				result.add(item);
 			}
 		}
 		
