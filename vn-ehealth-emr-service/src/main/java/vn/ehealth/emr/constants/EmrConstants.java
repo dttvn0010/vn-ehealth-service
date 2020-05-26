@@ -30,6 +30,12 @@ public class EmrConstants {
 			final public static String VAO_LAN_THU = observationCodes.getProperty("vaoLanThu");
 			final public static String VAO_NGAY_THU = observationCodes.getProperty("vaoNgayThu");
 		}
+		public static interface QuaTrinhBenhLy {
+			final public static String QUA_TRINH_KHOI_PHAT = observationCodes.getProperty("quaTrinhKhoiPhat");
+			final public static String MUC_DO_VA_DIEN_BIEN = observationCodes.getProperty("mucDoVaDienBien");
+			final public static String VI_TRI = observationCodes.getProperty("viTri");
+			final public static String TONG_QUAN = observationCodes.getProperty("tongQuan");
+		}
 	}
 	
 }
