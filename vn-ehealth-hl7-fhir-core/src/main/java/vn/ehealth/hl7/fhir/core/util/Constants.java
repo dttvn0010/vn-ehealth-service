@@ -113,6 +113,16 @@ public class Constants {
         final public static String DM_THUOC = codeSystems.getProperty("thuoc");
         final public static String DM_DUONG_DUNG_THUOC = codeSystems.getProperty("duong_dung_thuoc");
         
+        // EMR
+        final public static String TRANG_THAI_DI_UNG = codeSystems.getProperty("trang_thai_di_ung");
+        
+        final public static String SAN_PHAM_DI_UNG = codeSystems.getProperty("san_pham_di_ung");
+        final public static String VI_TRI_DI_UNG = codeSystems.getProperty("vi_tri_di_ung");
+        
+        final public static String PHAN_UNG_DI_UNG = codeSystems.getProperty("phan_ung_di_ung");
+        
+        
+        
     }
     
     
