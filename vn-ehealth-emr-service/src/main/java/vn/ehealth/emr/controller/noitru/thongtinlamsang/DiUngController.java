@@ -8,7 +8,6 @@ import org.hl7.fhir.r4.model.Age;
 import org.hl7.fhir.r4.model.AllergyIntolerance;
 import org.hl7.fhir.r4.model.AllergyIntolerance.AllergyIntoleranceCategory;
 import org.hl7.fhir.r4.model.AllergyIntolerance.AllergyIntoleranceCriticality;
-import org.hl7.fhir.r4.model.Enumeration;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +46,7 @@ public class DiUngController {
 			public CodingDTO viTri; // ~ exposureRoute
 			public String moTaPhanUng;	// ~ note
 		}
-		//public CodingDTO chatDiUng;  ~ Dang thieu truong Substance trong AllergyIntolerance
+		public CodingDTO chatDiUng;  //~ code
 		public CodingDTO mucDoNghiemTrong; // --> criticality
 		public CodingDTO loaiDiUng;	// --> category
 		public CodingDTO trangThai; // --> clinicalStatus
@@ -80,6 +79,7 @@ public class DiUngController {
 			allergy.setCriticality(AllergyIntoleranceCriticality.fromCode(body.mucDoNghiemTrong.code));
 			allergy.addCategory(AllergyIntoleranceCategory.fromCode(body.loaiDiUng.code));
 			allergy.setClinicalStatus(CodingDTO.toCodeableConcept(body.trangThai, CodeSystemValue.TRANG_THAI_DI_UNG));
+			allergy.setCode(CodingDTO.toCodeableConcept(body.chatDiUng, CodeSystemValue.CHAT_DI_UNG));
 			if(body.tuoiDiUng != null) {
 				var age = new Age();
 				age.setValue(body.tuoiDiUng);

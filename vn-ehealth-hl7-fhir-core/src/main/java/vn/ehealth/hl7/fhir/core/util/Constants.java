@@ -121,6 +121,8 @@ public class Constants {
         
         final public static String PHAN_UNG_DI_UNG = codeSystems.getProperty("phan_ung_di_ung");
         
+        final public static String CHAT_DI_UNG = codeSystems.getProperty("chat_di_ung");
+        
         
         
     }
