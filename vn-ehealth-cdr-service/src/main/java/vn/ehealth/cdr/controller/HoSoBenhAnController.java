@@ -5,8 +5,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hl7.fhir.r4.model.IdType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
@@ -37,7 +36,6 @@ import vn.ehealth.cdr.service.PhauThuatThuThuatService;
 import vn.ehealth.cdr.service.XetNghiemService;
 import vn.ehealth.cdr.utils.*;
 import vn.ehealth.hl7.fhir.core.common.UnAuthorizedException;
-import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 
@@ -62,8 +60,6 @@ public class HoSoBenhAnController {
     @Autowired private OrganizationHelper organizationHelper;
     @Autowired private EncounterHelper encounterHelper;
     
-    private Logger log = LoggerFactory.getLogger(HoSoBenhAnController.class);
-
     @GetMapping("/count_ds_hs")
     public ResponseEntity<?> countHsba(@RequestParam int trangthai, @RequestParam String maYte) {
         try {
@@ -206,47 +202,38 @@ public class HoSoBenhAnController {
             return ResponseUtil.errorResponse(e);
         }
     }
-    
-    private void removeOldFhirData(@Nonnull HoSoBenhAn hsba) {
-        var hsbaEncounter = encounterHelper.getEncounterByMaHsba(hsba.maYte);
+
+    private IdType getHsbaFhirId(@Nonnull HoSoBenhAn hsba) {
+        var enc = encounterHelper.getEncounterByMaHsba(hsba.maYte);
         
-        if(hsbaEncounter != null) {
-            var vkEncounters = encounterHelper.getVkEncounterList(hsbaEncounter);
-            vkEncounters.forEach(x -> encounterDao.remove(x.getIdElement()));
-            encounterDao.remove(hsbaEncounter.getIdElement());
+        if(enc != null) {
+            return enc.getIdElement();
         }
+        
+        return null;
     }
     
-    private void saveToFhirDb(HoSoBenhAn hsba) {
+    private void saveToFhirDb(HoSoBenhAn hsba) throws Exception {
         if(hsba == null) return;
         
-        try {
-            var benhNhan = hsba.getBenhNhan();
-            var cskb = hsba.getCoSoKhamBenh();
+        var benhNhan = hsba.benhNhan;
+        var cskb = hsba.coSoKhamBenh;
+        
+        if(benhNhan == null || cskb == null) return;
+        
+        var patient = patientHelper.getPatientBySobhyt(benhNhan.sobhyt);
+        var serviceProvider = organizationHelper.getOrganizationByMa(cskb.ma);
+        
+        var encounter = hsba.toFhir(patient, serviceProvider);
+        
+        if(encounter != null) {
+            var fhirId = getHsbaFhirId(hsba);
             
-            if(benhNhan == null || cskb == null) return;
-            
-            var patient = patientHelper.getPatientBySobhyt(benhNhan.sobhyt);
-            var serviceProvider = organizationHelper.getOrganizationByMa(cskb.ma);
-            
-            var encounters = hsba.toFhir(patient, serviceProvider);
-            
-            if(encounters != null && encounters.size() > 0) {
-                // Remove old data
-                removeOldFhirData(hsba);
-                
-                // Create new data
-                var hsbaEncounter = encounters.get(0);
-                hsbaEncounter = encounterDao.create(hsbaEncounter);
-                
-                for(int i = 1; i < encounters.size(); i++) {
-                    var vkEnc = encounters.get(i);
-                    vkEnc.setPartOf(FhirUtil.createReference(hsbaEncounter));
-                    encounterDao.create(vkEnc);
-                }
-            }
-        }catch(Exception e) {
-            log.error("Cannot save hsba id=" + hsba.getId() + " to fhir DB"); 
+            if(fhirId == null) {
+                encounterDao.create(encounter);
+            }else {
+                encounterDao.update(encounter, fhirId);
+            }            
         }
     }
     
@@ -274,7 +261,7 @@ public class HoSoBenhAnController {
                 throw new Exception(String.format("coSoKhamBenh with ma=%s not found", maCskb));
             }
             
-        	var hsba = objectMapper.convertValue(map, HoSoBenhAn.class);
+            var hsba = objectMapper.convertValue(map, HoSoBenhAn.class);
             hsba = hoSoBenhAnService.createOrUpdateFromHIS(benhNhan.id, coSoKhamBenh.id, hsba, jsonSt);
             
             // save to FHIR db

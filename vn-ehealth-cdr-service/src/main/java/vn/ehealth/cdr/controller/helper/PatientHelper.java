@@ -19,7 +19,7 @@ public class PatientHelper {
         
         var params = mapOf( 
                 "identifier.value", (Object) sobhyt,
-                "identifier.system",  IdentifierSystem.DINH_DANH_Y_TE                            
+                "identifier.system",  IdentifierSystem.INSURANCE_NUMBER                            
             );
 
         var query = MongoUtils.createQuery(params);

@@ -2,6 +2,7 @@ package vn.ehealth.emr.controller.noitru;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +59,8 @@ public class DanhSachBenhNhanController {
         var criteria = createQuery(falcutyCode, chiefComplaintICD, keyword);
         return encounterDao.countResource(criteria);
     }
+    
+    
    
     
     @GetMapping("/search")
@@ -72,14 +75,15 @@ public class DanhSachBenhNhanController {
 
         encList.forEach(x -> DatabaseUtil.setReferenceResource(x.getSubject()));
         
-        var encDtoList = transform(encList, EncounterDTO::fromFhir);
+        var encDtoList = new ArrayList<>();
         
-        for(var encDto : encDtoList) {
-            if(encDto.subject == null) continue;
-            
+        for(var enc : encList) {
+            if(!enc.hasSubject()) continue;
+            var encDto = EncounterDTO.fromFhir(enc);
             var patient = (Patient) encDto.subject.resource;
             var patientDto = PatientDTO.fromFhir(patient);
             encDto.computes.put("patient", patientDto);
+            encDtoList.add(encDto);
         }
         
         return ResponseEntity.ok(encDtoList);

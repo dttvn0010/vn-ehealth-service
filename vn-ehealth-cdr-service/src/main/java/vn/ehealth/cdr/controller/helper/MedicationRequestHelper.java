@@ -20,7 +20,7 @@ public class MedicationRequestHelper {
     
     public List<MedicationRequest> getMedicationRequestByDonThuoc(String soDon) {
         var params = mapOf(
-                        "groupIdentifier.system", (Object) IdentifierSystem.DON_THUOC,
+                        "groupIdentifier.system", (Object) IdentifierSystem.MEDICATION_REQUEST,
                         "groupIdentifier.value", soDon
                     );
         

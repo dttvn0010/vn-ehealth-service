@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
-import vn.ehealth.hl7.fhir.core.util.Constants.LoaiDichVuKT;
+import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "chan_doan_hinh_anh")
@@ -89,7 +89,7 @@ public class ChanDoanHinhAnh extends DichVuKyThuat {
     public CodeableConcept getCategory() {
         return createCodeableConcept(LoaiDichVuKT.CHAN_DOAN_HINH_ANH, 
                 MessageUtils.get("text.CT"), 
-                CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
+                CodeSystemValue.DIAGNOSTIC_SERVICE_SECTIONS);
     }
 
     @JsonIgnore

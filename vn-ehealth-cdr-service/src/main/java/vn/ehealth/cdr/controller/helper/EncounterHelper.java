@@ -22,7 +22,7 @@ public class EncounterHelper {
     public Encounter getEncounterByMaHsba(String maYte) {
         var params = mapOf(
                 "identifier.value", (Object) maYte,
-                "identifier.system", IdentifierSystem.MA_HO_SO                      
+                "identifier.system", IdentifierSystem.MEDICAL_RECORD                      
             );
 
         var query = MongoUtils.createQuery(params);

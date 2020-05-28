@@ -20,7 +20,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseType;
 
 
 @Document(collection = "condition")
-//@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
+@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1}", name = "index_by_default")
 public class ConditionEntity extends BaseResource {
 
     public static class ConditionStage extends BaseBackboneElement {        

@@ -37,6 +37,14 @@ public class FhirUtil {
         return FPUtil.findFirst(lst, x -> url.equals(x.getUrl()));
     }
     
+    public static Identifier findIdentifierBySystem(List<Identifier> lst, @Nonnull String system) {
+    	return FPUtil.findFirst(lst, x -> system.equals(x.getSystem()));
+    }
+    
+    public static ContactPoint findContactPointBySytem(List<ContactPoint> lst, @Nonnull ContactPointSystem system) {
+    	return FPUtil.findFirst(lst, x -> system.equals(x.getSystem()));    			
+    }
+    
     public static Identifier createIdentifier(String value, String system) {
         var identifier = new Identifier();
         identifier.setValue(value);
@@ -86,6 +94,17 @@ public class FhirUtil {
         var concept = new CodeableConcept();
         concept.setText(text);
         return concept;
+    }
+    
+    public static String getCodeableConceptDisplay(CodeableConcept codeableConcept) {
+        if(codeableConcept != null) {
+            var coding = codeableConcept.getCodingFirstRep();
+            if(coding.hasCode()) {
+                return String.format("%s|(%s)", coding.getDisplay(), coding.getCode());
+            }
+            return codeableConcept.getText();
+        }
+        return "";
     }
     
     public static Annotation createAnnotation(String text) {

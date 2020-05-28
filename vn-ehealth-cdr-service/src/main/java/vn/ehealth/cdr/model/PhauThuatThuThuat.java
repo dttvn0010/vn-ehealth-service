@@ -25,7 +25,7 @@ import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
-import vn.ehealth.hl7.fhir.core.util.Constants.LoaiDichVuKT;
+import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.listOf;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
@@ -122,7 +122,7 @@ public class PhauThuatThuThuat extends DichVuKyThuat {
     public CodeableConcept getCategory() {
         return createCodeableConcept(LoaiDichVuKT.PHAU_THUAT_THU_THUAT, 
                 MessageUtils.get("text.SUR"), 
-                CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
+                CodeSystemValue.DIAGNOSTIC_SERVICE_SECTIONS);
     }
 
     @JsonIgnore

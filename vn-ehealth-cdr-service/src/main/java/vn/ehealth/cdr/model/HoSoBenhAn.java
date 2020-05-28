@@ -13,6 +13,7 @@ import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Organization;
 import org.hl7.fhir.r4.model.Patient;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
@@ -23,7 +24,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import vn.ehealth.cdr.service.ServiceFactory;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
-import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createIdentifier;
@@ -146,10 +146,14 @@ public class HoSoBenhAn {
     
     @Id public ObjectId id;
             
-    public DanhMuc dmLoaiBenhAn;    
+    public DanhMuc dmLoaiBenhAn;   
+    
     public ObjectId benhNhanId;    
+    @Transient public BenhNhan benhNhan;
+    
     public ObjectId coSoKhamBenhId;
-           
+    @Transient public CoSoKhamBenh coSoKhamBenh;       
+    
     public int nguonDuLieu;    
     public int trangThai;
     public String maYte;
@@ -349,11 +353,11 @@ public class HoSoBenhAn {
         return "";
     }
     
-    public List<Encounter> toFhir(Patient patient, Organization serviceProvider) {
-        if(patient == null || serviceProvider == null) return new ArrayList<>();
+    public Encounter toFhir(Patient patient, Organization serviceProvider) {
+        if(patient == null || serviceProvider == null) return null;
         
         var enc = new Encounter();
-        enc.setIdentifier(listOf(createIdentifier(maYte, IdentifierSystem.MA_HO_SO)));        
+        enc.setIdentifier(listOf(createIdentifier(maYte, IdentifierSystem.MEDICAL_RECORD)));        
         enc.setSubject(FhirUtil.createReference(patient));
         enc.setServiceProvider(FhirUtil.createReference(serviceProvider));        
         
@@ -361,27 +365,6 @@ public class HoSoBenhAn {
             enc.setPeriod(createPeriod(quanLyNguoiBenh.ngayGioVaoVien, quanLyNguoiBenh.ngayGioRaVien));
         }
         
-        var loaiBenhAn = DanhMuc.toConcept(dmLoaiBenhAn, CodeSystemValue.LOAI_KHAM_BENH);
-        enc.setType(listOf(loaiBenhAn));
-        
-        var lst = listOf(enc);
-        
-        if(dsVaoKhoa != null) {
-            for(var vk : dsVaoKhoa) {                
-                var vkEnc = new Encounter();
-                vkEnc.setSubject(enc.getSubject());
-                var type = DanhMuc.toConcept(vk.dmKhoaDieuTri, CodeSystemValue.KHOA_DIEU_TRI);
-                vkEnc.setType(listOf(type));
-                vkEnc.setServiceProvider(vkEnc.getServiceProvider());
-                vkEnc.setPeriod(createPeriod(vk.ngayGioVaoKhoa, vk.ngayKetThucDieuTri));
-                
-                if(vk.bacSiDieuTri != null) {
-                    var participant = vkEnc.addParticipant();
-                    participant.setIndividual(CanboYte.toRef(bacSyDieuTri));         
-                }
-                lst.add(vkEnc);
-            }
-        }
-        return lst;
+        return enc;
     }
 }

@@ -96,7 +96,7 @@ public class CodeSystemController {
     	    propParam.setName("property");
     	    
     	    var codePart = propParam.addPart();
-    	    codePart.setName("code").setValue(new CodeType("slug"));
+    	    codePart.setName("code").setValue(new CodeType("display"));
     	    
     	    var valuePart = propParam.addPart();
     	    valuePart.setName("value").setValue(new StringType(keyword));
@@ -134,18 +134,7 @@ public class CodeSystemController {
 		if(codeSystem != null) {
 			var concepts = conceptDao.getByCodeSystem(codeSystem.getId());
 			for(var concept : concepts) {				
-				var item = mapOf("code", concept.code, "display", concept.display);
-				var vnDisplayProp = FPUtil.findFirst(concept.property, x -> "vn_display".equals(x.code));
-				if(vnDisplayProp != null) {
-					String vnDisplay = String.valueOf(((BasePrimitiveType)vnDisplayProp.value).value);
-					if(!org.apache.commons.lang.StringUtils.isEmpty(vnDisplay)) {
-						int pos = vnDisplay.lastIndexOf('|');
-						if(pos > 0) {
-							vnDisplay = vnDisplay.substring(0, pos).strip();
-						}
-						item.put("vn_display", vnDisplay);
-					}
-				}
+				var item = mapOf("code", concept.code, "display", concept.display);				
 				result.add(item);
 			}
 		}

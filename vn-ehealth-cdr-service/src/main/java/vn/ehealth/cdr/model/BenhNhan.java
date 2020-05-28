@@ -148,13 +148,13 @@ public class BenhNhan {
         obj.setBirthDate(ngaysinh);
         
         if(!StringUtils.isBlank(sobhyt)) {
-            var mohIdentifier = createIdentifier(sobhyt, IdentifierSystem.DINH_DANH_Y_TE, 
+            var mohIdentifier = createIdentifier(sobhyt, IdentifierSystem.INSURANCE_NUMBER, 
                                                     null, ngayHetHanTheBhyt);
             obj.addIdentifier(mohIdentifier);
         }
         
         if(!StringUtils.isBlank(idDinhDanhPhu)) {
-            var nationalIdentifier = createIdentifier(idDinhDanhPhu, IdentifierSystem.CMND);
+            var nationalIdentifier = createIdentifier(idDinhDanhPhu, IdentifierSystem.NATIONAL_ID);
             obj.addIdentifier(nationalIdentifier);
         }
         

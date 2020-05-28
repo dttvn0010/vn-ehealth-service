@@ -22,9 +22,9 @@ import vn.ehealth.cdr.repository.HoSoBenhAnRepository;
 import vn.ehealth.cdr.utils.CDRUtils;
 import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.Constants.MA_HANH_DONG;
-import vn.ehealth.hl7.fhir.core.util.Constants.NGUON_DU_LIEU;
-import vn.ehealth.hl7.fhir.core.util.Constants.TRANGTHAI_HOSO;
+import vn.ehealth.cdr.utils.CDRConstants.MA_HANH_DONG;
+import vn.ehealth.cdr.utils.CDRConstants.NGUON_DU_LIEU;
+import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_HOSO;
 
 @Service
 public class HoSoBenhAnService {

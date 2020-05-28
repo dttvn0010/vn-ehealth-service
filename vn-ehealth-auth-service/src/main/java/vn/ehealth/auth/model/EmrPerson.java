@@ -104,7 +104,7 @@ public class EmrPerson {
         obj.setBirthDate(ngaysinh);
         
         if(!StringUtils.isBlank(cmnd)) {
-            var nationalIdentifier = createIdentifier(cmnd, IdentifierSystem.CMND);
+            var nationalIdentifier = createIdentifier(cmnd, IdentifierSystem.NATIONAL_ID);
             obj.addIdentifier(nationalIdentifier);
         }
         

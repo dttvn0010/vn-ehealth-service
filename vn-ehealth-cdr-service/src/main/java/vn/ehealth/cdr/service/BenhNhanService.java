@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import vn.ehealth.cdr.model.BenhNhan;
 import vn.ehealth.cdr.repository.BenhNhanRepository;
 import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.hl7.fhir.core.util.Constants.MA_HANH_DONG;
+import vn.ehealth.cdr.utils.CDRConstants.MA_HANH_DONG;
 
 @Service
 public class BenhNhanService {

@@ -12,8 +12,8 @@ import vn.ehealth.cdr.model.ChanDoanHinhAnh;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.repository.ChanDoanHinhAnhRepository;
 import vn.ehealth.cdr.utils.JsonUtil;
-import vn.ehealth.hl7.fhir.core.util.Constants.MA_HANH_DONG;
-import vn.ehealth.hl7.fhir.core.util.Constants.TRANGTHAI_DULIEU;
+import vn.ehealth.cdr.utils.CDRConstants.MA_HANH_DONG;
+import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
 
 @Service
 public class ChanDoanHinhAnhService {

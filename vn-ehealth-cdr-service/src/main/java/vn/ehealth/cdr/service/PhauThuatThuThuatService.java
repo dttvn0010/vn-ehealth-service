@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.PhauThuatThuThuat;
 import vn.ehealth.cdr.repository.PhauThuatThuThuatRepository;
-import vn.ehealth.hl7.fhir.core.util.Constants.MA_HANH_DONG;
-import vn.ehealth.hl7.fhir.core.util.Constants.TRANGTHAI_DULIEU;
+import vn.ehealth.cdr.utils.CDRConstants.MA_HANH_DONG;
+import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
 
 @Service
 public class PhauThuatThuThuatService {

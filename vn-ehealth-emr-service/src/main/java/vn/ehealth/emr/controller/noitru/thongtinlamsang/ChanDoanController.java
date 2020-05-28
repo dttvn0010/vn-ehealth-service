@@ -95,13 +95,15 @@ public class ChanDoanController {
 			condition = conditionDao.create(condition);			
 			
 			var diagnosis = encounter.addDiagnosis();
-			diagnosis.setCondition(FhirUtil.createReference(condition));
+			var conditionRef = FhirUtil.createReference(condition);
+			conditionRef.setDisplay(FhirUtil.getCodeableConceptDisplay(condition.getCode()));
+			diagnosis.setCondition(conditionRef);
 			
 			if(body.rank != null) {
 				diagnosis.setRank(body.rank);
 			}
 			
-			diagnosis.setUse(CodingDTO.toCodeableConcept(body.loaiChanDoan, "http://hl7.org/fhir/diagnosis-role"));
+			diagnosis.setUse(CodingDTO.toCodeableConcept(body.loaiChanDoan,  CodeSystemValue.DIAGNOSIS_ROLE));
 			
 			encounterDao.update(encounter, encounter.getIdElement());
 			

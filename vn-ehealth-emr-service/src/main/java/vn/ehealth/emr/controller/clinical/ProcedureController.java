@@ -33,7 +33,7 @@ public class ProcedureController {
         
         if(serviceTypeCode.isPresent()) {
             params.put("category.coding.code", serviceTypeCode.get());
-            params.put("category.coding.system", CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
+            params.put("category.coding.system", CodeSystemValue.DIAGNOSTIC_SERVICE_SECTIONS);
         };
         
         return MongoUtils.createQuery(params);

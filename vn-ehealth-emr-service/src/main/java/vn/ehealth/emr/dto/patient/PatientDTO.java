@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import org.hl7.fhir.r4.model.Patient;
 
+import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
+import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.patient.entity.PatientEntity;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
@@ -42,6 +44,11 @@ public class PatientDTO extends PatientEntity {
     	
         var dto = fhirToEntity(obj, PatientDTO.class);
         dto.computes.put("age", dto.computeAge());
+        
+        var insuranceNumber = FhirUtil.findIdentifierBySystem(obj.getIdentifier(), IdentifierSystem.INSURANCE_NUMBER);
+        if(insuranceNumber != null) {
+            dto.computes.put("insuranceNumber", insuranceNumber.getValue());
+        }
         return dto;
     }
 }

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
-import vn.ehealth.hl7.fhir.core.util.Constants.LoaiDichVuKT;
+import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 
@@ -90,7 +90,7 @@ public class XetNghiem {
         public CodeableConcept getCategory() {
             return createCodeableConcept(LoaiDichVuKT.XET_NGHIEM, 
                     MessageUtils.get("text.LAB"), 
-                    CodeSystemValue.LOAI_DICH_VU_KY_THUAT);
+                    CodeSystemValue.DIAGNOSTIC_SERVICE_SECTIONS);
         }
 
         @JsonIgnore

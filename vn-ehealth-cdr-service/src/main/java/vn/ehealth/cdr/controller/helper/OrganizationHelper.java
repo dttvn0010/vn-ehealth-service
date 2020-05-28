@@ -17,7 +17,7 @@ public class OrganizationHelper {
     public Organization getOrganizationByMa(String maCskb) {
 
         var params = mapOf(
-                "identifier.system", (Object) IdentifierSystem.CO_SO_KHAM_BENH,
+                "identifier.system", (Object) IdentifierSystem.PROVIDER,
                 "identifier.value", maCskb
             );
 

@@ -5,8 +5,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hl7.fhir.r4.model.IdType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -30,8 +29,6 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 @RestController
 @RequestMapping("/api/benh_nhan")
 public class BenhNhanController {
-    
-    private Logger log = LoggerFactory.getLogger(BenhNhanController.class);
     
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
@@ -65,26 +62,26 @@ public class BenhNhanController {
         return ResponseEntity.ok(mapOf("id", id));
     }
     
-    private void removeOldFhirData(@Nonnull BenhNhan benhNhan) {
+    private IdType getBenhNhanFhirId(@Nonnull BenhNhan benhNhan) {
         var patient = patientHelper.getPatientBySobhyt(benhNhan.sobhyt);
         if(patient != null) {
-            patientDao.remove(patient.getIdElement());
+            return patient.getIdElement();
         }
+        return null;
     }
     
-    private void saveToFhirDb(BenhNhan benhNhan) {
+    private void saveToFhirDb(BenhNhan benhNhan) throws Exception {
         if(benhNhan == null) return;
         
-        try {                        
-            var patient = benhNhan.toFhir();
-            
-            if(patient != null) {
-                removeOldFhirData(benhNhan);
+        var patient = benhNhan.toFhir();
+        
+        if(patient != null) {
+            var fhirId = getBenhNhanFhirId(benhNhan);
+            if(fhirId == null) {
                 patientDao.create(patient);
+            }else {
+                patientDao.update(patient, fhirId);
             }
-            
-        }catch(Exception e) {
-            log.error("Cannot save benhNhan id=" + benhNhan.getId() + " to fhir DB", e);
         }
     }
 

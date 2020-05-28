@@ -11,17 +11,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Encounter;
-import org.hl7.fhir.r4.model.Organization;
 import org.hl7.fhir.r4.model.Procedure;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
-import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
-import vn.ehealth.utils.MongoUtils;
 
 public abstract class DichVuKyThuat {
 	
@@ -47,42 +41,8 @@ public abstract class DichVuKyThuat {
     
     abstract public CodeableConcept getCode();
     
-	private Organization getKhoaDieuTri(Reference cskbRef, String maKhoa) {
-	    if(cskbRef != null && cskbRef.hasReference()) {
-	        var params = mapOf(
-	                        "partOf.reference", (Object) cskbRef.getReference(),
-	                        "type.coding.system", CodeSystemValue.KHOA_DIEU_TRI,
-	                        "type.coding.code", dmKhoaDieuTri.ma
-                        );
-	        var query = MongoUtils.createQuery(params);
-	        return DaoFactory.getOrganizationDao().getResource(query);
-	    }
-	    return null;	    
-	}
-	
-	private Encounter getVaoKhoaEncounter(Encounter hsbaEncounter) {
-		if(hsbaEncounter == null 
-			|| dmKhoaDieuTri == null) {
-			return null;
-		}		
-		var khoaDieuTri = getKhoaDieuTri(hsbaEncounter.getServiceProvider(), dmKhoaDieuTri.ma);
-		
-		if(khoaDieuTri != null) {
-		    var parent = (Object) (ResourceType.Encounter + "/" + hsbaEncounter.getId());
-		    var params = mapOf("partOf.reference", parent);
-			var query = MongoUtils.createQuery(params);
-			return DaoFactory.getEncounterDao().getResource(query);
-		}
-    	return null;
-	}
-	
 	protected Map<String, Object> toFhirCommon(Encounter enc) {
-	    
-        if(enc != null) {
-            var vkEnc = getVaoKhoaEncounter(enc);
-            if(vkEnc != null) enc = vkEnc;
-        }
-        
+	   
         if(enc == null) new HashMap<>();
         
         var procedure = new Procedure();

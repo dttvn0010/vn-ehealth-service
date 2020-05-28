@@ -108,7 +108,7 @@ public class DonThuoc {
             mRequest.setEncounter(createReference(enc));
             mRequest.setRequester(CanboYte.toRef(bacSiKeDon));
             mRequest.setAuthoredOn(ngayKeDon);
-            mRequest.setGroupIdentifier(createIdentifier(soDon, IdentifierSystem.DON_THUOC));
+            mRequest.setGroupIdentifier(createIdentifier(soDon, IdentifierSystem.MEDICATION_REQUEST));
             
             mRequest.setMedication(DanhMuc.toConcept(dmThuoc, CodeSystemValue.DM_THUOC));
            

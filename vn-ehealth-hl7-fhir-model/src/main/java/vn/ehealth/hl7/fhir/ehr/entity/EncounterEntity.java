@@ -19,7 +19,7 @@ import vn.ehealth.hl7.fhir.core.entity.BaseReference;
 import vn.ehealth.hl7.fhir.core.entity.BaseResource;
 
 @Document(collection = "encounter")
-//@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1, 'serviceProvider.reference':1, 'partOf.reference':1, 'episodeOfCare.reference':1, 'subject.reference':1}", name = "index_by_default")
+@CompoundIndex(def = "{'_fhirId':1,'_active':1,'_version':1, 'serviceProvider.reference':1, 'partOf.reference':1, 'episodeOfCare.reference':1, 'subject.reference':1}", name = "index_by_default")
 public class EncounterEntity extends BaseResource{
     
     public static class EncounterLocation extends BaseBackboneElement {

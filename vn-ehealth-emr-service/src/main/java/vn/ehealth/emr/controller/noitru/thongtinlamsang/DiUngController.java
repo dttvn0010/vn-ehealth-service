@@ -78,8 +78,8 @@ public class DiUngController {
 			// allergy info
 			allergy.setCriticality(AllergyIntoleranceCriticality.fromCode(body.mucDoNghiemTrong.code));
 			allergy.addCategory(AllergyIntoleranceCategory.fromCode(body.loaiDiUng.code));
-			allergy.setClinicalStatus(CodingDTO.toCodeableConcept(body.trangThai, CodeSystemValue.TRANG_THAI_DI_UNG));
-			allergy.setCode(CodingDTO.toCodeableConcept(body.chatDiUng, CodeSystemValue.CHAT_DI_UNG));
+			allergy.setClinicalStatus(CodingDTO.toCodeableConcept(body.trangThai, CodeSystemValue.ALLERGY_INTOLERANCE_CLINICAL));
+			allergy.setCode(CodingDTO.toCodeableConcept(body.chatDiUng, CodeSystemValue.ALLERGY_INTOLERANCE_CODE));
 			if(body.tuoiDiUng != null) {
 				var age = new Age();
 				age.setValue(body.tuoiDiUng);
@@ -88,9 +88,9 @@ public class DiUngController {
 			if(body.items != null) {
 				for(var item : body.items) {
 					var reaction = new AllergyIntolerance.AllergyIntoleranceReactionComponent();
-					reaction.setSubstance(CodingDTO.toCodeableConcept(item.sanPham, CodeSystemValue.SAN_PHAM_DI_UNG));
-					reaction.addManifestation(CodingDTO.toCodeableConcept(item.phanUng, CodeSystemValue.PHAN_UNG_DI_UNG));
-					reaction.setExposureRoute(CodingDTO.toCodeableConcept(item.viTri, CodeSystemValue.VI_TRI_DI_UNG));
+					reaction.setSubstance(CodingDTO.toCodeableConcept(item.sanPham, CodeSystemValue.SUBSTANCE_CODE));
+					reaction.addManifestation(CodingDTO.toCodeableConcept(item.phanUng, CodeSystemValue.CLINICAL_FINDING));
+					reaction.setExposureRoute(CodingDTO.toCodeableConcept(item.viTri, CodeSystemValue.ROUTE_CODE));
 					var ann = reaction.addNote();
 					ann.setText(item.moTaPhanUng);
 				}
