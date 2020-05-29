@@ -2,7 +2,6 @@ package vn.ehealth.emr.controller.noitru.thongtinlamsang;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.emr.dto.base.CodingDTO;
-import vn.ehealth.emr.dto.clinical.AllergyIntoleranceDTO;
-import vn.ehealth.emr.dto.ehr.EncounterDTO.DiagnosisDTO;
 import vn.ehealth.emr.dto.medication.ImmunizationDTO;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
