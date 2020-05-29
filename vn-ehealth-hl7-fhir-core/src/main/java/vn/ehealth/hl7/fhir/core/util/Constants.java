@@ -62,6 +62,7 @@ public class Constants {
         final public static String CLINICAL_FINDING = codeSystems.getProperty("clinical-findings");        
         final public static String ALLERGY_INTOLERANCE_CRITICALITY = codeSystems.getProperty("allergy-intolerance-criticality");
         final public static String ALLERGY_INTOLERANCE_CODE = codeSystems.getProperty("allergyintolerance-code");
+        final public static String VACCINE_CODE = codeSystems.getProperty("vaccine-code");
         
         //emr.com.vn
         final public static String DVHC = codeSystems.getProperty("DiaDdanhHanhChinh");
