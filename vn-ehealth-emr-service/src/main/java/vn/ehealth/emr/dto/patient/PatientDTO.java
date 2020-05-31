@@ -3,10 +3,12 @@ package vn.ehealth.emr.dto.patient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Patient;
 
 import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
+import vn.ehealth.emr.dto.base.CodingDTO;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.patient.entity.PatientEntity;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -52,18 +54,18 @@ public class PatientDTO extends PatientEntity {
         }
         
         var raceExt = FhirUtil.findExtensionByURL(obj.getExtension(), ExtensionURL.DAN_TOC);
-        if(raceExt != null) {
-            dto.computes.put("race", raceExt.getValue());
+        if(raceExt != null && raceExt.getValue() instanceof CodeableConcept) {
+            dto.computes.put("race", CodingDTO.fromCodeableConcept((CodeableConcept) raceExt.getValue()));
         }
         
         var jobExt = FhirUtil.findExtensionByURL(obj.getExtension(), ExtensionURL.NGHE_NGHIEP);
-        if(jobExt != null) {
-            dto.computes.put("job", jobExt.getValue());
+        if(jobExt != null && jobExt.getValue() instanceof CodeableConcept) {
+            dto.computes.put("job", CodingDTO.fromCodeableConcept((CodeableConcept) jobExt.getValue()));
         }
         
         var nationalityExt = FhirUtil.findExtensionByURL(obj.getModifierExtension(), ExtensionURL.QUOC_TICH);
-        if(nationalityExt != null) {
-            dto.computes.put("nationality", nationalityExt.getValue());
+        if(nationalityExt != null && nationalityExt.getValue() instanceof CodeableConcept) {
+            dto.computes.put("nationality", CodingDTO.fromCodeableConcept((CodeableConcept) nationalityExt.getValue()));
         }
         
         return dto;

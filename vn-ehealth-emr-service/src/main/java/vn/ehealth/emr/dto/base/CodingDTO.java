@@ -24,4 +24,19 @@ public class CodingDTO {
 		if(dto == null) return null;
 		return FhirUtil.createCodeableConcept(dto.code, dto.display, codeSystemUrl);
 	}
+	
+	public static CodingDTO fromCodeableConcept(CodeableConcept obj) {
+	    if(obj == null) return null;
+	    
+	    var dto = new CodingDTO();
+	    dto.display = obj.getText();
+	    
+	    if(obj.hasCoding()) {
+	        var coding = obj.getCodingFirstRep();
+	        dto.code = coding.getCode();
+	        dto.display = coding.getDisplay();
+	    }
+	    
+	    return dto;
+	}
 }
