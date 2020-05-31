@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.r4.model.Patient;
 
 import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
@@ -49,9 +50,16 @@ public class PatientDTO extends PatientEntity {
         dto.computes.put("age", dto.computeAge());
         
         var insuranceNumber = FhirUtil.findIdentifierBySystem(obj.getIdentifier(), IdentifierSystem.INSURANCE_NUMBER);
-        if(insuranceNumber != null) {
-            dto.computes.put("insuranceNumber", insuranceNumber.getValue());
-        }
+        dto.computes.put("insuranceNumber", insuranceNumber != null? insuranceNumber.getValue() : "");
+        
+        var nationalId = FhirUtil.findIdentifierBySystem(obj.getIdentifier(), IdentifierSystem.NATIONAL_ID);
+        dto.computes.put("nationalId", nationalId != null? nationalId.getValue(): "");
+        
+        var phone = FhirUtil.findContactPointBySytem(obj.getTelecom(), ContactPointSystem.PHONE);
+        dto.computes.put("phone", phone != null? phone.getValue() : "");
+        
+        var email = FhirUtil.findContactPointBySytem(obj.getTelecom(), ContactPointSystem.EMAIL);
+        dto.computes.put("email", email != null? email.getValue() : "");        
         
         var raceExt = FhirUtil.findExtensionByURL(obj.getExtension(), ExtensionURL.DAN_TOC);
         if(raceExt != null && raceExt.getValue() instanceof CodeableConcept) {
