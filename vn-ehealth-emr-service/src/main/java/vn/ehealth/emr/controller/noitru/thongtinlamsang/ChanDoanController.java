@@ -156,7 +156,7 @@ public class ChanDoanController {
 			conditionRef.setDisplay(FhirUtil.getCodeableConceptDisplay(condition.getCode()));
 			diagnosis.setCondition(conditionRef);
 			
-			if(body.rank != null) {
+			if(DiagnosisRole.EDA.equals(body.loaiChanDoan.code)) {
 				diagnosis.setRank(body.rank);
 			}
 			
@@ -200,7 +200,7 @@ public class ChanDoanController {
                 condition.setRecordedDate(new Date());
                 condition = conditionDao.update(condition, condition.getIdElement()); 
                 
-                if(body.rank != null) {
+                if(DiagnosisRole.EDA.equals(body.loaiChanDoan.code)) {
                     diagnosis.setRank(body.rank);
                 }else {
                     diagnosis.setRankElement(new PositiveIntType());
