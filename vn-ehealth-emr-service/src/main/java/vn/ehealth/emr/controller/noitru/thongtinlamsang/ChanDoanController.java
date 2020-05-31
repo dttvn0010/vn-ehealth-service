@@ -2,6 +2,7 @@ package vn.ehealth.emr.controller.noitru.thongtinlamsang;
 
 import org.apache.commons.lang.StringUtils;
 import org.hl7.fhir.r4.model.Condition;
+import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.PositiveIntType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -86,7 +87,7 @@ public class ChanDoanController {
 	
 	
 	
-	private Map<String, List<String>> validateForm(ChanDoanBody body) {
+	private Map<String, List<String>> validateForm(ChanDoanBody body, String conditionId, Encounter enc) {
 	    var errors = new HashMap<String, List<String>>();
 	    
 	    if(body.maICD10 == null || StringUtils.isBlank(body.maICD10.code)) {
@@ -103,18 +104,38 @@ public class ChanDoanController {
 	        }
 	    }
 	    
+	    if(body.loaiChanDoan != null) {
+	        
+    	    for(var diagnosis: enc.getDiagnosis()) {
+    	        var useCode = diagnosis.getUse().getCodingFirstRep().getCode();
+    	        
+    	        if(useCode == null || DiagnosisRole.DDA.equals(useCode) || DiagnosisRole.EDA.equals(useCode)) {
+    	            continue;
+    	        }
+    	        
+    	        if(diagnosis.getCondition().getReference().endsWith("/" + conditionId)) {
+    	            continue;
+    	        }
+    	        
+    	        if(useCode.equals(body.loaiChanDoan.code)) {
+    	            EmrUtils.addError(errors, "loaiChanDoan", MessageUtils.get("diagnosis.role.already.exist"));
+    	        }
+    	    }
+	    }
+	    
 	    return errors;
 	}
 	
 	@PostMapping("/add")
 	public ResponseEntity<?> addChanDoan(@RequestParam String encounterId,  @RequestBody ChanDoanBody body) {
 		try {
-		    var errors = validateForm(body);
+		    var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
+		    
+		    var errors = validateForm(body, null, encounter);
 		    if(errors.size() > 0) {
 		        return ResponseEntity.ok(mapOf("success", false, "errors", errors));
-		    }
+		    }			
 			
-			var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
 			var user = UserUtil.getCurrentUser().orElse(null);
 			var practitionerId = user != null? user.fhirPractitionerId : null;
 			var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
@@ -154,12 +175,13 @@ public class ChanDoanController {
                             @RequestParam String conditionId,
                             @RequestBody ChanDoanBody body) {
         try {
-            var errors = validateForm(body);
+            var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
+            
+            var errors = validateForm(body, conditionId, encounter);
             if(errors.size() > 0) {
                 return ResponseEntity.ok(mapOf("success", false, "errors", errors));
-            }
+            }            
             
-            var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
             var user = UserUtil.getCurrentUser().orElse(null);
             var practitionerId = user != null? user.fhirPractitionerId : null;
             var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
