@@ -10,7 +10,6 @@ import vn.ehealth.emr.dto.base.CodingDTO;
 import vn.ehealth.emr.dto.diagnostic.ObservationDTO;
 import vn.ehealth.emr.helper.HelperFactory;
 import vn.ehealth.emr.utils.EmrConstants.DiagnosisRole;
-import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.hl7.fhir.ehr.entity.EncounterEntity;
@@ -29,20 +28,15 @@ public class EncounterDTO extends EncounterEntity {
 		}
 	}
 	
-	private static CodingDTO getEDCondition(Encounter enc) {
-        var ed = FPUtil.findFirst(enc.getDiagnosis(), 
-                    x -> DiagnosisRole.ED.equals(x.getUse().getCodingFirstRep().getCode()));
-        if(ed != null && ed.hasCondition()) {
-            return CodingDTO.fromText(ed.getCondition().getDisplay());
-        }
-        
-        return null;
+	private static CodingDTO getCondition(Encounter enc, String type) {
+        var lst = getConditions(enc, type);
+        return lst.size() > 0 ? lst.get(0) : null;
     }
     
-    private static List<CodingDTO> getEDACondition(Encounter enc) {
+    private static List<CodingDTO> getConditions(Encounter enc, String type) {
         var lst = new ArrayList<CodingDTO>();
         for(var diagnosis : enc.getDiagnosis()) {
-            if(DiagnosisRole.EDA.equals(diagnosis.getUse().getCodingFirstRep().getCode())) {
+            if(type.equals(diagnosis.getUse().getCodingFirstRep().getCode())) {
                 if(diagnosis.hasCondition()) {
                     String conditionDisplay = diagnosis.getCondition().getDisplay(); 
                     lst.add(CodingDTO.fromText(conditionDisplay));
@@ -66,8 +60,9 @@ public class EncounterDTO extends EncounterEntity {
         }
         
         // Chan doan
-        dto.computes.put("edCondition", getEDCondition(obj));
-        dto.computes.put("edaCondition", getEDACondition(obj));
+        dto.computes.put("adCondition", getCondition(obj, DiagnosisRole.AD));
+        dto.computes.put("edCondition", getCondition(obj,  DiagnosisRole.ED));
+        dto.computes.put("edaConditions", getConditions(obj,  DiagnosisRole.EDA));
         
         // Chung nang song
         dto.computes.put("heartRateObs", ObservationDTO.fromFhir(dto.getLastObservation(ChucNangSong.HEART_RATE)));

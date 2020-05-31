@@ -1,5 +1,6 @@
 package vn.ehealth.emr.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -35,5 +36,12 @@ public class EmrUtils {
     
     public static BaseExtension findExtensionByURL(List<BaseExtension> lst, @Nonnull String url) {
         return FPUtil.findFirst(lst, x -> url.equals(x.url));
+    }
+    
+    public static void addError(@Nonnull Map<String, List<String>> errors, String field, String message) {
+        if(!errors.containsKey(field)) {
+            errors.put(field, new ArrayList<>());
+        }
+        errors.get(field).add(message);
     }
 }
