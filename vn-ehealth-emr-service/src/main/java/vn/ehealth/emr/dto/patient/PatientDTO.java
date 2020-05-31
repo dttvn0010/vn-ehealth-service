@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import org.hl7.fhir.r4.model.Patient;
 
+import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.patient.entity.PatientEntity;
@@ -49,6 +50,22 @@ public class PatientDTO extends PatientEntity {
         if(insuranceNumber != null) {
             dto.computes.put("insuranceNumber", insuranceNumber.getValue());
         }
+        
+        var raceExt = FhirUtil.findExtensionByURL(obj.getExtension(), ExtensionURL.DAN_TOC);
+        if(raceExt != null) {
+            dto.computes.put("race", raceExt.getValue());
+        }
+        
+        var jobExt = FhirUtil.findExtensionByURL(obj.getExtension(), ExtensionURL.NGHE_NGHIEP);
+        if(jobExt != null) {
+            dto.computes.put("job", jobExt.getValue());
+        }
+        
+        var nationalityExt = FhirUtil.findExtensionByURL(obj.getModifierExtension(), ExtensionURL.QUOC_TICH);
+        if(nationalityExt != null) {
+            dto.computes.put("nationality", nationalityExt.getValue());
+        }
+        
         return dto;
     }
 }
