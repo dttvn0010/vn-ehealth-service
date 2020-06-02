@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Transient;
 
 public class BaseBackboneElement {
 
+	public List<BaseExtension> extension;
 	public List<BaseExtension> modifierExtension;
 	
 	@Transient

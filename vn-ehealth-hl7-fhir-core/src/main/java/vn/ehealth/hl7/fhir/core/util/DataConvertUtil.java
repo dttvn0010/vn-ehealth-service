@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.hl7.fhir.r4.model.BackboneElement;
 import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DomainResource;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ca.uhn.fhir.model.api.annotation.Child;
+import vn.ehealth.hl7.fhir.core.entity.BaseBackboneElement;
 import vn.ehealth.hl7.fhir.core.entity.BaseCoding;
 import vn.ehealth.hl7.fhir.core.entity.BaseComplexType;
 import vn.ehealth.hl7.fhir.core.entity.BaseExtension;
@@ -562,6 +564,18 @@ public class DataConvertUtil {
 				}
 			}
 			
+			if(obj instanceof BackboneElement && ent instanceof BaseBackboneElement) {
+				var resource = ((BackboneElement) obj);
+				if (resource.hasExtension()) {
+					((BaseBackboneElement) ent).extension = FPUtil.transform(resource.getExtension(),
+							BaseExtension::fromExtension);
+				}
+				if (resource.hasModifierExtension()) {
+					((BaseBackboneElement) ent).modifierExtension = FPUtil.transform(resource.getModifierExtension(),
+							BaseExtension::fromExtension);
+				}
+			}
+			
 			if(obj instanceof Reference && ent instanceof BaseReference) {
 				((BaseReference) ent).resource = ((Reference) obj).getResource();
 			}
@@ -622,6 +636,19 @@ public class DataConvertUtil {
 				if (entExt != null && entExt.size() > 0) {
 					((Type) obj).setExtension(FPUtil.transform(entExt, SimpleExtension::toExtension));
 				}
+			}
+			
+			if(obj instanceof BackboneElement && ent instanceof BaseBackboneElement) {
+				var entExt = ((BaseBackboneElement) ent).extension;
+				if (entExt != null && entExt.size() > 0) {
+					((BackboneElement) obj).setExtension(FPUtil.transform(entExt, BaseExtension::toExtension));
+				}
+				
+				var modifiedEntExt = ((BaseBackboneElement) ent).modifierExtension;
+				if(modifiedEntExt != null && modifiedEntExt.size() > 0) {
+					((BackboneElement) obj).setModifierExtension(FPUtil.transform(modifiedEntExt, BaseExtension::toExtension));
+				}
+				
 			}
 
 			return (T) obj;
