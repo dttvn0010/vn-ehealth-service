@@ -4,9 +4,13 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.hl7.fhir.r4.model.Annotation;
 import org.hl7.fhir.r4.model.DateTimeType;
+import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Immunization;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
@@ -22,8 +26,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.auth.utils.UserUtil;
+import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.emr.dto.base.CodingDTO;
 import vn.ehealth.emr.dto.medication.ImmunizationDTO;
+import vn.ehealth.emr.utils.EmrUtils;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.DateUtil;
@@ -45,10 +51,11 @@ public class TiemChungController {
 		public CodingDTO vaccine;
 		public String noiTiem;
 		public String ngayTiem;
-		public String moTaPhanUngSauTiem;
-		public String ghiChu;
-		
+		public String moTaPhanUngSauTiem;	//extention
+		public String ghiChu;	//~note
+		// nguoi ghi nhan la nguoi dang chinh sua
 	}
+	
 	@GetMapping("/get_list")
 	public ResponseEntity<?> getDsTiemChung(@RequestParam String encounterId) {
 		var params = new HashMap<String,Object>();
@@ -57,13 +64,11 @@ public class TiemChungController {
 		var result = DataConvertUtil.transform(lst, ImmunizationDTO::fromFhir);
 		return ResponseEntity.ok(result);
 	}
-
 	
 	@GetMapping("/delete")
 	public ResponseEntity<?> deleteTiemChung(@RequestParam String id,
 			@RequestParam String immunizationId) {
 		try {
-//			var encounter = encounterDao.read(FhirUtil.createIdType(id));
 			immunizationDao.remove(FhirUtil.createIdType(immunizationId));
 			return ResponseEntity.ok(mapOf("success", true));
 		}catch(Exception e) {
@@ -71,43 +76,54 @@ public class TiemChungController {
 		}
 	}
 		
+	private Map<String, List<String>> validateForm(TiemChungBody body, String immunizationId, Encounter enc) {
+	    var errors = new HashMap<String, List<String>>();
+	    
+	    if(body.vaccine == null || StringUtils.isBlank(body.vaccine.code)) {
+	        EmrUtils.addError(errors, "vaccine", MessageUtils.get("validate.required"));
+	    }
+	    if(body.noiTiem == null ) {
+	    	EmrUtils.addError(errors, "noiTiem", MessageUtils.get("validate.required"));
+	    }
+	    
+	    return errors;
+	}
+	
 	@PostMapping("/add")
 	public ResponseEntity<?> addTiemChung(@RequestParam String encounterId,  @RequestBody TiemChungBody body) {
 		try {
 			var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
+			
+			var errors = validateForm(body, null, encounter);
+				if(errors.size() > 0) {
+			        return ResponseEntity.ok(mapOf("success", false, "errors", errors));
+			    }			
+				
+			
 			var user = UserUtil.getCurrentUser().orElse(null);
-			
 			var imm = new Immunization();
-			
 			var practitionerId = user != null? user.fhirPractitionerId : null;
 			var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
-			
 			var practitionerRef = FhirUtil.createReference(practitioner);
 			practitionerRef.setDisplay(practitioner.getNameFirstRep().getText());
 			imm.setRecorded(new Date());
-					
 			imm.setEncounter(FhirUtil.createReference(encounter));
 			imm.setPatient(encounter.getSubject());
 			imm.setVaccineCode(CodingDTO.toCodeableConcept(body.vaccine, CodeSystemValue.VACCINE_CODE));
 			if(body.ngayTiem != null) {
 				imm.setOccurrence(new DateTimeType(DateUtil.parseStringToDate(body.ngayTiem.substring(0, 10), "yyyy-MM-dd")));
 			}
-			
 			var ref = new Reference();
 			ref.setDisplay(body.noiTiem);
 			imm.setLocation(ref);
-			
 			var reaction = imm.addReaction();
 			var ext = reaction.addExtension();
 			ext.setValue(new StringType(body.moTaPhanUngSauTiem));
 			reaction.setDate(new Date());
 			reaction.setReported(true);
-			
-			
 			var note = new Annotation();
 			note.setText(body.ghiChu);
 			imm.addNote(note);
-			
 			immunizationDao.create(imm);
 			
 			return ResponseEntity.ok(mapOf("success", true));
@@ -122,25 +138,20 @@ public class TiemChungController {
 		try {
 			
 			var user = UserUtil.getCurrentUser().orElse(null);
-			
 			var imm = immunizationDao.read(FhirUtil.createIdType(immunizationId));
-			
 			var practitionerId = user != null? user.fhirPractitionerId : null;
 			var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
-			
 			var practitionerRef = FhirUtil.createReference(practitioner);
 			practitionerRef.setDisplay(practitioner.getNameFirstRep().getText());
+			
 			imm.setRecorded(new Date());
-			
-			
 			imm.setVaccineCode(CodingDTO.toCodeableConcept(body.vaccine, CodeSystemValue.VACCINE_CODE));
-			if(body.ngayTiem != null) {
+			if(!StringUtils.isBlank(body.ngayTiem)) {
 				imm.setOccurrence(new DateTimeType(DateUtil.parseStringToDate(body.ngayTiem.substring(0, 10), "yyyy-MM-dd")));
 			}
 			
-			var ref = new Reference();
+			var ref = imm.getLocation();
 			ref.setDisplay(body.noiTiem);
-			imm.setLocation(ref);
 			
 			var reaction = imm.getReactionFirstRep();
 			var ext = reaction.getExtensionFirstRep();
@@ -148,11 +159,10 @@ public class TiemChungController {
 			reaction.setDate(new Date());
 			reaction.setReported(true);
 			
-			
 			var note = imm.getNoteFirstRep();
 			note.setText(body.ghiChu);
-			
 			imm = immunizationDao.update(imm, imm.getIdElement()); 
+			
 			return ResponseEntity.ok(mapOf("success", true));
 			
 		}catch(Exception e) {
