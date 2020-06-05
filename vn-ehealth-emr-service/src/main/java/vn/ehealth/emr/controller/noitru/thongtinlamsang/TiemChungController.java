@@ -66,10 +66,9 @@ public class TiemChungController {
 	}
 	
 	@GetMapping("/delete")
-	public ResponseEntity<?> deleteTiemChung(@RequestParam String id,
-			@RequestParam String immunizationId) {
+	public ResponseEntity<?> deleteTiemChung(@RequestParam String id) {
 		try {
-			immunizationDao.remove(FhirUtil.createIdType(immunizationId));
+			immunizationDao.remove(FhirUtil.createIdType(id));
 			return ResponseEntity.ok(mapOf("success", true));
 		}catch(Exception e) {
 			return ResponseUtil.errorResponse(e);
