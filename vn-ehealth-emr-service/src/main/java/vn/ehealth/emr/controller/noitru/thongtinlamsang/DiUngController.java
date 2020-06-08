@@ -52,7 +52,7 @@ public class DiUngController {
 		public CodingDTO trangThai; // --> clinicalStatus
 		public Integer tuoiDiUng; // --> onSet
 		//public CodingDTO bacSiDieuTri; // Dang thieu truong participant
-		public List<DiUngItem> items;
+		public List<DiUngItem> dsPhanUng;
 	}
 	
 	@PostMapping("/add")
@@ -85,9 +85,9 @@ public class DiUngController {
 				age.setValue(body.tuoiDiUng);
 				allergy.setOnset(age);
 			}
-			if(body.items != null) {
-				for(var item : body.items) {
-					var reaction = new AllergyIntolerance.AllergyIntoleranceReactionComponent();
+			if(body.dsPhanUng != null) {
+				for(var item : body.dsPhanUng) {
+					var reaction = allergy.addReaction();
 					reaction.setSubstance(CodingDTO.toCodeableConcept(item.sanPham, CodeSystemValue.SUBSTANCE_CODE));
 					reaction.addManifestation(CodingDTO.toCodeableConcept(item.phanUng, CodeSystemValue.CLINICAL_FINDING));
 					reaction.setExposureRoute(CodingDTO.toCodeableConcept(item.viTri, CodeSystemValue.ROUTE_CODE));

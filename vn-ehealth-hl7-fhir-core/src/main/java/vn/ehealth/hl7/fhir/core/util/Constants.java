@@ -66,17 +66,18 @@ public class Constants {
         
         //emr.com.vn
         final public static String DVHC = codeSystems.getProperty("DiaDdanhHanhChinh");
-        final public static String QUOC_GIA = codeSystems.getProperty("TonGiao");        
+        final public static String QUOC_GIA = codeSystems.getProperty("QuocGia");        
         final public static String DAN_TOC = codeSystems.getProperty("DanToc");
-        final public static String TON_GIAO = codeSystems.getProperty("NgheNghiep");
-        final public static String NGHE_NGHIEP = codeSystems.getProperty("QuocGia");        
+        final public static String TON_GIAO = codeSystems.getProperty("TonGiao");
+        final public static String NGHE_NGHIEP = codeSystems.getProperty("NgheNghiep");        
         final public static String DICH_VU_KY_THUAT = codeSystems.getProperty("DVKyThuat");
         final public static String VAI_TRO_PTTT = codeSystems.getProperty("VaiTroPTTT");
         final public static String CHI_SO_XET_NGHIEM = codeSystems.getProperty("ChiSoXetNghiem");
         final public static String DICH_KET_QUA_XET_NGHIEM = codeSystems.getProperty("DichKetQuaXetNghiem");
         final public static String VI_TRI_MAU_SINH_THIET = codeSystems.getProperty("ViTriMauSinhThiet");        
         final public static String DM_THUOC = codeSystems.getProperty("Thuoc");
-        final public static String DM_DUONG_DUNG_THUOC = codeSystems.getProperty("DuongDungThuoc");        
+        final public static String DM_DUONG_DUNG_THUOC = codeSystems.getProperty("DuongDungThuoc");
+        final public static String DOI_TUONG_BH = codeSystems.getProperty("doituongbaohiem");
        
     }
     
@@ -87,6 +88,8 @@ public class Constants {
         final public static String TON_GIAO = extensionURLs.getProperty("tongiao");
         final public static String NGHE_NGHIEP = extensionURLs.getProperty("nghe_nghiep");
         final public static String QUOC_TICH = extensionURLs.getProperty("quoctich");
+        final public static String DOI_TUONG_BH = extensionURLs.getProperty("doituongbaohiem");
+       
         
         final public static String TRINH_TU_PTTT = extensionURLs.getProperty("pttt.trinhtu");
         final public static String DAI_THE_GPB = extensionURLs.getProperty("gpb.daithe");
