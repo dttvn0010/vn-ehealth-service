@@ -17,6 +17,7 @@ import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Element;
+import org.hl7.fhir.r4.model.Enumeration;
 import org.hl7.fhir.r4.model.Meta;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Type;
@@ -512,6 +513,12 @@ public class DataConvertUtil {
 	public static <T> T fhirToEntity(Object obj, Class<T> entType) {
 		if (obj == null || entType == null)
 			return null;
+		
+		if(obj instanceof Enumeration) {
+			obj = ((Enumeration<?>) obj).getValue();
+			if(obj == null)
+				return null;
+		}
 
 		// Direct assignment
 		if (isAssignable(obj.getClass(), entType))
