@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.cdr.model.ChamSoc;
-import vn.ehealth.cdr.service.ChamSocService;
+import vn.ehealth.cdr.model.ChamSocOld;
+import vn.ehealth.cdr.service.ChamSocOldService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.utils.*;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
@@ -23,9 +23,9 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
 @RequestMapping("/api/chamsoc")
-public class ChamSocController {
+public class ChamSocOldController {
     
-    @Autowired private ChamSocService chamSocService;
+    @Autowired private ChamSocOldService chamSocService;
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
@@ -49,7 +49,7 @@ public class ChamSocController {
             }
             
             var csObjList = CDRUtils.getFieldAsList(map, "dsChamSoc");
-            var csList = FPUtil.transform(csObjList, x -> objectMapper.convertValue(x, ChamSoc.class));
+            var csList = FPUtil.transform(csObjList, x -> objectMapper.convertValue(x, ChamSocOld.class));
               
             chamSocService.createOrUpdateFromHIS(hsba, csList, csObjList, jsonSt);
             

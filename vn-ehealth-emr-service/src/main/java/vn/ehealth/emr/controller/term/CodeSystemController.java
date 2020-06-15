@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.CodeType;
 import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.UriType;
@@ -117,7 +118,24 @@ public class CodeSystemController {
     	                continue;
     	            }
     	            var code = (Coding) part.getValue();
-    	            conceptDTOList.add(ConceptDTO.fromCode(code));
+    	            var conceptDTO = ConceptDTO.fromCode(code);
+    	            
+    	            conceptDTO.property = new ArrayList<>();
+    	            for(var prop : part.getPart()) {
+    	                if("display".equals(prop.getName())) continue;
+    	                
+    	                var propDTO = new ConceptDTO.ConceptPropertyDTO();
+    	                propDTO.code = prop.getName();
+    	                
+    	                if(prop.getValue() instanceof IntegerType) {
+                            propDTO.value = ((IntegerType) prop.getValue()).getValue();
+                        }else {
+                            propDTO.value = prop.getValue().primitiveValue();
+                        }
+    	                conceptDTO.property.add(propDTO);
+    	            }
+    	            
+    	            conceptDTOList.add(conceptDTO);
     	            
     	            if(limit.isPresent() && conceptDTOList.size() >= limit.get()) {
     	                break;

@@ -356,6 +356,11 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 			code.setDisplay(conceptEntity.display);
 			code.setSystem(codeSystemUrl);
 			part.setValue(code);
+			if(conceptEntity.property != null) {
+			    for(var property : conceptEntity.property) {
+			        part.addPart().setName(property.code).setValue(BaseType.toFhir(property.value));
+			    }
+			}
 		}								
 		
 		return retVal;
