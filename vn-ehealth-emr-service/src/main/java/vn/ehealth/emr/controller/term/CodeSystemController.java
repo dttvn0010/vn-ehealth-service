@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.emr.dto.term.CodeSystemDTO;
 import vn.ehealth.emr.dto.term.ConceptDTO;
-import vn.ehealth.hl7.fhir.core.entity.BasePrimitiveType;
-import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.term.dao.impl.CodeSystemDao;
@@ -76,7 +74,8 @@ public class CodeSystemController {
 	@GetMapping("/find_match")
 	public ResponseEntity<?> findMatch(@RequestParam Optional<String> codeSystemId,
 	        @RequestParam Optional<String> codeSystemUrl,
-	        String keyword, @RequestParam Optional<Integer> limit) {
+	        String keyword,  @RequestParam Optional<Integer> offset,
+	        @RequestParam Optional<Integer> limit) {
 	    try {
 	        String system = codeSystemUrl.orElse("");
 	        if(StringUtils.isBlank(system)) {
@@ -111,7 +110,12 @@ public class CodeSystemController {
     	    	    
     	    List<ConceptDTO> conceptDTOList = new ArrayList<>();
     	    if(match != null) {
+    	        int skip = 0;
     	        for(var part : match.getPart()) {
+    	            if(offset.isPresent() && skip < offset.get()) {
+    	                skip += 1;
+    	                continue;
+    	            }
     	            var code = (Coding) part.getValue();
     	            conceptDTOList.add(ConceptDTO.fromCode(code));
     	            
