@@ -7,6 +7,7 @@ import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.ContactPoint.ContactPointSystem;
 import org.hl7.fhir.r4.model.Enumerations.AdministrativeGender;
+import org.hl7.fhir.r4.model.FamilyMemberHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,6 +68,33 @@ public class ChiTietBenhNhanController {
 		public String emailCaNhan;
 		public String soDienThoai;
 		
+		//thong tin bhyt
+		public CodingDTO noiKcbBanDau;
+		public String bhytGiaTriTuNgay;
+		public String bhytGiaTriDenNgay;
+		public CodingDTO mucBhDuocHuong;
+		public CodingDTO bhLienTiepNamNam;
+		
+		//thong tin lien he khan cap
+		public String hoTenNguoiCanLienHe;
+		public CodingDTO gioiTinhNguoiLienHe;
+		public CodingDTO moiQuanHe;
+		public String sdtLienHe;
+		public CodingDTO tinhThanhPhoLienHe;
+		public CodingDTO quanHuyenLienHe;
+		public CodingDTO phuongXaLienHe;
+		public String diaChiChiTietLienHe;
+		public String emailNguoiLienHe;
+		
+		//thong tin thanh vien gia dinh
+		public CodingDTO hoTenThanhVien;
+		public CodingDTO moiQHThanhVien;
+		public CodingDTO ngaySinhThanhVien;
+		public CodingDTO gioiTinhThanhVien;
+		public CodingDTO diaChiLienHeThanhVien;
+		public CodingDTO sdtLienHeThanhVien;
+		public CodingDTO emailThanhVien;
+		
 		public CodingDTO getGioiTinh() {
 			return gioiTinh != null? gioiTinh : new CodingDTO();
 		}
@@ -98,6 +126,8 @@ public class ChiTietBenhNhanController {
 		public CodingDTO getDoiTuongBaoHiem() {
 			return doiTuongBaoHiem != null? doiTuongBaoHiem : new CodingDTO();
 		}
+		
+		//get thong tin lien he khan cap 
 	}
 	
 	@PutMapping("/update/{encounterId}")
@@ -174,6 +204,9 @@ public class ChiTietBenhNhanController {
 			
 			identifier = patient.addIdentifier();
 			identifier.setValue(body.soBaoHiemYTe);
+			var period = identifier.getPeriod();
+			period.setStart(DateUtil.parseStringToDate(body.bhytGiaTriTuNgay, "yyyyMMdd"));
+			period.setEnd(DateUtil.parseStringToDate(body.bhytGiaTriDenNgay, "yyyyMMdd"));
 			
 			address = patient.addAddress();
 			address.setText(body.noiLamViec);
@@ -190,6 +223,81 @@ public class ChiTietBenhNhanController {
 			}
 			email.setValue(body.emailCaNhan);
 			
+			//Cap nhat thong tin bhyt
+			ext = FhirUtil.findExtensionByURL(patient.getModifierExtension(), ExtensionURL.NOIKCBBD);
+			if(ext == null) {
+				ext = patient.addExtension().setUrl(ExtensionURL.NOIKCBBD);
+			}
+			ext.setValue(CodingDTO.toCodeableConcept(body.noiKcbBanDau, CodeSystemValue.NOIKCBBD));
+			
+			ext = FhirUtil.findExtensionByURL(encounter.getExtension(), ExtensionURL.mucHuongBHYT);
+			if(ext == null) {
+				ext = encounter.addExtension().setUrl(ExtensionURL.mucHuongBHYT);
+			}
+			ext.setValue(CodingDTO.toCodeableConcept(body.mucBhDuocHuong, CodeSystemValue.mucHuongBHYT));
+			
+			ext = FhirUtil.findExtensionByURL(encounter.getExtension(), ExtensionURL.bhLienTiep5nam);
+			if(ext == null) {
+				ext = encounter.addExtension().setUrl(ExtensionURL.bhLienTiep5nam);
+			}
+			ext.setValue(CodingDTO.toCodeableConcept(body.bhLienTiepNamNam, CodeSystemValue.bhLienTiep5nam));
+			
+			//thong tin lien he khan cap
+			var contact = patient.getContactFirstRep();
+			
+			var coding = contact.getRelationshipFirstRep().getCodingFirstRep();
+			coding.setSystem("http://hl7.org/fhir/ValueSet/patient-contactrelationship");
+			
+			var contactName = contact.getName();
+			contactName.setText(body.hoTenNguoiCanLienHe);
+			
+			
+			contact.setGender(AdministrativeGender.fromCode(body.gioiTinhNguoiLienHe.code));
+			
+//			var family = contact.getRelationshipFirstRep().g
+//			family.getName();
+			//var coding = family.getCo
+			
+			phone = FhirUtil.findContactPointBySytem(contact.getTelecom(), ContactPointSystem.PHONE);
+			if(phone == null) {
+				phone = contact.addTelecom().setSystem(ContactPointSystem.PHONE);
+			}
+			phone.setValue(body.sdtLienHe);
+			
+			address = contact.getAddress();
+			ext = FhirUtil.findExtensionByURL(address.getExtension(), ExtensionURL.DVHC);
+			if(ext == null) {
+				ext = address.addExtension().setUrl(ExtensionURL.DVHC);
+			}
+			
+			ext2 = FhirUtil.findExtensionByURL(ext.getExtension(), "city");
+			if(ext2 == null) {
+				ext2 = ext.addExtension().setUrl("city");
+			}
+			ext2.setValue(CodingDTO.toCodeableConcept(body.tinhThanhPhoLienHe, CodeSystemValue.DVHC));
+			
+			ext2 = FhirUtil.findExtensionByURL(ext.getExtension(), "district");
+			if(ext2 == null) {
+				ext2 = ext.addExtension().setUrl("district");
+			}
+			ext2.setValue(CodingDTO.toCodeableConcept(body.quanHuyenLienHe, CodeSystemValue.DVHC));
+			
+			ext2 = FhirUtil.findExtensionByURL(ext.getExtension(), "ward");
+			if(ext2 == null) {
+				ext2 = ext.addExtension().setUrl("ward");
+			}
+			ext2.setValue(CodingDTO.toCodeableConcept(body.phuongXaLienHe, CodeSystemValue.DVHC));
+			
+			address.setLine(List.of(new StringType(body.diaChiChiTietLienHe)));
+			address.setText(String.format("%s, %s, %s, %s", body.diaChiChiTietLienHe, body.getPhuongXa().display, body.getQuanHuyen().display, body.getTinhThanhPho().display));
+			
+			email = FhirUtil.findContactPointBySytem(contact.getTelecom(), ContactPointSystem.EMAIL);
+			if(email == null) {
+				email = contact.addTelecom().setSystem(ContactPointSystem.EMAIL);
+			}
+			email.setValue(body.emailNguoiLienHe);
+			
+			//
 			
 			patientDao.update(patient, patient.getIdElement());
 			encounterDao.update(encounter, encounter.getIdElement());

@@ -78,7 +78,9 @@ public class Constants {
         final public static String DM_THUOC = codeSystems.getProperty("Thuoc");
         final public static String DM_DUONG_DUNG_THUOC = codeSystems.getProperty("DuongDungThuoc");
         final public static String DOI_TUONG_BH = codeSystems.getProperty("doituongbaohiem");
-       
+        final public static String NOIKCBBD = codeSystems.getProperty("noikcbbd");
+        final public static String mucHuongBHYT = codeSystems.getProperty("muchuongbhyt");
+        final public static String bhLienTiep5nam = codeSystems.getProperty("bhlientiep5nam");
     }
     
     
@@ -89,6 +91,9 @@ public class Constants {
         final public static String NGHE_NGHIEP = extensionURLs.getProperty("nghe_nghiep");
         final public static String QUOC_TICH = extensionURLs.getProperty("quoctich");
         final public static String DOI_TUONG_BH = extensionURLs.getProperty("doituongbaohiem");
+        final public static String NOIKCBBD = extensionURLs.getProperty("noikcbbd");
+        final public static String mucHuongBHYT = extensionURLs.getProperty("muchuongbhyt");
+        final public static String bhLienTiep5nam = extensionURLs.getProperty("bhlientiep5nam");
        
         
         final public static String TRINH_TU_PTTT = extensionURLs.getProperty("pttt.trinhtu");
