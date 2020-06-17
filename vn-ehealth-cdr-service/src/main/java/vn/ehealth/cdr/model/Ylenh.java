@@ -24,6 +24,7 @@ public class Ylenh {
     public ObjectId coSoKhamBenhId;
     public int trangThai;
     
+    public DanhMuc dmLoaiYlenh;
     public DanhMuc dmMaBenhChanDoan;
     public String dienBien;
     public String dienBienQuanTrong;
