@@ -194,7 +194,7 @@ public class BenhNhan {
         
         var ref = new EmrRef();
         ref.className = BenhNhan.class.getName();
-        ref.objectId = obj.getId();
+        ref.objectId = obj.id;
         ref.identifier = obj.sobhyt;
         
         return ref;

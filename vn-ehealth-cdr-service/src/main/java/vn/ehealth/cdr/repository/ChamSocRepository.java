@@ -9,5 +9,5 @@ import vn.ehealth.cdr.model.ChamSoc;
 
 public interface ChamSocRepository extends MongoRepository<ChamSoc, ObjectId>  {
 
-    public List<ChamSoc> findByHoSoBenhAnIdAndTrangThai(ObjectId hoSoBenhAnId, int trangThai);
+    public List<ChamSoc> findByHoSoBenhAnRefObjectIdAndTrangThai(ObjectId hsbaId, int trangThai);
 }

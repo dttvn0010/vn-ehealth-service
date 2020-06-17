@@ -230,17 +230,17 @@ public class ChiTietBenhNhanController {
 			}
 			ext.setValue(CodingDTO.toCodeableConcept(body.noiKcbBanDau, CodeSystemValue.NOIKCBBD));
 			
-			ext = FhirUtil.findExtensionByURL(encounter.getExtension(), ExtensionURL.mucHuongBHYT);
+			ext = FhirUtil.findExtensionByURL(encounter.getExtension(), ExtensionURL.MUC_HUONG_BHYT);
 			if(ext == null) {
-				ext = encounter.addExtension().setUrl(ExtensionURL.mucHuongBHYT);
+				ext = encounter.addExtension().setUrl(ExtensionURL.MUC_HUONG_BHYT);
 			}
-			ext.setValue(CodingDTO.toCodeableConcept(body.mucBhDuocHuong, CodeSystemValue.mucHuongBHYT));
+			ext.setValue(CodingDTO.toCodeableConcept(body.mucBhDuocHuong, CodeSystemValue.MUC_HUONG_BHYT));
 			
-			ext = FhirUtil.findExtensionByURL(encounter.getExtension(), ExtensionURL.bhLienTiep5nam);
+			ext = FhirUtil.findExtensionByURL(encounter.getExtension(), ExtensionURL.BH_LIENTIEP_5NAM);
 			if(ext == null) {
-				ext = encounter.addExtension().setUrl(ExtensionURL.bhLienTiep5nam);
+				ext = encounter.addExtension().setUrl(ExtensionURL.BH_LIENTIEP_5NAM);
 			}
-			ext.setValue(CodingDTO.toCodeableConcept(body.bhLienTiepNamNam, CodeSystemValue.bhLienTiep5nam));
+			ext.setValue(CodingDTO.toCodeableConcept(body.bhLienTiepNamNam, CodeSystemValue.BH_LIENTIEP_5NAM));
 			
 			//thong tin lien he khan cap
 			var contact = patient.getContactFirstRep();

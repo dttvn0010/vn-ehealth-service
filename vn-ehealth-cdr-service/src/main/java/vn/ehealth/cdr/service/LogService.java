@@ -24,11 +24,11 @@ public class LogService {
     @Autowired LogRepository logRepository;
     @Autowired MongoTemplate mongoTemplate;
     
-    public Log logAction(String objectClass, ObjectId objectId, String maHanhDong, Date ngayThucHien, ObjectId nguoiThucHienId, String noiDung, String ghiChu) {
+    public Log logAction(String objectClass, ObjectId hsbaId, String maHanhDong, Date ngayThucHien, ObjectId nguoiThucHienId, String noiDung, String ghiChu) {
         var log = new Log();
         log.nguoiThucHienId = nguoiThucHienId;
         log.ngayThucHien = new Date();
-        log.objectId = objectId;
+        log.hsbaId = hsbaId;
         log.objectClass = objectClass;
         log.maHanhDong = maHanhDong;
         log.ghiChu = ghiChu != null? ghiChu : "";

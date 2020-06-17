@@ -5,16 +5,19 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import vn.ehealth.cdr.model.DonThuoc;
 import vn.ehealth.cdr.model.FileDinhKem;
+import vn.ehealth.cdr.model.Ylenh;
 import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.model.component.DanhMuc;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
-public class DonThuocDTO {
-    
+public class DsDonThuocDTO {
+
     public static class LieuLuongDungThuocDTO {
         public Integer soLuong;
         public String donVi;
@@ -84,16 +87,39 @@ public class DonThuocDTO {
         }
     }
     
-    public String idhis;
+    public static class DonThuocDTO {
+        
+        public String idhis;
+        
+        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+        public Date ngayKeDon;
+        public CanboYteDTO bacSiKeDon;
+        public String soDon;
+        
+        public List<DonThuocChiTietDTO> dsDonThuocChiTiet = new ArrayList<>();
+        public List<FileDinhKem> dsFileDinhKemDonThuoc = new ArrayList<>();      
+        
+        public DonThuoc generateDonThuoc() {
+            var donThuoc = new DonThuoc();
+            donThuoc.idhis = idhis;
+            donThuoc.ngayKeDon = ngayKeDon;
+            donThuoc.bacSiKeDon = bacSiKeDon;
+            donThuoc.soDon = soDon;
+            donThuoc.dsFileDinhKemDonThuoc = dsFileDinhKemDonThuoc;
+            donThuoc.dsDonThuocChiTiet = FPUtil.transform(dsDonThuocChiTiet, DonThuocChiTietDTO::toDonThuocChiTiet);
+            return donThuoc;
+        }
+        
+        public Ylenh generateYlenh() {
+            var ylenh = new Ylenh();
+            ylenh.idhis = idhis;
+            ylenh.ngayRaYlenh = ngayKeDon;
+            ylenh.bacSiRaYlenh = bacSiKeDon;
+            return ylenh;
+        }
+      
+    }
     
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngayKeDon;
-    public CanboYteDTO bacSiKeDon;
-    public String soDon;
-    
-    public List<FileDinhKem> dsFileDinhKemDonThuoc = new ArrayList<>();      
-    
-    
-    public List<DonThuocChiTietDTO> dsDonThuocChiTiet = new ArrayList<>();
-  
+    public String maTraoDoiHoSo;
+    public List<DonThuocDTO> dsDonThuoc = new ArrayList<>();
 }

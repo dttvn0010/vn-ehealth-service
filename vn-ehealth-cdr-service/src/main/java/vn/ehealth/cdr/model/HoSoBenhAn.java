@@ -327,7 +327,7 @@ public class HoSoBenhAn {
         
         var ref = new EmrRef();
         ref.className = HoSoBenhAn.class.getName();
-        ref.objectId = obj.getId();
+        ref.objectId = obj.id;
         ref.identifier = obj.maYte;
         return ref;
     }

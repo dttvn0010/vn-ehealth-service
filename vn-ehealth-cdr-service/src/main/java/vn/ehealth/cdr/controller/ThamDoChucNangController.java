@@ -1,5 +1,9 @@
 package vn.ehealth.cdr.controller;
 
+import java.util.Date;
+import java.util.Map;
+
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,32 +13,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import vn.ehealth.cdr.controller.helper.ProcedureHelper;
-import vn.ehealth.cdr.model.dto.ThamDoChucNang;
+import vn.ehealth.cdr.model.dto.DsThamDoChucNangDTO;
 import vn.ehealth.cdr.service.DichVuKyThuatService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
+import vn.ehealth.cdr.service.LogService;
+import vn.ehealth.cdr.service.YlenhService;
 import vn.ehealth.cdr.utils.*;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.FPUtil;
+import vn.ehealth.cdr.utils.CDRConstants.MA_HANH_DONG;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 
 @RestController
 @RequestMapping("/api/tdcn")
 public class ThamDoChucNangController {
     
-    @Autowired private DichVuKyThuatService dichVuKyThuatService;
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
+    @Autowired private YlenhService ylenhService;
+    @Autowired private DichVuKyThuatService dichVuKyThuatService;
+    @Autowired private LogService logService;
     
     @Autowired private ProcedureHelper procedureHelper;
     
-    private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
-    
     @GetMapping("/get_ds_tdcn")
     public ResponseEntity<?> getDsThamDoChucNang(@RequestParam("hsba_id") String hsbaId) {
-        var tdcnList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(hsbaId, LoaiDichVuKT.THAM_DO_CHUC_NANG);
+        var tdcnList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(new ObjectId(hsbaId), LoaiDichVuKT.THAM_DO_CHUC_NANG);
         return ResponseEntity.ok(tdcnList);
     }
    
@@ -42,28 +45,28 @@ public class ThamDoChucNangController {
     public ResponseEntity<?> createOrUpdateTdcnFromHIS(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = JsonUtil.parseJson(jsonSt);
-            var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
-            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElse(null);
+            var body = JsonUtil.parseObject(jsonSt, DsThamDoChucNangDTO.class);
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(body.maTraoDoiHoSo).orElse(null);
             
             if(hsba == null) {
-                throw new Exception(String.format("hoSoBenhAn maTraoDoi=%s not found", maTraoDoiHsba));
+                throw new Exception(String.format("hoSoBenhAn maTraoDoi=%s not found", body.maTraoDoiHoSo));
             }
             
-            var tdcnObjList = CDRUtils.getFieldAsList(map, "dsThamDoChucNang");
-            var tdcnList = FPUtil.transform(tdcnObjList, x -> objectMapper.convertValue(x, ThamDoChucNang.class));
-            var dvktList = FPUtil.transform(tdcnList, ThamDoChucNang::toDichVuKyThuat);
-            dichVuKyThuatService.createOrUpdateFromHIS(hsba, dvktList, jsonSt);
+            if(body.dsThamDoChucNang != null) {
+                for(var tdcn : body.dsThamDoChucNang) {
+                    var ylenh = tdcn.generateYlenh();
+                    var dvkt = tdcn.generateDichVuKyThuat();
+                    
+                    ylenh = ylenhService.createOrUpdateFromHis(hsba, ylenh);
+                    dvkt = dichVuKyThuatService.createOrUpdate(ylenh, dvkt);
+                    procedureHelper.saveToFhirDb(ylenh, dvkt);
+                }
+            }
             
-            // save to FHIR db
-            procedureHelper.saveToFhirDb(hsba, dvktList);
+            logService.logAction(DsThamDoChucNangDTO.class.getName(), hsba.id, MA_HANH_DONG.THEM_SUA, new Date(),  
+                    null, "", jsonSt);
             
-            var result = DataConvertUtil.mapOf(
-                "success" , true,
-                "tdcnList", tdcnList  
-            );
-            
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(Map.of("success", true));
             
         }catch(Exception e) {
             return ResponseUtil.errorResponse(e);

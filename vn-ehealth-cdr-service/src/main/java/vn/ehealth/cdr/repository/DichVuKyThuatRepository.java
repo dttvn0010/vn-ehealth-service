@@ -11,5 +11,6 @@ import vn.ehealth.cdr.model.DichVuKyThuat;
 public interface DichVuKyThuatRepository extends MongoRepository<DichVuKyThuat, ObjectId> {
 
     public Optional<DichVuKyThuat> findByIdhis(String idhis);
-    public List<DichVuKyThuat> findByHoSoBenhAnRefObjectIdAndDmLoaiDVKTMa(String hsbaId, String maLoaiDVKT);
+    public List<DichVuKyThuat> findByHoSoBenhAnRefObjectIdAndDmLoaiDVKTMaAndTrangThai(ObjectId hsbaId, String maLoaiDVKT, int trangThai);
+    public List<DichVuKyThuat> findByYlenhRefObjectIdAndTrangThai(ObjectId ylenhId, int trangThai);
 }

@@ -3,19 +3,16 @@ package vn.ehealth.cdr.controller.helper;
 import java.util.ArrayList;
 import java.util.List;
 import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.Specimen;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import vn.ehealth.cdr.model.DichVuKyThuat;
-import vn.ehealth.cdr.model.HoSoBenhAn;
+import vn.ehealth.cdr.model.Ylenh;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ProcedureDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
@@ -36,34 +33,24 @@ public class ProcedureHelper {
 	@Autowired private ObservationDao observationDao;
 	@Autowired private EncounterHelper encounterHelper;
 	
-	private Logger log = LoggerFactory.getLogger(ProcedureHelper.class);
-
-	private DiagnosticReport saveDiagnosticReport(DiagnosticReport obj) {
+	private DiagnosticReport saveDiagnosticReport(DiagnosticReport obj) throws Exception {
 		if (obj != null) {
-			try {
-				if (obj.hasId()) {
-					return diagnosticReportDao.update(obj, obj.getIdElement());
-				} else {
-					return diagnosticReportDao.create(obj);
-				}
-			} catch (Exception ex) {
-				// TODO: logging
-			}
+		    if (obj.hasId()) {
+                return diagnosticReportDao.update(obj, obj.getIdElement());
+            } else {
+                return diagnosticReportDao.create(obj);
+            }
 		}
 		return null;
 	}
 
-	private ServiceRequest saveServiceRequest(ServiceRequest obj) {
+	private ServiceRequest saveServiceRequest(ServiceRequest obj) throws Exception {
 		if (obj != null) {
-			try {
-				if (obj.hasId()) {
-					return serviceRequestDao.update(obj, obj.getIdElement());
-				} else {
-					return serviceRequestDao.create(obj);
-				}
-			} catch (Exception ex) {
-				// TODO: logging
-			}
+		    if (obj.hasId()) {
+                return serviceRequestDao.update(obj, obj.getIdElement());
+            } else {
+                return serviceRequestDao.create(obj);
+            }
 		}
 		return null;
 	}
@@ -162,86 +149,76 @@ public class ProcedureHelper {
 			procedureDao.remove(procedure.getIdElement());
 		}
 	}
-
-	@SuppressWarnings("unchecked")
-	public void saveDVKT(Encounter enc, DichVuKyThuat dto) {
-		if (enc == null || dto == null)
-			return;
-
-		var resources = dto.toFhir(enc);
-		if (resources == null)
-			return;
-
-		// Remove old data
-		removeOldData(dto);
-
-		var serviceRequest = (ServiceRequest) resources.get("serviceRequest");
-		var procedure = (Procedure) resources.get("procedure");
-		var diagnosticReport = (DiagnosticReport) resources.get("diagnosticReport");
-		var specimen = (Specimen) resources.get("specimen");
-		var observations = (List<Observation>) resources.get("observations");
-		if (observations == null)
-			observations = new ArrayList<>();
-
-		// Save ServiceRequest
-		serviceRequest = saveServiceRequest(serviceRequest);
-
-		if (serviceRequest != null) {
-			var ref = createReference(serviceRequest);
-			if (procedure != null)
-				procedure.setBasedOn(listOf(ref));
-			if (diagnosticReport != null)
-				diagnosticReport.setBasedOn(listOf(ref));
-			if (specimen != null)
-				specimen.setRequest(listOf(ref));
-			observations.forEach(x -> x.setBasedOn(listOf(ref)));
-		}
-
-		// Save DiagnosticReport
-		diagnosticReport = saveDiagnosticReport(diagnosticReport);
-
-		if (diagnosticReport != null) {
-			if (procedure != null)
-				procedure.setReport(listOf(createReference(diagnosticReport)));
-		}
-
-		// Save Procedure
-		procedure = saveProcedure(procedure);
-
-		if (procedure != null) {
-			var ref = createReference(procedure);
-			observations.forEach(x -> x.setPartOf(listOf(ref)));
-		}
-
-		// Save Specimen
-		specimen = saveSpecimen(specimen);
-
-		if (specimen != null) {
-			serviceRequest.setSpecimen(listOf(createReference(specimen)));
-			serviceRequest = saveServiceRequest(serviceRequest);
-		}
-
-		// Save Observation
-		observations.forEach(x -> {
-			try {
-				observationDao.create(x);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
-	}
 	
-	public void saveToFhirDb(HoSoBenhAn hsba, List<DichVuKyThuat> dvktList) {
-        if(hsba == null) return;
-        
-        try {
-            var enc = encounterHelper.getEncounterByMaHsba(hsba.maYte);
-            if(enc != null) {            
-                dvktList.forEach(x -> saveDVKT(enc, x));
-            }            
-        }catch(Exception e) {
-            log.error("Cannot save cdha from hsba id=" + hsba.getId() + " to fhir DB", e);
+	@SuppressWarnings("unchecked")
+    public void saveToFhirDb(Ylenh ylenh, DichVuKyThuat dvkt) throws Exception {
+        if(ylenh == null || dvkt == null || ylenh.hoSoBenhAnRef.identifier == null) {
+            return;
         }
+        
+        var enc = encounterHelper.getEncounterByMaHsba(ylenh.hoSoBenhAnRef.identifier);
+        if(enc == null) return;
+        
+        var resources = dvkt.toFhir(enc, ylenh);
+        if (resources == null)
+            return;
+
+        // Remove old data
+        removeOldData(dvkt);
+
+        var serviceRequest = (ServiceRequest) resources.get("serviceRequest");
+        var procedure = (Procedure) resources.get("procedure");
+        var diagnosticReport = (DiagnosticReport) resources.get("diagnosticReport");
+        var specimen = (Specimen) resources.get("specimen");
+        var observations = (List<Observation>) resources.get("observations");
+        if (observations == null)
+            observations = new ArrayList<>();
+
+        // Save ServiceRequest
+        serviceRequest = saveServiceRequest(serviceRequest);
+
+        if (serviceRequest != null) {
+            var ref = createReference(serviceRequest);
+            if (procedure != null)
+                procedure.setBasedOn(listOf(ref));
+            if (diagnosticReport != null)
+                diagnosticReport.setBasedOn(listOf(ref));
+            if (specimen != null)
+                specimen.setRequest(listOf(ref));
+            observations.forEach(x -> x.setBasedOn(listOf(ref)));
+        }
+
+        // Save DiagnosticReport
+        diagnosticReport = saveDiagnosticReport(diagnosticReport);
+
+        if (diagnosticReport != null) {
+            if (procedure != null)
+                procedure.setReport(listOf(createReference(diagnosticReport)));
+        }
+
+        // Save Procedure
+        procedure = saveProcedure(procedure);
+
+        if (procedure != null) {
+            var ref = createReference(procedure);
+            observations.forEach(x -> x.setPartOf(listOf(ref)));
+        }
+
+        // Save Specimen
+        specimen = saveSpecimen(specimen);
+
+        if (specimen != null) {
+            serviceRequest.setSpecimen(listOf(createReference(specimen)));
+            serviceRequest = saveServiceRequest(serviceRequest);
+        }
+
+        // Save Observation
+        observations.forEach(x -> {
+            try {
+                observationDao.create(x);
+            } catch (Exception e) {
+                
+            }
+        }); 
     }
 }

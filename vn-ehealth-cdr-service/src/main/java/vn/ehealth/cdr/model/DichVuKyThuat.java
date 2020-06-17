@@ -22,12 +22,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.model.component.DanhMuc;
 import vn.ehealth.cdr.model.component.EmrRef;
+import vn.ehealth.cdr.utils.ObjectIdUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -52,10 +54,20 @@ public class DichVuKyThuat {
     
     @Id public ObjectId id;        
     
+    public String getId() {
+        return ObjectIdUtil.idToString(id);
+    }
+    
+    public void setId(String id) {
+        this.id = ObjectIdUtil.stringToId(id);
+    }
+    
     public EmrRef hoSoBenhAnRef;
     public EmrRef benhNhanRef;
     public EmrRef coSoKhamBenhRef;
     public EmrRef ylenhRef;
+    
+    public int trangThai;
     
     public String idhis;
     
@@ -63,20 +75,10 @@ public class DichVuKyThuat {
 	
 	public DanhMuc dmLoaiDVKT;
 	
+	public DanhMuc dmNhomDVKT;
+	
 	public DanhMuc dmDVKT;
 	
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngayYeuCau;
-    
-    public CanboYteDTO bacSiYeuCau;
-    public String noiDungYeuCau;
-    
-    public List<DanhMuc> dsDmMaBenhChanDoanSau = new ArrayList<>();
-    public String moTaChanDoanTruoc;
-    
-    public List<DanhMuc> dsDmMaBenhChanDoanTruoc = new ArrayList<>();    
-    public String moTaChanDoanSau;
-    
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayThucHien;
     public CanboYteDTO bacSiThucHien;
@@ -110,15 +112,17 @@ public class DichVuKyThuat {
     public Map<String, Object> extra = new HashMap<>();
     public List<FileDinhKem> dsFileDinhKem = new ArrayList<>();
     
+    @JsonIgnore
     public CodeableConcept getCategory() {
         return DanhMuc.toConcept(dmLoaiDVKT, CodeSystemValue.DIAGNOSTIC_SERVICE_SECTIONS);
     }
     
+    @JsonIgnore
     public CodeableConcept getCode() {
         return DanhMuc.toConcept(dmDVKT, CodeSystemValue.DICH_VU_KY_THUAT);
     }
     
-	public Map<String, Object> toFhir(Encounter enc) {
+	public Map<String, Object> toFhir(Encounter enc, Ylenh ylenh) {
 	   
         if(enc == null) new HashMap<>();
         
@@ -126,8 +130,8 @@ public class DichVuKyThuat {
         var serviceRequest = new ServiceRequest();
         var diagnosticReport = new DiagnosticReport();
         
-        var code = getCode();
-        var category = getCategory();
+        var code = DanhMuc.toConcept(dmDVKT, CodeSystemValue.DICH_VU_KY_THUAT);
+        var category = DanhMuc.toConcept(dmLoaiDVKT, CodeSystemValue.DIAGNOSTIC_SERVICE_SECTIONS);
         var subject = enc.getSubject();
         var encounter = createReference(enc);
         
@@ -165,9 +169,9 @@ public class DichVuKyThuat {
         serviceRequest.setCategory(listOf(category));
         serviceRequest.setSubject(subject);
         serviceRequest.setEncounter(encounter);            
-        serviceRequest.setAuthoredOn(ngayYeuCau);
-        serviceRequest.setRequester(CanboYteDTO.toRef(bacSiYeuCau));
-        serviceRequest.setOrderDetail(listOf(createCodeableConcept(noiDungYeuCau)));
+        serviceRequest.setAuthoredOn(ylenh.ngayRaYlenh);
+        serviceRequest.setRequester(CanboYteDTO.toRef(ylenh.bacSiRaYlenh));
+        serviceRequest.setOrderDetail(listOf(createCodeableConcept(ylenh.ghiChu)));
         
         // Diagnostic report
         diagnosticReport.setCode(code);

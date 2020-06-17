@@ -32,7 +32,7 @@ public class CanboYteDTO {
         
         var obj = ServiceFactory.getCanboYteService().getByChungChiHanhNghe(dto.chungChiHanhNghe).orElse(null);
         if(obj != null) {
-            ref.objectId = obj.id.toHexString();
+            ref.objectId = obj.id;
         }
         
         return ref;

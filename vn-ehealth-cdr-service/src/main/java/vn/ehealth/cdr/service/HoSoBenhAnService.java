@@ -83,7 +83,7 @@ public class HoSoBenhAnService {
     }
     
     public String getHsgoc(ObjectId id) {
-        var logs = logService.getLogs(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.CHINH_SUA, false, 0, 1);
+        var logs = logService.getLogs(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.THEM_SUA, false, 0, 1);
         if(logs.size() > 0) {
             return logs.get(0).ghiChu;
         }
@@ -91,11 +91,11 @@ public class HoSoBenhAnService {
     }
     
     public long countHistory(ObjectId id) {
-        return logService.countLogs(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.CHINH_SUA, false);   
+        return logService.countLogs(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.THEM_SUA, false);   
     }
     
     public List<Object> getHistory(ObjectId id, int offset, int limit) {
-        var logs = logService.getLogs(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.CHINH_SUA, false, offset, limit);
+        var logs = logService.getLogs(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.THEM_SUA, false, offset, limit);
         
         var result = new ArrayList<>();
         for(var log : logs) {
@@ -135,18 +135,12 @@ public class HoSoBenhAnService {
             hsba.ngaySua = new Date();
             hsba.nguoiSuaRef = null;
         }
-        
-        
+                
         hsba.nguonDuLieu = NGUON_DU_LIEU.TU_HIS;
         hsba.trangThai = TRANGTHAI_HOSO.CHUA_XULY;
         hsba = hoSoBenhAnRepository.save(hsba);
 
-        if(createNew) {
-            logService.logAction(HoSoBenhAn.class.getName(), hsba.id, MA_HANH_DONG.TAO_MOI, new Date(),  
-                                     null, "", jsonSt);
-        }
-        
-        logService.logAction(HoSoBenhAn.class.getName(), hsba.id, MA_HANH_DONG.CHINH_SUA, new Date(), 
+        logService.logAction(HoSoBenhAn.class.getName(), hsba.id, MA_HANH_DONG.THEM_SUA, new Date(), 
                                     null, JsonUtil.dumpObject(hsba), jsonSt);
         
         return hsba;

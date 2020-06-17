@@ -11,6 +11,6 @@ import vn.ehealth.cdr.model.ChucNangSong;
 
 public interface ChucNangSongRepository extends MongoRepository<ChucNangSong, ObjectId> {
 
-    public List<ChucNangSong> findByHoSoBenhAnIdAndTrangThai(ObjectId hoSoBenhAnId, int trangThai);
+    public List<ChucNangSong> findByHoSoBenhAnRefObjectIdAndTrangThai(ObjectId hsbaId, int trangThai);
     public Optional<ChucNangSong> findByIdhis(String idhis);
 }

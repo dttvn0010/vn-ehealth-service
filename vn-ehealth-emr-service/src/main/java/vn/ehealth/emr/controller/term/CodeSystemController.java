@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import vn.ehealth.emr.dto.base.CodingDTO;
 import vn.ehealth.emr.dto.term.CodeSystemDTO;
 import vn.ehealth.emr.dto.term.ConceptDTO;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
+import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.term.dao.impl.CodeSystemDao;
 import vn.ehealth.hl7.fhir.term.dao.impl.ConceptDao;
 import vn.ehealth.hl7.fhir.term.entity.CodeSystemEntity;
@@ -72,10 +74,111 @@ public class CodeSystemController {
 		}
 	}
 	
+	@GetMapping("/find_dvkt_items")
+    public ResponseEntity<?> findDVKTItems(@RequestParam Optional<String> maLoaiDVKT,
+            @RequestParam Optional<String> maNhomDVKT,            
+            @RequestParam Optional<String> keyword, 
+            @RequestParam Optional<Integer> offset,
+            @RequestParam Optional<Integer> limit) {
+        try {
+            String system = CodeSystemValue.DICH_VU_KY_THUAT;
+            
+            Parameters params = new Parameters();
+            
+            var systemParam = params.addParameter();
+            systemParam.setName("system").setValue(new UriType(system));
+            
+            var exactParam = params.addParameter();
+            exactParam.setName("exact").setValue(new BooleanType(false));
+            
+            if(keyword.isPresent()) {
+                var propParam = params.addParameter();
+                propParam.setName("property");
+                
+                var codePart = propParam.addPart();
+                codePart.setName("code").setValue(new CodeType("display"));
+                                
+                var valuePart = propParam.addPart();
+                valuePart.setName("value").setValue(new StringType(keyword.get()));
+            }
+            
+            if(maLoaiDVKT.isPresent()) {
+                var propParam = params.addParameter();
+                propParam.setName("property");                
+            
+                var codePart = propParam.addPart();
+                codePart.setName("code").setValue(new CodeType("maLoai"));
+                
+                var valuePart = propParam.addPart();
+                valuePart.setName("value").setValue(new StringType("(" + maLoaiDVKT.get()+ ")"));
+            }
+            
+            if(maNhomDVKT.isPresent()) {
+                var propParam = params.addParameter();
+                propParam.setName("property");
+                
+                var codePart = propParam.addPart();
+                codePart.setName("code").setValue(new CodeType("maNhom"));
+                
+                var valuePart = propParam.addPart();
+                valuePart.setName("value").setValue(new StringType("(" + maNhomDVKT.get() + ")"));
+            }
+            
+            var result = codeSystemDao.findMatches(params);
+            
+            var match = result.getParameter()
+                              .stream()
+                              .filter(x -> "match".equals(x.getName()))
+                              .findFirst()
+                              .orElse(null);
+                    
+            List<ConceptDTO> conceptDTOList = new ArrayList<>();
+            if(match != null) {
+                int skip = 0;
+                for(var part : match.getPart()) {
+                    if(offset.isPresent() && skip < offset.get()) {
+                        skip += 1;
+                        continue;
+                    }
+                    var code = (Coding) part.getValue();
+                    var conceptDTO = ConceptDTO.fromCode(code);
+                    
+                    conceptDTO.property = new ArrayList<>();
+                    for(var prop : part.getPart()) {
+                        if("display".equals(prop.getName())) continue;
+                        
+                        var propDTO = new ConceptDTO.ConceptPropertyDTO();
+                        propDTO.code = prop.getName();
+                        
+                        if(prop.getValue() instanceof IntegerType) {
+                            propDTO.value = ((IntegerType) prop.getValue()).getValue();
+                        }else if(prop.getValue() instanceof Coding) {
+                            propDTO.value = CodingDTO.fromCoding((Coding) prop.getValue());
+                        } else {
+                            propDTO.value = prop.getValue().primitiveValue();
+                        }
+                        conceptDTO.property.add(propDTO);
+                    }
+                    
+                    conceptDTOList.add(conceptDTO);
+                    
+                    if(limit.isPresent() && conceptDTOList.size() >= limit.get()) {
+                        break;
+                    }
+                }
+            }
+            
+            return ResponseEntity.ok(conceptDTOList);   
+        }catch(Exception e) {
+            return ResponseUtil.errorResponse(e);
+        }
+    }
+	
 	@GetMapping("/find_match")
 	public ResponseEntity<?> findMatch(@RequestParam Optional<String> codeSystemId,
 	        @RequestParam Optional<String> codeSystemUrl,
-	        String keyword,  @RequestParam Optional<Integer> offset,
+	        @RequestParam Optional<String> keyword,  
+	        @RequestParam Optional<Integer> offset,
 	        @RequestParam Optional<Integer> limit) {
 	    try {
 	        String system = codeSystemUrl.orElse("");
@@ -92,14 +195,16 @@ public class CodeSystemController {
     	    var exactParam = params.addParameter();
     	    exactParam.setName("exact").setValue(new BooleanType(false));
     	    
-    	    var propParam = params.addParameter();
-    	    propParam.setName("property");
-    	    
-    	    var codePart = propParam.addPart();
-    	    codePart.setName("code").setValue(new CodeType("display"));
-    	    
-    	    var valuePart = propParam.addPart();
-    	    valuePart.setName("value").setValue(new StringType(keyword));
+    	    if(keyword.isPresent()) {
+        	    var propParam = params.addParameter();
+        	    propParam.setName("property");
+        	    
+        	    var codePart = propParam.addPart();
+        	    codePart.setName("code").setValue(new CodeType("display"));
+        	    
+        	    var valuePart = propParam.addPart();
+        	    valuePart.setName("value").setValue(new StringType(keyword.get()));
+    	    }
     	    
     	    var result = codeSystemDao.findMatches(params);
     	    
@@ -129,7 +234,9 @@ public class CodeSystemController {
     	                
     	                if(prop.getValue() instanceof IntegerType) {
                             propDTO.value = ((IntegerType) prop.getValue()).getValue();
-                        }else {
+                        }else if(prop.getValue() instanceof Coding) {
+                            propDTO.value = CodingDTO.fromCoding((Coding) prop.getValue());
+                        } else {
                             propDTO.value = prop.getValue().primitiveValue();
                         }
     	                conceptDTO.property.add(propDTO);

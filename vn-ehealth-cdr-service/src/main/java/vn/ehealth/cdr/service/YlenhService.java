@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.Ylenh;
 import vn.ehealth.cdr.repository.YlenhRepository;
 import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
@@ -23,10 +24,29 @@ public class YlenhService {
     }
     
     public List<Ylenh> getByHoSoBenhAnId(ObjectId hoSoBenhAnId) {
-        return ylenhRepository.findByHoSoBenhAnIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);
+        return ylenhRepository.findByHoSoBenhAnRefObjectIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);
+    }
+    
+    public List<Ylenh> getByHoSoBenhAnIdAndLoaiYlenh(ObjectId hoSoBenhAnId, String maLoaiYlenh) {
+        return ylenhRepository.findByHoSoBenhAnRefObjectIdAndDmLoaiYlenhMaAndTrangThai(hoSoBenhAnId, maLoaiYlenh, TRANGTHAI_DULIEU.DEFAULT);
+    }
+    
+    public List<Ylenh> getByHoSoBenhAnIdAndLoaiYlenhAndLoaiDVKT(ObjectId hoSoBenhAnId, String maLoaiYlenh, String maLoaiDVKT) {
+        return ylenhRepository.findByHoSoBenhAnRefObjectIdAndDmLoaiYlenhMaAndDmLoaiDVKTMaAndTrangThai(hoSoBenhAnId, maLoaiYlenh, maLoaiDVKT, TRANGTHAI_DULIEU.DEFAULT);
     }
     
     public Ylenh save(@Nonnull Ylenh ylenh) {
         return ylenhRepository.save(ylenh);        
+    }
+    
+    public Ylenh createOrUpdateFromHis(@Nonnull HoSoBenhAn hsba, @Nonnull Ylenh ylenh) {
+        if(ylenh.idhis != null) {
+            ylenh.id = ylenhRepository.findByIdhis(ylenh.idhis).map(x -> x.id).orElse(null);
+        }
+        
+        ylenh.hoSoBenhAnRef = HoSoBenhAn.toEmrRef(hsba);
+        ylenh.benhNhanRef = hsba.benhNhanRef;
+        ylenh.coSoKhamBenhRef = hsba.coSoKhamBenhRef;
+        return ylenhRepository.save(ylenh);
     }
 }

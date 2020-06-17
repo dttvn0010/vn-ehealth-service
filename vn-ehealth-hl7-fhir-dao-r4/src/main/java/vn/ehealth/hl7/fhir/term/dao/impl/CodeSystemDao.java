@@ -3,6 +3,8 @@ package vn.ehealth.hl7.fhir.term.dao.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.CodeSystem;
@@ -303,11 +305,13 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 		if(codeSystem == null) {
 			return null;
 		}
-				
-		var criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true)
-								.and("codeSystemId").is(codeSystem.getId());
 		
 		boolean exact = false;
+		List<Object> andConditions = listOf(
+		            mapOf(ConstantKeys.QP_ACTIVE, true),
+		            mapOf("codeSystemId", codeSystem.getId())
+		        );
+		
 		for(var param : params.getParameter()) {
 			if(ConstantKeys.SP_EXACT.equals(param.getName())) {
 				exact = ((BooleanType) param.getValue()).getValue();
@@ -332,18 +336,25 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 				}
 				
 				if(!StringUtils.isEmpty(propertyCode)) {
+				    Map<String, Object> cond;
+				    
 					if(exact) {
-						criteria.and("property.code").is(propertyCode)
-								.and("property.value.value").is(propertyValue);
+					    cond = mapOf("code", propertyCode, "value.value", propertyValue);
+					    
 					}else {
-						criteria.and("property.code").is(propertyCode)
-								.and("property.value.value").regex(String.valueOf(propertyValue), "i");
+					    cond = mapOf("code", propertyCode, "value.value", mapOf("$regex", propertyValue));
 					}
+					
+					andConditions.add(mapOf(
+                            "property", mapOf("$elemMatch", cond)
+                    ));
 				}
 			}
 		}
 		
-		var conceptEntityList = mongo.find(Query.query(criteria), ConceptEntity.class);
+		var query = MongoUtils.createQuery(mapOf("$and", andConditions));
+		
+		var conceptEntityList = mongo.find(query, ConceptEntity.class);
 		
 		var match = retVal.addParameter();
 		match.setName("match");

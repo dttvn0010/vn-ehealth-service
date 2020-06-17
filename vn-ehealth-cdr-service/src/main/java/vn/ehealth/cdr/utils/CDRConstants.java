@@ -8,12 +8,11 @@ public class CDRConstants {
     }   
     
     public static interface MA_HANH_DONG {
-        final public static String TAO_MOI = "01";
-        final public static String CHINH_SUA = "02";
-        final public static String XOA = "03";
-        final public static String XEM = "04";
-        final public static String LUU_TRU = "05";
-        final public static String MO_LUU_TRU = "06";
+        final public static String THEM_SUA = "01";
+        final public static String XOA = "02";
+        final public static String XEM = "03";
+        final public static String LUU_TRU = "04";
+        final public static String MO_LUU_TRU = "05";
     } 
     
     public static interface TRANGTHAI_HOSO {
@@ -26,6 +25,12 @@ public class CDRConstants {
         final public static int TU_HIS = 1;
     }
     
+    public static interface LoaiYlenh {
+        final public static String YLENH_DIEU_TRI = "01";
+        final public static String YLENH_THUOC = "02";
+        final public static String YLENH_DVKT = "03";
+    }
+    
     public static interface LoaiDichVuKT {
         final public static String PHAU_THUAT_THU_THUAT = "SUR";
         final public static String XET_NGHIEM = "LAB";
@@ -33,4 +38,12 @@ public class CDRConstants {
         final public static String CHAN_DOAN_HINH_ANH = "CA";        
         final public static String THAM_DO_CHUC_NANG = "XRC";
     }   
+    
+    public static interface ThoiDiemDungThuoc {
+        final public static String SANG = "01";
+        final public static String TRUA = "02";
+        final public static String CHIEU = "03";
+        final public static String TOI = "04";
+    }
+    
 }

@@ -1,6 +1,8 @@
 package vn.ehealth.cdr.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -24,15 +26,24 @@ public class Ylenh {
     public EmrRef hoSoBenhAnRef;    
     public EmrRef benhNhanRef;
     public EmrRef coSoKhamBenhRef;
+    
     public int trangThai;
+    public String idhis;
     
     public DanhMuc dmLoaiYlenh;
-    public CanboYteDTO bacSiThucHien;
+    public DanhMuc dmLoaiDVKT;
+    public DanhMuc dmNhomDVKT;
     
-    public String display;
+    public CanboYteDTO bacSiRaYlenh;
+    
+    public DanhMuc dmMaBenhChanDoan;
+    public List<DanhMuc> dsDmMaBenhChanDoanKemTheo = new ArrayList<>();
+    public String moTaChanDoan;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngayThucHien;    
+    public Date ngayRaYlenh;    
+    
+    public String ghiChu;
         
     public String getId() {
         return ObjectIdUtil.idToString(id);
@@ -40,8 +51,7 @@ public class Ylenh {
     
     public void setId(String id) { 
         this.id = ObjectIdUtil.stringToId(id);
-    }
-    
+    }    
 
     public static EmrRef toEmrRef(Ylenh obj) {
         if(obj == null || obj.id == null) {
@@ -49,8 +59,8 @@ public class Ylenh {
         }
         
         var ref = new EmrRef();
-        ref.objectId = obj.getId();
-        ref.name = obj.display;
+        ref.className = Ylenh.class.toString();
+        ref.objectId = obj.id;
         return ref;
     }
 }

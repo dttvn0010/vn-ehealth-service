@@ -33,5 +33,5 @@ public class Log {
     public String ghiChu;
     
     public String objectClass;
-    public ObjectId objectId;
+    public ObjectId hsbaId;
 }

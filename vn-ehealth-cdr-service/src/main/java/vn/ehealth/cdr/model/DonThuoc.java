@@ -83,7 +83,6 @@ public class DonThuoc {
         
         public DanhMuc dmThuoc;
         public DanhMuc dmDuongDungThuoc;
-        public DanhMuc dmThoiDiemDungThuoc;
         public DanhMuc dmChiDanDungThuoc;   
         
         @JsonFormat(pattern="yyyy-MM-dd")
@@ -129,7 +128,7 @@ public class DonThuoc {
                         dosage.setText(dtct.chiDanDungThuoc);
                         dosage.setRoute(DanhMuc.toConcept(dtct.dmDuongDungThuoc, CodeSystemValue.DM_DUONG_DUNG_THUOC));
                         
-                        dosage.getTiming().setCode(DanhMuc.toConcept(dtct.dmThoiDiemDungThuoc, CodeSystemValue.DM_DUONG_DUNG_THUOC));;
+                        dosage.getTiming().setCode(DanhMuc.toConcept(lieuLuongThuoc.dmThoiDiemDungThuoc, CodeSystemValue.DM_DUONG_DUNG_THUOC));;
                         var quantity = new Quantity();
                         quantity.setValue(lieuLuongThuoc.soLuong);
                         quantity.setUnit(lieuLuongThuoc.donVi); 

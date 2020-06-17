@@ -34,7 +34,7 @@ public class CanboYte {
         
         var ref = new EmrRef();
         ref.className = CanboYte.class.toString();
-        ref.objectId = obj.getId();
+        ref.objectId = obj.id;
         ref.name = obj.ten;
         ref.identifier = obj.chungChiHanhNghe;
         

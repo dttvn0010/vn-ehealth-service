@@ -1,5 +1,9 @@
 package vn.ehealth.cdr.controller;
 
+import java.util.Date;
+import java.util.Map;
+
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,31 +13,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import vn.ehealth.cdr.controller.helper.ProcedureHelper;
-import vn.ehealth.cdr.model.dto.PhauThuatThuThuat;
+import vn.ehealth.cdr.model.dto.DsPhauThuatThuThuatDTO;
 import vn.ehealth.cdr.service.DichVuKyThuatService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
+import vn.ehealth.cdr.service.LogService;
+import vn.ehealth.cdr.service.YlenhService;
 import vn.ehealth.cdr.utils.*;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
-import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
-import vn.ehealth.hl7.fhir.core.util.FPUtil;
+import vn.ehealth.cdr.utils.CDRConstants.MA_HANH_DONG;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 
 @RestController
 @RequestMapping("/api/pttt")
 public class PhauThuatThuThuatController {
     
-    private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
-    @Autowired private DichVuKyThuatService dichVuKyThuatService;
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
+    @Autowired private YlenhService ylenhService;
+    @Autowired private DichVuKyThuatService dichVuKyThuatService;
+    @Autowired private LogService logService;
     
     @Autowired private ProcedureHelper procedureHelper;
 
     @GetMapping("/get_ds_pttt")
-    public ResponseEntity<?> getDsPhauThuatThuThuat(@RequestParam("hsba_id") String id) {
-        var ptttList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(id, LoaiDichVuKT.PHAU_THUAT_THU_THUAT);
+    public ResponseEntity<?> getDsPhauThuatThuThuat(@RequestParam("hsba_id") String hsbaId) {
+        var ptttList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(new ObjectId(hsbaId), LoaiDichVuKT.PHAU_THUAT_THU_THUAT);
         return ResponseEntity.ok(ptttList);
     }
     
@@ -41,29 +45,28 @@ public class PhauThuatThuThuatController {
     public ResponseEntity<?> createOrUpdatePtttFromHIS(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
-            var map = JsonUtil.parseJson(jsonSt);
-            var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
-            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElse(null);
+            var body = JsonUtil.parseObject(jsonSt, DsPhauThuatThuThuatDTO.class);
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(body.maTraoDoiHoSo).orElse(null);
             
             if(hsba == null) {
-                throw new Exception(String.format("hoSoBenhAn maTraoDoi=%s not found", maTraoDoiHsba));
+                throw new Exception(String.format("hoSoBenhAn maTraoDoi=%s not found", body.maTraoDoiHoSo));
             }
             
-            var ptttObjList = CDRUtils.getFieldAsList(map, "dsPhauThuatThuThuat");
-            var ptttList = FPUtil.transform(ptttObjList, x -> objectMapper.convertValue(x, PhauThuatThuThuat.class));
-            var dvktList = FPUtil.transform(ptttList, PhauThuatThuThuat::toDichVuKyThuat);
+            if(body.dsPhauThuatThuThuat != null) {
+                for(var pttt : body.dsPhauThuatThuThuat) {
+                    var ylenh = pttt.generateYlenh();
+                    var dvkt = pttt.generateDichVuKyThuat();
+                    
+                    ylenh = ylenhService.createOrUpdateFromHis(hsba, ylenh);
+                    dvkt = dichVuKyThuatService.createOrUpdate(ylenh, dvkt);
+                    procedureHelper.saveToFhirDb(ylenh, dvkt);
+                }
+            }
             
-            dichVuKyThuatService.createOrUpdateFromHIS(hsba, dvktList, jsonSt);
-                        
-            // save to FHIR db
-            procedureHelper.saveToFhirDb(hsba, dvktList);
-                        
-            var result = DataConvertUtil.mapOf(
-                "success" , true,
-                "ptttList", ptttList  
-            );
+            logService.logAction(DsPhauThuatThuThuatDTO.class.getName(), hsba.id, MA_HANH_DONG.THEM_SUA, new Date(),  
+                    null, "", jsonSt);
             
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(Map.of("success", true));
             
         }catch(Exception e) {
             return ResponseUtil.errorResponse(e);

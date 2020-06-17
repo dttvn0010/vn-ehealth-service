@@ -20,7 +20,7 @@ public class ChamSocService {
         return chamSocRepository.findById(id);
     }
     
-    public List<ChamSoc> getByHoSoBenhAnId(ObjectId hoSoBenhAnId) {
-        return chamSocRepository.findByHoSoBenhAnIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);
+    public List<ChamSoc> getByHoSoBenhAnId(ObjectId hsbaId) {
+        return chamSocRepository.findByHoSoBenhAnRefObjectIdAndTrangThai(hsbaId, TRANGTHAI_DULIEU.DEFAULT);
     }
 }

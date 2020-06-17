@@ -1,8 +1,0 @@
-<custodian>
-   <assignedCustodian>
-     <representedCustodianOrganization>
-       <id root="$!utils.randomUUID()"/>
-       <name>$!cskb.ten</name>
-     </representedCustodianOrganization>
-   </assignedCustodian>
- </custodian>

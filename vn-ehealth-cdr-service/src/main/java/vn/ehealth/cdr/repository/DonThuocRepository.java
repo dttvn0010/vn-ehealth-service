@@ -9,8 +9,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import vn.ehealth.cdr.model.DonThuoc;
 
 public interface DonThuocRepository extends MongoRepository<DonThuoc, ObjectId> {
-     
-    public List<DonThuoc> findByHoSoBenhAnIdAndTrangThai(ObjectId hoSoBenhAnId, int trangThai);
-    public List<DonThuoc> findByBenhNhanIdAndTrangThai(ObjectId benhNhanId, int trangThai);
+    
     public Optional<DonThuoc> findByIdhis(String idhis);
+    public List<DonThuoc> findByHoSoBenhAnRefObjectIdAndTrangThai(ObjectId hsbaId, int trangThai);
+    public List<DonThuoc> findByYlenhRefObjectIdAndTrangThai(ObjectId ylenhId, int trangThai);
 }

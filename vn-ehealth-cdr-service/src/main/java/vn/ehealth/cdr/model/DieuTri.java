@@ -27,7 +27,6 @@ public class DieuTri {
         public DanhMuc dmCheDoAnUong;
         public DanhMuc dmCheDoChamSoc;
         public DanhMuc dmCapHoLy;
-        public DanhMuc dmLoaiToaThuoc;
     }
     
     @Id public ObjectId id;

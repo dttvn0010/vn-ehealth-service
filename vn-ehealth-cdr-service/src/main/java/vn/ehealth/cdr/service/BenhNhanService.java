@@ -29,7 +29,6 @@ public class BenhNhanService {
     private LogService logService;
     
     public BenhNhan createOrUpdate(BenhNhan benhNhan, String jsonSt) {
-        boolean createNew = benhNhan.id == null;
         
         benhNhan.id = benhNhanRepository
                             .findByIdDinhDanhChinh(benhNhan.idDinhDanhChinh)
@@ -37,12 +36,7 @@ public class BenhNhanService {
         
         benhNhan = benhNhanRepository.save(benhNhan);
         
-        if(createNew) {
-            logService.logAction(BenhNhan.class.getName(), benhNhan.id, MA_HANH_DONG.TAO_MOI, new Date(), null, 
-                                        "", jsonSt);
-        }
-        
-        logService.logAction(BenhNhan.class.getName(), benhNhan.id, MA_HANH_DONG.CHINH_SUA, new Date(), null, 
+        logService.logAction(BenhNhan.class.getName(), benhNhan.id, MA_HANH_DONG.THEM_SUA, new Date(), null, 
                                     JsonUtil.dumpObject(benhNhan), jsonSt);
         
         return benhNhan;
