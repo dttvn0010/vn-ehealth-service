@@ -1,4 +1,4 @@
-package vn.ehealth.cdr.model;
+package vn.ehealth.cdr.model.component;
 
 import java.util.Map;
 
@@ -24,13 +24,22 @@ public class DanhMuc {
     @JsonIgnore
     public String codeSystem = "";
     
-    public Map<String, Object> extension;
+    public Map<String, Object> extra;
     
     @JsonIgnore
     public String maNhom;
     
     @JsonIgnore
     public String phienBan;
+    
+    public DanhMuc() {
+        
+    }
+    
+    public DanhMuc(String ma, String ten) {
+        this.ma = ma;
+        this.ten = ten;
+    }
     
     public static Coding toCoding(DanhMuc dto, String maNhom) {
         if(dto == null) return null;

@@ -20,6 +20,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import vn.ehealth.cdr.model.component.CanboYteDTO;
+import vn.ehealth.cdr.model.component.DanhMuc;
+import vn.ehealth.cdr.model.component.EmrRef;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
@@ -34,15 +37,17 @@ import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 public class DonThuoc {
     
     @Id public ObjectId id;    
-    public ObjectId hoSoBenhAnId;    
-    public ObjectId benhNhanId;
-    public ObjectId coSoKhamBenhId;
+    public EmrRef hoSoBenhAnRef;
+    public EmrRef benhNhanRef;
+    public EmrRef coSoKhamBenhRef;
+    public EmrRef ylenhRef;
+    
     public int trangThai;
     public String idhis;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayKeDon;
-    public CanboYte bacSiKeDon;
+    public CanboYteDTO bacSiKeDon;
     public String soDon;
     
     public List<FileDinhKem> dsFileDinhKemDonThuoc = new ArrayList<>();
@@ -85,7 +90,7 @@ public class DonThuoc {
         public Date ngayKeDon;
         
         @JsonIgnore
-        public CanboYte bacSiKeDon;
+        public CanboYteDTO bacSiKeDon;
         
         @JsonIgnore
         public String soDon;
@@ -96,7 +101,12 @@ public class DonThuoc {
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
         public Date ngayKetThuc;
         
-        public LieuLuongDungThuoc lieuLuongThuoc;    
+        public LieuLuongDungThuoc lieuLuongThuoc;
+        public LieuLuongDungThuoc lieuLuongSang;
+        public LieuLuongDungThuoc lieuLuongTrua;
+        public LieuLuongDungThuoc lieuLuongChieu;
+        public LieuLuongDungThuoc lieuLuongToi;
+        
         public String chiDanDungThuoc;
         public String bietDuoc;
       
@@ -106,7 +116,7 @@ public class DonThuoc {
             var mRequest = new MedicationRequest();
             mRequest.setSubject(enc.getSubject());
             mRequest.setEncounter(createReference(enc));
-            mRequest.setRequester(CanboYte.toRef(bacSiKeDon));
+            mRequest.setRequester(CanboYteDTO.toRef(bacSiKeDon));
             mRequest.setAuthoredOn(ngayKeDon);
             mRequest.setGroupIdentifier(createIdentifier(soDon, IdentifierSystem.MEDICATION_REQUEST));
             
@@ -147,29 +157,5 @@ public class DonThuoc {
     
     public void setId(String id) {
         this.id = ObjectIdUtil.stringToId(id);
-    }
-
-    public String getHoSoBenhAnId() {
-        return ObjectIdUtil.idToString(hoSoBenhAnId);
-    }
-    
-    public void setHoSoBenhAnId(String hoSoBenhAnId) {
-        this.hoSoBenhAnId = ObjectIdUtil.stringToId(hoSoBenhAnId);            
-    }
-
-    public String getBenhNhanId() {
-        return ObjectIdUtil.idToString(benhNhanId);
-    }
-
-    public void setBenhNhanId(String benhNhanId) {
-        this.benhNhanId = ObjectIdUtil.stringToId(benhNhanId);
-    }    
-    
-    public String getCoSoKhamBenhId() {
-        return ObjectIdUtil.idToString(coSoKhamBenhId);
-    }
-    
-    public void setCoSoKhamBenhId(String coSoKhamBenhId) {
-        this.coSoKhamBenhId = ObjectIdUtil.stringToId(coSoKhamBenhId);
     }
 }

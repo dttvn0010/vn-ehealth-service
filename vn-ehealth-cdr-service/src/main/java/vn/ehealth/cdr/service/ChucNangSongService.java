@@ -39,9 +39,9 @@ public class ChucNangSongService {
             	cns.id = chucNangSongRepository.findByIdhis(cns.idhis).map(x -> x.id).orElse(null);
             }
             
-            cns.hoSoBenhAnId = hsba.id;
-            cns.benhNhanId = hsba.benhNhanId;
-            cns.coSoKhamBenhId = hsba.coSoKhamBenhId;
+            cns.hoSoBenhAnRef = HoSoBenhAn.toEmrRef(hsba);
+            cns.benhNhanRef = hsba.benhNhanRef;
+            cns.coSoKhamBenhRef = hsba.coSoKhamBenhRef;
             cns = chucNangSongRepository.save(cns);
             cnsList.set(i, cns);
         }

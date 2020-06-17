@@ -16,8 +16,12 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import vn.ehealth.auth.model.User;
 import vn.ehealth.auth.service.UserService;
+import vn.ehealth.cdr.model.BenhNhan;
+import vn.ehealth.cdr.model.CoSoKhamBenh;
 import vn.ehealth.cdr.model.HoSoBenhAn;
+import vn.ehealth.cdr.model.component.EmrRef;
 import vn.ehealth.cdr.repository.HoSoBenhAnRepository;
 import vn.ehealth.cdr.utils.CDRUtils;
 import vn.ehealth.cdr.utils.JsonUtil;
@@ -100,7 +104,7 @@ public class HoSoBenhAnService {
             
             if(log.nguoiThucHienId != null) {
                 var user = userService.getById(log.nguoiThucHienId);
-                nguoiThucHien = user.map(x -> x.fullName).orElse("");
+                nguoiThucHien = user.map(x -> x.getDisplay()).orElse("");
             }
             
             if(log.ngayThucHien != null) {
@@ -113,19 +117,23 @@ public class HoSoBenhAnService {
         return result;
     }
     
-    public HoSoBenhAn createOrUpdateFromHIS(@Nonnull ObjectId benhNhanId, @Nonnull ObjectId coSoKhamBenhId, @Nonnull HoSoBenhAn hsba, String jsonSt) {
+    public HoSoBenhAn save(HoSoBenhAn hsba) {
+        return hoSoBenhAnRepository.save(hsba);
+    }
+    
+    public HoSoBenhAn createOrUpdateFromHIS(@Nonnull BenhNhan benhNhan, @Nonnull CoSoKhamBenh coSoKhamBenh, @Nonnull HoSoBenhAn hsba, String jsonSt) {
         hsba.id = hoSoBenhAnRepository.findByMaTraoDoi(hsba.maTraoDoi).map(x -> x.id).orElse(null);
         boolean createNew = hsba.id == null;
         
-        hsba.benhNhanId = benhNhanId;        
-        hsba.coSoKhamBenhId = coSoKhamBenhId;
+        hsba.benhNhanRef = BenhNhan.toRef(benhNhan);        
+        hsba.coSoKhamBenhRef = CoSoKhamBenh.toEmrRef(coSoKhamBenh);
         
         if(createNew) {
             hsba.ngayTao = new Date();
-            hsba.nguoiTaoId = null;
+            hsba.nguoiTaoRef = null;
         }else {
             hsba.ngaySua = new Date();
-            hsba.nguoiSuaId = null;
+            hsba.nguoiSuaRef = null;
         }
         
         
@@ -144,34 +152,36 @@ public class HoSoBenhAnService {
         return hsba;
     }
    
-    public void archiveHsba(ObjectId id, ObjectId userId) {
+    public void archiveHsba(ObjectId id, @Nonnull User user) {
         var hsba = hoSoBenhAnRepository.findById(id);
         hsba.ifPresent(x -> {
-            logService.logAction(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.LUU_TRU, new Date(), userId, "", "");            
+            logService.logAction(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.LUU_TRU, new Date(), user.id, "", "");            
             x.trangThai = TRANGTHAI_HOSO.DA_LUU;
-            x.nguoiLuuTruId = userId;
+            x.nguoiLuuTruRef = EmrRef.fromUser(user);
             x.ngayLuuTru = new Date();
             x.maLuuTru = x.maYte;
             hoSoBenhAnRepository.save(x);
         });
     }
     
-    public void unArchiveHsba(ObjectId id, ObjectId userId) {
+    public void unArchiveHsba(ObjectId id, @Nonnull User user) {
         var hsba = hoSoBenhAnRepository.findById(id);
         hsba.ifPresent(x -> {
-            logService.logAction(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.MO_LUU_TRU, new Date(), userId, "", "");            
+            logService.logAction(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.MO_LUU_TRU, new Date(), user.id, "", "");            
             x.trangThai = TRANGTHAI_HOSO.CHUA_XULY;
-            x.nguoiMoLuTruId = userId;
-            x.ngaymoluutru = new Date();
+            x.nguoiMoLuTruRef = EmrRef.fromUser(user);
+            x.ngayMoLuuTru = new Date();
             hoSoBenhAnRepository.save(x);
         });
     }
     
-    public void deleteHsba(ObjectId id, ObjectId userId) {
+    public void deleteHsba(ObjectId id, @Nonnull User user) {
         var hsba = hoSoBenhAnRepository.findById(id);
         hsba.ifPresent(x -> {
-            logService.logAction(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.XOA, new Date(), userId, "", "");
+            logService.logAction(HoSoBenhAn.class.getName(), id, MA_HANH_DONG.XOA, new Date(), user.id, "", "");
             x.trangThai = TRANGTHAI_HOSO.DA_XOA;
+            x.nguoiXoaRef =  EmrRef.fromUser(user);
+            x.ngayXoa = new Date();
             hoSoBenhAnRepository.save(x);
         });
     }

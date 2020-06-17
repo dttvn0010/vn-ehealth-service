@@ -12,6 +12,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import vn.ehealth.cdr.model.component.CanboYteDTO;
+import vn.ehealth.cdr.model.component.DanhMuc;
+import vn.ehealth.cdr.model.component.EmrRef;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
@@ -19,9 +22,9 @@ import vn.ehealth.cdr.utils.ObjectIdUtil;
 public class ChucNangSong {
     
     @Id public ObjectId id;        
-    public ObjectId hoSoBenhAnId;    
-    public ObjectId benhNhanId;
-    public ObjectId coSoKhamBenhId;
+    public EmrRef hoSoBenhAnRef;
+    public EmrRef benhNhanRef;
+    public EmrRef coSoKhamBenhRef;
     public int trangThai;
     public String idhis;
     
@@ -41,7 +44,7 @@ public class ChucNangSong {
         public Integer huyetApCao;
         public Integer nhipTho;
         public Double canNang;
-        public CanboYte ytaTheoDoi;
+        public CanboYteDTO ytaTheoDoi;
     }
     
     public List<ChucNangSongChiTiet> dsChucNangSongChiTiet = new ArrayList<>();
@@ -52,29 +55,5 @@ public class ChucNangSong {
     
     public void setId(String id) {
         this.id = ObjectIdUtil.stringToId(id);
-    }
-    
-    public String getHoSoBenhAnId() {
-        return ObjectIdUtil.idToString(hoSoBenhAnId);
-    }
-    
-    public void setHoSoBenhAnId(String hoSoBenhAnId) {
-        this.hoSoBenhAnId = ObjectIdUtil.stringToId(hoSoBenhAnId);            
-    }
-
-    public String getBenhNhanId() {
-        return ObjectIdUtil.idToString(benhNhanId);
-    }
-
-    public void setBenhNhanId(String benhNhanId) {
-        this.benhNhanId = ObjectIdUtil.stringToId(benhNhanId);
-    }
-    
-    public String getCoSoKhamBenhId() {
-        return ObjectIdUtil.idToString(coSoKhamBenhId);
-    }
-    
-    public void setCoSoKhamBenhId(String coSoKhamBenhId) {
-        this.coSoKhamBenhId = ObjectIdUtil.stringToId(coSoKhamBenhId);
-    }
+    }    
 }

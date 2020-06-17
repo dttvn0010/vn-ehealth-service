@@ -7,8 +7,6 @@ import javax.annotation.Nonnull;
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.IdType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,19 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vn.ehealth.auth.utils.UserUtil;
-import vn.ehealth.cda.CDAUtils;
-import vn.ehealth.cda.TemplateUtils;
 import vn.ehealth.cdr.controller.helper.EncounterHelper;
 import vn.ehealth.cdr.controller.helper.OrganizationHelper;
 import vn.ehealth.cdr.controller.helper.PatientHelper;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.service.BenhNhanService;
 import vn.ehealth.cdr.service.CoSoKhamBenhService;
-import vn.ehealth.cdr.service.DonThuocService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.LogService;
-import vn.ehealth.cdr.service.PhauThuatThuThuatService;
-import vn.ehealth.cdr.service.XetNghiemService;
 import vn.ehealth.cdr.utils.*;
 import vn.ehealth.hl7.fhir.core.common.UnAuthorizedException;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
@@ -50,10 +43,6 @@ public class HoSoBenhAnController {
     @Autowired private HoSoBenhAnService hoSoBenhAnService;    
     @Autowired private BenhNhanService benhNhanService;
     @Autowired private CoSoKhamBenhService coSoKhamBenhService;
-    @Autowired private PhauThuatThuThuatService phauThuatThuThuatService;
-    @Autowired private XetNghiemService xetNghiemService;
-    @Autowired private DonThuocService donThuocService;
-    
     @Autowired private LogService logService;
     @Autowired private EncounterDao encounterDao; 
     @Autowired private PatientHelper patientHelper;
@@ -136,7 +125,7 @@ public class HoSoBenhAnController {
         
         try {
             var user = UserUtil.getCurrentUser();
-            hoSoBenhAnService.archiveHsba(new ObjectId(id), user.get().id);
+            hoSoBenhAnService.archiveHsba(new ObjectId(id), user.get());
             return ResponseEntity.ok(mapOf("success", true));
             
         }catch(Exception e) {
@@ -148,43 +137,8 @@ public class HoSoBenhAnController {
     public ResponseEntity<?> unArchiveHsba(@RequestParam("hsba_id") String id) {
         try {
             var user = UserUtil.getCurrentUser();            
-            hoSoBenhAnService.unArchiveHsba(new ObjectId(id), user.get().id);
+            hoSoBenhAnService.unArchiveHsba(new ObjectId(id), user.get());
             return ResponseEntity.ok(mapOf("success", true));
-            
-        }catch(Exception e) {
-            return ResponseUtil.errorResponse(e);
-        }
-    }
-    
-    @GetMapping("/export_cda/{id}")
-    public ResponseEntity<?> exportCDA(@PathVariable("id") String id) {
-        try {
-            var hsbaId = new ObjectId(id);
-            var hsba = hoSoBenhAnService.getById(hsbaId).orElseThrow();
-            
-            var dsPttt = phauThuatThuThuatService.getByHoSoBenhAnId(hsbaId);
-            var dsXetNghiem = xetNghiemService.getByHoSoBenhAnId(hsbaId);
-            var dsDonThuoc = donThuocService.getByHoSoBenhAnId(hsbaId);
-            
-            var data = mapOf(
-                "utils", TemplateUtils.class,
-                "hsba", JsonUtil.objectToMap(hsba),
-                "benhNhan", JsonUtil.objectToMap(hsba.getBenhNhan()),
-                "cskb", JsonUtil.objectToMap(hsba.getCoSoKhamBenh()),
-                "dsPttt", transform(dsPttt, x -> JsonUtil.objectToMap(x)) ,
-                "dsXetNghiem", transform(dsXetNghiem, x -> JsonUtil.objectToMap(x)),
-                "dsDonThuoc", transform(dsDonThuoc, x -> JsonUtil.objectToMap(x))
-            );
-            
-            var xml = CDAUtils.getClinicalDocument(JsonUtil.objectToMap(data));
-            var xmlBytes = xml.getBytes();
-            var resource = new ByteArrayResource(xmlBytes);
-            
-            return ResponseEntity.ok()
-                    .contentLength(xmlBytes.length)
-                    .contentType(MediaType.parseMediaType("application/xml"))
-                    .header("Content-disposition", "attachment; filename=cda_" + id + ".xml")
-                    .body(resource);
             
         }catch(Exception e) {
             return ResponseUtil.errorResponse(e);
@@ -195,7 +149,7 @@ public class HoSoBenhAnController {
     public ResponseEntity<?> deleteHsba(@RequestParam("hsba_id") String id) {
         try {
             var user = UserUtil.getCurrentUser();
-            hoSoBenhAnService.deleteHsba(new ObjectId(id), user.get().id);
+            hoSoBenhAnService.deleteHsba(new ObjectId(id), user.get());
             return ResponseEntity.ok(mapOf("success", true));
             
         }catch(Exception e) {
@@ -262,7 +216,7 @@ public class HoSoBenhAnController {
             }
             
             var hsba = objectMapper.convertValue(map, HoSoBenhAn.class);
-            hsba = hoSoBenhAnService.createOrUpdateFromHIS(benhNhan.id, coSoKhamBenh.id, hsba, jsonSt);
+            hsba = hoSoBenhAnService.createOrUpdateFromHIS(benhNhan, coSoKhamBenh, hsba, jsonSt);
             
             // save to FHIR db
             saveToFhirDb(hsba);

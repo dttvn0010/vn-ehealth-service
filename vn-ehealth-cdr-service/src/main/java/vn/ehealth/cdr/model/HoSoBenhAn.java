@@ -21,6 +21,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import vn.ehealth.cdr.model.component.CanboYteDTO;
+import vn.ehealth.cdr.model.component.DanhMuc;
+import vn.ehealth.cdr.model.component.EmrRef;
 import vn.ehealth.cdr.service.ServiceFactory;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
@@ -53,9 +56,9 @@ public class HoSoBenhAn {
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
         public Date ngayGioRaVien;
         
-        public CanboYte bacSiKham;
+        public CanboYteDTO bacSiKham;
         public Integer tongSoNgayDieuTri;
-        public CanboYte bacSiChoRaVien;
+        public CanboYteDTO bacSiChoRaVien;
         public String noiChuyenDen;
         
     }
@@ -92,7 +95,7 @@ public class HoSoBenhAn {
 
         public String tenKhoa;
 
-        public CanboYte bacSiDieuTri;
+        public CanboYteDTO bacSiDieuTri;
 
         public String phong;
 
@@ -148,10 +151,10 @@ public class HoSoBenhAn {
             
     public DanhMuc dmLoaiBenhAn;   
     
-    public ObjectId benhNhanId;    
+    public EmrRef benhNhanRef;    
     @Transient public BenhNhan benhNhan;
     
-    public ObjectId coSoKhamBenhId;
+    public EmrRef coSoKhamBenhRef;
     @Transient public CoSoKhamBenh coSoKhamBenh;       
     
     public int nguonDuLieu;    
@@ -168,22 +171,27 @@ public class HoSoBenhAn {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayTao;
     
-    public ObjectId nguoiTaoId;
+    public EmrRef nguoiTaoRef;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaySua;
     
-    public ObjectId nguoiSuaId;
+    public EmrRef nguoiSuaRef;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayLuuTru;
     
-    public ObjectId nguoiLuuTruId;
+    public EmrRef nguoiLuuTruRef;
     
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngaymoluutru;
+    public Date ngayMoLuuTru;
     
-    public ObjectId nguoiMoLuTruId;    
+    public EmrRef nguoiMoLuTruRef;    
+    
+    public EmrRef nguoiXoaRef;
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngayXoa;
     
     public QuanLyNguoiBenh quanLyNguoiBenh;
     
@@ -198,7 +206,7 @@ public class HoSoBenhAn {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayKyBenhAn;
     
-    public CanboYte bacSyLamBenhAn;
+    public CanboYteDTO bacSyLamBenhAn;
     
     public String nguoiGiaoHoSo;
 
@@ -210,7 +218,7 @@ public class HoSoBenhAn {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaynhanhoso;
 
-    public CanboYte bacSyDieuTri;
+    public CanboYteDTO bacSyDieuTri;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngaybacSyDieuTriky;
@@ -227,62 +235,6 @@ public class HoSoBenhAn {
         this.id = ObjectIdUtil.stringToId(id);
     }
        
-    public String getBenhNhanId() {
-        return ObjectIdUtil.idToString(benhNhanId);
-    }
-    
-    public BenhNhan getBenhNhan() {
-        return ServiceFactory.getBenhNhanService().getById(benhNhanId).orElse(null);
-    }
-      
-    public void setBenhNhanId(String benhNhanId) {
-        this.benhNhanId = ObjectIdUtil.stringToId(benhNhanId);
-    }
-    
-    public String getCoSoKhamBenhId() {
-        return ObjectIdUtil.idToString(coSoKhamBenhId);
-    }
-    
-    public CoSoKhamBenh getCoSoKhamBenh() {
-        return ServiceFactory.getCoSoKhamBenhService().getById(coSoKhamBenhId).orElse(null);
-    }
-     
-    public void setCoSoKhamBenhId(String coSoKhamBenhId) {
-        this.coSoKhamBenhId = ObjectIdUtil.stringToId(coSoKhamBenhId);
-    }
-    
-    public String getNguoiTaoId() {
-        return ObjectIdUtil.idToString(nguoiTaoId);
-    }
-    
-    public void setNguoiTaoId(String nguoiTaoId) {
-        this.nguoiTaoId = ObjectIdUtil.stringToId(nguoiTaoId);
-    }
-    
-    public String getNguoiSuaId() {
-        return ObjectIdUtil.idToString(nguoiSuaId);
-    }
-    
-    public void setNguoiSuaId(String nguoisuaId) {
-        this.nguoiSuaId = ObjectIdUtil.stringToId(nguoisuaId);
-    }
-    
-    public String getNguoiLuuTruId() {
-        return ObjectIdUtil.idToString(nguoiLuuTruId);
-    }
-    
-    public void setNguoiLuuTruId(String nguoiLuuTruId) {
-        this.nguoiLuuTruId = ObjectIdUtil.stringToId(nguoiLuuTruId);
-    }
-    
-    public String getNguoiMoLuuTruId() {
-        return ObjectIdUtil.idToString(nguoiMoLuTruId);
-    }
-    
-    public void setNguoiMoLuuTruId(String nguoiMoLuTruId) {
-        this.nguoiMoLuTruId = ObjectIdUtil.stringToId(nguoiMoLuTruId);
-    }
-    
     @JsonInclude(Include.NON_NULL)
     public static class TuoiBenhNhan {
         final public static int YEAR = 1;
@@ -302,7 +254,7 @@ public class HoSoBenhAn {
     }
     
     public TuoiBenhNhan getTuoiBenhNhan() {
-        var benhNhan = getBenhNhan();
+        var benhNhan = ServiceFactory.getBenhNhanService().getById(EmrRef.toObjectId(benhNhanRef)).orElse(null);
         
         if(benhNhan == null
             || benhNhan.ngaysinh == null
@@ -366,5 +318,17 @@ public class HoSoBenhAn {
         }
         
         return enc;
+    }
+    
+    public static EmrRef toEmrRef(HoSoBenhAn obj) {
+        if(obj == null || obj.id == null) {
+            return null;
+        }
+        
+        var ref = new EmrRef();
+        ref.className = HoSoBenhAn.class.getName();
+        ref.objectId = obj.getId();
+        ref.identifier = obj.maYte;
+        return ref;
     }
 }

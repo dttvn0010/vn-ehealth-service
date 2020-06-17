@@ -16,6 +16,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import vn.ehealth.cdr.model.component.DanhMuc;
+import vn.ehealth.cdr.model.component.EmrRef;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.core.util.Constants.ExtensionURL;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
@@ -184,4 +186,17 @@ public class BenhNhan {
         return obj;
     }    
         
+    
+    public static EmrRef toRef(BenhNhan obj) {
+        if(obj == null || obj.id == null) {
+            return null;
+        }
+        
+        var ref = new EmrRef();
+        ref.className = BenhNhan.class.getName();
+        ref.objectId = obj.getId();
+        ref.identifier = obj.sobhyt;
+        
+        return ref;
+    }
 }

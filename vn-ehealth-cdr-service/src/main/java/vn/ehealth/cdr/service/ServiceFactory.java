@@ -10,6 +10,7 @@ public class ServiceFactory implements ApplicationContextAware  {
     private static ApplicationContext applicationContext;
     private static HoSoBenhAnService hoSoBenhAnService;
     private static BenhNhanService benhNhanService;
+    private static CanboYteService canboYteService;
     private static CoSoKhamBenhService coSoKhamBenhService;    
     
     @Override
@@ -29,6 +30,13 @@ public class ServiceFactory implements ApplicationContextAware  {
             benhNhanService = applicationContext.getBean(BenhNhanService.class);
         }
         return benhNhanService;
+    }
+    
+    public static CanboYteService getCanboYteService() {
+        if(canboYteService == null) {
+            canboYteService = applicationContext.getBean(CanboYteService.class);
+        }
+        return canboYteService;
     }
     
     public static CoSoKhamBenhService getCoSoKhamBenhService() {

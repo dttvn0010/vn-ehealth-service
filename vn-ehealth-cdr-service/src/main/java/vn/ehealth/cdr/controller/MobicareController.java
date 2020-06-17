@@ -3,6 +3,7 @@ package vn.ehealth.cdr.controller;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.auth.utils.UserUtil;
-import vn.ehealth.cdr.model.CanboYte;
+import vn.ehealth.cdr.model.DieuTri;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.Ylenh;
+import vn.ehealth.cdr.model.component.CanboYteDTO;
+import vn.ehealth.cdr.service.CanboYteService;
+import vn.ehealth.cdr.service.DieuTriService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.YlenhService;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
@@ -31,18 +35,19 @@ public class MobicareController {
 
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     @Autowired private EncounterDao encounterDao;
-    @Autowired private PractitionerDao practitionerDao;
     
     @Autowired private YlenhService ylenhService;
+    @Autowired private DieuTriService dieuTriService;
+    @Autowired private CanboYteService canboYteService;
     
-    @PostMapping("/create_ylenh/{encounterId}")
-    public ResponseEntity<?> createYlenh(@PathVariable String encounterId, @RequestBody Ylenh ylenh) {
+    @PostMapping("/them_ylenh_dieutri/{encounterId}")
+    public ResponseEntity<?> createYlenh(@PathVariable String encounterId, @RequestBody DieuTri dieuTri) {
         try {
             var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
             var medicalRecord = FhirUtil.findIdentifierBySystem(encounter.getIdentifier(), IdentifierSystem.MEDICAL_RECORD);
             var user = UserUtil.getCurrentUser().orElse(null);
-            var practitionerId = user != null? user.fhirPractitionerId : null;
-            var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
+            var canboYteId = user != null? user.canBoYteId : null;
+            var canboYte = canboYteId != null? canboYteService.getById(new ObjectId(canboYteId)) : null;
             
             HoSoBenhAn hsba = null;
             
@@ -55,15 +60,31 @@ public class MobicareController {
                 throw new Exception("No hsba with encounterId=" + encounterId);
             }
             
+            if(hsba.chanDoan == null) {
+                hsba.chanDoan = new HoSoBenhAn.ChanDoan();
+            }
+            
+            if(dieuTri.dmMaBenhChanDoan != null) {                
+                hsba.chanDoan.dmMaBenhChanDoanDieuTriChinh = dieuTri.dmMaBenhChanDoan;
+            }
+            
+            if(dieuTri.dsDmMaBenhChanDoanKemTheo != null) {
+                hsba.chanDoan.dsDmMaBenhChanDoanDieuTriKemTheo = dieuTri.dsDmMaBenhChanDoanKemTheo;
+            }
+            
+            hsba = hoSoBenhAnService.save(hsba);
+            dieuTri = dieuTriService.save(dieuTri);
+            
+            /*
             ylenh.hoSoBenhAnId = hsba.id;
             ylenh.benhNhanId = hsba.benhNhanId;
             ylenh.coSoKhamBenhId = hsba.coSoKhamBenhId;
             
             ylenh.ngayDieuTri = new Date();
-            ylenh.bacSiRaYlenh =  CanboYte.fromFhir(practitioner);
+            ylenh.bacSiRaYlenh =  CanboYteDTO.fromFhir(practitioner);
             ylenh = ylenhService.save(ylenh);
-            
-            return ResponseEntity.ok(mapOf("success", true, "ylenh", ylenh));
+            */
+            return ResponseEntity.ok(mapOf("success", true));
             
         }catch(Exception e) {
             return ResponseUtil.errorResponse(e);

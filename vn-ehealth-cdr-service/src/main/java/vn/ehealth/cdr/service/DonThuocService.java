@@ -41,9 +41,9 @@ public class DonThuocService {
             if(dt.idhis != null) {
                 dt.id = donThuocRepository.findByIdhis(dt.idhis).map(x -> x.id).orElse(null);
             }
-            dt.hoSoBenhAnId = hsba.id;
-            dt.benhNhanId = hsba.benhNhanId;
-            dt.coSoKhamBenhId = hsba.coSoKhamBenhId;
+            dt.hoSoBenhAnRef = HoSoBenhAn.toEmrRef(hsba);
+            dt.benhNhanRef = hsba.benhNhanRef;
+            dt.coSoKhamBenhRef = hsba.coSoKhamBenhRef;
             dt = donThuocRepository.save(dt);
             dtList.set(i, dt);
         }

@@ -9,10 +9,13 @@ import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.Specimen;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import vn.ehealth.cdr.model.DichVuKyThuat;
+import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ProcedureDao;
 import vn.ehealth.hl7.fhir.clinical.dao.impl.ServiceRequestDao;
 import vn.ehealth.hl7.fhir.dao.util.DatabaseUtil;
@@ -26,16 +29,14 @@ import static vn.ehealth.hl7.fhir.core.util.FhirUtil.*;
 @Service
 public class ProcedureHelper {
 
-	@Autowired
-	private ProcedureDao procedureDao;
-	@Autowired
-	private ServiceRequestDao serviceRequestDao;
-	@Autowired
-	private DiagnosticReportDao diagnosticReportDao;
-	@Autowired
-	private SpecimenDao specimenDao;
-	@Autowired
-	private ObservationDao observationDao;
+	@Autowired private ProcedureDao procedureDao;
+	@Autowired private ServiceRequestDao serviceRequestDao;
+	@Autowired private DiagnosticReportDao diagnosticReportDao;
+	@Autowired private SpecimenDao specimenDao;
+	@Autowired private ObservationDao observationDao;
+	@Autowired private EncounterHelper encounterHelper;
+	
+	private Logger log = LoggerFactory.getLogger(ProcedureHelper.class);
 
 	private DiagnosticReport saveDiagnosticReport(DiagnosticReport obj) {
 		if (obj != null) {
@@ -230,4 +231,17 @@ public class ProcedureHelper {
 			}
 		});
 	}
+	
+	public void saveToFhirDb(HoSoBenhAn hsba, List<DichVuKyThuat> dvktList) {
+        if(hsba == null) return;
+        
+        try {
+            var enc = encounterHelper.getEncounterByMaHsba(hsba.maYte);
+            if(enc != null) {            
+                dvktList.forEach(x -> saveDVKT(enc, x));
+            }            
+        }catch(Exception e) {
+            log.error("Cannot save cdha from hsba id=" + hsba.getId() + " to fhir DB", e);
+        }
+    }
 }

@@ -1,9 +1,5 @@
 package vn.ehealth.cdr.controller;
 
-import java.util.List;
-import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.cdr.controller.helper.EncounterHelper;
 import vn.ehealth.cdr.controller.helper.ProcedureHelper;
-import vn.ehealth.cdr.model.HoSoBenhAn;
-import vn.ehealth.cdr.model.PhauThuatThuThuat;
+import vn.ehealth.cdr.model.dto.PhauThuatThuThuat;
+import vn.ehealth.cdr.service.DichVuKyThuatService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.service.PhauThuatThuThuatService;
 import vn.ehealth.cdr.utils.*;
+import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
@@ -31,31 +26,15 @@ import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 public class PhauThuatThuThuatController {
     
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
-    private Logger log = LoggerFactory.getLogger(PhauThuatThuThuatController.class);
-            
-    @Autowired private PhauThuatThuThuatService phauThuatThuThuatService;
+    @Autowired private DichVuKyThuatService dichVuKyThuatService;
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     
     @Autowired private ProcedureHelper procedureHelper;
-    @Autowired private EncounterHelper encounterHelper;
 
     @GetMapping("/get_ds_pttt")
     public ResponseEntity<?> getDsPhauThuatThuThuat(@RequestParam("hsba_id") String id) {
-        var ptttList = phauThuatThuThuatService.getByHoSoBenhAnId(new ObjectId(id));
+        var ptttList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(id, LoaiDichVuKT.PHAU_THUAT_THU_THUAT);
         return ResponseEntity.ok(ptttList);
-    }
-    
-    private void saveToFhirDb(HoSoBenhAn hsba, List<PhauThuatThuThuat> ptttList) {
-        if(hsba == null) return;
-        
-        try {
-            var enc = encounterHelper.getEncounterByMaHsba(hsba.maYte);
-            if(enc != null) {            
-                ptttList.forEach(x -> procedureHelper.saveDVKT(enc, x));
-            }            
-        }catch(Exception e) {
-            log.error("Cannot save cdha from hsba id=" + hsba.getId() + " to fhir DB", e);
-        }
     }
     
     @PostMapping("/create_or_update_pttt")
@@ -71,12 +50,13 @@ public class PhauThuatThuThuatController {
             }
             
             var ptttObjList = CDRUtils.getFieldAsList(map, "dsPhauThuatThuThuat");
-            var ptttList = FPUtil.transform(ptttObjList, x -> objectMapper.convertValue(x, PhauThuatThuThuat.class)); 
+            var ptttList = FPUtil.transform(ptttObjList, x -> objectMapper.convertValue(x, PhauThuatThuThuat.class));
+            var dvktList = FPUtil.transform(ptttList, PhauThuatThuThuat::toDichVuKyThuat);
             
-            phauThuatThuThuatService.createOrUpdateFromHIS(hsba, ptttList, jsonSt);
-            
+            dichVuKyThuatService.createOrUpdateFromHIS(hsba, dvktList, jsonSt);
+                        
             // save to FHIR db
-            saveToFhirDb(hsba, ptttList);
+            procedureHelper.saveToFhirDb(hsba, dvktList);
                         
             var result = DataConvertUtil.mapOf(
                 "success" , true,

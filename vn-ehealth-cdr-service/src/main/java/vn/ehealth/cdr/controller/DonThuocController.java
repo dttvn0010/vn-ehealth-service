@@ -25,6 +25,7 @@ import vn.ehealth.cdr.controller.helper.EncounterHelper;
 import vn.ehealth.cdr.controller.helper.MedicationRequestHelper;
 import vn.ehealth.cdr.model.DonThuoc;
 import vn.ehealth.cdr.model.HoSoBenhAn;
+import vn.ehealth.cdr.model.component.EmrRef;
 import vn.ehealth.cdr.service.DonThuocService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.utils.*;
@@ -60,7 +61,7 @@ public class DonThuocController {
         var lst = donThuocService.getByBenhNhanId(new ObjectId(benhNhanId));
         
         var result = transform(lst, x -> {
-            var hsba =  hoSoBenhAnService.getById(x.hoSoBenhAnId);
+            var hsba =  hoSoBenhAnService.getById(EmrRef.toObjectId(x.hoSoBenhAnRef));
             return mapOf("donthuoc", x, "hsba", hsba);
          });
         

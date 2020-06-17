@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import vn.ehealth.cdr.model.component.DanhMuc;
+import vn.ehealth.cdr.model.component.EmrRef;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.hl7.fhir.dao.util.DaoFactory;
 import vn.ehealth.utils.MongoUtils;
@@ -63,5 +65,17 @@ public class CoSoKhamBenh {
         obj.setIdentifier(listOf(createIdentifier(ma, IdentifierSystem.PROVIDER)));
         obj.setName(ten);
         return obj;
+    }
+    
+    public static EmrRef toEmrRef(CoSoKhamBenh obj) {
+        if(obj == null || obj.id == null) return null;
+        
+        var ref = new EmrRef();
+        ref.className = CoSoKhamBenh.class.getName();
+        ref.objectId = obj.getId();
+        ref.name = obj.ten;
+        ref.identifier = obj.ma;
+        
+        return ref;
     }
 }

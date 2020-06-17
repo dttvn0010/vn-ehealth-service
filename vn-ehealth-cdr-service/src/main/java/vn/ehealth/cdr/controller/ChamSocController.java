@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("/api/dieutri")
-public class DieuTriController {
+@RequestMapping("/api/chamsoc")
+public class ChamSocController {
     
-    @GetMapping("/get_ds_dieutri")
-    public ResponseEntity<?> getDsDieutri(@RequestParam("hsba_id") String id) {        
+    
+    @GetMapping("/get_ds_chamsoc")
+    public ResponseEntity<?> getDsChamSoc(@RequestParam("hsba_id") String id) {
+    
         return ResponseEntity.ok(new ArrayList<>());
-    }    
+    }
+    
 }

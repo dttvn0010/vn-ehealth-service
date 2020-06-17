@@ -1,9 +1,6 @@
 package vn.ehealth.cdr.controller;
 
-import java.util.List;
-import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.cdr.controller.helper.EncounterHelper;
 import vn.ehealth.cdr.controller.helper.ProcedureHelper;
-import vn.ehealth.cdr.model.HoSoBenhAn;
-import vn.ehealth.cdr.model.XetNghiem;
+import vn.ehealth.cdr.model.DichVuKyThuat;
+import vn.ehealth.cdr.model.dto.XetNghiem;
+import vn.ehealth.cdr.service.DichVuKyThuatService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
-import vn.ehealth.cdr.service.XetNghiemService;
+import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
 import vn.ehealth.cdr.utils.CDRUtils;
 import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
@@ -31,56 +28,18 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 @RestController
 @RequestMapping("/api/xetnghiem")
 public class XetNghiemController {
-    
-    private Logger log = LoggerFactory.getLogger(XetNghiemController.class);
-    
-    @Autowired private XetNghiemService xetNghiemService;    
+
+    @Autowired private DichVuKyThuatService dichVuKyThuatService;    
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     
     @Autowired private ProcedureHelper procedureHelper;
-    @Autowired private EncounterHelper encounterHelper;
 
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
     @GetMapping("/get_ds_xetnghiem")
-    public ResponseEntity<?> getDsXetNghiem(@RequestParam("hsba_id") String id) {
-        var xetnghiemList = xetNghiemService.getByHoSoBenhAnId(new ObjectId(id));
+    public ResponseEntity<?> getDsXetNghiem(@RequestParam("hsba_id") String hsbaId) {
+        var xetnghiemList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(hsbaId, LoaiDichVuKT.XET_NGHIEM);
         return ResponseEntity.ok(xetnghiemList);
-    }
-    
-    @GetMapping("/get_ds_xetnghiem_by_bn")
-    public ResponseEntity<?> getDsXetNghiemByBn(@RequestParam String benhNhanId) {
-        var lst = xetNghiemService.getByBenhNhanId(new ObjectId(benhNhanId));
-        
-        var result = transform(lst, x -> {
-           var hsba =  hoSoBenhAnService.getById(x.hoSoBenhAnId);
-           return mapOf("xetnghiem", x, "hsba", hsba);
-        });
-        
-        return ResponseEntity.ok(result);
-    }
-    
-    private void saveToFhirDb(HoSoBenhAn hsba, List<XetNghiem> xetNghiemList) {
-        if(hsba == null) return;
-        try {
-            var enc = encounterHelper.getEncounterByMaHsba(hsba.maYte);
-            if(enc == null) return;
-            
-            for(var xetNghiem : xetNghiemList) {
-                if(xetNghiem.dsDichVuXetNghiem == null) continue;
-                
-                for(var xndv : xetNghiem.dsDichVuXetNghiem) {
-                    xndv.ngayYeuCau = xetNghiem.ngayYeuCau;
-                    xndv.bacSiYeuCau = xetNghiem.bacSiYeuCau;
-                    xndv.noiDungYeuCau = xetNghiem.noiDungYeuCau;
-                    xndv.ngayThucHien = xetNghiem.ngayThucHien;
-                    xndv.bacSiXetNghiem = xetNghiem.bacSiXetNghiem;
-                    procedureHelper.saveDVKT(enc, xndv);
-                }
-            }
-        }catch(Exception e) {
-            log.error("Cannot save xetnghiem from hsba id=" + hsba.getId() + " to fhir DB", e);
-        }
     }
     
     @PostMapping("/create_or_update_xetnghiem")
@@ -126,10 +85,16 @@ public class XetNghiemController {
             var xetnghiemList = FPUtil.transform(xnObjList,
                                         x -> objectMapper.convertValue(x, XetNghiem.class));
             
-            xetNghiemService.createOrUpdateFromHIS(hsba, xetnghiemList, jsonSt);
+            var dvktList = new ArrayList<DichVuKyThuat>();
+            
+            for(var xn : xetnghiemList) {
+                dvktList.addAll(xn.toDsDichVuKyThuat());
+            }
+            
+            dichVuKyThuatService.createOrUpdateFromHIS(hsba, dvktList, jsonSt);
             
             // save to FHIR db
-            saveToFhirDb(hsba, xetnghiemList);
+            procedureHelper.saveToFhirDb(hsba, dvktList);
             
             var result = mapOf(
                 "success" , true,

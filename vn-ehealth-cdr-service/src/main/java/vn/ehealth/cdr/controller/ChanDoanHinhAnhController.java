@@ -1,9 +1,5 @@
 package vn.ehealth.cdr.controller;
 
-import java.util.List;
-import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import vn.ehealth.cdr.controller.helper.EncounterHelper;
 import vn.ehealth.cdr.controller.helper.ProcedureHelper;
-import vn.ehealth.cdr.model.ChanDoanHinhAnh;
-import vn.ehealth.cdr.model.HoSoBenhAn;
-import vn.ehealth.cdr.service.ChanDoanHinhAnhService;
+import vn.ehealth.cdr.model.dto.ChanDoanHinhAnh;
+import vn.ehealth.cdr.service.DichVuKyThuatService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.utils.*;
+import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 
@@ -33,32 +28,17 @@ public class ChanDoanHinhAnhController {
     
     private ObjectMapper objectMapper = CDRUtils.createObjectMapper();
     
-    @Autowired private ChanDoanHinhAnhService chanDoanHinhAnhService;
+    @Autowired private DichVuKyThuatService dichVuKyThuatService;
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     
     @Autowired private ProcedureHelper procedureHelper;
-    @Autowired private EncounterHelper encounterHelper;
-    
-    private Logger log = LoggerFactory.getLogger(ChanDoanHinhAnhController.class);
             
     @GetMapping("/get_ds_cdha")
     public ResponseEntity<?> getDsChanDoanHinhAnh(@RequestParam("hsba_id") String hsbaId) {
-        var cdhaList = chanDoanHinhAnhService.getByHoSoBenhAnId(new ObjectId(hsbaId));
+        var cdhaList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(hsbaId, LoaiDichVuKT.CHAN_DOAN_HINH_ANH);
         return ResponseEntity.ok(cdhaList);
     }
     
-    private void saveToFhirDb(HoSoBenhAn hsba, List<ChanDoanHinhAnh> cdhaList) {
-        if(hsba == null) return;
-        
-        try {
-            var enc = encounterHelper.getEncounterByMaHsba(hsba.maYte);
-            if(enc != null) {
-                cdhaList.forEach(x -> procedureHelper.saveDVKT(enc, x));
-            }
-        }catch(Exception e) {
-            log.error("Cannot save cdha from hsba id=" + hsba.getId() + " to fhir DB", e);
-        }
-    }    
     
     @PostMapping("/create_or_update_cdha")
     public ResponseEntity<?> createOrUpdateCdhaFromHIS(@RequestBody String jsonSt) {
@@ -74,11 +54,12 @@ public class ChanDoanHinhAnhController {
             
             var cdhaObjList = CDRUtils.getFieldAsList(map, "dsChanDoanHinhAnh");
             var cdhaList = FPUtil.transform(cdhaObjList, x -> objectMapper.convertValue(x, ChanDoanHinhAnh.class));
+            var dvktList = FPUtil.transform(cdhaList, ChanDoanHinhAnh::toDichVuKyThuat);
             
-            chanDoanHinhAnhService.createOrUpdateFromHIS(hsba, cdhaList, jsonSt);
+            dichVuKyThuatService.createOrUpdateFromHIS(hsba, dvktList, jsonSt);
             
             // save to FHIR db
-            saveToFhirDb(hsba, cdhaList);
+            procedureHelper.saveToFhirDb(hsba, dvktList);
             
             var result = mapOf(
                 "success" , true,
