@@ -42,9 +42,19 @@ public class ChamSoc {
     public String thucHienYlenh;
     public String ghiChu;
     
-    public List<String> dsChiDinhThuocId = new ArrayList<>();
+    public static class VatTuYte {
+        public DanhMuc dmVatTuYte;
+        public int soLuong;
+    }
     
-    public List<DanhMuc> dsDmVatTuYTe = new ArrayList<>();
+    public static class UongThuoc {
+        public DanhMuc dmThuoc;
+        public int lieuLuong;
+        public int thoiDiemTrongNgay;
+        public List<VatTuYte> dsVatTuYte = new ArrayList<>();
+    }
+    
+    public List<UongThuoc> dsUongThuoc = new ArrayList<>();
     
     public String getId() { 
         return ObjectIdUtil.idToString(id); 
