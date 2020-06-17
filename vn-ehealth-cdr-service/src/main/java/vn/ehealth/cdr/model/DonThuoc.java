@@ -16,7 +16,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -52,101 +51,51 @@ public class DonThuoc {
     
     public List<FileDinhKem> dsFileDinhKemDonThuoc = new ArrayList<>();
    
-    @JsonInclude(Include.NON_NULL)
-    public static class DonThuocChiTiet {
+    public static class LieuLuongDungThuoc {
+        public Integer soLuong;
+        public String donVi;
+        public DanhMuc dmThoiDiemDungThuoc;
         
-        public static class LieuLuongDungThuoc {
-            public Integer soLuong;
-            public String donVi;
+        public LieuLuongDungThuoc() {
             
-            public LieuLuongDungThuoc() {
-                
-            }
-            
-            public LieuLuongDungThuoc(String lieuLuong) {
-                if(lieuLuong == null) return;
-                
-                var items = List.of(lieuLuong.split(" "));
-                items = FPUtil.filter(items, x -> !StringUtils.isBlank(x));
-                
-                try {
-                    this.soLuong = Integer.parseInt(items.get(0));
-                }catch(NumberFormatException e) {
-                    
-                }
-                
-                if(this.soLuong != null && items.size() > 0) {
-                    this.donVi = DataConvertUtil.joinString(items.subList(1, items.size()), " ");
-                }                
-            }
         }
+        
+        public LieuLuongDungThuoc(String lieuLuong) {
+            if(lieuLuong == null) return;
+            
+            var items = List.of(lieuLuong.split(" "));
+            items = FPUtil.filter(items, x -> !StringUtils.isBlank(x));
+            
+            try {
+                this.soLuong = Integer.parseInt(items.get(0));
+            }catch(NumberFormatException e) {
+                
+            }
+            
+            if(this.soLuong != null && items.size() > 0) {
+                this.donVi = DataConvertUtil.joinString(items.subList(1, items.size()), " ");
+            }                
+        }
+    }
+    
+    @JsonInclude(Include.NON_NULL)
+    public static class DonThuocChiTiet {               
         
         public DanhMuc dmThuoc;
         public DanhMuc dmDuongDungThuoc;
-        public DanhMuc dmTanSuatDungThuoc;
-        public DanhMuc dmChiDanDungThuoc;
+        public DanhMuc dmThoiDiemDungThuoc;
+        public DanhMuc dmChiDanDungThuoc;   
         
-        @JsonIgnore
-        public Date ngayKeDon;
-        
-        @JsonIgnore
-        public CanboYteDTO bacSiKeDon;
-        
-        @JsonIgnore
-        public String soDon;
-        
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(pattern="yyyy-MM-dd")
         public Date ngayBatDau;
         
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(pattern="yyyy-MM-dd")
         public Date ngayKetThuc;
         
-        public LieuLuongDungThuoc lieuLuongThuoc;
-        public LieuLuongDungThuoc lieuLuongSang;
-        public LieuLuongDungThuoc lieuLuongTrua;
-        public LieuLuongDungThuoc lieuLuongChieu;
-        public LieuLuongDungThuoc lieuLuongToi;
+        public List<LieuLuongDungThuoc> dsLieuLuongThuoc = new ArrayList<>();
         
         public String chiDanDungThuoc;
-        public String bietDuoc;
-      
-        public MedicationRequest toFHir(Encounter enc) {
-            if(enc == null) return null;
-            
-            var mRequest = new MedicationRequest();
-            mRequest.setSubject(enc.getSubject());
-            mRequest.setEncounter(createReference(enc));
-            mRequest.setRequester(CanboYteDTO.toRef(bacSiKeDon));
-            mRequest.setAuthoredOn(ngayKeDon);
-            mRequest.setGroupIdentifier(createIdentifier(soDon, IdentifierSystem.MEDICATION_REQUEST));
-            
-            mRequest.setMedication(DanhMuc.toConcept(dmThuoc, CodeSystemValue.DM_THUOC));
-           
-            var dosage = new Dosage();
-            dosage.setText(chiDanDungThuoc);
-            dosage.setRoute(DanhMuc.toConcept(dmDuongDungThuoc, CodeSystemValue.DM_DUONG_DUNG_THUOC));
-                
-            //TODO: TanXuat
-            
-            mRequest.getDosageInstruction().add(dosage);
-            
-            if(lieuLuongThuoc.soLuong != null) {
-                var quantity = new Quantity();
-                quantity.setValue(lieuLuongThuoc.soLuong);
-                quantity.setUnit(lieuLuongThuoc.donVi);                
-                
-                mRequest.getDispenseRequest().setQuantity(quantity);
-            }
-            
-            if(ngayBatDau != null || ngayKetThuc != null) {
-                var period = new Period();
-                period.setStart(ngayBatDau);
-                period.setEnd(ngayKetThuc);
-                mRequest.getDispenseRequest().setValidityPeriod(period);
-            }
-            
-            return mRequest;
-        }
+        public String bietDuoc;        
     }
     
     public List<DonThuocChiTiet> dsDonThuocChiTiet = new ArrayList<>();
@@ -157,5 +106,54 @@ public class DonThuoc {
     
     public void setId(String id) {
         this.id = ObjectIdUtil.stringToId(id);
+    }
+    
+    public List<MedicationRequest> toFHir(Encounter enc) {
+        var lst = new ArrayList<MedicationRequest>();
+        
+        if(enc != null && dsDonThuocChiTiet != null) {
+            for(var dtct : dsDonThuocChiTiet) {
+            
+                var mRequest = new MedicationRequest();
+                mRequest.setSubject(enc.getSubject());
+                mRequest.setEncounter(createReference(enc));
+                mRequest.setRequester(CanboYteDTO.toRef(bacSiKeDon));
+                mRequest.setAuthoredOn(ngayKeDon);
+                mRequest.setGroupIdentifier(createIdentifier(soDon, IdentifierSystem.MEDICATION_REQUEST));
+                
+                mRequest.setMedication(DanhMuc.toConcept(dtct.dmThuoc, CodeSystemValue.DM_THUOC));
+                
+                if(dtct.dsLieuLuongThuoc != null) {
+                    for(var lieuLuongThuoc : dtct.dsLieuLuongThuoc) {
+                        var dosage = new Dosage();
+                        dosage.setText(dtct.chiDanDungThuoc);
+                        dosage.setRoute(DanhMuc.toConcept(dtct.dmDuongDungThuoc, CodeSystemValue.DM_DUONG_DUNG_THUOC));
+                        
+                        dosage.getTiming().setCode(DanhMuc.toConcept(dtct.dmThoiDiemDungThuoc, CodeSystemValue.DM_DUONG_DUNG_THUOC));;
+                        var quantity = new Quantity();
+                        quantity.setValue(lieuLuongThuoc.soLuong);
+                        quantity.setUnit(lieuLuongThuoc.donVi); 
+                        
+                        var doseAndRate = dosage.getDoseAndRateFirstRep();
+                        doseAndRate.setRate(quantity);
+                        
+                        mRequest.getDosageInstruction().add(dosage);
+                       
+                    }
+                }
+                
+                
+                if(dtct.ngayBatDau != null || dtct.ngayKetThuc != null) {
+                    var period = new Period();
+                    period.setStart(dtct.ngayBatDau);
+                    period.setEnd(dtct.ngayKetThuc);
+                    mRequest.getDispenseRequest().setValidityPeriod(period);
+                }
+                
+                lst.add(mRequest);
+            }
+        }
+        
+        return lst;
     }
 }

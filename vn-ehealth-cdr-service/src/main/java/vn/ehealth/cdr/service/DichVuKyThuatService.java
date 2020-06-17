@@ -30,6 +30,9 @@ public class DichVuKyThuatService {
         return dichVuKyThuatRepository.findByHoSoBenhAnRefObjectIdAndDmLoaiDVKTMa(hsbaId, maLoaiDVKT);
     }    
     
+    public DichVuKyThuat save(@Nonnull DichVuKyThuat dvkt) {
+        return dichVuKyThuatRepository.save(dvkt);
+    }
     
     public void createOrUpdateFromHIS(@Nonnull HoSoBenhAn hsba, @Nonnull List<DichVuKyThuat> dvktList, String jsonSt) {
         for(int i = 0; i < dvktList.size(); i++) {

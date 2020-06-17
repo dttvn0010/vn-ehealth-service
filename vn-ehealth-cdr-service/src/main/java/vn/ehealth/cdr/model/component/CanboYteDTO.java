@@ -46,4 +46,13 @@ public class CanboYteDTO {
         }
         return null;
     }    
+    
+    public static CanboYteDTO fromCanboYte(CanboYte obj) {
+        if(obj == null) return null;
+        
+        var dto = new CanboYteDTO();
+        dto.ten = obj.ten;
+        dto.chungChiHanhNghe = obj.chungChiHanhNghe;
+        return dto;
+    }
 }

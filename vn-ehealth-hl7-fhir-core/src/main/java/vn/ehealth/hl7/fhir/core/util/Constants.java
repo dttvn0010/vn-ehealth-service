@@ -77,6 +77,7 @@ public class Constants {
         final public static String VI_TRI_MAU_SINH_THIET = codeSystems.getProperty("ViTriMauSinhThiet");        
         final public static String DM_THUOC = codeSystems.getProperty("Thuoc");
         final public static String DM_DUONG_DUNG_THUOC = codeSystems.getProperty("DuongDungThuoc");
+        final public static String DM_THOI_DIEM_DUNG_THUOC = codeSystems.getProperty("ThoiDiemDungThuoc");
         final public static String DOI_TUONG_BH = codeSystems.getProperty("doituongbaohiem");
         final public static String NOIKCBBD = codeSystems.getProperty("noikcbbd");
         final public static String mucHuongBHYT = codeSystems.getProperty("muchuongbhyt");

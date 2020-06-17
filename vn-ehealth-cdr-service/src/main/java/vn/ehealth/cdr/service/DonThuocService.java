@@ -35,6 +35,10 @@ public class DonThuocService {
         return donThuocRepository.findByBenhNhanIdAndTrangThai(benhNhanId, TRANGTHAI_DULIEU.DEFAULT);
     }
     
+    public DonThuoc save(@Nonnull DonThuoc donThuoc) {
+        return donThuocRepository.save(donThuoc);
+    }
+    
     public void createOrUpdateFromHIS(@Nonnull HoSoBenhAn hsba, @Nonnull List<DonThuoc> dtList, String jsonSt) {
         for(int i = 0; i < dtList.size(); i++) {
             var dt = dtList.get(i);

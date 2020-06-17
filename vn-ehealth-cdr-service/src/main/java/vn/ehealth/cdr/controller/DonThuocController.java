@@ -80,17 +80,13 @@ public class DonThuocController {
             var oldMedicationRequests = medicationRequestHelper.getMedicationRequestByDonThuoc(soDon);
             oldMedicationRequests.forEach(x -> medicationRequestDao.remove(x.getIdElement()));
             
+            
             // create new data
             for(var donthuoc : donThuocList) {
-                if(donthuoc.dsDonThuocChiTiet == null) continue;                
-                
-                for(var dtct : donthuoc.dsDonThuocChiTiet) {
-                    dtct.bacSiKeDon = donthuoc.bacSiKeDon;
-                    dtct.ngayKeDon = donthuoc.ngayKeDon;
-                    dtct.soDon = donthuoc.soDon;
-                    var medReq = dtct.toFHir(enc);
+                var medReqs = donthuoc.toFHir(enc);
+                for(var medReq : medReqs) {
                     medicationRequestDao.create(medReq);
-                }
+                }                
             }
         }catch(Exception e) {
             log.error("Cannot save donthuoc from hsba id=" + hsba.getId() + " to fhir DB", e);

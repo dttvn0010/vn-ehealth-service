@@ -12,8 +12,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.model.component.DanhMuc;
 import vn.ehealth.cdr.model.component.EmrRef;
+import vn.ehealth.cdr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "dieu_tri")
@@ -34,7 +36,7 @@ public class DieuTri {
     public EmrRef benhNhanRef;
     public EmrRef coSoKhamBenhRef;
     public EmrRef ylenhRef;
-    public EmrRef bacSiThucHienUserRef;
+    public CanboYteDTO bacSiDieuTri;
     
     public int trangThai;
     
@@ -50,4 +52,12 @@ public class DieuTri {
     public Date ngayDieuTri;
     
     public ChiDinh chiDinh;
+    
+    public String getId() {
+        return ObjectIdUtil.idToString(id);
+    }
+    
+    public void setId(String id) { 
+        this.id = ObjectIdUtil.stringToId(id);
+    }
 }

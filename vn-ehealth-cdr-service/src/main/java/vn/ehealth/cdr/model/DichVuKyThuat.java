@@ -55,6 +55,7 @@ public class DichVuKyThuat {
     public EmrRef hoSoBenhAnRef;
     public EmrRef benhNhanRef;
     public EmrRef coSoKhamBenhRef;
+    public EmrRef ylenhRef;
     
     public String idhis;
     
