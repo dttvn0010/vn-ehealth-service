@@ -8,5 +8,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 
 public interface HoSoBenhAnRepository extends MongoRepository<HoSoBenhAn, ObjectId> {
+    Optional<HoSoBenhAn> findByMaYte(String maYte);
     Optional<HoSoBenhAn> findByMaTraoDoi(String maTraoDoi);
 }

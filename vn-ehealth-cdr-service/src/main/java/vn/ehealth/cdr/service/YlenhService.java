@@ -3,6 +3,8 @@ package vn.ehealth.cdr.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,5 +24,9 @@ public class YlenhService {
     
     public List<Ylenh> getByHoSoBenhAnId(ObjectId hoSoBenhAnId) {
         return ylenhRepository.findByHoSoBenhAnIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);
+    }
+    
+    public Ylenh save(@Nonnull Ylenh ylenh) {
+        return ylenhRepository.save(ylenh);        
     }
 }

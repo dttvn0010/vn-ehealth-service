@@ -38,6 +38,10 @@ public class HoSoBenhAnService {
     
     @Autowired MongoTemplate mongoTemplate;
     
+    public Optional<HoSoBenhAn> getByMaYte(String maYte) {
+        return hoSoBenhAnRepository.findByMaYte(maYte);
+    }
+    
     public Optional<HoSoBenhAn> getByMaTraoDoi(String maTraoDoi) {
         return hoSoBenhAnRepository.findByMaTraoDoi(maTraoDoi);
     }
