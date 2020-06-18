@@ -20,6 +20,13 @@ import vn.ehealth.cdr.utils.ObjectIdUtil;
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "ylenh")
 public class Ylenh {
+    public static class ChiDinhDieuTri {
+
+        public String anUong;
+        public DanhMuc dmCheDoAnUong;
+        public DanhMuc dmCheDoChamSoc;
+        public DanhMuc dmCapHoLy;
+    }    
     
     @Id public ObjectId id;    
     
@@ -31,17 +38,21 @@ public class Ylenh {
     public String idhis;
     
     public DanhMuc dmLoaiYlenh;
-    public DanhMuc dmLoaiDVKT;
-    public DanhMuc dmNhomDVKT;
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngayRaYlenh;   
     
     public CanboYteDTO bacSiRaYlenh;
     
     public DanhMuc dmMaBenhChanDoan;
     public List<DanhMuc> dsDmMaBenhChanDoanKemTheo = new ArrayList<>();
     public String moTaChanDoan;
+     
+    public String dienBien;
+    public String dienBienQuanTrong;
+    public String loiDan;
     
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    public Date ngayRaYlenh;    
+    public ChiDinhDieuTri chiDinhDieuTri;
     
     public String hienThi;
     public String phong = "304";

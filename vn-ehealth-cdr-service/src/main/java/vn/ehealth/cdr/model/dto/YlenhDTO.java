@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import vn.ehealth.cdr.model.DichVuKyThuat;
 import vn.ehealth.cdr.model.DonThuoc;
 import vn.ehealth.cdr.model.Ylenh;
 import vn.ehealth.cdr.model.component.DanhMuc;
@@ -13,9 +14,20 @@ import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiYlenh;
 import vn.ehealth.cdr.utils.CDRConstants.ThoiDiemDungThuoc;
 
-public class YlenhThuocDTO {
-
-    public static class DonThuocChiTietDTO {
+public class YlenhDTO {
+    public DanhMuc dmLoaiYlenh;
+    public DanhMuc dmMaBenhChanDoan;
+    public String dienBien;
+    public String dienBienQuanTrong;
+    public String loiDan;
+    public String ghiChu;
+    
+    public String chiDinhAnUong;
+    public DanhMuc dmChiDinhCheDoAnUong;
+    public DanhMuc dmChiDinhCheDoChamSoc;
+    public DanhMuc dmChiDinhCapHoLy;    
+    
+    public static class ChiDinhThuocDTO {
         public DanhMuc dmThuoc;
         public DanhMuc dmDuongDungThuoc;
         public Integer lieuLuongSang;
@@ -32,7 +44,15 @@ public class YlenhThuocDTO {
         public Date ngayKetThuc;
     }
     
-    public List<DonThuocChiTietDTO> dsChiDinhThuoc = new ArrayList<>();
+    public static class ChiDinhDVKT {
+        public DanhMuc dmLoaiDVKT;
+        public DanhMuc dmDVKT;
+        public DanhMuc dmNoiThucHien;
+        public String ghiChu;
+    }
+    
+    public List<ChiDinhThuocDTO> dsChiDinhThuoc = new ArrayList<>();
+    public List<ChiDinhDVKT> dsChiDinhDVKT = new ArrayList<>();
     
     public DonThuoc generateDonThuoc() {
         var donThuoc = new DonThuoc();
@@ -86,11 +106,50 @@ public class YlenhThuocDTO {
         return donThuoc;
     }
     
+    public List<DichVuKyThuat> generateDsDichVuKyThuat() {
+        var dsDVKT = new ArrayList<DichVuKyThuat>();
+        
+        for(var chiDinhDVKT : dsChiDinhDVKT) {
+           var dvkt = new DichVuKyThuat();
+           dvkt.dmLoaiDVKT = chiDinhDVKT.dmLoaiDVKT;
+           dvkt.dmDVKT = chiDinhDVKT.dmDVKT;
+           dvkt.ghiChu = ghiChu;
+           dsDVKT.add(dvkt);
+        }
+        
+        return dsDVKT;
+    }
+    
     public Ylenh generateYlenh() {
         var ylenh = new Ylenh();
-        ylenh.dmLoaiYlenh = new DanhMuc(LoaiYlenh.YLENH_THUOC, MessageUtils.get("ylenh.thuoc"));
-        int count = dsChiDinhThuoc != null? dsChiDinhThuoc.size() : 0;
-        ylenh.hienThi = String.format(MessageUtils.get("ylenh.thuoc.hienthi.template"), count);
+        
+        ylenh.dmLoaiYlenh = dmLoaiYlenh;
+        
+        if(dmLoaiYlenh != null) {
+            if(LoaiYlenh.YLENH_DIEU_TRI.equals(dmLoaiYlenh.ma)) {
+                ylenh.hienThi = dienBien;
+            }else if(LoaiYlenh.YLENH_THUOC.equals(dmLoaiYlenh.ma)) {
+                int count = dsChiDinhThuoc != null? dsChiDinhThuoc.size() : 0;
+                ylenh.hienThi = String.format(MessageUtils.get("ylenh.thuoc.hienthi.template"), count); 
+            }else if(LoaiYlenh.YLENH_DVKT.equals(dmLoaiYlenh.ma)) {
+                int count = dsChiDinhDVKT != null? dsChiDinhDVKT.size() : 0;                
+                ylenh.hienThi = String.format(MessageUtils.get("ylenh.dvkt.hienthi.template"), count);
+            }
+        }
+        
+        ylenh.dmMaBenhChanDoan = dmMaBenhChanDoan;
+        ylenh.dienBien = dienBien;
+        ylenh.dienBienQuanTrong = dienBienQuanTrong;
+        ylenh.loiDan = loiDan;
+        ylenh.ghiChu = ghiChu;
+        ylenh.chiDinhDieuTri = new Ylenh.ChiDinhDieuTri();
+        
+        ylenh.chiDinhDieuTri.anUong = chiDinhAnUong;
+        ylenh.chiDinhDieuTri.dmCheDoAnUong = dmChiDinhCheDoAnUong;
+        ylenh.chiDinhDieuTri.dmCheDoChamSoc = dmChiDinhCheDoChamSoc;
+        ylenh.chiDinhDieuTri.dmCapHoLy = dmChiDinhCapHoLy;
+        
+        ylenh.ghiChu = ghiChu;
         return ylenh;
     }
 }

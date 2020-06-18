@@ -17,7 +17,5 @@ public interface YlenhRepository extends MongoRepository<Ylenh, ObjectId>{
     
     List<Ylenh> findByHoSoBenhAnRefObjectIdAndDmLoaiYlenhMaAndTrangThai(ObjectId hsbaId, String maLoaiYlenh, int trangThai, Pageable pageable);
     
-    List<Ylenh> findByHoSoBenhAnRefObjectIdAndDmLoaiYlenhMaAndDmLoaiDVKTMaAndTrangThai(ObjectId hsbaId, String maLoaiYlenh, String maLoaiDVKT, int trangThai, Pageable pageable);
-    
     Optional<Ylenh> findByIdhis(String idhis);
 }

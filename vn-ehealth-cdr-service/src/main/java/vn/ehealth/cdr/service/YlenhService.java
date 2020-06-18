@@ -38,11 +38,6 @@ public class YlenhService {
         return ylenhRepository.findByHoSoBenhAnRefObjectIdAndDmLoaiYlenhMaAndTrangThai(hoSoBenhAnId, maLoaiYlenh, TRANGTHAI_DULIEU.DEFAULT, pageable);
     }
     
-    public List<Ylenh> getByHoSoBenhAnIdAndLoaiYlenhAndLoaiDVKT(ObjectId hoSoBenhAnId, String maLoaiYlenh, String maLoaiDVKT, int start, int count) {
-        var pageable = new OffsetBasedPageable(count, start, Sort.by("id"));
-        return ylenhRepository.findByHoSoBenhAnRefObjectIdAndDmLoaiYlenhMaAndDmLoaiDVKTMaAndTrangThai(hoSoBenhAnId, maLoaiYlenh, maLoaiDVKT, TRANGTHAI_DULIEU.DEFAULT, pageable);
-    }
-    
     public Ylenh save(@Nonnull Ylenh ylenh) {
         return ylenhRepository.save(ylenh);        
     }
