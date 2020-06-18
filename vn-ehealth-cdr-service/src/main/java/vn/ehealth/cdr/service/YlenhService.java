@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import vn.ehealth.cdr.model.HoSoBenhAn;
@@ -23,16 +24,23 @@ public class YlenhService {
         return ylenhRepository.findById(id);
     }
     
-    public List<Ylenh> getByHoSoBenhAnId(ObjectId hoSoBenhAnId) {
-        return ylenhRepository.findByHoSoBenhAnRefObjectIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT);
+    public List<Ylenh> getByHoSoBenhAnId(ObjectId hoSoBenhAnId, int start, int count) {
+        if(start >= 0 && count >= 0) {
+            var pageable = new OffsetBasedPageable(count, start, Sort.by("id"));
+            return ylenhRepository.findByHoSoBenhAnRefObjectIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT, pageable);
+        }else {
+            return ylenhRepository.findByHoSoBenhAnRefObjectIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT); 
+        }
     }
     
-    public List<Ylenh> getByHoSoBenhAnIdAndLoaiYlenh(ObjectId hoSoBenhAnId, String maLoaiYlenh) {
-        return ylenhRepository.findByHoSoBenhAnRefObjectIdAndDmLoaiYlenhMaAndTrangThai(hoSoBenhAnId, maLoaiYlenh, TRANGTHAI_DULIEU.DEFAULT);
+    public List<Ylenh> getByHoSoBenhAnIdAndLoaiYlenh(ObjectId hoSoBenhAnId, String maLoaiYlenh, int start, int count) {
+        var pageable = new OffsetBasedPageable(count, start, Sort.by("id"));
+        return ylenhRepository.findByHoSoBenhAnRefObjectIdAndDmLoaiYlenhMaAndTrangThai(hoSoBenhAnId, maLoaiYlenh, TRANGTHAI_DULIEU.DEFAULT, pageable);
     }
     
-    public List<Ylenh> getByHoSoBenhAnIdAndLoaiYlenhAndLoaiDVKT(ObjectId hoSoBenhAnId, String maLoaiYlenh, String maLoaiDVKT) {
-        return ylenhRepository.findByHoSoBenhAnRefObjectIdAndDmLoaiYlenhMaAndDmLoaiDVKTMaAndTrangThai(hoSoBenhAnId, maLoaiYlenh, maLoaiDVKT, TRANGTHAI_DULIEU.DEFAULT);
+    public List<Ylenh> getByHoSoBenhAnIdAndLoaiYlenhAndLoaiDVKT(ObjectId hoSoBenhAnId, String maLoaiYlenh, String maLoaiDVKT, int start, int count) {
+        var pageable = new OffsetBasedPageable(count, start, Sort.by("id"));
+        return ylenhRepository.findByHoSoBenhAnRefObjectIdAndDmLoaiYlenhMaAndDmLoaiDVKTMaAndTrangThai(hoSoBenhAnId, maLoaiYlenh, maLoaiDVKT, TRANGTHAI_DULIEU.DEFAULT, pageable);
     }
     
     public Ylenh save(@Nonnull Ylenh ylenh) {

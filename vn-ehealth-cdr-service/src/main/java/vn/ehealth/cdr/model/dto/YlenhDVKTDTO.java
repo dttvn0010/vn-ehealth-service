@@ -3,6 +3,8 @@ package vn.ehealth.cdr.model.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import vn.ehealth.cdr.model.DichVuKyThuat;
 import vn.ehealth.cdr.model.Ylenh;
 import vn.ehealth.cdr.model.component.DanhMuc;
@@ -34,6 +36,15 @@ public class YlenhDVKTDTO {
     public Ylenh generateYlenh() {
         var ylenh = new Ylenh();
         ylenh.dmLoaiYlenh = new DanhMuc(LoaiYlenh.YLENH_DVKT, MessageUtils.get("ylenh.dvkt"));
+        String dvkt = "";
+        
+        if(dmNhomDVKT != null && !StringUtils.isEmpty(dmNhomDVKT.ten)) {
+            dvkt = dmNhomDVKT.ten;
+        }else if(dsDmDVKT.size() > 0){
+            dvkt = dsDmDVKT.get(0).ten;
+        }
+        
+        ylenh.hienThi = String.format(MessageUtils.get("ylenh.dvkt.hienthi.template"), dvkt);
         ylenh.dmMaBenhChanDoan = dmMaBenhChanDoan;
         ylenh.dmLoaiDVKT = dmLoaiDVKT;
         ylenh.dmNhomDVKT = dmNhomDVKT;

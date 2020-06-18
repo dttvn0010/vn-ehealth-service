@@ -89,6 +89,8 @@ public class YlenhThuocDTO {
     public Ylenh generateYlenh() {
         var ylenh = new Ylenh();
         ylenh.dmLoaiYlenh = new DanhMuc(LoaiYlenh.YLENH_THUOC, MessageUtils.get("ylenh.thuoc"));
+        int count = dsChiDinhThuoc != null? dsChiDinhThuoc.size() : 0;
+        ylenh.hienThi = String.format(MessageUtils.get("ylenh.thuoc.hienthi.template"), count);
         return ylenh;
     }
 }

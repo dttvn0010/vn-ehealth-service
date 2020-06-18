@@ -38,6 +38,7 @@ public class YlenhDieuTriDTO {
     
     public Ylenh generateYlenh() {
         var ylenh = new Ylenh();
+        ylenh.hienThi = dienBien;
         ylenh.dmLoaiYlenh = new DanhMuc(LoaiYlenh.YLENH_DIEU_TRI, MessageUtils.get("ylenh.dieutri"));
         ylenh.dmMaBenhChanDoan = dmMaBenhChanDoan;
         ylenh.ghiChu = ghiChu;

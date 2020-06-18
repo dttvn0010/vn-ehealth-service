@@ -43,6 +43,8 @@ public class Ylenh {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayRaYlenh;    
     
+    public String hienThi;
+    public String phong = "304";
     public String ghiChu;
         
     public String getId() {
@@ -61,6 +63,7 @@ public class Ylenh {
         var ref = new EmrRef();
         ref.className = Ylenh.class.toString();
         ref.objectId = obj.id;
+        ref.name = obj.hienThi;
         return ref;
     }
 }

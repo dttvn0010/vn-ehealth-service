@@ -2,6 +2,7 @@ package vn.ehealth.cdr.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.auth.utils.UserUtil;
@@ -205,7 +207,9 @@ public class YlenhController {
     }
     
     @GetMapping("/get_list/{encounterId}")
-    public ResponseEntity<?> getList(@PathVariable String encounterId) {
+    public ResponseEntity<?> getList(@PathVariable String encounterId, 
+            @RequestParam Optional<Integer> start,
+            @RequestParam Optional<Integer> count) {
         try {
             var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
             var medicalRecord = FhirUtil.findIdentifierBySystem(encounter.getIdentifier(), IdentifierSystem.MEDICAL_RECORD);
@@ -221,7 +225,7 @@ public class YlenhController {
                 throw new Exception("No hsba with encounterId=" + encounterId);
             }
             
-            var lst = ylenhService.getByHoSoBenhAnId(hsba.id);
+            var lst = ylenhService.getByHoSoBenhAnId(hsba.id, start.orElse(-1), count.orElse(-1));
             return ResponseEntity.ok(lst);
             
         }catch(Exception e) {
