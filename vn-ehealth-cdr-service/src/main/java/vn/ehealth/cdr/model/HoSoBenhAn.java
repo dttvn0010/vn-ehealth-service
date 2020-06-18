@@ -235,6 +235,15 @@ public class HoSoBenhAn {
         this.id = ObjectIdUtil.stringToId(id);
     }
        
+    
+    public BenhNhan getBenhNhan() {
+        var benhNhanId = EmrRef.toObjectId(benhNhanRef);
+        if(benhNhanId != null) {
+            return ServiceFactory.getBenhNhanService().getById(benhNhanId).orElse(null);
+        }
+        return null;
+    }
+    
     @JsonInclude(Include.NON_NULL)
     public static class TuoiBenhNhan {
         final public static int YEAR = 1;

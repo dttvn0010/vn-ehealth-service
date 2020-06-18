@@ -59,7 +59,7 @@ public class HoSoBenhAnService {
     }
     
     public long countHoSo(ObjectId userId, ObjectId coSoKhamBenhId, int trangThai, String maYte) {
-        var query = new Query(Criteria.where("coSoKhamBenhId").is(coSoKhamBenhId)
+        var query = new Query(Criteria.where("coSoKhamBenhRef.objectId").is(coSoKhamBenhId)
                                         .and("trangThai").is(trangThai)
                                         .and("maYte").regex(maYte)
                              );
@@ -70,7 +70,7 @@ public class HoSoBenhAnService {
     public List<HoSoBenhAn> getDsHoSo(ObjectId userId, ObjectId coSoKhamBenhId, int trangThai, String maYte, int offset, int limit) {
         var sort = new Sort(Sort.Direction.DESC, "ngayTao");
         
-        var query = new Query(Criteria.where("coSoKhamBenhId").is(coSoKhamBenhId)
+        var query = new Query(Criteria.where("coSoKhamBenhRef.objectId").is(coSoKhamBenhId)
         								.and("trangThai").is(trangThai)
                                         .and("maYte").regex(maYte)
                              ).with(sort).skip(offset).limit(limit);
