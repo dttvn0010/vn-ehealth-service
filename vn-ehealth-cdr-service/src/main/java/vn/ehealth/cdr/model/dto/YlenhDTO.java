@@ -67,38 +67,38 @@ public class YlenhDTO {
                 dtct.ngayBatDau = chiDinhThuoc.ngayBatDau;
                 dtct.ngayKetThuc = chiDinhThuoc.ngayKetThuc;
                 
-                dtct.dsLieuLuongThuoc = new ArrayList<>();
+                dtct.dsTanSuatDungThuoc = new ArrayList<>();
                 
                 if(chiDinhThuoc.lieuLuongSang != null && chiDinhThuoc.lieuLuongSang > 0) {
-                    var lieuLuongSang = new DonThuoc.LieuLuongDungThuoc();
-                    lieuLuongSang.soLuong = chiDinhThuoc.lieuLuongSang;
-                    lieuLuongSang.donVi = chiDinhThuoc.donVi;
-                    lieuLuongSang.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.SANG, MessageUtils.get("thoidiem.sang"));
-                    dtct.dsLieuLuongThuoc.add(lieuLuongSang);
+                    var tanSuatSang = new DonThuoc.TanSuatDungThuoc();
+                    tanSuatSang.soLuong = chiDinhThuoc.lieuLuongSang;
+                    tanSuatSang.donVi = chiDinhThuoc.donVi;
+                    tanSuatSang.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.SANG, MessageUtils.get("thoidiem.sang"));
+                    dtct.dsTanSuatDungThuoc.add(tanSuatSang);
                 }
                 
                 if(chiDinhThuoc.lieuLuongTrua != null && chiDinhThuoc.lieuLuongTrua > 0) {
-                    var lieuLuongTrua = new DonThuoc.LieuLuongDungThuoc();
-                    lieuLuongTrua.soLuong = chiDinhThuoc.lieuLuongTrua;
-                    lieuLuongTrua.donVi = chiDinhThuoc.donVi;
-                    lieuLuongTrua.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.TRUA, MessageUtils.get("thoidiem.trua"));
-                    dtct.dsLieuLuongThuoc.add(lieuLuongTrua);
+                    var tanSuatTrua = new DonThuoc.TanSuatDungThuoc();
+                    tanSuatTrua.soLuong = chiDinhThuoc.lieuLuongTrua;
+                    tanSuatTrua.donVi = chiDinhThuoc.donVi;
+                    tanSuatTrua.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.TRUA, MessageUtils.get("thoidiem.trua"));
+                    dtct.dsTanSuatDungThuoc.add(tanSuatTrua);
                 }
                 
                 if(chiDinhThuoc.lieuLuongChieu != null && chiDinhThuoc.lieuLuongChieu > 0) {
-                    var lieuLuongChieu = new DonThuoc.LieuLuongDungThuoc();
-                    lieuLuongChieu.soLuong = chiDinhThuoc.lieuLuongChieu;
-                    lieuLuongChieu.donVi = chiDinhThuoc.donVi;
-                    lieuLuongChieu.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.CHIEU, MessageUtils.get("thoidiem.chieu"));
-                    dtct.dsLieuLuongThuoc.add(lieuLuongChieu);
+                    var tanSuatChieu = new DonThuoc.TanSuatDungThuoc();
+                    tanSuatChieu.soLuong = chiDinhThuoc.lieuLuongChieu;
+                    tanSuatChieu.donVi = chiDinhThuoc.donVi;
+                    tanSuatChieu.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.CHIEU, MessageUtils.get("thoidiem.chieu"));
+                    dtct.dsTanSuatDungThuoc.add(tanSuatChieu);
                 }
                 
                 if(chiDinhThuoc.lieuLuongToi != null && chiDinhThuoc.lieuLuongToi > 0) {
-                    var lieuLuongToi = new DonThuoc.LieuLuongDungThuoc();
-                    lieuLuongToi.soLuong = chiDinhThuoc.lieuLuongToi;
-                    lieuLuongToi.donVi = chiDinhThuoc.donVi;
-                    lieuLuongToi.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.TOI, MessageUtils.get("thoidiem.toi"));
-                    dtct.dsLieuLuongThuoc.add(lieuLuongToi);
+                    var tanSuatToi = new DonThuoc.TanSuatDungThuoc();
+                    tanSuatToi.soLuong = chiDinhThuoc.lieuLuongToi;
+                    tanSuatToi.donVi = chiDinhThuoc.donVi;
+                    tanSuatToi.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.TOI, MessageUtils.get("thoidiem.toi"));
+                    dtct.dsTanSuatDungThuoc.add(tanSuatToi);
                 }
                 donThuoc.dsDonThuocChiTiet.add(dtct);
             }            

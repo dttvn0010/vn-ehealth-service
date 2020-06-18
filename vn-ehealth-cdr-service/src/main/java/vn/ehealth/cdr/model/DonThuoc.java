@@ -51,10 +51,16 @@ public class DonThuoc {
     
     public List<FileDinhKem> dsFileDinhKemDonThuoc = new ArrayList<>();
    
-    public static class LieuLuongDungThuoc {
+    public static class TanSuatDungThuoc {
         public Integer soLuong;
         public String donVi;
         public DanhMuc dmThoiDiemDungThuoc;
+    }
+    
+    public static class LieuLuongDungThuoc {
+        public Integer soLuong;
+        public String donVi;
+        
         
         public LieuLuongDungThuoc() {
             
@@ -91,7 +97,9 @@ public class DonThuoc {
         @JsonFormat(pattern="yyyy-MM-dd")
         public Date ngayKetThuc;
         
-        public List<LieuLuongDungThuoc> dsLieuLuongThuoc = new ArrayList<>();
+        public LieuLuongDungThuoc lieuLuongThuoc;
+        
+        public List<TanSuatDungThuoc> dsTanSuatDungThuoc = new ArrayList<>();
         
         public String chiDanDungThuoc;
         public String bietDuoc;        
@@ -122,26 +130,35 @@ public class DonThuoc {
                 
                 mRequest.setMedication(DanhMuc.toConcept(dtct.dmThuoc, CodeSystemValue.DM_THUOC));
                 
-                if(dtct.dsLieuLuongThuoc != null) {
-                    for(var lieuLuongThuoc : dtct.dsLieuLuongThuoc) {
-                        var dosage = new Dosage();
-                        dosage.setText(dtct.chiDanDungThuoc);
-                        dosage.setRoute(DanhMuc.toConcept(dtct.dmDuongDungThuoc, CodeSystemValue.DM_DUONG_DUNG_THUOC));
-                        
-                        dosage.getTiming().setCode(DanhMuc.toConcept(lieuLuongThuoc.dmThoiDiemDungThuoc, CodeSystemValue.DM_DUONG_DUNG_THUOC));;
-                        var quantity = new Quantity();
-                        quantity.setValue(lieuLuongThuoc.soLuong);
-                        quantity.setUnit(lieuLuongThuoc.donVi); 
-                        
-                        var doseAndRate = dosage.getDoseAndRateFirstRep();
-                        doseAndRate.setRate(quantity);
-                        
-                        mRequest.getDosageInstruction().add(dosage);
+                var dosage = new Dosage();
+                dosage.setText(dtct.chiDanDungThuoc);
+                dosage.setRoute(DanhMuc.toConcept(dtct.dmDuongDungThuoc, CodeSystemValue.DM_DUONG_DUNG_THUOC));
+                mRequest.getDosageInstruction().add(dosage);
+                
+                if(dtct.lieuLuongThuoc != null && dtct.lieuLuongThuoc.soLuong != null) {
+                    var quantity = new Quantity();
+                    quantity.setValue(dtct.lieuLuongThuoc.soLuong);
+                    quantity.setUnit(dtct.lieuLuongThuoc.donVi);                
+                    
+                    mRequest.getDispenseRequest().setQuantity(quantity);
+                }
+                
+                var repeat = dosage.getTiming().getRepeat();
+                
+                if(dtct.dsTanSuatDungThuoc != null) {
+                    for(var tanSuatDungThuoc : dtct.dsTanSuatDungThuoc) {
+                        if(tanSuatDungThuoc.soLuong != null && tanSuatDungThuoc.soLuong > 0 && tanSuatDungThuoc.dmThoiDiemDungThuoc != null) {                            
+                            repeat.addTimeOfDay(tanSuatDungThuoc.dmThoiDiemDungThuoc.code);
+                            var doseAndRate = dosage.addDoseAndRate();
+                            var rateQty = new Quantity();
+                            rateQty.setValue(tanSuatDungThuoc.soLuong);
+                            rateQty.setUnit(tanSuatDungThuoc.donVi);
+                            doseAndRate.setRate(rateQty);
+                        }
                        
                     }
                 }
-                
-                
+                                
                 if(dtct.ngayBatDau != null || dtct.ngayKetThuc != null) {
                     var period = new Period();
                     period.setStart(dtct.ngayBatDau);

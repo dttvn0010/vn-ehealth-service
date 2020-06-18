@@ -18,11 +18,24 @@ import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 public class DsDonThuocDTO {
 
-    public static class LieuLuongDungThuocDTO {
+    public static class TanSuatDungThuocDTO {
         public Integer soLuong;
         public String donVi;
         public DanhMuc dmThoiDiemDungThuoc;
         
+        public DonThuoc.TanSuatDungThuoc toTanSuatDungThuoc() {
+            var obj = new DonThuoc.TanSuatDungThuoc();
+            obj.soLuong = soLuong;
+            obj.donVi = donVi;
+            obj.dmThoiDiemDungThuoc = dmThoiDiemDungThuoc;
+            return obj;
+        }
+    }
+    
+    public static class LieuLuongDungThuocDTO {
+        public Integer soLuong;
+        public String donVi;
+                
         public LieuLuongDungThuocDTO() {
             
         }
@@ -48,7 +61,6 @@ public class DsDonThuocDTO {
             var obj = new DonThuoc.LieuLuongDungThuoc();
             obj.soLuong = soLuong;
             obj.donVi = donVi;
-            obj.dmThoiDiemDungThuoc = dmThoiDiemDungThuoc;
             return obj;
         }
     }
@@ -66,6 +78,7 @@ public class DsDonThuocDTO {
         public Date ngayKetThuc;
         
         public LieuLuongDungThuocDTO lieuLuongThuoc;
+        public List<TanSuatDungThuocDTO> dsTanSuatDungThuoc;
         
         public String chiDanDungThuoc;
         public String bietDuoc;
@@ -79,8 +92,9 @@ public class DsDonThuocDTO {
             obj.ngayKetThuc = ngayKetThuc;
             obj.chiDanDungThuoc = chiDanDungThuoc;
             if(lieuLuongThuoc != null) {
-                obj.dsLieuLuongThuoc = List.of(lieuLuongThuoc.toLieuLuongDungThuoc());
+                obj.lieuLuongThuoc = lieuLuongThuoc.toLieuLuongDungThuoc();
             }
+            obj.dsTanSuatDungThuoc = FPUtil.transform(dsTanSuatDungThuoc, TanSuatDungThuocDTO::toTanSuatDungThuoc);
             obj.bietDuoc = bietDuoc;
             
             return obj;

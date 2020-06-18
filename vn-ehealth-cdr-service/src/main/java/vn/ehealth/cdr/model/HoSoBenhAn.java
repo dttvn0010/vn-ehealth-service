@@ -234,6 +234,14 @@ public class HoSoBenhAn {
     public void setId(String id) { 
         this.id = ObjectIdUtil.stringToId(id);
     }
+    
+    public CoSoKhamBenh getCoSoKhamBenh() {
+        var coSoKhamBenhId = EmrRef.toObjectId(coSoKhamBenhRef);
+        if(coSoKhamBenhId != null) {
+            return ServiceFactory.getCoSoKhamBenhService().getById(coSoKhamBenhId).orElse(null);
+        }
+        return null;
+    }
        
     
     public BenhNhan getBenhNhan() {
