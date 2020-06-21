@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import vn.ehealth.cdr.model.DonThuoc;
 import vn.ehealth.cdr.model.Ylenh;
+import vn.ehealth.cdr.repository.DonThuocChiTietRepository;
 import vn.ehealth.cdr.repository.DonThuocRepository;
 import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
 
@@ -18,8 +19,7 @@ import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
 public class DonThuocService {
 
     @Autowired private DonThuocRepository donThuocRepository;
-    
-    @Autowired LogService logService;
+    @Autowired private DonThuocChiTietRepository donThuocChiTietRepository;
     
     public Optional<DonThuoc> getById(ObjectId id) {
         return donThuocRepository.findById(id);
@@ -47,6 +47,22 @@ public class DonThuocService {
         donThuoc.coSoKhamBenhRef = ylenh.coSoKhamBenhRef;
         donThuoc.bacSiKeDon = ylenh.bacSiRaYlenh;
         donThuoc.ngayKeDon = ylenh.ngayRaYlenh;
-        return donThuocRepository.save(donThuoc);
+        donThuoc =  donThuocRepository.save(donThuoc);
+        
+        if(donThuoc.dsDonThuocChiTiet != null) {
+            for(var dtct : donThuoc.dsDonThuocChiTiet) {
+                dtct.soDon = donThuoc.soDon;
+                dtct.ylenhRef = donThuoc.ylenhRef;
+                dtct.hoSoBenhAnRef = donThuoc.hoSoBenhAnRef;
+                dtct.benhNhanRef = donThuoc.benhNhanRef;
+                dtct.coSoKhamBenhRef = donThuoc.coSoKhamBenhRef;
+                dtct.donThuocRef = DonThuoc.toEmrRef(donThuoc);
+                dtct.bacSiKeDon = donThuoc.bacSiKeDon;
+                dtct.ngayKeDon = donThuoc.ngayKeDon;
+                donThuocChiTietRepository.save(dtct);
+            }
+        }
+        
+        return donThuoc;
     }
 }

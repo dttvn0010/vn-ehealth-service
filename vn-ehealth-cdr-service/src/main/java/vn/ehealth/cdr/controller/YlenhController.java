@@ -92,9 +92,11 @@ public class YlenhController {
             }            
 
             var donThuoc = body.generateDonThuoc();
-            if(donThuoc.dsDonThuocChiTiet.size() > 0) {
-                donThuoc = donThuocService.createOrUpdate(ylenh, donThuoc);
-                medicationRequestHelper.saveToFhirDb(hsba, donThuoc);
+            donThuoc.soDon = StringUtil.generateUUID();
+            donThuoc = donThuocService.createOrUpdate(ylenh, donThuoc);
+            
+            if(donThuoc.dsDonThuocChiTiet.size() > 0) {                
+                medicationRequestHelper.saveToFhirDb(hsba, donThuoc.getDsDonThuocChiTiet());
             }
             
             var dsDvkt = body.generateDsDichVuKyThuat();
@@ -133,6 +135,7 @@ public class YlenhController {
             return ResponseEntity.ok(lst);
             
         }catch(Exception e) {
+            e.printStackTrace();
             return ResponseEntity.ok(new ArrayList<>());
         }
     }

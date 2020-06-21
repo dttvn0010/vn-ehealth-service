@@ -40,7 +40,7 @@ public class HoSoBenhAnService {
     @Autowired private LogService logService;
     @Autowired private UserService userService;
     
-    @Autowired MongoTemplate mongoTemplate;
+    @Autowired private MongoTemplate mongoTemplate;
     
     public Optional<HoSoBenhAn> getByMaYte(String maYte) {
         return hoSoBenhAnRepository.findByMaYte(maYte);

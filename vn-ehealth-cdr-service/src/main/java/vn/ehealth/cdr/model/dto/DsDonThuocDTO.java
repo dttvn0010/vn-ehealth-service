@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.cdr.model.DonThuoc;
+import vn.ehealth.cdr.model.DonThuocChiTiet;
 import vn.ehealth.cdr.model.FileDinhKem;
 import vn.ehealth.cdr.model.Ylenh;
 import vn.ehealth.cdr.model.component.CanboYteDTO;
@@ -23,8 +24,8 @@ public class DsDonThuocDTO {
         public String donVi;
         public DanhMuc dmThoiDiemDungThuoc;
         
-        public DonThuoc.TanSuatDungThuoc toTanSuatDungThuoc() {
-            var obj = new DonThuoc.TanSuatDungThuoc();
+        public DonThuocChiTiet.TanSuatDungThuoc toTanSuatDungThuoc() {
+            var obj = new DonThuocChiTiet.TanSuatDungThuoc();
             obj.soLuong = soLuong;
             obj.donVi = donVi;
             obj.dmThoiDiemDungThuoc = dmThoiDiemDungThuoc;
@@ -57,8 +58,8 @@ public class DsDonThuocDTO {
             }                
         }
         
-        public DonThuoc.LieuLuongDungThuoc toLieuLuongDungThuoc() {
-            var obj = new DonThuoc.LieuLuongDungThuoc();
+        public DonThuocChiTiet.LieuLuongDungThuoc toLieuLuongDungThuoc() {
+            var obj = new DonThuocChiTiet.LieuLuongDungThuoc();
             obj.soLuong = soLuong;
             obj.donVi = donVi;
             return obj;
@@ -83,9 +84,9 @@ public class DsDonThuocDTO {
         public String chiDanDungThuoc;
         public String bietDuoc;
         
-        public DonThuoc.DonThuocChiTiet toDonThuocChiTiet() {
+        public DonThuocChiTiet toDonThuocChiTiet() {
              
-            var obj = new DonThuoc.DonThuocChiTiet();
+            var obj = new DonThuocChiTiet();
             obj.dmThuoc = dmThuoc;
             obj.dmDuongDungThuoc = dmDuongDungThuoc;
             obj.ngayBatDau = ngayBatDau;
@@ -130,8 +131,7 @@ public class DsDonThuocDTO {
             ylenh.ngayRaYlenh = ngayKeDon;
             ylenh.bacSiRaYlenh = bacSiKeDon;
             return ylenh;
-        }
-      
+        }      
     }
     
     public String maTraoDoiHoSo;

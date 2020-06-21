@@ -237,19 +237,22 @@ public class HoSoBenhAn {
     
     public CoSoKhamBenh getCoSoKhamBenh() {
         var coSoKhamBenhId = EmrRef.toObjectId(coSoKhamBenhRef);
-        if(coSoKhamBenhId != null) {
-            return ServiceFactory.getCoSoKhamBenhService().getById(coSoKhamBenhId).orElse(null);
+
+        if(coSoKhamBenh == null && coSoKhamBenhId != null) {
+            coSoKhamBenh = ServiceFactory.getCoSoKhamBenhService().getById(coSoKhamBenhId).orElse(null);
         }
-        return null;
+    
+        return coSoKhamBenh;
     }
        
     
     public BenhNhan getBenhNhan() {
         var benhNhanId = EmrRef.toObjectId(benhNhanRef);
-        if(benhNhanId != null) {
+        if(benhNhan == null && benhNhanId != null) {
             return ServiceFactory.getBenhNhanService().getById(benhNhanId).orElse(null);
         }
-        return null;
+        
+        return benhNhan;
     }
     
     @JsonInclude(Include.NON_NULL)

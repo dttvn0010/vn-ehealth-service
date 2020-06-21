@@ -74,6 +74,7 @@ public class Ylenh {
         var ref = new EmrRef();
         ref.className = Ylenh.class.toString();
         ref.objectId = obj.id;
+        ref.identifier = obj.idhis;
         ref.name = obj.hienThi;
         return ref;
     }

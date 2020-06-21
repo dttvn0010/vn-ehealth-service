@@ -11,7 +11,9 @@ public class ServiceFactory implements ApplicationContextAware  {
     private static HoSoBenhAnService hoSoBenhAnService;
     private static BenhNhanService benhNhanService;
     private static CanboYteService canboYteService;
-    private static CoSoKhamBenhService coSoKhamBenhService;    
+    private static CoSoKhamBenhService coSoKhamBenhService;   
+    private static DonThuocChiTietService donThuocChiTietService;
+    private static UongThuocService uongThuocService;
     
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
@@ -44,5 +46,19 @@ public class ServiceFactory implements ApplicationContextAware  {
             coSoKhamBenhService = applicationContext.getBean(CoSoKhamBenhService.class); 
         }
         return coSoKhamBenhService;        
+    }
+    
+    public static DonThuocChiTietService getDonThuocChiTietService() {
+        if(donThuocChiTietService == null) {
+            donThuocChiTietService = applicationContext.getBean(DonThuocChiTietService.class); 
+        }
+        return donThuocChiTietService;        
+    }
+    
+    public static UongThuocService getUongThuocService() {
+        if(uongThuocService == null) {
+            uongThuocService = applicationContext.getBean(UongThuocService.class); 
+        }
+        return uongThuocService;        
     }
 }

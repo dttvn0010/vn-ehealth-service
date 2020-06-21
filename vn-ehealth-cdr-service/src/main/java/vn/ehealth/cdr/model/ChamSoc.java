@@ -1,17 +1,21 @@
 package vn.ehealth.cdr.model;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.model.component.DanhMuc;
 import vn.ehealth.cdr.model.component.EmrRef;
+import vn.ehealth.cdr.service.ServiceFactory;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 
 @JsonInclude(Include.NON_NULL)
@@ -23,7 +27,13 @@ public class ChamSoc {
     public EmrRef benhNhanRef;
     public EmrRef coSoKhamBenhRef;
     
+    public String idhis;
     public int trangThai;
+    
+    public CanboYteDTO ytaChamSoc;
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngayChamSoc;
     
     public DanhMuc dmTriGiac;
     public double nhietDo;
@@ -46,19 +56,7 @@ public class ChamSoc {
     public String thucHienYlenh;
     public String ghiChu;
     
-    public static class VatTuYte {
-        public DanhMuc dmVatTuYte;
-        public int soLuong;
-    }
-    
-    public static class UongThuoc {
-        public DanhMuc dmThuoc;
-        public int lieuLuong;
-        public int thoiDiemTrongNgay;
-        public List<VatTuYte> dsVatTuYte = new ArrayList<>();
-    }
-    
-    public List<UongThuoc> dsUongThuoc = new ArrayList<>();
+    @Transient public List<UongThuoc> dsUongThuoc;
     
     public String getId() { 
         return ObjectIdUtil.idToString(id); 
@@ -66,5 +64,22 @@ public class ChamSoc {
     
     public void setId(String id) {
         this.id = ObjectIdUtil.stringToId(id);
-    }    
+    }
+    
+    public List<UongThuoc> getDsUongThuoc() {
+        if(dsUongThuoc == null) {
+            dsUongThuoc = ServiceFactory.getUongThuocService().getByChamSocId(id);
+        }
+        return dsUongThuoc;
+    }
+    
+    public static EmrRef toEmrRef(ChamSoc obj) {
+        if(obj == null) return null;
+        
+        var ref = new EmrRef();
+        ref.className = ChamSoc.class.getName();
+        ref.objectId = obj.id;
+        ref.identifier = obj.idhis;
+        return ref;
+    }
 }

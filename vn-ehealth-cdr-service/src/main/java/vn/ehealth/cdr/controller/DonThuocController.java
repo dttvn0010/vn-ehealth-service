@@ -33,14 +33,13 @@ public class DonThuocController {
     @Autowired private YlenhService ylenhService;
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     @Autowired private MedicationRequestHelper medicationRequestHelper;
-    
-    
+        
     @GetMapping("/get_ds_donthuoc")
     public ResponseEntity<?> getDsDonThuoc(@RequestParam("hsba_id") String id) {
         var donthuocList = donThuocService.getByHoSoBenhAnId(new ObjectId(id));
         return ResponseEntity.ok(donthuocList);
     }
-  
+    
     @PostMapping("/create_or_update_don_thuoc")
     public ResponseEntity<?> createOrUpdateDonThuocFromHIS(@RequestBody String jsonSt) {
         try {
@@ -58,7 +57,7 @@ public class DonThuocController {
                     var donThuoc = donThuocDTO.generateDonThuoc();
                     ylenh = ylenhService.createOrUpdateFromHis(hsba, ylenh);
                     donThuoc = donThuocService.createOrUpdate(ylenh, donThuoc);
-                    medicationRequestHelper.saveToFhirDb(hsba, donThuoc);
+                    medicationRequestHelper.saveToFhirDb(hsba, donThuoc.getDsDonThuocChiTiet());
                 }
             }            
             
