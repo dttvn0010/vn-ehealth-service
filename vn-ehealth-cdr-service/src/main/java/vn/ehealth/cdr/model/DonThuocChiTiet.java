@@ -113,6 +113,19 @@ public class DonThuocChiTiet {
         return 0;
     }
     
+    public long getTongLieu() {
+        long soNgayKe = getSoNgayKe();
+        long lieuLuongNgay = 0;
+        if(dsTanSuatDungThuoc != null) {
+            for(var tanSuatDungThuoc : dsTanSuatDungThuoc) {
+                lieuLuongNgay += tanSuatDungThuoc.soLuong;
+            }
+        }
+        
+        return soNgayKe * lieuLuongNgay;
+    }    
+    
+    
     public MedicationRequest toFHir(Encounter enc) {
     
         var mRequest = new MedicationRequest();
