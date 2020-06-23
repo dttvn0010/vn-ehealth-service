@@ -156,15 +156,15 @@ public class ChamSocController {
 			}
 
 			Date ngayBatDau = null;
-			Date ngayKetThuc = null;
+            Date ngayKetThuc = null;
 
-			if (ngayChamSoc.isPresent()) {
-				String ngayBatDauSt = ngayChamSoc.get() + " 00:00:00";
-				String ngayKetThucSt = ngayChamSoc.get() + " 23:59:59";
-
-				ngayBatDau = DateUtil.parseStringToDate(ngayBatDauSt, "dd/MM/yyyy HH:mm:ss");
-				ngayKetThuc = DateUtil.parseStringToDate(ngayKetThucSt, "dd/MM/yyyy HH:mm:ss");
-			}
+            if (ngayChamSoc.isPresent()) {
+                ngayBatDau = DateUtil.parseStringToDate(ngayChamSoc.get(), "dd/MM/yyyy");
+                var cal = Calendar.getInstance();
+                cal.setTime(ngayBatDau);
+                cal.add(Calendar.DATE, 1);
+                ngayKetThuc = cal.getTime();
+            }
 
 			var lst = chamSocService.getByLoaiAndNgayChamSoc(hsba.id, maLoaiChamSoc.orElse(""), ngayBatDau, ngayKetThuc, 
 			                            start.orElse(-1), count.orElse(-1));
