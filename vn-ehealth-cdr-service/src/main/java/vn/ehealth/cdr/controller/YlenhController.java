@@ -31,6 +31,7 @@ import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
+import vn.ehealth.hl7.fhir.core.util.DateUtil;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
@@ -151,6 +152,46 @@ public class YlenhController {
         
             var result = mapOf("ylenh", ylenh, "dsDVKT", dsDVKT, "donThuoc", donThuoc);
             return ResponseEntity.ok(result);
+        }catch(Exception e) {
+            return ResponseEntity.ok(new ArrayList<>());
+        }
+    }
+    
+    @GetMapping("/search/{encounterId}")
+    public ResponseEntity<?> searchYlenh(@PathVariable String encounterId,
+    		@RequestParam Optional<String> ngayRaYlenh, 
+    		@RequestParam Optional<String> loaiYlenh,
+    		@RequestParam Optional<Integer> start,
+            @RequestParam Optional<Integer> count){
+    	try {
+    		var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
+            var medicalRecord = FhirUtil.findIdentifierBySystem(encounter.getIdentifier(), IdentifierSystem.MEDICAL_RECORD);
+            
+            HoSoBenhAn hsba = null;
+            
+            if(medicalRecord != null) {
+                String maYte = medicalRecord.getValue();
+                hsba = hoSoBenhAnService.getByMaYte(maYte).orElse(null);
+            }
+            
+            if(hsba == null) {
+                throw new Exception("No hsba with encounterId=" + encounterId);
+            }
+            
+            Date ngayBatDau = null;
+            Date ngayKetThuc = null;
+            
+            if(ngayRaYlenh.isPresent()) {
+            	String ngayBatDauSt = ngayRaYlenh.get() + " 00:00:00";
+            	String ngayKetThucSt = ngayRaYlenh.get() + " 23:59:59";
+            	
+            	ngayBatDau = DateUtil.parseStringToDate(ngayBatDauSt, "dd/MM/yyyy HH:mm:ss");
+              	ngayKetThuc = DateUtil.parseStringToDate(ngayKetThucSt, "dd/MM/yyyy HH:mm:ss");
+            }
+            
+            
+    		var lst = ylenhService.search(hsba.id, loaiYlenh.orElse(""),ngayBatDau, ngayKetThuc, start.orElse(-1), count.orElse(-1));
+            return ResponseEntity.ok(lst);
         }catch(Exception e) {
             return ResponseEntity.ok(new ArrayList<>());
         }

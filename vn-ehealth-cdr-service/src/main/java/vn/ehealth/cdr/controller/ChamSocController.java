@@ -18,7 +18,11 @@ import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.service.CanboYteService;
 import vn.ehealth.cdr.service.ChamSocService;
+import vn.ehealth.cdr.service.DonThuocService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
+import vn.ehealth.cdr.service.UongThuocService;
+import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
+import vn.ehealth.hl7.fhir.core.util.DateUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.core.util.StringUtil;
@@ -29,6 +33,7 @@ import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/chamsoc")
@@ -83,5 +88,83 @@ public class ChamSocController {
         return ResponseEntity.ok(new ArrayList<>());
     }
     
+    @GetMapping("/get_list/{encounterId}")
+    public ResponseEntity<?> getList(@PathVariable String encounterId, 
+            @RequestParam Optional<Integer> start,
+            @RequestParam Optional<Integer> count) {
+    	try {
+            var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
+            var medicalRecord = FhirUtil.findIdentifierBySystem(encounter.getIdentifier(), IdentifierSystem.MEDICAL_RECORD);
+            
+            HoSoBenhAn hsba = null;
+            
+            if(medicalRecord != null) {
+                String maYte = medicalRecord.getValue();
+                hsba = hoSoBenhAnService.getByMaYte(maYte).orElse(null);
+            }
+            
+            if(hsba == null) {
+                throw new Exception("No hsba with encounterId=" + encounterId);
+            }
+	
+            var lst = chamSocService.getByHoSoBenhAnId(hsba.id);
+            return ResponseEntity.ok(lst);
+    	
+    }catch (Exception e) {
+    	e.printStackTrace();
+        return ResponseEntity.ok(new ArrayList<>());
+	}
+    }
     
+	@GetMapping("/get_detail/{chamsocId}")
+	public ResponseEntity<?> getDetail(@PathVariable String chamsocId) {
+		try {
+			var chamsoc = chamSocService.getById(new ObjectId(chamsocId)).get();
+
+			return ResponseEntity.ok(chamsoc);
+		} catch (Exception e) {
+			return ResponseEntity.ok(new ArrayList<>());
+		}
+	}
+
+	@GetMapping("/search/{encounterId}")
+	public ResponseEntity<?> searchChamSoc(@PathVariable String encounterId, @RequestParam Optional<String> ngayChamSoc,
+			@RequestParam Optional<String> loaiChamSoc, 
+			@RequestParam Optional<Integer> start,
+			@RequestParam Optional<Integer> count) {
+		try {
+			var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
+			var medicalRecord = FhirUtil.findIdentifierBySystem(encounter.getIdentifier(),
+					IdentifierSystem.MEDICAL_RECORD);
+
+			HoSoBenhAn hsba = null;
+
+			if (medicalRecord != null) {
+				String maYte = medicalRecord.getValue();
+				hsba = hoSoBenhAnService.getByMaYte(maYte).orElse(null);
+			}
+
+			if (hsba == null) {
+				throw new Exception("No hsba with encounterId=" + encounterId);
+			}
+
+			Date ngayBatDau = null;
+			Date ngayKetThuc = null;
+
+			if (ngayChamSoc.isPresent()) {
+				String ngayBatDauSt = ngayChamSoc.get() + " 00:00:00";
+				String ngayKetThucSt = ngayChamSoc.get() + " 23:59:59";
+
+				ngayBatDau = DateUtil.parseStringToDate(ngayBatDauSt, "dd/MM/yyyy HH:mm:ss");
+				ngayKetThuc = DateUtil.parseStringToDate(ngayKetThucSt, "dd/MM/yyyy HH:mm:ss");
+			}
+
+			var lst = chamSocService.search(hsba.id, loaiChamSoc.orElse(""), ngayBatDau, ngayKetThuc, start.orElse(-1),
+					count.orElse(-1));
+			return ResponseEntity.ok(lst);
+
+		} catch (Exception e) {
+			return ResponseEntity.ok(new ArrayList<>());
+		}
+	}
 }

@@ -36,7 +36,8 @@ public class UongThuoc {
     public DanhMuc dmDuongDungThuoc;
     public DanhMuc dmThoiDiemDungThuoc;
             
-    public int soLuong;        
+    public int soLuong;    
+    public String donVi;
     public CanboYteDTO bacSiChiDinh;
     public CanboYteDTO ytaChamSoc;
     public List<VatTuYte> dsVatTuYte = new ArrayList<>();

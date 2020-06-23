@@ -35,13 +35,14 @@ public class ChamSoc {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayChamSoc;
     
+    public DanhMuc dmLoaiChamSoc;
     public DanhMuc dmTriGiac;
-    public double nhietDo;
-    public double mach;
-    public double huyetApCao;
-    public double huyetApThap;
-    public double nhipTho;
-    public double spO2;
+    public Double nhietDo;
+    public Double mach;
+    public Double huyetApCao;
+    public Double huyetApThap;
+    public Double nhipTho;
+    public Double spO2;
     
     public String non;
     public String anUong;

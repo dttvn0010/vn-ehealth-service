@@ -1,5 +1,6 @@
 package vn.ehealth.cdr.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,10 +8,15 @@ import javax.annotation.Nonnull;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import vn.ehealth.cdr.model.ChamSoc;
 import vn.ehealth.cdr.model.HoSoBenhAn;
+import vn.ehealth.cdr.model.Ylenh;
 import vn.ehealth.cdr.repository.ChamSocRepository;
 import vn.ehealth.cdr.repository.UongThuocRepository;
 import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
@@ -20,6 +26,7 @@ public class ChamSocService {
 
     @Autowired private ChamSocRepository chamSocRepository;
     @Autowired private UongThuocRepository uongThuocRepository;
+    @Autowired private MongoTemplate mongoTemplate;
         
     public Optional<ChamSoc> getById(ObjectId id) {
         return chamSocRepository.findById(id);
@@ -29,6 +36,19 @@ public class ChamSocService {
         return chamSocRepository.findByHoSoBenhAnRefObjectIdAndTrangThai(hsbaId, TRANGTHAI_DULIEU.DEFAULT);
     }
     
+	public List<ChamSoc> search(ObjectId hoSoBenhAnId, String maLoaiChamSoc, Date ngayBatDau, Date ngayKetThuc, int start,
+			int count) {
+
+		var sort = new Sort(Sort.Direction.ASC, "id");
+
+		var query = new Query(Criteria.where("hoSoBenhAnRef.objectId").is(hoSoBenhAnId)
+				.and("ngayChamSoc").gt(ngayBatDau)
+				.and("ngayChamSoc").lt(ngayKetThuc))
+				.with(sort);
+
+		return mongoTemplate.find(query, ChamSoc.class);
+	}
+	
     public ChamSoc createOrUpdate(@Nonnull HoSoBenhAn hsba, @Nonnull ChamSoc chamSoc) {
         if(chamSoc.idhis != null) {
             chamSoc.id = chamSocRepository.findByIdhis(chamSoc.idhis).map(x -> x.id).orElse(null);

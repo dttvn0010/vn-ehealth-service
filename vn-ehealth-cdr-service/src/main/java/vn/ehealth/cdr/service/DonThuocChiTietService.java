@@ -45,7 +45,7 @@ public class DonThuocChiTietService {
         
         var sort = new Sort(Sort.Direction.ASC, "id");
         
-        var query = new Query(Criteria.where("hoSoBenhAnhRef.objectId").is(hoSoBenhAnId)
+        var query = new Query(Criteria.where("hoSoBenhAnRef.objectId").is(hoSoBenhAnId)
                 .and("ngayBatDau").lt(ngayUongThuoc)
                 .and("ngayKetThuc").gt(ngayUongThuoc)
                 .and("dsTanSuatDungThuoc.dmThoiDiemDungThuoc.ma").is(maThoiDiemUongThuoc)
@@ -58,4 +58,21 @@ public class DonThuocChiTietService {
         return mongoTemplate.find(query, DonThuocChiTiet.class);
         
     }
+    
+	public List<DonThuocChiTiet> getDsDonThuoc(ObjectId hoSoBenhAnId, Date ngayUongThuoc,
+			int offset, int limit) {
+
+		var sort = new Sort(Sort.Direction.ASC, "id");
+
+		var query = new Query(Criteria.where("hoSoBenhAnRef.objectId").is(hoSoBenhAnId).and("ngayBatDau")
+				.lt(ngayUongThuoc).and("ngayKetThuc").gt(ngayUongThuoc))
+				.with(sort);
+
+		if (offset >= 0 && limit >= 0) {
+			query = query.skip(offset).limit(limit);
+		}
+
+		return mongoTemplate.find(query, DonThuocChiTiet.class);
+
+	}
 }
