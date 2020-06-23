@@ -99,6 +99,7 @@ public class YlenhDTO {
         public DichVuKyThuat toDVKT() {
             var dvkt = new DichVuKyThuat();
             dvkt.dmLoaiDVKT = this.dmLoaiDVKT;
+            dvkt.dmNoiThucHien = dmNoiThucHien;
             dvkt.dmDVKT = this.dmDVKT;
             dvkt.ghiChu = this.ghiChu;
             return dvkt;
