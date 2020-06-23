@@ -116,9 +116,12 @@ public class DonThuocChiTiet {
     public long getTongLieu() {
         long soNgayKe = getSoNgayKe();
         long lieuLuongNgay = 0;
+        
         if(dsTanSuatDungThuoc != null) {
             for(var tanSuatDungThuoc : dsTanSuatDungThuoc) {
-                lieuLuongNgay += tanSuatDungThuoc.soLuong;
+                if(tanSuatDungThuoc.soLuong != null) {
+                    lieuLuongNgay += tanSuatDungThuoc.soLuong;
+                }
             }
         }
         
