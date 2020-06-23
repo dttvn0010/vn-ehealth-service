@@ -14,6 +14,7 @@ import vn.ehealth.cdr.model.component.DanhMuc;
 import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiYlenh;
 import vn.ehealth.cdr.utils.CDRConstants.ThoiDiemDungThuoc;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 public class YlenhDTO {
     public DanhMuc dmLoaiYlenh;
@@ -43,6 +44,50 @@ public class YlenhDTO {
         
         @JsonFormat(pattern="yyyy-MM-dd")
         public Date ngayKetThuc;
+        
+        public DonThuocChiTiet toDonThuocChiTiet() {
+            var dtct = new DonThuocChiTiet();
+            dtct.dmThuoc = this.dmThuoc;
+            dtct.dmDuongDungThuoc = this.dmDuongDungThuoc;
+            dtct.chiDanDungThuoc = this.ghiChu;
+            dtct.ngayBatDau = this.ngayBatDau;
+            dtct.ngayKetThuc = this.ngayKetThuc;
+            
+            dtct.dsTanSuatDungThuoc = new ArrayList<>();
+            
+            if(this.lieuLuongSang != null && this.lieuLuongSang > 0) {
+                var tanSuatSang = new DonThuocChiTiet.TanSuatDungThuoc();
+                tanSuatSang.soLuong = this.lieuLuongSang;
+                tanSuatSang.donVi = this.donVi;
+                tanSuatSang.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.SANG, MessageUtils.get("thoidiem.sang"));
+                dtct.dsTanSuatDungThuoc.add(tanSuatSang);
+            }
+            
+            if(this.lieuLuongTrua != null && this.lieuLuongTrua > 0) {
+                var tanSuatTrua = new DonThuocChiTiet.TanSuatDungThuoc();
+                tanSuatTrua.soLuong = this.lieuLuongTrua;
+                tanSuatTrua.donVi = this.donVi;
+                tanSuatTrua.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.TRUA, MessageUtils.get("thoidiem.trua"));
+                dtct.dsTanSuatDungThuoc.add(tanSuatTrua);
+            }
+            
+            if(this.lieuLuongChieu != null && this.lieuLuongChieu > 0) {
+                var tanSuatChieu = new DonThuocChiTiet.TanSuatDungThuoc();
+                tanSuatChieu.soLuong = this.lieuLuongChieu;
+                tanSuatChieu.donVi = this.donVi;
+                tanSuatChieu.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.CHIEU, MessageUtils.get("thoidiem.chieu"));
+                dtct.dsTanSuatDungThuoc.add(tanSuatChieu);
+            }
+            
+            if(this.lieuLuongToi != null && this.lieuLuongToi > 0) {
+                var tanSuatToi = new DonThuocChiTiet.TanSuatDungThuoc();
+                tanSuatToi.soLuong = this.lieuLuongToi;
+                tanSuatToi.donVi = this.donVi;
+                tanSuatToi.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.TOI, MessageUtils.get("thoidiem.toi"));
+                dtct.dsTanSuatDungThuoc.add(tanSuatToi);
+            }
+            return dtct;
+        }
     }
     
     public static class ChiDinhDVKT {
@@ -50,6 +95,14 @@ public class YlenhDTO {
         public DanhMuc dmDVKT;
         public DanhMuc dmNoiThucHien;
         public String ghiChu;
+        
+        public DichVuKyThuat toDVKT() {
+            var dvkt = new DichVuKyThuat();
+            dvkt.dmLoaiDVKT = this.dmLoaiDVKT;
+            dvkt.dmDVKT = this.dmDVKT;
+            dvkt.ghiChu = this.ghiChu;
+            return dvkt;
+        }
     }
     
     public List<ChiDinhThuocDTO> dsChiDinhThuoc = new ArrayList<>();
@@ -57,68 +110,12 @@ public class YlenhDTO {
     
     public DonThuoc generateDonThuoc() {
         var donThuoc = new DonThuoc();
-        donThuoc.dsDonThuocChiTiet = new ArrayList<>();
-        
-        if(dsChiDinhThuoc != null) {
-            for(var chiDinhThuoc : dsChiDinhThuoc) {
-                var dtct = new DonThuocChiTiet();
-                dtct.dmThuoc = chiDinhThuoc.dmThuoc;
-                dtct.dmDuongDungThuoc = chiDinhThuoc.dmDuongDungThuoc;
-                dtct.chiDanDungThuoc = chiDinhThuoc.ghiChu;
-                dtct.ngayBatDau = chiDinhThuoc.ngayBatDau;
-                dtct.ngayKetThuc = chiDinhThuoc.ngayKetThuc;
-                
-                dtct.dsTanSuatDungThuoc = new ArrayList<>();
-                
-                if(chiDinhThuoc.lieuLuongSang != null && chiDinhThuoc.lieuLuongSang > 0) {
-                    var tanSuatSang = new DonThuocChiTiet.TanSuatDungThuoc();
-                    tanSuatSang.soLuong = chiDinhThuoc.lieuLuongSang;
-                    tanSuatSang.donVi = chiDinhThuoc.donVi;
-                    tanSuatSang.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.SANG, MessageUtils.get("thoidiem.sang"));
-                    dtct.dsTanSuatDungThuoc.add(tanSuatSang);
-                }
-                
-                if(chiDinhThuoc.lieuLuongTrua != null && chiDinhThuoc.lieuLuongTrua > 0) {
-                    var tanSuatTrua = new DonThuocChiTiet.TanSuatDungThuoc();
-                    tanSuatTrua.soLuong = chiDinhThuoc.lieuLuongTrua;
-                    tanSuatTrua.donVi = chiDinhThuoc.donVi;
-                    tanSuatTrua.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.TRUA, MessageUtils.get("thoidiem.trua"));
-                    dtct.dsTanSuatDungThuoc.add(tanSuatTrua);
-                }
-                
-                if(chiDinhThuoc.lieuLuongChieu != null && chiDinhThuoc.lieuLuongChieu > 0) {
-                    var tanSuatChieu = new DonThuocChiTiet.TanSuatDungThuoc();
-                    tanSuatChieu.soLuong = chiDinhThuoc.lieuLuongChieu;
-                    tanSuatChieu.donVi = chiDinhThuoc.donVi;
-                    tanSuatChieu.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.CHIEU, MessageUtils.get("thoidiem.chieu"));
-                    dtct.dsTanSuatDungThuoc.add(tanSuatChieu);
-                }
-                
-                if(chiDinhThuoc.lieuLuongToi != null && chiDinhThuoc.lieuLuongToi > 0) {
-                    var tanSuatToi = new DonThuocChiTiet.TanSuatDungThuoc();
-                    tanSuatToi.soLuong = chiDinhThuoc.lieuLuongToi;
-                    tanSuatToi.donVi = chiDinhThuoc.donVi;
-                    tanSuatToi.dmThoiDiemDungThuoc = new DanhMuc(ThoiDiemDungThuoc.TOI, MessageUtils.get("thoidiem.toi"));
-                    dtct.dsTanSuatDungThuoc.add(tanSuatToi);
-                }
-                donThuoc.dsDonThuocChiTiet.add(dtct);
-            }            
-        }
+        donThuoc.dsDonThuocChiTiet = FPUtil.transform(dsChiDinhThuoc, ChiDinhThuocDTO::toDonThuocChiTiet);        
         return donThuoc;
     }
     
     public List<DichVuKyThuat> generateDsDichVuKyThuat() {
-        var dsDVKT = new ArrayList<DichVuKyThuat>();
-        
-        for(var chiDinhDVKT : dsChiDinhDVKT) {
-           var dvkt = new DichVuKyThuat();
-           dvkt.dmLoaiDVKT = chiDinhDVKT.dmLoaiDVKT;
-           dvkt.dmDVKT = chiDinhDVKT.dmDVKT;
-           dvkt.ghiChu = ghiChu;
-           dsDVKT.add(dvkt);
-        }
-        
-        return dsDVKT;
+        return FPUtil.transform(dsChiDinhDVKT, ChiDinhDVKT::toDVKT);
     }
     
     public Ylenh generateYlenh() {

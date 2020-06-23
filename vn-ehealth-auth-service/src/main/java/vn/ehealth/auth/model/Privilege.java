@@ -1,7 +1,5 @@
 package vn.ehealth.auth.model;
 
-import java.util.Set;
-
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,15 +8,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "role")
-public class Role {
-    
+@Document(collection = "permission")
+public class Privilege {
+
     @Id public ObjectId id;
     
     public String ma;
     public String ten;
-    
-    public Set<String> privileges;
+    public String moTa;
     
     public String getId() {
         return id != null? id.toHexString() : null;

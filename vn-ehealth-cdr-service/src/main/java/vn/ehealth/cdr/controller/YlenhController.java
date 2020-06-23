@@ -1,6 +1,7 @@
 package vn.ehealth.cdr.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
@@ -113,10 +114,11 @@ public class YlenhController {
         }
     }
     
-    @GetMapping("/get_list/{encounterId}")
-    public ResponseEntity<?> getList(@PathVariable String encounterId, 
-            @RequestParam Optional<Integer> start,
-            @RequestParam Optional<Integer> count) {
+    @GetMapping("/count/{encounterId}")
+    public ResponseEntity<?> count(@PathVariable String encounterId,
+            @RequestParam Optional<String> ngayRaYlenh, 
+            @RequestParam Optional<String> maLoaiYlenh){
+        
         try {
             var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
             var medicalRecord = FhirUtil.findIdentifierBySystem(encounter.getIdentifier(), IdentifierSystem.MEDICAL_RECORD);
@@ -132,35 +134,28 @@ public class YlenhController {
                 throw new Exception("No hsba with encounterId=" + encounterId);
             }
             
-            var lst = ylenhService.getByHoSoBenhAnId(hsba.id, start.orElse(-1), count.orElse(-1));
-            return ResponseEntity.ok(lst);
+            Date ngayBatDau = null;
+            Date ngayKetThuc = null;
             
-        }catch(Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.ok(new ArrayList<>());
-        }
-    }
-    
-    @GetMapping("/get_detail/{ylenhId}")
-    public ResponseEntity<?> getDetail(@PathVariable String ylenhId) {
-        try {
-            var ylenh = ylenhService.getById(new ObjectId(ylenhId)).get();
-            var dsDVKT = dichVuKyThuatService.getByYlenhId(ylenh.id);
-            
-            var dsDonThuoc = donThuocService.getByYlenhId(ylenh.id);                      
-            var donThuoc = dsDonThuoc.size() > 0? dsDonThuoc.get(0) : null;
-        
-            var result = mapOf("ylenh", ylenh, "dsDVKT", dsDVKT, "donThuoc", donThuoc);
-            return ResponseEntity.ok(result);
+            if(ngayRaYlenh.isPresent()) {
+                ngayBatDau = DateUtil.parseStringToDate(ngayRaYlenh.get(), "dd/MM/yyyy");
+                var cal = Calendar.getInstance();
+                cal.setTime(ngayBatDau);
+                cal.add(Calendar.DATE, 1);
+                ngayKetThuc = cal.getTime();
+            }
+                        
+            var count = ylenhService.countByLoaiAndNgayRaYlenh(hsba.id, maLoaiYlenh.orElse(""), ngayBatDau, ngayKetThuc);
+            return ResponseEntity.ok(mapOf("success", true, "count", count));
         }catch(Exception e) {
             return ResponseEntity.ok(new ArrayList<>());
         }
     }
     
-    @GetMapping("/search/{encounterId}")
-    public ResponseEntity<?> searchYlenh(@PathVariable String encounterId,
+    @GetMapping("/get_list/{encounterId}")
+    public ResponseEntity<?> getList(@PathVariable String encounterId,
     		@RequestParam Optional<String> ngayRaYlenh, 
-    		@RequestParam Optional<String> loaiYlenh,
+    		@RequestParam Optional<String> maLoaiYlenh,
     		@RequestParam Optional<Integer> start,
             @RequestParam Optional<Integer> count){
     	try {
@@ -182,16 +177,32 @@ public class YlenhController {
             Date ngayKetThuc = null;
             
             if(ngayRaYlenh.isPresent()) {
-            	String ngayBatDauSt = ngayRaYlenh.get() + " 00:00:00";
-            	String ngayKetThucSt = ngayRaYlenh.get() + " 23:59:59";
-            	
-            	ngayBatDau = DateUtil.parseStringToDate(ngayBatDauSt, "dd/MM/yyyy HH:mm:ss");
-              	ngayKetThuc = DateUtil.parseStringToDate(ngayKetThucSt, "dd/MM/yyyy HH:mm:ss");
+            	ngayBatDau = DateUtil.parseStringToDate(ngayRaYlenh.get(), "dd/MM/yyyy");
+            	var cal = Calendar.getInstance();
+                cal.setTime(ngayBatDau);
+                cal.add(Calendar.DATE, 1);
+                ngayKetThuc = cal.getTime();
             }
+                        
+    		var lst = ylenhService.getByLoaiAndNgayRaYlenh(hsba.id, maLoaiYlenh.orElse(""), ngayBatDau, ngayKetThuc, 
+    		                            start.orElse(-1), count.orElse(-1));
+            return ResponseEntity.ok(mapOf("success", true, "dsYlenh", lst));
+        }catch(Exception e) {
+            return ResponseUtil.errorResponse(e);
+        }
+    }
+    
+    @GetMapping("/get_detail/{ylenhId}")
+    public ResponseEntity<?> getDetail(@PathVariable String ylenhId) {
+        try {
+            var ylenh = ylenhService.getById(new ObjectId(ylenhId)).get();
+            var dsDVKT = dichVuKyThuatService.getByYlenhId(ylenh.id);
             
-            
-    		var lst = ylenhService.search(hsba.id, loaiYlenh.orElse(""),ngayBatDau, ngayKetThuc, start.orElse(-1), count.orElse(-1));
-            return ResponseEntity.ok(lst);
+            var dsDonThuoc = donThuocService.getByYlenhId(ylenh.id);                      
+            var donThuoc = dsDonThuoc.size() > 0? dsDonThuoc.get(0) : null;
+        
+            var result = mapOf("success", true, "ylenh", ylenh, "dsDVKT", dsDVKT, "donThuoc", donThuoc);
+            return ResponseEntity.ok(result);
         }catch(Exception e) {
             return ResponseEntity.ok(new ArrayList<>());
         }

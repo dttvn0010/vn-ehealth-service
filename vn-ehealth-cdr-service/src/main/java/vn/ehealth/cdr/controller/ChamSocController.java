@@ -13,15 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.model.CanboYte;
-import vn.ehealth.cdr.model.ChamSoc;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.component.CanboYteDTO;
+import vn.ehealth.cdr.model.dto.ChamSocDTO;
 import vn.ehealth.cdr.service.CanboYteService;
 import vn.ehealth.cdr.service.ChamSocService;
-import vn.ehealth.cdr.service.DonThuocService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.UongThuocService;
-import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
 import vn.ehealth.hl7.fhir.core.util.DateUtil;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
@@ -29,9 +27,10 @@ import vn.ehealth.hl7.fhir.core.util.StringUtil;
 import vn.ehealth.hl7.fhir.core.util.Constants.IdentifierSystem;
 import vn.ehealth.hl7.fhir.ehr.dao.impl.EncounterDao;
 
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
@@ -44,9 +43,10 @@ public class ChamSocController {
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     @Autowired private ChamSocService chamSocService;
     @Autowired private CanboYteService canboYteService;
+    @Autowired private UongThuocService uongThuocService;
     
     @PostMapping("/create_chamsoc/{encounterId}")
-    public ResponseEntity<?> createChamSoc(@PathVariable String encounterId, @RequestBody ChamSoc chamSoc) {
+    public ResponseEntity<?> createChamSoc(@PathVariable String encounterId, @RequestBody ChamSocDTO body) {
         try {
             var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
             var medicalRecord = FhirUtil.findIdentifierBySystem(encounter.getIdentifier(), IdentifierSystem.MEDICAL_RECORD);
@@ -69,11 +69,18 @@ public class ChamSocController {
                 throw new Exception("No hsba with encounterId=" + encounterId);
             }
             
+            var chamSoc = body.generateChamSoc();
             chamSoc.idhis = StringUtil.generateUUID();
             chamSoc.ytaChamSoc = CanboYteDTO.fromCanboYte(canboYte);
             chamSoc.ngayChamSoc = new Date();
             
             chamSoc = chamSocService.createOrUpdate(hsba, chamSoc);
+            
+            var dsUongThuoc = body.generateDsUongThuoc();
+            for(var uongThuoc : dsUongThuoc) {
+                uongThuocService.createOrUpdate(chamSoc, uongThuoc);
+            }
+            
             return ResponseEntity.ok(mapOf("success", true));
             
         }catch(Exception e) {
@@ -88,11 +95,11 @@ public class ChamSocController {
         return ResponseEntity.ok(new ArrayList<>());
     }
     
-    @GetMapping("/get_list/{encounterId}")
-    public ResponseEntity<?> getList(@PathVariable String encounterId, 
-            @RequestParam Optional<Integer> start,
-            @RequestParam Optional<Integer> count) {
-    	try {
+    @GetMapping("/count/{encounterId}")
+    public ResponseEntity<?> count(@PathVariable String encounterId,
+                @RequestParam Optional<String> ngayChamSoc,
+                @RequestParam Optional<String> maLoaiChamSoc) {
+        try {
             var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
             var medicalRecord = FhirUtil.findIdentifierBySystem(encounter.getIdentifier(), IdentifierSystem.MEDICAL_RECORD);
             
@@ -106,30 +113,30 @@ public class ChamSocController {
             if(hsba == null) {
                 throw new Exception("No hsba with encounterId=" + encounterId);
             }
-	
-            var lst = chamSocService.getByHoSoBenhAnId(hsba.id);
-            return ResponseEntity.ok(lst);
-    	
-    }catch (Exception e) {
-    	e.printStackTrace();
-        return ResponseEntity.ok(new ArrayList<>());
-	}
+    
+            Date ngayBatDau = null;
+            Date ngayKetThuc = null;
+
+            if (ngayChamSoc.isPresent()) {
+                ngayBatDau = DateUtil.parseStringToDate(ngayChamSoc.get(), "dd/MM/yyyy");
+                var cal = Calendar.getInstance();
+                cal.setTime(ngayBatDau);
+                cal.add(Calendar.DATE, 1);
+                ngayKetThuc = cal.getTime();
+            }
+            
+            var count = chamSocService.countByLoaiAndNgayChamSoc(hsba.id, maLoaiChamSoc.orElse(""), ngayBatDau, ngayKetThuc);
+            return ResponseEntity.ok(mapOf("success", true, "count", count));
+        
+        }catch (Exception e) {
+            return ResponseUtil.errorResponse(e);
+        }
     }
     
-	@GetMapping("/get_detail/{chamsocId}")
-	public ResponseEntity<?> getDetail(@PathVariable String chamsocId) {
-		try {
-			var chamsoc = chamSocService.getById(new ObjectId(chamsocId)).get();
-
-			return ResponseEntity.ok(chamsoc);
-		} catch (Exception e) {
-			return ResponseEntity.ok(new ArrayList<>());
-		}
-	}
-
-	@GetMapping("/search/{encounterId}")
-	public ResponseEntity<?> searchChamSoc(@PathVariable String encounterId, @RequestParam Optional<String> ngayChamSoc,
-			@RequestParam Optional<String> loaiChamSoc, 
+    @GetMapping("/get_list/{encounterId}")
+	public ResponseEntity<?> getList(@PathVariable String encounterId, 
+	        @RequestParam Optional<String> ngayChamSoc,
+			@RequestParam Optional<String> maLoaiChamSoc, 
 			@RequestParam Optional<Integer> start,
 			@RequestParam Optional<Integer> count) {
 		try {
@@ -159,12 +166,24 @@ public class ChamSocController {
 				ngayKetThuc = DateUtil.parseStringToDate(ngayKetThucSt, "dd/MM/yyyy HH:mm:ss");
 			}
 
-			var lst = chamSocService.search(hsba.id, loaiChamSoc.orElse(""), ngayBatDau, ngayKetThuc, start.orElse(-1),
-					count.orElse(-1));
-			return ResponseEntity.ok(lst);
+			var lst = chamSocService.getByLoaiAndNgayChamSoc(hsba.id, maLoaiChamSoc.orElse(""), ngayBatDau, ngayKetThuc, 
+			                            start.orElse(-1), count.orElse(-1));
+			
+			return ResponseEntity.ok(mapOf("success", true, "dsChamSoc", lst));
 
 		} catch (Exception e) {
-			return ResponseEntity.ok(new ArrayList<>());
+			return ResponseUtil.errorResponse(e);
 		}
 	}
+    
+    @GetMapping("/get_detail/{chamsocId}")
+    public ResponseEntity<?> getDetail(@PathVariable String chamsocId) {
+        try {
+            var chamsoc = chamSocService.getById(new ObjectId(chamsocId)).get();
+            var dsUongThuoc = uongThuocService.getByChamSocId(new ObjectId(chamsocId));
+            return ResponseEntity.ok(mapOf("success", true, "chamSoc", chamsoc, "dsUongThuoc", dsUongThuoc));
+        } catch (Exception e) {
+            return ResponseUtil.errorResponse(e);
+        }
+    }
 }

@@ -11,14 +11,14 @@ import vn.ehealth.auth.service.RoleService;
 
 import java.util.List;
 
-@RequestMapping("api/role")
+@RequestMapping("/api/role")
 @RestController
 public class RoleController {
 
     @Autowired
     private RoleService roleService;
 
-    @GetMapping("getAll")
+    @GetMapping("/getAll")
     @ResponseBody
     public List<Role> getAll() {
         return roleService.getAll();

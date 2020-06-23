@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import vn.ehealth.cdr.model.DonThuoc;
 import vn.ehealth.cdr.model.Ylenh;
-import vn.ehealth.cdr.repository.DonThuocChiTietRepository;
 import vn.ehealth.cdr.repository.DonThuocRepository;
 import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
 
@@ -19,7 +18,7 @@ import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
 public class DonThuocService {
 
     @Autowired private DonThuocRepository donThuocRepository;
-    @Autowired private DonThuocChiTietRepository donThuocChiTietRepository;
+    @Autowired private DonThuocChiTietService donThuocChiTietService;
     
     public Optional<DonThuoc> getById(ObjectId id) {
         return donThuocRepository.findById(id);
@@ -59,10 +58,18 @@ public class DonThuocService {
                 dtct.donThuocRef = DonThuoc.toEmrRef(donThuoc);
                 dtct.bacSiKeDon = donThuoc.bacSiKeDon;
                 dtct.ngayKeDon = donThuoc.ngayKeDon;
-                donThuocChiTietRepository.save(dtct);
+                donThuocChiTietService.save(dtct);
             }
         }
         
         return donThuoc;
+    }
+    
+    public void deleteByYlenhId(@Nonnull ObjectId ylenhId) {
+        var dsDonThuoc = donThuocRepository.findByYlenhRefObjectIdAndTrangThai(ylenhId, TRANGTHAI_DULIEU.DEFAULT);
+        for(var donThuoc : dsDonThuoc) {
+            donThuocChiTietService.deleteByDonThuoc(donThuoc.id);
+            donThuocRepository.delete(donThuoc);
+        }
     }
 }

@@ -46,7 +46,7 @@ public class DonThuocChiTietController {
 	            }
 	            
 	            var date = new Date();
-	            var dsDonThuocChiTiet = donThuocChiTietService.getDsDonThuoc(hsba.id, date,
+	            var dsDonThuocChiTiet = donThuocChiTietService.getByNgayUongThuoc(hsba.id, date,
 	                                        start.orElse(-1), count.orElse(-1));
 	            
 	            return ResponseEntity.ok(dsDonThuocChiTiet);

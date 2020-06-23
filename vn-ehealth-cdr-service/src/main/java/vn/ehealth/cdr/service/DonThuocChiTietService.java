@@ -3,6 +3,8 @@ package vn.ehealth.cdr.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -30,36 +32,14 @@ public class DonThuocChiTietService {
         return donThuocChiTietRepository.findByDonThuocRefObjectIdAndTrangThai(donThuocId, TRANGTHAI_DULIEU.DEFAULT);
     }
     
-    public long countDsUongThuoc(ObjectId hoSoBenhAnId, Date ngayUongThuoc, String maThoiDiemUongThuoc) {
-        var query = new Query(Criteria.where("hoSoBenhAnhRef.objectId").is(hoSoBenhAnId)
-                .and("ngayBatDau").lt(ngayUongThuoc)
-                .and("ngayKetThuc").gt(ngayUongThuoc)
-                .and("dsTanSuatDungThuoc.dmThoiDiemDungThuoc.ma").is(maThoiDiemUongThuoc)
-                );
+    public long countByNgayUongThuoc(ObjectId hoSoBenhAnId, Date ngayUongThuoc) {
+        var query = new Query(Criteria.where("hoSoBenhAnRef.objectId").is(hoSoBenhAnId).and("ngayBatDau")
+                .lt(ngayUongThuoc).and("ngayKetThuc").gt(ngayUongThuoc));
         
-        return mongoTemplate.count(query, DonThuocChiTiet.class);     
+        return mongoTemplate.count(query, DonThuocChiTiet.class);
     }
-    
-    public List<DonThuocChiTiet> getDsUongThuoc(ObjectId hoSoBenhAnId, Date ngayUongThuoc, String maThoiDiemUongThuoc,
-                                    int offset, int limit) {
         
-        var sort = new Sort(Sort.Direction.ASC, "id");
-        
-        var query = new Query(Criteria.where("hoSoBenhAnRef.objectId").is(hoSoBenhAnId)
-                .and("ngayBatDau").lt(ngayUongThuoc)
-                .and("ngayKetThuc").gt(ngayUongThuoc)
-                .and("dsTanSuatDungThuoc.dmThoiDiemDungThuoc.ma").is(maThoiDiemUongThuoc)
-                ).with(sort);
-        
-        if(offset >= 0 && limit >= 0) {
-            query = query.skip(offset).limit(limit);
-        }
-        
-        return mongoTemplate.find(query, DonThuocChiTiet.class);
-        
-    }
-    
-	public List<DonThuocChiTiet> getDsDonThuoc(ObjectId hoSoBenhAnId, Date ngayUongThuoc,
+	public List<DonThuocChiTiet> getByNgayUongThuoc(ObjectId hoSoBenhAnId, Date ngayUongThuoc,
 			int offset, int limit) {
 
 		var sort = new Sort(Sort.Direction.ASC, "id");
@@ -74,5 +54,12 @@ public class DonThuocChiTietService {
 
 		return mongoTemplate.find(query, DonThuocChiTiet.class);
 
+	}
+	
+	public void deleteByDonThuoc(@Nonnull ObjectId donThuocId) {
+	    var dsDtct = donThuocChiTietRepository.findByDonThuocRefObjectIdAndTrangThai(donThuocId, TRANGTHAI_DULIEU.DEFAULT);
+	    for(var dtct : dsDtct) {
+	        donThuocChiTietRepository.delete(dtct);
+	    }
 	}
 }

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -16,16 +17,14 @@ import org.springframework.stereotype.Service;
 
 import vn.ehealth.cdr.model.ChamSoc;
 import vn.ehealth.cdr.model.HoSoBenhAn;
-import vn.ehealth.cdr.model.Ylenh;
 import vn.ehealth.cdr.repository.ChamSocRepository;
-import vn.ehealth.cdr.repository.UongThuocRepository;
 import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
 
 @Service
 public class ChamSocService {
 
     @Autowired private ChamSocRepository chamSocRepository;
-    @Autowired private UongThuocRepository uongThuocRepository;
+    @Autowired private UongThuocService uongThuocService;
     @Autowired private MongoTemplate mongoTemplate;
         
     public Optional<ChamSoc> getById(ObjectId id) {
@@ -36,15 +35,44 @@ public class ChamSocService {
         return chamSocRepository.findByHoSoBenhAnRefObjectIdAndTrangThai(hsbaId, TRANGTHAI_DULIEU.DEFAULT);
     }
     
-	public List<ChamSoc> search(ObjectId hoSoBenhAnId, String maLoaiChamSoc, Date ngayBatDau, Date ngayKetThuc, int start,
+    private Criteria createCriteriaByLoaiAndNgayChamSoc(ObjectId hoSoBenhAnId, String maLoaiChamSoc, Date ngayBatDau, Date ngayKetThuc) {
+        var criteria = Criteria.where("hoSoBenhAnRef.objectId").is(hoSoBenhAnId);
+
+        if(ngayBatDau != null && ngayKetThuc == null) {
+            criteria = criteria.and("ngayChamSoc").gt(ngayBatDau);
+        }
+        
+        if(ngayBatDau == null && ngayKetThuc != null) {
+            criteria = criteria.and("ngayChamSoc").lt(ngayKetThuc);
+        }
+        
+        if(ngayBatDau != null && ngayKetThuc != null) {
+            criteria.and("ngayChamSoc").gt(ngayBatDau).lt(ngayKetThuc);
+        }
+        
+        if(!StringUtils.isEmpty(maLoaiChamSoc)) {
+            criteria.and("dmLoaiChamSoc.ma").is(maLoaiChamSoc);
+        }
+        
+        return criteria;
+    }
+    
+    public long countByLoaiAndNgayChamSoc(ObjectId hoSoBenhAnId, String maLoaiChamSoc, Date ngayBatDau, Date ngayKetThuc) {
+        var criteria = createCriteriaByLoaiAndNgayChamSoc(hoSoBenhAnId, maLoaiChamSoc, ngayBatDau, ngayKetThuc);
+        return mongoTemplate.count(new Query(criteria), ChamSoc.class);
+    }
+    
+	public List<ChamSoc> getByLoaiAndNgayChamSoc(ObjectId hoSoBenhAnId, String maLoaiChamSoc, Date ngayBatDau, Date ngayKetThuc, int start,
 			int count) {
 
-		var sort = new Sort(Sort.Direction.ASC, "id");
+	    var criteria = createCriteriaByLoaiAndNgayChamSoc(hoSoBenhAnId, maLoaiChamSoc, ngayBatDau, ngayKetThuc);
+	    var sort = new Sort(Sort.Direction.ASC, "id");
 
-		var query = new Query(Criteria.where("hoSoBenhAnRef.objectId").is(hoSoBenhAnId)
-				.and("ngayChamSoc").gt(ngayBatDau)
-				.and("ngayChamSoc").lt(ngayKetThuc))
-				.with(sort);
+		var query = new Query(criteria).with(sort);
+		
+		if(start >= 0 && count >= 0) {
+		    query.skip(start).limit(count);
+		}
 
 		return mongoTemplate.find(query, ChamSoc.class);
 	}
@@ -53,10 +81,7 @@ public class ChamSocService {
         if(chamSoc.idhis != null) {
             chamSoc.id = chamSocRepository.findByIdhis(chamSoc.idhis).map(x -> x.id).orElse(null);
             if(chamSoc.id != null) {
-                var dsUongThuocOld = uongThuocRepository.findByChamSocRefObjectIdAndTrangThai(chamSoc.id, TRANGTHAI_DULIEU.DEFAULT);
-                for(var uongThuoc : dsUongThuocOld) {
-                    uongThuocRepository.delete(uongThuoc);
-                }
+                uongThuocService.deleteByChamSocId(chamSoc.id);
             }
         }
         
@@ -64,17 +89,6 @@ public class ChamSocService {
         chamSoc.benhNhanRef = hsba.benhNhanRef;
         chamSoc.coSoKhamBenhRef = hsba.coSoKhamBenhRef;        
         chamSoc = chamSocRepository.save(chamSoc);
-        
-        if(chamSoc.dsUongThuoc != null) {
-            for(var uongThuoc : chamSoc.dsUongThuoc) {
-                uongThuoc.hoSoBenhAnRef = chamSoc.hoSoBenhAnRef;
-                uongThuoc.benhNhanRef = chamSoc.benhNhanRef;
-                uongThuoc.coSoKhamBenhRef = chamSoc.coSoKhamBenhRef;        
-                uongThuoc.chamSocRef = ChamSoc.toEmrRef(chamSoc);
-                uongThuoc.ytaChamSoc = chamSoc.ytaChamSoc;
-                uongThuocRepository.save(uongThuoc);
-            }
-        }
         
         return chamSoc;
     }
