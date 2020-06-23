@@ -3,6 +3,7 @@ package vn.ehealth.cdr.model;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createIdentifier;
 import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createReference;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -103,6 +104,14 @@ public class DonThuocChiTiet {
     public void setId(String id) {
         this.id = ObjectIdUtil.stringToId(id);
     } 
+    
+    public long getSoNgayKe() {
+        if(ngayBatDau != null && ngayKetThuc != null) {
+            var d = Duration.between(ngayBatDau.toInstant(), ngayKetThuc.toInstant());
+            return d.toDays() + 1;
+        }
+        return 0;
+    }
     
     public MedicationRequest toFHir(Encounter enc) {
     
