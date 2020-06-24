@@ -232,4 +232,16 @@ public class HoSoBenhAnController {
             return ResponseUtil.errorResponse(e);
         }
     }
+    
+    @GetMapping("/get_encounter_id/{hsbaId}")
+    public ResponseEntity<?> getEncounterId(@PathVariable String hsbaId) {
+        String encounterId = "";
+        var hsba = hoSoBenhAnService.getById(new ObjectId(hsbaId));
+        if(hsba.isPresent()) {
+            var enc = encounterHelper.getEncounterByMaHsba(hsba.get().maYte);
+            encounterId = enc.getId();
+        }
+        var result = mapOf("success", true, "encounterId", encounterId);
+        return ResponseEntity.ok(result);
+    }
 }
