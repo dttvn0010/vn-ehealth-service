@@ -119,10 +119,12 @@ public class ChamSocController {
 
             if (ngayChamSoc.isPresent()) {
                 ngayBatDau = DateUtil.parseStringToDate(ngayChamSoc.get(), "dd/MM/yyyy");
-                var cal = Calendar.getInstance();
-                cal.setTime(ngayBatDau);
-                cal.add(Calendar.DATE, 1);
-                ngayKetThuc = cal.getTime();
+                if(ngayBatDau != null) {
+                    var cal = Calendar.getInstance();
+                    cal.setTime(ngayBatDau);
+                    cal.add(Calendar.DATE, 1);
+                    ngayKetThuc = cal.getTime();
+                }
             }
             
             var count = chamSocService.countByLoaiAndNgayChamSoc(hsba.id, maLoaiChamSoc.orElse(""), ngayBatDau, ngayKetThuc);
@@ -160,10 +162,12 @@ public class ChamSocController {
 
             if (ngayChamSoc.isPresent()) {
                 ngayBatDau = DateUtil.parseStringToDate(ngayChamSoc.get(), "dd/MM/yyyy");
-                var cal = Calendar.getInstance();
-                cal.setTime(ngayBatDau);
-                cal.add(Calendar.DATE, 1);
-                ngayKetThuc = cal.getTime();
+                if(ngayBatDau != null) {
+                    var cal = Calendar.getInstance();
+                    cal.setTime(ngayBatDau);
+                    cal.add(Calendar.DATE, 1);
+                    ngayKetThuc = cal.getTime();
+                }
             }
 
 			var lst = chamSocService.getByLoaiAndNgayChamSoc(hsba.id, maLoaiChamSoc.orElse(""), ngayBatDau, ngayKetThuc, 
