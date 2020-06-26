@@ -137,6 +137,13 @@ public class HoSoBenhAn {
         
         public DanhMuc dmMaBenhChanDoanSauPttt;
         public String moTaChanDoanSauPttt;
+        
+        public boolean biTaiBien;
+        public boolean biBienChung;
+        
+        public String phuongPhapPhauThuat;
+        public int tongSoNgaySauPt;
+        public int tongSoLanPt;
     }
     
     @JsonInclude(Include.NON_NULL)    
