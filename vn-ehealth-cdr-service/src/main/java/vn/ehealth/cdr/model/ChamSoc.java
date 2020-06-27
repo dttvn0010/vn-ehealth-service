@@ -56,6 +56,8 @@ public class ChamSoc {
     public String thucHienYlenh;
     public String ghiChu;
     
+    public String phong = "304";
+    
     public String getId() { 
         return ObjectIdUtil.idToString(id); 
     }
