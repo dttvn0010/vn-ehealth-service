@@ -52,7 +52,7 @@ public class ChamSoc {
     public String truyenMau;
     public String danLuu;
     
-    public String dienBienYlenh;
+    public String dienBienBenh;
     public String thucHienYlenh;
     public String ghiChu;
     
