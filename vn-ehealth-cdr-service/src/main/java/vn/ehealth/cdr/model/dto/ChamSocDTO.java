@@ -68,7 +68,7 @@ public class ChamSocDTO {
     public String truyenMau;
     public String danLuu;
     
-    public String dienBienYlenh;
+    public String dienBienBenh;
     public String thucHienYlenh;
     public String ghiChu;
     public List<UongThuocDTO> dsUongThuoc = new ArrayList<>();
@@ -94,7 +94,7 @@ public class ChamSocDTO {
         chamSoc.tiemTruyen = tiemTruyen;
         chamSoc.truyenMau = truyenMau;
         chamSoc.danLuu = danLuu;
-        chamSoc.dienBienYlenh = dienBienYlenh;
+        chamSoc.dienBienBenh = dienBienBenh;
         chamSoc.thucHienYlenh = thucHienYlenh;
         chamSoc.ghiChu = ghiChu;
         
