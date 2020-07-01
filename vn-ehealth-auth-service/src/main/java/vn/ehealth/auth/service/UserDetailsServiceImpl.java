@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
             var grantedAuthorities = new HashSet<GrantedAuthority>();
             var role = user.getRole();  
             if(role != null) {
-                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role.ma));
+                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role.code));
                 if(role.privileges != null) {
                     for(String privilege : role.privileges) {
                         grantedAuthorities.add(new SimpleGrantedAuthority(privilege));

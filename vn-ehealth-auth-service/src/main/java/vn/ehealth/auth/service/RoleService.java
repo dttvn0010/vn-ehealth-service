@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import vn.ehealth.auth.model.Role;
-import vn.ehealth.auth.model.User;
 import vn.ehealth.auth.repository.RoleRepository;
 
 import org.springframework.stereotype.Service;
@@ -25,6 +24,10 @@ public class RoleService {
     
     public Optional<Role> getById(ObjectId id) {
         return roleRepository.findById(id);
+    }
+    
+    public Optional<Role> getByCode(String code) {
+        return roleRepository.findByCode(code);
     }
 
     public List<Role> getAll() {
