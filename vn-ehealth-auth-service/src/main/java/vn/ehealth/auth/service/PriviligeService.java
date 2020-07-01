@@ -1,6 +1,7 @@
 package vn.ehealth.auth.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,10 +20,14 @@ public class PriviligeService {
 	@Autowired
 	MongoTemplate mongoTemplate;
 	
+	public Optional<Privilege> getByCode(String code) {
+        return privilegeRepository.findByCode(code);
+    }
+	
 	public List<Privilege> search(String keyword) {
     	var criteria = new Criteria().orOperator(
-                Criteria.where("ma").regex(keyword),
-                Criteria.where("ten").regex(keyword)
+                Criteria.where("code").regex(keyword),
+                Criteria.where("name").regex(keyword)
             );
 
     	var query = new Query(criteria);

@@ -36,8 +36,8 @@ public class RoleService {
     
     public List<Role> search(String keyword) {
     	var criteria = new Criteria().orOperator(
-                Criteria.where("ma").regex(keyword),
-                Criteria.where("ten").regex(keyword)
+                Criteria.where("code").regex(keyword),
+                Criteria.where("name").regex(keyword)
             );
 
     	var query = new Query(criteria);
