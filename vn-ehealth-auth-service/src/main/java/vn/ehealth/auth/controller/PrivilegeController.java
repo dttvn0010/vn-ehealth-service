@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.auth.model.Privilege;
-import vn.ehealth.auth.model.Role;
 import vn.ehealth.auth.service.PriviligeService;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 
@@ -23,7 +22,7 @@ public class PrivilegeController {
     private PriviligeService priviligeService;
 	
 	@PostMapping("/save")
-    public ResponseEntity<?> savePrivilege(@RequestBody Privilege privilege){
+    public ResponseEntity<?> save(@RequestBody Privilege privilege){
     	 try {
              privilege = priviligeService.save(privilege);
              return ResponseEntity.ok(mapOf("success", true, "privilege", privilege));
@@ -33,7 +32,7 @@ public class PrivilegeController {
     }
     
     @GetMapping("/search")
-    public ResponseEntity<?> searchPrivilige(@RequestParam ("keyword") String keyword){
+    public ResponseEntity<?> search(@RequestParam ("keyword") String keyword){
     	try {
     		var result = priviligeService.search(keyword);
             return ResponseEntity.ok(result);

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-@Document(collection = "permission")
+@Document(collection = "privilege")
 public class Privilege {
 
     @Id public ObjectId id;

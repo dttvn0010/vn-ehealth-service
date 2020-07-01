@@ -22,9 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController

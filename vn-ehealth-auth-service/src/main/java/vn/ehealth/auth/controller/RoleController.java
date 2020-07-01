@@ -17,6 +17,7 @@ import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/api/role")
 @RestController
@@ -32,7 +33,7 @@ public class RoleController {
     }
     
     @PostMapping("/save")
-    public ResponseEntity<?> saveRoles(@RequestBody Role role){
+    public ResponseEntity<?> save(@RequestBody Role role){
     	 try {
              role = roleService.save(role);
              return ResponseEntity.ok(mapOf("success", true, "role", role));
@@ -42,9 +43,9 @@ public class RoleController {
     }
     
     @GetMapping("/search")
-    public ResponseEntity<?> searchRoles(@RequestParam ("keyword") String keyword){
+    public ResponseEntity<?> search(@RequestParam ("keyword") Optional<String> keyword){
     	try {
-    		var result = roleService.search(keyword);
+    		var result = roleService.search(keyword.get());
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             return ResponseUtil.errorResponse(e);
