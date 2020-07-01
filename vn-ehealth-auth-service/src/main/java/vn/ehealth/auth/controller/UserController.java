@@ -44,7 +44,6 @@ public class UserController {
     
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody User user) {
-    	validateForm(user);
         try {
         	var passwordEncoder = new BCryptPasswordEncoder();
         	user.password = passwordEncoder.encode(user.password);
@@ -58,6 +57,10 @@ public class UserController {
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody User body) {
         try {
+        	var errors = validateForm(body);
+        	if(errors.size() > 0) {
+        		return ResponseEntity.ok(mapOf("success", false, "errors", errors));
+        	}
         	var user = userService.getByUsername(body.username).get();
         	user.tenDayDu = body.tenDayDu;
         	user.email = body.email;
@@ -73,6 +76,11 @@ public class UserController {
     @PutMapping("/change_password")
     public ResponseEntity<?> changePassword(@RequestBody User body) {
         try {
+        	var errors = validatePassword(body);
+        	if(errors.size() > 0) {
+        		return ResponseEntity.ok(mapOf("success", false, "errors", errors));
+        	}
+        	
         	var passwordEncoder = new BCryptPasswordEncoder();
         	var user = userService.getByUsername(body.username).get();
         	user.password = passwordEncoder.encode(body.password);
@@ -93,31 +101,13 @@ public class UserController {
         }
     }
     
-    private boolean validatePassword() {
-    	var regexPassword = "^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$" ;
- 	    
- 	    Matcher matcher = null;
- 	    Pattern pattern = null;
- 	    
- 	    matcher = pattern.matcher(regexPassword);
- 	    return matcher.matches();
-    }
-    
-    private boolean validateEmail() {
-    	var regexEmail = "/[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}/igm" ;
- 	    
- 	    Matcher matcher;
- 	    Pattern pattern = null;
- 	    
- 	    matcher = pattern.matcher(regexEmail);
- 	    return matcher.matches();
-    }
-    
-    
     private Map<String, List<String>> validateForm(User body) {
 	    var errors = new HashMap<String, List<String>>();
 	    
+	    var user = userService.getByUsername(body.username).orElse(null);
 	    
+	    var regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$";
+	   
 	    if(body.username == null || body.username.isBlank()) {
 	        UserUtil.addError(errors, "username", MessageUtils.get("validate.required"));
 	    }
@@ -126,19 +116,36 @@ public class UserController {
             UserUtil.addError(errors, "password", MessageUtils.get("validate.required"));
         }
 	    
-	    if(body.email != null || body.email.isBlank()) {
+	    if(!body.password.matches(regex)) {
+	    	UserUtil.addError(errors, "passwordFormat", MessageUtils.get("validate.password.required"));
+	    }
+	    
+	    
+	    if(user != null && !user.id.equals(body.id)) {
+	    	UserUtil.addError(errors, "usernameExist", MessageUtils.get("username.already.exist"));
+	    }
+	    
+	    if(body.email == null || body.email.isBlank()) {
 	    	UserUtil.addError(errors, "email", MessageUtils.get("validate.required"));	            
-	    }
-	    
-	    if(!validatePassword()) {
-	    	UserUtil.addError(errors, "validatePassword", MessageUtils.get("validate.password.required"));
-	    }
-	    
-	    if(!validateEmail()) {
-	    	UserUtil.addError(errors, "validateEmail", MessageUtils.get("validate.email.required"));
 	    }
 	    
 	    return errors;
 	}
+    
+    private Map<String, List<String>> validatePassword(User body){
+    	var errors = new HashMap<String, List<String>>();
+    	
+    	var regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$";
+    	
+    	if(body.password == null || body.password.isBlank()) {
+            UserUtil.addError(errors, "password", MessageUtils.get("validate.required"));
+        }
+    	
+    	if(!body.password.matches(regex)) {
+	    	UserUtil.addError(errors, "passwordFormat", MessageUtils.get("validate.password.required"));
+	    }
+    	
+    	return errors;
+    }
 
 }
