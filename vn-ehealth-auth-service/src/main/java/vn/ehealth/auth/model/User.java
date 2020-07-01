@@ -26,7 +26,7 @@ public class User {
     public String soDienThoai;
     public String diaChi;
     
-    public String canBoYteId;
+    public String chungChiHanhNghe;
     public String fhirPractitionerId;
     
     public ObjectId roleId;

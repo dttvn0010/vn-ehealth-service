@@ -20,6 +20,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
@@ -90,9 +91,9 @@ public class UserController {
     }
     
     @GetMapping("/search")
-    public ResponseEntity<?> searchUser(@RequestParam ("keyword") String keyword){
+    public ResponseEntity<?> searchUser(@RequestParam ("keyword") Optional<String> keyword){
     	try {
-    		var result = userService.search(keyword);
+    		var result = userService.search(keyword.orElse(""));
             return ResponseEntity.ok(result);
         }catch(Exception e) {
             return ResponseUtil.errorResponse(e);

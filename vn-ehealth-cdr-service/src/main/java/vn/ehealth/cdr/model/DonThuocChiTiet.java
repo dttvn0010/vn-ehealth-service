@@ -76,6 +76,7 @@ public class DonThuocChiTiet {
     public EmrRef donThuocRef;
     public int trangThai;
     
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayKeDon;
     public CanboYteDTO bacSiKeDon;
     public String soDon;

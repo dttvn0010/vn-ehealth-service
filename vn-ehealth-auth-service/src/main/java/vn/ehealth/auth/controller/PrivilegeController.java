@@ -28,7 +28,7 @@ public class PrivilegeController {
     private PriviligeService priviligeService;
 	
 	@PostMapping("/save")
-    public ResponseEntity<?> savePrivilege(@RequestBody Privilege privilege){
+    public ResponseEntity<?> save(@RequestBody Privilege privilege){
     	 try {
     		 var errors = validateForm(privilege);
           	 if(errors.size() > 0) {
@@ -42,7 +42,7 @@ public class PrivilegeController {
     }
     
     @GetMapping("/search")
-    public ResponseEntity<?> searchPrivilige(@RequestParam ("keyword") String keyword){
+    public ResponseEntity<?> search(@RequestParam ("keyword") String keyword){
     	try {
     		var result = priviligeService.search(keyword);
             return ResponseEntity.ok(result);

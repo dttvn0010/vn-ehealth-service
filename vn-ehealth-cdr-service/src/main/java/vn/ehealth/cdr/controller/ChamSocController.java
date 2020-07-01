@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import vn.ehealth.auth.utils.UserUtil;
-import vn.ehealth.cdr.model.CanboYte;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.model.dto.ChamSocDTO;
-import vn.ehealth.cdr.service.CanboYteService;
 import vn.ehealth.cdr.service.ChamSocService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
 import vn.ehealth.cdr.service.UongThuocService;
@@ -42,7 +40,6 @@ public class ChamSocController {
     
     @Autowired private HoSoBenhAnService hoSoBenhAnService;
     @Autowired private ChamSocService chamSocService;
-    @Autowired private CanboYteService canboYteService;
     @Autowired private UongThuocService uongThuocService;
     
     @PostMapping("/create_chamsoc/{encounterId}")
@@ -51,12 +48,6 @@ public class ChamSocController {
             var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
             var medicalRecord = FhirUtil.findIdentifierBySystem(encounter.getIdentifier(), IdentifierSystem.MEDICAL_RECORD);
             var user = UserUtil.getCurrentUser().orElse(null);
-            var canboYteId = user != null? user.canBoYteId : null;
-            CanboYte canboYte = null;
-            
-            if(canboYteId != null) {
-                canboYte = canboYteService.getById(new ObjectId(canboYteId)).orElse(null);
-            }
             
             HoSoBenhAn hsba = null;
             
@@ -71,7 +62,7 @@ public class ChamSocController {
             
             var chamSoc = body.generateChamSoc();
             chamSoc.idhis = StringUtil.generateUUID();
-            chamSoc.ytaChamSoc = CanboYteDTO.fromCanboYte(canboYte);
+            chamSoc.ytaChamSoc = new CanboYteDTO(user);
             chamSoc.ngayChamSoc = new Date();
             
             chamSoc = chamSocService.createOrUpdate(hsba, chamSoc);

@@ -1,12 +1,14 @@
 package vn.ehealth.cdr.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -39,6 +41,10 @@ public class UongThuoc {
     public int soLuong;    
     public String donVi;
     public CanboYteDTO bacSiChiDinh;
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngayChiDinh;
+    
     public CanboYteDTO ytaChamSoc;
     public List<VatTuYte> dsVatTuYte = new ArrayList<>();
     
