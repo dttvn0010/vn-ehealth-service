@@ -139,10 +139,12 @@ public class YlenhController {
             
             if(ngayRaYlenh.isPresent()) {
                 ngayBatDau = DateUtil.parseStringToDate(ngayRaYlenh.get(), "dd/MM/yyyy");
-                var cal = Calendar.getInstance();
-                cal.setTime(ngayBatDau);
-                cal.add(Calendar.DATE, 1);
-                ngayKetThuc = cal.getTime();
+                if(ngayBatDau != null) {
+                    var cal = Calendar.getInstance();
+                    cal.setTime(ngayBatDau);
+                    cal.add(Calendar.DATE, 1);
+                    ngayKetThuc = cal.getTime();
+                }
             }
                         
             var count = ylenhService.countByLoaiAndNgayRaYlenh(hsba.id, maLoaiYlenh.orElse(""), ngayBatDau, ngayKetThuc);
@@ -178,10 +180,12 @@ public class YlenhController {
             
             if(ngayRaYlenh.isPresent()) {
             	ngayBatDau = DateUtil.parseStringToDate(ngayRaYlenh.get(), "dd/MM/yyyy");
-            	var cal = Calendar.getInstance();
-                cal.setTime(ngayBatDau);
-                cal.add(Calendar.DATE, 1);
-                ngayKetThuc = cal.getTime();
+            	if(ngayBatDau != null) {
+                	var cal = Calendar.getInstance();
+                    cal.setTime(ngayBatDau);
+                    cal.add(Calendar.DATE, 1);
+                    ngayKetThuc = cal.getTime();
+            	}
             }
                         
     		var lst = ylenhService.getByLoaiAndNgayRaYlenh(hsba.id, maLoaiYlenh.orElse(""), ngayBatDau, ngayKetThuc, 
