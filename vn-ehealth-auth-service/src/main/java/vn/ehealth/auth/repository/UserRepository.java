@@ -10,4 +10,5 @@ import vn.ehealth.auth.model.User;
 public interface UserRepository extends MongoRepository<User, ObjectId> {
 
     Optional<User> findByUsername(String username);
+    
 }
