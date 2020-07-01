@@ -84,7 +84,7 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
-            user.id = null;
+            var currentUser = UserUtil.getCurrentUser().get();
             
             var errors = validateCreateUser(user);
             if(errors.size() > 0) {
@@ -92,8 +92,9 @@ public class UserController {
             }
         	user.roleId = roleService.getByCode(user.roleCode).map(x -> x.id).orElse(null);
         	user.password = passwordEncoder.encode(user.password);
+        	user.coSoKhamBenhId = currentUser.coSoKhamBenhId;
             user = userService.save(user);
-            return ResponseEntity.ok(mapOf("success", true, "user", user));
+            return ResponseEntity.ok(mapOf("success", true));
         }catch(Exception e) {
             return ResponseUtil.errorResponse(e);
         }
@@ -116,34 +117,26 @@ public class UserController {
             UserUtil.addError(errors, "tenDayDu", MessageUtils.get("validate.required"));              
         }
         
-        if(StringUtils.isEmpty(body.roleCode)) {
-            UserUtil.addError(errors, "roleCode", MessageUtils.get("validate.required"));              
-        }
-        
-        if(roleService.getByCode(body.roleCode).isEmpty()) {
-            UserUtil.addError(errors, "roleCode", MessageUtils.get("validate.role.invalid"));
-        }
-        
         return errors;
     }
     
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody User body) {
         try {
+            
         	var errors = validateUpdateUser(body);
         	if(errors.size() > 0) {
         		return ResponseEntity.ok(mapOf("success", false, "errors", errors));
         	}
         	
         	var user = userService.getByUsername(body.username).get();
-        	user.roleId = roleService.getByCode(user.roleCode).map(x -> x.id).orElse(null);
         	user.tenDayDu = body.tenDayDu;
         	user.email = body.email;
         	user.diaChi = body.diaChi;
         	user.soDienThoai = body.soDienThoai;
         	user.chungChiHanhNghe = body.chungChiHanhNghe;
         	user = userService.save(user);
-            return ResponseEntity.ok(mapOf("success", true, "user", user));
+            return ResponseEntity.ok(mapOf("success", true));
         }catch(Exception e) {
             return ResponseUtil.errorResponse(e);
         }
@@ -170,7 +163,7 @@ public class UserController {
         return errors;
     }
         
-    @PutMapping("/change_password")
+    @PostMapping("/change_password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordBody body) {
         try {
         	var errors = validateChangePassword(body);

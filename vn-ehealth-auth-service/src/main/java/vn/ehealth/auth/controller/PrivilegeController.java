@@ -55,15 +55,15 @@ public class PrivilegeController {
     private Map<String, List<String>> validateForm(Privilege body){
     	var errors = new HashMap<String, List<String>>();
     	
-    	var privilege = priviligeService.getByCode(body.code).orElse(null);
-    	
-    	if(StringUtils.isEmpty(privilege.code)) {
+    	if(StringUtils.isEmpty(body.code)) {
             UserUtil.addError(errors, "code", MessageUtils.get("validate.required"));
         }
     	
-    	if(StringUtils.isAllBlank(privilege.name)) {
+    	if(StringUtils.isAllBlank(body.name)) {
             UserUtil.addError(errors, "name", MessageUtils.get("validate.required"));
         }
+    	
+    	var privilege = priviligeService.getByCode(body.code).orElse(null);
     	
     	if(privilege != null && !privilege.id.equals(body.id)) {
 	    	UserUtil.addError(errors, "code", MessageUtils.get("validate.code.already.exist"));

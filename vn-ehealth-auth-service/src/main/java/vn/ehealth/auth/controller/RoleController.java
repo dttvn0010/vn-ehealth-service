@@ -65,8 +65,6 @@ public class RoleController {
     private Map<String, List<String>> validateForm(Role body){
     	var errors = new HashMap<String, List<String>>();
     	
-    	var role = roleService.getByCode(body.code).orElse(null);
-    	
     	if(StringUtils.isEmpty(body.code)) {
             UserUtil.addError(errors, "code", MessageUtils.get("validate.required"));
         }
@@ -74,6 +72,8 @@ public class RoleController {
     	if(StringUtils.isEmpty(body.name)) {
             UserUtil.addError(errors, "name", MessageUtils.get("validate.required"));
         }
+    	
+    	var role = roleService.getByCode(body.code).orElse(null);
     	
     	if(role != null && !role.id.equals(body.id)) {
 	    	UserUtil.addError(errors, "code", MessageUtils.get("validate.code.already.exist"));
