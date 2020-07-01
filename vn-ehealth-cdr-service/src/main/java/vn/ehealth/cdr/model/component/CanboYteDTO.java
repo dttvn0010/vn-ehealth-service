@@ -1,10 +1,12 @@
 package vn.ehealth.cdr.model.component;
 
+import org.apache.commons.lang.StringUtils;
 import org.hl7.fhir.r4.model.Reference;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import vn.ehealth.auth.model.User;
 import vn.ehealth.cdr.model.CanboYte;
 import vn.ehealth.cdr.service.ServiceFactory;
 
@@ -16,6 +18,11 @@ public class CanboYteDTO {
        
     public CanboYteDTO() {
         
+    }
+    
+    public CanboYteDTO(User user) {
+        this.ten = StringUtils.isEmpty(user.tenDayDu)? user.username : user.tenDayDu;
+        this.chungChiHanhNghe = user.chungChiHanhNghe;
     }
     
     public CanboYteDTO(String ten) {

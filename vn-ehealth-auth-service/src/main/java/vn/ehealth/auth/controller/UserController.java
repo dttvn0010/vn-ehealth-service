@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.*;
 
 @RestController
