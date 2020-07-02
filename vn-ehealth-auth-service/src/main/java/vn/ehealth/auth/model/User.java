@@ -20,17 +20,20 @@ public class User {
     public ObjectId coSoKhamBenhId;
     
     public String username;
-    public String password;
+    public String password;    
+    @Transient public String password2;
+    
     public String tenDayDu;
     public String email;
     public String soDienThoai;
     public String diaChi;
     
-    public String canBoYteId;
+    public String chungChiHanhNghe;
     public String fhirPractitionerId;
     
     public ObjectId roleId;
     
+    @Transient public String roleCode;
     @Transient private Role role;
     
     public String getId() {
@@ -48,7 +51,7 @@ public class User {
     }
     
     public void setRoleId(String roleId) {
-        if(roleId != null) {
+        if(roleId != null && !roleId.isBlank()) {
             this.roleId = new ObjectId(roleId);
         }
     }

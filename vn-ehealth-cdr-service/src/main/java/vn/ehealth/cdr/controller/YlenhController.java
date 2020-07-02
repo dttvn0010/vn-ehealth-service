@@ -19,11 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.controller.helper.MedicationRequestHelper;
 import vn.ehealth.cdr.controller.helper.ProcedureHelper;
-import vn.ehealth.cdr.model.CanboYte;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.model.dto.YlenhDTO;
-import vn.ehealth.cdr.service.CanboYteService;
 import vn.ehealth.cdr.service.DichVuKyThuatService;
 import vn.ehealth.cdr.service.DonThuocService;
 import vn.ehealth.cdr.service.HoSoBenhAnService;
@@ -49,7 +47,6 @@ public class YlenhController {
     @Autowired private YlenhService ylenhService;
     @Autowired private DonThuocService donThuocService;
     @Autowired private DichVuKyThuatService dichVuKyThuatService;
-    @Autowired private CanboYteService canboYteService;
     
     @PostMapping("/create_ylenh/{encounterId}")
     public ResponseEntity<?> createYlenh(@PathVariable String encounterId, @RequestBody YlenhDTO body) {
@@ -57,12 +54,6 @@ public class YlenhController {
             var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
             var medicalRecord = FhirUtil.findIdentifierBySystem(encounter.getIdentifier(), IdentifierSystem.MEDICAL_RECORD);
             var user = UserUtil.getCurrentUser().orElse(null);
-            var canboYteId = user != null? user.canBoYteId : null;
-            CanboYte canboYte = null;
-            
-            if(canboYteId != null) {
-                canboYte = canboYteService.getById(new ObjectId(canboYteId)).orElse(null);
-            }
             
             HoSoBenhAn hsba = null;
             
@@ -84,7 +75,7 @@ public class YlenhController {
             ylenh.hoSoBenhAnRef = HoSoBenhAn.toEmrRef(hsba);
             ylenh.coSoKhamBenhRef = hsba.coSoKhamBenhRef;
             ylenh.benhNhanRef = hsba.benhNhanRef;
-            ylenh.bacSiRaYlenh = CanboYteDTO.fromCanboYte(canboYte);
+            ylenh.bacSiRaYlenh = new CanboYteDTO(user);
             ylenh.ngayRaYlenh = new Date();
             ylenh = ylenhService.save(ylenh);
             

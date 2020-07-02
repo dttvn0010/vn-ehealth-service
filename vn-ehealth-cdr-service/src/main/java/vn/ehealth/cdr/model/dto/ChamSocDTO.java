@@ -1,7 +1,10 @@
 package vn.ehealth.cdr.model.dto;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import vn.ehealth.cdr.model.ChamSoc;
 import vn.ehealth.cdr.model.UongThuoc;
@@ -32,6 +35,10 @@ public class ChamSocDTO {
         public int soLuong;    
         public String donVi;
         public CanboYteDTO bacSiChiDinh;
+        
+        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+        public Date ngayChiDinh;
+        
         public List<VatTuYteDTO> dsVatTuYte = new ArrayList<>();
         
         public UongThuoc toModel() {
@@ -42,6 +49,7 @@ public class ChamSocDTO {
             obj.soLuong = soLuong;
             obj.donVi = donVi;
             obj.bacSiChiDinh = bacSiChiDinh;
+            obj.ngayChiDinh = ngayChiDinh;
             obj.dsVatTuYte = FPUtil.transform(dsVatTuYte, VatTuYteDTO::toModel);
             return obj;
         }

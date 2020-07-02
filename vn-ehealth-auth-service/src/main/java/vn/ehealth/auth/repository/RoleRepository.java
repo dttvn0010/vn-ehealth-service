@@ -9,5 +9,5 @@ import vn.ehealth.auth.model.Role;
 
 public interface RoleRepository extends MongoRepository<Role, ObjectId>  {
     
-    Optional<Role> findByMa(String ma);
+    Optional<Role> findByCode(String code);
 }
