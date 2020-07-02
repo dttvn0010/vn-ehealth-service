@@ -5,7 +5,6 @@ import org.hl7.fhir.r4.model.Condition;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.PositiveIntType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -136,8 +135,8 @@ public class ChanDoanController {
 		        return ResponseEntity.ok(mapOf("success", false, "errors", errors));
 		    }			
 			
-			var user = UserUtil.getCurrentUser().orElse(null);
-			var practitionerId = user != null? user.fhirPractitionerId : null;
+			var user = UserUtil.getCurrentUser();
+			var practitionerId = user.fhirPractitionerId;
 			var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
 			
 			var condition = new Condition();
@@ -182,8 +181,8 @@ public class ChanDoanController {
                 return ResponseEntity.ok(mapOf("success", false, "errors", errors));
             }            
             
-            var user = UserUtil.getCurrentUser().orElse(null);
-            var practitionerId = user != null? user.fhirPractitionerId : null;
+            var user = UserUtil.getCurrentUser();
+            var practitionerId = user.fhirPractitionerId;
             var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
                     
             

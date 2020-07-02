@@ -2,8 +2,6 @@ package vn.ehealth.emr.controller.noitru.thongtinlamsang;
 
 import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
 
-import org.apache.commons.lang.StringUtils;
-import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -60,8 +58,8 @@ public class QuatrinhBenhlyController {
 								@RequestBody QuaTrinhBenhLyBody body) {
 		try {
 			var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
-			var user = UserUtil.getCurrentUser().orElse(null);
-			var practitionerId = user != null? user.fhirPractitionerId : null;
+			var user = UserUtil.getCurrentUser();
+			var practitionerId = user.fhirPractitionerId;
 			var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
 			
 			observationHelper.saveObservation(encounter, practitioner, QuaTrinhBenhLy.QUA_TRINH_KHOI_PHAT, new StringType(body.quaTrinhKhoiPhat));
