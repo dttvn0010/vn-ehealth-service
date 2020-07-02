@@ -148,12 +148,12 @@ public class HoSoBenhAn {
         public String chanDoanDieuTriChinh_T;
         public String chanDoanDieuTriChinh_N;
         public String chanDoanDieuTriChinh_M;
-        public DanhMuc chanDoanDieuTriChinh_giaiDoan;
+        public Integer chanDoanDieuTriChinh_giaiDoan;
         
         public String chanDoanRaVienChinh_T;
         public String chanDoanRaVienChinh_N;
         public String chanDoanRaVienChinh_M;
-        public DanhMuc chanDoanRaVienChinh_giaiDoan;
+        public Integer chanDoanRaVienChinh_giaiDoan;
     }
     
     @JsonInclude(Include.NON_NULL)    
