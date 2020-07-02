@@ -2,6 +2,7 @@ package vn.ehealth.cdr.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
@@ -23,6 +24,10 @@ public class DonThuocChiTietService {
     @Autowired private DonThuocChiTietRepository donThuocChiTietRepository;
     
     @Autowired private MongoTemplate mongoTemplate;
+    
+    public Optional<DonThuocChiTiet> getById(ObjectId id) {
+        return donThuocChiTietRepository.findById(id);
+    }
     
     public DonThuocChiTiet save(DonThuocChiTiet donThuocChiTiet) {
         return donThuocChiTietRepository.save(donThuocChiTiet);
