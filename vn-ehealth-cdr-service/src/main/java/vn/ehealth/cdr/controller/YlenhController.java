@@ -55,10 +55,6 @@ public class YlenhController {
             var medicalRecord = FhirUtil.findIdentifierBySystem(encounter.getIdentifier(), IdentifierSystem.MEDICAL_RECORD);
             var user = UserUtil.getCurrentUser();
             
-            if(user == null) {
-                throw new Exception("Invalid token.");
-            }
-            
             HoSoBenhAn hsba = null;
             
             if(medicalRecord != null) {
