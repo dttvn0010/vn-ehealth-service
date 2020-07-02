@@ -141,6 +141,9 @@ public class HoSoBenhAn {
         public boolean biTaiBien;
         public boolean biBienChung;
         
+        public boolean dieuTriThuThuat;
+        public boolean dieuTriPhauThuat;
+        
         public String phuongPhapPhauThuat;
         public int tongSoNgaySauPt;
         public int tongSoLanPt;
