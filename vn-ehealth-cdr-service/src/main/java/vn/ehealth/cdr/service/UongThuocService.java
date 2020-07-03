@@ -33,6 +33,7 @@ public class UongThuocService {
         uongThuoc.coSoKhamBenhRef = chamSoc.coSoKhamBenhRef;        
         uongThuoc.chamSocRef = ChamSoc.toEmrRef(chamSoc);
         uongThuoc.ytaChamSoc = chamSoc.ytaChamSoc;
+        uongThuoc.ngayUongThuoc = chamSoc.ngayChamSoc;
         
         var dtct = donThuocChiTietService.getById(EmrRef.toObjectId(uongThuoc.donThuocChiTietRef)).get();
         uongThuoc.dmThuoc = dtct.dmThuoc;

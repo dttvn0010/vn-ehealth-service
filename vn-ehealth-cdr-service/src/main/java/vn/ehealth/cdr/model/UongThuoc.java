@@ -51,6 +51,10 @@ public class UongThuoc {
     public Date ngayChiDinh;
     
     public CanboYteDTO ytaChamSoc;
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngayUongThuoc;
+    
     public List<VatTuYte> dsVatTuYte = new ArrayList<>();
     
     public String getId() { 
