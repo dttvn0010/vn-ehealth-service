@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -32,8 +33,12 @@ public class UongThuoc {
     public EmrRef benhNhanRef;
     public EmrRef coSoKhamBenhRef;
     public EmrRef chamSocRef;
+    public EmrRef donThuocChiTietRef;
+    public EmrRef donThuocRef;
+    
     public int trangThai;
     
+    @Transient public String maThoiDiemUongThuoc;
     public DanhMuc dmThuoc;
     public DanhMuc dmDuongDungThuoc;
     public DanhMuc dmThoiDiemDungThuoc;
@@ -46,6 +51,10 @@ public class UongThuoc {
     public Date ngayChiDinh;
     
     public CanboYteDTO ytaChamSoc;
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    public Date ngayUongThuoc;
+    
     public List<VatTuYte> dsVatTuYte = new ArrayList<>();
     
     public String getId() { 

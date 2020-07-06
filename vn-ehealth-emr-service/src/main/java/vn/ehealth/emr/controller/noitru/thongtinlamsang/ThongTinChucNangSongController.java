@@ -63,8 +63,8 @@ public class ThongTinChucNangSongController {
                                 @RequestBody ThongTinChucNangSongBody body) {
         try {
             var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
-            var user = UserUtil.getCurrentUser().orElse(null);
-            var practitionerId = user != null? user.fhirPractitionerId : null;
+            var user = UserUtil.getCurrentUser();
+            var practitionerId = user.fhirPractitionerId;
             var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
             
             if(body.mach != null) {

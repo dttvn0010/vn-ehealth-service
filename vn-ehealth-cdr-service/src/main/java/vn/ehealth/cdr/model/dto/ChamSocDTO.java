@@ -1,16 +1,16 @@
 package vn.ehealth.cdr.model.dto;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.apache.commons.lang.StringUtils;
 
 import vn.ehealth.cdr.model.ChamSoc;
+import vn.ehealth.cdr.model.DonThuocChiTiet;
 import vn.ehealth.cdr.model.UongThuoc;
 import vn.ehealth.cdr.model.UongThuoc.VatTuYte;
-import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.model.component.DanhMuc;
+import vn.ehealth.cdr.model.component.EmrRef;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 public class ChamSocDTO {
@@ -28,28 +28,18 @@ public class ChamSocDTO {
     }
     
     public static class UongThuocDTO {
-        public DanhMuc dmThuoc;
-        public DanhMuc dmDuongDungThuoc;
-        public DanhMuc dmThoiDiemDungThuoc;
-                
-        public int soLuong;    
-        public String donVi;
-        public CanboYteDTO bacSiChiDinh;
-        
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-        public Date ngayChiDinh;
+        public String donThuocChiTietId;
+        public String maThoiDiemDungThuoc;
         
         public List<VatTuYteDTO> dsVatTuYte = new ArrayList<>();
         
         public UongThuoc toModel() {
             var obj = new UongThuoc();
-            obj.dmThuoc = dmThuoc;
-            obj.dmDuongDungThuoc = dmDuongDungThuoc;
-            obj.dmThoiDiemDungThuoc = dmThoiDiemDungThuoc;
-            obj.soLuong = soLuong;
-            obj.donVi = donVi;
-            obj.bacSiChiDinh = bacSiChiDinh;
-            obj.ngayChiDinh = ngayChiDinh;
+            if(StringUtils.isEmpty(donThuocChiTietId)) {
+                throw new RuntimeException("Missing field donThuocChiTietId for chamSoc.uongThuoc");
+            }
+            obj.donThuocChiTietRef = EmrRef.fromObjectId(DonThuocChiTiet.class.getName(), donThuocChiTietId);
+            obj.maThoiDiemUongThuoc = maThoiDiemDungThuoc != null? maThoiDiemDungThuoc : "";
             obj.dsVatTuYte = FPUtil.transform(dsVatTuYte, VatTuYteDTO::toModel);
             return obj;
         }

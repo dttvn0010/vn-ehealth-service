@@ -84,7 +84,7 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
-            var currentUser = UserUtil.getCurrentUser().get();
+            var currentUser = UserUtil.getCurrentUser();
             
             var errors = validateCreateUser(user);
             if(errors.size() > 0) {

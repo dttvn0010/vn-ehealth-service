@@ -59,8 +59,8 @@ public class ThongTinVaoVienController {
 								@RequestBody ThongTinVaoVienBody body) {
 		try {
 			var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
-			var user = UserUtil.getCurrentUser().orElse(null);
-			var practitionerId = user != null? user.fhirPractitionerId : null;
+			var user = UserUtil.getCurrentUser();
+			var practitionerId = user.fhirPractitionerId;
 			var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
 			
 			observationHelper.saveObservation(encounter, practitioner, ThongTinVaoVien.LY_DO_VAO_VIEN, new StringType(body.lyDoVaoVien));

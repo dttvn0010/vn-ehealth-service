@@ -47,7 +47,7 @@ public class ChamSocController {
         try {
             var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
             var medicalRecord = FhirUtil.findIdentifierBySystem(encounter.getIdentifier(), IdentifierSystem.MEDICAL_RECORD);
-            var user = UserUtil.getCurrentUser().orElse(null);
+            var user = UserUtil.getCurrentUser();
             
             HoSoBenhAn hsba = null;
             

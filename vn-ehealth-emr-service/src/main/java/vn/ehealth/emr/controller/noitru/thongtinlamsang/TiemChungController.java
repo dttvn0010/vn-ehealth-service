@@ -99,9 +99,9 @@ public class TiemChungController {
 			    }			
 				
 			
-			var user = UserUtil.getCurrentUser().orElse(null);
+			var user = UserUtil.getCurrentUser();
 			var imm = new Immunization();
-			var practitionerId = user != null? user.fhirPractitionerId : null;
+			var practitionerId = user.fhirPractitionerId;
 			var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
 			var practitionerRef = FhirUtil.createReference(practitioner);
 			practitionerRef.setDisplay(practitioner.getNameFirstRep().getText());
@@ -136,9 +136,9 @@ public class TiemChungController {
 										@RequestBody TiemChungBody body) {
 		try {
 			
-			var user = UserUtil.getCurrentUser().orElse(null);
+			var user = UserUtil.getCurrentUser();
 			var imm = immunizationDao.read(FhirUtil.createIdType(immunizationId));
-			var practitionerId = user != null? user.fhirPractitionerId : null;
+			var practitionerId = user.fhirPractitionerId;
 			var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
 			var practitionerRef = FhirUtil.createReference(practitioner);
 			practitionerRef.setDisplay(practitioner.getNameFirstRep().getText());
