@@ -144,6 +144,16 @@ public class HoSoBenhAn {
         public String phuongPhapPhauThuat;
         public int tongSoNgaySauPt;
         public int tongSoLanPt;
+        
+        public String chanDoanDieuTriChinh_T;
+        public String chanDoanDieuTriChinh_N;
+        public String chanDoanDieuTriChinh_M;
+        public Integer chanDoanDieuTriChinh_giaiDoan;
+        
+        public String chanDoanRaVienChinh_T;
+        public String chanDoanRaVienChinh_N;
+        public String chanDoanRaVienChinh_M;
+        public Integer chanDoanRaVienChinh_giaiDoan;
     }
     
     @JsonInclude(Include.NON_NULL)    

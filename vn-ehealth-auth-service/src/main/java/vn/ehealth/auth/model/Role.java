@@ -15,8 +15,8 @@ public class Role {
     
     @Id public ObjectId id;
     
-    public String ma;
-    public String ten;
+    public String code;
+    public String name;
     
     public Set<String> privileges;
     

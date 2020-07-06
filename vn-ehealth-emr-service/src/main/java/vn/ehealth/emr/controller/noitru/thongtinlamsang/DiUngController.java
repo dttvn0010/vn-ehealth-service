@@ -13,7 +13,6 @@ import org.hl7.fhir.r4.model.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -92,8 +91,8 @@ public class DiUngController {
 	public ResponseEntity<?> addDiUng(@RequestParam String encounterId, @RequestBody DiUngBody body) {
 		try {
 			var encounter = encounterDao.read(FhirUtil.createIdType(encounterId));
-			var user = UserUtil.getCurrentUser().orElse(null);
-			var practitionerId = user != null? user.fhirPractitionerId : null;
+			var user = UserUtil.getCurrentUser();
+			var practitionerId = user.fhirPractitionerId;
 			var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
 			
 			var allergy = new AllergyIntolerance();
@@ -139,8 +138,8 @@ public class DiUngController {
 	public ResponseEntity<?> updateInfo(@RequestParam String fhirId, 
 			@RequestBody DiUngBody body) {
 		try {
-			var user = UserUtil.getCurrentUser().orElse(null);
-			var practitionerId = user != null? user.fhirPractitionerId : null;
+			var user = UserUtil.getCurrentUser();
+			var practitionerId = user.fhirPractitionerId;
 			var practitioner = practitionerDao.read(FhirUtil.createIdType(practitionerId));
 			
 			var allergy = allergyIntoleranceDao.read(FhirUtil.createIdType(fhirId));

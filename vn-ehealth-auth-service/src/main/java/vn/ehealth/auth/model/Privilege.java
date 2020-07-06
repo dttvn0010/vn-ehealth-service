@@ -13,9 +13,9 @@ public class Privilege {
 
     @Id public ObjectId id;
     
-    public String ma;
-    public String ten;
-    public String moTa;
+    public String code;
+    public String name;
+    public String description;
     
     public String getId() {
         return id != null? id.toHexString() : null;

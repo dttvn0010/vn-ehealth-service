@@ -9,5 +9,5 @@ import vn.ehealth.auth.model.Privilege;
 
 
 public interface PrivilegeRepository extends MongoRepository<Privilege, ObjectId> {
-	Optional<Privilege> findByMa(String ma);
+	Optional<Privilege> findByCode(String code);
 }

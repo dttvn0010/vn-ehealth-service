@@ -26,8 +26,8 @@ public class RoleService {
         return roleRepository.findById(id);
     }
     
-    public Optional<Role> getByMa(String ma) {
-        return roleRepository.findByMa(ma);
+    public Optional<Role> getByCode(String code) {
+        return roleRepository.findByCode(code);
     }
 
     public List<Role> getAll() {
@@ -36,8 +36,8 @@ public class RoleService {
     
     public List<Role> search(String keyword) {
     	var criteria = new Criteria().orOperator(
-                Criteria.where("ma").regex(keyword),
-                Criteria.where("ten").regex(keyword)
+                Criteria.where("code").regex(keyword),
+                Criteria.where("name").regex(keyword)
             );
 
     	var query = new Query(criteria);

@@ -20,14 +20,14 @@ public class PriviligeService {
 	@Autowired
 	MongoTemplate mongoTemplate;
 	
-	public Optional<Privilege> getByMa(String ma) {
-        return privilegeRepository.findByMa(ma);
+	public Optional<Privilege> getByCode(String code) {
+        return privilegeRepository.findByCode(code);
     }
 	
 	public List<Privilege> search(String keyword) {
     	var criteria = new Criteria().orOperator(
-                Criteria.where("ma").regex(keyword),
-                Criteria.where("ten").regex(keyword)
+                Criteria.where("code").regex(keyword),
+                Criteria.where("name").regex(keyword)
             );
 
     	var query = new Query(criteria);

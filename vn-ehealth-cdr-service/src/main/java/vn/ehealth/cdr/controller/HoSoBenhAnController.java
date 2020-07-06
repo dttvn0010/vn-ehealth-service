@@ -53,12 +53,8 @@ public class HoSoBenhAnController {
     @GetMapping("/count_ds_hs")
     public ResponseEntity<?> countHsba(@RequestParam int trangthai, @RequestParam String maYte) {
         try {
-            var user = UserUtil.getCurrentUser().orElse(null);
-            
-            if(user == null) {
-                throw new UnAuthorizedException();
-            }
-            
+            var user = UserUtil.getCurrentUser();
+           
             var count = hoSoBenhAnService.countHoSo(user.id, user.coSoKhamBenhId, trangthai, maYte);
             return ResponseEntity.ok(count);
             
@@ -84,7 +80,7 @@ public class HoSoBenhAnController {
                                                 @RequestParam int count) {
         
         try {
-            var user = UserUtil.getCurrentUser().orElse(null);
+            var user = UserUtil.getCurrentUser();
             
             if(user == null) {
                 throw new UnAuthorizedException();
@@ -126,7 +122,7 @@ public class HoSoBenhAnController {
         
         try {
             var user = UserUtil.getCurrentUser();
-            hoSoBenhAnService.archiveHsba(new ObjectId(id), user.get());
+            hoSoBenhAnService.archiveHsba(new ObjectId(id), user);
             return ResponseEntity.ok(mapOf("success", true));
             
         }catch(Exception e) {
@@ -138,7 +134,7 @@ public class HoSoBenhAnController {
     public ResponseEntity<?> unArchiveHsba(@RequestParam("hsba_id") String id) {
         try {
             var user = UserUtil.getCurrentUser();            
-            hoSoBenhAnService.unArchiveHsba(new ObjectId(id), user.get());
+            hoSoBenhAnService.unArchiveHsba(new ObjectId(id), user);
             return ResponseEntity.ok(mapOf("success", true));
             
         }catch(Exception e) {
@@ -150,7 +146,7 @@ public class HoSoBenhAnController {
     public ResponseEntity<?> deleteHsba(@RequestParam("hsba_id") String id) {
         try {
             var user = UserUtil.getCurrentUser();
-            hoSoBenhAnService.deleteHsba(new ObjectId(id), user.get());
+            hoSoBenhAnService.deleteHsba(new ObjectId(id), user);
             return ResponseEntity.ok(mapOf("success", true));
             
         }catch(Exception e) {

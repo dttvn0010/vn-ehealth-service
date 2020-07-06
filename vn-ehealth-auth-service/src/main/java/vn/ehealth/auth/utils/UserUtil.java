@@ -3,7 +3,6 @@ package vn.ehealth.auth.utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.TimeZone;
 
 import javax.annotation.Nonnull;
@@ -21,15 +20,20 @@ import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 public class UserUtil {
 
-    public static Optional<User> getCurrentUser() {
+    public static @Nonnull User getCurrentUser() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
         if(userDetails instanceof UserDetails) {
             String username = ((UserDetails) userDetails).getUsername();
-            return EmrServiceFactory.getUserService().getByUsername(username);
+            var user = EmrServiceFactory.getUserService().getByUsername(username);
+            if(user.isPresent()) {
+                return user.get();
+            }else {
+                throw new RuntimeException("No user with username:" + username);
+            }
         }
         
-        return Optional.ofNullable(null);
+        throw new RuntimeException("Invalid/expired token");
         
     }
     

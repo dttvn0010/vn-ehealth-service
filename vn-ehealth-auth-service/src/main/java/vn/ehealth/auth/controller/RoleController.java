@@ -1,5 +1,6 @@
 package vn.ehealth.auth.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,18 +65,18 @@ public class RoleController {
     private Map<String, List<String>> validateForm(Role body){
     	var errors = new HashMap<String, List<String>>();
     	
-    	var role = roleService.getByMa(body.ma).orElse(null);
-    	
-    	if(body.ma == null || body.ma.isBlank()) {
-            UserUtil.addError(errors, "ma", MessageUtils.get("validate.required"));
+    	if(StringUtils.isEmpty(body.code)) {
+            UserUtil.addError(errors, "code", MessageUtils.get("validate.required"));
         }
     	
-    	if(body.ten == null || body.ten.isBlank()) {
-            UserUtil.addError(errors, "ten", MessageUtils.get("validate.required"));
+    	if(StringUtils.isEmpty(body.name)) {
+            UserUtil.addError(errors, "name", MessageUtils.get("validate.required"));
         }
+    	
+    	var role = roleService.getByCode(body.code).orElse(null);
     	
     	if(role != null && !role.id.equals(body.id)) {
-	    	UserUtil.addError(errors, "codeExist", MessageUtils.get("code.already.exist"));
+	    	UserUtil.addError(errors, "code", MessageUtils.get("validate.code.already.exist"));
 	    }
     	
     	return errors;

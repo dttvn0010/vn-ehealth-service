@@ -27,6 +27,13 @@ public class EmrRef {
         }
     }
     
+    public static EmrRef fromObjectId(String className, String objectId) {
+        var ref = new EmrRef();
+        ref.className = className;
+        ref.objectId = new ObjectId(objectId);
+        return ref;        
+    }
+    
     public static ObjectId toObjectId(EmrRef ref) {
         if(ref == null) {
             return null;

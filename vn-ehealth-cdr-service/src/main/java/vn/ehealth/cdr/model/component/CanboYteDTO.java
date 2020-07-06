@@ -19,8 +19,10 @@ public class CanboYteDTO {
     }
     
     public CanboYteDTO(User user) {
-        this.ten = StringUtils.isEmpty(user.tenDayDu)? user.username : user.tenDayDu;
-        this.chungChiHanhNghe = user.chungChiHanhNghe;
+        if(user != null) {
+            this.ten = StringUtils.isEmpty(user.tenDayDu)? user.username : user.tenDayDu;
+            this.chungChiHanhNghe = user.chungChiHanhNghe;
+        }
     }
     
     public CanboYteDTO(String ten) {
