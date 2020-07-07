@@ -1,0 +1,46 @@
+{
+  "resourceType": "CodeSystem",
+ 
+  "url": "https://fhir.emr.com.vn/CodeSystem/DMLoaiYlenh",
+  "name": "Danh mục loại y lệnh",
+  "publisher": "VEIG",
+  "description": "Danh mục loại y lệnh",
+  "property": [
+    {
+      "code": "display",
+      "type": "string"
+    }
+  ],
+  "concept": [
+    {
+      "code": "01",
+      "display": "Thăm khám định kỳ",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Thăm khám định kỳ|(01)"
+        }
+      ]
+    },
+    {
+      "code": "02",
+      "display": "Chỉ định thuốc",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Chỉ định thuốc|(02)"
+        }
+      ]
+    },
+    {
+      "code": "03",
+      "display": "Chỉ định dịch vụ kỹ thuật",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Chỉ định dịch vụ kỹ thuật|(03)"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "resourceType": "CodeSystem",
+ 
+  "url": "https://fhir.emr.com.vn/CodeSystem/DMCheDoAnUong",
+  "version": "1",
+  "name": "Danh Mục Chế Độ Ăn Uống",
+  "publisher": "VEIG",
+  "property": [
+    {
+      "code": "display",
+      "type": "string"
+    }
+  ],
+  "concept": [
+    {
+      "code": "01",
+      "display": "Cấp 1",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Cấp 1|(01)"
+        }
+      ]
+    },
+    {
+      "code": "02",
+      "display": "Cấp 2",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Cấp 2|(02)"
+        }
+      ]
+    },
+    {
+      "code": "03",
+      "display": "Cấp 3",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Cấp 3|(03)"
+        }
+      ]
+    }
+  ]
+}

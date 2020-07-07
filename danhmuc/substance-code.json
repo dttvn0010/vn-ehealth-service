@@ -1,0 +1,49 @@
+{
+  "resourceType": "CodeSystem",
+  
+  "url": "http://hl7.org/fhir/ValueSet/substance-code",
+  "name": "Allergy intolerance substance code",
+  "publisher": "HL7 Organization",
+  "concept": [
+    {
+      "code": "102002",
+      "display": "Hemoglobin Okaloosa"
+    },
+    {
+      "code": "120006",
+      "display": "Ornithine racemase"
+    },
+    {
+      "code": "125001",
+      "display": "Ferrous sulfate Fe^59^"
+    },
+    {
+      "code": "126000",
+      "display": "Galactosyl-N-acetylglucosaminylgalactosylglucosylceramide alpha-galactosyltransferase"
+    },
+    {
+      "code": "130002",
+      "display": "Hemoglobin Hopkins-II"
+    },
+    {
+      "code": "131003",
+      "display": "Dolichyl-phosphate mannosyltransferase"
+    },
+    {
+      "code": "159002",
+      "display": "Ferrocyanide salt"
+    },
+    {
+      "code": "164003",
+      "display": "Phosphoenolpyruvate-protein phosphotransferase"
+    },
+    {
+      "code": "178002",
+      "display": "Uridyl diphosphate galactose"
+    },
+    {
+      "code": "186002",
+      "display": "HLA-Cw9 antigen"
+    }
+  ]
+}

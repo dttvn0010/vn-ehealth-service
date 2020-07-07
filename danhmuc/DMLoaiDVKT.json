@@ -1,0 +1,65 @@
+{
+  "resourceType": "CodeSystem",
+  "url": "http://hl7.org/fhir/ValueSet/diagnostic-service-sections",
+  "name": "Danh mục loại dịch vụ kỹ thuật",
+  "publisher": "VEIG",
+  "description": "Danh mục loại dịch vụ kỹ thuật",
+  "property": [
+    {
+      "code": "display",
+      "type": "string"
+    }
+  ],
+  "concept": [
+    {
+      "code": "SUR",
+      "display": "Phẫu thuật/thủ thuật",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Phẫu thuật/thủ thuật|(SUR)"
+        }
+      ]
+    },
+    {
+      "code": "LAB",
+      "display": "Xét nghiệm",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Xét nghiệm|(LAB)"
+        }
+      ]
+    },
+    {
+      "code": "SP",
+      "display": "Giải phẫu bệnh",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Giải phẫu bệnh|(SP)"
+        }
+      ]
+    },
+    {
+      "code": "CA",
+      "display": "Chẩn đoán hình ảnh",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Chẩn đoán hình ảnh|(CA)"
+        }
+      ]
+    },
+    {
+      "code": "XRC",
+      "display": "Thăm dò chức năng",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Thăm dò chức năng|(XRC)"
+        }
+      ]
+    }
+  ]
+}

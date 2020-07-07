@@ -1,0 +1,44 @@
+{
+  "resourceType": "CodeSystem",
+  "url": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+  "name": "Allergy intolerance clinical status",
+  "publisher": "HL7 Organization",
+  "property": [
+    {
+      "code": "display",
+      "type": "string"
+    }
+  ],
+  "concept": [
+    {
+      "code": "active",
+      "display": "Đang hoạt động",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Đang hoạt động|(active)"
+        }
+      ]
+    },
+    {
+      "code": "inactive",
+      "display": "Không hoạt động",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Đang hoạt động|(inactive)"
+        }
+      ]
+    },
+    {
+      "code": "resolved",
+      "display": "Đã được xử lý",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Đã được xử lý|(resolved)"
+        }
+      ]
+    }
+  ]
+}

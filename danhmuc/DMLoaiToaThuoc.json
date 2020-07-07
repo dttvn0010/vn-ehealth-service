@@ -1,0 +1,44 @@
+{
+  "resourceType": "CodeSystem",
+  "url": "https://fhir.emr.com.vn/CodeSystem/DMLoaiToaThuoc",
+  "name": "Danh Mục Loại Toa Thuốc",
+  "publisher": "VEIG",
+  "property": [
+    {
+      "code": "display",
+      "type": "string"
+    }
+  ],
+  "concept": [
+    {
+      "code": "01",
+      "display": "Bệnh viện",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Bệnh viện|(01)"
+        }
+      ]
+    },
+    {
+      "code": "02",
+      "display": "Nhà thuốc",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Nhà thuốc|(02)"
+        }
+      ]
+    },
+    {
+      "code": "03",
+      "display": "Cấp cứu",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Cấp cứu|(03)"
+        }
+      ]
+    }
+  ]
+}

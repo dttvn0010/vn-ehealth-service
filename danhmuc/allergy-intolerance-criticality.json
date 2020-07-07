@@ -1,0 +1,45 @@
+{
+  "resourceType": "CodeSystem",
+  
+  "url": "http://hl7.org/fhir/allergy-intolerance-criticality",
+  "name": "Allergy intolerance criticality",
+  "publisher": "HL7 Organization",
+  "property": [
+    {
+      "code": "display",
+      "type": "string"
+    }
+  ],
+  "concept": [
+    {
+      "code": "low",
+      "display": "Thấp",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Thấp|(low)"
+        }
+      ]
+    },
+    {
+      "code": "high",
+      "display": "Cao",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Cao|(high)"
+        }
+      ]
+    },
+    {
+      "code": "unable-to-assess",
+      "display": "Không xác định",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Không xác định|(unable-to-assess)"
+        }
+      ]
+    }
+  ]
+}
