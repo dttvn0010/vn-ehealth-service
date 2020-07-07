@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.IdType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -239,5 +240,19 @@ public class HoSoBenhAnController {
         }
         var result = mapOf("success", true, "encounterId", encounterId);
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/add_nguoi_xem/{hsbaId}")
+    public ResponseEntity<?> addNguoiXem(@PathVariable String hsbaId, @RequestBody String listUserName) {
+    	hoSoBenhAnService.addNguoiXem(new ObjectId(hsbaId), listUserName.split(","));
+    	var result = mapOf("success", true);
+        return ResponseEntity.ok(result); 
+    }
+    
+    @DeleteMapping("/remove_nguoi_xem/{hsbaId}")
+    public ResponseEntity<?> removeNguoiXem(@PathVariable String hsbaId, @RequestBody String listUserName) {
+    	hoSoBenhAnService.xoaNguoiXem(new ObjectId(hsbaId), listUserName.split(","));
+    	var result = mapOf("success", true);
+        return ResponseEntity.ok(result); 
     }
 }
