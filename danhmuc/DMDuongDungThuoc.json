@@ -1,0 +1,164 @@
+{
+  "resourceType": "CodeSystem",
+  "url": "https://fhir.emr.com.vn/CodeSystem/DMDuongDungThuoc",
+  "name": "Danh Mục Đường Dùng Thuốc",
+  "publisher": "VEIG",
+  "property": [
+    {
+      "code": "display",
+      "type": "string"
+    }
+  ],
+  "concept": [
+    {
+      "code": "1",
+      "display": "Uống",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Uống|(1)"
+        }
+      ]
+    },
+    {
+      "code": "2",
+      "display": "Tiêm",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Tiêm|(2)"
+        }
+      ]
+    },
+    {
+      "code": "3",
+      "display": "Dùng ngoài",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Dùng ngoài|(3)"
+        }
+      ]
+    },
+    {
+      "code": "4",
+      "display": "Đường hô hấp",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Đường hô hấp|(4)"
+        }
+      ]
+    },
+    {
+      "code": "5",
+      "display": "Đặt trực tràng",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Đặt trực tràng|(5)"
+        }
+      ]
+    },
+    {
+      "code": "6",
+      "display": "Tiêm truyền",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Tiêm truyền|(6)"
+        }
+      ]
+    },
+    {
+      "code": "7",
+      "display": "Âm đạo",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Âm đạo|(7)"
+        }
+      ]
+    },
+    {
+      "code": "8",
+      "display": "Đặt dưới lưỡi",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Đặt dưới lưỡi|(8)"
+        }
+      ]
+    },
+    {
+      "code": "9",
+      "display": "Nhỏ mắt",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Nhỏ mắt|(9)"
+        }
+      ]
+    },
+    {
+      "code": "10",
+      "display": "Tra mắt",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Tra mắt|(10)"
+        }
+      ]
+    },
+    {
+      "code": "11",
+      "display": "Nhỏ mắt, tai",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Nhỏ mắt, tai|(11)"
+        }
+      ]
+    },
+    {
+      "code": "12",
+      "display": "Nhỏ mũi",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Nhỏ mũi|(12)"
+        }
+      ]
+    },
+    {
+      "code": "13",
+      "display": "Xịt mũi",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Xịt mũi|(13)"
+        }
+      ]
+    },
+    {
+      "code": "14",
+      "display": "Dùng tại chỗ",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Dùng tại chỗ|(14)"
+        }
+      ]
+    },
+    {
+      "code": "15",
+      "display": "Cấy vào cơ thể",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Cấy vào cơ thể|(15)"
+        }
+      ]
+    }
+  ]
+}

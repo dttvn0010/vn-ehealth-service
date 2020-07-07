@@ -1,0 +1,672 @@
+{
+  "resourceType": "CodeSystem",
+ 
+  "url": "https://fhir.emr.com.vn/CodeSystem/DMDVKyThuat",
+  "name": "Danh mục dịch vụ kỹ thuật",
+  "publisher": "VEIG",
+  "description": "Danh mục dịch vụ kỹ thuật",
+  "property": [
+    {
+      "code": "display",
+      "type": "string"
+    },
+    {
+      "code": "loai",
+      "type": "Coding"
+    },
+    {
+      "code": "maLoai",
+      "type": "string"
+    },
+    {
+      "code": "nhom",
+      "type": "Coding"
+    },
+    {
+      "code": "maNhom",
+      "type": "string"
+    }
+  ],
+  "concept": [
+    {
+      "code": "01",
+      "display": "PTTT loại đặc biệt 1",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "PTTT loại đặc biệt 1|(01)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(SUR)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "SUR",
+            "display": "Phẫu thuật/thủ thuật"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(01)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "01",
+            "display": "Loại đặc biệt"
+          }
+        }
+      ]
+    },
+    {
+      "code": "02",
+      "display": "PTTT loại đặc biệt 2",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "PTTT loại đặc biệt 2|(02)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(SUR)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "SUR",
+            "display": "Phẫu thuật/thủ thuật"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(01)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "01",
+            "display": "Loại đặc biệt"
+          }
+        }
+      ]
+    },
+    {
+      "code": "03",
+      "display": "PTTT loại 1 - 1",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "PTTT loại 1 - 1|(03)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(SUR)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "SUR",
+            "display": "Phẫu thuật/thủ thuật"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(02)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "02",
+            "display": "Loại 1"
+          }
+        }
+      ]
+    },
+    {
+      "code": "04",
+      "display": "PTTT loại 1 - 2",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "PTTT loại 1 - 2|(04)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(SUR)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "SUR",
+            "display": "Phẫu thuật/thủ thuật"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(02)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "02",
+            "display": "Loại 1"
+          }
+        }
+      ]
+    },
+    {
+      "code": "05",
+      "display": "PTTT loại 2 - 1",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "PTTT loại 2 - 1|(05)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(SUR)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "SUR",
+            "display": "Phẫu thuật/thủ thuật"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(03)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "03",
+            "display": "Loại 2"
+          }
+        }
+      ]
+    },
+    {
+      "code": "06",
+      "display": "PTTT loại 2 - 2",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "PTTT loại 2 - 2|(06)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(SUR)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "SUR",
+            "display": "Phẫu thuật/thủ thuật"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(03)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "03",
+            "display": "Loại 2"
+          }
+        }
+      ]
+    },
+    {
+      "code": "07",
+      "display": "PTTT loại 3 - 1",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "PTTT loại 3 - 1|(07)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(SUR)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "SUR",
+            "display": "Phẫu thuật/thủ thuật"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(04)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "04",
+            "display": "Loại 3"
+          }
+        }
+      ]
+    },
+    {
+      "code": "08",
+      "display": "PTTT loại 3 - 2",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "PTTT loại 3 - 2|(08)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(SUR)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "SUR",
+            "display": "Phẫu thuật/thủ thuật"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(04)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "04",
+            "display": "Loại 3"
+          }
+        }
+      ]
+    },
+    {
+      "code": "09",
+      "display": "Xét nghiệm Huyết học 1",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Xét nghiệm Huyết học 1|(09)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(LAB)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "LAB",
+            "display": "Xét nghiệm"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(01)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "01",
+            "display": "Huyết học"
+          }
+        }
+      ]
+    },
+    {
+      "code": "10",
+      "display": "Xét nghiệm Huyết học 2",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Xét nghiệm Huyết học 2|(10)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(LAB)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "LAB",
+            "display": "Xét nghiệm"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(01)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "01",
+            "display": "Huyết học"
+          }
+        }
+      ]
+    },
+    {
+      "code": "11",
+      "display": "Xét nghiệm Hoá sinh 1",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Xét nghiệm Hoá sinh 1|(11)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(LAB)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "LAB",
+            "display": "Xét nghiệm"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(02)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "02",
+            "display": "Hoá sinh"
+          }
+        }
+      ]
+    },
+    {
+      "code": "12",
+      "display": "Xét nghiệm Hoá sinh 2",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Xét nghiệm Hoá sinh 2|(12)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(LAB)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "LAB",
+            "display": "Xét nghiệm"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(02)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "02",
+            "display": "Hoá sinh"
+          }
+        }
+      ]
+    },
+    {
+      "code": "13",
+      "display": "Xét nghiệm Vi sinh 1",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Xét nghiệm Vi sinh 1|(13)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(LAB)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "LAB",
+            "display": "Xét nghiệm"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(03)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "03",
+            "display": "Vi sinh"
+          }
+        }
+      ]
+    },
+    {
+      "code": "14",
+      "display": "Xét nghiệm Vi sinh 2",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Xét nghiệm Vi sinh 2|(14)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(LAB)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "LAB",
+            "display": "Xét nghiệm"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(03)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "03",
+            "display": "Vi sinh"
+          }
+        }
+      ]
+    },
+    {
+      "code": "15",
+      "display": "Chụp XQuang 1",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Chụp XQuang 1|(15)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(CT)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "CT",
+            "display": "Chẩn đoán hình ảnh"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(01)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "01",
+            "display": "XQuang"
+          }
+        }
+      ]
+    },
+    {
+      "code": "16",
+      "display": "Chụp XQuang 2",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Chụp XQuang 2|(16)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(CT)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "CT",
+            "display": "Chẩn đoán hình ảnh"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(01)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "01",
+            "display": "XQuang"
+          }
+        }
+      ]
+    },
+    {
+      "code": "17",
+      "display": "Siêu Âm 1",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Siêu Âm 1|(17)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(CT)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "CT",
+            "display": "Chẩn đoán hình ảnh"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(02)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "02",
+            "display": "Siêu Âm"
+          }
+        }
+      ]
+    },
+    {
+      "code": "18",
+      "display": "Siêu Âm 2",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Siêu Âm 2|(18)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(CT)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "CT",
+            "display": "Chẩn đoán hình ảnh"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(02)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "02",
+            "display": "Siêu Âm"
+          }
+        }
+      ]
+    },
+    {
+      "code": "19",
+      "display": "Cộng hưởng từ 1",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Cộng hưởng từ 1|(19)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(CT)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "CT",
+            "display": "Chẩn đoán hình ảnh"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(03)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "03",
+            "display": "Cộng hưởng từ"
+          }
+        }
+      ]
+    },
+    {
+      "code": "20",
+      "display": "Cộng hưởng từ 2",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Cộng hưởng từ 2|(20)"
+        },
+        {
+          "code": "maLoai",
+          "valueString": "(CT)"
+        },
+        {
+          "code": "loai",
+          "valueCoding": {
+            "code": "CT",
+            "display": "Chẩn đoán hình ảnh"
+          }
+        },
+        {
+          "code": "maNhom",
+          "valueString": "(03)"
+        },
+        {
+          "code": "nhom",
+          "valueCoding": {
+            "code": "03",
+            "display": "Cộng hưởng từ"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "resourceType": "CodeSystem",
+  
+  "url": "http://hl7.org/fhir/ValueSet/clinical-findings",
+  "name": "Allergy intolerance clinical findings",
+  "publisher": "HL7 Organization",
+  "concept": [
+    {
+      "code": "109006",
+      "display": "Anxiety disorder of childhood OR adolescence"
+    },
+    {
+      "code": "122003",
+      "display": "Choroidal hemorrhage"
+    },
+    {
+      "code": "127009",
+      "display": "Spontaneous abortion with laceration of cervix"
+    },
+    {
+      "code": "129007",
+      "display": "Homoiothermia"
+    },
+    {
+      "code": "134006",
+      "display": "Decreased hair growth"
+    },
+    {
+      "code": "140004",
+      "display": "Chronic pharyngitis"
+    },
+    {
+      "code": "144008",
+      "display": "Normal peripheral vision"
+    },
+    {
+      "code": "147001",
+      "display": "Superficial foreign body of scrotum without major open wound but with infection"
+    },
+    {
+      "code": "150003",
+      "display": "Abnormal bladder continence"
+    },
+    {
+      "code": "151004",
+      "display": "Meningitis due to gonococcus"
+    }
+  ]
+}

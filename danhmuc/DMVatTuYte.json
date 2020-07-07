@@ -1,0 +1,56 @@
+{
+  "resourceType": "CodeSystem",
+ 
+  "url": "https://fhir.emr.com.vn/CodeSystem/DMVatTuYte",
+  "name": "Danh mục vật tư y tế",
+  "publisher": "VEIG",
+  "description": "Danh mục vật tư y tế",
+  "property": [
+    {
+      "code": "display",
+      "type": "string"
+    }
+  ],
+  "concept": [
+    {
+      "code": "01",
+      "display": "Bông băng",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Bông băng|(01)"
+        }
+      ]
+    },
+	{
+      "code": "02",
+      "display": "Gạc",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Gạc|(02)"
+        }
+      ]
+    },
+	{
+      "code": "03",
+      "display": "Kim tiêm",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Kim tiêm|(03)"
+        }
+      ]
+    },
+	{
+	  "code": "04",
+	  "display": "Găng tay",
+	  "property": [
+		{
+		  "code": "display",
+		  "valueString": "Găng tay|(04)"
+		}
+	  ]
+	}     
+  ]
+}
