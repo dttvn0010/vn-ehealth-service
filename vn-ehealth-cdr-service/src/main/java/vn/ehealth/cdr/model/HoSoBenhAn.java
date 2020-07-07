@@ -213,6 +213,8 @@ public class HoSoBenhAn {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date ngayXoa;
     
+    public List<EmrRef> dsNguoiXemRef = new ArrayList<>(); 
+    
     public QuanLyNguoiBenh quanLyNguoiBenh;
     
     public TinhTrangRaVien tinhTrangRaVien;

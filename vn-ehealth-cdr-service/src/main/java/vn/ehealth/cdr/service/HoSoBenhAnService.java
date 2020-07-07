@@ -26,6 +26,7 @@ import vn.ehealth.cdr.repository.HoSoBenhAnRepository;
 import vn.ehealth.cdr.utils.CDRUtils;
 import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
+import vn.ehealth.hl7.fhir.core.util.FPUtil;
 import vn.ehealth.cdr.utils.CDRConstants.MA_HANH_DONG;
 import vn.ehealth.cdr.utils.CDRConstants.NGUON_DU_LIEU;
 import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_HOSO;
@@ -178,5 +179,36 @@ public class HoSoBenhAnService {
             x.ngayXoa = new Date();
             hoSoBenhAnRepository.save(x);
         });
+    }
+    
+    public void addNguoiXem(ObjectId id, String[] usernames) {
+    	var hsba = hoSoBenhAnRepository.findById(id);
+    	hsba.ifPresent(x -> {
+    		if(x.dsNguoiXemRef == null) {
+        		x.dsNguoiXemRef = new ArrayList<>();
+        	}
+        	for(String username : usernames) {
+        		if(!FPUtil.anyMatch(x.dsNguoiXemRef, ref -> username.equals(ref.identifier))) {
+        			var user = userService.getByUsername(username).orElse(null);
+        			if(user != null) {
+        				x.dsNguoiXemRef.add(EmrRef.fromUser(user));
+        			}
+        		}
+        	}
+        	hoSoBenhAnRepository.save(x);
+    	});    	
+    }
+    
+    public void xoaNguoiXem(ObjectId id, String[] usernames) {
+    	var hsba = hoSoBenhAnRepository.findById(id);
+    	hsba.ifPresent(x -> {
+    		if(x.dsNguoiXemRef == null) {
+        		x.dsNguoiXemRef = new ArrayList<>();
+        	}
+        	for(String username : usernames) {
+        		x.dsNguoiXemRef = FPUtil.filter(x.dsNguoiXemRef, ref -> !username.equals(ref.identifier));
+        	}
+        	hoSoBenhAnRepository.save(x);
+    	});    	
     }
 }
