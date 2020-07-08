@@ -1,15 +1,15 @@
 {
     "resourceType": "CodeSystem",
-    "url": "",
+    "url": "https://fhir.emr.com.vn/DanhMucPhatHienLamSang-v1.0",
     "name": "Danh mục phát hiện lâm sàng clinical_finding",
     "publisher": "VEIG",
     "description": "Danh mục phát hiện lâm sàng clinical_finding",
     "property": [{
         "code": "clinical_finding",
-        "valueString": "string"
+        "type": "string"
     }],
     "concept": [{
-            "display": "R\u1ed1i lo\u1ea1n lo \u00e2u th\u1eddi th\u01a1 \u1ea5u HO\u1eb6C tu\u1ed5i thi\u1ebfu ni\u00ean",
+            "display": "Rối loạn lo âu thời thơ ấu HOẶC tuổi thiếu niên",
             "code": "109006",
             "property": [{
                 "code": "clinical_finding",
@@ -17,7 +17,7 @@
             }]
         },
         {
-            "display": "Xu\u1ea5t huy\u1ebft m\u00e0ng \u0111\u1ec7m",
+            "display": "Xuất huyết màng đệm",
             "code": "122003",
             "property": [{
                 "code": "clinical_finding",
@@ -25,7 +25,7 @@
             }]
         },
         {
-            "display": "S\u1ea3y thai t\u1ef1 nhi\u00ean v\u1edbi r\u00e1ch c\u1ed5 t\u1eed cung",
+            "display": "Sảy thai tự nhiên với rách cổ tử cung",
             "code": "127009",
             "property": [{
                 "code": "clinical_finding",
@@ -33,7 +33,7 @@
             }]
         },
         {
-            "display": "Homoi nhi\u1ec7t",
+            "display": "Homoi nhiệt",
             "code": "129007",
             "property": [{
                 "code": "clinical_finding",
@@ -41,7 +41,7 @@
             }]
         },
         {
-            "display": "Gi\u1ea3m s\u1ef1 ph\u00e1t tri\u1ec3n c\u1ee7a t\u00f3c",
+            "display": "Giảm sự phát triển của tóc",
             "code": "134006",
             "property": [{
                 "code": "clinical_finding",
@@ -49,7 +49,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam h\u1ecdng m\u00e3n t\u00ednh",
+            "display": "Viêm họng mãn tính",
             "code": "140004",
             "property": [{
                 "code": "clinical_finding",
@@ -57,7 +57,7 @@
             }]
         },
         {
-            "display": "T\u1ea7m nh\u00ecn ngo\u1ea1i vi b\u00ecnh th\u01b0\u1eddng",
+            "display": "Tầm nhìn ngoại vi bình thường",
             "code": "144008",
             "property": [{
                 "code": "clinical_finding",
@@ -65,7 +65,7 @@
             }]
         },
         {
-            "display": "C\u01a1 quan n\u01b0\u1edbc ngo\u00e0i b\u1ec1 ngo\u00e0i c\u1ee7a b\u00ecu kh\u00f4ng c\u00f3 v\u1ebft th\u01b0\u01a1ng h\u1edf l\u1edbn nh\u01b0ng b\u1ecb nhi\u1ec5m tr\u00f9ng",
+            "display": "Cơ quan nước ngoài bề ngoài của bìu không có vết thương hở lớn nhưng bị nhiễm trùng",
             "code": "147001",
             "property": [{
                 "code": "clinical_finding",
@@ -73,7 +73,7 @@
             }]
         },
         {
-            "display": "Ti\u1ebfp t\u1ee5c b\u00e0ng quang b\u1ea5t th\u01b0\u1eddng",
+            "display": "Tiếp tục bàng quang bất thường",
             "code": "150003",
             "property": [{
                 "code": "clinical_finding",
@@ -81,7 +81,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam m\u00e0ng n\u00e3o do l\u1eadu c\u1ea7u",
+            "display": "Viêm màng não do lậu cầu",
             "code": "151004",
             "property": [{
                 "code": "clinical_finding",
@@ -89,7 +89,7 @@
             }]
         },
         {
-            "display": "R\u1ed1i lo\u1ea1n l\u01b0\u1ee1ng c\u1ef1c nghi\u00eam tr\u1ecdng I kh\u00f4ng c\u00f3 \u0111\u1eb7c \u0111i\u1ec3m t\u00e2m th\u1ea7n",
+            "display": "Rối loạn lưỡng cực nghiêm trọng I không có đặc điểm tâm thần",
             "code": "162004",
             "property": [{
                 "code": "clinical_finding",
@@ -97,7 +97,7 @@
             }]
         },
         {
-            "display": "D\u1ec5 b\u1ecb tai n\u1ea1n",
+            "display": "Dễ bị tai nạn",
             "code": "165002",
             "property": [{
                 "code": "clinical_finding",
@@ -105,7 +105,7 @@
             }]
         },
         {
-            "display": "B\u1ec7nh th\u01b0\u01a1ng h\u00e0n",
+            "display": "Bệnh thương hàn",
             "code": "168000",
             "property": [{
                 "code": "clinical_finding",
@@ -113,7 +113,7 @@
             }]
         },
         {
-            "display": "T\u1ed5n th\u01b0\u01a1ng \u0111\u1ea1i tr\u00e0ng ph\u1ea3i t\u0103ng d\u1ea7n m\u00e0 kh\u00f4ng c\u00f3 v\u1ebft th\u01b0\u01a1ng h\u1edf v\u00e0o khoang b\u1ee5ng",
+            "display": "Tổn thương đại tràng phải tăng dần mà không có vết thương hở vào khoang bụng",
             "code": "171008",
             "property": [{
                 "code": "clinical_finding",
@@ -121,7 +121,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam n\u1ed9i m\u1ea1c t\u1eed cung sau khi mang thai v\u00e0 / HO\u1eb6C thai ngo\u00e0i t\u1eed cung",
+            "display": "Viêm nội mạc tử cung sau khi mang thai và / HOẶC thai ngoài tử cung",
             "code": "172001",
             "property": [{
                 "code": "clinical_finding",
@@ -129,7 +129,7 @@
             }]
         },
         {
-            "display": "\u0110au th\u1ea7n kinh c\u01a1",
+            "display": "Đau thần kinh cơ",
             "code": "175004",
             "property": [{
                 "code": "clinical_finding",
@@ -137,7 +137,7 @@
             }]
         },
         {
-            "display": "Ng\u1ed9 \u0111\u1ed9c b\u1edfi \u1ea5u tr\u00f9ng b\u1ecd c\u00e1nh c\u1ee9ng",
+            "display": "Ngộ độc bởi ấu trùng bọ cánh cứng",
             "code": "177007",
             "property": [{
                 "code": "clinical_finding",
@@ -145,7 +145,7 @@
             }]
         },
         {
-            "display": "Apraxia m\u1eb7c qu\u1ea7n \u00e1o",
+            "display": "Apraxia mặc quần áo",
             "code": "179005",
             "property": [{
                 "code": "clinical_finding",
@@ -153,7 +153,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam ph\u1ebf qu\u1ea3n xu\u1ea5t huy\u1ebft",
+            "display": "Viêm phế quản xuất huyết",
             "code": "181007",
             "property": [{
                 "code": "clinical_finding",
@@ -161,7 +161,7 @@
             }]
         },
         {
-            "display": "Gi\u1ea3m b\u00e9o t\u1ef1 mi\u1ec5n",
+            "display": "Giảm béo tự miễn",
             "code": "183005",
             "property": [{
                 "code": "clinical_finding",
@@ -169,7 +169,7 @@
             }]
         },
         {
-            "display": "R\u00fat r\u1ed1i lo\u1ea1n nh\u1ecbp tim",
+            "display": "Rút rối loạn nhịp tim",
             "code": "184004",
             "property": [{
                 "code": "clinical_finding",
@@ -177,7 +177,7 @@
             }]
         },
         {
-            "display": "Ch\u1ea5n th\u01b0\u01a1ng \u0111\u1ed9ng m\u1ea1ch li\u00ean s\u01b0\u1eddn",
+            "display": "Chấn thương động mạch liên sườn",
             "code": "188001",
             "property": [{
                 "code": "clinical_finding",
@@ -185,7 +185,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam gan giang mai b\u1ea9m sinh",
+            "display": "Viêm gan giang mai bẩm sinh",
             "code": "192008",
             "property": [{
                 "code": "clinical_finding",
@@ -193,7 +193,7 @@
             }]
         },
         {
-            "display": "B\u1ec7nh th\u1eadn t\u0103ng huy\u1ebft \u00e1p l\u00e0nh t\u00ednh",
+            "display": "Bệnh thận tăng huyết áp lành tính",
             "code": "193003",
             "property": [{
                 "code": "clinical_finding",
@@ -201,7 +201,7 @@
             }]
         },
         {
-            "display": "Ph\u00e1 thai b\u1ea5t h\u1ee3p ph\u00e1p v\u1edbi vi\u00eam n\u1ed9i m\u1ea1c t\u1eed cung",
+            "display": "Phá thai bất hợp pháp với viêm nội mạc tử cung",
             "code": "195005",
             "property": [{
                 "code": "clinical_finding",
@@ -209,7 +209,7 @@
             }]
         },
         {
-            "display": "B\u1ec7nh do Filoviridae",
+            "display": "Bệnh do Filoviridae",
             "code": "198007",
             "property": [{
                 "code": "clinical_finding",
@@ -217,7 +217,7 @@
             }]
         },
         {
-            "display": "Gi\u1ea3m ti\u1ebft s\u1eefa",
+            "display": "Giảm tiết sữa",
             "code": "199004",
             "property": [{
                 "code": "clinical_finding",
@@ -225,7 +225,7 @@
             }]
         },
         {
-            "display": "Tr\u00ecnh t\u1ef1 melanocutrial melanosis",
+            "display": "Trình tự melanocutrial melanosis",
             "code": "208008",
             "property": [{
                 "code": "clinical_finding",
@@ -233,7 +233,7 @@
             }]
         },
         {
-            "display": "\u1ea2o t\u01b0\u1edfng v\u1ec1 s\u1ef1 b\u1eaft b\u1edb",
+            "display": "Ảo tưởng về sự bắt bớ",
             "code": "216004",
             "property": [{
                 "code": "clinical_finding",
@@ -241,7 +241,7 @@
             }]
         },
         {
-            "display": "Ng\u01b0\u1eddi nghi\u1ec7n r\u01b0\u1ee3u",
+            "display": "Người nghiện rượu",
             "code": "219006",
             "property": [{
                 "code": "clinical_finding",
@@ -249,7 +249,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam n\u1eafp thanh qu\u1ea3n c\u1ea5p t\u00ednh v\u1edbi t\u1eafc ngh\u1ebdn",
+            "display": "Viêm nắp thanh quản cấp tính với tắc nghẽn",
             "code": "222008",
             "property": [{
                 "code": "clinical_finding",
@@ -257,7 +257,7 @@
             }]
         },
         {
-            "display": "Kh\u1ed1i u c\u01a1 th\u1ec3 t\u1eed cung \u1ea3nh h\u01b0\u1edfng \u0111\u1ebfn thai k\u1ef3",
+            "display": "Khối u cơ thể tử cung ảnh hưởng đến thai kỳ",
             "code": "223003",
             "property": [{
                 "code": "clinical_finding",
@@ -265,7 +265,7 @@
             }]
         },
         {
-            "display": "Hi\u1ec7n t\u01b0\u1ee3ng Lucio",
+            "display": "Hiện tượng Lucio",
             "code": "228007",
             "property": [{
                 "code": "clinical_finding",
@@ -273,7 +273,7 @@
             }]
         },
         {
-            "display": "\u0110\u1ed9ng c\u01a1 m\u1ed9t ph\u1ea7n \u0111\u01a1n gi\u1ea3n",
+            "display": "Động cơ một phần đơn giản",
             "code": "241006",
             "property": [{
                 "code": "clinical_finding",
@@ -281,7 +281,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam jejun kh\u00f4ng truy\u1ec1n nhi\u1ec5m",
+            "display": "Viêm jejun không truyền nhiễm",
             "code": "242004",
             "property": [{
                 "code": "clinical_finding",
@@ -297,7 +297,7 @@
             }]
         },
         {
-            "display": "M\u1ee5n tr\u1ee9ng c\u00e1 \u0111\u1ecf, h\u1ed3ng ban lo\u1ea1i",
+            "display": "Mụn trứng cá đỏ, hồng ban loại",
             "code": "257006",
             "property": [{
                 "code": "clinical_finding",
@@ -313,7 +313,7 @@
             }]
         },
         {
-            "display": "M\u00f9 m\u1eaft t\u0103ng huy\u1ebft \u00e1p",
+            "display": "Mù mắt tăng huyết áp",
             "code": "264008",
             "property": [{
                 "code": "clinical_finding",
@@ -321,7 +321,7 @@
             }]
         },
         {
-            "display": "Ng\u1ed9 \u0111\u1ed9c oxytocin",
+            "display": "Ngộ độc oxytocin",
             "code": "276008",
             "property": [{
                 "code": "clinical_finding",
@@ -329,7 +329,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam c\u01a1 tim",
+            "display": "Viêm cơ tim",
             "code": "279001",
             "property": [{
                 "code": "clinical_finding",
@@ -337,7 +337,7 @@
             }]
         },
         {
-            "display": "Ch\u1ee9ng m\u1ea5t tr\u00ed do r\u01b0\u1ee3u",
+            "display": "Chứng mất trí do rượu",
             "code": "281004",
             "property": [{
                 "code": "clinical_finding",
@@ -345,7 +345,7 @@
             }]
         },
         {
-            "display": "Nh\u1ed3i m\u00e1u c\u01a1 tim c\u1ea5p t\u00ednh c\u1ee7a th\u00e0nh \u0111\u00e1y",
+            "display": "Nhồi máu cơ tim cấp tính của thành đáy",
             "code": "282006",
             "property": [{
                 "code": "clinical_finding",
@@ -353,7 +353,7 @@
             }]
         },
         {
-            "display": "H\u1ed9i ch\u1ee9ng Melnick-Fraser",
+            "display": "Hội chứng Melnick-Fraser",
             "code": "290006",
             "property": [{
                 "code": "clinical_finding",
@@ -361,7 +361,7 @@
             }]
         },
         {
-            "display": "T\u00ecm ki\u1ebfm \u0111i\u1ec7n n\u00e3o \u0111\u1ed3",
+            "display": "Tìm kiếm điện não đồ",
             "code": "292003",
             "property": [{
                 "code": "clinical_finding",
@@ -369,7 +369,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam m\u00e0ng c\u1ee9ng c\u1ea5p t\u00ednh",
+            "display": "Viêm màng cứng cấp tính",
             "code": "297009",
             "property": [{
                 "code": "clinical_finding",
@@ -377,7 +377,7 @@
             }]
         },
         {
-            "display": "Paraffinoma c\u1ee7a da",
+            "display": "Paraffinoma của da",
             "code": "299007",
             "property": [{
                 "code": "clinical_finding",
@@ -385,7 +385,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam t\u1ee5y Apoplectic",
+            "display": "Viêm tụy Apoplectic",
             "code": "303002",
             "property": [{
                 "code": "clinical_finding",
@@ -393,7 +393,7 @@
             }]
         },
         {
-            "display": "S\u1ea9n d\u01b0\u01a1ng v\u1eadt",
+            "display": "Sẩn dương vật",
             "code": "308006",
             "property": [{
                 "code": "clinical_finding",
@@ -401,7 +401,7 @@
             }]
         },
         {
-            "display": "Nh\u1ecdt d\u01b0\u01a1ng v\u1eadt",
+            "display": "Nhọt dương vật",
             "code": "310008",
             "property": [{
                 "code": "clinical_finding",
@@ -409,15 +409,15 @@
             }]
         },
         {
-            "display": "D\u00eaj\u00e0 vu",
+            "display": "Dêjà vu",
             "code": "313005",
             "property": [{
                 "code": "clinical_finding",
-                "valueString": "D\u00e9j\u00e0 vu"
+                "valueString": "Déjà vu"
             }]
         },
         {
-            "display": "H\u1ea1 \u0111\u01b0\u1eddng huy\u1ebft ph\u1ea3n \u1ee9ng",
+            "display": "Hạ đường huyết phản ứng",
             "code": "317006",
             "property": [{
                 "code": "clinical_finding",
@@ -425,7 +425,7 @@
             }]
         },
         {
-            "display": "H\u1eb9p c\u1ed5 t\u1eed cung, 1cm",
+            "display": "Hẹp cổ tử cung, 1cm",
             "code": "320003",
             "property": [{
                 "code": "clinical_finding",
@@ -433,7 +433,7 @@
             }]
         },
         {
-            "display": "Lo\u00e9t th\u1ea1ch cao",
+            "display": "Loét thạch cao",
             "code": "324007",
             "property": [{
                 "code": "clinical_finding",
@@ -441,7 +441,7 @@
             }]
         },
         {
-            "display": "\u0110au \u0111\u1ea7u ch\u1ea9m",
+            "display": "Đau đầu chẩm",
             "code": "330007",
             "property": [{
                 "code": "clinical_finding",
@@ -449,7 +449,7 @@
             }]
         },
         {
-            "display": "Co th\u1eaft m\u00f4n v\u1ecb",
+            "display": "Co thắt môn vị",
             "code": "335002",
             "property": [{
                 "code": "clinical_finding",
@@ -457,7 +457,7 @@
             }]
         },
         {
-            "display": "Ph\u1ea3n \u1ee9ng kh\u00f4ng t\u01b0\u01a1ng th\u00edch ABO",
+            "display": "Phản ứng không tương thích ABO",
             "code": "341009",
             "property": [{
                 "code": "clinical_finding",
@@ -465,7 +465,7 @@
             }]
         },
         {
-            "display": "Kh\u00f4ng c\u00f3 ph\u1ea3n x\u1ea1 g\u00e2n",
+            "display": "Không có phản xạ gân",
             "code": "349006",
             "property": [{
                 "code": "clinical_finding",
@@ -473,7 +473,7 @@
             }]
         },
         {
-            "display": "S\u1ed1c xu\u1ea5t huy\u1ebft",
+            "display": "Sốc xuất huyết",
             "code": "355001",
             "property": [{
                 "code": "clinical_finding",
@@ -481,7 +481,7 @@
             }]
         },
         {
-            "display": "H\u00ecnh thang g\u00e3y k\u00edn",
+            "display": "Hình thang gãy kín",
             "code": "357009",
             "property": [{
                 "code": "clinical_finding",
@@ -489,7 +489,7 @@
             }]
         },
         {
-            "display": "Ng\u1ed9 \u0111\u1ed9c v\u1eafc-xin \u0111\u1eadu m\u00f9a",
+            "display": "Ngộ độc vắc-xin đậu mùa",
             "code": "358004",
             "property": [{
                 "code": "clinical_finding",
@@ -505,7 +505,7 @@
             }]
         },
         {
-            "display": "B\u1ec7nh b\u1ee9c x\u1ea1 c\u1ea5p t\u00ednh",
+            "display": "Bệnh bức xạ cấp tính",
             "code": "360002",
             "property": [{
                 "code": "clinical_finding",
@@ -513,7 +513,7 @@
             }]
         },
         {
-            "display": "Suy tim tr\u00e1i c\u1ea5p t\u00ednh",
+            "display": "Suy tim trái cấp tính",
             "code": "364006",
             "property": [{
                 "code": "clinical_finding",
@@ -529,7 +529,7 @@
             }]
         },
         {
-            "display": "R\u1ed1i lo\u1ea1n van tim",
+            "display": "Rối loạn van tim",
             "code": "368009",
             "property": [{
                 "code": "clinical_finding",
@@ -537,7 +537,7 @@
             }]
         },
         {
-            "display": "\u00c1p l\u1ef1c t\u0129nh m\u1ea1ch b\u00ecnh th\u01b0\u1eddng",
+            "display": "Áp lực tĩnh mạch bình thường",
             "code": "369001",
             "property": [{
                 "code": "clinical_finding",
@@ -545,7 +545,7 @@
             }]
         },
         {
-            "display": "H\u1ed9i ch\u1ee9ng Morquio",
+            "display": "Hội chứng Morquio",
             "code": "378007",
             "property": [{
                 "code": "clinical_finding",
@@ -553,7 +553,7 @@
             }]
         },
         {
-            "display": "Ph\u00e1t hi\u1ec7n l\u1ecbch s\u1eed ph\u00e1p l\u00fd li\u00ean quan \u0111\u1ebfn tr\u1ebb em",
+            "display": "Phát hiện lịch sử pháp lý liên quan đến trẻ em",
             "code": "382009",
             "property": [{
                 "code": "clinical_finding",
@@ -561,7 +561,7 @@
             }]
         },
         {
-            "display": "T\u00ecm ki\u1ebfm ph\u1ea1m vi th\u1ee5 \u0111\u1ed9ng c\u1ee7a m\u1edf r\u1ed9ng h\u00f4ng",
+            "display": "Tìm kiếm phạm vi thụ động của mở rộng hông",
             "code": "383004",
             "property": [{
                 "code": "clinical_finding",
@@ -569,7 +569,7 @@
             }]
         },
         {
-            "display": "B\u1ec7nh th\u1ea7n kinh ngo\u1ea1i bi\u00ean th\u1ee9 ph\u00e1t",
+            "display": "Bệnh thần kinh ngoại biên thứ phát",
             "code": "385006",
             "property": [{
                 "code": "clinical_finding",
@@ -577,7 +577,7 @@
             }]
         },
         {
-            "display": "B\u1ec7nh ti\u1ec3u \u0111\u01b0\u1eddng",
+            "display": "Bệnh tiểu đường",
             "code": "387003",
             "property": [{
                 "code": "clinical_finding",
@@ -585,7 +585,7 @@
             }]
         },
         {
-            "display": "\u0110\u1ed9 l\u1ec7ch tr\u1ee5c tr\u00e1i l\u1edbn h\u01a1n -90 \u0111\u1ed9 theo EKG",
+            "display": "Độ lệch trục trái lớn hơn -90 độ theo EKG",
             "code": "398002",
             "property": [{
                 "code": "clinical_finding",
@@ -593,7 +593,7 @@
             }]
         },
         {
-            "display": "Gan b\u1ea9m sinh",
+            "display": "Gan bẩm sinh",
             "code": "407000",
             "property": [{
                 "code": "clinical_finding",
@@ -601,7 +601,7 @@
             }]
         },
         {
-            "display": "Nghi\u1ebfn r\u0103ng",
+            "display": "Nghiến răng",
             "code": "408005",
             "property": [{
                 "code": "clinical_finding",
@@ -609,7 +609,7 @@
             }]
         },
         {
-            "display": "Th\u1ef1c ph\u1ea9m d\u1ecb \u1ee9ng",
+            "display": "Thực phẩm dị ứng",
             "code": "409002",
             "property": [{
                 "code": "clinical_finding",
@@ -617,7 +617,7 @@
             }]
         },
         {
-            "display": "Ch\u1ea5n th\u01b0\u01a1ng b\u1ec1 m\u1eb7t m\u1eaft c\u00e1 ch\u00e2n kh\u00f4ng b\u1ecb nhi\u1ec5m tr\u00f9ng",
+            "display": "Chấn thương bề mặt mắt cá chân không bị nhiễm trùng",
             "code": "426008",
             "property": [{
                 "code": "clinical_finding",
@@ -625,7 +625,7 @@
             }]
         },
         {
-            "display": "Ph\u00ec \u0111\u1ea1i b\u00ecu",
+            "display": "Phì đại bìu",
             "code": "431005",
             "property": [{
                 "code": "clinical_finding",
@@ -633,7 +633,7 @@
             }]
         },
         {
-            "display": "Th\u00e0nh ph\u1ea7n b\u1ea5t th\u01b0\u1eddng c\u1ee7a n\u01b0\u1edbc ti\u1ec3u",
+            "display": "Thành phần bất thường của nước tiểu",
             "code": "437009",
             "property": [{
                 "code": "clinical_finding",
@@ -641,7 +641,7 @@
             }]
         },
         {
-            "display": "Hyperphenylalaninemia dai d\u1eb3ng",
+            "display": "Hyperphenylalaninemia dai dẳng",
             "code": "440009",
             "property": [{
                 "code": "clinical_finding",
@@ -649,7 +649,7 @@
             }]
         },
         {
-            "display": "Suy tuy\u1ebfn y\u00ean th\u1ee9 ph\u00e1t",
+            "display": "Suy tuyến yên thứ phát",
             "code": "442001",
             "property": [{
                 "code": "clinical_finding",
@@ -657,7 +657,7 @@
             }]
         },
         {
-            "display": "Cystocele \u1ea3nh h\u01b0\u1edfng \u0111\u1ebfn thai k\u1ef3",
+            "display": "Cystocele ảnh hưởng đến thai kỳ",
             "code": "443006",
             "property": [{
                 "code": "clinical_finding",
@@ -665,7 +665,7 @@
             }]
         },
         {
-            "display": "Hu\u1ea5n luy\u1ec7n vi\u00ean trong tai n\u1ea1n ho\u1ea1t \u0111\u1ed9ng th\u1ec3 thao",
+            "display": "Huấn luyện viên trong tai nạn hoạt động thể thao",
             "code": "447007",
             "property": [{
                 "code": "clinical_finding",
@@ -673,7 +673,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam mi\u1ec7ng lo\u00e9t",
+            "display": "Viêm miệng loét",
             "code": "450005",
             "property": [{
                 "code": "clinical_finding",
@@ -681,7 +681,7 @@
             }]
         },
         {
-            "display": "V\u1ec9 h\u00e1ng kh\u00f4ng b\u1ecb nhi\u1ec5m tr\u00f9ng",
+            "display": "Vỉ háng không bị nhiễm trùng",
             "code": "452002",
             "property": [{
                 "code": "clinical_finding",
@@ -689,7 +689,7 @@
             }]
         },
         {
-            "display": "Bi\u1ebfn ch\u1ea5t v\u1ea3y c\u1ee7a tuy\u1ebfn ti\u1ec1n li\u1ec7t",
+            "display": "Biến chất vảy của tuyến tiền liệt",
             "code": "460001",
             "property": [{
                 "code": "clinical_finding",
@@ -697,7 +697,7 @@
             }]
         },
         {
-            "display": "R\u00e1ch c\u0169 c\u1ee7a c\u01a1 s\u00e0n ch\u1eadu",
+            "display": "Rách cũ của cơ sàn chậu",
             "code": "467003",
             "property": [{
                 "code": "clinical_finding",
@@ -705,7 +705,7 @@
             }]
         },
         {
-            "display": "H\u1ed9i ch\u1ee9ng c\u1ea3m \u1ee9ng th\u1ee7y tinh th\u1ec3",
+            "display": "Hội chứng cảm ứng thủy tinh thể",
             "code": "470004",
             "property": [{
                 "code": "clinical_finding",
@@ -713,7 +713,7 @@
             }]
         },
         {
-            "display": "B\u1ec7nh Graves v\u1edbi b\u1ec7nh nh\u01b0\u1ee3c c\u01a1 ti\u1ec1n c\u0103n V\u00c0 v\u1edbi kh\u1ee7ng ho\u1ea3ng thyrotoxic",
+            "display": "Bệnh Graves với bệnh nhược cơ tiền căn VÀ với khủng hoảng thyrotoxic",
             "code": "479003",
             "property": [{
                 "code": "clinical_finding",
@@ -721,7 +721,7 @@
             }]
         },
         {
-            "display": "Suy m\u1ea1ch m\u00e1u c\u1ea5p t\u00ednh",
+            "display": "Suy mạch máu cấp tính",
             "code": "486006",
             "property": [{
                 "code": "clinical_finding",
@@ -729,7 +729,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam c\u01a1 tim",
+            "display": "Viêm cơ tim",
             "code": "488007",
             "property": [{
                 "code": "clinical_finding",
@@ -737,7 +737,7 @@
             }]
         },
         {
-            "display": "Ph\u1ea3n \u1ee9ng qu\u00e1 m\u1eabn \u0111\u01b0\u1eddng h\u00f4 h\u1ea5p tr\u00ean",
+            "display": "Phản ứng quá mẫn đường hô hấp trên",
             "code": "490008",
             "property": [{
                 "code": "clinical_finding",
@@ -745,7 +745,7 @@
             }]
         },
         {
-            "display": "Ch\u1ea5n th\u01b0\u01a1ng k\u00edn c\u1ee7a \u0111\u1ed1t s\u1ed1ng c\u1ed5 th\u1ee9 ba",
+            "display": "Chấn thương kín của đốt sống cổ thứ ba",
             "code": "496002",
             "property": [{
                 "code": "clinical_finding",
@@ -753,7 +753,7 @@
             }]
         },
         {
-            "display": "Hirsutism ph\u1ee5 thu\u1ed9c Androgen",
+            "display": "Hirsutism phụ thuộc Androgen",
             "code": "504009",
             "property": [{
                 "code": "clinical_finding",
@@ -761,7 +761,7 @@
             }]
         },
         {
-            "display": "C\u01a1 quan n\u01b0\u1edbc ngo\u00e0i trong th\u00f4i mi\u00ean",
+            "display": "Cơ quan nước ngoài trong thôi miên",
             "code": "517007",
             "property": [{
                 "code": "clinical_finding",
@@ -769,7 +769,7 @@
             }]
         },
         {
-            "display": "Nhi\u1ec1u t\u1eadp h\u1ee3p",
+            "display": "Nhiều tập hợp",
             "code": "518002",
             "property": [{
                 "code": "clinical_finding",
@@ -777,7 +777,7 @@
             }]
         },
         {
-            "display": "M\u0169i cong b\u1ea9m sinh",
+            "display": "Mũi cong bẩm sinh",
             "code": "520004",
             "property": [{
                 "code": "clinical_finding",
@@ -785,7 +785,7 @@
             }]
         },
         {
-            "display": "S\u1ef1 ti\u1ebfn h\u00f3a c\u1ee7a thai nhi t\u1ef1 ph\u00e1t, ph\u01b0\u01a1ng ph\u00e1p c\u1ee7a Roederer",
+            "display": "Sự tiến hóa của thai nhi tự phát, phương pháp của Roederer",
             "code": "527001",
             "property": [{
                 "code": "clinical_finding",
@@ -793,7 +793,7 @@
             }]
         },
         {
-            "display": "X\u01a1 gan",
+            "display": "Xơ gan",
             "code": "536002",
             "property": [{
                 "code": "clinical_finding",
@@ -801,7 +801,7 @@
             }]
         },
         {
-            "display": "K\u1ebft h\u1ee3p argyrosis",
+            "display": "Kết hợp argyrosis",
             "code": "539009",
             "property": [{
                 "code": "clinical_finding",
@@ -809,7 +809,7 @@
             }]
         },
         {
-            "display": "T\u0103ng ti\u1ebft calcitonin",
+            "display": "Tăng tiết calcitonin",
             "code": "547009",
             "property": [{
                 "code": "clinical_finding",
@@ -817,7 +817,7 @@
             }]
         },
         {
-            "display": "H\u1ed9i ch\u1ee9ng trisomy 13p m\u1ed9t ph\u1ea7n",
+            "display": "Hội chứng trisomy 13p một phần",
             "code": "548004",
             "property": [{
                 "code": "clinical_finding",
@@ -825,7 +825,7 @@
             }]
         },
         {
-            "display": "H\u1ed9i ch\u1ee9ng trisomy 2p m\u1ed9t ph\u1ea7n",
+            "display": "Hội chứng trisomy 2p một phần",
             "code": "554003",
             "property": [{
                 "code": "clinical_finding",
@@ -833,7 +833,7 @@
             }]
         },
         {
-            "display": "Nhi\u1ec5m \u0111\u1ed9c lo\u00e0i Dicentra",
+            "display": "Nhiễm độc loài Dicentra",
             "code": "555002",
             "property": [{
                 "code": "clinical_finding",
@@ -841,7 +841,7 @@
             }]
         },
         {
-            "display": "Ch\u1ee9ng gi\u1eadt nh\u00e3n c\u1ea7u",
+            "display": "Chứng giật nhãn cầu",
             "code": "563001",
             "property": [{
                 "code": "clinical_finding",
@@ -849,7 +849,7 @@
             }]
         },
         {
-            "display": "R\u1ed1i lo\u1ea1n th\u00f3i quen",
+            "display": "Rối loạn thói quen",
             "code": "568005",
             "property": [{
                 "code": "clinical_finding",
@@ -857,7 +857,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam da ti\u1ebfp x\u00fac do hoa anh th\u1ea3o",
+            "display": "Viêm da tiếp xúc do hoa anh thảo",
             "code": "586008",
             "property": [{
                 "code": "clinical_finding",
@@ -865,7 +865,7 @@
             }]
         },
         {
-            "display": "Ph\u00ecnh \u0111\u1ed9ng m\u1ea1ch b\u1ea9m sinh c\u1ee7a \u0111\u1ed9ng m\u1ea1ch giao ti\u1ebfp tr\u01b0\u1edbc",
+            "display": "Phình động mạch bẩm sinh của động mạch giao tiếp trước",
             "code": "590005",
             "property": [{
                 "code": "clinical_finding",
@@ -873,7 +873,7 @@
             }]
         },
         {
-            "display": "R\u1ed1i lo\u1ea1n ho\u1ea3ng lo\u1ea1n ti\u1ec1n kinh nguy\u1ec7t",
+            "display": "Rối loạn hoảng loạn tiền kinh nguyệt",
             "code": "596004",
             "property": [{
                 "code": "clinical_finding",
@@ -881,7 +881,7 @@
             }]
         },
         {
-            "display": "Tr\u00e0n kh\u00ed m\u00e0ng ph\u1ed5i dai d\u1eb3ng",
+            "display": "Tràn khí màng phổi dai dẳng",
             "code": "599006",
             "property": [{
                 "code": "clinical_finding",
@@ -897,7 +897,7 @@
             }]
         },
         {
-            "display": "C\u01a1n s\u1ed1t s\u00f4ng Ross",
+            "display": "Cơn sốt sông Ross",
             "code": "602001",
             "property": [{
                 "code": "clinical_finding",
@@ -905,7 +905,7 @@
             }]
         },
         {
-            "display": "Gi\u1ea3m n\u0103ng l\u1ef1c s\u1ed1ng",
+            "display": "Giảm năng lực sống",
             "code": "607007",
             "property": [{
                 "code": "clinical_finding",
@@ -913,7 +913,7 @@
             }]
         },
         {
-            "display": "R\u1ec7p",
+            "display": "Rệp",
             "code": "610000",
             "property": [{
                 "code": "clinical_finding",
@@ -921,7 +921,7 @@
             }]
         },
         {
-            "display": "FRAXA - H\u1ed9i ch\u1ee9ng mong manh X",
+            "display": "FRAXA - Hội chứng mong manh X",
             "code": "613003",
             "property": [{
                 "code": "clinical_finding",
@@ -929,7 +929,7 @@
             }]
         },
         {
-            "display": "T\u1eafc ngh\u1ebdn do d\u1ecb v\u1eadt v\u00f4 t\u00ecnh \u0111\u1ec3 l\u1ea1i v\u1ebft th\u01b0\u01a1ng ph\u1eabu thu\u1eadt V\u00c0 / HO\u1eb6C khoang c\u01a1 th\u1ec3 trong khi l\u00e0m th\u1ee7 thu\u1eadt",
+            "display": "Tắc nghẽn do dị vật vô tình để lại vết thương phẫu thuật VÀ / HOẶC khoang cơ thể trong khi làm thủ thuật",
             "code": "615005",
             "property": [{
                 "code": "clinical_finding",
@@ -937,7 +937,7 @@
             }]
         },
         {
-            "display": "R\u1ed1i lo\u1ea1n c\u1ea3m bi\u1ebfn m\u00ed m\u1eaft",
+            "display": "Rối loạn cảm biến mí mắt",
             "code": "616006",
             "property": [{
                 "code": "clinical_finding",
@@ -945,7 +945,7 @@
             }]
         },
         {
-            "display": "Hypercortisolism do kh\u1ed1i u kh\u00f4ng theo nghi th\u1ee9c",
+            "display": "Hypercortisolism do khối u không theo nghi thức",
             "code": "626004",
             "property": [{
                 "code": "clinical_finding",
@@ -953,7 +953,7 @@
             }]
         },
         {
-            "display": "Ph\u1ea3n \u1ee9ng truy\u1ec1n m\u00e1u do kh\u00f4ng t\u01b0\u01a1ng th\u00edch nh\u1ecf",
+            "display": "Phản ứng truyền máu do không tương thích nhỏ",
             "code": "631002",
             "property": [{
                 "code": "clinical_finding",
@@ -961,7 +961,7 @@
             }]
         },
         {
-            "display": "Y\u00ean \u0111un s\u00f4i",
+            "display": "Yên đun sôi",
             "code": "634005",
             "property": [{
                 "code": "clinical_finding",
@@ -969,7 +969,7 @@
             }]
         },
         {
-            "display": "T\u1ed5n th\u01b0\u01a1ng d\u00e2y th\u1ea7n kinh ph\u1ebf qu\u1ea3n",
+            "display": "Tổn thương dây thần kinh phế quản",
             "code": "640003",
             "property": [{
                 "code": "clinical_finding",
@@ -977,7 +977,7 @@
             }]
         },
         {
-            "display": "Ph\u00ec \u0111\u1ea1i m\u00f4i",
+            "display": "Phì đại môi",
             "code": "643001",
             "property": [{
                 "code": "clinical_finding",
@@ -985,7 +985,7 @@
             }]
         },
         {
-            "display": "U nang v\u00f4 c\u0103n c\u1ee7a khoang tr\u01b0\u1edbc",
+            "display": "U nang vô căn của khoang trước",
             "code": "646009",
             "property": [{
                 "code": "clinical_finding",
@@ -993,7 +993,7 @@
             }]
         },
         {
-            "display": "G\u00e3y m\u1edf c\u1ee7a \u0111\u1ea7u xa c\u1ee7a ulna",
+            "display": "Gãy mở của đầu xa của ulna",
             "code": "649002",
             "property": [{
                 "code": "clinical_finding",
@@ -1001,7 +1001,7 @@
             }]
         },
         {
-            "display": "Root c\u00f4ng vi\u1ec7c",
+            "display": "Root công việc",
             "code": "651003",
             "property": [{
                 "code": "clinical_finding",
@@ -1009,7 +1009,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam amidan gangrenous",
+            "display": "Viêm amidan gangrenous",
             "code": "652005",
             "property": [{
                 "code": "clinical_finding",
@@ -1017,7 +1017,7 @@
             }]
         },
         {
-            "display": "Tim thai b\u1ea5t th\u01b0\u1eddng \u0111\u01b0\u1ee3c ghi nh\u1eadn tr\u01b0\u1edbc khi chuy\u1ec3n d\u1ea1 \u1edf tr\u1ebb s\u01a1 sinh c\u00f2n s\u1ed1ng",
+            "display": "Tim thai bất thường được ghi nhận trước khi chuyển dạ ở trẻ sơ sinh còn sống",
             "code": "655007",
             "property": [{
                 "code": "clinical_finding",
@@ -1025,7 +1025,7 @@
             }]
         },
         {
-            "display": "Ch\u1ea5n th\u01b0\u01a1ng \u0111\u1ea1i tr\u00e0ng kh\u00f4ng c\u00f3 v\u1ebft th\u01b0\u01a1ng h\u1edf v\u00e0o khoang b\u1ee5ng",
+            "display": "Chấn thương đại tràng không có vết thương hở vào khoang bụng",
             "code": "658009",
             "property": [{
                 "code": "clinical_finding",
@@ -1033,7 +1033,7 @@
             }]
         },
         {
-            "display": "Thuy\u00ean t\u1eafc ph\u1ed5i sau khi mang thai V\u00c0 / HO\u1eb6C thai ngo\u00e0i t\u1eed cung",
+            "display": "Thuyên tắc phổi sau khi mang thai VÀ / HOẶC thai ngoài tử cung",
             "code": "663008",
             "property": [{
                 "code": "clinical_finding",
@@ -1041,7 +1041,7 @@
             }]
         },
         {
-            "display": "R\u1ee5ng tr\u1ee9ng mu\u1ed9n",
+            "display": "Rụng trứng muộn",
             "code": "664002",
             "property": [{
                 "code": "clinical_finding",
@@ -1049,7 +1049,7 @@
             }]
         },
         {
-            "display": "Ng\u1ed9 \u0111\u1ed9c b\u1edfi thu\u1ed1c ch\u1ed1ng vi r\u00fat V\u00c0 / HO\u1eb6C t\u00e1c nh\u00e2n x\u01a1 c\u1ee9ng",
+            "display": "Ngộ độc bởi thuốc chống vi rút VÀ / HOẶC tác nhân xơ cứng",
             "code": "666000",
             "property": [{
                 "code": "clinical_finding",
@@ -1057,7 +1057,7 @@
             }]
         },
         {
-            "display": "Xo\u1eafn ru\u1ed9t",
+            "display": "Xoắn ruột",
             "code": "675003",
             "property": [{
                 "code": "clinical_finding",
@@ -1065,7 +1065,7 @@
             }]
         },
         {
-            "display": "Huy\u1ebft kh\u1ed1i g\u00e2y bi\u1ebfn ch\u1ee9ng thai k\u1ef3 V\u00c0 / HO\u1eb6C puerperium",
+            "display": "Huyết khối gây biến chứng thai kỳ VÀ / HOẶC puerperium",
             "code": "682004",
             "property": [{
                 "code": "clinical_finding",
@@ -1073,7 +1073,7 @@
             }]
         },
         {
-            "display": "C\u00f3 \u0111\u01b0\u1ee3c telangiectasia c\u1ee7a ru\u1ed9t non V\u00c0 / HO\u1eb6C",
+            "display": "Có được telangiectasia của ruột non VÀ / HOẶC",
             "code": "685002",
             "property": [{
                 "code": "clinical_finding",
@@ -1081,7 +1081,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam x\u01b0\u01a1ng kh\u1edbp \u1edf ng\u01b0\u1eddi l\u1edbn",
+            "display": "Viêm xương khớp ở người lớn",
             "code": "701003",
             "property": [{
                 "code": "clinical_finding",
@@ -1089,7 +1089,7 @@
             }]
         },
         {
-            "display": "B\u1ea9m sinh d\u00ednh l\u01b0\u1ee1i",
+            "display": "Bẩm sinh dính lưỡi",
             "code": "703000",
             "property": [{
                 "code": "clinical_finding",
@@ -1097,7 +1097,7 @@
             }]
         },
         {
-            "display": "S\u1ef1 m\u00e0i m\u00f2n V\u00c0 / HO\u1eb6C b\u1ecfng ma s\u00e1t c\u1ee7a ng\u00f3n ch\u00e2n v\u1edbi nhi\u1ec5m tr\u00f9ng",
+            "display": "Sự mài mòn VÀ / HOẶC bỏng ma sát của ngón chân với nhiễm trùng",
             "code": "714002",
             "property": [{
                 "code": "clinical_finding",
@@ -1105,7 +1105,7 @@
             }]
         },
         {
-            "display": "N\u1ee9t v\u1ee1 ni\u1ec7u \u0111\u1ea1o",
+            "display": "Nứt vỡ niệu đạo",
             "code": "715001",
             "property": [{
                 "code": "clinical_finding",
@@ -1113,7 +1113,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam ph\u1ebf qu\u1ea3n c\u1ea5p t\u00ednh v\u1edbi t\u1eafc ngh\u1ebdn",
+            "display": "Viêm phế quản cấp tính với tắc nghẽn",
             "code": "718004",
             "property": [{
                 "code": "clinical_finding",
@@ -1121,7 +1121,7 @@
             }]
         },
         {
-            "display": "C\u01a1 th\u1ec3 n\u01b0\u1edbc ngo\u00e0i h\u00e1ng kh\u00f4ng c\u00f3 v\u1ebft th\u01b0\u01a1ng h\u1edf l\u1edbn nh\u01b0ng b\u1ecb nhi\u1ec5m tr\u00f9ng",
+            "display": "Cơ thể nước ngoài háng không có vết thương hở lớn nhưng bị nhiễm trùng",
             "code": "733007",
             "property": [{
                 "code": "clinical_finding",
@@ -1137,7 +1137,7 @@
             }]
         },
         {
-            "display": "\u00c1p xe h\u00f4ng",
+            "display": "Áp xe hông",
             "code": "736004",
             "property": [{
                 "code": "clinical_finding",
@@ -1145,7 +1145,7 @@
             }]
         },
         {
-            "display": "Nhi\u1ec5m Schistosoma mansoni",
+            "display": "Nhiễm Schistosoma mansoni",
             "code": "750009",
             "property": [{
                 "code": "clinical_finding",
@@ -1153,7 +1153,7 @@
             }]
         },
         {
-            "display": "Phytobezoar sau ph\u1eabu thu\u1eadt c\u1eaft b\u1ecf",
+            "display": "Phytobezoar sau phẫu thuật cắt bỏ",
             "code": "755004",
             "property": [{
                 "code": "clinical_finding",
@@ -1161,7 +1161,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam c\u01a1 th\u1ea5p m\u00e3n t\u00ednh",
+            "display": "Viêm cơ thấp mãn tính",
             "code": "756003",
             "property": [{
                 "code": "clinical_finding",
@@ -1169,7 +1169,7 @@
             }]
         },
         {
-            "display": "U nang t\u1eed cung",
+            "display": "U nang tử cung",
             "code": "758002",
             "property": [{
                 "code": "clinical_finding",
@@ -1177,7 +1177,7 @@
             }]
         },
         {
-            "display": "V\u1ebft th\u01b0\u01a1ng h\u1edf \u0111\u1ea7u c\u00f3 bi\u1ebfn ch\u1ee9ng",
+            "display": "Vết thương hở đầu có biến chứng",
             "code": "775008",
             "property": [{
                 "code": "clinical_finding",
@@ -1185,7 +1185,7 @@
             }]
         },
         {
-            "display": "T\u1eafc ngh\u1ebdn \u0111\u1ed9ng m\u1ea1ch m\u1ed9t ph\u1ea7n",
+            "display": "Tắc nghẽn động mạch một phần",
             "code": "776009",
             "property": [{
                 "code": "clinical_finding",
@@ -1193,7 +1193,7 @@
             }]
         },
         {
-            "display": "Nhi\u1ec5m \u0111\u1ed9c Cestrum diurnum",
+            "display": "Nhiễm độc Cestrum diurnum",
             "code": "781000",
             "property": [{
                 "code": "clinical_finding",
@@ -1201,7 +1201,7 @@
             }]
         },
         {
-            "display": "Giai \u0111o\u1ea1n l\u00e2m s\u00e0ng I B",
+            "display": "Giai đoạn lâm sàng I B",
             "code": "786005",
             "property": [{
                 "code": "clinical_finding",
@@ -1209,7 +1209,7 @@
             }]
         },
         {
-            "display": "H\u1eb9p van hai l\u00e1 v\u1edbi b\u1ec7nh tho\u00e1i h\u00f3a",
+            "display": "Hẹp van hai lá với bệnh thoái hóa",
             "code": "787001",
             "property": [{
                 "code": "clinical_finding",
@@ -1217,7 +1217,7 @@
             }]
         },
         {
-            "display": "Ch\u1ebf \u0111\u1ed9 \u0103n u\u1ed1ng li\u00ean quan \u0111\u1ebfn b\u1ec7nh",
+            "display": "Chế độ ăn uống liên quan đến bệnh",
             "code": "788006",
             "property": [{
                 "code": "clinical_finding",
@@ -1225,7 +1225,7 @@
             }]
         },
         {
-            "display": "B\u1ec7nh CJD - Creutzfeldt-Jakob",
+            "display": "Bệnh CJD - Creutzfeldt-Jakob",
             "code": "792004",
             "property": [{
                 "code": "clinical_finding",
@@ -1233,7 +1233,7 @@
             }]
         },
         {
-            "display": "Lo\u00e9t \u0111\u1ea1i tr\u00e0ng sigma",
+            "display": "Loét đại tràng sigma",
             "code": "799008",
             "property": [{
                 "code": "clinical_finding",
@@ -1241,7 +1241,7 @@
             }]
         },
         {
-            "display": "C\u00f4n tr\u00f9ng c\u1eafn, kh\u00f4ng nhi\u1ec5m tr\u00f9ng, ch\u00e2n, b\u1ecb nhi\u1ec5m b\u1ec7nh",
+            "display": "Côn trùng cắn, không nhiễm trùng, chân, bị nhiễm bệnh",
             "code": "801006",
             "property": [{
                 "code": "clinical_finding",
@@ -1249,7 +1249,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam ph\u1ed5i do silica",
+            "display": "Viêm phổi do silica",
             "code": "805002",
             "property": [{
                 "code": "clinical_finding",
@@ -1257,7 +1257,7 @@
             }]
         },
         {
-            "display": "Chuy\u1ec3n \u0111\u1ed9ng s\u00e1o",
+            "display": "Chuyển động sáo",
             "code": "811004",
             "property": [{
                 "code": "clinical_finding",
@@ -1265,7 +1265,7 @@
             }]
         },
         {
-            "display": "M\u1eaft c\u00e1 ch\u00e2n kh\u00f4ng \u1ed5n \u0111\u1ecbnh",
+            "display": "Mắt cá chân không ổn định",
             "code": "813001",
             "property": [{
                 "code": "clinical_finding",
@@ -1273,7 +1273,7 @@
             }]
         },
         {
-            "display": "Vi\u00eam m\u00e0ng c\u1ee9ng",
+            "display": "Viêm màng cứng",
             "code": "815008",
             "property": [{
                 "code": "clinical_finding",
@@ -1281,7 +1281,7 @@
             }]
         },
         {
-            "display": "T\u00e1i t\u1ed5 h\u1ee3p di truy\u1ec1n",
+            "display": "Tái tổ hợp di truyền",
             "code": "816009",
             "property": [{
                 "code": "clinical_finding",
@@ -1289,7 +1289,7 @@
             }]
         },
         {
-            "display": "B\u1ecfng \u0111\u1ed9 ba c\u1ee7a nhi\u1ec1u v\u1ecb tr\u00ed c\u1ee7a chi d\u01b0\u1edbi",
+            "display": "Bỏng độ ba của nhiều vị trí của chi dưới",
             "code": "818005",
             "property": [{
                 "code": "clinical_finding",
@@ -1297,7 +1297,7 @@
             }]
         },
         {
-            "display": "Ch\u1ea5n th\u01b0\u01a1ng b\u1ec1 m\u1eb7t c\u1ee7a n\u00e1ch v\u1edbi nhi\u1ec5m tr\u00f9ng",
+            "display": "Chấn thương bề mặt của nách với nhiễm trùng",
             "code": "825003",
             "property": [{
                 "code": "clinical_finding",
@@ -1305,7 +1305,7 @@
             }]
         },
         {
-            "display": "B\u1ec7nh giang mai b\u1ea9m sinh mu\u1ed9n, ti\u1ec1m \u1ea9n (+ huy\u1ebft thanh., - C.S.F., 2 n\u0103m HO\u1eb6C h\u01a1n)",
+            "display": "Bệnh giang mai bẩm sinh muộn, tiềm ẩn (+ huyết thanh., - C.S.F., 2 năm HOẶC hơn)",
             "code": "827006",
             "property": [{
                 "code": "clinical_finding",
@@ -1313,7 +1313,7 @@
             }]
         },
         {
-            "display": "Tr\u1ea7m c\u1ea3m l\u1edbn v\u1eeba ph\u1ea3i",
+            "display": "Trầm cảm lớn vừa phải",
             "code": "832007",
             "property": [{
                 "code": "clinical_finding",
@@ -1321,7 +1321,7 @@
             }]
         },
         {
-            "display": "Gh\u1ebf ng\u1ed3i \u0111\u1ed1i di\u1ec7n v\u1edbi t\u01b0 th\u1ebf coital",
+            "display": "Ghế ngồi đối diện với tư thế coital",
             "code": "834008",
             "property": [{
                 "code": "clinical_finding",

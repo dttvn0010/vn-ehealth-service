@@ -6,562 +6,562 @@
     "description": "Danh mục giải phẫu",
     "property": [],
     "concept": [{
-            "display": "B\u1ee5ng",
+            "display": "Bụng",
             "code": "ADB",
             "property": []
         },
         {
-            "display": "L\u1edbp s\u1ee5n \u1edf h\u1ed1c kh\u1edbp g\u1ed1i",
+            "display": "Lớp sụn ở hốc khớp gối",
             "code": "ACET",
             "property": []
         },
         {
-            "display": "G\u00e2n n\u1ed1i b\u1eafp ch\u00e2n v\u1edbi g\u00f3t ch\u00e2n",
+            "display": "Gân nối bắp chân với gót chân",
             "code": "ACHIL",
             "property": []
         },
         {
-            "display": "Amidan V.A (n\u1eb1m ch\u1eb7n gi\u1eefa \u0111\u01b0\u1eddng th\u1edf v\u00e0 \u0111\u01b0\u1eddng \u0103n, ch\u1ec9 th\u01b0\u1eddng t\u1ed3n t\u1ea1i khi nh\u1ecf h\u01a1n 12 tu\u1ed5i, s\u1ebd teo nh\u1ecf sau 12 tu\u1ed5i)",
+            "display": "Amidan V.A (nằm chặn giữa đường thở và đường ăn, chỉ thường tồn tại khi nhỏ hơn 12 tuổi, sẽ teo nhỏ sau 12 tuổi)",
             "code": "ADE",
             "property": []
         },
         {
-            "display": "Tuy\u1ebfn th\u01b0\u1ee3ng th\u1eadn",
+            "display": "Tuyến thượng thận",
             "code": "ADR",
             "property": []
         },
         {
-            "display": "N\u01b0\u1edbc \u1ed1i",
+            "display": "Nước ối",
             "code": "AMN",
             "property": []
         },
         {
-            "display": "T\u00fai \u1ed1i",
+            "display": "Túi ối",
             "code": "AMS",
             "property": []
         },
         {
-            "display": "H\u1eadu m\u00f4n",
+            "display": "Hậu môn",
             "code": "ANAL",
             "property": []
         },
         {
-            "display": "M\u1eaft c\u00e1 ch\u00e2n",
+            "display": "Mắt cá chân",
             "code": "ANKL",
             "property": []
         },
         {
-            "display": "Tr\u01b0\u1edbc khu\u1ef7u",
+            "display": "Trước khuỷu",
             "code": "ANTEC",
             "property": []
         },
         {
-            "display": "H\u1ed1 tr\u01b0\u1edbc khu\u1ef7u",
+            "display": "Hố trước khuỷu",
             "code": "ANTECF",
             "property": []
         },
         {
-            "display": "Antrum (h\u1ed1 h\u1ed1c/\u1ed5/khoang trong x\u01b0\u01a1ng ho\u1eb7c c\u1ea5u tr\u00fac gi\u1ea3i ph\u1eabu kh\u00e1c)",
+            "display": "Antrum (hố hốc/ổ/khoang trong xương hoặc cấu trúc giải phẫu khác)",
             "code": "ANTR",
             "property": []
         },
         {
-            "display": "H\u1eadu m\u00f4n",
+            "display": "Hậu môn",
             "code": "ANUS",
             "property": []
         },
         {
-            "display": "\u0110\u1ed9ng m\u1ea1ch ch\u1ee7",
+            "display": "Động mạch chủ",
             "code": "AORTA",
             "property": []
         },
         {
-            "display": "V\u00e0nh \u0111\u1ed9ng m\u1ea1ch ch\u1ee7",
+            "display": "Vành động mạch chủ",
             "code": "AR",
             "property": []
         },
         {
-            "display": "Van \u0111\u1ed9ng m\u1ea1ch ch\u1ee7",
+            "display": "Van động mạch chủ",
             "code": "AV",
             "property": []
         },
         {
-            "display": "Ru\u1ed9t th\u1eeba",
+            "display": "Ruột thừa",
             "code": "APDX",
             "property": []
         },
         {
-            "display": "Qu\u1ea7ng v\u00fa",
+            "display": "Quầng vú",
             "code": "AREO",
             "property": []
         },
         {
-            "display": "C\u00e1nh tay",
+            "display": "Cánh tay",
             "code": "ARM",
             "property": []
         },
         {
-            "display": "\u0110\u1ed9ng m\u1ea1ch",
+            "display": "Động mạch",
             "code": "ARTE",
             "property": []
         },
         {
-            "display": "C\u1ed5 tr\u01b0\u1edbng",
+            "display": "Cổ trướng",
             "code": "ASCIT",
             "property": []
         },
         {
-            "display": "D\u1ecbch c\u1ed5 tr\u01b0\u1edbng",
+            "display": "Dịch cổ trướng",
             "code": "ASCT",
             "property": []
         },
         {
-            "display": "T\u00e2m nh\u0129",
+            "display": "Tâm nhĩ",
             "code": "ATR",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c v\u1ec1 l\u1ed7 tai",
+            "display": "Thuộc về lỗ tai",
             "code": "AURI",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c n\u00e1ch",
+            "display": "Thuộc nách",
             "code": "AXI",
             "property": []
         },
         {
-            "display": "L\u01b0ng",
+            "display": "Lưng",
             "code": "BACK",
             "property": []
         },
         {
-            "display": "\u1ed0ng bartholin",
+            "display": "Ống bartholin",
             "code": "BARTD",
             "property": []
         },
         {
-            "display": "Tuy\u1ebfn bartholin",
+            "display": "Tuyến bartholin",
             "code": "BARTG",
             "property": []
         },
         {
-            "display": "D\u1ecbch tuy\u1ebfn bartholin",
+            "display": "Dịch tuyến bartholin",
             "code": "BRTGF",
             "property": []
         },
         {
-            "display": "T\u1ebf b\u00e0o m\u00e1u tr\u1eafng basophil",
+            "display": "Tế bào máu trắng basophil",
             "code": "BPH",
             "property": []
         },
         {
-            "display": "\u1ed0ng m\u1eadt",
+            "display": "Ống mật",
             "code": "BID",
             "property": []
         },
         {
-            "display": "D\u1ecbch m\u1eadt",
+            "display": "Dịch mật",
             "code": "BIFL",
             "property": []
         },
         {
-            "display": "B\u00e0ng quang",
+            "display": "Bàng quang",
             "code": "BLAD",
             "property": []
         },
         {
-            "display": "M\u00e1u",
+            "display": "Máu",
             "code": "BLOOD",
             "property": []
         },
         {
-            "display": "M\u00e1u, \u0111\u1ed9ng m\u1ea1ch",
+            "display": "Máu, động mạch",
             "code": "BLDA",
             "property": []
         },
         {
-            "display": "M\u00e1u, mao m\u1ea1ch",
+            "display": "Máu, mao mạch",
             "code": "BLDC",
             "property": []
         },
         {
-            "display": "M\u00e1u, t\u0129nh m\u1ea1ch",
+            "display": "Máu, tĩnh mạch",
             "code": "BLDV",
             "property": []
         },
         {
-            "display": "M\u00e1u, cu\u1ed1ng r\u1ed1n",
+            "display": "Máu, cuống rốn",
             "code": "CBLD",
             "property": []
         },
         {
-            "display": "M\u00e1u, to\u00e0n ph\u1ea7n",
+            "display": "Máu, toàn phần",
             "code": "BLD",
             "property": []
         },
         {
-            "display": "C\u01a1 th\u1ec3, to\u00e0n ph\u1ea7n",
+            "display": "Cơ thể, toàn phần",
             "code": "BDY",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng",
+            "display": "Xương",
             "code": "BON",
             "property": []
         },
         {
-            "display": "T\u1ee7y X\u01b0\u01a1ng \u1ed1ng",
+            "display": "Tủy Xương ống",
             "code": "BMAR",
             "property": []
         },
         {
-            "display": "Ru\u1ed9t",
+            "display": "Ruột",
             "code": "BOWEL",
             "property": []
         },
         {
-            "display": "Ru\u1ed9t gi\u00e0",
+            "display": "Ruột già",
             "code": "BOWLA",
             "property": []
         },
         {
-            "display": "Ru\u1ed9t non",
+            "display": "Ruột non",
             "code": "BOWSM",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c c\u00e1nh tay",
+            "display": "Thuộc cánh tay",
             "code": "BRA",
             "property": []
         },
         {
-            "display": "N\u00e3o",
+            "display": "Não",
             "code": "BRAIN",
             "property": []
         },
         {
-            "display": "D\u1ecbch u nang n\u00e3o",
+            "display": "Dịch u nang não",
             "code": "BCYS",
             "property": []
         },
         {
-            "display": "V\u00fa",
+            "display": "Vú",
             "code": "BRST",
             "property": []
         },
         {
-            "display": "D\u1ecbch v\u00fa",
+            "display": "Dịch vú",
             "code": "BRSTFL",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c cu\u1ed1ng ph\u1ed5i/ ph\u1ebf qu\u1ea3n",
+            "display": "Thuộc cuống phổi/ phế quản",
             "code": "BRO",
             "property": []
         },
         {
-            "display": "Nh\u00e1nh cu\u1ed1ng ph\u1ed5i nh\u1ecf",
+            "display": "Nhánh cuống phổi nhỏ",
             "code": "BROCH",
             "property": []
         },
         {
-            "display": "Ph\u1ebf qu\u1ea3n",
+            "display": "Phế quản",
             "code": "BRONC",
             "property": []
         },
         {
-            "display": "\u1ed0ng th\u00f4ng broviac (th\u01b0\u1eddng \u0111\u01b0\u1ee3c \u0111\u1eb7t \u1edf t\u0129nh m\u1ea1ch d\u01b0\u1edbi x\u01b0\u01a1ng \u0111\u00f2n)",
+            "display": "Ống thông broviac (thường được đặt ở tĩnh mạch dưới xương đòn)",
             "code": "BRV   ",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c mi\u1ec7ng/Thu\u1ed9c m\u00e1",
+            "display": "Thuộc miệng/Thuộc má",
             "code": "BUCCA",
             "property": []
         },
         {
-            "display": "B\u00ecu/t\u00fai ho\u1ea1t d\u1ecbch",
+            "display": "Bìu/túi hoạt dịch",
             "code": "BURSA",
             "property": []
         },
         {
-            "display": "D\u1ecbch trong b\u00ecu/t\u00fai ho\u1ea1t d\u1ecbch",
+            "display": "Dịch trong bìu/túi hoạt dịch",
             "code": "BURSF",
             "property": []
         },
         {
-            "display": "M\u00f4ng \u0111\u00edt",
+            "display": "Mông đít",
             "code": "BUTT",
             "property": []
         },
         {
-            "display": "B\u1eafp ch\u00e2n",
+            "display": "Bắp chân",
             "code": "CALF",
             "property": []
         },
         {
-            "display": "\u1ed0ng",
+            "display": "Ống",
             "code": "CANAL",
             "property": []
         },
         {
-            "display": "\u1ed0ng nh\u1ecf, l\u1ec7 qu\u1ea3n",
+            "display": "Ống nhỏ, lệ quản",
             "code": "CANLI",
             "property": []
         },
         {
-            "display": "\u1ed0ng th\u00f4ng d\u00f2",
+            "display": "Ống thông dò",
             "code": "CNL",
             "property": []
         },
         {
-            "display": "Kh\u00f3e m\u1eaft",
+            "display": "Khóe mắt",
             "code": "CANTH",
             "property": []
         },
         {
-            "display": "C\u01a1 tim",
+            "display": "Cơ tim",
             "code": "CDM",
             "property": []
         },
         {
-            "display": "\u0110\u1ed9ng m\u1ea1ch c\u1ed5",
+            "display": "Động mạch cổ",
             "code": "CARO",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c x\u01b0\u01a1ng c\u1ed5 tay",
+            "display": "Thuộc xương cổ tay",
             "code": "CARP",
             "property": []
         },
         {
-            "display": "H\u1ed1, l\u1ed7 h\u1ed5ng",
+            "display": "Hố, lỗ hổng",
             "code": "CAVIT",
             "property": []
         },
         {
-            "display": "Khoang ng\u1ef1c",
+            "display": "Khoang ngực",
             "code": "CHE",
             "property": []
         },
         {
-            "display": "Manh tr\u00e0ng/ ru\u1ed9t t\u1ecbt (\u0111o\u1ea1n g\u1ea7n ru\u1ed9t th\u1eeba)",
+            "display": "Manh tràng/ ruột tịt (đoạn gần ruột thừa)",
             "code": "CECUM",
             "property": []
         },
         {
-            "display": "D\u1ecbch n\u00e3o t\u1ee7y",
+            "display": "Dịch não tủy",
             "code": "CSF",
             "property": []
         },
         {
-            "display": "C\u1ed5 t\u1eed cung",
+            "display": "Cổ tử cung",
             "code": "CVX",
             "property": []
         },
         {
-            "display": "C\u1ed5 t\u1eed cung/T\u1eed cung",
+            "display": "Cổ tử cung/Tử cung",
             "code": "CERVUT",
             "property": []
         },
         {
-            "display": "M\u00e1",
+            "display": "Má",
             "code": "CHEEK",
             "property": []
         },
         {
-            "display": "Ng\u1ef1c",
+            "display": "Ngực",
             "code": "CHES",
             "property": []
         },
         {
-            "display": "\u1ed0ng d\u1eabn l\u01b0u ng\u1ef1c",
-            "code": "CHEST\u00a0",
+            "display": "Ống dẫn lưu ngực",
+            "code": "CHEST ",
             "property": []
         },
         {
-            "display": "C\u1eb1m",
+            "display": "Cằm",
             "code": "CHIN",
             "property": []
         },
         {
-            "display": "V\u1ecb tr\u00ed c\u1eaft bao quy \u0111\u1ea7u",
+            "display": "Vị trí cắt bao quy đầu",
             "code": "CIRCU",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng \u0111\u00f2n/thu\u1ed9c x\u01b0\u01a1ng \u0111\u00f2n",
+            "display": "Xương đòn/thuộc xương đòn",
             "code": "CLAVI",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c \u00e2m v\u1eadt",
+            "display": "Thuộc âm vật",
             "code": "CLITO",
             "property": []
         },
         {
-            "display": "\u00c2m v\u1eadt",
+            "display": "Âm vật",
             "code": "CLIT",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c x\u01b0\u01a1ng c\u1ee5t",
+            "display": "Thuộc xương cụt",
             "code": "COCCG",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng c\u1ee5t",
+            "display": "Xương cụt",
             "code": "COCCY",
             "property": []
         },
         {
-            "display": "Ru\u1ed9t k\u1ebft",
+            "display": "Ruột kết",
             "code": "COLON",
             "property": []
         },
         {
-            "display": "Thu\u1eadt m\u1edf th\u00f4ng ru\u1ed9t k\u1ebft (ph\u1eabu thu\u1eadt l\u00e0m h\u1eadu m\u00f4n gi\u1ea3)",
+            "display": "Thuật mở thông ruột kết (phẫu thuật làm hậu môn giả)",
             "code": "COLOS",
             "property": []
         },
         {
-            "display": "L\u1ed7 th\u00f4ng m\u1edf th\u00f4ng ru\u1ed9t k\u1ebft",
+            "display": "Lỗ thông mở thông ruột kết",
             "code": "COS   ",
             "property": []
         },
         {
-            "display": "\u1ed0ng d\u1eabn ch\u1ee7",
+            "display": "Ống dẫn chủ",
             "code": "CDUCT",
             "property": []
         },
         {
-            "display": "K\u1ebft m\u1ea1c",
+            "display": "Kết mạc",
             "code": "CONJ",
             "property": []
         },
         {
-            "display": "Coral (sinh v\u1eadt bi\u1ec3n thu\u1ed9c l\u1edbp san h\u00f4)",
+            "display": "Coral (sinh vật biển thuộc lớp san hô)",
             "code": "CORAL",
             "property": []
         },
         {
-            "display": "Cu\u1ed1ng r\u1ed1n",
+            "display": "Cuống rốn",
             "code": "COR",
             "property": []
         },
         {
-            "display": "M\u00e1u cu\u1ed1ng r\u1ed1n",
+            "display": "Máu cuống rốn",
             "code": "CORD",
             "property": []
         },
         {
-            "display": "Gi\u00e1c m\u1ea1c",
+            "display": "Giác mạc",
             "code": "CORN",
             "property": []
         },
         {
-            "display": "H\u1ed9p s\u1ecd, g\u1ed1c m\u0169i (hai xoang s\u00e0ng)",
+            "display": "Hộp sọ, gốc mũi (hai xoang sàng)",
             "code": "CRANE",
             "property": []
         },
         {
-            "display": "H\u1ed9p s\u1ecd, tr\u00e1n",
+            "display": "Hộp sọ, trán",
             "code": "CRANF",
             "property": []
         },
         {
-            "display": "H\u1ed9p s\u1ecd, ch\u1ea9m",
+            "display": "Hộp sọ, chẩm",
             "code": "CRANO",
             "property": []
         },
         {
-            "display": "H\u1ed9p s\u1ecd, th\u00f9y \u0111\u1ec9nh",
+            "display": "Hộp sọ, thùy đỉnh",
             "code": "CRANP",
             "property": []
         },
         {
-            "display": "H\u1ed9p s\u1ecd, x\u01b0\u01a1ng b\u01b0\u1edbm",
+            "display": "Hộp sọ, xương bướm",
             "code": "CRANS",
             "property": []
         },
         {
-            "display": "H\u1ed9p s\u1ecd, th\u00e1i d\u01b0\u01a1ng",
+            "display": "Hộp sọ, thái dương",
             "code": "CRANT",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng tr\u1ee5",
+            "display": "Xương trụ",
             "code": "CUBIT",
             "property": []
         },
         {
-            "display": "Kh\u1edbp",
+            "display": "Khớp",
             "code": "CUFF",
             "property": []
         },
         {
-            "display": "T\u00fai c\u00f9ng (ph\u1ea7n m\u1edf r\u1ed9ng c\u1ee7a khoang ph\u00fac m\u1ea1c gi\u1eefa tr\u1ef1c tr\u00e0ng v\u00e0 v\u00e1ch ng\u0103n \u0111\u1eb1ng sau t\u1eed cung)",
+            "display": "Túi cùng (phần mở rộng của khoang phúc mạc giữa trực tràng và vách ngăn đằng sau tử cung)",
             "code": "CULD",
             "property": []
         },
         {
-            "display": "Ch\u1ecdc h\u00fat t\u00fai c\u00f9ng b\u1eb1ng kim ch\u00edch",
+            "display": "Chọc hút túi cùng bằng kim chích",
             "code": "CULDO",
             "property": []
         },
         {
-            "display": "C\u01a1 delta",
+            "display": "Cơ delta",
             "code": "DELT",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c r\u0103ng",
+            "display": "Thuộc răng",
             "code": "DENTA",
             "property": []
         },
         {
-            "display": "N\u01b0\u1edbu r\u0103ng",
+            "display": "Nướu răng",
             "code": "DEN",
             "property": []
         },
         {
-            "display": "D\u1ecbch th\u1ea9m t\u00e1ch",
+            "display": "Dịch thẩm tách",
             "code": "DIAF",
             "property": []
         },
         {
-            "display": "C\u01a1 ho\u00e0nh",
+            "display": "Cơ hoành",
             "code": "DPH",
             "property": []
         },
         {
-            "display": "Ng\u00f3n ch\u00e2n, ng\u00f3n tay",
+            "display": "Ngón chân, ngón tay",
             "code": "DIGIT",
             "property": []
         },
         {
-            "display": "\u0110\u0129a \u0111\u1ec7m",
+            "display": "Đĩa đệm",
             "code": "DISC",
             "property": []
         },
         {
-            "display": "L\u01b0ng/Ph\u1ea7n l\u01b0ng",
+            "display": "Lưng/Phần lưng",
             "code": "DORS",
             "property": []
         },
         {
-            "display": "D\u1ecbch t\u00e1 tr\u00e0ng",
+            "display": "Dịch tá tràng",
             "code": "DUFL",
             "property": []
         },
         {
-            "display": "T\u00e1 tr\u00e0ng/thu\u1ed9c t\u00e1 tr\u00e0ng",
+            "display": "Tá tràng/thuộc tá tràng",
             "code": "DUODE",
             "property": []
         },
         {
-            "display": "M\u00e0ng c\u1ee9ng",
+            "display": "Màng cứng",
             "code": "DUR",
             "property": []
         },
@@ -571,322 +571,322 @@
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng tai, x\u01b0\u01a1ng \u0111e",
+            "display": "Xương tai, xương đe",
             "code": "EARBI",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng tai, x\u01b0\u01a1ng b\u00faa",
+            "display": "Xương tai, xương búa",
             "code": "EARBM",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng tai, x\u01b0\u01a1ng b\u00e0n \u0111\u1ea1p",
+            "display": "Xương tai, xương bàn đạp",
             "code": "EARBS",
             "property": []
         },
         {
-            "display": "D\u00e1i tai/Th\u00f9y tai",
+            "display": "Dái tai/Thùy tai",
             "code": "EARLO",
             "property": []
         },
         {
-            "display": "Khu\u1ef7u tay",
+            "display": "Khuỷu tay",
             "code": "ELBOW",
             "property": []
         },
         {
-            "display": "Kh\u1edbp khu\u1ef7u tay",
+            "display": "Khớp khuỷu tay",
             "code": "ELBOWJ",
             "property": []
         },
         {
-            "display": "M\u00e0ng trong tim",
+            "display": "Màng trong tim",
             "code": "ENDC",
             "property": []
         },
         {
-            "display": "N\u1ed9i m\u1ea1c c\u1ed5 t\u1eed cung",
+            "display": "Nội mạc cổ tử cung",
             "code": "EC",
             "property": []
         },
         {
-            "display": "Vi\u00eam n\u1ed9i nh\u00e3n (ch\u1ea5t l\u1ecfng th\u1ee7y tinh th\u1ec3 v\u00e0 dung d\u1ecbch n\u01b0\u1edbc)",
+            "display": "Viêm nội nhãn (chất lỏng thủy tinh thể và dung dịch nước)",
             "code": "EOLPH",
             "property": []
         },
         {
-            "display": "N\u1ed9i m\u1ea1c t\u1eed cung",
+            "display": "Nội mạc tử cung",
             "code": "ENDM",
             "property": []
         },
         {
-            "display": "N\u1ed9i kh\u00ed qu\u1ea3n",
+            "display": "Nội khí quản",
             "code": "ET",
             "property": []
         },
         {
-            "display": "Trong ni\u1ec7u \u0111\u1ea1o",
+            "display": "Trong niệu đạo",
             "code": "EUR",
             "property": []
         },
         {
-            "display": "B\u1ea1ch c\u1ea7u \u01b0a a-x\u00edt (s\u1ed1 l\u01b0\u1ee3ng t\u0103ng cao khi c\u00f3 d\u1ecb \u1ee9ng)",
+            "display": "Bạch cầu ưa a-xít (số lượng tăng cao khi có dị ứng)",
             "code": "EOS",
             "property": []
         },
         {
-            "display": "Th\u01b0\u1ee3ng t\u00e2m v\u1ecb",
+            "display": "Thượng tâm vị",
             "code": "EPICA",
             "property": []
         },
         {
-            "display": "Th\u01b0\u1ee3ng t\u00e2m",
+            "display": "Thượng tâm",
             "code": "EPICM",
             "property": []
         },
         {
-            "display": "M\u00e0o tinh ho\u00e0n",
+            "display": "Mào tinh hoàn",
             "code": "EPD",
             "property": []
         },
         {
-            "display": "G\u00e2y t\u00ea ngo\u00e0i m\u00e0ng c\u1ee9ng",
+            "display": "Gây tê ngoài màng cứng",
             "code": "EPIDU",
             "property": []
         },
         {
-            "display": "N\u1eafp thanh qu\u1ea3n",
+            "display": "Nắp thanh quản",
             "code": "EPIGL",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c th\u1ef1c qu\u1ea3n",
+            "display": "Thuộc thực quản",
             "code": "ESOPG",
             "property": []
         },
         {
-            "display": "Th\u1ef1c qu\u1ea3n",
+            "display": "Thực quản",
             "code": "ESO",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c g\u1ed1c m\u0169i (x\u01b0\u01a1ng xoang s\u00e0ng)",
+            "display": "Thuộc gốc mũi (xương xoang sàng)",
             "code": "ETHMO",
             "property": []
         },
         {
-            "display": "B\u00ean ngo\u00e0i T\u0129nh m\u1ea1ch c\u1ea3nh/t\u0129nh m\u1ea1ch c\u1ed5",
+            "display": "Bên ngoài Tĩnh mạch cảnh/tĩnh mạch cổ",
             "code": "",
             "property": []
         },
         {
-            "display": "M\u1eaft",
+            "display": "Mắt",
             "code": "EYE",
             "property": []
         },
         {
-            "display": "L\u00f4ng m\u00e0y",
+            "display": "Lông mày",
             "code": "BROW",
             "property": []
         },
         {
-            "display": "M\u00ed m\u1eaft",
+            "display": "Mí mắt",
             "code": "EYELI",
             "property": []
         },
         {
-            "display": "M\u1eb7t",
+            "display": "Mặt",
             "code": "FACE",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng m\u1eb7t, x\u01b0\u01a1ng xo\u0103n m\u0169i d\u01b0\u1edbi",
+            "display": "Xương mặt, xương xoăn mũi dưới",
             "code": "FBINC",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng m\u1eb7t, x\u01b0\u01a1ng l\u1ec7",
+            "display": "Xương mặt, xương lệ",
             "code": "FBLAC",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng m\u1eb7t, h\u00e0m tr\u00ean",
+            "display": "Xương mặt, hàm trên",
             "code": "FBMAX",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng m\u1eb7t, x\u01b0\u01a1ng m\u0169i",
+            "display": "Xương mặt, xương mũi",
             "code": "FBNAS",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng m\u1eb7t, v\u00f2m mi\u1ec7ng",
+            "display": "Xương mặt, vòm miệng",
             "code": "FBPAL",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng m\u1eb7t, x\u01b0\u01a1ng l\u00e1 m\u00eda",
+            "display": "Xương mặt, xương lá mía",
             "code": "FBVOM",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng m\u1eb7t, x\u01b0\u01a1ng g\u00f2 m\u00e1",
+            "display": "Xương mặt, xương gò má",
             "code": "FBZYG",
             "property": []
         },
         {
-            "display": "\u1ed0ng d\u1eabn tr\u1ee9ng",
+            "display": "Ống dẫn trứng",
             "code": "FALLT",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c \u0111\u00f9i",
+            "display": "Thuộc đùi",
             "code": "FEMOR",
             "property": []
         },
         {
-            "display": "Ch\u1ecfm x\u01b0\u01a1ng \u0111\u00f9i",
+            "display": "Chỏm xương đùi",
             "code": "FMH",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng \u0111\u00f9i",
+            "display": "Xương đùi",
             "code": "FEMUR",
             "property": []
         },
         {
-            "display": "B\u00e0o thai",
+            "display": "Bào thai",
             "code": "FET",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng m\u00e1c",
+            "display": "Xương mác",
             "code": "FIBU",
             "property": []
         },
         {
-            "display": "Ng\u00f3n tay",
+            "display": "Ngón tay",
             "code": "FING",
             "property": []
         },
         {
-            "display": "M\u00f3ng tay",
+            "display": "Móng tay",
             "code": "FINGN",
             "property": []
         },
         {
-            "display": "Nang (l\u00f4ng, no\u00e3n,\u2026)",
+            "display": "Nang (lông, noãn,…)",
             "code": "FOL",
             "property": []
         },
         {
-            "display": "B\u00e0n ch\u00e2n",
+            "display": "Bàn chân",
             "code": "FOOT",
             "property": []
         },
         {
-            "display": "C\u1eb3ng tay",
+            "display": "Cẳng tay",
             "code": "FOREA",
             "property": []
         },
         {
-            "display": "Tr\u00e1n",
+            "display": "Trán",
             "code": "FOREH",
             "property": []
         },
         {
-            "display": "Bao quy \u0111\u1ea7u",
+            "display": "Bao quy đầu",
             "code": "FORES",
             "property": []
         },
         {
-            "display": "Ch\u1ea1c \u00e2m h\u1ed9",
+            "display": "Chạc âm hộ",
             "code": "FOURC",
             "property": []
         },
         {
-            "display": "T\u00fai m\u1eadt",
+            "display": "Túi mật",
             "code": "GB",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c c\u01a1 quan sinh d\u1ee5c",
+            "display": "Thuộc cơ quan sinh dục",
             "code": "GEN",
             "property": []
         },
         {
-            "display": "Sinh d\u1ee5c \u2013 \u00e2m h\u1ed9",
+            "display": "Sinh dục – âm hộ",
             "code": "GVU",
             "property": []
         },
         {
-            "display": "Sinh d\u1ee5c \u2013 c\u1ed5 t\u1eed cung",
+            "display": "Sinh dục – cổ tử cung",
             "code": "GENC",
             "property": []
         },
         {
-            "display": "Th\u01b0\u01a1ng t\u1ed5n c\u01a1 quan sinh d\u1ee5c",
+            "display": "Thương tổn cơ quan sinh dục",
             "code": "GL",
             "property": []
         },
         {
-            "display": "S\u1ea3n d\u1ecbch sau khi sinh",
+            "display": "Sản dịch sau khi sinh",
             "code": "GENL",
             "property": []
         },
         {
-            "display": "Tuy\u1ebfn",
+            "display": "Tuyến",
             "code": "GLAND",
             "property": []
         },
         {
-            "display": "C\u1ea5u tr\u00fac m\u1ea1ch m\u00e1u n\u1eb1m \u1edf v\u1ecb tr\u00ed \u0111\u1ea7u d\u01b0\u01a1ng v\u1eadt",
+            "display": "Cấu trúc mạch máu nằm ở vị trí đầu dương vật",
             "code": "GLANS",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c c\u01a1 m\u00f4ng",
+            "display": "Thuộc cơ mông",
             "code": "GLUTE",
             "property": []
         },
         {
-            "display": "C\u01a1 m\u00f4ng",
+            "display": "Cơ mông",
             "code": "GLUT",
             "property": []
         },
         {
-            "display": "C\u01a1 m\u00f4ng nh\u1ee1",
+            "display": "Cơ mông nhỡ",
             "code": "GLUTM",
             "property": []
         },
         {
-            "display": "H\u00e1ng",
+            "display": "Háng",
             "code": "GROIN",
             "property": []
         },
         {
-            "display": "N\u01b0\u1edbu r\u0103ng/l\u1ee3i",
+            "display": "Nướu răng/lợi",
             "code": "GUM",
             "property": []
         },
         {
-            "display": "T\u00f3c",
+            "display": "Tóc",
             "code": "HAR",
             "property": []
         },
         {
-            "display": "Ng\u00f3n ch\u00e2n c\u00e1i",
+            "display": "Ngón chân cái",
             "code": "HAL",
             "property": []
         },
         {
-            "display": "B\u00e0n tay",
+            "display": "Bàn tay",
             "code": "HAND",
             "property": []
         },
         {
-            "display": "\u0110\u1ea7u",
+            "display": "Đầu",
             "code": "HEAD",
             "property": []
         },
@@ -901,212 +901,212 @@
             "property": []
         },
         {
-            "display": "Van tim,  hai l\u00e1",
+            "display": "Van tim,  hai lá",
             "code": "HVB",
             "property": []
         },
         {
-            "display": "Van tim, ba l\u00e1",
+            "display": "Van tim, ba lá",
             "code": "HVT",
             "property": []
         },
         {
-            "display": "G\u00f3t ch\u00e2n",
+            "display": "Gót chân",
             "code": "HEEL",
             "property": []
         },
         {
-            "display": "Tr\u0129",
+            "display": "Trĩ",
             "code": "HEM",
             "property": []
         },
         {
-            "display": "H\u00f4ng",
+            "display": "Hông",
             "code": "HIP",
             "property": []
         },
         {
-            "display": "Kh\u1edbp h\u00e1ng",
+            "display": "Khớp háng",
             "code": "HIPJ",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng c\u00e1nh tay",
+            "display": "Xương cánh tay",
             "code": "HUMER",
             "property": []
         },
         {
-            "display": "M\u00e0ng trinh",
+            "display": "Màng trinh",
             "code": "HYMEN",
             "property": []
         },
         {
-            "display": "Ileal Conduit (\u1ed1ng d\u1eabn h\u1ed3i tr\u00e0ng, n\u1ed1i \u1ed1ng d\u1eabn n\u01b0\u1edbc ti\u1ec3u v\u00e0 b\u00e0ng quang)",
+            "display": "Ileal Conduit (ống dẫn hồi tràng, nối ống dẫn nước tiểu và bàng quang)",
             "code": "ILC",
             "property": []
         },
         {
-            "display": "V\u00f2ng h\u1ed3i tr\u00e0ng",
+            "display": "Vòng hồi tràng",
             "code": "ILE",
             "property": []
         },
         {
-            "display": "Th\u1ee7 thu\u1eadt m\u1edf th\u00f4ng ru\u1ed9t h\u1ed3i",
+            "display": "Thủ thuật mở thông ruột hồi",
             "code": "ILEOS",
             "property": []
         },
         {
-            "display": "Ru\u1ed9t h\u1ed3i",
+            "display": "Ruột hồi",
             "code": "ILEUM",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng ch\u1eadu",
+            "display": "Xương chậu",
             "code": "ILIAC",
             "property": []
         },
         {
-            "display": "M\u00e0o ch\u1eadu",
+            "display": "Mào chậu",
             "code": "ILCR",
             "property": []
         },
         {
-            "display": "Ilical Conduit (M\u1edf th\u00f4ng \u1ed1ng h\u1ed3i tr\u00e0ng)",
+            "display": "Ilical Conduit (Mở thông ống hồi tràng)",
             "code": "ILCON",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c b\u1eb9n",
+            "display": "Thuộc bẹn",
             "code": "INGUI",
             "property": []
         },
         {
-            "display": "T\u0129nh m\u1ea1ch c\u1ed5 trong",
+            "display": "Tĩnh mạch cổ trong",
             "code": "JUGI",
             "property": []
         },
         {
-            "display": "Ru\u1ed9t",
+            "display": "Ruột",
             "code": "INT",
             "property": []
         },
         {
-            "display": "Trong c\u1ed5 t\u1eed cung",
+            "display": "Trong cổ tử cung",
             "code": "ICX  ",
             "property": []
         },
         {
-            "display": "Trong m\u0169i",
+            "display": "Trong mũi",
             "code": "INASA",
             "property": []
         },
         {
-            "display": "Trong t\u1eed cung",
+            "display": "Trong tử cung",
             "code": "INTRU",
             "property": []
         },
         {
-            "display": "C\u1eeda \u00e2m \u0111\u1ea1o (c\u1eeda m\u00ecnh)",
+            "display": "Cửa âm đạo (cửa mình)",
             "code": "INTRO",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng \u0111\u00e1y ch\u1eadu g\u1ea7n kh\u1edbp h\u00e1ng",
+            "display": "Xương đáy chậu gần khớp háng",
             "code": "ISCHI",
             "property": []
         },
         {
-            "display": "H\u00e0m/Quai h\u00e0m",
+            "display": "Hàm/Quai hàm",
             "code": "JAW",
             "property": []
         },
         {
-            "display": "Th\u1eadn",
-            "code": "KIDN\u00a0",
+            "display": "Thận",
+            "code": "KIDN ",
             "property": []
         },
         {
-            "display": "\u0110\u1ea7u g\u1ed1i",
+            "display": "Đầu gối",
             "code": "KNEE",
             "property": []
         },
         {
-            "display": "D\u1ecbch \u0111\u1ea7u g\u1ed1i",
+            "display": "Dịch đầu gối",
             "code": "KNEEF",
             "property": []
         },
         {
-            "display": "Kh\u1edbp g\u1ed1i",
+            "display": "Khớp gối",
             "code": "KNEEJ",
             "property": []
         },
         {
-            "display": "M\u00f4i \u00e2m h\u1ed9",
+            "display": "Môi âm hộ",
             "code": "LABIA",
             "property": []
         },
         {
-            "display": "M\u00f4i l\u1edbn (\u00e2m h\u1ed9)",
+            "display": "Môi lớn (âm hộ)",
             "code": "LABMA",
             "property": []
         },
         {
-            "display": "M\u00f4i nh\u1ecf (\u00e2m h\u1ed9)",
+            "display": "Môi nhỏ (âm hộ)",
             "code": "LABMI",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c tuy\u1ebfn l\u1ec7",
+            "display": "Thuộc tuyến lệ",
             "code": "LACRI",
             "property": []
         },
         {
-            "display": "M\u00e0ng/v\u1ea3y/l\u1edbp m\u1ecfng c\u1ee7a m\u00f4 ho\u1eb7c x\u01b0\u01a1ng",
+            "display": "Màng/vảy/lớp mỏng của mô hoặc xương",
             "code": "LAM",
             "property": []
         },
         {
-            "display": "Ru\u1ed9t gi\u00e0",
+            "display": "Ruột già",
             "code": "INSTL",
             "property": []
         },
         {
-            "display": "Thanh qu\u1ea3n",
+            "display": "Thanh quản",
             "code": "LARYN",
             "property": []
         },
         {
-            "display": "Ch\u00e2n",
+            "display": "Chân",
             "code": "LEG",
             "property": []
         },
         {
-            "display": "Th\u1ee7y tinh th\u1ec3",
+            "display": "Thủy tinh thể",
             "code": "LENS",
             "property": []
         },
         {
-            "display": "B\u1ea1ch c\u1ea7u",
+            "display": "Bạch cầu",
             "code": "WBC",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c l\u01b0\u1ee1i",
+            "display": "Thuộc lưỡi",
             "code": "LING",
             "property": []
         },
         {
-            "display": "L\u01b0\u1ee1i",
+            "display": "Lưỡi",
             "code": "LINGU",
             "property": []
         },
         {
-            "display": "M\u00f4i",
+            "display": "Môi",
             "code": "LIP",
             "property": []
         },
         {
-            "display": "Ph\u00e2n l\u1ecfng",
+            "display": "Phân lỏng",
             "code": "STOOLL",
             "property": []
         },
@@ -1116,382 +1116,382 @@
             "property": []
         },
         {
-            "display": "Th\u00f9y",
+            "display": "Thùy",
             "code": "LOBE",
             "property": []
         },
         {
-            "display": "S\u1ea3n d\u1ecbch sau khi sinh n\u1edf",
+            "display": "Sản dịch sau khi sinh nở",
             "code": "LOCH",
             "property": []
         },
         {
-            "display": "V\u00f2ng, x\u01b0\u01a1ng \u0111\u00e1y ch\u1eadu (\u0111\u1ed1t h\u00e1ng)",
+            "display": "Vòng, xương đáy chậu (đốt háng)",
             "code": "ISH",
             "property": []
         },
         {
-            "display": "Th\u1eaft l\u01b0ng",
+            "display": "Thắt lưng",
             "code": "LUMBA",
             "property": []
         },
         {
-            "display": "Khoang h\u00ecnh \u1ed1ng (m\u1ea1ch m\u00e1u, ru\u1ed9t)",
+            "display": "Khoang hình ống (mạch máu, ruột)",
             "code": "LMN",
             "property": []
         },
         {
-            "display": "Ph\u1ed5i",
+            "display": "Phổi",
             "code": "LUNG",
             "property": []
         },
         {
-            "display": "H\u1ea1ch b\u1ea1ch huy\u1ebft",
+            "display": "Hạch bạch huyết",
             "code": "LN",
             "property": []
         },
         {
-            "display": "H\u1ea1ch b\u1ea1ch huy\u1ebft, h\u00e1ng",
+            "display": "Hạch bạch huyết, háng",
             "code": "LNG",
             "property": []
         },
         {
-            "display": "T\u1ebf b\u00e0o Lympho (b\u1ea1ch huy\u1ebft)",
+            "display": "Tế bào Lympho (bạch huyết)",
             "code": "LYM",
             "property": []
         },
         {
-            "display": "\u0110\u1ea1i th\u1ef1c b\u00e0o",
+            "display": "Đại thực bào",
             "code": "MAC",
             "property": []
         },
         {
-            "display": "M\u1eaft c\u00e1 ngo\u00e0i",
+            "display": "Mắt cá ngoài",
             "code": "MALLE",
             "property": []
         },
         {
-            "display": "H\u00e0m d\u01b0\u1edbi",
+            "display": "Hàm dưới",
             "code": "MANDI",
             "property": []
         },
         {
-            "display": "T\u1ee7y x\u01b0\u01a1ng",
+            "display": "Tủy xương",
             "code": "MAR",
             "property": []
         },
         {
-            "display": "C\u00f3 h\u00ecnh v\u00fa, gi\u1ed1ng nh\u01b0 v\u00fa",
+            "display": "Có hình vú, giống như vú",
             "code": "MAST",
             "property": []
         },
         {
-            "display": "H\u00e0m tr\u00ean",
+            "display": "Hàm trên",
             "code": "MAXIL",
             "property": []
         },
         {
-            "display": "Xoang h\u00e0m tr\u00ean",
+            "display": "Xoang hàm trên",
             "code": "MAXS",
             "property": []
         },
         {
-            "display": "c\u1eeda d\u1eabn v\u00e0o b\u00ean trong c\u01a1 th\u1ec3 (mi\u1ec7ng, l\u1ed7 tai, \u2026)",
+            "display": "cửa dẫn vào bên trong cơ thể (miệng, lỗ tai, …)",
             "code": "MEATU",
             "property": []
         },
         {
-            "display": "Ph\u00e2n su",
+            "display": "Phân su",
             "code": "MEC",
             "property": []
         },
         {
-            "display": "M\u00e0ng trong gi\u1eefa hai l\u00e1 ph\u1ed5i",
+            "display": "Màng trong giữa hai lá phổi",
             "code": "MEDST",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c v\u1ec1 t\u1ee7y",
+            "display": "Thuộc về tủy",
             "code": "MEDU",
             "property": []
         },
         {
-            "display": "M\u00e0ng",
+            "display": "Màng",
             "code": "MOU",
             "property": []
         },
         {
-            "display": "M\u00e0ng n\u00e3o",
+            "display": "Màng não",
             "code": "MPB",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c x\u01b0\u01a1ng b\u00e0n tay",
+            "display": "Thuộc xương bàn tay",
             "code": "METAC",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c x\u01b0\u01a1ng b\u00e0n ch\u00e2n",
+            "display": "Thuộc xương bàn chân",
             "code": "METAT",
             "property": []
         },
         {
-            "display": "S\u1eefa, v\u00fa",
+            "display": "Sữa, vú",
             "code": "MILK",
             "property": []
         },
         {
-            "display": "Van hai l\u00e1",
+            "display": "Van hai lá",
             "code": "MITRL",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c r\u0103ng h\u00e0m (r\u0103ng c\u1ea5m)",
+            "display": "Thuộc răng hàm (răng cấm)",
             "code": "MOLAR",
             "property": []
         },
         {
-            "display": "M\u00f4 m\u1ee1 n\u1eb1m tr\u00ean x\u01b0\u01a1ng mu",
+            "display": "Mô mỡ nằm trên xương mu",
             "code": "MP",
             "property": []
         },
         {
-            "display": "G\u00f2 ni\u1ec7u qu\u1ea3n",
+            "display": "Gò niệu quản",
             "code": "MONSU",
             "property": []
         },
         {
-            "display": "G\u00f2 x\u01b0\u01a1ng mu",
+            "display": "Gò xương mu",
             "code": "MONSV",
             "property": []
         },
         {
-            "display": "Mi\u1ec7ng",
+            "display": "Miệng",
             "code": "MOUTH",
             "property": []
         },
         {
-            "display": "Mrsa: methicillin-resistant Staphylococcus aureus, m\u1ed9t lo\u1ea1i vi khu\u1ea9n c\u00f3 kh\u1ea3 n\u0103ng ch\u1ed1ng methicillin, penicillin, v\u00e0 m\u1ed9t s\u1ed1 kh\u00e1ng sinh kh\u00e1c, v\u00e0 c\u00f3 th\u1ec3 g\u00e2y nhi\u1ec5m tr\u00f9ng da, m\u00e1u, ph\u1ed5i, \u2026",
+            "display": "Mrsa: methicillin-resistant Staphylococcus aureus, một loại vi khuẩn có khả năng chống methicillin, penicillin, và một số kháng sinh khác, và có thể gây nhiễm trùng da, máu, phổi, …",
             "code": "MRSA2",
             "property": []
         },
         {
-            "display": "C\u01a1 tim",
+            "display": "Cơ tim",
             "code": "MYO",
             "property": []
         },
         {
-            "display": "M\u00f3ng tay/ch\u00e2n",
+            "display": "Móng tay/chân",
             "code": "NAIL",
             "property": []
         },
         {
-            "display": "Da d\u01b0\u1edbi m\u00f3ng",
+            "display": "Da dưới móng",
             "code": "NAILB",
             "property": []
         },
         {
-            "display": "M\u00f3ng tay",
+            "display": "Móng tay",
             "code": "NAILF",
             "property": []
         },
         {
-            "display": "M\u00f3ng ch\u00e2n",
+            "display": "Móng chân",
             "code": "NAILT",
             "property": []
         },
         {
-            "display": "L\u1ed7 m\u0169i",
+            "display": "Lỗ mũi",
             "code": "NARES",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c m\u0169i",
+            "display": "Thuộc mũi",
             "code": "NASL",
             "property": []
         },
         {
-            "display": "V\u00e1ch ng\u0103n m\u0169i",
+            "display": "Vách ngăn mũi",
             "code": "NSS",
             "property": []
         },
         {
-            "display": "Li\u00ean quan \u0111\u1ebfn m\u0169i \u2013 tuy\u1ebfn l\u1ec7",
+            "display": "Liên quan đến mũi – tuyến lệ",
             "code": "NLACR",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c m\u0169i h\u1ecdng",
+            "display": "Thuộc mũi họng",
             "code": "NP",
             "property": []
         },
         {
-            "display": "M\u0169i \u2013kh\u00ed qu\u1ea3n",
+            "display": "Mũi –khí quản",
             "code": "NTRAC",
             "property": []
         },
         {
-            "display": "L\u1ed7 r\u1ed1n",
+            "display": "Lỗ rốn",
             "code": "NAVEL",
             "property": []
         },
         {
-            "display": "C\u1ed5",
+            "display": "Cổ",
             "code": "NECK",
             "property": []
         },
         {
-            "display": "D\u00e2y th\u1ea7n kinh",
+            "display": "Dây thần kinh",
             "code": "NERVE",
             "property": []
         },
         {
-            "display": "N\u00fam v\u00fa",
+            "display": "Núm vú",
             "code": "NIPPL",
             "property": []
         },
         {
-            "display": "M\u0169i (khoang m\u0169i)",
+            "display": "Mũi (khoang mũi)",
             "code": "NOS",
             "property": []
         },
         {
-            "display": "M\u0169i/ (b\u00ean ngo\u00e0i)",
+            "display": "Mũi/ (bên ngoài)",
             "code": "NOSE",
             "property": []
         },
         {
-            "display": "L\u1ed7 m\u0169i",
+            "display": "Lỗ mũi",
             "code": "NOSTR",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c ch\u1eabm (th\u00f9y ch\u1eabm, x\u01b0\u01a1ng ch\u1eabm)",
+            "display": "Thuộc chẫm (thùy chẫm, xương chẫm)",
             "code": "OCCIP",
             "property": []
         },
         {
-            "display": "M\u1ecfm khu\u1ef7u tay",
+            "display": "Mỏm khuỷu tay",
             "code": "OLECR",
             "property": []
         },
         {
-            "display": "M\u00e0ng n\u1ed1i",
+            "display": "Màng nối",
             "code": "OMEN",
             "property": []
         },
         {
-            "display": "\u1ed4 m\u1eaft",
+            "display": "Ổ mắt",
             "code": "ORBIT",
             "property": []
         },
         {
-            "display": "H\u1ecdng mi\u1ec7ng",
+            "display": "Họng miệng",
             "code": "ORO",
             "property": []
         },
         {
-            "display": "\u0110ai x\u01b0\u01a1ng ch\u1eadu",
+            "display": "Đai xương chậu",
             "code": "OSCOX",
             "property": []
         },
         {
-            "display": "Bu\u1ed3ng tr\u1ee9ng",
+            "display": "Buồng trứng",
             "code": "OVARY",
             "property": []
         },
         {
-            "display": "V\u00f2m mi\u1ec7ng/h\u00e0m \u1ebfch",
+            "display": "Vòm miệng/hàm ếch",
             "code": "PALAT",
             "property": []
         },
         {
-            "display": "V\u00f2m mi\u1ec7ng c\u1ee9ng",
+            "display": "Vòm miệng cứng",
             "code": "PLATH",
             "property": []
         },
         {
-            "display": "V\u00f2m mi\u1ec7ng m\u1ec1m",
+            "display": "Vòm miệng mềm",
             "code": "PLATS",
             "property": []
         },
         {
-            "display": "L\u00f2ng b\u00e0n tay/Gan b\u00e0n tay",
+            "display": "Lòng bàn tay/Gan bàn tay",
             "code": "PALM",
             "property": []
         },
         {
-            "display": "Tuy\u1ebfn t\u1ee5y",
+            "display": "Tuyến tụy",
             "code": "PANCR",
             "property": []
         },
         {
-            "display": "D\u1ecbch t\u1ee5y",
+            "display": "Dịch tụy",
             "code": "PAFL",
             "property": []
         },
         {
-            "display": "\u1ede g\u1ea7n x\u01b0\u01a1ng \u1ee9c",
+            "display": "Ở gần xương ức",
             "code": "PAS   ",
             "property": []
         },
         {
-            "display": "C\u1eadn kh\u00ed qu\u1ea3n",
+            "display": "Cận khí quản",
             "code": "PARAT",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c \u0111\u1ec9nh (x\u01b0\u01a1ng \u0111\u1ec9nh)",
+            "display": "Thuộc đỉnh (xương đỉnh)",
             "code": "PARIE",
             "property": []
         },
         {
-            "display": "Vi\u00eam quanh m\u00f3ng (do vi khu\u1ea9n, n\u1ea5m)",
+            "display": "Viêm quanh móng (do vi khuẩn, nấm)",
             "code": "PARON",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c mang tai/ Tuy\u1ebfn mang tai",
+            "display": "Thuộc mang tai/ Tuyến mang tai",
             "code": "PAROT",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng b\u00e1nh ch\u00e8",
+            "display": "Xương bánh chè",
             "code": "PATEL",
             "property": []
         },
         {
-            "display": "Khung x\u01b0\u01a1ng ch\u1eadu",
+            "display": "Khung xương chậu",
             "code": "PELV",
             "property": []
         },
         {
-            "display": "Tr\u1ee5c/Th\u00e2n d\u01b0\u01a1ng v\u1eadt",
+            "display": "Trục/Thân dương vật",
             "code": "PENSH",
             "property": []
         },
         {
-            "display": "D\u01b0\u01a1ng v\u1eadt",
+            "display": "Dương vật",
             "code": "PENIS",
             "property": []
         },
         {
-            "display": "Quanh h\u1eadu m\u00f4n/ Quanh tr\u1ef1c tr\u00e0ng",
+            "display": "Quanh hậu môn/ Quanh trực tràng",
             "code": "PANAL",
             "property": []
         },
         {
-            "display": "D\u1ecbch m\u00e0ng tim",
+            "display": "Dịch màng tim",
             "code": "PERI",
             "property": []
         },
         {
-            "display": "M\u00e0ng ngo\u00e0i tim",
+            "display": "Màng ngoài tim",
             "code": "PCARD",
             "property": []
         },
         {
-            "display": "Quanh \u00e2m v\u1eadt",
+            "display": "Quanh âm vật",
             "code": "PCLIT",
             "property": []
         },
@@ -1501,52 +1501,52 @@
             "property": []
         },
         {
-            "display": "\u0110\u00e1y ch\u1eadu",
+            "display": "Đáy chậu",
             "code": "PNEAL",
             "property": []
         },
         {
-            "display": "\u00c1p-xe \u0111\u00e1y ch\u1eadu",
+            "display": "Áp-xe đáy chậu",
             "code": "PERIN",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c quanh th\u1eadn",
+            "display": "Thuộc quanh thận",
             "code": "PNEPH",
             "property": []
         },
         {
-            "display": "Ph\u1ea7n \u1edf gi\u1eefa h\u1eadu m\u00f4n v\u00e0 b\u1ed9 ph\u1eadn sinh d\u1ee5c",
+            "display": "Phần ở giữa hậu môn và bộ phận sinh dục",
             "code": "PNM",
             "property": []
         },
         {
-            "display": "Quanh h\u1ed1c m\u1eaft",
+            "display": "Quanh hốc mắt",
             "code": "PORBI",
             "property": []
         },
         {
-            "display": "Quanh tr\u1ef1c tr\u00e0ng",
+            "display": "Quanh trực tràng",
             "code": "PERRA",
             "property": []
         },
         {
-            "display": "Quanh l\u00e1ch",
+            "display": "Quanh lách",
             "code": "PERIS",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c m\u00e0ng b\u1ee5ng",
+            "display": "Thuộc màng bụng",
             "code": "PER",
             "property": []
         },
         {
-            "display": "D\u1ecbch m\u00e0ng b\u1ee5ng",
+            "display": "Dịch màng bụng",
             "code": "PERT",
             "property": []
         },
         {
-            "display": "M\u00e0ng b\u1ee5ng/Ph\u00fac m\u1ea1c",
+            "display": "Màng bụng/Phúc mạc",
             "code": "PERIT",
             "property": []
         },
@@ -1556,22 +1556,22 @@
             "property": []
         },
         {
-            "display": "Quanh ni\u1ec7u \u0111\u1ea1o",
+            "display": "Quanh niệu đạo",
             "code": "PERIU",
             "property": []
         },
         {
-            "display": "Xung quanh m\u1ee5n n\u01b0\u1edbc/t\u00fai tinh",
+            "display": "Xung quanh mụn nước/túi tinh",
             "code": "PERIV",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng \u0111\u1ed1t ng\u00f3n tay/ch\u00e2n",
+            "display": "Xương đốt ngón tay/chân",
             "code": "PHALA",
             "property": []
         },
         {
-            "display": "\u1ed4 l\u00f4ng/Nang l\u00f4ng",
+            "display": "Ổ lông/Nang lông",
             "code": "PILO",
             "property": []
         },
@@ -1586,187 +1586,187 @@
             "property": []
         },
         {
-            "display": "Nhau thai (ph\u00eda thai nhi)",
+            "display": "Nhau thai (phía thai nhi)",
             "code": "PLACF",
             "property": []
         },
         {
-            "display": "Nhau thai (ph\u00eda m\u1eb9)",
+            "display": "Nhau thai (phía mẹ)",
             "code": "PLACM",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c b\u00e0n ch\u00e2n",
+            "display": "Thuộc bàn chân",
             "code": "PLANT",
             "property": []
         },
         {
-            "display": "M\u00e0ng ph\u1ed5i",
+            "display": "Màng phổi",
             "code": "PLEUR",
             "property": []
         },
         {
-            "display": "D\u1ecbch m\u00e0ng ph\u1ed5i",
+            "display": "Dịch màng phổi",
             "code": "PLEU",
             "property": []
         },
         {
-            "display": "D\u1ecbch m\u00e0ng ph\u1ed5i (d\u1ecbch ch\u1ecdc d\u00f2 ng\u1ef1c)",
+            "display": "Dịch màng phổi (dịch chọc dò ngực)",
             "code": "PLR",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c v\u00f9ng kheo",
+            "display": "Thuộc vùng kheo",
             "code": "POPLI",
             "property": []
         },
         {
-            "display": "Tr\u01b0\u1edbc tai",
+            "display": "Trước tai",
             "code": "PREAU",
             "property": []
         },
         {
-            "display": "Ni\u1ec7u ti\u1ec1n th\u1eadn",
+            "display": "Niệu tiền thận",
             "code": "PRERE",
             "property": []
         },
         {
-            "display": "Tuy\u1ebfn ti\u1ec1n li\u1ec7t",
+            "display": "Tuyến tiền liệt",
             "code": "PRST",
             "property": []
         },
         {
-            "display": "D\u1ecbch tuy\u1ebfn ti\u1ec1n li\u1ec7t",
+            "display": "Dịch tuyến tiền liệt",
             "code": "PROS",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c x\u01b0\u01a1ng mu",
+            "display": "Thuộc xương mu",
             "code": "PUBIC",
             "property": []
         },
         {
-            "display": "\u0110\u1ed9ng m\u1ea1ch ph\u1ed5i",
+            "display": "Động mạch phổi",
             "code": "PUL",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c x\u01b0\u01a1ng tay",
+            "display": "Thuộc xương tay",
             "code": "RADI",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng quay",
+            "display": "Xương quay",
             "code": "RADIUS",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c tr\u1ef1c tr\u00e0ng",
+            "display": "Thuộc trực tràng",
             "code": "RECTL",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c tr\u1ef1c tr\u00e0ng",
+            "display": "Thuộc trực tràng",
             "code": "RECTU",
             "property": []
         },
         {
-            "display": "T\u1ebf b\u00e0o h\u1ed3ng c\u1ea7u",
+            "display": "Tế bào hồng cầu",
             "code": "RBC",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c th\u1eadn",
+            "display": "Thuộc thận",
             "code": "RENL",
             "property": []
         },
         {
-            "display": "Khu v\u1ef1c t\u1ea1i trung t\u00e2m c\u1ee7a th\u1eadn",
+            "display": "Khu vực tại trung tâm của thận",
             "code": "RNP",
             "property": []
         },
         {
-            "display": "Sau m\u00e0ng b\u1ee5ng",
+            "display": "Sau màng bụng",
             "code": "RPERI",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng s\u01b0\u1eddn",
+            "display": "Xương sườn",
             "code": "RIB",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c x\u01b0\u01a1ng c\u00f9ng",
+            "display": "Thuộc xương cùng",
             "code": "SACRA",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c x\u01b0\u01a1ng c\u00f9ng-c\u1ee5t",
+            "display": "Thuộc xương cùng-cụt",
             "code": "SACRO",
             "property": []
         },
         {
-            "display": "Kh\u1edbp n\u1ed1i x\u01b0\u01a1ng c\u00f9ng v\u00e0 x\u01b0\u01a1ng ch\u1eadu",
+            "display": "Khớp nối xương cùng và xương chậu",
             "code": "SACIL",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng c\u00f9ng",
+            "display": "Xương cùng",
             "code": "SACRU",
             "property": []
         },
         {
-            "display": "Tuy\u1ebfn n\u01b0\u1edbc b\u1ecdt",
+            "display": "Tuyến nước bọt",
             "code": "SALGL",
             "property": []
         },
         {
-            "display": "Da \u0111\u1ea7u",
+            "display": "Da đầu",
             "code": "SCALP",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng b\u1ea3 vai",
+            "display": "Xương bả vai",
             "code": "SCAPU",
             "property": []
         },
         {
-            "display": "M\u00e0ng c\u1ee9ng",
+            "display": "Màng cứng",
             "code": "SCLER",
             "property": []
         },
         {
-            "display": "B\u00ecu d\u00e1i",
+            "display": "Bìu dái",
             "code": "SCROT",
             "property": []
         },
         {
-            "display": "Tinh d\u1ecbch",
+            "display": "Tinh dịch",
             "code": "SEMN",
             "property": []
         },
         {
-            "display": "D\u1ecbch tinh d\u1ecbch",
+            "display": "Dịch tinh dịch",
             "code": "SEM",
             "property": []
         },
         {
-            "display": "V\u00e1ch ng\u0103n",
+            "display": "Vách ngăn",
             "code": "SEPTU",
             "property": []
         },
         {
-            "display": "T\u1ee5 d\u1ecbch (t\u00fai d\u1ecbch huy\u1ebft thanh th\u01b0\u1eddng xu\u1ea5t hi\u1ec7n trong c\u01a1 th\u1ec3 sau khi ph\u1eabu thu\u1eadt)",
+            "display": "Tụ dịch (túi dịch huyết thanh thường xuất hiện trong cơ thể sau khi phẫu thuật)",
             "code": "SEROM",
             "property": []
         },
         {
-            "display": "C\u1eb3ng ch\u00e2n/\u1ed1ng quy\u1ec3n",
+            "display": "Cẳng chân/ống quyển",
             "code": "SHIN",
             "property": []
         },
         {
-            "display": "Kh\u1edbp vai",
+            "display": "Khớp vai",
             "code": "SHOLJ",
             "property": []
         },
@@ -1776,262 +1776,262 @@
             "property": []
         },
         {
-            "display": "H\u00ecnh x\u00edch-ma",
+            "display": "Hình xích-ma",
             "code": "SIGMO",
             "property": []
         },
         {
-            "display": "Xoang/r\u00f2",
+            "display": "Xoang/rò",
             "code": "SINUS",
             "property": []
         },
         {
-            "display": "C\u01a1 x\u01b0\u01a1ng",
+            "display": "Cơ xương",
             "code": "SKM",
             "property": []
         },
         {
-            "display": "Tuy\u1ebfn Skene",
+            "display": "Tuyến Skene",
             "code": "SKENE",
             "property": []
         },
         {
-            "display": "H\u1ed9p s\u1ecd",
+            "display": "Hộp sọ",
             "code": "SKULL",
             "property": []
         },
         {
-            "display": "Ru\u1ed9t non",
+            "display": "Ruột non",
             "code": "INSTS",
             "property": []
         },
         {
-            "display": "Gan b\u00e0n ch\u00e2n/L\u00f2ng b\u00e0n ch\u00e2n",
+            "display": "Gan bàn chân/Lòng bàn chân",
             "code": "SOLE",
             "property": []
         },
         {
-            "display": "Tinh tr\u00f9ng",
+            "display": "Tinh trùng",
             "code": "SPRM",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c x\u01b0\u01a1ng b\u01b0\u1edbm",
+            "display": "Thuộc xương bướm",
             "code": "SPHEN",
             "property": []
         },
         {
-            "display": "T\u1ee7y x\u01b0\u01a1ng s\u1ed1ng",
+            "display": "Tủy xương sống",
             "code": "SPCOR",
             "property": []
         },
         {
-            "display": "L\u00e1 l\u00e1ch",
+            "display": "Lá lách",
             "code": "SPLN",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng \u1ee9c/Thu\u1ed9c x\u01b0\u01a1ng \u1ee9c",
+            "display": "Xương ức/Thuộc xương ức",
             "code": "STER",
             "property": []
         },
         {
-            "display": "L\u1ed7 kh\u00ed/l\u1ed7 th\u1edf",
+            "display": "Lỗ khí/lỗ thở",
             "code": "STOM",
             "property": []
         },
         {
-            "display": "L\u1ed7 nh\u00e2n t\u1ea1o, ti\u1ec3u",
+            "display": "Lỗ nhân tạo, tiểu",
             "code": "USTOM",
             "property": []
         },
         {
-            "display": "D\u1ea1 d\u00e0y",
+            "display": "Dạ dày",
             "code": "STOMA",
             "property": []
         },
         {
-            "display": "M\u1ecfm c\u1ee5t",
+            "display": "Mỏm cụt",
             "code": "STUMP",
             "property": []
         },
         {
-            "display": "D\u01b0\u1edbi x\u01b0\u01a1ng \u0111\u00f2n",
+            "display": "Dưới xương đòn",
             "code": "SCLV",
             "property": []
         },
         {
-            "display": "D\u01b0\u1edbi c\u01a1 ho\u00e0nh",
+            "display": "Dưới cơ hoành",
             "code": "SDP",
             "property": []
         },
         {
-            "display": "D\u01b0\u1edbi m\u00e0ng c\u1ee9ng",
+            "display": "Dưới màng cứng",
             "code": "SUB",
             "property": []
         },
         {
-            "display": "D\u1ecbch d\u01b0\u1edbi m\u00e0ng c\u1ee9ng",
+            "display": "Dịch dưới màng cứng",
             "code": "SUBD",
             "property": []
         },
         {
-            "display": "D\u1ecbch t\u1ee5 d\u01b0\u1edbi da \u0111\u1ea7u (kho\u1ea3ng kh\u00f4ng gian n\u1eb1m gi\u1eefa m\u00e0ng x\u01b0\u01a1ng s\u1ecd v\u00e0 da \u0111\u1ea7u)",
+            "display": "Dịch tụ dưới da đầu (khoảng không gian nằm giữa màng xương sọ và da đầu)",
             "code": "SGF",
             "property": []
         },
         {
-            "display": "D\u01b0\u1edbi h\u00e0m d\u01b0\u1edbi",
+            "display": "Dưới hàm dưới",
             "code": "SUBM",
             "property": []
         },
         {
-            "display": "D\u01b0\u1edbi h\u00e0m tr\u00ean",
+            "display": "Dưới hàm trên",
             "code": "SUBX",
             "property": []
         },
         {
-            "display": "D\u01b0\u1edbi c\u1eb1m",
+            "display": "Dưới cằm",
             "code": "SUBME",
             "property": []
         },
         {
-            "display": "D\u01b0\u1edbi c\u01a1 ho\u00e0nh",
+            "display": "Dưới cơ hoành",
             "code": "SUBPH",
             "property": []
         },
         {
-            "display": "Tr\u00ean c\u1ed5 t\u1eed cung",
+            "display": "Trên cổ tử cung",
             "code": "SPX",
             "property": []
         },
         {
-            "display": "Tr\u00ean x\u01b0\u01a1ng \u0111\u00f2n",
+            "display": "Trên xương đòn",
             "code": "SCLAV",
             "property": []
         },
         {
-            "display": "Tr\u00ean kh\u1edbp mu",
+            "display": "Trên khớp mu",
             "code": "SUPRA",
             "property": []
         },
         {
-            "display": "M\u1eabu x\u00e9t nghi\u1ec7m tr\u00ean kh\u1edbp mu",
+            "display": "Mẫu xét nghiệm trên khớp mu",
             "code": "SUPB",
             "property": []
         },
         {
-            "display": "M\u1ed3 h\u00f4i",
+            "display": "Mồ hôi",
             "code": "SWT",
             "property": []
         },
         {
-            "display": "Tuy\u1ebfn m\u1ed3 h\u00f4i",
+            "display": "Tuyến mồ hôi",
             "code": "SWTG",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c ho\u1ea1t d\u1ecbch",
+            "display": "Thuộc hoạt dịch",
             "code": "SYNOL",
             "property": []
         },
         {
-            "display": "Ho\u1ea1t d\u1ecbch",
+            "display": "Hoạt dịch",
             "code": "SYN",
             "property": []
         },
         {
-            "display": "M\u00e0ng ho\u1ea1t d\u1ecbch",
+            "display": "Màng hoạt dịch",
             "code": "SYNOV",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c kh\u1ed1i x\u01b0\u01a1ng c\u1ed5 ch\u00e2n",
+            "display": "Thuộc khối xương cổ chân",
             "code": "TARS",
             "property": []
         },
         {
-            "display": "\u1ed1ng l\u1ec7",
+            "display": "ống lệ",
             "code": "TDUCT",
             "property": []
         },
         {
-            "display": "N\u01b0\u1edbc m\u1eaft",
+            "display": "Nước mắt",
             "code": "TEAR",
             "property": []
         },
         {
-            "display": "Th\u00e1i d\u01b0\u01a1ng",
+            "display": "Thái dương",
             "code": "TEMPL",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c th\u00e1i d\u01b0\u01a1ng",
+            "display": "Thuộc thái dương",
             "code": "TEMPO",
             "property": []
         },
         {
-            "display": "Th\u00f9y th\u00e1i d\u01b0\u01a1ng",
+            "display": "Thùy thái dương",
             "code": "TML",
             "property": []
         },
         {
-            "display": "Tinh ho\u00e0n",
+            "display": "Tinh hoàn",
             "code": "TESTI",
             "property": []
         },
         {
-            "display": "B\u1eafp \u0111\u00f9i",
+            "display": "Bắp đùi",
             "code": "THIGH",
             "property": []
         },
         {
-            "display": "Ng\u1ef1c/\u1edf ng\u1ef1c/Ch\u1ecdc d\u00f2 ng\u1ef1c",
+            "display": "Ngực/ở ngực/Chọc dò ngực",
             "code": "THORA",
             "property": []
         },
         {
-            "display": "C\u1ed5 h\u1ecdng",
+            "display": "Cổ họng",
             "code": "THRB",
             "property": []
         },
         {
-            "display": "Ng\u00f3n tay c\u00e1i",
+            "display": "Ngón tay cái",
             "code": "THUMB",
             "property": []
         },
         {
-            "display": "M\u00f3ng ng\u00f3n tay c\u00e1i",
+            "display": "Móng ngón tay cái",
             "code": "TNL",
             "property": []
         },
         {
-            "display": "Tuy\u1ebfn \u1ee9c",
+            "display": "Tuyến ức",
             "code": "THM",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c tuy\u1ebfn gi\u00e1p",
+            "display": "Thuộc tuyến giáp",
             "code": "THYRD",
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng ch\u00e0y, x\u01b0\u01a1ng \u1ed1ng ch\u00e2n",
+            "display": "Xương chày, xương ống chân",
             "code": "TIBIA",
             "property": []
         },
         {
-            "display": "Ng\u00f3n ch\u00e2n",
+            "display": "Ngón chân",
             "code": "TOE",
             "property": []
         },
         {
-            "display": "M\u00f3ng ng\u00f3n ch\u00e2n",
+            "display": "Móng ngón chân",
             "code": "TOEN",
             "property": []
         },
         {
-            "display": "L\u01b0\u1ee1i",
+            "display": "Lưỡi",
             "code": "TONG",
             "property": []
         },
@@ -2041,22 +2041,22 @@
             "property": []
         },
         {
-            "display": "R\u0103ng",
+            "display": "Răng",
             "code": "TOOTH",
             "property": []
         },
         {
-            "display": "Ch\u00e2n r\u0103ng",
+            "display": "Chân răng",
             "code": "TSK",
             "property": []
         },
         {
-            "display": "Kh\u00ed qu\u1ea3n",
+            "display": "Khí quản",
             "code": "TRCHE",
             "property": []
         },
         {
-            "display": "Xuy\u00ean cu\u1ed1ng ph\u1ed5i",
+            "display": "Xuyên cuống phổi",
             "code": "TBRON",
             "property": []
         },
@@ -2066,57 +2066,57 @@
             "property": []
         },
         {
-            "display": "X\u01b0\u01a1ng tr\u1ee5, x\u01b0\u01a1ng khu\u1ef7u tay",
+            "display": "Xương trụ, xương khuỷu tay",
             "code": "ULNA",
             "property": []
         },
         {
-            "display": "M\u00e1u cu\u1ed1ng r\u1ed1n",
+            "display": "Máu cuống rốn",
             "code": "UMB",
             "property": []
         },
         {
-            "display": "R\u1ed1n",
+            "display": "Rốn",
             "code": "UMBL",
             "property": []
         },
         {
-            "display": "Ni\u1ec7u qu\u1ea3n",
+            "display": "Niệu quản",
             "code": "URET",
             "property": []
         },
         {
-            "display": "Ni\u1ec7u \u0111\u1ea1o",
+            "display": "Niệu đạo",
             "code": "URTH",
             "property": []
         },
         {
-            "display": "T\u1eed cung",
+            "display": "Tử cung",
             "code": "UTERI",
             "property": []
         },
         {
-            "display": "T\u00fai c\u00f9ng \u00e2m \u0111\u1ea1o",
+            "display": "Túi cùng âm đạo",
             "code": "SAC",
             "property": []
         },
         {
-            "display": "T\u1eed cung",
+            "display": "Tử cung",
             "code": "UTER",
             "property": []
         },
         {
-            "display": "\u00c2m \u0111\u1ea1o",
+            "display": "Âm đạo",
             "code": "VAGIN",
             "property": []
         },
         {
-            "display": "Th\u00e0nh \u00e2m \u0111\u1ea1o",
+            "display": "Thành âm đạo",
             "code": "VCUFF",
             "property": []
         },
         {
-            "display": "V\u00f2m \u00e2m \u0111\u1ea1o",
+            "display": "Vòm âm đạo",
             "code": "VGV",
             "property": []
         },
@@ -2126,92 +2126,92 @@
             "property": []
         },
         {
-            "display": "\u1ed0ng d\u1eabn tinh",
+            "display": "Ống dẫn tinh",
             "code": "VAS",
             "property": []
         },
         {
-            "display": "C\u01a1 r\u1ed9ng ngo\u00e0i c\u1ee7a \u0111\u00f9i",
+            "display": "Cơ rộng ngoài của đùi",
             "code": "VASTL",
             "property": []
         },
         {
-            "display": "V\u00f2m",
+            "display": "Vòm",
             "code": "VAULT",
             "property": []
         },
         {
-            "display": "T\u0129nh m\u1ea1ch",
+            "display": "Tĩnh mạch",
             "code": "VEIN",
             "property": []
         },
         {
-            "display": "H\u00f4ng",
+            "display": "Hông",
             "code": "VENTG",
             "property": []
         },
         {
-            "display": "CSF t\u00e2m th\u1ea5t",
+            "display": "CSF tâm thất",
             "code": "VCSF",
             "property": []
         },
         {
-            "display": "Th\u00f9y nh\u1ed9ng ti\u1ec3u n\u00e3o",
+            "display": "Thùy nhộng tiểu não",
             "code": "VERMI",
             "property": []
         },
         {
-            "display": "\u0110\u1ed1t s\u1ed1ng c\u1ed5",
+            "display": "Đốt sống cổ",
             "code": "VERTC",
             "property": []
         },
         {
-            "display": "\u0110\u1ed1t s\u1ed1ng l\u01b0ng",
+            "display": "Đốt sống lưng",
             "code": "VERTL",
             "property": []
         },
         {
-            "display": "\u0110\u1ed1t s\u1ed1ng ng\u1ef1c",
+            "display": "Đốt sống ngực",
             "code": "VERTT",
             "property": []
         },
         {
-            "display": "T\u00fai, b\u1ecdng",
+            "display": "Túi, bọng",
             "code": "VESI",
             "property": []
         },
         {
-            "display": "Thu\u1ed9c t\u00fai, b\u1ecdng",
+            "display": "Thuộc túi, bọng",
             "code": "VESCL",
             "property": []
         },
         {
-            "display": "D\u1ecbch trong t\u00fai, b\u1ecdng",
+            "display": "Dịch trong túi, bọng",
             "code": "VESFLD",
             "property": []
         },
         {
-            "display": "Ti\u1ec1n \u0111\u00ecnh (sinh d\u1ee5c)",
+            "display": "Tiền đình (sinh dục)",
             "code": "VESTI",
             "property": []
         },
         {
-            "display": "D\u1ecbch th\u1ee7y tinh",
+            "display": "Dịch thủy tinh",
             "code": "VITR",
             "property": []
         },
         {
-            "display": "D\u00e2y thanh qu\u1ea3n",
+            "display": "Dây thanh quản",
             "code": "VOC",
             "property": []
         },
         {
-            "display": "\u00c2m h\u1ed9",
+            "display": "Âm hộ",
             "code": "VULVA",
             "property": []
         },
         {
-            "display": "C\u1ed5 tay",
+            "display": "Cổ tay",
             "code": "WRIST",
             "property": []
         }

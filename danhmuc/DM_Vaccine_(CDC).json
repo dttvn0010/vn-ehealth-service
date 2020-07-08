@@ -1,36 +1,36 @@
 {
     "resourceType": "CodeSystem",
-    "url": "",
+    "url": "https://fhir.emr.com.vn/DanhMucVaccine_CDC-v1.0",
     "name": "Danh mục Văc-xin (CDC)",
     "publisher": "VEIG",
     "description": "Danh mục Văc-xin (CDC)",
     "property": [{
             "code": "cvx_code",
-            "valueString": "string"
+            "type": "string"
         },
         {
             "code": "full_vaccine_name",
-            "valueString": "string"
+            "type": "string"
         },
         {
             "code": "short_description",
-            "valueString": "string"
+            "type": "string"
         },
         {
             "code": "vaccine_status",
-            "valueString": "string"
+            "type": "string"
         },
         {
             "code": "last_updated_date",
-            "valueString": "string"
+            "type": "string"
         },
         {
             "code": "ghi_chu",
-            "valueString": "string"
+            "type": "string"
         }
     ],
     "concept": [{
-            "display": "b\u1ea1ch h\u1ea7u, \u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 v\u1eafc-xin ho g\u00e0",
+            "display": "bạch hầu, độc tố uốn ván và vắc-xin ho gà",
             "code": "DTP",
             "property": [{
                     "code": "cvx_code",
@@ -54,12 +54,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin b\u1ea1i li\u1ec7t h\u00f3a tr\u1ecb ba, s\u1ed1ng, u\u1ed1ng",
+            "display": "Vắc-xin bại liệt hóa trị ba, sống, uống",
             "code": "OPV",
             "property": [{
                     "code": "cvx_code",
@@ -88,7 +88,7 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin s\u1edfi, quai b\u1ecb v\u00e0 rubella",
+            "display": "Vắc-xin sởi, quai bị và rubella",
             "code": "MMR",
             "property": [{
                     "code": "cvx_code",
@@ -112,13 +112,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin s\u1edfi v\u00e0 rubella",
-            "code": "\u00d4NG",
+            "display": "vắc-xin sởi và rubella",
+            "code": "ÔNG",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "4"
@@ -141,13 +141,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin virus s\u1edfi",
-            "code": "b\u1ec7nh s\u1edfi",
+            "display": "vắc-xin virus sởi",
+            "code": "bệnh sởi",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "5"
@@ -170,12 +170,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin virus rubella",
+            "display": "vắc-xin virus rubella",
             "code": "rubella",
             "property": [{
                     "code": "cvx_code",
@@ -199,13 +199,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin quai b\u1ecb",
-            "code": "quai b\u1ecb",
+            "display": "vắc-xin quai bị",
+            "code": "quai bị",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "7"
@@ -228,13 +228,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin vi\u00eam gan B, li\u1ec1u d\u00f9ng cho tr\u1ebb em ho\u1eb7c tr\u1ebb em / thanh thi\u1ebfu ni\u00ean",
-            "code": "Gan B, thanh thi\u1ebfu ni\u00ean ho\u1eb7c nhi",
+            "display": "Vắc-xin viêm gan B, liều dùng cho trẻ em hoặc trẻ em / thanh thiếu niên",
+            "code": "Gan B, thanh thiếu niên hoặc nhi",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "8"
@@ -262,8 +262,8 @@
             ]
         },
         {
-            "display": "\u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 b\u1ea1ch h\u1ea7u, h\u1ea5p ph\u1ee5, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n, cho ng\u01b0\u1eddi l\u1edbn s\u1eed d\u1ee5ng (2 Lf \u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 2 Lf \u0111\u1ed9c t\u1ed1 b\u1ea1ch h\u1ea7u)",
-            "code": "Td (ng\u01b0\u1eddi l\u1edbn), \u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n 2 Lf, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n, h\u1ea5p ph\u1ee5",
+            "display": "độc tố uốn ván và bạch hầu, hấp phụ, không chất bảo quản, cho người lớn sử dụng (2 Lf độc tố uốn ván và 2 Lf độc tố bạch hầu)",
+            "code": "Td (người lớn), độc tố uốn ván 2 Lf, không chất bảo quản, hấp phụ",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "9"
@@ -286,12 +286,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin b\u1ea1i li\u1ec7t, b\u1ea5t ho\u1ea1t",
+            "display": "vắc-xin bại liệt, bất hoạt",
             "code": "IPV",
             "property": [{
                     "code": "cvx_code",
@@ -315,13 +315,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin ho g\u00e0",
-            "code": "ho g\u00e0",
+            "display": "vắc-xin ho gà",
+            "code": "ho gà",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "11"
@@ -344,13 +344,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "b\u1ea1ch h\u1ea7u ch\u1ed1ng \u0111\u1ed9c",
-            "code": "b\u1ea1ch h\u1ea7u ch\u1ed1ng \u0111\u1ed9c",
+            "display": "bạch hầu chống độc",
+            "code": "bạch hầu chống độc",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "12"
@@ -373,13 +373,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Globulin mi\u1ec5n d\u1ecbch u\u1ed1n v\u00e1n",
-            "code": "T\u1ea0M",
+            "display": "Globulin miễn dịch uốn ván",
+            "code": "TẠM",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "13"
@@ -402,13 +402,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Globulin mi\u1ec5n d\u1ecbch, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "IG, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Globulin miễn dịch, công thức không xác định",
+            "code": "IG, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "14"
@@ -431,13 +431,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin c\u00fam, vi-r\u00fat ph\u00e2n chia (bao g\u1ed3m kh\u00e1ng nguy\u00ean b\u1ec1 m\u1eb7t \u0111\u00e3 \u0111\u01b0\u1ee3c tinh ch\u1ebf)",
-            "code": "c\u00fam, ph\u00e2n chia (bao g\u1ed3m kh\u00e1ng nguy\u00ean b\u1ec1 m\u1eb7t tinh khi\u1ebft)",
+            "display": "Vắc-xin cúm, vi-rút phân chia (bao gồm kháng nguyên bề mặt đã được tinh chế)",
+            "code": "cúm, phân chia (bao gồm kháng nguyên bề mặt tinh khiết)",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "15"
@@ -465,8 +465,8 @@
             ]
         },
         {
-            "display": "v\u1eafc-xin c\u00fam, to\u00e0n b\u1ed9 vi-r\u00fat",
-            "code": "c\u00fam, to\u00e0n b\u1ed9",
+            "display": "vắc-xin cúm, toàn bộ vi-rút",
+            "code": "cúm, toàn bộ",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "16"
@@ -489,13 +489,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin Haemophilusenzae lo\u1ea1i b, c\u00f4ng th\u1ee9c li\u00ean h\u1ee3p kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "Hib, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Vắc-xin Haemophilusenzae loại b, công thức liên hợp không xác định",
+            "code": "Hib, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "17"
@@ -518,13 +518,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin b\u1ec7nh d\u1ea1i, \u0111\u1ec3 ti\u00eam b\u1eafp M\u00c3 T\u1ea0O",
-            "code": "b\u1ec7nh d\u1ea1i, ti\u00eam b\u1eafp",
+            "display": "Vắc-xin bệnh dại, để tiêm bắp MÃ TẠO",
+            "code": "bệnh dại, tiêm bắp",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "18"
@@ -552,7 +552,7 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin Bacillus Calmette-Guerin",
+            "display": "Vắc-xin Bacillus Calmette-Guerin",
             "code": "BCG",
             "property": [{
                     "code": "cvx_code",
@@ -576,12 +576,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "b\u1ea1ch h\u1ea7u, \u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 v\u1eafc-xin ho g\u00e0",
+            "display": "bạch hầu, độc tố uốn ván và vắc-xin ho gà",
             "code": "DTaP",
             "property": [{
                     "code": "cvx_code",
@@ -605,13 +605,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin virus th\u1ee7y \u0111\u1eadu",
-            "code": "th\u1ee7y \u0111\u1eadu",
+            "display": "vắc-xin virus thủy đậu",
+            "code": "thủy đậu",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "21"
@@ -634,12 +634,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin k\u1ebft h\u1ee3p DTP-Haemophilusenzae lo\u1ea1i b",
+            "display": "Vắc-xin kết hợp DTP-Haemophilusenzae loại b",
             "code": "DTP-Hib",
             "property": [{
                     "code": "cvx_code",
@@ -663,13 +663,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin b\u1ec7nh d\u1ecbch h\u1ea1ch",
-            "code": "tai h\u1ecda",
+            "display": "vắc-xin bệnh dịch hạch",
+            "code": "tai họa",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "23"
@@ -692,13 +692,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin b\u1ec7nh than",
-            "code": "b\u1ec7nh than",
+            "display": "vắc-xin bệnh than",
+            "code": "bệnh than",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "24"
@@ -721,13 +721,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin th\u01b0\u01a1ng h\u00e0n, s\u1ed1ng, u\u1ed1ng",
-            "code": "th\u01b0\u01a1ng h\u00e0n, u\u1ed1ng",
+            "display": "vắc-xin thương hàn, sống, uống",
+            "code": "thương hàn, uống",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "25"
@@ -750,13 +750,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin d\u1ecbch t\u1ea3, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "d\u1ecbch t\u1ea3, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "vắc-xin dịch tả, công thức không xác định",
+            "code": "dịch tả, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "26"
@@ -779,13 +779,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "botulinum ch\u1ed1ng \u0111\u1ed9c",
-            "code": "botulinum ch\u1ed1ng \u0111\u1ed9c",
+            "display": "botulinum chống độc",
+            "code": "botulinum chống độc",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "27"
@@ -808,12 +808,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "b\u1ea1ch h\u1ea7u v\u00e0 \u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n, h\u1ea5p ph\u1ee5 cho tr\u1ebb em",
+            "display": "bạch hầu và độc tố uốn ván, hấp phụ cho trẻ em",
             "code": "DT (nhi khoa)",
             "property": [{
                     "code": "cvx_code",
@@ -837,12 +837,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Globulin mi\u1ec5n d\u1ecbch cytomegalovirus, ti\u00eam t\u0129nh m\u1ea1ch",
+            "display": "Globulin miễn dịch cytomegalovirus, tiêm tĩnh mạch",
             "code": "CMVIG",
             "property": [{
                     "code": "cvx_code",
@@ -866,12 +866,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Globulin mi\u1ec5n d\u1ecbch vi\u00eam gan B",
+            "display": "Globulin miễn dịch viêm gan B",
             "code": "HBIG",
             "property": [{
                     "code": "cvx_code",
@@ -895,13 +895,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin vi\u00eam gan A, li\u1ec1u d\u00f9ng cho tr\u1ebb em, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "Hep A, nhi khoa, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Vắc-xin viêm gan A, liều dùng cho trẻ em, công thức không xác định",
+            "code": "Hep A, nhi khoa, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "31"
@@ -929,8 +929,8 @@
             ]
         },
         {
-            "display": "v\u1eafc-xin polysacarit n\u00e3o m\u00f4 c\u1ea7u (MPSV4)",
-            "code": "MPSV4 m\u00e0ng n\u00e3o",
+            "display": "vắc-xin polysacarit não mô cầu (MPSV4)",
+            "code": "MPSV4 màng não",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "32"
@@ -953,13 +953,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin polysacarit ph\u1ebf c\u1ea7u khu\u1ea9n, 23 valent",
-            "code": "polysacarit ph\u1ebf c\u1ea7u PPV23",
+            "display": "Vắc-xin polysacarit phế cầu khuẩn, 23 valent",
+            "code": "polysacarit phế cầu PPV23",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "33"
@@ -982,13 +982,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Globulin mi\u1ec5n d\u1ecbch b\u1ec7nh d\u1ea1i",
-            "code": "GI\u00c0N KHOAN",
+            "display": "Globulin miễn dịch bệnh dại",
+            "code": "GIÀN KHOAN",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "34"
@@ -1011,13 +1011,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "\u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n, h\u1ea5p ph\u1ee5",
-            "code": "\u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n, h\u1ea5p ph\u1ee5",
+            "display": "độc tố uốn ván, hấp phụ",
+            "code": "độc tố uốn ván, hấp phụ",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "35"
@@ -1040,12 +1040,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Globulin mi\u1ec5n d\u1ecbch varicella zoster",
+            "display": "Globulin miễn dịch varicella zoster",
             "code": "VZIG",
             "property": [{
                     "code": "cvx_code",
@@ -1069,13 +1069,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin s\u1ed1t v\u00e0ng",
-            "code": "s\u1ed1t v\u00e0ng",
+            "display": "vắc-xin sốt vàng",
+            "code": "sốt vàng",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "37"
@@ -1103,8 +1103,8 @@
             ]
         },
         {
-            "display": "v\u1eafc-xin rubella v\u00e0 quai b\u1ecb",
-            "code": "rubella / quai b\u1ecb",
+            "display": "vắc-xin rubella và quai bị",
+            "code": "rubella / quai bị",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "38"
@@ -1127,13 +1127,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc xin vi\u00eam n\u00e3o Nh\u1eadt B\u1ea3n SC",
-            "code": "Vi\u00eam n\u00e3o Nh\u1eadt B\u1ea3n SC",
+            "display": "Vắc xin viêm não Nhật Bản SC",
+            "code": "Viêm não Nhật Bản SC",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "39"
@@ -1156,13 +1156,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc xin d\u1ea1i, ti\u00eam trong da",
-            "code": "b\u1ec7nh d\u1ea1i, ti\u00eam trong da",
+            "display": "Vắc xin dại, tiêm trong da",
+            "code": "bệnh dại, tiêm trong da",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "40"
@@ -1185,13 +1185,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin th\u01b0\u01a1ng h\u00e0n, ti\u00eam ngo\u00e0i da, tr\u1eeb acetone-kill, s\u1ea5y kh\u00f4",
-            "code": "th\u01b0\u01a1ng h\u00e0n, ti\u00eam",
+            "display": "vắc-xin thương hàn, tiêm ngoài da, trừ acetone-kill, sấy khô",
+            "code": "thương hàn, tiêm",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "41"
@@ -1214,13 +1214,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin vi\u00eam gan B, li\u1ec1u tr\u1ebb v\u1ecb th\u00e0nh ni\u00ean / nguy c\u01a1 cao",
-            "code": "Gan B, tr\u1ebb v\u1ecb th\u00e0nh ni\u00ean / nguy c\u01a1 cao",
+            "display": "Vắc-xin viêm gan B, liều trẻ vị thành niên / nguy cơ cao",
+            "code": "Gan B, trẻ vị thành niên / nguy cơ cao",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "42"
@@ -1248,8 +1248,8 @@
             ]
         },
         {
-            "display": "V\u1eafc xin vi\u00eam gan B, li\u1ec1u ng\u01b0\u1eddi l\u1edbn",
-            "code": "Gan B, ng\u01b0\u1eddi l\u1edbn",
+            "display": "Vắc xin viêm gan B, liều người lớn",
+            "code": "Gan B, người lớn",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "43"
@@ -1277,8 +1277,8 @@
             ]
         },
         {
-            "display": "V\u1eafc xin vi\u00eam gan B, li\u1ec1u l\u1ecdc m\u00e1u b\u1ec7nh nh\u00e2n",
-            "code": "Gan B, l\u1ecdc m\u00e1u",
+            "display": "Vắc xin viêm gan B, liều lọc máu bệnh nhân",
+            "code": "Gan B, lọc máu",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "44"
@@ -1306,8 +1306,8 @@
             ]
         },
         {
-            "display": "v\u1eafc-xin vi\u00eam gan B, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "Hep B, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "vắc-xin viêm gan B, công thức không xác định",
+            "code": "Hep B, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "45"
@@ -1335,7 +1335,7 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin Haemophilusenzae lo\u1ea1i b, PRP-D li\u00ean h\u1ee3p",
+            "display": "Vắc-xin Haemophilusenzae loại b, PRP-D liên hợp",
             "code": "Hib (PRP-D)",
             "property": [{
                     "code": "cvx_code",
@@ -1359,12 +1359,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin Haemophilusenzae lo\u1ea1i b, li\u00ean h\u1ee3p HbOC",
+            "display": "Vắc-xin Haemophilusenzae loại b, liên hợp HbOC",
             "code": "Hib (HbOC)",
             "property": [{
                     "code": "cvx_code",
@@ -1388,12 +1388,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin Haemophilusenzae lo\u1ea1i b, PRP-T li\u00ean h\u1ee3p",
+            "display": "Vắc-xin Haemophilusenzae loại b, PRP-T liên hợp",
             "code": "Hib (PRP-T)",
             "property": [{
                     "code": "cvx_code",
@@ -1417,12 +1417,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin Haemophilusenzae lo\u1ea1i b, PRP-OMP li\u00ean h\u1ee3p",
+            "display": "Vắc-xin Haemophilusenzae loại b, PRP-OMP liên hợp",
             "code": "Hib (PRP-OMP)",
             "property": [{
                     "code": "cvx_code",
@@ -1446,12 +1446,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin k\u1ebft h\u1ee3p DTaP-Haemophilusenzae lo\u1ea1i b",
+            "display": "Vắc-xin kết hợp DTaP-Haemophilusenzae loại b",
             "code": "DTaP-Hib",
             "property": [{
                     "code": "cvx_code",
@@ -1475,12 +1475,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Haemophilusenzae lo\u1ea1i b li\u00ean h\u1ee3p v\u00e0 v\u1eafc-xin vi\u00eam gan B",
+            "display": "Haemophilusenzae loại b liên hợp và vắc-xin viêm gan B",
             "code": "Hib-Hep B",
             "property": [{
                     "code": "cvx_code",
@@ -1509,8 +1509,8 @@
             ]
         },
         {
-            "display": "V\u1eafc xin vi\u00eam gan A, li\u1ec1u ng\u01b0\u1eddi l\u1edbn",
-            "code": "Gan A, ng\u01b0\u1eddi l\u1edbn",
+            "display": "Vắc xin viêm gan A, liều người lớn",
+            "code": "Gan A, người lớn",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "52"
@@ -1533,13 +1533,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin th\u01b0\u01a1ng h\u00e0n, ti\u00eam, ti\u00eam acetone, s\u1ea5y kh\u00f4 (qu\u00e2n \u0111\u1ed9i Hoa K\u1ef3)",
-            "code": "th\u01b0\u01a1ng h\u00e0n, ti\u00eam, AKD (qu\u00e2n \u0111\u1ed9i Hoa K\u1ef3)",
+            "display": "vắc-xin thương hàn, tiêm, tiêm acetone, sấy khô (quân đội Hoa Kỳ)",
+            "code": "thương hàn, tiêm, AKD (quân đội Hoa Kỳ)",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "53"
@@ -1562,13 +1562,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin adenovirus, lo\u1ea1i 4, s\u1ed1ng, u\u1ed1ng",
-            "code": "adenovirus, lo\u1ea1i 4",
+            "display": "vắc-xin adenovirus, loại 4, sống, uống",
+            "code": "adenovirus, loại 4",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "54"
@@ -1591,13 +1591,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin adenovirus, lo\u1ea1i 7, s\u1ed1ng, u\u1ed1ng",
-            "code": "adenovirus, lo\u1ea1i 7",
+            "display": "vắc-xin adenovirus, loại 7, sống, uống",
+            "code": "adenovirus, loại 7",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "55"
@@ -1620,13 +1620,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin s\u1ed1t xu\u1ea5t huy\u1ebft",
-            "code": "s\u1ed1t xu\u1ea5t huy\u1ebft",
+            "display": "vắc-xin sốt xuất huyết",
+            "code": "sốt xuất huyết",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "56"
@@ -1654,7 +1654,7 @@
             ]
         },
         {
-            "display": "v\u1eafc-xin hantavirus",
+            "display": "vắc-xin hantavirus",
             "code": "virus hantavirus",
             "property": [{
                     "code": "cvx_code",
@@ -1678,12 +1678,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin vi\u00eam gan C",
+            "display": "vắc-xin viêm gan C",
             "code": "Gan C",
             "property": [{
                     "code": "cvx_code",
@@ -1707,12 +1707,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin vi\u00eam gan E",
+            "display": "vắc-xin viêm gan E",
             "code": "Gan E",
             "property": [{
                     "code": "cvx_code",
@@ -1736,13 +1736,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "virus herpes simplex, v\u1eafc-xin lo\u1ea1i 2",
-            "code": "herpes \u0111\u01a1n gi\u1ea3n 2",
+            "display": "virus herpes simplex, vắc-xin loại 2",
+            "code": "herpes đơn giản 2",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "60"
@@ -1765,12 +1765,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin virus suy gi\u1ea3m mi\u1ec5n d\u1ecbch \u1edf ng\u01b0\u1eddi",
+            "display": "vắc-xin virus suy giảm miễn dịch ở người",
             "code": "HIV",
             "property": [{
                     "code": "cvx_code",
@@ -1794,13 +1794,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin virus u nh\u00fa \u1edf ng\u01b0\u1eddi, t\u1ee9 gi\u00e1c",
-            "code": "HPV, t\u1ee9 gi\u00e1c",
+            "display": "vắc-xin virus u nhú ở người, tứ giác",
+            "code": "HPV, tứ giác",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "62"
@@ -1823,12 +1823,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin Junin",
+            "display": "Vắc-xin Junin",
             "code": "Virus Junin",
             "property": [{
                     "code": "cvx_code",
@@ -1852,13 +1852,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin leishmania",
-            "code": "b\u1ec7nh leishmania",
+            "display": "vắc-xin leishmania",
+            "code": "bệnh leishmania",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "64"
@@ -1881,13 +1881,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin b\u1ec7nh phong",
-            "code": "b\u1ec7nh phong",
+            "display": "vắc-xin bệnh phong",
+            "code": "bệnh phong",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "65"
@@ -1910,13 +1910,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc xin ph\u00f2ng b\u1ec7nh Lyme",
-            "code": "B\u1ec7nh Lyme",
+            "display": "Vắc xin phòng bệnh Lyme",
+            "code": "Bệnh Lyme",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "66"
@@ -1939,13 +1939,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin s\u1ed1t r\u00e9t",
-            "code": "b\u1ec7nh s\u1ed1t r\u00e9t",
+            "display": "vắc-xin sốt rét",
+            "code": "bệnh sốt rét",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "67"
@@ -1968,13 +1968,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin kh\u1ed1i u \u00e1c t\u00ednh",
-            "code": "kh\u1ed1i u \u00e1c t\u00ednh",
+            "display": "vắc-xin khối u ác tính",
+            "code": "khối u ác tính",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "68"
@@ -1997,12 +1997,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin virus parainfluenza-3",
+            "display": "vắc-xin virus parainfluenza-3",
             "code": "parainfluenza-3",
             "property": [{
                     "code": "cvx_code",
@@ -2026,13 +2026,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc xin s\u1ed1t",
-            "code": "S\u1ed1t",
+            "display": "Vắc xin sốt",
+            "code": "Sốt",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "70"
@@ -2055,12 +2055,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Globulin mi\u1ec5n d\u1ecbch virus h\u1ee3p b\u00e0o \u0111\u01b0\u1eddng h\u00f4 h\u1ea5p, ti\u00eam t\u0129nh m\u1ea1ch",
+            "display": "Globulin miễn dịch virus hợp bào đường hô hấp, tiêm tĩnh mạch",
             "code": "RSV-IGIV",
             "property": [{
                     "code": "cvx_code",
@@ -2084,13 +2084,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin s\u1ed1t th\u1ea5p kh\u1edbp",
-            "code": "th\u1ea5p kh\u1edbp",
+            "display": "vắc-xin sốt thấp khớp",
+            "code": "thấp khớp",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "72"
@@ -2113,13 +2113,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin s\u1ed1t rift Valley",
-            "code": "S\u1ed1t rift thung l\u0169ng",
+            "display": "Vắc-xin sốt rift Valley",
+            "code": "Sốt rift thung lũng",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "73"
@@ -2142,12 +2142,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "rotavirus, s\u1ed1ng, v\u1eafc-xin tetravalent",
+            "display": "rotavirus, sống, vắc-xin tetravalent",
             "code": "rotavirus, tetravalent",
             "property": [{
                     "code": "cvx_code",
@@ -2171,13 +2171,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin v\u1eafc-xin (\u0111\u1eadu m\u00f9a)",
-            "code": "v\u1eafc-xin (\u0111\u1eadu m\u00f9a)",
+            "display": "vắc-xin vắc-xin (đậu mùa)",
+            "code": "vắc-xin (đậu mùa)",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "75"
@@ -2200,13 +2200,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
             "display": "Staphylococcus lysate lysate",
-            "code": "Staphylococcus khu\u1ea9n lysate",
+            "code": "Staphylococcus khuẩn lysate",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "76"
@@ -2229,13 +2229,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin vi\u00eam n\u00e3o b\u1ea9m sinh",
-            "code": "vi\u00eam n\u00e3o do ve",
+            "display": "vắc-xin viêm não bẩm sinh",
+            "code": "viêm não do ve",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "77"
@@ -2258,13 +2258,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin s\u1ed1t th\u1ecf",
-            "code": "v\u1eafc-xin s\u1ed1t th\u1ecf",
+            "display": "vắc-xin sốt thỏ",
+            "code": "vắc-xin sốt thỏ",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "78"
@@ -2287,13 +2287,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Globulin mi\u1ec5n d\u1ecbch vaccinia",
-            "code": "Globulin mi\u1ec5n d\u1ecbch vaccinia",
+            "display": "Globulin miễn dịch vaccinia",
+            "code": "Globulin miễn dịch vaccinia",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "79"
@@ -2316,13 +2316,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Vi\u00eam n\u00e3o ng\u1ef1a \u1edf Venezuela, s\u1ed1ng, suy nh\u01b0\u1ee3c",
-            "code": "VEE, s\u1ed1ng",
+            "display": "Viêm não ngựa ở Venezuela, sống, suy nhược",
+            "code": "VEE, sống",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "80"
@@ -2345,13 +2345,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Vi\u00eam n\u00e3o ng\u1ef1a \u1edf Venezuela, b\u1ea5t ho\u1ea1t",
-            "code": "VEE, b\u1ea5t ho\u1ea1t",
+            "display": "Viêm não ngựa ở Venezuela, bất hoạt",
+            "code": "VEE, bất hoạt",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "81"
@@ -2374,13 +2374,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin adenovirus, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "adenovirus, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "vắc-xin adenovirus, công thức không xác định",
+            "code": "adenovirus, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "82"
@@ -2408,8 +2408,8 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin vi\u00eam gan A, li\u1ec1u cho tr\u1ebb em / thanh thi\u1ebfu ni\u00ean, l\u1ecbch tr\u00ecnh 2 li\u1ec1u",
-            "code": "Gan A, ped / adol, 2 li\u1ec1u",
+            "display": "Vắc-xin viêm gan A, liều cho trẻ em / thanh thiếu niên, lịch trình 2 liều",
+            "code": "Gan A, ped / adol, 2 liều",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "83"
@@ -2432,13 +2432,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin vi\u00eam gan A, li\u1ec1u cho tr\u1ebb em / thanh thi\u1ebfu ni\u00ean, l\u1ecbch tr\u00ecnh 3 li\u1ec1u",
-            "code": "Gan A, ped / adol, 3 li\u1ec1u",
+            "display": "Vắc-xin viêm gan A, liều cho trẻ em / thanh thiếu niên, lịch trình 3 liều",
+            "code": "Gan A, ped / adol, 3 liều",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "84"
@@ -2466,8 +2466,8 @@
             ]
         },
         {
-            "display": "v\u1eafc-xin vi\u00eam gan A, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "Hep A, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "vắc-xin viêm gan A, công thức không xác định",
+            "code": "Hep A, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "85"
@@ -2495,7 +2495,7 @@
             ]
         },
         {
-            "display": "Globulin mi\u1ec5n d\u1ecbch, ti\u00eam b\u1eafp",
+            "display": "Globulin miễn dịch, tiêm bắp",
             "code": "IG",
             "property": [{
                     "code": "cvx_code",
@@ -2519,12 +2519,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Globulin mi\u1ec5n d\u1ecbch, ti\u00eam t\u0129nh m\u1ea1ch",
+            "display": "Globulin miễn dịch, tiêm tĩnh mạch",
             "code": "IGIV",
             "property": [{
                     "code": "cvx_code",
@@ -2548,13 +2548,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin c\u00fam, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "c\u00fam, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Vắc-xin cúm, công thức không xác định",
+            "code": "cúm, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "88"
@@ -2582,8 +2582,8 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin b\u1ea1i li\u1ec7t, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "b\u1ea1i li\u1ec7t, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Vắc-xin bại liệt, công thức không xác định",
+            "code": "bại liệt, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "89"
@@ -2611,8 +2611,8 @@
             ]
         },
         {
-            "display": "v\u1eafc-xin b\u1ec7nh d\u1ea1i, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "b\u1ec7nh d\u1ea1i, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "vắc-xin bệnh dại, công thức không xác định",
+            "code": "bệnh dại, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "90"
@@ -2640,8 +2640,8 @@
             ]
         },
         {
-            "display": "v\u1eafc-xin th\u01b0\u01a1ng h\u00e0n, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "th\u01b0\u01a1ng h\u00e0n, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "vắc-xin thương hàn, công thức không xác định",
+            "code": "thương hàn, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "91"
@@ -2669,8 +2669,8 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin vi\u00eam n\u00e3o ng\u1ef1a \u1edf Venezuela, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "VEE, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Vắc-xin viêm não ngựa ở Venezuela, công thức không xác định",
+            "code": "VEE, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "92"
@@ -2698,7 +2698,7 @@
             ]
         },
         {
-            "display": "Kh\u00e1ng th\u1ec3 \u0111\u01a1n b\u00e0o kh\u00e1ng virus \u0111\u01a1n b\u00e0o (palivizumab), ti\u00eam b\u1eafp",
+            "display": "Kháng thể đơn bào kháng virus đơn bào (palivizumab), tiêm bắp",
             "code": "RSV-MAb",
             "property": [{
                     "code": "cvx_code",
@@ -2722,12 +2722,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin s\u1edfi, quai b\u1ecb, rubella v\u00e0 varicella",
+            "display": "Vắc-xin sởi, quai bị, rubella và varicella",
             "code": "MMRV",
             "property": [{
                     "code": "cvx_code",
@@ -2751,13 +2751,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "x\u00e9t nghi\u1ec7m da tuberculin; tuberculin c\u0169, thi\u1ebft b\u1ecb \u0111a n\u0103ng",
-            "code": "Th\u1eed nghi\u1ec7m tST-OT",
+            "display": "xét nghiệm da tuberculin; tuberculin cũ, thiết bị đa năng",
+            "code": "Thử nghiệm tST-OT",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "95"
@@ -2785,7 +2785,7 @@
             ]
         },
         {
-            "display": "x\u00e9t nghi\u1ec7m da tuberculin; dung d\u1ecbch d\u1eabn xu\u1ea5t protein tinh khi\u1ebft, trong da",
+            "display": "xét nghiệm da tuberculin; dung dịch dẫn xuất protein tinh khiết, trong da",
             "code": "TST-PPD trong da",
             "property": [{
                     "code": "cvx_code",
@@ -2814,8 +2814,8 @@
             ]
         },
         {
-            "display": "x\u00e9t nghi\u1ec7m da tuberculin; d\u1eabn xu\u1ea5t protein tinh khi\u1ebft, thi\u1ebft b\u1ecb \u0111a n\u0103ng",
-            "code": "Th\u1eed nghi\u1ec7m tST-PPD",
+            "display": "xét nghiệm da tuberculin; dẫn xuất protein tinh khiết, thiết bị đa năng",
+            "code": "Thử nghiệm tST-PPD",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "97"
@@ -2843,8 +2843,8 @@
             ]
         },
         {
-            "display": "x\u00e9t nghi\u1ec7m da tuberculin; c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "TST, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "xét nghiệm da tuberculin; công thức không xác định",
+            "code": "TST, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "98"
@@ -2872,8 +2872,8 @@
             ]
         },
         {
-            "display": "v\u1eafc-xin li\u00ean h\u1ee3p ph\u1ebf c\u1ea7u khu\u1ea9n, 7 valent",
-            "code": "PCV 7 li\u00ean h\u1ee3p ph\u1ebf c\u1ea7u khu\u1ea9n",
+            "display": "vắc-xin liên hợp phế cầu khuẩn, 7 valent",
+            "code": "PCV 7 liên hợp phế cầu khuẩn",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "100"
@@ -2896,13 +2896,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin polysacarit d\u1ea1ng nang Vi",
-            "code": "th\u01b0\u01a1ng h\u00e0n, ViCP",
+            "display": "vắc-xin polysacarit dạng nang Vi",
+            "code": "thương hàn, ViCP",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "101"
@@ -2925,12 +2925,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin DTP- Haemophilusenzae lo\u1ea1i b v\u00e0 vi\u00eam gan b",
+            "display": "Vắc-xin DTP- Haemophilusenzae loại b và viêm gan b",
             "code": "DTP-Hib-Hep B",
             "property": [{
                     "code": "cvx_code",
@@ -2959,8 +2959,8 @@
             ]
         },
         {
-            "display": "v\u1eafc-xin k\u1ebft h\u1ee3p n\u00e3o m\u00f4 c\u1ea7u C",
-            "code": "vi\u00eam m\u00e0ng n\u00e3o C li\u00ean h\u1ee3p",
+            "display": "vắc-xin kết hợp não mô cầu C",
+            "code": "viêm màng não C liên hợp",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "103"
@@ -2983,12 +2983,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin vi\u00eam gan A v\u00e0 vi\u00eam gan B",
+            "display": "vắc-xin viêm gan A và viêm gan B",
             "code": "Gan A-Hep B",
             "property": [{
                     "code": "cvx_code",
@@ -3012,13 +3012,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin vaccinia (\u0111\u1eadu m\u00f9a), pha lo\u00e3ng",
-            "code": "vaccinia (\u0111\u1eadu m\u00f9a) pha lo\u00e3ng",
+            "display": "vắc-xin vaccinia (đậu mùa), pha loãng",
+            "code": "vaccinia (đậu mùa) pha loãng",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "105"
@@ -3041,13 +3041,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "b\u1ea1ch h\u1ea7u, \u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 v\u1eafc-xin ho g\u00e0, 5 lo\u1ea1i kh\u00e1ng nguy\u00ean ho g\u00e0",
-            "code": "DTaP, 5 kh\u00e1ng nguy\u00ean ho g\u00e0",
+            "display": "bạch hầu, độc tố uốn ván và vắc-xin ho gà, 5 loại kháng nguyên ho gà",
+            "code": "DTaP, 5 kháng nguyên ho gà",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "106"
@@ -3070,13 +3070,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "b\u1ea1ch h\u1ea7u, \u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 v\u1eafc-xin ho g\u00e0 ho g\u00e0, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "DTaP, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "bạch hầu, độc tố uốn ván và vắc-xin ho gà ho gà, công thức không xác định",
+            "code": "DTaP, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "107"
@@ -3104,8 +3104,8 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin vi\u00eam m\u00e0ng n\u00e3o m\u00f4 c\u1ea7u, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "vi\u00eam m\u00e0ng n\u00e3o do ACWY, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Vắc-xin viêm màng não mô cầu, công thức không xác định",
+            "code": "viêm màng não do ACWY, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "108"
@@ -3133,8 +3133,8 @@
             ]
         },
         {
-            "display": "v\u1eafc-xin ph\u1ebf c\u1ea7u khu\u1ea9n, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "ph\u1ebf c\u1ea7u khu\u1ea9n, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "vắc-xin phế cầu khuẩn, công thức không xác định",
+            "code": "phế cầu khuẩn, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "109"
@@ -3162,7 +3162,7 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin DTaP-vi\u00eam gan B v\u00e0 v\u1eafc-xin b\u1ea1i li\u1ec7t",
+            "display": "Vắc-xin DTaP-viêm gan B và vắc-xin bại liệt",
             "code": "DTaP-Hep B-IPV",
             "property": [{
                     "code": "cvx_code",
@@ -3186,13 +3186,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin c\u00fam, s\u1ed1ng, suy y\u1ebfu, \u0111\u1ec3 s\u1eed d\u1ee5ng n\u1ed9i s\u1ecd",
-            "code": "c\u00fam, s\u1ed1ng, n\u1ed9i s\u1ecd",
+            "display": "Vắc-xin cúm, sống, suy yếu, để sử dụng nội sọ",
+            "code": "cúm, sống, nội sọ",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "111"
@@ -3220,8 +3220,8 @@
             ]
         },
         {
-            "display": "\u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "\u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "độc tố uốn ván, công thức không xác định",
+            "code": "độc tố uốn ván, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "112"
@@ -3244,13 +3244,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "\u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 b\u1ea1ch h\u1ea7u, h\u1ea5p ph\u1ee5, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n, cho ng\u01b0\u1eddi l\u1edbn s\u1eed d\u1ee5ng (5 Lf \u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 2 Lf \u0111\u1ed9c t\u1ed1 b\u1ea1ch h\u1ea7u)",
-            "code": "Td (ng\u01b0\u1eddi l\u1edbn), \u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n 5 Lf, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n, h\u1ea5p ph\u1ee5",
+            "display": "độc tố uốn ván và bạch hầu, hấp phụ, không chất bảo quản, cho người lớn sử dụng (5 Lf độc tố uốn ván và 2 Lf độc tố bạch hầu)",
+            "code": "Td (người lớn), độc tố uốn ván 5 Lf, không chất bảo quản, hấp phụ",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "113"
@@ -3273,13 +3273,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin polysacarit n\u00e3o m\u00f4 c\u1ea7u (nh\u00f3m A, C, Y v\u00e0 W-135) v\u1eafc-xin k\u1ebft h\u1ee3p \u0111\u1ed9c t\u1ed1 b\u1ea1ch h\u1ea7u (MCV4P)",
-            "code": "MCV4P m\u00e0ng n\u00e3o",
+            "display": "vắc-xin polysacarit não mô cầu (nhóm A, C, Y và W-135) vắc-xin kết hợp độc tố bạch hầu (MCV4P)",
+            "code": "MCV4P màng não",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "114"
@@ -3302,12 +3302,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "\u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n, gi\u1ea3m \u0111\u1ed9c t\u1ed1 b\u1ea1ch h\u1ea7u, v\u00e0 v\u1eafc-xin ho g\u00e0 ho g\u00e0, h\u1ea5p ph\u1ee5",
+            "display": "độc tố uốn ván, giảm độc tố bạch hầu, và vắc-xin ho gà ho gà, hấp phụ",
             "code": "Tdap",
             "property": [{
                     "code": "cvx_code",
@@ -3331,12 +3331,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "rotavirus, v\u1eafc-xin s\u1ed1ng, pentavalent",
+            "display": "rotavirus, vắc-xin sống, pentavalent",
             "code": "rotavirus, pentavalent",
             "property": [{
                     "code": "cvx_code",
@@ -3360,12 +3360,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "varicella zoster globulin mi\u1ec5n d\u1ecbch (Thu\u1ed1c m\u1edbi \u0111i\u1ec1u tra)",
+            "display": "varicella zoster globulin miễn dịch (Thuốc mới điều tra)",
             "code": "VZIG (IND)",
             "property": [{
                     "code": "cvx_code",
@@ -3389,13 +3389,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin virus u nh\u00fa \u1edf ng\u01b0\u1eddi, h\u00f3a tr\u1ecb hai",
-            "code": "HPV, h\u00f3a tr\u1ecb hai",
+            "display": "vắc-xin virus u nhú ở người, hóa trị hai",
+            "code": "HPV, hóa trị hai",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "118"
@@ -3418,13 +3418,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "rotavirus, v\u1eafc-xin s\u1ed1ng, \u0111\u01a1n tr\u1ecb",
-            "code": "rotavirus, \u0111\u01a1n tr\u1ecb",
+            "display": "rotavirus, vắc-xin sống, đơn trị",
+            "code": "rotavirus, đơn trị",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "119"
@@ -3447,12 +3447,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "b\u1ea1ch h\u1ea7u, \u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 v\u1eafc-xin ho g\u00e0 ho g\u00e0, Haemophilusenzae lo\u1ea1i b li\u00ean h\u1ee3p v\u00e0 v\u1eafc-xin b\u1ea1i li\u1ec7t, b\u1ea5t ho\u1ea1t (DTaP-Hib-IPV)",
+            "display": "bạch hầu, độc tố uốn ván và vắc-xin ho gà ho gà, Haemophilusenzae loại b liên hợp và vắc-xin bại liệt, bất hoạt (DTaP-Hib-IPV)",
             "code": "DTaP-Hib-IPV",
             "property": [{
                     "code": "cvx_code",
@@ -3476,13 +3476,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin zoster, s\u1ed1ng",
-            "code": "s\u1ed1ng",
+            "display": "vắc-xin zoster, sống",
+            "code": "sống",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "121"
@@ -3505,13 +3505,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin rotavirus, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "rotavirus, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Vắc-xin rotavirus, công thức không xác định",
+            "code": "rotavirus, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "122"
@@ -3534,13 +3534,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin c\u00fam, H5N1, A / Vi\u1ec7t Nam / 1203/2004 (kho d\u1ef1 tr\u1eef qu\u1ed1c gia)",
-            "code": "c\u00fam, H5N1-1203",
+            "display": "Vắc-xin cúm, H5N1, A / Việt Nam / 1203/2004 (kho dự trữ quốc gia)",
+            "code": "cúm, H5N1-1203",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "123"
@@ -3563,13 +3563,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Ti\u1ec3u thuy\u1ebft C\u00fam-H1N1-09, vi-r\u00fat s\u1ed1ng d\u00f9ng cho m\u0169i",
-            "code": "Ti\u1ec3u thuy\u1ebft C\u00fam-H1N1-09, m\u0169i",
+            "display": "Tiểu thuyết Cúm-H1N1-09, vi-rút sống dùng cho mũi",
+            "code": "Tiểu thuyết Cúm-H1N1-09, mũi",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "125"
@@ -3592,13 +3592,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Ti\u1ec3u thuy\u1ebft c\u00fam-H1N1-09, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n, thu\u1ed1c ti\u00eam",
-            "code": "Ti\u1ec3u thuy\u1ebft c\u00fam-H1N1-09, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "Tiểu thuyết cúm-H1N1-09, không chất bảo quản, thuốc tiêm",
+            "code": "Tiểu thuyết cúm-H1N1-09, không chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "126"
@@ -3621,13 +3621,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Ti\u1ec3u thuy\u1ebft c\u00fam-H1N1-09, ti\u00eam",
-            "code": "Ti\u1ec3u thuy\u1ebft c\u00fam-H1N1-09",
+            "display": "Tiểu thuyết cúm-H1N1-09, tiêm",
+            "code": "Tiểu thuyết cúm-H1N1-09",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "127"
@@ -3650,13 +3650,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Ti\u1ec3u thuy\u1ebft c\u00fam-H1N1-09, t\u1ea5t c\u1ea3 c\u00e1c c\u00f4ng th\u1ee9c",
-            "code": "Ti\u1ec3u thuy\u1ebft C\u00fam-H1N1-09, t\u1ea5t c\u1ea3 c\u00e1c c\u00f4ng th\u1ee9c",
+            "display": "Tiểu thuyết cúm-H1N1-09, tất cả các công thức",
+            "code": "Tiểu thuyết Cúm-H1N1-09, tất cả các công thức",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "128"
@@ -3684,8 +3684,8 @@
             ]
         },
         {
-            "display": "V\u1eafc xin vi\u00eam n\u00e3o Nh\u1eadt B\u1ea3n, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "Vi\u00eam n\u00e3o Nh\u1eadt B\u1ea3n, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Vắc xin viêm não Nhật Bản, công thức không xác định",
+            "code": "Viêm não Nhật Bản, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "129"
@@ -3713,7 +3713,7 @@
             ]
         },
         {
-            "display": "B\u1ea1ch h\u1ea7u, \u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 v\u1eafc-xin ho g\u00e0 ho g\u00e0 v\u00e0 v\u1eafc-xin b\u1ea1i li\u1ec7t, b\u1ea5t ho\u1ea1t",
+            "display": "Bạch hầu, độc tố uốn ván và vắc-xin ho gà ho gà và vắc-xin bại liệt, bất hoạt",
             "code": "DTaP-IPV",
             "property": [{
                     "code": "cvx_code",
@@ -3737,13 +3737,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "K\u1ef7 l\u1ee5c l\u1ecbch s\u1eed ti\u00eam ph\u00f2ng b\u1ec7nh s\u1ed1t ph\u00e1t ban",
-            "code": "s\u1ed1t ph\u00e1t ban, l\u1ecbch s\u1eed",
+            "display": "Kỷ lục lịch sử tiêm phòng bệnh sốt phát ban",
+            "code": "sốt phát ban, lịch sử",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "131"
@@ -3766,13 +3766,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "B\u1ec7nh b\u1ea1ch h\u1ea7u v\u00e0 b\u1ec7nh u\u1ed1n v\u00e1n trong l\u1ecbch s\u1eed v\u00e0 b\u1ec7nh ho g\u00e0, b\u1ec7nh b\u1ea1i li\u1ec7t, v\u1eafc-xin Haemophilus b v\u00e0 v\u1eafc-xin vi\u00eam gan B (t\u00e1i t\u1ed5 h\u1ee3p).",
-            "code": "DTaP-IPV-HIB-HEP B, l\u1ecbch s\u1eed",
+            "display": "Bệnh bạch hầu và bệnh uốn ván trong lịch sử và bệnh ho gà, bệnh bại liệt, vắc-xin Haemophilus b và vắc-xin viêm gan B (tái tổ hợp).",
+            "code": "DTaP-IPV-HIB-HEP B, lịch sử",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "132"
@@ -3800,8 +3800,8 @@
             ]
         },
         {
-            "display": "v\u1eafc-xin li\u00ean h\u1ee3p ph\u1ebf c\u1ea7u khu\u1ea9n, 13 valent",
-            "code": "PCV li\u00ean h\u1ee3p ph\u1ebf c\u1ea7u khu\u1ea9n 13",
+            "display": "vắc-xin liên hợp phế cầu khuẩn, 13 valent",
+            "code": "PCV liên hợp phế cầu khuẩn 13",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "133"
@@ -3824,13 +3824,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc xin vi\u00eam n\u00e3o Nh\u1eadt B\u1ea3n \u0111\u1ec3 ti\u00eam b\u1eafp",
-            "code": "Vi\u00eam n\u00e3o Nh\u1eadt B\u1ea3n IM",
+            "display": "Vắc xin viêm não Nhật Bản để tiêm bắp",
+            "code": "Viêm não Nhật Bản IM",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "134"
@@ -3853,13 +3853,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "c\u00fam, li\u1ec1u cao theo m\u00f9a, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "C\u00fam, li\u1ec1u cao theo m\u00f9a",
+            "display": "cúm, liều cao theo mùa, không chất bảo quản",
+            "code": "Cúm, liều cao theo mùa",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "135"
@@ -3882,13 +3882,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin oligosacaride n\u00e3o m\u00f4 c\u1ea7u (nh\u00f3m A, C, Y v\u00e0 W-135) v\u1eafc-xin k\u1ebft h\u1ee3p \u0111\u1ed9c t\u1ed1 b\u1ea1ch h\u1ea7u (MCV4O)",
-            "code": "Vi\u00eam m\u00e0ng n\u00e3o m\u00f4 c\u1ea7u MCV4O",
+            "display": "vắc-xin oligosacaride não mô cầu (nhóm A, C, Y và W-135) vắc-xin kết hợp độc tố bạch hầu (MCV4O)",
+            "code": "Viêm màng não mô cầu MCV4O",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "136"
@@ -3911,13 +3911,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "HPV, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "HPV, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "HPV, công thức không xác định",
+            "code": "HPV, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "137"
@@ -3945,8 +3945,8 @@
             ]
         },
         {
-            "display": "\u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 b\u1ea1ch h\u1ea7u, kh\u00f4ng h\u1ea5p ph\u1ee5, cho ng\u01b0\u1eddi l\u1edbn s\u1eed d\u1ee5ng",
-            "code": "Td (ng\u01b0\u1eddi l\u1edbn)",
+            "display": "độc tố uốn ván và bạch hầu, không hấp phụ, cho người lớn sử dụng",
+            "code": "Td (người lớn)",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "138"
@@ -3974,8 +3974,8 @@
             ]
         },
         {
-            "display": "Td (ng\u01b0\u1eddi l\u1edbn) c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "Td (ng\u01b0\u1eddi l\u1edbn) c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Td (người lớn) công thức không xác định",
+            "code": "Td (người lớn) công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "139"
@@ -4003,8 +4003,8 @@
             ]
         },
         {
-            "display": "C\u00fam, theo m\u00f9a, ti\u00eam, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "C\u00fam, theo m\u00f9a, ti\u00eam, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "Cúm, theo mùa, tiêm, không chất bảo quản",
+            "code": "Cúm, theo mùa, tiêm, không chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "140"
@@ -4032,8 +4032,8 @@
             ]
         },
         {
-            "display": "C\u00fam, theo m\u00f9a, ti\u00eam",
-            "code": "C\u00fam, theo m\u00f9a, ti\u00eam",
+            "display": "Cúm, theo mùa, tiêm",
+            "code": "Cúm, theo mùa, tiêm",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "141"
@@ -4061,8 +4061,8 @@
             ]
         },
         {
-            "display": "\u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n, kh\u00f4ng h\u1ea5p ph\u1ee5",
-            "code": "\u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n, kh\u00f4ng h\u1ea5p ph\u1ee5",
+            "display": "độc tố uốn ván, không hấp phụ",
+            "code": "độc tố uốn ván, không hấp phụ",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "142"
@@ -4085,13 +4085,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Adenovirus, lo\u1ea1i 4 v\u00e0 lo\u1ea1i 7, s\u1ed1ng, u\u1ed1ng",
-            "code": "Adenovirus lo\u1ea1i 4 v\u00e0 7",
+            "display": "Adenovirus, loại 4 và loại 7, sống, uống",
+            "code": "Adenovirus loại 4 và 7",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "143"
@@ -4119,8 +4119,8 @@
             ]
         },
         {
-            "display": "c\u00fam theo m\u00f9a, trong da, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "c\u00fam, theo m\u00f9a, trong da, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "cúm theo mùa, trong da, không chất bảo quản",
+            "code": "cúm, theo mùa, trong da, không chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "144"
@@ -4148,8 +4148,8 @@
             ]
         },
         {
-            "display": "Kh\u00e1ng th\u1ec3 \u0111\u01a1n b\u00e0o kh\u00e1ng virus \u0111\u01a1n b\u00e0o (motavizumab), ti\u00eam b\u1eafp",
-            "code": "RSV-MAb (m\u1edbi)",
+            "display": "Kháng thể đơn bào kháng virus đơn bào (motavizumab), tiêm bắp",
+            "code": "RSV-MAb (mới)",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "145"
@@ -4172,12 +4172,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "B\u1ea1ch h\u1ea7u v\u00e0 Tetanus Toxoids v\u00e0 Acertular Pertussis \u0111\u00e3 b\u1ecb h\u1ea5p ph\u1ee5, Virus b\u1ea1i li\u1ec7t b\u1ea5t ho\u1ea1t, Haemophilus b Conjugate (Meningococcal Protein Conjugate) v\u00e0 Vaccine Vi\u00eam gan B (T\u00e1i t\u1ed5 h\u1ee3p).",
+            "display": "Bạch hầu và Tetanus Toxoids và Acertular Pertussis đã bị hấp phụ, Virus bại liệt bất hoạt, Haemophilus b Conjugate (Meningococcal Protein Conjugate) và Vaccine Viêm gan B (Tái tổ hợp).",
             "code": "DTaP, IPV, Hib, HepB",
             "property": [{
                     "code": "cvx_code",
@@ -4206,8 +4206,8 @@
             ]
         },
         {
-            "display": "Vi\u00eam m\u00e0ng n\u00e3o, MCV4, c\u00f4ng th\u1ee9c li\u00ean h\u1ee3p kh\u00f4ng x\u00e1c \u0111\u1ecbnh (nh\u00f3m A, C, Y v\u00e0 W-135)",
-            "code": "MCV4 n\u00e3o m\u00f4 c\u1ea7u, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Viêm màng não, MCV4, công thức liên hợp không xác định (nhóm A, C, Y và W-135)",
+            "code": "MCV4 não mô cầu, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "147"
@@ -4235,8 +4235,8 @@
             ]
         },
         {
-            "display": "Nh\u00f3m n\u00e3o m\u00f4 c\u1ea7u C v\u00e0 Y v\u00e0 Haemophilus b Tetanus Toxoid Conjugate Vaccine",
-            "code": "Vi\u00eam m\u00e0ng n\u00e3o C / Y-HIB PRP",
+            "display": "Nhóm não mô cầu C và Y và Haemophilus b Tetanus Toxoid Conjugate Vaccine",
+            "code": "Viêm màng não C / Y-HIB PRP",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "148"
@@ -4259,13 +4259,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "c\u00fam, s\u1ed1ng, n\u1ed9i s\u1ecd, t\u1ee9 ph\u01b0\u01a1ng",
-            "code": "c\u00fam, s\u1ed1ng, n\u1ed9i s\u1ecd, t\u1ee9 ph\u01b0\u01a1ng",
+            "display": "cúm, sống, nội sọ, tứ phương",
+            "code": "cúm, sống, nội sọ, tứ phương",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "149"
@@ -4293,8 +4293,8 @@
             ]
         },
         {
-            "display": "C\u00fam, ti\u00eam, t\u1ee9 gi\u00e1c, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "c\u00fam, ti\u00eam, t\u1ee9 gi\u00e1c, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "Cúm, tiêm, tứ giác, không chất bảo quản",
+            "code": "cúm, tiêm, tứ giác, không chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "150"
@@ -4322,8 +4322,8 @@
             ]
         },
         {
-            "display": "c\u00fam m\u0169i, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "c\u00fam m\u0169i, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "cúm mũi, công thức không xác định",
+            "code": "cúm mũi, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "151"
@@ -4351,8 +4351,8 @@
             ]
         },
         {
-            "display": "Li\u00ean h\u1ee3p ph\u1ebf c\u1ea7u khu\u1ea9n, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "Li\u00ean h\u1ee3p ph\u1ebf c\u1ea7u khu\u1ea9n, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Liên hợp phế cầu khuẩn, công thức không xác định",
+            "code": "Liên hợp phế cầu khuẩn, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "152"
@@ -4380,8 +4380,8 @@
             ]
         },
         {
-            "display": "C\u00fam, ti\u00eam, Madin Darby Canine Th\u1eadn, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "C\u00fam, ti\u00eam, MDCK, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "Cúm, tiêm, Madin Darby Canine Thận, không chất bảo quản",
+            "code": "Cúm, tiêm, MDCK, không chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "153"
@@ -4409,7 +4409,7 @@
             ]
         },
         {
-            "display": "Globulin mi\u1ec5n d\u1ecbch vi\u00eam gan A",
+            "display": "Globulin miễn dịch viêm gan A",
             "code": "Gan A, IG",
             "property": [{
                     "code": "cvx_code",
@@ -4438,8 +4438,8 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin c\u00fam theo m\u00f9a, h\u00f3a tr\u1ecb ba, t\u00e1i t\u1ed5 h\u1ee3p, ti\u00eam ph\u00f2ng, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "c\u00fam, t\u00e1i t\u1ed5 h\u1ee3p, ti\u00eam, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "Vắc-xin cúm theo mùa, hóa trị ba, tái tổ hợp, tiêm phòng, không chất bảo quản",
+            "code": "cúm, tái tổ hợp, tiêm, không chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "155"
@@ -4467,7 +4467,7 @@
             ]
         },
         {
-            "display": "Rho (D) Globulin mi\u1ec5n d\u1ecbch-IV ho\u1eb7c IM",
+            "display": "Rho (D) Globulin miễn dịch-IV hoặc IM",
             "code": "Rho (D) -IG",
             "property": [{
                     "code": "cvx_code",
@@ -4496,7 +4496,7 @@
             ]
         },
         {
-            "display": "Rho (D) Globulin mi\u1ec5n d\u1ecbch - IM",
+            "display": "Rho (D) Globulin miễn dịch - IM",
             "code": "Rho (D) -IG IM",
             "property": [{
                     "code": "cvx_code",
@@ -4525,8 +4525,8 @@
             ]
         },
         {
-            "display": "c\u00fam, ti\u00eam, t\u1ee9 gi\u00e1c, ch\u1ee9a ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "c\u00fam, ti\u00eam, t\u1ee9 gi\u00e1c",
+            "display": "cúm, tiêm, tứ giác, chứa chất bảo quản",
+            "code": "cúm, tiêm, tứ giác",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "158"
@@ -4554,8 +4554,8 @@
             ]
         },
         {
-            "display": "Rho (D) C\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "Rho (D) - C\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Rho (D) Công thức không xác định",
+            "code": "Rho (D) - Công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "159"
@@ -4578,13 +4578,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "C\u00fam A \u0111\u01a1n tr\u1ecb (H5N1), b\u1ed5 tr\u1ee3, d\u1ef1 tr\u1eef qu\u1ed1c gia 2013",
-            "code": "C\u00fam A \u0111\u01a1n tr\u1ecb (H5N1), ADJUVANTED-2013",
+            "display": "Cúm A đơn trị (H5N1), bổ trợ, dự trữ quốc gia 2013",
+            "code": "Cúm A đơn trị (H5N1), ADJUVANTED-2013",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "160"
@@ -4612,8 +4612,8 @@
             ]
         },
         {
-            "display": "C\u00fam, ti\u00eam, t\u1ee9 gi\u00e1c, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n, nhi khoa",
-            "code": "C\u00fam, ti\u00eam, t\u1ee9 gi\u00e1c, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n, nhi khoa",
+            "display": "Cúm, tiêm, tứ giác, không chất bảo quản, nhi khoa",
+            "code": "Cúm, tiêm, tứ giác, không chất bảo quản, nhi khoa",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "161"
@@ -4636,13 +4636,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin n\u00e3o m\u00f4 c\u1ea7u B, t\u00e1i t\u1ed5 h\u1ee3p \u0111\u1ea7y \u0111\u1ee7",
-            "code": "vi\u00eam m\u00e0ng n\u00e3o B, t\u00e1i t\u1ed5 h\u1ee3p",
+            "display": "vắc-xin não mô cầu B, tái tổ hợp đầy đủ",
+            "code": "viêm màng não B, tái tổ hợp",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "162"
@@ -4665,13 +4665,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin n\u00e3o m\u00f4 c\u1ea7u B, t\u00e1i t\u1ed5 h\u1ee3p, OMV, b\u1ed5 tr\u1ee3",
-            "code": "vi\u00eam m\u00e0ng n\u00e3o B, OMV",
+            "display": "vắc-xin não mô cầu B, tái tổ hợp, OMV, bổ trợ",
+            "code": "viêm màng não B, OMV",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "163"
@@ -4694,13 +4694,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "vi\u00eam m\u00e0ng n\u00e3o B, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "vi\u00eam m\u00e0ng n\u00e3o B, kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "viêm màng não B, công thức không xác định",
+            "code": "viêm màng não B, không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "164"
@@ -4723,12 +4723,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin ph\u00f2ng b\u1ec7nh Papillomavirus 9 ng\u01b0\u1eddi",
+            "display": "Vắc-xin phòng bệnh Papillomavirus 9 người",
             "code": "HPV9",
             "property": [{
                     "code": "cvx_code",
@@ -4752,13 +4752,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "c\u00fam, trong da, t\u1ee9 gi\u00e1c, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n, ti\u00eam",
-            "code": "c\u00fam, trong da, t\u1ee9 gi\u00e1c, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "cúm, trong da, tứ giác, không chất bảo quản, tiêm",
+            "code": "cúm, trong da, tứ giác, không chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "166"
@@ -4781,13 +4781,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin n\u00e3o m\u00f4 c\u1ea7u c\u1ee7a c\u00f4ng th\u1ee9c ch\u01b0a bi\u1ebft v\u00e0 nh\u00f3m huy\u1ebft thanh ch\u01b0a bi\u1ebft",
-            "code": "n\u00e3o m\u00f4 c\u1ea7u, nh\u00f3m huy\u1ebft thanh ch\u01b0a bi\u1ebft",
+            "display": "vắc-xin não mô cầu của công thức chưa biết và nhóm huyết thanh chưa biết",
+            "code": "não mô cầu, nhóm huyết thanh chưa biết",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "167"
@@ -4815,8 +4815,8 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin h\u00f3a tr\u1ecb ba theo m\u00f9a, b\u1ed5 tr\u1ee3, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "c\u00fam, h\u00f3a tr\u1ecb ba, b\u1ed5 tr\u1ee3",
+            "display": "Vắc-xin hóa trị ba theo mùa, bổ trợ, không chất bảo quản",
+            "code": "cúm, hóa trị ba, bổ trợ",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "168"
@@ -4839,13 +4839,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "Hep A, suy y\u1ebfu s\u1ed1ng-IM",
-            "code": "Hep A, suy gi\u1ea3m s\u1ed1ng",
+            "display": "Hep A, suy yếu sống-IM",
+            "code": "Hep A, suy giảm sống",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "169"
@@ -4873,8 +4873,8 @@
             ]
         },
         {
-            "display": "b\u1ec7nh b\u1ea1ch h\u1ea7u kh\u00f4ng do Hoa K\u1ef3, \u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 v\u1eafc-xin ho g\u00e0 ho g\u00e0, Haemophilusenzae lo\u1ea1i b li\u00ean h\u1ee3p v\u00e0 v\u1eafc-xin b\u1ea1i li\u1ec7t, b\u1ea5t ho\u1ea1t (DTaP-Hib-IPV)",
-            "code": "DTAP / IPV / HIB - kh\u00f4ng thu\u1ed9c Hoa K\u1ef3",
+            "display": "bệnh bạch hầu không do Hoa Kỳ, độc tố uốn ván và vắc-xin ho gà ho gà, Haemophilusenzae loại b liên hợp và vắc-xin bại liệt, bất hoạt (DTaP-Hib-IPV)",
+            "code": "DTAP / IPV / HIB - không thuộc Hoa Kỳ",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "170"
@@ -4902,8 +4902,8 @@
             ]
         },
         {
-            "display": "C\u00fam, ti\u00eam, Madin Darby Canine Th\u1eadn, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n, kh\u00f4ng ch\u1ee9a ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "C\u00fam, ti\u00eam, MDCK, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n, kh\u00f4ng ch\u1ee9a ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "Cúm, tiêm, Madin Darby Canine Thận, không chất bảo quản, không chứa chất bảo quản",
+            "code": "Cúm, tiêm, MDCK, không chất bảo quản, không chứa chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "171"
@@ -4926,13 +4926,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "d\u1ecbch t\u1ea3, WC-rBS",
-            "code": "d\u1ecbch t\u1ea3, WC-rBS",
+            "display": "dịch tả, WC-rBS",
+            "code": "dịch tả, WC-rBS",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "172"
@@ -4955,13 +4955,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "d\u1ecbch t\u1ea3, BivWC",
-            "code": "d\u1ecbch t\u1ea3, BivWC",
+            "display": "dịch tả, BivWC",
+            "code": "dịch tả, BivWC",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "173"
@@ -4984,13 +4984,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "d\u1ecbch t\u1ea3, s\u1ed1ng gi\u1ea3m",
-            "code": "d\u1ecbch t\u1ea3, s\u1ed1ng gi\u1ea3m",
+            "display": "dịch tả, sống giảm",
+            "code": "dịch tả, sống giảm",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "174"
@@ -5013,13 +5013,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc xin ph\u00f2ng b\u1ec7nh d\u1ea1i t\u1eeb nu\u00f4i c\u1ea5y t\u1ebf b\u00e0o l\u01b0\u1ee1ng b\u1ed9i \u1edf ng\u01b0\u1eddi",
-            "code": "B\u1ec7nh d\u1ea1i - Nu\u00f4i c\u1ea5y t\u1ebf b\u00e0o l\u01b0\u1ee1ng b\u1ed9i IM",
+            "display": "Vắc xin phòng bệnh dại từ nuôi cấy tế bào lưỡng bội ở người",
+            "code": "Bệnh dại - Nuôi cấy tế bào lưỡng bội IM",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "175"
@@ -5042,13 +5042,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin d\u1ea1i \u1edf ng\u01b0\u1eddi t\u1eeb nu\u00f4i c\u1ea5y nguy\u00ean b\u00e0o s\u1ee3i g\u00e0",
-            "code": "B\u1ec7nh d\u1ea1i - IM nu\u00f4i c\u1ea5y nguy\u00ean b\u00e0o s\u1ee3i",
+            "display": "Vắc-xin dại ở người từ nuôi cấy nguyên bào sợi gà",
+            "code": "Bệnh dại - IM nuôi cấy nguyên bào sợi",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "176"
@@ -5071,12 +5071,12 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin li\u00ean h\u1ee3p ph\u1ebf c\u1ea7u khu\u1ea9n, 10 valent",
+            "display": "vắc-xin liên hợp phế cầu khuẩn, 10 valent",
             "code": "PCV10",
             "property": [{
                     "code": "cvx_code",
@@ -5105,8 +5105,8 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin b\u1ea1i li\u1ec7t hai ph\u1ea7n kh\u00f4ng ph\u1ea3i do M\u1ef9 (lo\u1ea1i 1 v\u00e0 3)",
-            "code": "OPV h\u00f3a tr\u1ecb hai",
+            "display": "Vắc-xin bại liệt hai phần không phải do Mỹ (loại 1 và 3)",
+            "code": "OPV hóa trị hai",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "178"
@@ -5134,8 +5134,8 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin b\u1ea1i li\u1ec7t \u0111\u01a1n tr\u1ecb li\u1ec7u kh\u00f4ng ph\u1ea3i c\u1ee7a Hoa K\u1ef3, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "OPV, \u0111\u01a1n tr\u1ecb, kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Vắc-xin bại liệt đơn trị liệu không phải của Hoa Kỳ, công thức không xác định",
+            "code": "OPV, đơn trị, không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "179"
@@ -5163,8 +5163,8 @@
             ]
         },
         {
-            "display": "Globulin mi\u1ec5n d\u1ecbch u\u1ed1n v\u00e1n",
-            "code": "Globulin mi\u1ec5n d\u1ecbch u\u1ed1n v\u00e1n",
+            "display": "Globulin miễn dịch uốn ván",
+            "code": "Globulin miễn dịch uốn ván",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "180"
@@ -5192,8 +5192,8 @@
             ]
         },
         {
-            "display": "b\u1ec7nh than mi\u1ec5n d\u1ecbch",
-            "code": "b\u1ec7nh than mi\u1ec5n d\u1ecbch",
+            "display": "bệnh than miễn dịch",
+            "code": "bệnh than miễn dịch",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "181"
@@ -5216,13 +5216,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin b\u1ea1i li\u1ec7t, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "OPV, kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Vắc-xin bại liệt, công thức không xác định",
+            "code": "OPV, không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "182"
@@ -5250,8 +5250,8 @@
             ]
         },
         {
-            "display": "C\u00f4ng th\u1ee9c thay th\u1ebf v\u1eafc-xin s\u1ed1t v\u00e0ng",
-            "code": "V\u1eafc xin s\u1ed1t v\u00e0ng da - alt",
+            "display": "Công thức thay thế vắc-xin sốt vàng",
+            "code": "Vắc xin sốt vàng da - alt",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "183"
@@ -5279,8 +5279,8 @@
             ]
         },
         {
-            "display": "V\u1eafc xin s\u1ed1t v\u00e0ng da, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "S\u1ed1t v\u00e0ng, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "Vắc xin sốt vàng da, công thức không xác định",
+            "code": "Sốt vàng, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "184"
@@ -5303,13 +5303,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin c\u00fam theo m\u00f9a, b\u1ed1n m\u0169i, t\u00e1i t\u1ed5 h\u1ee3p, ti\u00eam ph\u00f2ng, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "c\u00fam, t\u00e1i t\u1ed5 h\u1ee3p, t\u1ee9 gi\u00e1c, ti\u00eam, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "Vắc-xin cúm theo mùa, bốn mũi, tái tổ hợp, tiêm phòng, không chất bảo quản",
+            "code": "cúm, tái tổ hợp, tứ giác, tiêm, không chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "185"
@@ -5332,13 +5332,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "C\u00fam, ti\u00eam, Madin Darby Canine Th\u1eadn, t\u1ee9 gi\u00e1c v\u1edbi ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "C\u00fam, ti\u00eam, MDCK, t\u1ee9 gi\u00e1c, ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "Cúm, tiêm, Madin Darby Canine Thận, tứ giác với chất bảo quản",
+            "code": "Cúm, tiêm, MDCK, tứ giác, chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "186"
@@ -5361,13 +5361,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "t\u00e1i t\u1ed5 h\u1ee3p v\u1eafc-xin zoster",
-            "code": "t\u00e1i t\u1ed5 h\u1ee3p zoster",
+            "display": "tái tổ hợp vắc-xin zoster",
+            "code": "tái tổ hợp zoster",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "187"
@@ -5390,13 +5390,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin zoster, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "zoster, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "vắc-xin zoster, công thức không xác định",
+            "code": "zoster, công thức không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "188"
@@ -5424,7 +5424,7 @@
             ]
         },
         {
-            "display": "V\u1eafc-xin vi\u00eam gan B (t\u00e1i t\u1ed5 h\u1ee3p), b\u1ed5 tr\u1ee3 CpG",
+            "display": "Vắc-xin viêm gan B (tái tổ hợp), bổ trợ CpG",
             "code": "HepB-CpG",
             "property": [{
                     "code": "cvx_code",
@@ -5448,13 +5448,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "V\u1eafc-xin li\u00ean h\u1ee3p th\u01b0\u01a1ng h\u00e0n (kh\u00f4ng ph\u1ea3i Hoa K\u1ef3)",
-            "code": "V\u1eafc-xin li\u00ean h\u1ee3p th\u01b0\u01a1ng h\u00e0n (TCV)",
+            "display": "Vắc-xin liên hợp thương hàn (không phải Hoa Kỳ)",
+            "code": "Vắc-xin liên hợp thương hàn (TCV)",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "190"
@@ -5477,13 +5477,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin n\u00e3o m\u00f4 c\u1ea7u M\u1ed9t lo\u1ea1i v\u1eafc-xin polysacarit (kh\u00f4ng ph\u1ea3i Hoa K\u1ef3)",
-            "code": "n\u00e3o m\u00f4 c\u1ea7u M\u1ed9t polysacarit (kh\u00f4ng ph\u1ea3i Hoa K\u1ef3)",
+            "display": "vắc-xin não mô cầu Một loại vắc-xin polysacarit (không phải Hoa Kỳ)",
+            "code": "não mô cầu Một polysacarit (không phải Hoa Kỳ)",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "191"
@@ -5506,13 +5506,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin polysacaride AC m\u00e0ng n\u00e3o (kh\u00f4ng ph\u1ea3i Hoa K\u1ef3)",
-            "code": "vi\u00eam m\u00e0ng n\u00e3o do polysacarit AC (kh\u00f4ng ph\u1ea3i M\u1ef9)",
+            "display": "vắc-xin polysacaride AC màng não (không phải Hoa Kỳ)",
+            "code": "viêm màng não do polysacarit AC (không phải Mỹ)",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "192"
@@ -5535,13 +5535,13 @@
                 },
                 {
                     "code": "ghi_chu",
-                    "valueString": ""
+                    "valueString": null
                 }
             ]
         },
         {
-            "display": "v\u1eafc-xin vi\u00eam gan A v\u00e0 vi\u00eam gan B, tr\u1ebb em / thanh thi\u1ebfu ni\u00ean (kh\u00f4ng ph\u1ea3i Hoa K\u1ef3)",
-            "code": "Hep A-Hep B, nhi khoa / v\u1ecb th\u00e0nh ni\u00ean",
+            "display": "vắc-xin viêm gan A và viêm gan B, trẻ em / thanh thiếu niên (không phải Hoa Kỳ)",
+            "code": "Hep A-Hep B, nhi khoa / vị thành niên",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "193"
@@ -5569,8 +5569,8 @@
             ]
         },
         {
-            "display": "C\u00fam, Nam b\u00e1n c\u1ea7u, c\u00f4ng th\u1ee9c kh\u00f4ng x\u00e1c \u0111\u1ecbnh (Kh\u00f4ng thu\u1ed9c Hoa K\u1ef3)",
-            "code": "C\u00fam, Nam b\u00e1n c\u1ea7u",
+            "display": "Cúm, Nam bán cầu, công thức không xác định (Không thuộc Hoa Kỳ)",
+            "code": "Cúm, Nam bán cầu",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "194"
@@ -5598,8 +5598,8 @@
             ]
         },
         {
-            "display": "B\u1ea1ch h\u1ea7u, u\u1ed1n v\u00e1n, Poliomyel vi\u00eam h\u1ea5p ph\u1ee5",
-            "code": "DT, IPV h\u1ea5p ph\u1ee5",
+            "display": "Bạch hầu, uốn ván, Poliomyel viêm hấp phụ",
+            "code": "DT, IPV hấp phụ",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "195"
@@ -5627,8 +5627,8 @@
             ]
         },
         {
-            "display": "\u0111\u1ed9c t\u1ed1 u\u1ed1n v\u00e1n v\u00e0 b\u1ea1ch h\u1ea7u, h\u1ea5p ph\u1ee5, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n, cho ng\u01b0\u1eddi l\u1edbn s\u1eed d\u1ee5ng, Lf kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
-            "code": "Td, h\u1ea5p ph\u1ee5, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n, ng\u01b0\u1eddi l\u1edbn s\u1eed d\u1ee5ng, Lf kh\u00f4ng x\u00e1c \u0111\u1ecbnh",
+            "display": "độc tố uốn ván và bạch hầu, hấp phụ, không chất bảo quản, cho người lớn sử dụng, Lf không xác định",
+            "code": "Td, hấp phụ, không chất bảo quản, người lớn sử dụng, Lf không xác định",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "196"
@@ -5656,8 +5656,8 @@
             ]
         },
         {
-            "display": "c\u00fam, li\u1ec1u cao theo m\u00f9a, t\u1ee9 ph\u01b0\u01a1ng, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "c\u00fam, li\u1ec1u cao, t\u1ee9 ph\u01b0\u01a1ng",
+            "display": "cúm, liều cao theo mùa, tứ phương, không chất bảo quản",
+            "code": "cúm, liều cao, tứ phương",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "197"
@@ -5685,7 +5685,7 @@
             ]
         },
         {
-            "display": "B\u1ea1ch h\u1ea7u, ho g\u00e0, u\u1ed1n v\u00e1n, vi\u00eam gan B, Haemophilus C\u00fam lo\u1ea1i b, (Pentavalent)",
+            "display": "Bạch hầu, ho gà, uốn ván, viêm gan B, Haemophilus Cúm loại b, (Pentavalent)",
             "code": "DTP-hepB-Hib Pentavalent Non-US",
             "property": [{
                     "code": "cvx_code",
@@ -5714,8 +5714,8 @@
             ]
         },
         {
-            "display": "c\u00fam, theo m\u00f9a, Nam b\u00e1n c\u1ea7u, t\u1ee9 gi\u00e1c, li\u1ec1u tr\u1ebb em 0,25mL, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "c\u00fam, Nam b\u00e1n c\u1ea7u, nhi khoa, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "cúm, theo mùa, Nam bán cầu, tứ giác, liều trẻ em 0,25mL, không chất bảo quản",
+            "code": "cúm, Nam bán cầu, nhi khoa, không chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "200"
@@ -5743,8 +5743,8 @@
             ]
         },
         {
-            "display": "c\u00fam, theo m\u00f9a, Nam b\u00e1n c\u1ea7u, t\u1ee9 gi\u00e1c, li\u1ec1u 0,5mL, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "c\u00fam, Nam b\u00e1n c\u1ea7u, kh\u00f4ng ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "cúm, theo mùa, Nam bán cầu, tứ giác, liều 0,5mL, không chất bảo quản",
+            "code": "cúm, Nam bán cầu, không chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "201"
@@ -5772,8 +5772,8 @@
             ]
         },
         {
-            "display": "c\u00fam, theo m\u00f9a, Nam b\u00e1n c\u1ea7u, t\u1ee9 gi\u00e1c, li\u1ec1u 0,5mL, c\u00f3 ch\u1ea5t b\u1ea3o qu\u1ea3n",
-            "code": "c\u00fam, Nam b\u00e1n c\u1ea7u, t\u1ee9 gi\u00e1c, v\u1edbi ch\u1ea5t b\u1ea3o qu\u1ea3n",
+            "display": "cúm, theo mùa, Nam bán cầu, tứ giác, liều 0,5mL, có chất bảo quản",
+            "code": "cúm, Nam bán cầu, tứ giác, với chất bảo quản",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "202"
@@ -5801,8 +5801,8 @@
             ]
         },
         {
-            "display": "Ch\u1ea5t b\u1ed5 tr\u1ee3 AS03",
-            "code": "Ch\u1ea5t b\u1ed5 tr\u1ee3 AS03",
+            "display": "Chất bổ trợ AS03",
+            "code": "Chất bổ trợ AS03",
             "property": [{
                     "code": "cvx_code",
                     "valueString": "801"
