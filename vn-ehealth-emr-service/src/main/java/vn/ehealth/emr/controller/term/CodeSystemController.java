@@ -71,7 +71,7 @@ public class CodeSystemController {
                                 @RequestParam Optional<Integer> count) {
 		
 	    var criteria = createQuery(keyword);
-		var lst = codeSystemDao.searchResource(criteria);
+		var lst = codeSystemDao.searchResource(criteria, start.orElse(-1), count.orElse(-1));
 		
 		if(viewEntity.orElse(false)) {
 			var lstEnt = transform(lst, x -> fhirToEntity(x, CodeSystemEntity.class));
