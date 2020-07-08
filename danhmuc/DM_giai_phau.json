@@ -1,0 +1,2219 @@
+{
+    "resourceType": "CodeSystem",
+    "url": "",
+    "name": "Danh mục giải phẫu",
+    "publisher": "VEIG",
+    "description": "Danh mục giải phẫu",
+    "property": [],
+    "concept": [{
+            "display": "B\u1ee5ng",
+            "code": "ADB",
+            "property": []
+        },
+        {
+            "display": "L\u1edbp s\u1ee5n \u1edf h\u1ed1c kh\u1edbp g\u1ed1i",
+            "code": "ACET",
+            "property": []
+        },
+        {
+            "display": "G\u00e2n n\u1ed1i b\u1eafp ch\u00e2n v\u1edbi g\u00f3t ch\u00e2n",
+            "code": "ACHIL",
+            "property": []
+        },
+        {
+            "display": "Amidan V.A (n\u1eb1m ch\u1eb7n gi\u1eefa \u0111\u01b0\u1eddng th\u1edf v\u00e0 \u0111\u01b0\u1eddng \u0103n, ch\u1ec9 th\u01b0\u1eddng t\u1ed3n t\u1ea1i khi nh\u1ecf h\u01a1n 12 tu\u1ed5i, s\u1ebd teo nh\u1ecf sau 12 tu\u1ed5i)",
+            "code": "ADE",
+            "property": []
+        },
+        {
+            "display": "Tuy\u1ebfn th\u01b0\u1ee3ng th\u1eadn",
+            "code": "ADR",
+            "property": []
+        },
+        {
+            "display": "N\u01b0\u1edbc \u1ed1i",
+            "code": "AMN",
+            "property": []
+        },
+        {
+            "display": "T\u00fai \u1ed1i",
+            "code": "AMS",
+            "property": []
+        },
+        {
+            "display": "H\u1eadu m\u00f4n",
+            "code": "ANAL",
+            "property": []
+        },
+        {
+            "display": "M\u1eaft c\u00e1 ch\u00e2n",
+            "code": "ANKL",
+            "property": []
+        },
+        {
+            "display": "Tr\u01b0\u1edbc khu\u1ef7u",
+            "code": "ANTEC",
+            "property": []
+        },
+        {
+            "display": "H\u1ed1 tr\u01b0\u1edbc khu\u1ef7u",
+            "code": "ANTECF",
+            "property": []
+        },
+        {
+            "display": "Antrum (h\u1ed1 h\u1ed1c/\u1ed5/khoang trong x\u01b0\u01a1ng ho\u1eb7c c\u1ea5u tr\u00fac gi\u1ea3i ph\u1eabu kh\u00e1c)",
+            "code": "ANTR",
+            "property": []
+        },
+        {
+            "display": "H\u1eadu m\u00f4n",
+            "code": "ANUS",
+            "property": []
+        },
+        {
+            "display": "\u0110\u1ed9ng m\u1ea1ch ch\u1ee7",
+            "code": "AORTA",
+            "property": []
+        },
+        {
+            "display": "V\u00e0nh \u0111\u1ed9ng m\u1ea1ch ch\u1ee7",
+            "code": "AR",
+            "property": []
+        },
+        {
+            "display": "Van \u0111\u1ed9ng m\u1ea1ch ch\u1ee7",
+            "code": "AV",
+            "property": []
+        },
+        {
+            "display": "Ru\u1ed9t th\u1eeba",
+            "code": "APDX",
+            "property": []
+        },
+        {
+            "display": "Qu\u1ea7ng v\u00fa",
+            "code": "AREO",
+            "property": []
+        },
+        {
+            "display": "C\u00e1nh tay",
+            "code": "ARM",
+            "property": []
+        },
+        {
+            "display": "\u0110\u1ed9ng m\u1ea1ch",
+            "code": "ARTE",
+            "property": []
+        },
+        {
+            "display": "C\u1ed5 tr\u01b0\u1edbng",
+            "code": "ASCIT",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch c\u1ed5 tr\u01b0\u1edbng",
+            "code": "ASCT",
+            "property": []
+        },
+        {
+            "display": "T\u00e2m nh\u0129",
+            "code": "ATR",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c v\u1ec1 l\u1ed7 tai",
+            "code": "AURI",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c n\u00e1ch",
+            "code": "AXI",
+            "property": []
+        },
+        {
+            "display": "L\u01b0ng",
+            "code": "BACK",
+            "property": []
+        },
+        {
+            "display": "\u1ed0ng bartholin",
+            "code": "BARTD",
+            "property": []
+        },
+        {
+            "display": "Tuy\u1ebfn bartholin",
+            "code": "BARTG",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch tuy\u1ebfn bartholin",
+            "code": "BRTGF",
+            "property": []
+        },
+        {
+            "display": "T\u1ebf b\u00e0o m\u00e1u tr\u1eafng basophil",
+            "code": "BPH",
+            "property": []
+        },
+        {
+            "display": "\u1ed0ng m\u1eadt",
+            "code": "BID",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch m\u1eadt",
+            "code": "BIFL",
+            "property": []
+        },
+        {
+            "display": "B\u00e0ng quang",
+            "code": "BLAD",
+            "property": []
+        },
+        {
+            "display": "M\u00e1u",
+            "code": "BLOOD",
+            "property": []
+        },
+        {
+            "display": "M\u00e1u, \u0111\u1ed9ng m\u1ea1ch",
+            "code": "BLDA",
+            "property": []
+        },
+        {
+            "display": "M\u00e1u, mao m\u1ea1ch",
+            "code": "BLDC",
+            "property": []
+        },
+        {
+            "display": "M\u00e1u, t\u0129nh m\u1ea1ch",
+            "code": "BLDV",
+            "property": []
+        },
+        {
+            "display": "M\u00e1u, cu\u1ed1ng r\u1ed1n",
+            "code": "CBLD",
+            "property": []
+        },
+        {
+            "display": "M\u00e1u, to\u00e0n ph\u1ea7n",
+            "code": "BLD",
+            "property": []
+        },
+        {
+            "display": "C\u01a1 th\u1ec3, to\u00e0n ph\u1ea7n",
+            "code": "BDY",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng",
+            "code": "BON",
+            "property": []
+        },
+        {
+            "display": "T\u1ee7y X\u01b0\u01a1ng \u1ed1ng",
+            "code": "BMAR",
+            "property": []
+        },
+        {
+            "display": "Ru\u1ed9t",
+            "code": "BOWEL",
+            "property": []
+        },
+        {
+            "display": "Ru\u1ed9t gi\u00e0",
+            "code": "BOWLA",
+            "property": []
+        },
+        {
+            "display": "Ru\u1ed9t non",
+            "code": "BOWSM",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c c\u00e1nh tay",
+            "code": "BRA",
+            "property": []
+        },
+        {
+            "display": "N\u00e3o",
+            "code": "BRAIN",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch u nang n\u00e3o",
+            "code": "BCYS",
+            "property": []
+        },
+        {
+            "display": "V\u00fa",
+            "code": "BRST",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch v\u00fa",
+            "code": "BRSTFL",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c cu\u1ed1ng ph\u1ed5i/ ph\u1ebf qu\u1ea3n",
+            "code": "BRO",
+            "property": []
+        },
+        {
+            "display": "Nh\u00e1nh cu\u1ed1ng ph\u1ed5i nh\u1ecf",
+            "code": "BROCH",
+            "property": []
+        },
+        {
+            "display": "Ph\u1ebf qu\u1ea3n",
+            "code": "BRONC",
+            "property": []
+        },
+        {
+            "display": "\u1ed0ng th\u00f4ng broviac (th\u01b0\u1eddng \u0111\u01b0\u1ee3c \u0111\u1eb7t \u1edf t\u0129nh m\u1ea1ch d\u01b0\u1edbi x\u01b0\u01a1ng \u0111\u00f2n)",
+            "code": "BRV   ",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c mi\u1ec7ng/Thu\u1ed9c m\u00e1",
+            "code": "BUCCA",
+            "property": []
+        },
+        {
+            "display": "B\u00ecu/t\u00fai ho\u1ea1t d\u1ecbch",
+            "code": "BURSA",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch trong b\u00ecu/t\u00fai ho\u1ea1t d\u1ecbch",
+            "code": "BURSF",
+            "property": []
+        },
+        {
+            "display": "M\u00f4ng \u0111\u00edt",
+            "code": "BUTT",
+            "property": []
+        },
+        {
+            "display": "B\u1eafp ch\u00e2n",
+            "code": "CALF",
+            "property": []
+        },
+        {
+            "display": "\u1ed0ng",
+            "code": "CANAL",
+            "property": []
+        },
+        {
+            "display": "\u1ed0ng nh\u1ecf, l\u1ec7 qu\u1ea3n",
+            "code": "CANLI",
+            "property": []
+        },
+        {
+            "display": "\u1ed0ng th\u00f4ng d\u00f2",
+            "code": "CNL",
+            "property": []
+        },
+        {
+            "display": "Kh\u00f3e m\u1eaft",
+            "code": "CANTH",
+            "property": []
+        },
+        {
+            "display": "C\u01a1 tim",
+            "code": "CDM",
+            "property": []
+        },
+        {
+            "display": "\u0110\u1ed9ng m\u1ea1ch c\u1ed5",
+            "code": "CARO",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c x\u01b0\u01a1ng c\u1ed5 tay",
+            "code": "CARP",
+            "property": []
+        },
+        {
+            "display": "H\u1ed1, l\u1ed7 h\u1ed5ng",
+            "code": "CAVIT",
+            "property": []
+        },
+        {
+            "display": "Khoang ng\u1ef1c",
+            "code": "CHE",
+            "property": []
+        },
+        {
+            "display": "Manh tr\u00e0ng/ ru\u1ed9t t\u1ecbt (\u0111o\u1ea1n g\u1ea7n ru\u1ed9t th\u1eeba)",
+            "code": "CECUM",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch n\u00e3o t\u1ee7y",
+            "code": "CSF",
+            "property": []
+        },
+        {
+            "display": "C\u1ed5 t\u1eed cung",
+            "code": "CVX",
+            "property": []
+        },
+        {
+            "display": "C\u1ed5 t\u1eed cung/T\u1eed cung",
+            "code": "CERVUT",
+            "property": []
+        },
+        {
+            "display": "M\u00e1",
+            "code": "CHEEK",
+            "property": []
+        },
+        {
+            "display": "Ng\u1ef1c",
+            "code": "CHES",
+            "property": []
+        },
+        {
+            "display": "\u1ed0ng d\u1eabn l\u01b0u ng\u1ef1c",
+            "code": "CHEST\u00a0",
+            "property": []
+        },
+        {
+            "display": "C\u1eb1m",
+            "code": "CHIN",
+            "property": []
+        },
+        {
+            "display": "V\u1ecb tr\u00ed c\u1eaft bao quy \u0111\u1ea7u",
+            "code": "CIRCU",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng \u0111\u00f2n/thu\u1ed9c x\u01b0\u01a1ng \u0111\u00f2n",
+            "code": "CLAVI",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c \u00e2m v\u1eadt",
+            "code": "CLITO",
+            "property": []
+        },
+        {
+            "display": "\u00c2m v\u1eadt",
+            "code": "CLIT",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c x\u01b0\u01a1ng c\u1ee5t",
+            "code": "COCCG",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng c\u1ee5t",
+            "code": "COCCY",
+            "property": []
+        },
+        {
+            "display": "Ru\u1ed9t k\u1ebft",
+            "code": "COLON",
+            "property": []
+        },
+        {
+            "display": "Thu\u1eadt m\u1edf th\u00f4ng ru\u1ed9t k\u1ebft (ph\u1eabu thu\u1eadt l\u00e0m h\u1eadu m\u00f4n gi\u1ea3)",
+            "code": "COLOS",
+            "property": []
+        },
+        {
+            "display": "L\u1ed7 th\u00f4ng m\u1edf th\u00f4ng ru\u1ed9t k\u1ebft",
+            "code": "COS   ",
+            "property": []
+        },
+        {
+            "display": "\u1ed0ng d\u1eabn ch\u1ee7",
+            "code": "CDUCT",
+            "property": []
+        },
+        {
+            "display": "K\u1ebft m\u1ea1c",
+            "code": "CONJ",
+            "property": []
+        },
+        {
+            "display": "Coral (sinh v\u1eadt bi\u1ec3n thu\u1ed9c l\u1edbp san h\u00f4)",
+            "code": "CORAL",
+            "property": []
+        },
+        {
+            "display": "Cu\u1ed1ng r\u1ed1n",
+            "code": "COR",
+            "property": []
+        },
+        {
+            "display": "M\u00e1u cu\u1ed1ng r\u1ed1n",
+            "code": "CORD",
+            "property": []
+        },
+        {
+            "display": "Gi\u00e1c m\u1ea1c",
+            "code": "CORN",
+            "property": []
+        },
+        {
+            "display": "H\u1ed9p s\u1ecd, g\u1ed1c m\u0169i (hai xoang s\u00e0ng)",
+            "code": "CRANE",
+            "property": []
+        },
+        {
+            "display": "H\u1ed9p s\u1ecd, tr\u00e1n",
+            "code": "CRANF",
+            "property": []
+        },
+        {
+            "display": "H\u1ed9p s\u1ecd, ch\u1ea9m",
+            "code": "CRANO",
+            "property": []
+        },
+        {
+            "display": "H\u1ed9p s\u1ecd, th\u00f9y \u0111\u1ec9nh",
+            "code": "CRANP",
+            "property": []
+        },
+        {
+            "display": "H\u1ed9p s\u1ecd, x\u01b0\u01a1ng b\u01b0\u1edbm",
+            "code": "CRANS",
+            "property": []
+        },
+        {
+            "display": "H\u1ed9p s\u1ecd, th\u00e1i d\u01b0\u01a1ng",
+            "code": "CRANT",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng tr\u1ee5",
+            "code": "CUBIT",
+            "property": []
+        },
+        {
+            "display": "Kh\u1edbp",
+            "code": "CUFF",
+            "property": []
+        },
+        {
+            "display": "T\u00fai c\u00f9ng (ph\u1ea7n m\u1edf r\u1ed9ng c\u1ee7a khoang ph\u00fac m\u1ea1c gi\u1eefa tr\u1ef1c tr\u00e0ng v\u00e0 v\u00e1ch ng\u0103n \u0111\u1eb1ng sau t\u1eed cung)",
+            "code": "CULD",
+            "property": []
+        },
+        {
+            "display": "Ch\u1ecdc h\u00fat t\u00fai c\u00f9ng b\u1eb1ng kim ch\u00edch",
+            "code": "CULDO",
+            "property": []
+        },
+        {
+            "display": "C\u01a1 delta",
+            "code": "DELT",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c r\u0103ng",
+            "code": "DENTA",
+            "property": []
+        },
+        {
+            "display": "N\u01b0\u1edbu r\u0103ng",
+            "code": "DEN",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch th\u1ea9m t\u00e1ch",
+            "code": "DIAF",
+            "property": []
+        },
+        {
+            "display": "C\u01a1 ho\u00e0nh",
+            "code": "DPH",
+            "property": []
+        },
+        {
+            "display": "Ng\u00f3n ch\u00e2n, ng\u00f3n tay",
+            "code": "DIGIT",
+            "property": []
+        },
+        {
+            "display": "\u0110\u0129a \u0111\u1ec7m",
+            "code": "DISC",
+            "property": []
+        },
+        {
+            "display": "L\u01b0ng/Ph\u1ea7n l\u01b0ng",
+            "code": "DORS",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch t\u00e1 tr\u00e0ng",
+            "code": "DUFL",
+            "property": []
+        },
+        {
+            "display": "T\u00e1 tr\u00e0ng/thu\u1ed9c t\u00e1 tr\u00e0ng",
+            "code": "DUODE",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng c\u1ee9ng",
+            "code": "DUR",
+            "property": []
+        },
+        {
+            "display": "Tai",
+            "code": "EAR",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng tai, x\u01b0\u01a1ng \u0111e",
+            "code": "EARBI",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng tai, x\u01b0\u01a1ng b\u00faa",
+            "code": "EARBM",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng tai, x\u01b0\u01a1ng b\u00e0n \u0111\u1ea1p",
+            "code": "EARBS",
+            "property": []
+        },
+        {
+            "display": "D\u00e1i tai/Th\u00f9y tai",
+            "code": "EARLO",
+            "property": []
+        },
+        {
+            "display": "Khu\u1ef7u tay",
+            "code": "ELBOW",
+            "property": []
+        },
+        {
+            "display": "Kh\u1edbp khu\u1ef7u tay",
+            "code": "ELBOWJ",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng trong tim",
+            "code": "ENDC",
+            "property": []
+        },
+        {
+            "display": "N\u1ed9i m\u1ea1c c\u1ed5 t\u1eed cung",
+            "code": "EC",
+            "property": []
+        },
+        {
+            "display": "Vi\u00eam n\u1ed9i nh\u00e3n (ch\u1ea5t l\u1ecfng th\u1ee7y tinh th\u1ec3 v\u00e0 dung d\u1ecbch n\u01b0\u1edbc)",
+            "code": "EOLPH",
+            "property": []
+        },
+        {
+            "display": "N\u1ed9i m\u1ea1c t\u1eed cung",
+            "code": "ENDM",
+            "property": []
+        },
+        {
+            "display": "N\u1ed9i kh\u00ed qu\u1ea3n",
+            "code": "ET",
+            "property": []
+        },
+        {
+            "display": "Trong ni\u1ec7u \u0111\u1ea1o",
+            "code": "EUR",
+            "property": []
+        },
+        {
+            "display": "B\u1ea1ch c\u1ea7u \u01b0a a-x\u00edt (s\u1ed1 l\u01b0\u1ee3ng t\u0103ng cao khi c\u00f3 d\u1ecb \u1ee9ng)",
+            "code": "EOS",
+            "property": []
+        },
+        {
+            "display": "Th\u01b0\u1ee3ng t\u00e2m v\u1ecb",
+            "code": "EPICA",
+            "property": []
+        },
+        {
+            "display": "Th\u01b0\u1ee3ng t\u00e2m",
+            "code": "EPICM",
+            "property": []
+        },
+        {
+            "display": "M\u00e0o tinh ho\u00e0n",
+            "code": "EPD",
+            "property": []
+        },
+        {
+            "display": "G\u00e2y t\u00ea ngo\u00e0i m\u00e0ng c\u1ee9ng",
+            "code": "EPIDU",
+            "property": []
+        },
+        {
+            "display": "N\u1eafp thanh qu\u1ea3n",
+            "code": "EPIGL",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c th\u1ef1c qu\u1ea3n",
+            "code": "ESOPG",
+            "property": []
+        },
+        {
+            "display": "Th\u1ef1c qu\u1ea3n",
+            "code": "ESO",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c g\u1ed1c m\u0169i (x\u01b0\u01a1ng xoang s\u00e0ng)",
+            "code": "ETHMO",
+            "property": []
+        },
+        {
+            "display": "B\u00ean ngo\u00e0i T\u0129nh m\u1ea1ch c\u1ea3nh/t\u0129nh m\u1ea1ch c\u1ed5",
+            "code": "",
+            "property": []
+        },
+        {
+            "display": "M\u1eaft",
+            "code": "EYE",
+            "property": []
+        },
+        {
+            "display": "L\u00f4ng m\u00e0y",
+            "code": "BROW",
+            "property": []
+        },
+        {
+            "display": "M\u00ed m\u1eaft",
+            "code": "EYELI",
+            "property": []
+        },
+        {
+            "display": "M\u1eb7t",
+            "code": "FACE",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng m\u1eb7t, x\u01b0\u01a1ng xo\u0103n m\u0169i d\u01b0\u1edbi",
+            "code": "FBINC",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng m\u1eb7t, x\u01b0\u01a1ng l\u1ec7",
+            "code": "FBLAC",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng m\u1eb7t, h\u00e0m tr\u00ean",
+            "code": "FBMAX",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng m\u1eb7t, x\u01b0\u01a1ng m\u0169i",
+            "code": "FBNAS",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng m\u1eb7t, v\u00f2m mi\u1ec7ng",
+            "code": "FBPAL",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng m\u1eb7t, x\u01b0\u01a1ng l\u00e1 m\u00eda",
+            "code": "FBVOM",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng m\u1eb7t, x\u01b0\u01a1ng g\u00f2 m\u00e1",
+            "code": "FBZYG",
+            "property": []
+        },
+        {
+            "display": "\u1ed0ng d\u1eabn tr\u1ee9ng",
+            "code": "FALLT",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c \u0111\u00f9i",
+            "code": "FEMOR",
+            "property": []
+        },
+        {
+            "display": "Ch\u1ecfm x\u01b0\u01a1ng \u0111\u00f9i",
+            "code": "FMH",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng \u0111\u00f9i",
+            "code": "FEMUR",
+            "property": []
+        },
+        {
+            "display": "B\u00e0o thai",
+            "code": "FET",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng m\u00e1c",
+            "code": "FIBU",
+            "property": []
+        },
+        {
+            "display": "Ng\u00f3n tay",
+            "code": "FING",
+            "property": []
+        },
+        {
+            "display": "M\u00f3ng tay",
+            "code": "FINGN",
+            "property": []
+        },
+        {
+            "display": "Nang (l\u00f4ng, no\u00e3n,\u2026)",
+            "code": "FOL",
+            "property": []
+        },
+        {
+            "display": "B\u00e0n ch\u00e2n",
+            "code": "FOOT",
+            "property": []
+        },
+        {
+            "display": "C\u1eb3ng tay",
+            "code": "FOREA",
+            "property": []
+        },
+        {
+            "display": "Tr\u00e1n",
+            "code": "FOREH",
+            "property": []
+        },
+        {
+            "display": "Bao quy \u0111\u1ea7u",
+            "code": "FORES",
+            "property": []
+        },
+        {
+            "display": "Ch\u1ea1c \u00e2m h\u1ed9",
+            "code": "FOURC",
+            "property": []
+        },
+        {
+            "display": "T\u00fai m\u1eadt",
+            "code": "GB",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c c\u01a1 quan sinh d\u1ee5c",
+            "code": "GEN",
+            "property": []
+        },
+        {
+            "display": "Sinh d\u1ee5c \u2013 \u00e2m h\u1ed9",
+            "code": "GVU",
+            "property": []
+        },
+        {
+            "display": "Sinh d\u1ee5c \u2013 c\u1ed5 t\u1eed cung",
+            "code": "GENC",
+            "property": []
+        },
+        {
+            "display": "Th\u01b0\u01a1ng t\u1ed5n c\u01a1 quan sinh d\u1ee5c",
+            "code": "GL",
+            "property": []
+        },
+        {
+            "display": "S\u1ea3n d\u1ecbch sau khi sinh",
+            "code": "GENL",
+            "property": []
+        },
+        {
+            "display": "Tuy\u1ebfn",
+            "code": "GLAND",
+            "property": []
+        },
+        {
+            "display": "C\u1ea5u tr\u00fac m\u1ea1ch m\u00e1u n\u1eb1m \u1edf v\u1ecb tr\u00ed \u0111\u1ea7u d\u01b0\u01a1ng v\u1eadt",
+            "code": "GLANS",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c c\u01a1 m\u00f4ng",
+            "code": "GLUTE",
+            "property": []
+        },
+        {
+            "display": "C\u01a1 m\u00f4ng",
+            "code": "GLUT",
+            "property": []
+        },
+        {
+            "display": "C\u01a1 m\u00f4ng nh\u1ee1",
+            "code": "GLUTM",
+            "property": []
+        },
+        {
+            "display": "H\u00e1ng",
+            "code": "GROIN",
+            "property": []
+        },
+        {
+            "display": "N\u01b0\u1edbu r\u0103ng/l\u1ee3i",
+            "code": "GUM",
+            "property": []
+        },
+        {
+            "display": "T\u00f3c",
+            "code": "HAR",
+            "property": []
+        },
+        {
+            "display": "Ng\u00f3n ch\u00e2n c\u00e1i",
+            "code": "HAL",
+            "property": []
+        },
+        {
+            "display": "B\u00e0n tay",
+            "code": "HAND",
+            "property": []
+        },
+        {
+            "display": "\u0110\u1ea7u",
+            "code": "HEAD",
+            "property": []
+        },
+        {
+            "display": "Tim",
+            "code": "HART",
+            "property": []
+        },
+        {
+            "display": "Van tim",
+            "code": "HV",
+            "property": []
+        },
+        {
+            "display": "Van tim,  hai l\u00e1",
+            "code": "HVB",
+            "property": []
+        },
+        {
+            "display": "Van tim, ba l\u00e1",
+            "code": "HVT",
+            "property": []
+        },
+        {
+            "display": "G\u00f3t ch\u00e2n",
+            "code": "HEEL",
+            "property": []
+        },
+        {
+            "display": "Tr\u0129",
+            "code": "HEM",
+            "property": []
+        },
+        {
+            "display": "H\u00f4ng",
+            "code": "HIP",
+            "property": []
+        },
+        {
+            "display": "Kh\u1edbp h\u00e1ng",
+            "code": "HIPJ",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng c\u00e1nh tay",
+            "code": "HUMER",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng trinh",
+            "code": "HYMEN",
+            "property": []
+        },
+        {
+            "display": "Ileal Conduit (\u1ed1ng d\u1eabn h\u1ed3i tr\u00e0ng, n\u1ed1i \u1ed1ng d\u1eabn n\u01b0\u1edbc ti\u1ec3u v\u00e0 b\u00e0ng quang)",
+            "code": "ILC",
+            "property": []
+        },
+        {
+            "display": "V\u00f2ng h\u1ed3i tr\u00e0ng",
+            "code": "ILE",
+            "property": []
+        },
+        {
+            "display": "Th\u1ee7 thu\u1eadt m\u1edf th\u00f4ng ru\u1ed9t h\u1ed3i",
+            "code": "ILEOS",
+            "property": []
+        },
+        {
+            "display": "Ru\u1ed9t h\u1ed3i",
+            "code": "ILEUM",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng ch\u1eadu",
+            "code": "ILIAC",
+            "property": []
+        },
+        {
+            "display": "M\u00e0o ch\u1eadu",
+            "code": "ILCR",
+            "property": []
+        },
+        {
+            "display": "Ilical Conduit (M\u1edf th\u00f4ng \u1ed1ng h\u1ed3i tr\u00e0ng)",
+            "code": "ILCON",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c b\u1eb9n",
+            "code": "INGUI",
+            "property": []
+        },
+        {
+            "display": "T\u0129nh m\u1ea1ch c\u1ed5 trong",
+            "code": "JUGI",
+            "property": []
+        },
+        {
+            "display": "Ru\u1ed9t",
+            "code": "INT",
+            "property": []
+        },
+        {
+            "display": "Trong c\u1ed5 t\u1eed cung",
+            "code": "ICX  ",
+            "property": []
+        },
+        {
+            "display": "Trong m\u0169i",
+            "code": "INASA",
+            "property": []
+        },
+        {
+            "display": "Trong t\u1eed cung",
+            "code": "INTRU",
+            "property": []
+        },
+        {
+            "display": "C\u1eeda \u00e2m \u0111\u1ea1o (c\u1eeda m\u00ecnh)",
+            "code": "INTRO",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng \u0111\u00e1y ch\u1eadu g\u1ea7n kh\u1edbp h\u00e1ng",
+            "code": "ISCHI",
+            "property": []
+        },
+        {
+            "display": "H\u00e0m/Quai h\u00e0m",
+            "code": "JAW",
+            "property": []
+        },
+        {
+            "display": "Th\u1eadn",
+            "code": "KIDN\u00a0",
+            "property": []
+        },
+        {
+            "display": "\u0110\u1ea7u g\u1ed1i",
+            "code": "KNEE",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch \u0111\u1ea7u g\u1ed1i",
+            "code": "KNEEF",
+            "property": []
+        },
+        {
+            "display": "Kh\u1edbp g\u1ed1i",
+            "code": "KNEEJ",
+            "property": []
+        },
+        {
+            "display": "M\u00f4i \u00e2m h\u1ed9",
+            "code": "LABIA",
+            "property": []
+        },
+        {
+            "display": "M\u00f4i l\u1edbn (\u00e2m h\u1ed9)",
+            "code": "LABMA",
+            "property": []
+        },
+        {
+            "display": "M\u00f4i nh\u1ecf (\u00e2m h\u1ed9)",
+            "code": "LABMI",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c tuy\u1ebfn l\u1ec7",
+            "code": "LACRI",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng/v\u1ea3y/l\u1edbp m\u1ecfng c\u1ee7a m\u00f4 ho\u1eb7c x\u01b0\u01a1ng",
+            "code": "LAM",
+            "property": []
+        },
+        {
+            "display": "Ru\u1ed9t gi\u00e0",
+            "code": "INSTL",
+            "property": []
+        },
+        {
+            "display": "Thanh qu\u1ea3n",
+            "code": "LARYN",
+            "property": []
+        },
+        {
+            "display": "Ch\u00e2n",
+            "code": "LEG",
+            "property": []
+        },
+        {
+            "display": "Th\u1ee7y tinh th\u1ec3",
+            "code": "LENS",
+            "property": []
+        },
+        {
+            "display": "B\u1ea1ch c\u1ea7u",
+            "code": "WBC",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c l\u01b0\u1ee1i",
+            "code": "LING",
+            "property": []
+        },
+        {
+            "display": "L\u01b0\u1ee1i",
+            "code": "LINGU",
+            "property": []
+        },
+        {
+            "display": "M\u00f4i",
+            "code": "LIP",
+            "property": []
+        },
+        {
+            "display": "Ph\u00e2n l\u1ecfng",
+            "code": "STOOLL",
+            "property": []
+        },
+        {
+            "display": "Gan",
+            "code": "LIVER",
+            "property": []
+        },
+        {
+            "display": "Th\u00f9y",
+            "code": "LOBE",
+            "property": []
+        },
+        {
+            "display": "S\u1ea3n d\u1ecbch sau khi sinh n\u1edf",
+            "code": "LOCH",
+            "property": []
+        },
+        {
+            "display": "V\u00f2ng, x\u01b0\u01a1ng \u0111\u00e1y ch\u1eadu (\u0111\u1ed1t h\u00e1ng)",
+            "code": "ISH",
+            "property": []
+        },
+        {
+            "display": "Th\u1eaft l\u01b0ng",
+            "code": "LUMBA",
+            "property": []
+        },
+        {
+            "display": "Khoang h\u00ecnh \u1ed1ng (m\u1ea1ch m\u00e1u, ru\u1ed9t)",
+            "code": "LMN",
+            "property": []
+        },
+        {
+            "display": "Ph\u1ed5i",
+            "code": "LUNG",
+            "property": []
+        },
+        {
+            "display": "H\u1ea1ch b\u1ea1ch huy\u1ebft",
+            "code": "LN",
+            "property": []
+        },
+        {
+            "display": "H\u1ea1ch b\u1ea1ch huy\u1ebft, h\u00e1ng",
+            "code": "LNG",
+            "property": []
+        },
+        {
+            "display": "T\u1ebf b\u00e0o Lympho (b\u1ea1ch huy\u1ebft)",
+            "code": "LYM",
+            "property": []
+        },
+        {
+            "display": "\u0110\u1ea1i th\u1ef1c b\u00e0o",
+            "code": "MAC",
+            "property": []
+        },
+        {
+            "display": "M\u1eaft c\u00e1 ngo\u00e0i",
+            "code": "MALLE",
+            "property": []
+        },
+        {
+            "display": "H\u00e0m d\u01b0\u1edbi",
+            "code": "MANDI",
+            "property": []
+        },
+        {
+            "display": "T\u1ee7y x\u01b0\u01a1ng",
+            "code": "MAR",
+            "property": []
+        },
+        {
+            "display": "C\u00f3 h\u00ecnh v\u00fa, gi\u1ed1ng nh\u01b0 v\u00fa",
+            "code": "MAST",
+            "property": []
+        },
+        {
+            "display": "H\u00e0m tr\u00ean",
+            "code": "MAXIL",
+            "property": []
+        },
+        {
+            "display": "Xoang h\u00e0m tr\u00ean",
+            "code": "MAXS",
+            "property": []
+        },
+        {
+            "display": "c\u1eeda d\u1eabn v\u00e0o b\u00ean trong c\u01a1 th\u1ec3 (mi\u1ec7ng, l\u1ed7 tai, \u2026)",
+            "code": "MEATU",
+            "property": []
+        },
+        {
+            "display": "Ph\u00e2n su",
+            "code": "MEC",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng trong gi\u1eefa hai l\u00e1 ph\u1ed5i",
+            "code": "MEDST",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c v\u1ec1 t\u1ee7y",
+            "code": "MEDU",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng",
+            "code": "MOU",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng n\u00e3o",
+            "code": "MPB",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c x\u01b0\u01a1ng b\u00e0n tay",
+            "code": "METAC",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c x\u01b0\u01a1ng b\u00e0n ch\u00e2n",
+            "code": "METAT",
+            "property": []
+        },
+        {
+            "display": "S\u1eefa, v\u00fa",
+            "code": "MILK",
+            "property": []
+        },
+        {
+            "display": "Van hai l\u00e1",
+            "code": "MITRL",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c r\u0103ng h\u00e0m (r\u0103ng c\u1ea5m)",
+            "code": "MOLAR",
+            "property": []
+        },
+        {
+            "display": "M\u00f4 m\u1ee1 n\u1eb1m tr\u00ean x\u01b0\u01a1ng mu",
+            "code": "MP",
+            "property": []
+        },
+        {
+            "display": "G\u00f2 ni\u1ec7u qu\u1ea3n",
+            "code": "MONSU",
+            "property": []
+        },
+        {
+            "display": "G\u00f2 x\u01b0\u01a1ng mu",
+            "code": "MONSV",
+            "property": []
+        },
+        {
+            "display": "Mi\u1ec7ng",
+            "code": "MOUTH",
+            "property": []
+        },
+        {
+            "display": "Mrsa: methicillin-resistant Staphylococcus aureus, m\u1ed9t lo\u1ea1i vi khu\u1ea9n c\u00f3 kh\u1ea3 n\u0103ng ch\u1ed1ng methicillin, penicillin, v\u00e0 m\u1ed9t s\u1ed1 kh\u00e1ng sinh kh\u00e1c, v\u00e0 c\u00f3 th\u1ec3 g\u00e2y nhi\u1ec5m tr\u00f9ng da, m\u00e1u, ph\u1ed5i, \u2026",
+            "code": "MRSA2",
+            "property": []
+        },
+        {
+            "display": "C\u01a1 tim",
+            "code": "MYO",
+            "property": []
+        },
+        {
+            "display": "M\u00f3ng tay/ch\u00e2n",
+            "code": "NAIL",
+            "property": []
+        },
+        {
+            "display": "Da d\u01b0\u1edbi m\u00f3ng",
+            "code": "NAILB",
+            "property": []
+        },
+        {
+            "display": "M\u00f3ng tay",
+            "code": "NAILF",
+            "property": []
+        },
+        {
+            "display": "M\u00f3ng ch\u00e2n",
+            "code": "NAILT",
+            "property": []
+        },
+        {
+            "display": "L\u1ed7 m\u0169i",
+            "code": "NARES",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c m\u0169i",
+            "code": "NASL",
+            "property": []
+        },
+        {
+            "display": "V\u00e1ch ng\u0103n m\u0169i",
+            "code": "NSS",
+            "property": []
+        },
+        {
+            "display": "Li\u00ean quan \u0111\u1ebfn m\u0169i \u2013 tuy\u1ebfn l\u1ec7",
+            "code": "NLACR",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c m\u0169i h\u1ecdng",
+            "code": "NP",
+            "property": []
+        },
+        {
+            "display": "M\u0169i \u2013kh\u00ed qu\u1ea3n",
+            "code": "NTRAC",
+            "property": []
+        },
+        {
+            "display": "L\u1ed7 r\u1ed1n",
+            "code": "NAVEL",
+            "property": []
+        },
+        {
+            "display": "C\u1ed5",
+            "code": "NECK",
+            "property": []
+        },
+        {
+            "display": "D\u00e2y th\u1ea7n kinh",
+            "code": "NERVE",
+            "property": []
+        },
+        {
+            "display": "N\u00fam v\u00fa",
+            "code": "NIPPL",
+            "property": []
+        },
+        {
+            "display": "M\u0169i (khoang m\u0169i)",
+            "code": "NOS",
+            "property": []
+        },
+        {
+            "display": "M\u0169i/ (b\u00ean ngo\u00e0i)",
+            "code": "NOSE",
+            "property": []
+        },
+        {
+            "display": "L\u1ed7 m\u0169i",
+            "code": "NOSTR",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c ch\u1eabm (th\u00f9y ch\u1eabm, x\u01b0\u01a1ng ch\u1eabm)",
+            "code": "OCCIP",
+            "property": []
+        },
+        {
+            "display": "M\u1ecfm khu\u1ef7u tay",
+            "code": "OLECR",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng n\u1ed1i",
+            "code": "OMEN",
+            "property": []
+        },
+        {
+            "display": "\u1ed4 m\u1eaft",
+            "code": "ORBIT",
+            "property": []
+        },
+        {
+            "display": "H\u1ecdng mi\u1ec7ng",
+            "code": "ORO",
+            "property": []
+        },
+        {
+            "display": "\u0110ai x\u01b0\u01a1ng ch\u1eadu",
+            "code": "OSCOX",
+            "property": []
+        },
+        {
+            "display": "Bu\u1ed3ng tr\u1ee9ng",
+            "code": "OVARY",
+            "property": []
+        },
+        {
+            "display": "V\u00f2m mi\u1ec7ng/h\u00e0m \u1ebfch",
+            "code": "PALAT",
+            "property": []
+        },
+        {
+            "display": "V\u00f2m mi\u1ec7ng c\u1ee9ng",
+            "code": "PLATH",
+            "property": []
+        },
+        {
+            "display": "V\u00f2m mi\u1ec7ng m\u1ec1m",
+            "code": "PLATS",
+            "property": []
+        },
+        {
+            "display": "L\u00f2ng b\u00e0n tay/Gan b\u00e0n tay",
+            "code": "PALM",
+            "property": []
+        },
+        {
+            "display": "Tuy\u1ebfn t\u1ee5y",
+            "code": "PANCR",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch t\u1ee5y",
+            "code": "PAFL",
+            "property": []
+        },
+        {
+            "display": "\u1ede g\u1ea7n x\u01b0\u01a1ng \u1ee9c",
+            "code": "PAS   ",
+            "property": []
+        },
+        {
+            "display": "C\u1eadn kh\u00ed qu\u1ea3n",
+            "code": "PARAT",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c \u0111\u1ec9nh (x\u01b0\u01a1ng \u0111\u1ec9nh)",
+            "code": "PARIE",
+            "property": []
+        },
+        {
+            "display": "Vi\u00eam quanh m\u00f3ng (do vi khu\u1ea9n, n\u1ea5m)",
+            "code": "PARON",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c mang tai/ Tuy\u1ebfn mang tai",
+            "code": "PAROT",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng b\u00e1nh ch\u00e8",
+            "code": "PATEL",
+            "property": []
+        },
+        {
+            "display": "Khung x\u01b0\u01a1ng ch\u1eadu",
+            "code": "PELV",
+            "property": []
+        },
+        {
+            "display": "Tr\u1ee5c/Th\u00e2n d\u01b0\u01a1ng v\u1eadt",
+            "code": "PENSH",
+            "property": []
+        },
+        {
+            "display": "D\u01b0\u01a1ng v\u1eadt",
+            "code": "PENIS",
+            "property": []
+        },
+        {
+            "display": "Quanh h\u1eadu m\u00f4n/ Quanh tr\u1ef1c tr\u00e0ng",
+            "code": "PANAL",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch m\u00e0ng tim",
+            "code": "PERI",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng ngo\u00e0i tim",
+            "code": "PCARD",
+            "property": []
+        },
+        {
+            "display": "Quanh \u00e2m v\u1eadt",
+            "code": "PCLIT",
+            "property": []
+        },
+        {
+            "display": "Quanh gan",
+            "code": "PERIH",
+            "property": []
+        },
+        {
+            "display": "\u0110\u00e1y ch\u1eadu",
+            "code": "PNEAL",
+            "property": []
+        },
+        {
+            "display": "\u00c1p-xe \u0111\u00e1y ch\u1eadu",
+            "code": "PERIN",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c quanh th\u1eadn",
+            "code": "PNEPH",
+            "property": []
+        },
+        {
+            "display": "Ph\u1ea7n \u1edf gi\u1eefa h\u1eadu m\u00f4n v\u00e0 b\u1ed9 ph\u1eadn sinh d\u1ee5c",
+            "code": "PNM",
+            "property": []
+        },
+        {
+            "display": "Quanh h\u1ed1c m\u1eaft",
+            "code": "PORBI",
+            "property": []
+        },
+        {
+            "display": "Quanh tr\u1ef1c tr\u00e0ng",
+            "code": "PERRA",
+            "property": []
+        },
+        {
+            "display": "Quanh l\u00e1ch",
+            "code": "PERIS",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c m\u00e0ng b\u1ee5ng",
+            "code": "PER",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch m\u00e0ng b\u1ee5ng",
+            "code": "PERT",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng b\u1ee5ng/Ph\u00fac m\u1ea1c",
+            "code": "PERIT",
+            "property": []
+        },
+        {
+            "display": "Quanh amidan",
+            "code": "PTONS",
+            "property": []
+        },
+        {
+            "display": "Quanh ni\u1ec7u \u0111\u1ea1o",
+            "code": "PERIU",
+            "property": []
+        },
+        {
+            "display": "Xung quanh m\u1ee5n n\u01b0\u1edbc/t\u00fai tinh",
+            "code": "PERIV",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng \u0111\u1ed1t ng\u00f3n tay/ch\u00e2n",
+            "code": "PHALA",
+            "property": []
+        },
+        {
+            "display": "\u1ed4 l\u00f4ng/Nang l\u00f4ng",
+            "code": "PILO",
+            "property": []
+        },
+        {
+            "display": "Loa tai",
+            "code": "PINNA",
+            "property": []
+        },
+        {
+            "display": "Nhau thai",
+            "code": "PLC",
+            "property": []
+        },
+        {
+            "display": "Nhau thai (ph\u00eda thai nhi)",
+            "code": "PLACF",
+            "property": []
+        },
+        {
+            "display": "Nhau thai (ph\u00eda m\u1eb9)",
+            "code": "PLACM",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c b\u00e0n ch\u00e2n",
+            "code": "PLANT",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng ph\u1ed5i",
+            "code": "PLEUR",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch m\u00e0ng ph\u1ed5i",
+            "code": "PLEU",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch m\u00e0ng ph\u1ed5i (d\u1ecbch ch\u1ecdc d\u00f2 ng\u1ef1c)",
+            "code": "PLR",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c v\u00f9ng kheo",
+            "code": "POPLI",
+            "property": []
+        },
+        {
+            "display": "Tr\u01b0\u1edbc tai",
+            "code": "PREAU",
+            "property": []
+        },
+        {
+            "display": "Ni\u1ec7u ti\u1ec1n th\u1eadn",
+            "code": "PRERE",
+            "property": []
+        },
+        {
+            "display": "Tuy\u1ebfn ti\u1ec1n li\u1ec7t",
+            "code": "PRST",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch tuy\u1ebfn ti\u1ec1n li\u1ec7t",
+            "code": "PROS",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c x\u01b0\u01a1ng mu",
+            "code": "PUBIC",
+            "property": []
+        },
+        {
+            "display": "\u0110\u1ed9ng m\u1ea1ch ph\u1ed5i",
+            "code": "PUL",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c x\u01b0\u01a1ng tay",
+            "code": "RADI",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng quay",
+            "code": "RADIUS",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c tr\u1ef1c tr\u00e0ng",
+            "code": "RECTL",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c tr\u1ef1c tr\u00e0ng",
+            "code": "RECTU",
+            "property": []
+        },
+        {
+            "display": "T\u1ebf b\u00e0o h\u1ed3ng c\u1ea7u",
+            "code": "RBC",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c th\u1eadn",
+            "code": "RENL",
+            "property": []
+        },
+        {
+            "display": "Khu v\u1ef1c t\u1ea1i trung t\u00e2m c\u1ee7a th\u1eadn",
+            "code": "RNP",
+            "property": []
+        },
+        {
+            "display": "Sau m\u00e0ng b\u1ee5ng",
+            "code": "RPERI",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng s\u01b0\u1eddn",
+            "code": "RIB",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c x\u01b0\u01a1ng c\u00f9ng",
+            "code": "SACRA",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c x\u01b0\u01a1ng c\u00f9ng-c\u1ee5t",
+            "code": "SACRO",
+            "property": []
+        },
+        {
+            "display": "Kh\u1edbp n\u1ed1i x\u01b0\u01a1ng c\u00f9ng v\u00e0 x\u01b0\u01a1ng ch\u1eadu",
+            "code": "SACIL",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng c\u00f9ng",
+            "code": "SACRU",
+            "property": []
+        },
+        {
+            "display": "Tuy\u1ebfn n\u01b0\u1edbc b\u1ecdt",
+            "code": "SALGL",
+            "property": []
+        },
+        {
+            "display": "Da \u0111\u1ea7u",
+            "code": "SCALP",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng b\u1ea3 vai",
+            "code": "SCAPU",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng c\u1ee9ng",
+            "code": "SCLER",
+            "property": []
+        },
+        {
+            "display": "B\u00ecu d\u00e1i",
+            "code": "SCROT",
+            "property": []
+        },
+        {
+            "display": "Tinh d\u1ecbch",
+            "code": "SEMN",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch tinh d\u1ecbch",
+            "code": "SEM",
+            "property": []
+        },
+        {
+            "display": "V\u00e1ch ng\u0103n",
+            "code": "SEPTU",
+            "property": []
+        },
+        {
+            "display": "T\u1ee5 d\u1ecbch (t\u00fai d\u1ecbch huy\u1ebft thanh th\u01b0\u1eddng xu\u1ea5t hi\u1ec7n trong c\u01a1 th\u1ec3 sau khi ph\u1eabu thu\u1eadt)",
+            "code": "SEROM",
+            "property": []
+        },
+        {
+            "display": "C\u1eb3ng ch\u00e2n/\u1ed1ng quy\u1ec3n",
+            "code": "SHIN",
+            "property": []
+        },
+        {
+            "display": "Kh\u1edbp vai",
+            "code": "SHOLJ",
+            "property": []
+        },
+        {
+            "display": "Vai",
+            "code": "SHOL",
+            "property": []
+        },
+        {
+            "display": "H\u00ecnh x\u00edch-ma",
+            "code": "SIGMO",
+            "property": []
+        },
+        {
+            "display": "Xoang/r\u00f2",
+            "code": "SINUS",
+            "property": []
+        },
+        {
+            "display": "C\u01a1 x\u01b0\u01a1ng",
+            "code": "SKM",
+            "property": []
+        },
+        {
+            "display": "Tuy\u1ebfn Skene",
+            "code": "SKENE",
+            "property": []
+        },
+        {
+            "display": "H\u1ed9p s\u1ecd",
+            "code": "SKULL",
+            "property": []
+        },
+        {
+            "display": "Ru\u1ed9t non",
+            "code": "INSTS",
+            "property": []
+        },
+        {
+            "display": "Gan b\u00e0n ch\u00e2n/L\u00f2ng b\u00e0n ch\u00e2n",
+            "code": "SOLE",
+            "property": []
+        },
+        {
+            "display": "Tinh tr\u00f9ng",
+            "code": "SPRM",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c x\u01b0\u01a1ng b\u01b0\u1edbm",
+            "code": "SPHEN",
+            "property": []
+        },
+        {
+            "display": "T\u1ee7y x\u01b0\u01a1ng s\u1ed1ng",
+            "code": "SPCOR",
+            "property": []
+        },
+        {
+            "display": "L\u00e1 l\u00e1ch",
+            "code": "SPLN",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng \u1ee9c/Thu\u1ed9c x\u01b0\u01a1ng \u1ee9c",
+            "code": "STER",
+            "property": []
+        },
+        {
+            "display": "L\u1ed7 kh\u00ed/l\u1ed7 th\u1edf",
+            "code": "STOM",
+            "property": []
+        },
+        {
+            "display": "L\u1ed7 nh\u00e2n t\u1ea1o, ti\u1ec3u",
+            "code": "USTOM",
+            "property": []
+        },
+        {
+            "display": "D\u1ea1 d\u00e0y",
+            "code": "STOMA",
+            "property": []
+        },
+        {
+            "display": "M\u1ecfm c\u1ee5t",
+            "code": "STUMP",
+            "property": []
+        },
+        {
+            "display": "D\u01b0\u1edbi x\u01b0\u01a1ng \u0111\u00f2n",
+            "code": "SCLV",
+            "property": []
+        },
+        {
+            "display": "D\u01b0\u1edbi c\u01a1 ho\u00e0nh",
+            "code": "SDP",
+            "property": []
+        },
+        {
+            "display": "D\u01b0\u1edbi m\u00e0ng c\u1ee9ng",
+            "code": "SUB",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch d\u01b0\u1edbi m\u00e0ng c\u1ee9ng",
+            "code": "SUBD",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch t\u1ee5 d\u01b0\u1edbi da \u0111\u1ea7u (kho\u1ea3ng kh\u00f4ng gian n\u1eb1m gi\u1eefa m\u00e0ng x\u01b0\u01a1ng s\u1ecd v\u00e0 da \u0111\u1ea7u)",
+            "code": "SGF",
+            "property": []
+        },
+        {
+            "display": "D\u01b0\u1edbi h\u00e0m d\u01b0\u1edbi",
+            "code": "SUBM",
+            "property": []
+        },
+        {
+            "display": "D\u01b0\u1edbi h\u00e0m tr\u00ean",
+            "code": "SUBX",
+            "property": []
+        },
+        {
+            "display": "D\u01b0\u1edbi c\u1eb1m",
+            "code": "SUBME",
+            "property": []
+        },
+        {
+            "display": "D\u01b0\u1edbi c\u01a1 ho\u00e0nh",
+            "code": "SUBPH",
+            "property": []
+        },
+        {
+            "display": "Tr\u00ean c\u1ed5 t\u1eed cung",
+            "code": "SPX",
+            "property": []
+        },
+        {
+            "display": "Tr\u00ean x\u01b0\u01a1ng \u0111\u00f2n",
+            "code": "SCLAV",
+            "property": []
+        },
+        {
+            "display": "Tr\u00ean kh\u1edbp mu",
+            "code": "SUPRA",
+            "property": []
+        },
+        {
+            "display": "M\u1eabu x\u00e9t nghi\u1ec7m tr\u00ean kh\u1edbp mu",
+            "code": "SUPB",
+            "property": []
+        },
+        {
+            "display": "M\u1ed3 h\u00f4i",
+            "code": "SWT",
+            "property": []
+        },
+        {
+            "display": "Tuy\u1ebfn m\u1ed3 h\u00f4i",
+            "code": "SWTG",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c ho\u1ea1t d\u1ecbch",
+            "code": "SYNOL",
+            "property": []
+        },
+        {
+            "display": "Ho\u1ea1t d\u1ecbch",
+            "code": "SYN",
+            "property": []
+        },
+        {
+            "display": "M\u00e0ng ho\u1ea1t d\u1ecbch",
+            "code": "SYNOV",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c kh\u1ed1i x\u01b0\u01a1ng c\u1ed5 ch\u00e2n",
+            "code": "TARS",
+            "property": []
+        },
+        {
+            "display": "\u1ed1ng l\u1ec7",
+            "code": "TDUCT",
+            "property": []
+        },
+        {
+            "display": "N\u01b0\u1edbc m\u1eaft",
+            "code": "TEAR",
+            "property": []
+        },
+        {
+            "display": "Th\u00e1i d\u01b0\u01a1ng",
+            "code": "TEMPL",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c th\u00e1i d\u01b0\u01a1ng",
+            "code": "TEMPO",
+            "property": []
+        },
+        {
+            "display": "Th\u00f9y th\u00e1i d\u01b0\u01a1ng",
+            "code": "TML",
+            "property": []
+        },
+        {
+            "display": "Tinh ho\u00e0n",
+            "code": "TESTI",
+            "property": []
+        },
+        {
+            "display": "B\u1eafp \u0111\u00f9i",
+            "code": "THIGH",
+            "property": []
+        },
+        {
+            "display": "Ng\u1ef1c/\u1edf ng\u1ef1c/Ch\u1ecdc d\u00f2 ng\u1ef1c",
+            "code": "THORA",
+            "property": []
+        },
+        {
+            "display": "C\u1ed5 h\u1ecdng",
+            "code": "THRB",
+            "property": []
+        },
+        {
+            "display": "Ng\u00f3n tay c\u00e1i",
+            "code": "THUMB",
+            "property": []
+        },
+        {
+            "display": "M\u00f3ng ng\u00f3n tay c\u00e1i",
+            "code": "TNL",
+            "property": []
+        },
+        {
+            "display": "Tuy\u1ebfn \u1ee9c",
+            "code": "THM",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c tuy\u1ebfn gi\u00e1p",
+            "code": "THYRD",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng ch\u00e0y, x\u01b0\u01a1ng \u1ed1ng ch\u00e2n",
+            "code": "TIBIA",
+            "property": []
+        },
+        {
+            "display": "Ng\u00f3n ch\u00e2n",
+            "code": "TOE",
+            "property": []
+        },
+        {
+            "display": "M\u00f3ng ng\u00f3n ch\u00e2n",
+            "code": "TOEN",
+            "property": []
+        },
+        {
+            "display": "L\u01b0\u1ee1i",
+            "code": "TONG",
+            "property": []
+        },
+        {
+            "display": "Ami-dan",
+            "code": "TONS",
+            "property": []
+        },
+        {
+            "display": "R\u0103ng",
+            "code": "TOOTH",
+            "property": []
+        },
+        {
+            "display": "Ch\u00e2n r\u0103ng",
+            "code": "TSK",
+            "property": []
+        },
+        {
+            "display": "Kh\u00ed qu\u1ea3n",
+            "code": "TRCHE",
+            "property": []
+        },
+        {
+            "display": "Xuy\u00ean cu\u1ed1ng ph\u1ed5i",
+            "code": "TBRON",
+            "property": []
+        },
+        {
+            "display": "Transcarina Asp",
+            "code": "TCN",
+            "property": []
+        },
+        {
+            "display": "X\u01b0\u01a1ng tr\u1ee5, x\u01b0\u01a1ng khu\u1ef7u tay",
+            "code": "ULNA",
+            "property": []
+        },
+        {
+            "display": "M\u00e1u cu\u1ed1ng r\u1ed1n",
+            "code": "UMB",
+            "property": []
+        },
+        {
+            "display": "R\u1ed1n",
+            "code": "UMBL",
+            "property": []
+        },
+        {
+            "display": "Ni\u1ec7u qu\u1ea3n",
+            "code": "URET",
+            "property": []
+        },
+        {
+            "display": "Ni\u1ec7u \u0111\u1ea1o",
+            "code": "URTH",
+            "property": []
+        },
+        {
+            "display": "T\u1eed cung",
+            "code": "UTERI",
+            "property": []
+        },
+        {
+            "display": "T\u00fai c\u00f9ng \u00e2m \u0111\u1ea1o",
+            "code": "SAC",
+            "property": []
+        },
+        {
+            "display": "T\u1eed cung",
+            "code": "UTER",
+            "property": []
+        },
+        {
+            "display": "\u00c2m \u0111\u1ea1o",
+            "code": "VAGIN",
+            "property": []
+        },
+        {
+            "display": "Th\u00e0nh \u00e2m \u0111\u1ea1o",
+            "code": "VCUFF",
+            "property": []
+        },
+        {
+            "display": "V\u00f2m \u00e2m \u0111\u1ea1o",
+            "code": "VGV",
+            "property": []
+        },
+        {
+            "display": "Van",
+            "code": "VAL",
+            "property": []
+        },
+        {
+            "display": "\u1ed0ng d\u1eabn tinh",
+            "code": "VAS",
+            "property": []
+        },
+        {
+            "display": "C\u01a1 r\u1ed9ng ngo\u00e0i c\u1ee7a \u0111\u00f9i",
+            "code": "VASTL",
+            "property": []
+        },
+        {
+            "display": "V\u00f2m",
+            "code": "VAULT",
+            "property": []
+        },
+        {
+            "display": "T\u0129nh m\u1ea1ch",
+            "code": "VEIN",
+            "property": []
+        },
+        {
+            "display": "H\u00f4ng",
+            "code": "VENTG",
+            "property": []
+        },
+        {
+            "display": "CSF t\u00e2m th\u1ea5t",
+            "code": "VCSF",
+            "property": []
+        },
+        {
+            "display": "Th\u00f9y nh\u1ed9ng ti\u1ec3u n\u00e3o",
+            "code": "VERMI",
+            "property": []
+        },
+        {
+            "display": "\u0110\u1ed1t s\u1ed1ng c\u1ed5",
+            "code": "VERTC",
+            "property": []
+        },
+        {
+            "display": "\u0110\u1ed1t s\u1ed1ng l\u01b0ng",
+            "code": "VERTL",
+            "property": []
+        },
+        {
+            "display": "\u0110\u1ed1t s\u1ed1ng ng\u1ef1c",
+            "code": "VERTT",
+            "property": []
+        },
+        {
+            "display": "T\u00fai, b\u1ecdng",
+            "code": "VESI",
+            "property": []
+        },
+        {
+            "display": "Thu\u1ed9c t\u00fai, b\u1ecdng",
+            "code": "VESCL",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch trong t\u00fai, b\u1ecdng",
+            "code": "VESFLD",
+            "property": []
+        },
+        {
+            "display": "Ti\u1ec1n \u0111\u00ecnh (sinh d\u1ee5c)",
+            "code": "VESTI",
+            "property": []
+        },
+        {
+            "display": "D\u1ecbch th\u1ee7y tinh",
+            "code": "VITR",
+            "property": []
+        },
+        {
+            "display": "D\u00e2y thanh qu\u1ea3n",
+            "code": "VOC",
+            "property": []
+        },
+        {
+            "display": "\u00c2m h\u1ed9",
+            "code": "VULVA",
+            "property": []
+        },
+        {
+            "display": "C\u1ed5 tay",
+            "code": "WRIST",
+            "property": []
+        }
+    ]
+}
