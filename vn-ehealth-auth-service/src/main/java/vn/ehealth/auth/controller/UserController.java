@@ -135,6 +135,7 @@ public class UserController {
         	user.diaChi = body.diaChi;
         	user.soDienThoai = body.soDienThoai;
         	user.chungChiHanhNghe = body.chungChiHanhNghe;
+        	user.roleId = roleService.getByCode(body.roleCode).map(x->x.id).orElse(null);
         	user = userService.save(user);
             return ResponseEntity.ok(mapOf("success", true));
         }catch(Exception e) {

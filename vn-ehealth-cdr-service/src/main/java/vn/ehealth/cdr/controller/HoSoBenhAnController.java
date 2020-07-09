@@ -55,7 +55,7 @@ public class HoSoBenhAnController {
         try {
             var user = UserUtil.getCurrentUser();
            
-            var count = hoSoBenhAnService.countHoSo(user.id, user.coSoKhamBenhId, trangthai, maYte);
+            var count = hoSoBenhAnService.countHoSo(user, user.coSoKhamBenhId, trangthai, maYte);
             return ResponseEntity.ok(count);
             
         }catch (Exception e) {
@@ -86,7 +86,7 @@ public class HoSoBenhAnController {
                 throw new UnAuthorizedException();
             }
             
-            var result = hoSoBenhAnService.getDsHoSo(user.id, user.coSoKhamBenhId, trangthai, maYte, start, count);
+            var result = hoSoBenhAnService.getDsHoSo(user, user.coSoKhamBenhId, trangthai, maYte, start, count);
             return ResponseEntity.ok(result);
             
         }catch(Exception e) {
@@ -243,15 +243,16 @@ public class HoSoBenhAnController {
     }
 
     @PostMapping("/add_nguoi_xem/{hsbaId}")
-    public ResponseEntity<?> addNguoiXem(@PathVariable String hsbaId, @RequestBody String listUserName) {
-    	hoSoBenhAnService.addNguoiXem(new ObjectId(hsbaId), listUserName.split(","));
+    public ResponseEntity<?> addNguoiXem(@PathVariable String hsbaId, @RequestBody Map<String, String> body) {
+    	String userIds = body.get("userIds");
+    	hoSoBenhAnService.addNguoiXem(new ObjectId(hsbaId), userIds.split(","));
     	var result = mapOf("success", true);
         return ResponseEntity.ok(result); 
     }
     
-    @DeleteMapping("/remove_nguoi_xem/{hsbaId}")
-    public ResponseEntity<?> removeNguoiXem(@PathVariable String hsbaId, @RequestBody String listUserName) {
-    	hoSoBenhAnService.xoaNguoiXem(new ObjectId(hsbaId), listUserName.split(","));
+    @PostMapping("/remove_nguoi_xem/{hsbaId}")
+    public ResponseEntity<?> removeNguoiXem(@PathVariable String hsbaId, @RequestBody Map<String, String> body) {
+    	hoSoBenhAnService.xoaNguoiXem(new ObjectId(hsbaId), new String[] {body.get("username")});
     	var result = mapOf("success", true);
         return ResponseEntity.ok(result); 
     }

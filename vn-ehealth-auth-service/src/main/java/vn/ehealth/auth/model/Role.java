@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 @Document(collection = "role")
 public class Role {
+	final public static String ADMIN = "ADMIN";
     
     @Id public ObjectId id;
     
@@ -28,5 +29,14 @@ public class Role {
         if(id != null) {
             this.id = new ObjectId(id);
         }
+    }
+    
+    public boolean isAdminRole() {
+    	return ADMIN.equals(this.code);
+    	
+    }
+    
+    public boolean hasPrivilege(String privilegeCode) {
+    	return privileges != null && privilegeCode.contains(privilegeCode);
     }
 }

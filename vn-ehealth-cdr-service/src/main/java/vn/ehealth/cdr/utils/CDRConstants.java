@@ -45,5 +45,5 @@ public class CDRConstants {
         final public static String CHIEU = "03";
         final public static String TOI = "04";
     }
-    
+
 }

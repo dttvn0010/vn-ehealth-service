@@ -80,4 +80,14 @@ public class User {
         }
         return role;
     }
+    
+    public boolean isAdmin() {
+    	getRole();
+    	return role != null && role.isAdminRole();
+    }
+    
+    public boolean hasPrivilege(String privilegeCode) {
+    	getRole();
+    	return role != null && role.hasPrivilege(privilegeCode);
+    }
 }
