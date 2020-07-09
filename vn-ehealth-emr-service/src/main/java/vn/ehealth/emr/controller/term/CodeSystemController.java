@@ -244,7 +244,7 @@ public class CodeSystemController {
                             propDTO.value = ((IntegerType) prop.getValue()).getValue();
                         }else if(prop.getValue() instanceof Coding) {
                             propDTO.value = CodingDTO.fromCoding((Coding) prop.getValue());
-                        } else {
+                        } else if (prop.getValue() != null) {
                             propDTO.value = prop.getValue().primitiveValue();
                         }
     	                conceptDTO.property.add(propDTO);

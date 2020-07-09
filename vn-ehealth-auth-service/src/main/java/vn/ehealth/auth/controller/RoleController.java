@@ -1,5 +1,12 @@
 package vn.ehealth.auth.controller;
 
+import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +23,6 @@ import vn.ehealth.auth.service.RoleService;
 import vn.ehealth.auth.utils.MessageUtils;
 import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
-
-import static vn.ehealth.hl7.fhir.core.util.DataConvertUtil.mapOf;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 
 @RequestMapping("/api/role")
@@ -72,13 +72,10 @@ public class RoleController {
     	if(StringUtils.isEmpty(body.name)) {
             UserUtil.addError(errors, "name", MessageUtils.get("validate.required"));
         }
-    	
     	var role = roleService.getByCode(body.code).orElse(null);
-    	
     	if(role != null && !role.id.equals(body.id)) {
 	    	UserUtil.addError(errors, "code", MessageUtils.get("validate.code.already.exist"));
 	    }
-    	
     	return errors;
     }
     

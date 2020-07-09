@@ -112,7 +112,7 @@ public class Hl7FhirRestfulServer extends RestfulServer {
 	@Override
 	public void addHeadersToResponse(HttpServletResponse theHttpResponse) {
 		theHttpResponse.addHeader("X-Powered-By", "HAPI FHIR " + VersionUtil.getVersion()
-				+ " RESTful Server (Vietnam eHealth Innovation Group - FHIR API R4)");
+				+ " RESTful Server (Cục Quản lý Khám chữa bệnh - Bộ Y tế - FHIR API R4)");
 	}
 
 	@Override

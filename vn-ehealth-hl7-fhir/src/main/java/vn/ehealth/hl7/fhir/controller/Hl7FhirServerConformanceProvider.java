@@ -89,7 +89,7 @@ public class Hl7FhirServerConformanceProvider extends ServerCapabilityStatementP
 		}
 
 		myCapabilityStatement.setCopyright(
-				"This implementation is belonged to eHealth Core Team - Vietnam eHealth Innovation Group (VEIG). "
+				"This implementation is belonged to eHealth Core Team - Vietnam eHealth Innovation Group (VEIG) - Bộ Y tế. "
 						+ "Reproduction or distribution of this product without permission of the owner is prohibited");
 		ContactDetail contact = new ContactDetail();
 		ContactPoint contactPoint = new ContactPoint();
