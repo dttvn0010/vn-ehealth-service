@@ -1,0 +1,25 @@
+{
+  "resourceType": "CodeSystem",
+  
+  "url": "http://hl7.org/fhir/ValueSet/vaccine-code",
+  "name": "Vaccine Code",
+  "publisher": "HL7 Organization",
+  "concept": [
+    {
+      "code": "143",
+      "display": "Adenovirus types 4 and 7"
+    },
+    {
+      "code": "54",
+      "display": "adenovirus, type 4"
+    },
+    {
+      "code": "55",
+      "display": "adenovirus, type 7"
+    },
+    {
+      "code": "82",
+      "display": "adenovirus, unspecified formulation"
+    }
+  ]
+}

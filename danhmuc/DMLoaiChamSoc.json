@@ -1,0 +1,46 @@
+{
+  "resourceType": "CodeSystem",
+ 
+  "url": "https://fhir.emr.com.vn/CodeSystem/DMLoaiChamSoc",
+  "name": "Danh mục loại chăm sóc",
+  "publisher": "VEIG",
+  "description": "Danh mục loại chăm sóc",
+  "property": [
+    {
+      "code": "display",
+      "type": "string"
+    }
+  ],
+  "concept": [
+    {
+      "code": "01",
+      "display": "Uống thuốc",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Uống thuốc|(01)"
+        }
+      ]
+    },
+    {
+      "code": "02",
+      "display": "Tiêm truyền",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Tiêm truyền|(02)"
+        }
+      ]
+    },
+    {
+      "code": "03",
+      "display": "Phẫu thuật thủ thuật",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Phẫu thuật thủ thuật|(03)"
+        }
+      ]
+    }
+  ]
+}

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,6 +51,13 @@ public class CodeSystemController {
 	    return MongoUtils.createQuery(params);
 	}
 	
+	@GetMapping("/get_url_by_id/{id}")
+	public ResponseEntity<?> getUrlById(@PathVariable String id) {
+		var codeSystem = codeSystemDao.read(FhirUtil.createIdType(id));
+		var result = mapOf("url", codeSystem.getUrl());
+		return ResponseEntity.ok(result);
+	}
+	
 	@GetMapping("/count")
 	public int count(@RequestParam Optional<String> keyword) {
 		var criteria = createQuery(keyword);
@@ -63,7 +71,7 @@ public class CodeSystemController {
                                 @RequestParam Optional<Integer> count) {
 		
 	    var criteria = createQuery(keyword);
-		var lst = codeSystemDao.searchResource(criteria);
+		var lst = codeSystemDao.searchResource(criteria, start.orElse(-1), count.orElse(-1));
 		
 		if(viewEntity.orElse(false)) {
 			var lstEnt = transform(lst, x -> fhirToEntity(x, CodeSystemEntity.class));

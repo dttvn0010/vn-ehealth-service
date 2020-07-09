@@ -1,0 +1,2219 @@
+{
+    "resourceType": "CodeSystem",
+    "url": "",
+    "name": "Danh mục giải phẫu",
+    "publisher": "VEIG",
+    "description": "Danh mục giải phẫu",
+    "property": [],
+    "concept": [{
+            "display": "Bụng",
+            "code": "ADB",
+            "property": []
+        },
+        {
+            "display": "Lớp sụn ở hốc khớp gối",
+            "code": "ACET",
+            "property": []
+        },
+        {
+            "display": "Gân nối bắp chân với gót chân",
+            "code": "ACHIL",
+            "property": []
+        },
+        {
+            "display": "Amidan V.A (nằm chặn giữa đường thở và đường ăn, chỉ thường tồn tại khi nhỏ hơn 12 tuổi, sẽ teo nhỏ sau 12 tuổi)",
+            "code": "ADE",
+            "property": []
+        },
+        {
+            "display": "Tuyến thượng thận",
+            "code": "ADR",
+            "property": []
+        },
+        {
+            "display": "Nước ối",
+            "code": "AMN",
+            "property": []
+        },
+        {
+            "display": "Túi ối",
+            "code": "AMS",
+            "property": []
+        },
+        {
+            "display": "Hậu môn",
+            "code": "ANAL",
+            "property": []
+        },
+        {
+            "display": "Mắt cá chân",
+            "code": "ANKL",
+            "property": []
+        },
+        {
+            "display": "Trước khuỷu",
+            "code": "ANTEC",
+            "property": []
+        },
+        {
+            "display": "Hố trước khuỷu",
+            "code": "ANTECF",
+            "property": []
+        },
+        {
+            "display": "Antrum (hố hốc/ổ/khoang trong xương hoặc cấu trúc giải phẫu khác)",
+            "code": "ANTR",
+            "property": []
+        },
+        {
+            "display": "Hậu môn",
+            "code": "ANUS",
+            "property": []
+        },
+        {
+            "display": "Động mạch chủ",
+            "code": "AORTA",
+            "property": []
+        },
+        {
+            "display": "Vành động mạch chủ",
+            "code": "AR",
+            "property": []
+        },
+        {
+            "display": "Van động mạch chủ",
+            "code": "AV",
+            "property": []
+        },
+        {
+            "display": "Ruột thừa",
+            "code": "APDX",
+            "property": []
+        },
+        {
+            "display": "Quầng vú",
+            "code": "AREO",
+            "property": []
+        },
+        {
+            "display": "Cánh tay",
+            "code": "ARM",
+            "property": []
+        },
+        {
+            "display": "Động mạch",
+            "code": "ARTE",
+            "property": []
+        },
+        {
+            "display": "Cổ trướng",
+            "code": "ASCIT",
+            "property": []
+        },
+        {
+            "display": "Dịch cổ trướng",
+            "code": "ASCT",
+            "property": []
+        },
+        {
+            "display": "Tâm nhĩ",
+            "code": "ATR",
+            "property": []
+        },
+        {
+            "display": "Thuộc về lỗ tai",
+            "code": "AURI",
+            "property": []
+        },
+        {
+            "display": "Thuộc nách",
+            "code": "AXI",
+            "property": []
+        },
+        {
+            "display": "Lưng",
+            "code": "BACK",
+            "property": []
+        },
+        {
+            "display": "Ống bartholin",
+            "code": "BARTD",
+            "property": []
+        },
+        {
+            "display": "Tuyến bartholin",
+            "code": "BARTG",
+            "property": []
+        },
+        {
+            "display": "Dịch tuyến bartholin",
+            "code": "BRTGF",
+            "property": []
+        },
+        {
+            "display": "Tế bào máu trắng basophil",
+            "code": "BPH",
+            "property": []
+        },
+        {
+            "display": "Ống mật",
+            "code": "BID",
+            "property": []
+        },
+        {
+            "display": "Dịch mật",
+            "code": "BIFL",
+            "property": []
+        },
+        {
+            "display": "Bàng quang",
+            "code": "BLAD",
+            "property": []
+        },
+        {
+            "display": "Máu",
+            "code": "BLOOD",
+            "property": []
+        },
+        {
+            "display": "Máu, động mạch",
+            "code": "BLDA",
+            "property": []
+        },
+        {
+            "display": "Máu, mao mạch",
+            "code": "BLDC",
+            "property": []
+        },
+        {
+            "display": "Máu, tĩnh mạch",
+            "code": "BLDV",
+            "property": []
+        },
+        {
+            "display": "Máu, cuống rốn",
+            "code": "CBLD",
+            "property": []
+        },
+        {
+            "display": "Máu, toàn phần",
+            "code": "BLD",
+            "property": []
+        },
+        {
+            "display": "Cơ thể, toàn phần",
+            "code": "BDY",
+            "property": []
+        },
+        {
+            "display": "Xương",
+            "code": "BON",
+            "property": []
+        },
+        {
+            "display": "Tủy Xương ống",
+            "code": "BMAR",
+            "property": []
+        },
+        {
+            "display": "Ruột",
+            "code": "BOWEL",
+            "property": []
+        },
+        {
+            "display": "Ruột già",
+            "code": "BOWLA",
+            "property": []
+        },
+        {
+            "display": "Ruột non",
+            "code": "BOWSM",
+            "property": []
+        },
+        {
+            "display": "Thuộc cánh tay",
+            "code": "BRA",
+            "property": []
+        },
+        {
+            "display": "Não",
+            "code": "BRAIN",
+            "property": []
+        },
+        {
+            "display": "Dịch u nang não",
+            "code": "BCYS",
+            "property": []
+        },
+        {
+            "display": "Vú",
+            "code": "BRST",
+            "property": []
+        },
+        {
+            "display": "Dịch vú",
+            "code": "BRSTFL",
+            "property": []
+        },
+        {
+            "display": "Thuộc cuống phổi/ phế quản",
+            "code": "BRO",
+            "property": []
+        },
+        {
+            "display": "Nhánh cuống phổi nhỏ",
+            "code": "BROCH",
+            "property": []
+        },
+        {
+            "display": "Phế quản",
+            "code": "BRONC",
+            "property": []
+        },
+        {
+            "display": "Ống thông broviac (thường được đặt ở tĩnh mạch dưới xương đòn)",
+            "code": "BRV   ",
+            "property": []
+        },
+        {
+            "display": "Thuộc miệng/Thuộc má",
+            "code": "BUCCA",
+            "property": []
+        },
+        {
+            "display": "Bìu/túi hoạt dịch",
+            "code": "BURSA",
+            "property": []
+        },
+        {
+            "display": "Dịch trong bìu/túi hoạt dịch",
+            "code": "BURSF",
+            "property": []
+        },
+        {
+            "display": "Mông đít",
+            "code": "BUTT",
+            "property": []
+        },
+        {
+            "display": "Bắp chân",
+            "code": "CALF",
+            "property": []
+        },
+        {
+            "display": "Ống",
+            "code": "CANAL",
+            "property": []
+        },
+        {
+            "display": "Ống nhỏ, lệ quản",
+            "code": "CANLI",
+            "property": []
+        },
+        {
+            "display": "Ống thông dò",
+            "code": "CNL",
+            "property": []
+        },
+        {
+            "display": "Khóe mắt",
+            "code": "CANTH",
+            "property": []
+        },
+        {
+            "display": "Cơ tim",
+            "code": "CDM",
+            "property": []
+        },
+        {
+            "display": "Động mạch cổ",
+            "code": "CARO",
+            "property": []
+        },
+        {
+            "display": "Thuộc xương cổ tay",
+            "code": "CARP",
+            "property": []
+        },
+        {
+            "display": "Hố, lỗ hổng",
+            "code": "CAVIT",
+            "property": []
+        },
+        {
+            "display": "Khoang ngực",
+            "code": "CHE",
+            "property": []
+        },
+        {
+            "display": "Manh tràng/ ruột tịt (đoạn gần ruột thừa)",
+            "code": "CECUM",
+            "property": []
+        },
+        {
+            "display": "Dịch não tủy",
+            "code": "CSF",
+            "property": []
+        },
+        {
+            "display": "Cổ tử cung",
+            "code": "CVX",
+            "property": []
+        },
+        {
+            "display": "Cổ tử cung/Tử cung",
+            "code": "CERVUT",
+            "property": []
+        },
+        {
+            "display": "Má",
+            "code": "CHEEK",
+            "property": []
+        },
+        {
+            "display": "Ngực",
+            "code": "CHES",
+            "property": []
+        },
+        {
+            "display": "Ống dẫn lưu ngực",
+            "code": "CHEST ",
+            "property": []
+        },
+        {
+            "display": "Cằm",
+            "code": "CHIN",
+            "property": []
+        },
+        {
+            "display": "Vị trí cắt bao quy đầu",
+            "code": "CIRCU",
+            "property": []
+        },
+        {
+            "display": "Xương đòn/thuộc xương đòn",
+            "code": "CLAVI",
+            "property": []
+        },
+        {
+            "display": "Thuộc âm vật",
+            "code": "CLITO",
+            "property": []
+        },
+        {
+            "display": "Âm vật",
+            "code": "CLIT",
+            "property": []
+        },
+        {
+            "display": "Thuộc xương cụt",
+            "code": "COCCG",
+            "property": []
+        },
+        {
+            "display": "Xương cụt",
+            "code": "COCCY",
+            "property": []
+        },
+        {
+            "display": "Ruột kết",
+            "code": "COLON",
+            "property": []
+        },
+        {
+            "display": "Thuật mở thông ruột kết (phẫu thuật làm hậu môn giả)",
+            "code": "COLOS",
+            "property": []
+        },
+        {
+            "display": "Lỗ thông mở thông ruột kết",
+            "code": "COS   ",
+            "property": []
+        },
+        {
+            "display": "Ống dẫn chủ",
+            "code": "CDUCT",
+            "property": []
+        },
+        {
+            "display": "Kết mạc",
+            "code": "CONJ",
+            "property": []
+        },
+        {
+            "display": "Coral (sinh vật biển thuộc lớp san hô)",
+            "code": "CORAL",
+            "property": []
+        },
+        {
+            "display": "Cuống rốn",
+            "code": "COR",
+            "property": []
+        },
+        {
+            "display": "Máu cuống rốn",
+            "code": "CORD",
+            "property": []
+        },
+        {
+            "display": "Giác mạc",
+            "code": "CORN",
+            "property": []
+        },
+        {
+            "display": "Hộp sọ, gốc mũi (hai xoang sàng)",
+            "code": "CRANE",
+            "property": []
+        },
+        {
+            "display": "Hộp sọ, trán",
+            "code": "CRANF",
+            "property": []
+        },
+        {
+            "display": "Hộp sọ, chẩm",
+            "code": "CRANO",
+            "property": []
+        },
+        {
+            "display": "Hộp sọ, thùy đỉnh",
+            "code": "CRANP",
+            "property": []
+        },
+        {
+            "display": "Hộp sọ, xương bướm",
+            "code": "CRANS",
+            "property": []
+        },
+        {
+            "display": "Hộp sọ, thái dương",
+            "code": "CRANT",
+            "property": []
+        },
+        {
+            "display": "Xương trụ",
+            "code": "CUBIT",
+            "property": []
+        },
+        {
+            "display": "Khớp",
+            "code": "CUFF",
+            "property": []
+        },
+        {
+            "display": "Túi cùng (phần mở rộng của khoang phúc mạc giữa trực tràng và vách ngăn đằng sau tử cung)",
+            "code": "CULD",
+            "property": []
+        },
+        {
+            "display": "Chọc hút túi cùng bằng kim chích",
+            "code": "CULDO",
+            "property": []
+        },
+        {
+            "display": "Cơ delta",
+            "code": "DELT",
+            "property": []
+        },
+        {
+            "display": "Thuộc răng",
+            "code": "DENTA",
+            "property": []
+        },
+        {
+            "display": "Nướu răng",
+            "code": "DEN",
+            "property": []
+        },
+        {
+            "display": "Dịch thẩm tách",
+            "code": "DIAF",
+            "property": []
+        },
+        {
+            "display": "Cơ hoành",
+            "code": "DPH",
+            "property": []
+        },
+        {
+            "display": "Ngón chân, ngón tay",
+            "code": "DIGIT",
+            "property": []
+        },
+        {
+            "display": "Đĩa đệm",
+            "code": "DISC",
+            "property": []
+        },
+        {
+            "display": "Lưng/Phần lưng",
+            "code": "DORS",
+            "property": []
+        },
+        {
+            "display": "Dịch tá tràng",
+            "code": "DUFL",
+            "property": []
+        },
+        {
+            "display": "Tá tràng/thuộc tá tràng",
+            "code": "DUODE",
+            "property": []
+        },
+        {
+            "display": "Màng cứng",
+            "code": "DUR",
+            "property": []
+        },
+        {
+            "display": "Tai",
+            "code": "EAR",
+            "property": []
+        },
+        {
+            "display": "Xương tai, xương đe",
+            "code": "EARBI",
+            "property": []
+        },
+        {
+            "display": "Xương tai, xương búa",
+            "code": "EARBM",
+            "property": []
+        },
+        {
+            "display": "Xương tai, xương bàn đạp",
+            "code": "EARBS",
+            "property": []
+        },
+        {
+            "display": "Dái tai/Thùy tai",
+            "code": "EARLO",
+            "property": []
+        },
+        {
+            "display": "Khuỷu tay",
+            "code": "ELBOW",
+            "property": []
+        },
+        {
+            "display": "Khớp khuỷu tay",
+            "code": "ELBOWJ",
+            "property": []
+        },
+        {
+            "display": "Màng trong tim",
+            "code": "ENDC",
+            "property": []
+        },
+        {
+            "display": "Nội mạc cổ tử cung",
+            "code": "EC",
+            "property": []
+        },
+        {
+            "display": "Viêm nội nhãn (chất lỏng thủy tinh thể và dung dịch nước)",
+            "code": "EOLPH",
+            "property": []
+        },
+        {
+            "display": "Nội mạc tử cung",
+            "code": "ENDM",
+            "property": []
+        },
+        {
+            "display": "Nội khí quản",
+            "code": "ET",
+            "property": []
+        },
+        {
+            "display": "Trong niệu đạo",
+            "code": "EUR",
+            "property": []
+        },
+        {
+            "display": "Bạch cầu ưa a-xít (số lượng tăng cao khi có dị ứng)",
+            "code": "EOS",
+            "property": []
+        },
+        {
+            "display": "Thượng tâm vị",
+            "code": "EPICA",
+            "property": []
+        },
+        {
+            "display": "Thượng tâm",
+            "code": "EPICM",
+            "property": []
+        },
+        {
+            "display": "Mào tinh hoàn",
+            "code": "EPD",
+            "property": []
+        },
+        {
+            "display": "Gây tê ngoài màng cứng",
+            "code": "EPIDU",
+            "property": []
+        },
+        {
+            "display": "Nắp thanh quản",
+            "code": "EPIGL",
+            "property": []
+        },
+        {
+            "display": "Thuộc thực quản",
+            "code": "ESOPG",
+            "property": []
+        },
+        {
+            "display": "Thực quản",
+            "code": "ESO",
+            "property": []
+        },
+        {
+            "display": "Thuộc gốc mũi (xương xoang sàng)",
+            "code": "ETHMO",
+            "property": []
+        },
+        {
+            "display": "Bên ngoài Tĩnh mạch cảnh/tĩnh mạch cổ",
+            "code": "",
+            "property": []
+        },
+        {
+            "display": "Mắt",
+            "code": "EYE",
+            "property": []
+        },
+        {
+            "display": "Lông mày",
+            "code": "BROW",
+            "property": []
+        },
+        {
+            "display": "Mí mắt",
+            "code": "EYELI",
+            "property": []
+        },
+        {
+            "display": "Mặt",
+            "code": "FACE",
+            "property": []
+        },
+        {
+            "display": "Xương mặt, xương xoăn mũi dưới",
+            "code": "FBINC",
+            "property": []
+        },
+        {
+            "display": "Xương mặt, xương lệ",
+            "code": "FBLAC",
+            "property": []
+        },
+        {
+            "display": "Xương mặt, hàm trên",
+            "code": "FBMAX",
+            "property": []
+        },
+        {
+            "display": "Xương mặt, xương mũi",
+            "code": "FBNAS",
+            "property": []
+        },
+        {
+            "display": "Xương mặt, vòm miệng",
+            "code": "FBPAL",
+            "property": []
+        },
+        {
+            "display": "Xương mặt, xương lá mía",
+            "code": "FBVOM",
+            "property": []
+        },
+        {
+            "display": "Xương mặt, xương gò má",
+            "code": "FBZYG",
+            "property": []
+        },
+        {
+            "display": "Ống dẫn trứng",
+            "code": "FALLT",
+            "property": []
+        },
+        {
+            "display": "Thuộc đùi",
+            "code": "FEMOR",
+            "property": []
+        },
+        {
+            "display": "Chỏm xương đùi",
+            "code": "FMH",
+            "property": []
+        },
+        {
+            "display": "Xương đùi",
+            "code": "FEMUR",
+            "property": []
+        },
+        {
+            "display": "Bào thai",
+            "code": "FET",
+            "property": []
+        },
+        {
+            "display": "Xương mác",
+            "code": "FIBU",
+            "property": []
+        },
+        {
+            "display": "Ngón tay",
+            "code": "FING",
+            "property": []
+        },
+        {
+            "display": "Móng tay",
+            "code": "FINGN",
+            "property": []
+        },
+        {
+            "display": "Nang (lông, noãn,…)",
+            "code": "FOL",
+            "property": []
+        },
+        {
+            "display": "Bàn chân",
+            "code": "FOOT",
+            "property": []
+        },
+        {
+            "display": "Cẳng tay",
+            "code": "FOREA",
+            "property": []
+        },
+        {
+            "display": "Trán",
+            "code": "FOREH",
+            "property": []
+        },
+        {
+            "display": "Bao quy đầu",
+            "code": "FORES",
+            "property": []
+        },
+        {
+            "display": "Chạc âm hộ",
+            "code": "FOURC",
+            "property": []
+        },
+        {
+            "display": "Túi mật",
+            "code": "GB",
+            "property": []
+        },
+        {
+            "display": "Thuộc cơ quan sinh dục",
+            "code": "GEN",
+            "property": []
+        },
+        {
+            "display": "Sinh dục – âm hộ",
+            "code": "GVU",
+            "property": []
+        },
+        {
+            "display": "Sinh dục – cổ tử cung",
+            "code": "GENC",
+            "property": []
+        },
+        {
+            "display": "Thương tổn cơ quan sinh dục",
+            "code": "GL",
+            "property": []
+        },
+        {
+            "display": "Sản dịch sau khi sinh",
+            "code": "GENL",
+            "property": []
+        },
+        {
+            "display": "Tuyến",
+            "code": "GLAND",
+            "property": []
+        },
+        {
+            "display": "Cấu trúc mạch máu nằm ở vị trí đầu dương vật",
+            "code": "GLANS",
+            "property": []
+        },
+        {
+            "display": "Thuộc cơ mông",
+            "code": "GLUTE",
+            "property": []
+        },
+        {
+            "display": "Cơ mông",
+            "code": "GLUT",
+            "property": []
+        },
+        {
+            "display": "Cơ mông nhỡ",
+            "code": "GLUTM",
+            "property": []
+        },
+        {
+            "display": "Háng",
+            "code": "GROIN",
+            "property": []
+        },
+        {
+            "display": "Nướu răng/lợi",
+            "code": "GUM",
+            "property": []
+        },
+        {
+            "display": "Tóc",
+            "code": "HAR",
+            "property": []
+        },
+        {
+            "display": "Ngón chân cái",
+            "code": "HAL",
+            "property": []
+        },
+        {
+            "display": "Bàn tay",
+            "code": "HAND",
+            "property": []
+        },
+        {
+            "display": "Đầu",
+            "code": "HEAD",
+            "property": []
+        },
+        {
+            "display": "Tim",
+            "code": "HART",
+            "property": []
+        },
+        {
+            "display": "Van tim",
+            "code": "HV",
+            "property": []
+        },
+        {
+            "display": "Van tim,  hai lá",
+            "code": "HVB",
+            "property": []
+        },
+        {
+            "display": "Van tim, ba lá",
+            "code": "HVT",
+            "property": []
+        },
+        {
+            "display": "Gót chân",
+            "code": "HEEL",
+            "property": []
+        },
+        {
+            "display": "Trĩ",
+            "code": "HEM",
+            "property": []
+        },
+        {
+            "display": "Hông",
+            "code": "HIP",
+            "property": []
+        },
+        {
+            "display": "Khớp háng",
+            "code": "HIPJ",
+            "property": []
+        },
+        {
+            "display": "Xương cánh tay",
+            "code": "HUMER",
+            "property": []
+        },
+        {
+            "display": "Màng trinh",
+            "code": "HYMEN",
+            "property": []
+        },
+        {
+            "display": "Ileal Conduit (ống dẫn hồi tràng, nối ống dẫn nước tiểu và bàng quang)",
+            "code": "ILC",
+            "property": []
+        },
+        {
+            "display": "Vòng hồi tràng",
+            "code": "ILE",
+            "property": []
+        },
+        {
+            "display": "Thủ thuật mở thông ruột hồi",
+            "code": "ILEOS",
+            "property": []
+        },
+        {
+            "display": "Ruột hồi",
+            "code": "ILEUM",
+            "property": []
+        },
+        {
+            "display": "Xương chậu",
+            "code": "ILIAC",
+            "property": []
+        },
+        {
+            "display": "Mào chậu",
+            "code": "ILCR",
+            "property": []
+        },
+        {
+            "display": "Ilical Conduit (Mở thông ống hồi tràng)",
+            "code": "ILCON",
+            "property": []
+        },
+        {
+            "display": "Thuộc bẹn",
+            "code": "INGUI",
+            "property": []
+        },
+        {
+            "display": "Tĩnh mạch cổ trong",
+            "code": "JUGI",
+            "property": []
+        },
+        {
+            "display": "Ruột",
+            "code": "INT",
+            "property": []
+        },
+        {
+            "display": "Trong cổ tử cung",
+            "code": "ICX  ",
+            "property": []
+        },
+        {
+            "display": "Trong mũi",
+            "code": "INASA",
+            "property": []
+        },
+        {
+            "display": "Trong tử cung",
+            "code": "INTRU",
+            "property": []
+        },
+        {
+            "display": "Cửa âm đạo (cửa mình)",
+            "code": "INTRO",
+            "property": []
+        },
+        {
+            "display": "Xương đáy chậu gần khớp háng",
+            "code": "ISCHI",
+            "property": []
+        },
+        {
+            "display": "Hàm/Quai hàm",
+            "code": "JAW",
+            "property": []
+        },
+        {
+            "display": "Thận",
+            "code": "KIDN ",
+            "property": []
+        },
+        {
+            "display": "Đầu gối",
+            "code": "KNEE",
+            "property": []
+        },
+        {
+            "display": "Dịch đầu gối",
+            "code": "KNEEF",
+            "property": []
+        },
+        {
+            "display": "Khớp gối",
+            "code": "KNEEJ",
+            "property": []
+        },
+        {
+            "display": "Môi âm hộ",
+            "code": "LABIA",
+            "property": []
+        },
+        {
+            "display": "Môi lớn (âm hộ)",
+            "code": "LABMA",
+            "property": []
+        },
+        {
+            "display": "Môi nhỏ (âm hộ)",
+            "code": "LABMI",
+            "property": []
+        },
+        {
+            "display": "Thuộc tuyến lệ",
+            "code": "LACRI",
+            "property": []
+        },
+        {
+            "display": "Màng/vảy/lớp mỏng của mô hoặc xương",
+            "code": "LAM",
+            "property": []
+        },
+        {
+            "display": "Ruột già",
+            "code": "INSTL",
+            "property": []
+        },
+        {
+            "display": "Thanh quản",
+            "code": "LARYN",
+            "property": []
+        },
+        {
+            "display": "Chân",
+            "code": "LEG",
+            "property": []
+        },
+        {
+            "display": "Thủy tinh thể",
+            "code": "LENS",
+            "property": []
+        },
+        {
+            "display": "Bạch cầu",
+            "code": "WBC",
+            "property": []
+        },
+        {
+            "display": "Thuộc lưỡi",
+            "code": "LING",
+            "property": []
+        },
+        {
+            "display": "Lưỡi",
+            "code": "LINGU",
+            "property": []
+        },
+        {
+            "display": "Môi",
+            "code": "LIP",
+            "property": []
+        },
+        {
+            "display": "Phân lỏng",
+            "code": "STOOLL",
+            "property": []
+        },
+        {
+            "display": "Gan",
+            "code": "LIVER",
+            "property": []
+        },
+        {
+            "display": "Thùy",
+            "code": "LOBE",
+            "property": []
+        },
+        {
+            "display": "Sản dịch sau khi sinh nở",
+            "code": "LOCH",
+            "property": []
+        },
+        {
+            "display": "Vòng, xương đáy chậu (đốt háng)",
+            "code": "ISH",
+            "property": []
+        },
+        {
+            "display": "Thắt lưng",
+            "code": "LUMBA",
+            "property": []
+        },
+        {
+            "display": "Khoang hình ống (mạch máu, ruột)",
+            "code": "LMN",
+            "property": []
+        },
+        {
+            "display": "Phổi",
+            "code": "LUNG",
+            "property": []
+        },
+        {
+            "display": "Hạch bạch huyết",
+            "code": "LN",
+            "property": []
+        },
+        {
+            "display": "Hạch bạch huyết, háng",
+            "code": "LNG",
+            "property": []
+        },
+        {
+            "display": "Tế bào Lympho (bạch huyết)",
+            "code": "LYM",
+            "property": []
+        },
+        {
+            "display": "Đại thực bào",
+            "code": "MAC",
+            "property": []
+        },
+        {
+            "display": "Mắt cá ngoài",
+            "code": "MALLE",
+            "property": []
+        },
+        {
+            "display": "Hàm dưới",
+            "code": "MANDI",
+            "property": []
+        },
+        {
+            "display": "Tủy xương",
+            "code": "MAR",
+            "property": []
+        },
+        {
+            "display": "Có hình vú, giống như vú",
+            "code": "MAST",
+            "property": []
+        },
+        {
+            "display": "Hàm trên",
+            "code": "MAXIL",
+            "property": []
+        },
+        {
+            "display": "Xoang hàm trên",
+            "code": "MAXS",
+            "property": []
+        },
+        {
+            "display": "cửa dẫn vào bên trong cơ thể (miệng, lỗ tai, …)",
+            "code": "MEATU",
+            "property": []
+        },
+        {
+            "display": "Phân su",
+            "code": "MEC",
+            "property": []
+        },
+        {
+            "display": "Màng trong giữa hai lá phổi",
+            "code": "MEDST",
+            "property": []
+        },
+        {
+            "display": "Thuộc về tủy",
+            "code": "MEDU",
+            "property": []
+        },
+        {
+            "display": "Màng",
+            "code": "MOU",
+            "property": []
+        },
+        {
+            "display": "Màng não",
+            "code": "MPB",
+            "property": []
+        },
+        {
+            "display": "Thuộc xương bàn tay",
+            "code": "METAC",
+            "property": []
+        },
+        {
+            "display": "Thuộc xương bàn chân",
+            "code": "METAT",
+            "property": []
+        },
+        {
+            "display": "Sữa, vú",
+            "code": "MILK",
+            "property": []
+        },
+        {
+            "display": "Van hai lá",
+            "code": "MITRL",
+            "property": []
+        },
+        {
+            "display": "Thuộc răng hàm (răng cấm)",
+            "code": "MOLAR",
+            "property": []
+        },
+        {
+            "display": "Mô mỡ nằm trên xương mu",
+            "code": "MP",
+            "property": []
+        },
+        {
+            "display": "Gò niệu quản",
+            "code": "MONSU",
+            "property": []
+        },
+        {
+            "display": "Gò xương mu",
+            "code": "MONSV",
+            "property": []
+        },
+        {
+            "display": "Miệng",
+            "code": "MOUTH",
+            "property": []
+        },
+        {
+            "display": "Mrsa: methicillin-resistant Staphylococcus aureus, một loại vi khuẩn có khả năng chống methicillin, penicillin, và một số kháng sinh khác, và có thể gây nhiễm trùng da, máu, phổi, …",
+            "code": "MRSA2",
+            "property": []
+        },
+        {
+            "display": "Cơ tim",
+            "code": "MYO",
+            "property": []
+        },
+        {
+            "display": "Móng tay/chân",
+            "code": "NAIL",
+            "property": []
+        },
+        {
+            "display": "Da dưới móng",
+            "code": "NAILB",
+            "property": []
+        },
+        {
+            "display": "Móng tay",
+            "code": "NAILF",
+            "property": []
+        },
+        {
+            "display": "Móng chân",
+            "code": "NAILT",
+            "property": []
+        },
+        {
+            "display": "Lỗ mũi",
+            "code": "NARES",
+            "property": []
+        },
+        {
+            "display": "Thuộc mũi",
+            "code": "NASL",
+            "property": []
+        },
+        {
+            "display": "Vách ngăn mũi",
+            "code": "NSS",
+            "property": []
+        },
+        {
+            "display": "Liên quan đến mũi – tuyến lệ",
+            "code": "NLACR",
+            "property": []
+        },
+        {
+            "display": "Thuộc mũi họng",
+            "code": "NP",
+            "property": []
+        },
+        {
+            "display": "Mũi –khí quản",
+            "code": "NTRAC",
+            "property": []
+        },
+        {
+            "display": "Lỗ rốn",
+            "code": "NAVEL",
+            "property": []
+        },
+        {
+            "display": "Cổ",
+            "code": "NECK",
+            "property": []
+        },
+        {
+            "display": "Dây thần kinh",
+            "code": "NERVE",
+            "property": []
+        },
+        {
+            "display": "Núm vú",
+            "code": "NIPPL",
+            "property": []
+        },
+        {
+            "display": "Mũi (khoang mũi)",
+            "code": "NOS",
+            "property": []
+        },
+        {
+            "display": "Mũi/ (bên ngoài)",
+            "code": "NOSE",
+            "property": []
+        },
+        {
+            "display": "Lỗ mũi",
+            "code": "NOSTR",
+            "property": []
+        },
+        {
+            "display": "Thuộc chẫm (thùy chẫm, xương chẫm)",
+            "code": "OCCIP",
+            "property": []
+        },
+        {
+            "display": "Mỏm khuỷu tay",
+            "code": "OLECR",
+            "property": []
+        },
+        {
+            "display": "Màng nối",
+            "code": "OMEN",
+            "property": []
+        },
+        {
+            "display": "Ổ mắt",
+            "code": "ORBIT",
+            "property": []
+        },
+        {
+            "display": "Họng miệng",
+            "code": "ORO",
+            "property": []
+        },
+        {
+            "display": "Đai xương chậu",
+            "code": "OSCOX",
+            "property": []
+        },
+        {
+            "display": "Buồng trứng",
+            "code": "OVARY",
+            "property": []
+        },
+        {
+            "display": "Vòm miệng/hàm ếch",
+            "code": "PALAT",
+            "property": []
+        },
+        {
+            "display": "Vòm miệng cứng",
+            "code": "PLATH",
+            "property": []
+        },
+        {
+            "display": "Vòm miệng mềm",
+            "code": "PLATS",
+            "property": []
+        },
+        {
+            "display": "Lòng bàn tay/Gan bàn tay",
+            "code": "PALM",
+            "property": []
+        },
+        {
+            "display": "Tuyến tụy",
+            "code": "PANCR",
+            "property": []
+        },
+        {
+            "display": "Dịch tụy",
+            "code": "PAFL",
+            "property": []
+        },
+        {
+            "display": "Ở gần xương ức",
+            "code": "PAS   ",
+            "property": []
+        },
+        {
+            "display": "Cận khí quản",
+            "code": "PARAT",
+            "property": []
+        },
+        {
+            "display": "Thuộc đỉnh (xương đỉnh)",
+            "code": "PARIE",
+            "property": []
+        },
+        {
+            "display": "Viêm quanh móng (do vi khuẩn, nấm)",
+            "code": "PARON",
+            "property": []
+        },
+        {
+            "display": "Thuộc mang tai/ Tuyến mang tai",
+            "code": "PAROT",
+            "property": []
+        },
+        {
+            "display": "Xương bánh chè",
+            "code": "PATEL",
+            "property": []
+        },
+        {
+            "display": "Khung xương chậu",
+            "code": "PELV",
+            "property": []
+        },
+        {
+            "display": "Trục/Thân dương vật",
+            "code": "PENSH",
+            "property": []
+        },
+        {
+            "display": "Dương vật",
+            "code": "PENIS",
+            "property": []
+        },
+        {
+            "display": "Quanh hậu môn/ Quanh trực tràng",
+            "code": "PANAL",
+            "property": []
+        },
+        {
+            "display": "Dịch màng tim",
+            "code": "PERI",
+            "property": []
+        },
+        {
+            "display": "Màng ngoài tim",
+            "code": "PCARD",
+            "property": []
+        },
+        {
+            "display": "Quanh âm vật",
+            "code": "PCLIT",
+            "property": []
+        },
+        {
+            "display": "Quanh gan",
+            "code": "PERIH",
+            "property": []
+        },
+        {
+            "display": "Đáy chậu",
+            "code": "PNEAL",
+            "property": []
+        },
+        {
+            "display": "Áp-xe đáy chậu",
+            "code": "PERIN",
+            "property": []
+        },
+        {
+            "display": "Thuộc quanh thận",
+            "code": "PNEPH",
+            "property": []
+        },
+        {
+            "display": "Phần ở giữa hậu môn và bộ phận sinh dục",
+            "code": "PNM",
+            "property": []
+        },
+        {
+            "display": "Quanh hốc mắt",
+            "code": "PORBI",
+            "property": []
+        },
+        {
+            "display": "Quanh trực tràng",
+            "code": "PERRA",
+            "property": []
+        },
+        {
+            "display": "Quanh lách",
+            "code": "PERIS",
+            "property": []
+        },
+        {
+            "display": "Thuộc màng bụng",
+            "code": "PER",
+            "property": []
+        },
+        {
+            "display": "Dịch màng bụng",
+            "code": "PERT",
+            "property": []
+        },
+        {
+            "display": "Màng bụng/Phúc mạc",
+            "code": "PERIT",
+            "property": []
+        },
+        {
+            "display": "Quanh amidan",
+            "code": "PTONS",
+            "property": []
+        },
+        {
+            "display": "Quanh niệu đạo",
+            "code": "PERIU",
+            "property": []
+        },
+        {
+            "display": "Xung quanh mụn nước/túi tinh",
+            "code": "PERIV",
+            "property": []
+        },
+        {
+            "display": "Xương đốt ngón tay/chân",
+            "code": "PHALA",
+            "property": []
+        },
+        {
+            "display": "Ổ lông/Nang lông",
+            "code": "PILO",
+            "property": []
+        },
+        {
+            "display": "Loa tai",
+            "code": "PINNA",
+            "property": []
+        },
+        {
+            "display": "Nhau thai",
+            "code": "PLC",
+            "property": []
+        },
+        {
+            "display": "Nhau thai (phía thai nhi)",
+            "code": "PLACF",
+            "property": []
+        },
+        {
+            "display": "Nhau thai (phía mẹ)",
+            "code": "PLACM",
+            "property": []
+        },
+        {
+            "display": "Thuộc bàn chân",
+            "code": "PLANT",
+            "property": []
+        },
+        {
+            "display": "Màng phổi",
+            "code": "PLEUR",
+            "property": []
+        },
+        {
+            "display": "Dịch màng phổi",
+            "code": "PLEU",
+            "property": []
+        },
+        {
+            "display": "Dịch màng phổi (dịch chọc dò ngực)",
+            "code": "PLR",
+            "property": []
+        },
+        {
+            "display": "Thuộc vùng kheo",
+            "code": "POPLI",
+            "property": []
+        },
+        {
+            "display": "Trước tai",
+            "code": "PREAU",
+            "property": []
+        },
+        {
+            "display": "Niệu tiền thận",
+            "code": "PRERE",
+            "property": []
+        },
+        {
+            "display": "Tuyến tiền liệt",
+            "code": "PRST",
+            "property": []
+        },
+        {
+            "display": "Dịch tuyến tiền liệt",
+            "code": "PROS",
+            "property": []
+        },
+        {
+            "display": "Thuộc xương mu",
+            "code": "PUBIC",
+            "property": []
+        },
+        {
+            "display": "Động mạch phổi",
+            "code": "PUL",
+            "property": []
+        },
+        {
+            "display": "Thuộc xương tay",
+            "code": "RADI",
+            "property": []
+        },
+        {
+            "display": "Xương quay",
+            "code": "RADIUS",
+            "property": []
+        },
+        {
+            "display": "Thuộc trực tràng",
+            "code": "RECTL",
+            "property": []
+        },
+        {
+            "display": "Thuộc trực tràng",
+            "code": "RECTU",
+            "property": []
+        },
+        {
+            "display": "Tế bào hồng cầu",
+            "code": "RBC",
+            "property": []
+        },
+        {
+            "display": "Thuộc thận",
+            "code": "RENL",
+            "property": []
+        },
+        {
+            "display": "Khu vực tại trung tâm của thận",
+            "code": "RNP",
+            "property": []
+        },
+        {
+            "display": "Sau màng bụng",
+            "code": "RPERI",
+            "property": []
+        },
+        {
+            "display": "Xương sườn",
+            "code": "RIB",
+            "property": []
+        },
+        {
+            "display": "Thuộc xương cùng",
+            "code": "SACRA",
+            "property": []
+        },
+        {
+            "display": "Thuộc xương cùng-cụt",
+            "code": "SACRO",
+            "property": []
+        },
+        {
+            "display": "Khớp nối xương cùng và xương chậu",
+            "code": "SACIL",
+            "property": []
+        },
+        {
+            "display": "Xương cùng",
+            "code": "SACRU",
+            "property": []
+        },
+        {
+            "display": "Tuyến nước bọt",
+            "code": "SALGL",
+            "property": []
+        },
+        {
+            "display": "Da đầu",
+            "code": "SCALP",
+            "property": []
+        },
+        {
+            "display": "Xương bả vai",
+            "code": "SCAPU",
+            "property": []
+        },
+        {
+            "display": "Màng cứng",
+            "code": "SCLER",
+            "property": []
+        },
+        {
+            "display": "Bìu dái",
+            "code": "SCROT",
+            "property": []
+        },
+        {
+            "display": "Tinh dịch",
+            "code": "SEMN",
+            "property": []
+        },
+        {
+            "display": "Dịch tinh dịch",
+            "code": "SEM",
+            "property": []
+        },
+        {
+            "display": "Vách ngăn",
+            "code": "SEPTU",
+            "property": []
+        },
+        {
+            "display": "Tụ dịch (túi dịch huyết thanh thường xuất hiện trong cơ thể sau khi phẫu thuật)",
+            "code": "SEROM",
+            "property": []
+        },
+        {
+            "display": "Cẳng chân/ống quyển",
+            "code": "SHIN",
+            "property": []
+        },
+        {
+            "display": "Khớp vai",
+            "code": "SHOLJ",
+            "property": []
+        },
+        {
+            "display": "Vai",
+            "code": "SHOL",
+            "property": []
+        },
+        {
+            "display": "Hình xích-ma",
+            "code": "SIGMO",
+            "property": []
+        },
+        {
+            "display": "Xoang/rò",
+            "code": "SINUS",
+            "property": []
+        },
+        {
+            "display": "Cơ xương",
+            "code": "SKM",
+            "property": []
+        },
+        {
+            "display": "Tuyến Skene",
+            "code": "SKENE",
+            "property": []
+        },
+        {
+            "display": "Hộp sọ",
+            "code": "SKULL",
+            "property": []
+        },
+        {
+            "display": "Ruột non",
+            "code": "INSTS",
+            "property": []
+        },
+        {
+            "display": "Gan bàn chân/Lòng bàn chân",
+            "code": "SOLE",
+            "property": []
+        },
+        {
+            "display": "Tinh trùng",
+            "code": "SPRM",
+            "property": []
+        },
+        {
+            "display": "Thuộc xương bướm",
+            "code": "SPHEN",
+            "property": []
+        },
+        {
+            "display": "Tủy xương sống",
+            "code": "SPCOR",
+            "property": []
+        },
+        {
+            "display": "Lá lách",
+            "code": "SPLN",
+            "property": []
+        },
+        {
+            "display": "Xương ức/Thuộc xương ức",
+            "code": "STER",
+            "property": []
+        },
+        {
+            "display": "Lỗ khí/lỗ thở",
+            "code": "STOM",
+            "property": []
+        },
+        {
+            "display": "Lỗ nhân tạo, tiểu",
+            "code": "USTOM",
+            "property": []
+        },
+        {
+            "display": "Dạ dày",
+            "code": "STOMA",
+            "property": []
+        },
+        {
+            "display": "Mỏm cụt",
+            "code": "STUMP",
+            "property": []
+        },
+        {
+            "display": "Dưới xương đòn",
+            "code": "SCLV",
+            "property": []
+        },
+        {
+            "display": "Dưới cơ hoành",
+            "code": "SDP",
+            "property": []
+        },
+        {
+            "display": "Dưới màng cứng",
+            "code": "SUB",
+            "property": []
+        },
+        {
+            "display": "Dịch dưới màng cứng",
+            "code": "SUBD",
+            "property": []
+        },
+        {
+            "display": "Dịch tụ dưới da đầu (khoảng không gian nằm giữa màng xương sọ và da đầu)",
+            "code": "SGF",
+            "property": []
+        },
+        {
+            "display": "Dưới hàm dưới",
+            "code": "SUBM",
+            "property": []
+        },
+        {
+            "display": "Dưới hàm trên",
+            "code": "SUBX",
+            "property": []
+        },
+        {
+            "display": "Dưới cằm",
+            "code": "SUBME",
+            "property": []
+        },
+        {
+            "display": "Dưới cơ hoành",
+            "code": "SUBPH",
+            "property": []
+        },
+        {
+            "display": "Trên cổ tử cung",
+            "code": "SPX",
+            "property": []
+        },
+        {
+            "display": "Trên xương đòn",
+            "code": "SCLAV",
+            "property": []
+        },
+        {
+            "display": "Trên khớp mu",
+            "code": "SUPRA",
+            "property": []
+        },
+        {
+            "display": "Mẫu xét nghiệm trên khớp mu",
+            "code": "SUPB",
+            "property": []
+        },
+        {
+            "display": "Mồ hôi",
+            "code": "SWT",
+            "property": []
+        },
+        {
+            "display": "Tuyến mồ hôi",
+            "code": "SWTG",
+            "property": []
+        },
+        {
+            "display": "Thuộc hoạt dịch",
+            "code": "SYNOL",
+            "property": []
+        },
+        {
+            "display": "Hoạt dịch",
+            "code": "SYN",
+            "property": []
+        },
+        {
+            "display": "Màng hoạt dịch",
+            "code": "SYNOV",
+            "property": []
+        },
+        {
+            "display": "Thuộc khối xương cổ chân",
+            "code": "TARS",
+            "property": []
+        },
+        {
+            "display": "ống lệ",
+            "code": "TDUCT",
+            "property": []
+        },
+        {
+            "display": "Nước mắt",
+            "code": "TEAR",
+            "property": []
+        },
+        {
+            "display": "Thái dương",
+            "code": "TEMPL",
+            "property": []
+        },
+        {
+            "display": "Thuộc thái dương",
+            "code": "TEMPO",
+            "property": []
+        },
+        {
+            "display": "Thùy thái dương",
+            "code": "TML",
+            "property": []
+        },
+        {
+            "display": "Tinh hoàn",
+            "code": "TESTI",
+            "property": []
+        },
+        {
+            "display": "Bắp đùi",
+            "code": "THIGH",
+            "property": []
+        },
+        {
+            "display": "Ngực/ở ngực/Chọc dò ngực",
+            "code": "THORA",
+            "property": []
+        },
+        {
+            "display": "Cổ họng",
+            "code": "THRB",
+            "property": []
+        },
+        {
+            "display": "Ngón tay cái",
+            "code": "THUMB",
+            "property": []
+        },
+        {
+            "display": "Móng ngón tay cái",
+            "code": "TNL",
+            "property": []
+        },
+        {
+            "display": "Tuyến ức",
+            "code": "THM",
+            "property": []
+        },
+        {
+            "display": "Thuộc tuyến giáp",
+            "code": "THYRD",
+            "property": []
+        },
+        {
+            "display": "Xương chày, xương ống chân",
+            "code": "TIBIA",
+            "property": []
+        },
+        {
+            "display": "Ngón chân",
+            "code": "TOE",
+            "property": []
+        },
+        {
+            "display": "Móng ngón chân",
+            "code": "TOEN",
+            "property": []
+        },
+        {
+            "display": "Lưỡi",
+            "code": "TONG",
+            "property": []
+        },
+        {
+            "display": "Ami-dan",
+            "code": "TONS",
+            "property": []
+        },
+        {
+            "display": "Răng",
+            "code": "TOOTH",
+            "property": []
+        },
+        {
+            "display": "Chân răng",
+            "code": "TSK",
+            "property": []
+        },
+        {
+            "display": "Khí quản",
+            "code": "TRCHE",
+            "property": []
+        },
+        {
+            "display": "Xuyên cuống phổi",
+            "code": "TBRON",
+            "property": []
+        },
+        {
+            "display": "Transcarina Asp",
+            "code": "TCN",
+            "property": []
+        },
+        {
+            "display": "Xương trụ, xương khuỷu tay",
+            "code": "ULNA",
+            "property": []
+        },
+        {
+            "display": "Máu cuống rốn",
+            "code": "UMB",
+            "property": []
+        },
+        {
+            "display": "Rốn",
+            "code": "UMBL",
+            "property": []
+        },
+        {
+            "display": "Niệu quản",
+            "code": "URET",
+            "property": []
+        },
+        {
+            "display": "Niệu đạo",
+            "code": "URTH",
+            "property": []
+        },
+        {
+            "display": "Tử cung",
+            "code": "UTERI",
+            "property": []
+        },
+        {
+            "display": "Túi cùng âm đạo",
+            "code": "SAC",
+            "property": []
+        },
+        {
+            "display": "Tử cung",
+            "code": "UTER",
+            "property": []
+        },
+        {
+            "display": "Âm đạo",
+            "code": "VAGIN",
+            "property": []
+        },
+        {
+            "display": "Thành âm đạo",
+            "code": "VCUFF",
+            "property": []
+        },
+        {
+            "display": "Vòm âm đạo",
+            "code": "VGV",
+            "property": []
+        },
+        {
+            "display": "Van",
+            "code": "VAL",
+            "property": []
+        },
+        {
+            "display": "Ống dẫn tinh",
+            "code": "VAS",
+            "property": []
+        },
+        {
+            "display": "Cơ rộng ngoài của đùi",
+            "code": "VASTL",
+            "property": []
+        },
+        {
+            "display": "Vòm",
+            "code": "VAULT",
+            "property": []
+        },
+        {
+            "display": "Tĩnh mạch",
+            "code": "VEIN",
+            "property": []
+        },
+        {
+            "display": "Hông",
+            "code": "VENTG",
+            "property": []
+        },
+        {
+            "display": "CSF tâm thất",
+            "code": "VCSF",
+            "property": []
+        },
+        {
+            "display": "Thùy nhộng tiểu não",
+            "code": "VERMI",
+            "property": []
+        },
+        {
+            "display": "Đốt sống cổ",
+            "code": "VERTC",
+            "property": []
+        },
+        {
+            "display": "Đốt sống lưng",
+            "code": "VERTL",
+            "property": []
+        },
+        {
+            "display": "Đốt sống ngực",
+            "code": "VERTT",
+            "property": []
+        },
+        {
+            "display": "Túi, bọng",
+            "code": "VESI",
+            "property": []
+        },
+        {
+            "display": "Thuộc túi, bọng",
+            "code": "VESCL",
+            "property": []
+        },
+        {
+            "display": "Dịch trong túi, bọng",
+            "code": "VESFLD",
+            "property": []
+        },
+        {
+            "display": "Tiền đình (sinh dục)",
+            "code": "VESTI",
+            "property": []
+        },
+        {
+            "display": "Dịch thủy tinh",
+            "code": "VITR",
+            "property": []
+        },
+        {
+            "display": "Dây thanh quản",
+            "code": "VOC",
+            "property": []
+        },
+        {
+            "display": "Âm hộ",
+            "code": "VULVA",
+            "property": []
+        },
+        {
+            "display": "Cổ tay",
+            "code": "WRIST",
+            "property": []
+        }
+    ]
+}

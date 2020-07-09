@@ -1,0 +1,55 @@
+{
+  "resourceType": "CodeSystem",
+  
+  "url": "http://hl7.org/fhir/diagnosis-role",
+  "name": "Diagnosis Roles",
+  "publisher": "HL7 Organization",
+  "property": [
+    {
+      "code": "display",
+      "type": "string"
+    }
+  ],
+  "concept": [
+    {
+      "code": "PRD",
+      "display": "Chẩn đoán nơi đến",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Chẩn đoán nơi đến|(PRD)"
+        }
+      ]
+    },
+    {
+      "code": "AD",
+      "display": "Chẩn đoán vào viện",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Chẩn đoán vào viện|(AD)"
+        }
+      ]
+    },
+    {
+      "code": "ED",
+      "display": "Chẩn đoán vào khoa điều trị",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Chẩn đoán vào khoa điều trị|(ED)"
+        }
+      ]
+    },
+    {
+      "code": "EDA",
+      "display": "Chẩn đoán vào khoa điều trị, bệnh phụ",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "Chẩn đoán vào khoa điều trị, bệnh phụ|(EDA)"
+        }
+      ]
+    }
+  ]
+}

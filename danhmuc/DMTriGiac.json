@@ -1,0 +1,56 @@
+{
+  "resourceType": "CodeSystem",
+ 
+  "url": "https://fhir.emr.com.vn/CodeSystem/DMTriGiac",
+  "name": "Danh mục tri giác",
+  "publisher": "VEIG",
+  "description": "Danh mục tri giác",
+  "property": [
+    {
+      "code": "display",
+      "type": "string"
+    }
+  ],
+  "concept": [
+    {
+      "code": "01",
+      "display": "A-Tỉnh táo",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "A-Tỉnh táo|(01)"
+        }
+      ]
+    },
+	{
+      "code": "02",
+      "display": "V-Gọi tỉnh",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "V-Gọi tỉnh|(02)"
+        }
+      ]
+    },
+	{
+      "code": "03",
+      "display": "P-Đau tỉnh",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "P-Đau tỉnh|(03)"
+        }
+      ]
+    },
+	{
+      "code": "04",
+      "display": "U-Hôn mê",
+      "property": [
+        {
+          "code": "display",
+          "valueString": "U-Hôn mê|(04)"
+        }
+      ]
+    }
+  ]
+}

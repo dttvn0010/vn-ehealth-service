@@ -1,0 +1,49 @@
+{
+  "resourceType": "CodeSystem",
+ 
+  "url": "http://hl7.org/fhir/ValueSet/route-codes",
+  "name": "Allergy intolerance route codes",
+  "publisher": "HL7 Organization",
+  "concept": [
+    {
+      "code": "6064005",
+      "display": "Topical route"
+    },
+    {
+      "code": "10547007",
+      "display": "Auricular use"
+    },
+    {
+      "code": "12130007",
+      "display": "Intra-articular route"
+    },
+    {
+      "code": "16857009",
+      "display": "Vaginal use"
+    },
+    {
+      "code": "26643006",
+      "display": "Oral use"
+    },
+    {
+      "code": "34206005",
+      "display": "SC use"
+    },
+    {
+      "code": "37161004",
+      "display": "Rectal use"
+    },
+    {
+      "code": "37737002",
+      "display": "Intraluminal use"
+    },
+    {
+      "code": "37839007",
+      "display": "Sublingual use"
+    },
+    {
+      "code": "38239002",
+      "display": "Intraperitoneal use"
+    }
+  ]
+}

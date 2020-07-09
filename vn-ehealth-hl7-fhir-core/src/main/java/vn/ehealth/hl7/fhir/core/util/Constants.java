@@ -65,6 +65,7 @@ public class Constants {
         final public static String VACCINE_CODE = codeSystems.getProperty("vaccine-code");
         
         //emr.com.vn
+        
         final public static String DVHC = codeSystems.getProperty("DiaDdanhHanhChinh");
         final public static String QUOC_GIA = codeSystems.getProperty("QuocGia");        
         final public static String DAN_TOC = codeSystems.getProperty("DanToc");
@@ -82,6 +83,15 @@ public class Constants {
         final public static String NOIKCBBD = codeSystems.getProperty("noikcbbd");
         final public static String MUC_HUONG_BHYT = codeSystems.getProperty("muchuongbhyt");
         final public static String BH_LIENTIEP_5NAM = codeSystems.getProperty("bhlientiep5nam");
+        //bo_sung
+        final public static String ICD9 = codeSystems.getProperty("icd-9");
+        final public static String DM_TUONG_DUONG_ICD9 = codeSystems.getProperty("DanhMucTuongDuongICD9");
+        final public static String DM_TRIEU_CHUNG_THEO_ICD10 = codeSystems.getProperty("DanhMucTrieuChungTheoICD10");
+        final public static String DM_PHAT_HIEN_LAM_SANG = codeSystems.getProperty("DanhMucPhatHienLamSang");
+        final public static String DM_TAC_NHAN_GAY_DI_UNG = codeSystems.getProperty("DanhMucTacNhanGayDiUng");
+        final public static String DM_VACCINE_CDC = codeSystems.getProperty("DanhMucVaccine_CDC");
+        final public static String DM_GIAI_PHAU = codeSystems.getProperty("DanhMucGiaiPhau");
+        
     }
     
     
