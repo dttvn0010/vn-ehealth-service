@@ -85,6 +85,8 @@ public class Constants {
         final public static String BH_LIENTIEP_5NAM = codeSystems.getProperty("bhlientiep5nam");
         //bo_sung
         final public static String ICD9 = codeSystems.getProperty("icd-9");
+        final public static String ICD9_KCB = codeSystems.getProperty("icd-9-kcb");
+        final public static String ICD10_KCB = codeSystems.getProperty("icd-10-kcb");
         final public static String DM_TUONG_DUONG_ICD9 = codeSystems.getProperty("DanhMucTuongDuongICD9");
         final public static String DM_TRIEU_CHUNG_THEO_ICD10 = codeSystems.getProperty("DanhMucTrieuChungTheoICD10");
         final public static String DM_PHAT_HIEN_LAM_SANG = codeSystems.getProperty("DanhMucPhatHienLamSang");
