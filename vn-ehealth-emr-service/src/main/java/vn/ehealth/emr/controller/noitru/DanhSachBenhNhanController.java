@@ -39,15 +39,15 @@ public class DanhSachBenhNhanController {
         var params = new HashMap<String, Object>();  //mapOf3("status", "$in", status);
         
         if(falcutyCode.isPresent()) {
-        	params.put("extension.value.display", mapOf("$regex", "(" + falcutyCode.get() + ")"));
+        	params.put("extension.value.display", mapOf("$regex", "(" + falcutyCode.get() + ")", "$options" , "i"));
         }
         
         if(chiefComplaintICD.isPresent()) {
-        	params.put("diagnosis.condition.display", mapOf("$regex", "(" + chiefComplaintICD.get() + ")"));
+        	params.put("diagnosis.condition.display", mapOf("$regex", "(" + chiefComplaintICD.get() + ")", "$options" , "i"));
         }
         
         if(keyword.isPresent()) {
-        	params.put("subject.display", mapOf("$regex", keyword.get()));
+        	params.put("subject.display", mapOf("$regex", keyword.get(), "$options" , "i"));
         }
         
         return MongoUtils.createQuery(params);
