@@ -106,7 +106,7 @@ public class DsDonThuocDTO {
             cal.set(Calendar.HOUR, 23);
             cal.set(Calendar.MINUTE, 59);
             cal.set(Calendar.SECOND, 59);
-            if(ngayKetThuc == null || ngayKetThuc.getTime() > cal.getTimeInMillis()) {
+            if(ngayKetThuc == null || ngayKetThuc.getTime() < cal.getTimeInMillis()) {
                 obj.trangThai = TRANGTHAI_DONTHUOC.DA_XONG;
             }
           
