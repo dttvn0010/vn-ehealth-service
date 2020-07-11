@@ -5,7 +5,6 @@ import static vn.ehealth.hl7.fhir.core.util.FhirUtil.createReference;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +25,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.model.component.DanhMuc;
 import vn.ehealth.cdr.model.component.EmrRef;
-import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DONTHUOC;
 import vn.ehealth.cdr.utils.ObjectIdUtil;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
@@ -180,19 +178,5 @@ public class DonThuocChiTiet {
         }        
 
         return mRequest;
-    }
-    
-    public int getTrangThai() {
-        if(trangThai != TRANGTHAI_DONTHUOC.DA_XOA) {
-            var cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR, 23);
-            cal.set(Calendar.MINUTE, 59);
-            cal.set(Calendar.SECOND, 59);
-            if(ngayKetThuc == null || ngayKetThuc.getTime() > cal.getTimeInMillis()) {
-                return TRANGTHAI_DONTHUOC.DA_XONG;
-            }
-            return TRANGTHAI_DONTHUOC.DANG_THUC_HIEN;
-        }
-        return trangThai;
-    }
+    }    
 }

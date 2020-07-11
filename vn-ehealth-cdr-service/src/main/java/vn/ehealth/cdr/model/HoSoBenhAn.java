@@ -261,7 +261,7 @@ public class HoSoBenhAn {
         var coSoKhamBenhId = EmrRef.toObjectId(coSoKhamBenhRef);
 
         if(coSoKhamBenh == null && coSoKhamBenhId != null) {
-            coSoKhamBenh = ServiceFactory.getCoSoKhamBenhService().getById(coSoKhamBenhId).orElse(null);
+            coSoKhamBenh = ServiceFactory.getCoSoKhamBenhService().getById(coSoKhamBenhId);
         }
     
         return coSoKhamBenh;
@@ -271,7 +271,7 @@ public class HoSoBenhAn {
     public BenhNhan getBenhNhan() {
         var benhNhanId = EmrRef.toObjectId(benhNhanRef);
         if(benhNhan == null && benhNhanId != null) {
-            return ServiceFactory.getBenhNhanService().getById(benhNhanId).orElse(null);
+            return ServiceFactory.getBenhNhanService().getById(benhNhanId);
         }
         
         return benhNhan;
@@ -296,7 +296,7 @@ public class HoSoBenhAn {
     }
     
     public TuoiBenhNhan getTuoiBenhNhan() {
-        var benhNhan = ServiceFactory.getBenhNhanService().getById(EmrRef.toObjectId(benhNhanRef)).orElse(null);
+        var benhNhan = ServiceFactory.getBenhNhanService().getById(EmrRef.toObjectId(benhNhanRef));
         
         if(benhNhan == null
             || benhNhan.ngaysinh == null

@@ -58,7 +58,7 @@ public class ChanDoanHinhAnhController {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
             var body = JsonUtil.parseObject(jsonSt, DsChanDoanHinhAnhDTO.class);
-            var hsba = hoSoBenhAnService.getByMaTraoDoi(body.maTraoDoiHoSo).orElse(null);
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(body.maTraoDoiHoSo);
             
             if(hsba == null) {
                 throw new Exception(String.format("hoSoBenhAn maTraoDoi=%s not found", body.maTraoDoiHoSo));

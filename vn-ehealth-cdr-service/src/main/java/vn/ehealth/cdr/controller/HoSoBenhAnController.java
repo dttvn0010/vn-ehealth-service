@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.IdType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -113,7 +114,11 @@ public class HoSoBenhAnController {
     @GetMapping("/get_hsba_by_id")
     public ResponseEntity<?> getHsbaById(@RequestParam("hsba_id") String id) {        
         var hsba = hoSoBenhAnService.getById(new ObjectId(id));
-        return ResponseEntity.of(hsba);
+        if(hsba != null) {
+            return ResponseEntity.ok(hsba);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
     
     @GetMapping("/archive_hsba")
@@ -197,7 +202,7 @@ public class HoSoBenhAnController {
             
             var benhNhanMap = (Map<String, Object>) map.get("benhNhan");
             String idhis = (String) benhNhanMap.get("idhis");
-            var benhNhan = benhNhanService.getByIdhis(idhis).orElse(null);
+            var benhNhan = benhNhanService.getByIdhis(idhis);
             
             if(benhNhan == null) {
                 throw new Exception(String.format("benhNhan with idhis %s not found, please create this patient first", idhis));
@@ -205,7 +210,7 @@ public class HoSoBenhAnController {
             
             var coSoKhamBenhMap = (Map<String, Object>) map.get("coSoKhamBenh");
             String maCskb = (String) coSoKhamBenhMap.get("ma");
-            var coSoKhamBenh = coSoKhamBenhService.getByMa(maCskb).orElse(null);
+            var coSoKhamBenh = coSoKhamBenhService.getByMa(maCskb);
             
             if(coSoKhamBenh == null) {
                 throw new Exception(String.format("coSoKhamBenh with ma=%s not found", maCskb));
@@ -233,8 +238,8 @@ public class HoSoBenhAnController {
     public ResponseEntity<?> getEncounterId(@PathVariable String hsbaId) {
         String encounterId = "";
         var hsba = hoSoBenhAnService.getById(new ObjectId(hsbaId));
-        if(hsba.isPresent()) {
-            var enc = encounterHelper.getEncounterByMaHsba(hsba.get().maYte);
+        if(hsba != null) {
+            var enc = encounterHelper.getEncounterByMaHsba(hsba.maYte);
             encounterId = enc.getId();
         }
         var result = mapOf("success", true, "encounterId", encounterId);
