@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import vn.ehealth.cdr.model.DonThuoc;
 import vn.ehealth.cdr.model.Ylenh;
+import vn.ehealth.cdr.model.component.EmrRef;
 import vn.ehealth.cdr.repository.DonThuocRepository;
 import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DONTHUOC;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
@@ -21,6 +22,7 @@ public class DonThuocService {
 
     @Autowired private DonThuocRepository donThuocRepository;
     @Autowired private DonThuocChiTietService donThuocChiTietService;
+    @Autowired private YlenhService ylenhService;
     @Autowired private MongoTemplate mongoTemplate;
     
     public DonThuoc getById(ObjectId id) {
@@ -86,7 +88,7 @@ public class DonThuocService {
         return donThuoc;
     }
     
-    public void updateTrangThai(@Nonnull ObjectId id) {
+    public DonThuoc updateTrangThai(@Nonnull ObjectId id) {
         var donThuoc = getById(id);
         if(donThuoc != null) {
             var dsDtct = donThuocChiTietService.getByDonThuocId(id);
@@ -94,7 +96,13 @@ public class DonThuocService {
                 donThuoc.trangThai = TRANGTHAI_DONTHUOC.DA_XONG;
                 donThuocRepository.save(donThuoc);
             }
+            var ylenhId = EmrRef.toObjectId(donThuoc.ylenhRef);
+            if(ylenhId != null) {
+                ylenhService.updateTrangThai(ylenhId);
+            }
         }
+        
+        return donThuoc;        
     }
     
     public void deleteByYlenhId(@Nonnull ObjectId ylenhId) {

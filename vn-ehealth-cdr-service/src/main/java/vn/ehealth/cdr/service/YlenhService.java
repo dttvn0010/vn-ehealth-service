@@ -118,4 +118,13 @@ public class YlenhService {
         ylenh.coSoKhamBenhRef = hsba.coSoKhamBenhRef;
         return ylenhRepository.save(ylenh);
     }
+    
+    public Ylenh updateTrangThai(@Nonnull ObjectId id) {
+        var ylenh = getById(id);
+        if(ylenh != null) {
+            ylenh.trangThai = TRANGTHAI_YLENH.DA_XONG;
+            ylenhRepository.save(ylenh);
+        }
+        return ylenh;        
+    }
 }

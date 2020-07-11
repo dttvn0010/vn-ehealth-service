@@ -55,6 +55,7 @@ public class DonThuocController {
                 for(var donThuocDTO : body.dsDonThuoc) {
                     var ylenh = donThuocDTO.generateYlenh();
                     var donThuoc = donThuocDTO.generateDonThuoc();
+                    ylenh.trangThai = donThuoc.trangThai;
                     ylenh = ylenhService.createOrUpdateFromHis(hsba, ylenh);
                     donThuoc = donThuocService.createOrUpdate(ylenh, donThuoc);
                     medicationRequestHelper.saveToFhirDb(hsba, donThuoc.getDsDonThuocChiTiet());

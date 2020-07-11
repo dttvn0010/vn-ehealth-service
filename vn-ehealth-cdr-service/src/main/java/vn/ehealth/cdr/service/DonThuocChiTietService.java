@@ -68,7 +68,9 @@ public class DonThuocChiTietService {
         
         var donThuocIds = new HashSet<ObjectId>();
         for(var donThuocId : FPUtil.transform(dsDtct, x -> EmrRef.toObjectId(x.donThuocRef))) {
-            donThuocIds.add(donThuocId);
+            if(donThuocId != null) {
+                donThuocIds.add(donThuocId);
+            }
         }
         
         for(var donThuocId : donThuocIds) {
