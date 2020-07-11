@@ -14,6 +14,7 @@ import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.model.component.DanhMuc;
 import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
+import vn.ehealth.cdr.utils.CDRConstants.LoaiYlenh;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 
 public class DsPhauThuatThuThuatDTO {
@@ -96,7 +97,9 @@ public class DsPhauThuatThuThuatDTO {
         }
         
         public Ylenh generateYlenh() {
-            var ylenh = new Ylenh();    
+            var ylenh = new Ylenh();
+            ylenh.dmLoaiYlenh = new DanhMuc(LoaiYlenh.YLENH_DVKT, MessageUtils.get("ylenh.dvkt"));
+            ylenh.hienThi = String.format(MessageUtils.get("ylenh.dvkt.hienthi.template"), 1);
             ylenh.idhis = idhis;
             ylenh.ngayRaYlenh = ngayYeuCau;
             ylenh.bacSiRaYlenh = bacSiYeuCau;

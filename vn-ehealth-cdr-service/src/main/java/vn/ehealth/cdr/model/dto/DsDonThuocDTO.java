@@ -14,6 +14,8 @@ import vn.ehealth.cdr.model.FileDinhKem;
 import vn.ehealth.cdr.model.Ylenh;
 import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.model.component.DanhMuc;
+import vn.ehealth.cdr.utils.CDRConstants.LoaiYlenh;
+import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
@@ -127,11 +129,14 @@ public class DsDonThuocDTO {
         
         public Ylenh generateYlenh() {
             var ylenh = new Ylenh();
+            ylenh.dmLoaiYlenh = new DanhMuc(LoaiYlenh.YLENH_THUOC, MessageUtils.get("ylenh.thuoc"));
+            int count = dsDonThuocChiTiet != null? dsDonThuocChiTiet.size() : 0;
+            ylenh.hienThi = String.format(MessageUtils.get("ylenh.thuoc.hienthi.template"), count);
             ylenh.idhis = idhis;
             ylenh.ngayRaYlenh = ngayKeDon;
             ylenh.bacSiRaYlenh = bacSiKeDon;
             return ylenh;
-        }      
+        }
     }
     
     public String maTraoDoiHoSo;

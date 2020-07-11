@@ -13,6 +13,7 @@ import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.model.component.DanhMuc;
 import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
+import vn.ehealth.cdr.utils.CDRConstants.LoaiYlenh;
 
 public class DsGiaiPhauBenhDTO {
 
@@ -75,6 +76,8 @@ public class DsGiaiPhauBenhDTO {
         
         public Ylenh generateYlenh() {
             var ylenh = new Ylenh();
+            ylenh.dmLoaiYlenh = new DanhMuc(LoaiYlenh.YLENH_DVKT, MessageUtils.get("ylenh.dvkt"));
+            ylenh.hienThi = String.format(MessageUtils.get("ylenh.dvkt.hienthi.template"), 1);
             ylenh.idhis = idhis;
             ylenh.ngayRaYlenh = ngayYeuCau;
             ylenh.bacSiRaYlenh = bacSiYeuCau;
