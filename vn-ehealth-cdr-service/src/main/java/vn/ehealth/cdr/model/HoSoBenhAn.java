@@ -351,8 +351,20 @@ public class HoSoBenhAn {
         if(patient == null || serviceProvider == null) return null;
         
         var enc = new Encounter();
-        enc.setIdentifier(listOf(createIdentifier(maYte, IdentifierSystem.MEDICAL_RECORD)));        
-        enc.setSubject(FhirUtil.createReference(patient));
+        enc.setIdentifier(listOf(createIdentifier(maYte, IdentifierSystem.MEDICAL_RECORD)));
+        
+        var patientRef = FhirUtil.createReference(patient);                
+        var patientDisplay = patient.getNameFirstRep().getText();
+        
+        var identifier = FhirUtil.findIdentifierBySystem(patient.getIdentifier(), IdentifierSystem.INSURANCE_NUMBER);
+        if(identifier != null) {
+            patientDisplay += "|" + identifier.getValue();
+        }
+        
+        patientRef.setDisplay(patientDisplay);
+        patientRef.setIdentifier(identifier);
+        
+        enc.setSubject(patientRef);
         enc.setServiceProvider(FhirUtil.createReference(serviceProvider));        
         
         if(quanLyNguoiBenh != null) {
