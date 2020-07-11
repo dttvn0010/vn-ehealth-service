@@ -14,6 +14,7 @@ import vn.ehealth.cdr.model.component.DanhMuc;
 import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiYlenh;
+import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DVKT;
 
 public class DsChanDoanHinhAnhDTO {
 
@@ -60,6 +61,7 @@ public class DsChanDoanHinhAnhDTO {
             dvkt.loiDan = loiDan;
             
             dvkt.dsFileDinhKem = dsFileDinhKemCdha;
+            dvkt.trangThai = TRANGTHAI_DVKT.DA_XONG;
             
             return dvkt;
         }

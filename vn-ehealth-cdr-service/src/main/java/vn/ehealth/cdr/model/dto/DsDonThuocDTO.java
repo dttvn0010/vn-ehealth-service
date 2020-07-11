@@ -99,7 +99,7 @@ public class DsDonThuocDTO {
             }
             obj.dsTanSuatDungThuoc = FPUtil.transform(dsTanSuatDungThuoc, TanSuatDungThuocDTO::toTanSuatDungThuoc);
             obj.bietDuoc = bietDuoc;
-            
+          
             return obj;
         }
     }
@@ -124,6 +124,7 @@ public class DsDonThuocDTO {
             donThuoc.soDon = soDon;
             donThuoc.dsFileDinhKemDonThuoc = dsFileDinhKemDonThuoc;
             donThuoc.dsDonThuocChiTiet = FPUtil.transform(dsDonThuocChiTiet, DonThuocChiTietDTO::toDonThuocChiTiet);
+            
             return donThuoc;
         }
         

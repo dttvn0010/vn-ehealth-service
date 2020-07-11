@@ -14,6 +14,7 @@ import vn.ehealth.cdr.model.component.DanhMuc;
 import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiYlenh;
+import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DVKT;
 
 public class DsGiaiPhauBenhDTO {
 
@@ -70,6 +71,7 @@ public class DsGiaiPhauBenhDTO {
             dvkt.extra.put("ngayLayMauSinhThiet", ngayLayMauSinhThiet);
             
             dvkt.dsFileDinhKem = dsFileDinhKemGpb;
+            dvkt.trangThai = TRANGTHAI_DVKT.DA_XONG;
             
             return dvkt;
         }
