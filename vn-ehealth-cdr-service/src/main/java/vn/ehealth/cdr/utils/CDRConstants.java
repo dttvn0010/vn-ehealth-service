@@ -21,6 +21,12 @@ public class CDRConstants {
         final public static int DA_LUU = 1;        
     }
     
+    public static interface TRANGTHAI_YLENH {
+        final public static int DA_XOA = -1;
+        final public static int DANG_THUC_HIEN = 0;
+        final public static int DA_XONG = 1;        
+    }
+    
     public static interface TRANGTHAI_DVKT {
         final public static int DA_XOA = -1;
         final public static int DANG_THUC_HIEN = 0;

@@ -16,6 +16,7 @@ import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiYlenh;
 import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DVKT;
+import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_YLENH;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 
 public class DsPhauThuatThuThuatDTO {
@@ -106,6 +107,7 @@ public class DsPhauThuatThuThuatDTO {
             ylenh.ngayRaYlenh = ngayYeuCau;
             ylenh.bacSiRaYlenh = bacSiYeuCau;
             ylenh.ghiChu = noiDungYeuCau;
+            ylenh.trangThai = TRANGTHAI_YLENH.DA_XONG;
             return ylenh;
         }
     }

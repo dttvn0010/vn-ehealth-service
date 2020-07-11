@@ -14,7 +14,9 @@ import vn.ehealth.cdr.model.component.DanhMuc;
 import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiDichVuKT;
 import vn.ehealth.cdr.utils.CDRConstants.LoaiYlenh;
+import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
 import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DVKT;
+import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_YLENH;
 
 public class DsChanDoanHinhAnhDTO {
 
@@ -74,6 +76,7 @@ public class DsChanDoanHinhAnhDTO {
             ylenh.ngayRaYlenh = ngayYeuCau;
             ylenh.bacSiRaYlenh = bacSiYeuCau;
             ylenh.ghiChu = noiDungYeuCau;
+            ylenh.trangThai = TRANGTHAI_YLENH.DA_XONG;
             return ylenh;
         }
     }
