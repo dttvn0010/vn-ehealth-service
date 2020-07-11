@@ -40,13 +40,17 @@ public class XetNghiemController {
 
     @GetMapping("/get_ds_xetnghiem")
     public ResponseEntity<?> getDsXetNghiem(@RequestParam("hsba_id") String hsbaId) {
-    	var user = UserUtil.getCurrentUser();
-    	if(!user.isAdmin() && !user.hasPrivilege(Privilege.XEM_TAB_CDHA)) {
-    		var result = Map.of("success", false, "noPermission", true);
-    		return new ResponseEntity<>(result, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
-    	}
-        var xetnghiemList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(new ObjectId(hsbaId), LoaiDichVuKT.XET_NGHIEM);
-        return ResponseEntity.ok(xetnghiemList);
+        try {
+        	var user = UserUtil.getCurrentUser();
+        	if(!user.isAdmin() && !user.hasPrivilege(Privilege.XEM_TAB_CDHA)) {
+        		var result = Map.of("success", false, "noPermission", true);
+        		return new ResponseEntity<>(result, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+        	}
+            var xetnghiemList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(new ObjectId(hsbaId), LoaiDichVuKT.XET_NGHIEM);
+            return ResponseEntity.ok(xetnghiemList);
+        }catch(Exception e) {
+            return ResponseUtil.errorResponse(e);
+        }
     }
     
     @PostMapping("/create_or_update_xetnghiem")
