@@ -40,13 +40,17 @@ public class GiaiPhauBenhController {
     
     @GetMapping("/get_ds_gpb")
     public ResponseEntity<?> getDsGiaiPhauBenh(@RequestParam("hsba_id") String hsbaId) {
-    	var user = UserUtil.getCurrentUser();
-    	if(!user.isAdmin() && !user.hasPrivilege(Privilege.XEM_TAB_GPB)) {
-    		var result = Map.of("success", false, "noPermission", true);
-    		return new ResponseEntity<>(result, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+    	try {
+	    	var user = UserUtil.getCurrentUser();
+	    	if(!user.isAdmin() && !user.hasPrivilege(Privilege.XEM_TAB_GPB)) {
+	    		var result = Map.of("success", false, "noPermission", true);
+	    		return new ResponseEntity<>(result, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+	    	}
+	        var gpbList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(new ObjectId(hsbaId), LoaiDichVuKT.GIAI_PHAU_BENH);
+	        return ResponseEntity.ok(gpbList);
+    	}catch(Exception e) {
+    		return ResponseUtil.errorResponse(e);
     	}
-        var gpbList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(new ObjectId(hsbaId), LoaiDichVuKT.GIAI_PHAU_BENH);
-        return ResponseEntity.ok(gpbList);
     }
             
     @PostMapping("/create_or_update_gpb")
