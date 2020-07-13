@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,12 @@ public class DonThuocController {
     public ResponseEntity<?> getDsDonThuoc(@RequestParam("hsba_id") String id) {
         var donthuocList = donThuocService.getByHoSoBenhAnId(new ObjectId(id));
         return ResponseEntity.ok(donthuocList);
+    }
+    
+    @GetMapping("/get_donthuoc_by_id/{id}")
+    public ResponseEntity<?> getDonThuocById(@PathVariable String id) {
+    	var donThuoc = donThuocService.getById(new ObjectId(id));
+    	return ResponseEntity.ok(Map.of("success", true, "donThuoc", donThuoc));
     }
     
     @PostMapping("/create_or_update_don_thuoc")
