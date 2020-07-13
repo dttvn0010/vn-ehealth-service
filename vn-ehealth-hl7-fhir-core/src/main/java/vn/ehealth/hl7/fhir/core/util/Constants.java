@@ -93,6 +93,8 @@ public class Constants {
         final public static String DM_TAC_NHAN_GAY_DI_UNG = codeSystems.getProperty("DanhMucTacNhanGayDiUng");
         final public static String DM_VACCINE_CDC = codeSystems.getProperty("DanhMucVaccine_CDC");
         final public static String DM_GIAI_PHAU = codeSystems.getProperty("DanhMucGiaiPhau");
+        final public static String DM_CO_SO_Y_TE = codeSystems.getProperty("DanhMucCoSoYte");
+        final public static String DM_ICF = codeSystems.getProperty("DanhMucICF");
         
     }
     
