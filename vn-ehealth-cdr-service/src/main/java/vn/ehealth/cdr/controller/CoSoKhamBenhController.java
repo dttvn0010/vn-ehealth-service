@@ -41,7 +41,8 @@ public class CoSoKhamBenhController {
     @PostMapping("/create_or_update_cskb")
     public ResponseEntity<?> createOrUpdateCskb(@RequestBody CoSoKhamBenh cskb) {
         try {
-            cskb.id = coSoKhamBenhService.getByMa(cskb.ma).map(x -> x.id).orElse(null);
+            var cskbOld = coSoKhamBenhService.getByMa(cskb.ma);
+            cskb.id = cskbOld != null? cskbOld.id : null;
             cskb = coSoKhamBenhService.save(cskb);
             
             saveToFhirDb(cskb);

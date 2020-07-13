@@ -40,13 +40,17 @@ public class PhauThuatThuThuatController {
 
     @GetMapping("/get_ds_pttt")
     public ResponseEntity<?> getDsPhauThuatThuThuat(@RequestParam("hsba_id") String hsbaId) {
-    	var user = UserUtil.getCurrentUser();
-    	if(!user.isAdmin() && !user.hasPrivilege(Privilege.XEM_TAB_PTTT)) {
-    		var result = Map.of("success", false, "noPermission", true);
-    		return new ResponseEntity<>(result, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
-    	}
-        var ptttList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(new ObjectId(hsbaId), LoaiDichVuKT.PHAU_THUAT_THU_THUAT);
-        return ResponseEntity.ok(ptttList);
+        try {
+        	var user = UserUtil.getCurrentUser();
+        	if(!user.isAdmin() && !user.hasPrivilege(Privilege.XEM_TAB_PTTT)) {
+        		var result = Map.of("success", false, "noPermission", true);
+        		return new ResponseEntity<>(result, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+        	}
+            var ptttList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(new ObjectId(hsbaId), LoaiDichVuKT.PHAU_THUAT_THU_THUAT);
+            return ResponseEntity.ok(ptttList);
+        }catch(Exception e) {
+            return ResponseUtil.errorResponse(e);
+        }
     }
     
     @PostMapping("/create_or_update_pttt")
@@ -54,7 +58,7 @@ public class PhauThuatThuThuatController {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
             var body = JsonUtil.parseObject(jsonSt, DsPhauThuatThuThuatDTO.class);
-            var hsba = hoSoBenhAnService.getByMaTraoDoi(body.maTraoDoiHoSo).orElse(null);
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(body.maTraoDoiHoSo);
             
             if(hsba == null) {
                 throw new Exception(String.format("hoSoBenhAn maTraoDoi=%s not found", body.maTraoDoiHoSo));

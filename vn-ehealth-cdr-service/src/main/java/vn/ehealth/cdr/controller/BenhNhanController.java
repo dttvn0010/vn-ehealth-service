@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import org.bson.types.ObjectId;
 import org.hl7.fhir.r4.model.IdType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,13 +53,17 @@ public class BenhNhanController {
     @GetMapping("/get_benhnhan_by_id")
     public ResponseEntity<?> getBenhNhan(@RequestParam String id) {
         var benhNhan = benhNhanService.getById(new ObjectId(id));
-        return ResponseEntity.of(benhNhan);
+        if(benhNhan != null) {
+            return ResponseEntity.ok(benhNhan);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
     
     @GetMapping("/get_id_by_sobhyte")
     public ResponseEntity<?> getIdBySobhyt(@RequestParam String sobhyt) {
         var benhNhan = benhNhanService.getBySobhyt(sobhyt);
-        var id = benhNhan.map(x -> x.getId()).orElse("");
+        var id = benhNhan != null? benhNhan.getId(): "";
         return ResponseEntity.ok(mapOf("id", id));
     }
     

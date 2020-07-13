@@ -185,7 +185,8 @@ public class CodeSystemController {
 	@GetMapping("/count_match")
     public long countMatch(@RequestParam Optional<String> codeSystemId,
             @RequestParam Optional<String> codeSystemUrl,
-            @RequestParam Optional<String> keyword) {
+            @RequestParam Optional<String> keyword,
+            @RequestParam Optional<String> advanceSearch) {
         
         String system = codeSystemUrl.orElse("");
         if(StringUtils.isBlank(system)) {
@@ -212,6 +213,26 @@ public class CodeSystemController {
             valuePart.setName("value").setValue(new StringType(keyword.get()));
         }
         
+        if(advanceSearch.isPresent()) {
+            for(String codeValuePair : advanceSearch.get().split(",")) {
+                String[] arr = codeValuePair.split("|");
+                String code = arr[0];
+                String value = arr[1];
+                
+                if(arr.length == 2) {
+                    var propParam = params.addParameter();
+                    propParam.setName("property");
+                    
+                    var codePart = propParam.addPart();
+                    codePart.setName("code").setValue(new CodeType(code));
+                    
+                    var valuePart = propParam.addPart();
+                    valuePart.setName("value").setValue(new StringType(value));
+                }
+            }
+        }
+        
+        
         var result = codeSystemDao.findMatches(params);
         
         var match = result.getParameter()
@@ -230,7 +251,8 @@ public class CodeSystemController {
 	@GetMapping("/find_match")
 	public ResponseEntity<?> findMatch(@RequestParam Optional<String> codeSystemId,
 	        @RequestParam Optional<String> codeSystemUrl,
-	        @RequestParam Optional<String> keyword,  
+	        @RequestParam Optional<String> keyword,
+	        @RequestParam Optional<String> advanceSearch,
 	        @RequestParam Optional<Integer> offset,
 	        @RequestParam Optional<Integer> limit) {
 	    try {
@@ -257,6 +279,25 @@ public class CodeSystemController {
         	    
         	    var valuePart = propParam.addPart();
         	    valuePart.setName("value").setValue(new StringType(keyword.get()));
+    	    }
+    	    
+    	    if(advanceSearch.isPresent()) {
+    	        for(String codeValuePair : advanceSearch.get().split(",")) {
+    	            String[] arr = codeValuePair.split("\\|");
+    	            String code = arr[0];
+    	            String value = arr[1];
+    	            
+    	            if(arr.length == 2) {
+    	                var propParam = params.addParameter();
+    	                propParam.setName("property");
+    	                
+    	                var codePart = propParam.addPart();
+    	                codePart.setName("code").setValue(new CodeType(code));
+    	                
+    	                var valuePart = propParam.addPart();
+    	                valuePart.setName("value").setValue(new StringType(value));
+    	            }
+    	        }
     	    }
     	    
     	    var result = codeSystemDao.findMatches(params);

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import org.bson.types.ObjectId;
@@ -43,12 +42,18 @@ public class HoSoBenhAnService {
     
     @Autowired private MongoTemplate mongoTemplate;
     
-    public Optional<HoSoBenhAn> getByMaYte(String maYte) {
-        return hoSoBenhAnRepository.findByMaYte(maYte);
+    public HoSoBenhAn getByMaYte(String maYte) {
+        var criteria = Criteria.where("maYte").is(maYte)
+                                .and("trangThai").ne(TRANGTHAI_HOSO.DA_XOA);
+        
+        return mongoTemplate.findOne(new Query(criteria), HoSoBenhAn.class);
     }
     
-    public Optional<HoSoBenhAn> getByMaTraoDoi(String maTraoDoi) {
-        return hoSoBenhAnRepository.findByMaTraoDoi(maTraoDoi);
+    public HoSoBenhAn getByMaTraoDoi(String maTraoDoi) {
+        var criteria = Criteria.where("maTraoDoi").is(maTraoDoi)
+                .and("trangThai").ne(TRANGTHAI_HOSO.DA_XOA);
+
+        return mongoTemplate.findOne(new Query(criteria), HoSoBenhAn.class);
     }
     
     public List<String> getAllIds() {
@@ -87,8 +92,12 @@ public class HoSoBenhAnService {
         return mongoTemplate.find(query, HoSoBenhAn.class);
     }
     
-    public Optional<HoSoBenhAn> getById(ObjectId id){
-        return hoSoBenhAnRepository.findById(id);
+    public HoSoBenhAn getById(ObjectId id){
+        var hsba = hoSoBenhAnRepository.findById(id);
+        if(hsba.isPresent() && hsba.get().trangThai != TRANGTHAI_HOSO.DA_XOA) {
+            return hsba.get();
+        }
+        return null;
     }
     
     public String getHsgoc(ObjectId id) {
@@ -131,7 +140,8 @@ public class HoSoBenhAnService {
     }
     
     public HoSoBenhAn createOrUpdateFromHIS(@Nonnull BenhNhan benhNhan, @Nonnull CoSoKhamBenh coSoKhamBenh, @Nonnull HoSoBenhAn hsba, String jsonSt) {
-        hsba.id = hoSoBenhAnRepository.findByMaTraoDoi(hsba.maTraoDoi).map(x -> x.id).orElse(null);
+        var hsbaOld = getByMaTraoDoi(hsba.maTraoDoi);
+        hsba.id = hsbaOld != null? hsbaOld.id : null;
         boolean createNew = hsba.id == null;
         
         hsba.benhNhanRef = BenhNhan.toRef(benhNhan);        

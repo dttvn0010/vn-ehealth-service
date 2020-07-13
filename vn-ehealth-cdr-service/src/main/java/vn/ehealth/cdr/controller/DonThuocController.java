@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,12 +41,18 @@ public class DonThuocController {
         return ResponseEntity.ok(donthuocList);
     }
     
+    @GetMapping("/get_donthuoc_by_id/{id}")
+    public ResponseEntity<?> getDonThuocById(@PathVariable String id) {
+    	var donThuoc = donThuocService.getById(new ObjectId(id));
+    	return ResponseEntity.ok(Map.of("success", true, "donThuoc", donThuoc));
+    }
+    
     @PostMapping("/create_or_update_don_thuoc")
     public ResponseEntity<?> createOrUpdateDonThuocFromHIS(@RequestBody String jsonSt) {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
             var body = JsonUtil.parseObject(jsonSt, DsDonThuocDTO.class);
-            var hsba = hoSoBenhAnService.getByMaTraoDoi(body.maTraoDoiHoSo).orElse(null);
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(body.maTraoDoiHoSo);
             
             if(hsba == null) {
                 throw new Exception(String.format("hoSoBenhAn maTraoDoi=%s not found", body.maTraoDoiHoSo));
@@ -55,6 +62,7 @@ public class DonThuocController {
                 for(var donThuocDTO : body.dsDonThuoc) {
                     var ylenh = donThuocDTO.generateYlenh();
                     var donThuoc = donThuocDTO.generateDonThuoc();
+                    ylenh.trangThai = donThuoc.trangThai;
                     ylenh = ylenhService.createOrUpdateFromHis(hsba, ylenh);
                     donThuoc = donThuocService.createOrUpdate(ylenh, donThuoc);
                     medicationRequestHelper.saveToFhirDb(hsba, donThuoc.getDsDonThuocChiTiet());

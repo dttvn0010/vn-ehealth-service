@@ -1,6 +1,7 @@
 package vn.ehealth.cdr.model.dto;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,9 @@ import vn.ehealth.cdr.model.FileDinhKem;
 import vn.ehealth.cdr.model.Ylenh;
 import vn.ehealth.cdr.model.component.CanboYteDTO;
 import vn.ehealth.cdr.model.component.DanhMuc;
+import vn.ehealth.cdr.utils.CDRConstants.LoaiYlenh;
+import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DONTHUOC;
+import vn.ehealth.cdr.utils.MessageUtils;
 import vn.ehealth.hl7.fhir.core.util.DataConvertUtil;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
@@ -98,6 +102,14 @@ public class DsDonThuocDTO {
             obj.dsTanSuatDungThuoc = FPUtil.transform(dsTanSuatDungThuoc, TanSuatDungThuocDTO::toTanSuatDungThuoc);
             obj.bietDuoc = bietDuoc;
             
+            var cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR, 23);
+            cal.set(Calendar.MINUTE, 59);
+            cal.set(Calendar.SECOND, 59);
+            if(ngayKetThuc == null || ngayKetThuc.getTime() < cal.getTimeInMillis()) {
+                obj.trangThai = TRANGTHAI_DONTHUOC.DA_XONG;
+            }
+          
             return obj;
         }
     }
@@ -122,16 +134,23 @@ public class DsDonThuocDTO {
             donThuoc.soDon = soDon;
             donThuoc.dsFileDinhKemDonThuoc = dsFileDinhKemDonThuoc;
             donThuoc.dsDonThuocChiTiet = FPUtil.transform(dsDonThuocChiTiet, DonThuocChiTietDTO::toDonThuocChiTiet);
+            
+            if(FPUtil.allMatch(donThuoc.dsDonThuocChiTiet, x -> x.trangThai == TRANGTHAI_DONTHUOC.DA_XONG)) {
+                donThuoc.trangThai = TRANGTHAI_DONTHUOC.DA_XONG;
+            }
             return donThuoc;
         }
         
         public Ylenh generateYlenh() {
             var ylenh = new Ylenh();
+            ylenh.dmLoaiYlenh = new DanhMuc(LoaiYlenh.YLENH_THUOC, MessageUtils.get("ylenh.thuoc"));
+            int count = dsDonThuocChiTiet != null? dsDonThuocChiTiet.size() : 0;
+            ylenh.hienThi = String.format(MessageUtils.get("ylenh.thuoc.hienthi.template"), count);
             ylenh.idhis = idhis;
             ylenh.ngayRaYlenh = ngayKeDon;
             ylenh.bacSiRaYlenh = bacSiKeDon;
             return ylenh;
-        }      
+        }
     }
     
     public String maTraoDoiHoSo;

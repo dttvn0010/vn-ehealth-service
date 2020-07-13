@@ -15,12 +15,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vn.ehealth.auth.model.User;
 import vn.ehealth.auth.service.EmrServiceFactory;
+import vn.ehealth.hl7.fhir.core.common.UnAuthorizedException;
 import vn.ehealth.hl7.fhir.core.entity.BaseExtension;
 import vn.ehealth.hl7.fhir.core.util.FPUtil;
 
 public class UserUtil {
 
-    public static @Nonnull User getCurrentUser() {
+    public static @Nonnull User getCurrentUser() throws UnAuthorizedException {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
         if(userDetails instanceof UserDetails) {
@@ -29,11 +30,11 @@ public class UserUtil {
             if(user.isPresent()) {
                 return user.get();
             }else {
-                throw new RuntimeException("No user with username:" + username);
+                throw new UnAuthorizedException("No user with username:" + username);
             }
         }
         
-        throw new RuntimeException("Invalid/expired token");
+        throw new UnAuthorizedException("Invalid/expired token");
         
     }
     

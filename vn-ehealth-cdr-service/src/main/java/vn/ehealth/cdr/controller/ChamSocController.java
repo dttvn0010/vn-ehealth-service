@@ -53,7 +53,7 @@ public class ChamSocController {
             
             if(medicalRecord != null) {
                 String maYte = medicalRecord.getValue();
-                hsba = hoSoBenhAnService.getByMaYte(maYte).orElse(null);
+                hsba = hoSoBenhAnService.getByMaYte(maYte);
             }
             
             if(hsba == null) {
@@ -98,7 +98,7 @@ public class ChamSocController {
             
             if(medicalRecord != null) {
                 String maYte = medicalRecord.getValue();
-                hsba = hoSoBenhAnService.getByMaYte(maYte).orElse(null);
+                hsba = hoSoBenhAnService.getByMaYte(maYte);
             }
             
             if(hsba == null) {
@@ -141,7 +141,7 @@ public class ChamSocController {
 
 			if (medicalRecord != null) {
 				String maYte = medicalRecord.getValue();
-				hsba = hoSoBenhAnService.getByMaYte(maYte).orElse(null);
+				hsba = hoSoBenhAnService.getByMaYte(maYte);
 			}
 
 			if (hsba == null) {
@@ -174,7 +174,10 @@ public class ChamSocController {
     @GetMapping("/get_detail/{chamsocId}")
     public ResponseEntity<?> getDetail(@PathVariable String chamsocId) {
         try {
-            var chamsoc = chamSocService.getById(new ObjectId(chamsocId)).get();
+            var chamsoc = chamSocService.getById(new ObjectId(chamsocId));
+            if(chamsoc == null) {
+                throw new Exception("No chamSoc with id " + chamsocId + " found");
+            }
             var dsUongThuoc = uongThuocService.getByChamSocId(new ObjectId(chamsocId));
             return ResponseEntity.ok(mapOf("success", true, "chamSoc", chamsoc, "dsUongThuoc", dsUongThuoc));
         } catch (Exception e) {

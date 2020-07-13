@@ -59,7 +59,7 @@ public class YlenhController {
             
             if(medicalRecord != null) {
                 String maYte = medicalRecord.getValue();
-                hsba = hoSoBenhAnService.getByMaYte(maYte).orElse(null);
+                hsba = hoSoBenhAnService.getByMaYte(maYte);
             }
             
             if(hsba == null) {
@@ -118,7 +118,7 @@ public class YlenhController {
             
             if(medicalRecord != null) {
                 String maYte = medicalRecord.getValue();
-                hsba = hoSoBenhAnService.getByMaYte(maYte).orElse(null);
+                hsba = hoSoBenhAnService.getByMaYte(maYte);
             }
             
             if(hsba == null) {
@@ -159,7 +159,7 @@ public class YlenhController {
             
             if(medicalRecord != null) {
                 String maYte = medicalRecord.getValue();
-                hsba = hoSoBenhAnService.getByMaYte(maYte).orElse(null);
+                hsba = hoSoBenhAnService.getByMaYte(maYte);
             }
             
             if(hsba == null) {
@@ -190,7 +190,10 @@ public class YlenhController {
     @GetMapping("/get_detail/{ylenhId}")
     public ResponseEntity<?> getDetail(@PathVariable String ylenhId) {
         try {
-            var ylenh = ylenhService.getById(new ObjectId(ylenhId)).get();
+            var ylenh = ylenhService.getById(new ObjectId(ylenhId));
+            if(ylenh == null) {
+                throw new Exception("No ylenh with id " + ylenhId + " found");
+            }
             var dsDVKT = dichVuKyThuatService.getByYlenhId(ylenh.id);
             
             var dsDonThuoc = donThuocService.getByYlenhId(ylenh.id);                      
