@@ -41,7 +41,7 @@ public class XetNghiemController {
     @GetMapping("/get_ds_xetnghiem")
     public ResponseEntity<?> getDsXetNghiem(@RequestParam("hsba_id") String hsbaId) {
     	var user = UserUtil.getCurrentUser();
-    	if(!user.isAdmin() && !user.hasPrivilege(Privilege.XEM_TAB_CDHA)) {
+    	if(!user.isAdmin() && !user.hasPrivilege(Privilege.XEM_TAB_XN)) {
     		var result = Map.of("success", false, "noPermission", true);
     		return new ResponseEntity<>(result, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
     	}

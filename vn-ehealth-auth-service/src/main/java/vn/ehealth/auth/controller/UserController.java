@@ -20,6 +20,7 @@ import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -226,6 +227,20 @@ public class UserController {
         }
     	
     	return errors;
+    }
+    
+    @GetMapping("/get_privileges")
+    ResponseEntity<?> getUserPrivileges() {
+    	var user = UserUtil.getCurrentUser();
+    	if(user.isAdmin()) {
+    		return ResponseEntity.ok(Map.of("privileges", List.of("ALL")));
+    	}
+    	var role = user.getRole();
+    	var privileges = new ArrayList<>();
+    	if(role != null && role.privileges != null) {
+    		privileges = new ArrayList<>(role.privileges);
+    	}
+    	return ResponseEntity.ok(Map.of("privileges", privileges));
     }
 
 }

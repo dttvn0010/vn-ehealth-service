@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import vn.ehealth.auth.model.Privilege;
+import vn.ehealth.auth.utils.UserUtil;
 import vn.ehealth.cdr.controller.helper.ProcedureHelper;
 import vn.ehealth.cdr.model.dto.DsGiaiPhauBenhDTO;
 import vn.ehealth.cdr.service.DichVuKyThuatService;
@@ -37,6 +40,11 @@ public class GiaiPhauBenhController {
     
     @GetMapping("/get_ds_gpb")
     public ResponseEntity<?> getDsGiaiPhauBenh(@RequestParam("hsba_id") String hsbaId) {
+    	var user = UserUtil.getCurrentUser();
+    	if(!user.isAdmin() && !user.hasPrivilege(Privilege.XEM_TAB_GPB)) {
+    		var result = Map.of("success", false, "noPermission", true);
+    		return new ResponseEntity<>(result, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+    	}
         var gpbList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(new ObjectId(hsbaId), LoaiDichVuKT.GIAI_PHAU_BENH);
         return ResponseEntity.ok(gpbList);
     }
