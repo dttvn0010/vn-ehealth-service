@@ -41,7 +41,7 @@ public class ChucNangSongController {
             jsonSt = JsonUtil.preprocess(jsonSt);
             var map = JsonUtil.parseJson(jsonSt);
             var maTraoDoiHsba = (String) map.get("maTraoDoiHoSo");
-            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba).orElse(null);
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(maTraoDoiHsba);
             
             if(hsba == null) {
                 throw new Exception(String.format("hoSoBenhAn maTraoDoi=%s not found", maTraoDoiHsba));

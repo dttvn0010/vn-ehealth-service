@@ -2,8 +2,6 @@ package vn.ehealth.cdr.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang.StringUtils;
@@ -27,12 +25,26 @@ public class ChamSocService {
     @Autowired private UongThuocService uongThuocService;
     @Autowired private MongoTemplate mongoTemplate;
         
-    public Optional<ChamSoc> getById(ObjectId id) {
-        return chamSocRepository.findById(id);
+    public ChamSoc getById(ObjectId id) {
+        var chamSoc = chamSocRepository.findById(id);
+        if(chamSoc.isPresent() && chamSoc.get().trangThai != TRANGTHAI_DULIEU.DA_XOA) {
+            return chamSoc.get();
+        }
+        return null;
+    }
+    
+    public ChamSoc getByIdhis(String idhis) {
+        var criteria = Criteria.where("idhis").is(idhis)
+                .and("trangThai").ne(TRANGTHAI_DULIEU.DA_XOA);
+
+        return mongoTemplate.findOne(new Query(criteria), ChamSoc.class);
     }
     
     public List<ChamSoc> getByHoSoBenhAnId(ObjectId hsbaId) {
-        return chamSocRepository.findByHoSoBenhAnRefObjectIdAndTrangThai(hsbaId, TRANGTHAI_DULIEU.DEFAULT);
+        var criteria = Criteria.where("hoSoBenhAnRef.objectId").is(hsbaId)
+                                .and("trangThai").ne(TRANGTHAI_DULIEU.DA_XOA);
+        
+        return mongoTemplate.find(new Query(criteria), ChamSoc.class);
     }
     
     private Criteria createCriteriaByLoaiAndNgayChamSoc(ObjectId hoSoBenhAnId, String maLoaiChamSoc, Date ngayBatDau, Date ngayKetThuc) {
@@ -79,7 +91,8 @@ public class ChamSocService {
 	
     public ChamSoc createOrUpdate(@Nonnull HoSoBenhAn hsba, @Nonnull ChamSoc chamSoc) {
         if(chamSoc.idhis != null) {
-            chamSoc.id = chamSocRepository.findByIdhis(chamSoc.idhis).map(x -> x.id).orElse(null);
+            var chamSocOld = getByIdhis(chamSoc.idhis);
+            chamSoc.id = chamSocOld != null? chamSocOld.id : null;
             if(chamSoc.id != null) {
                 uongThuocService.deleteByChamSocId(chamSoc.id);
             }

@@ -40,13 +40,17 @@ public class ChanDoanHinhAnhController {
             
     @GetMapping("/get_ds_cdha")
     public ResponseEntity<?> getDsChanDoanHinhAnh(@RequestParam("hsba_id") String hsbaId) {
-    	var user = UserUtil.getCurrentUser();
-    	if(!user.isAdmin() && !user.hasPrivilege(Privilege.XEM_TAB_CDHA)) {
-    		var result = Map.of("success", false, "noPermission", true);
-    		return new ResponseEntity<>(result, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
-    	}
-        var cdhaList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(new ObjectId(hsbaId), LoaiDichVuKT.CHAN_DOAN_HINH_ANH);
-        return ResponseEntity.ok(Map.of("cdhaList", cdhaList, "success", true));
+        try {
+        	var user = UserUtil.getCurrentUser();
+        	if(!user.isAdmin() && !user.hasPrivilege(Privilege.XEM_TAB_CDHA)) {
+        		var result = Map.of("success", false, "noPermission", true);
+        		return new ResponseEntity<>(result, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+        	}
+            var cdhaList = dichVuKyThuatService.getByHsbaIdAndLoaiDVKT(new ObjectId(hsbaId), LoaiDichVuKT.CHAN_DOAN_HINH_ANH);
+            return ResponseEntity.ok(Map.of("cdhaList", cdhaList, "success", true));
+        }catch(Exception e) {
+            return ResponseUtil.errorResponse(e);
+        }
     }
         
     @PostMapping("/create_or_update_cdha")
@@ -54,7 +58,7 @@ public class ChanDoanHinhAnhController {
         try {
             jsonSt = JsonUtil.preprocess(jsonSt);
             var body = JsonUtil.parseObject(jsonSt, DsChanDoanHinhAnhDTO.class);
-            var hsba = hoSoBenhAnService.getByMaTraoDoi(body.maTraoDoiHoSo).orElse(null);
+            var hsba = hoSoBenhAnService.getByMaTraoDoi(body.maTraoDoiHoSo);
             
             if(hsba == null) {
                 throw new Exception(String.format("hoSoBenhAn maTraoDoi=%s not found", body.maTraoDoiHoSo));

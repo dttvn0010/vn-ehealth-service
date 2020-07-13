@@ -182,6 +182,51 @@ public class CodeSystemController {
         }
     }
 	
+	@GetMapping("/count_match")
+    public long countMatch(@RequestParam Optional<String> codeSystemId,
+            @RequestParam Optional<String> codeSystemUrl,
+            @RequestParam Optional<String> keyword) {
+        
+        String system = codeSystemUrl.orElse("");
+        if(StringUtils.isBlank(system)) {
+            var codeSystem = codeSystemDao.read(FhirUtil.createIdType(codeSystemId.orElseThrow()));
+            system = codeSystem.getUrl();
+        }
+        
+        Parameters params = new Parameters();
+        
+        var systemParam = params.addParameter();
+        systemParam.setName("system").setValue(new UriType(system));
+        
+        var exactParam = params.addParameter();
+        exactParam.setName("exact").setValue(new BooleanType(false));
+        
+        if(keyword.isPresent()) {
+            var propParam = params.addParameter();
+            propParam.setName("property");
+            
+            var codePart = propParam.addPart();
+            codePart.setName("code").setValue(new CodeType("display"));
+            
+            var valuePart = propParam.addPart();
+            valuePart.setName("value").setValue(new StringType(keyword.get()));
+        }
+        
+        var result = codeSystemDao.findMatches(params);
+        
+        var match = result.getParameter()
+                          .stream()
+                          .filter(x -> "match".equals(x.getName()))
+                          .findFirst()
+                          .orElse(null);
+        if(match != null) {
+            return match.getPart().size();
+        }
+        
+        return 0;
+        
+    }
+	
 	@GetMapping("/find_match")
 	public ResponseEntity<?> findMatch(@RequestParam Optional<String> codeSystemId,
 	        @RequestParam Optional<String> codeSystemUrl,
@@ -244,7 +289,7 @@ public class CodeSystemController {
                             propDTO.value = ((IntegerType) prop.getValue()).getValue();
                         }else if(prop.getValue() instanceof Coding) {
                             propDTO.value = CodingDTO.fromCoding((Coding) prop.getValue());
-                        } else {
+                        } else if (prop.getValue() != null) {
                             propDTO.value = prop.getValue().primitiveValue();
                         }
     	                conceptDTO.property.add(propDTO);

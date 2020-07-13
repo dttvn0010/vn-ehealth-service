@@ -38,7 +38,7 @@ public class DonThuocChiTietController {
 	            
 	            if(medicalRecord != null) {
 	                String maYte = medicalRecord.getValue();
-	                hsba = hoSoBenhAnService.getByMaYte(maYte).orElse(null);
+	                hsba = hoSoBenhAnService.getByMaYte(maYte);
 	            }
 	            
 	            if(hsba == null) {

@@ -2,8 +2,6 @@ package vn.ehealth.cdr.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang.StringUtils;
@@ -18,30 +16,49 @@ import org.springframework.stereotype.Service;
 import vn.ehealth.cdr.model.HoSoBenhAn;
 import vn.ehealth.cdr.model.Ylenh;
 import vn.ehealth.cdr.repository.YlenhRepository;
-import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
+import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_YLENH;
 
 @Service
 public class YlenhService {
 
     @Autowired private YlenhRepository ylenhRepository;
     @Autowired private DonThuocService donThuocService;
+    @Autowired private DichVuKyThuatService dichVuKyThuatService;
     @Autowired private MongoTemplate mongoTemplate;
     
-    public Optional<Ylenh> getById(ObjectId id) {
-        return ylenhRepository.findById(id);
+    public Ylenh getById(ObjectId id) {
+        var ylenh = ylenhRepository.findById(id);
+        if(ylenh.isPresent() && ylenh.get().trangThai != TRANGTHAI_YLENH.DA_XOA) {
+            return ylenh.get();
+        }
+        return null;
+    }
+    
+    public Ylenh getByIdhis(String idhis) {
+        var criteria = Criteria.where("idhis").is(idhis)
+                                .and("trangThai").ne(TRANGTHAI_YLENH.DA_XOA);
+        
+        return mongoTemplate.findOne(new Query(criteria), Ylenh.class);
     }
     
     public List<Ylenh> getByHoSoBenhAnId(ObjectId hoSoBenhAnId, int start, int count) {
-        if(start >= 0 && count >= 0) {
-            var pageable = new OffsetBasedPageable(count, start, Sort.by("id"));
-            return ylenhRepository.findByHoSoBenhAnRefObjectIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT, pageable);
-        }else {
-            return ylenhRepository.findByHoSoBenhAnRefObjectIdAndTrangThai(hoSoBenhAnId, TRANGTHAI_DULIEU.DEFAULT); 
+        var criteria = Criteria.where("hoSoBenhAnRef.objectId").is(hoSoBenhAnId)
+                                .and("trangThai").ne(TRANGTHAI_YLENH.DA_XOA);
+        
+        var sort = new Sort(Sort.Direction.ASC, "id");
+        var query = new Query(criteria).with(sort);
+        
+        if(start >= 0 & count >= 0) {
+            query.skip(start).limit(count);
         }
+        
+        return mongoTemplate.find(query, Ylenh.class);
+        
     }
     
     public Criteria createCriteriaByLoaiAndNgayRaYlenh(ObjectId hoSoBenhAnId, String maLoaiYlenh,Date ngayBatDau, Date ngayKetThuc) {
-        var criteria = Criteria.where("hoSoBenhAnRef.objectId").is(hoSoBenhAnId);
+        var criteria = Criteria.where("hoSoBenhAnRef.objectId").is(hoSoBenhAnId)
+                                .and("trangThai").ne(TRANGTHAI_YLENH.DA_XOA);
         
         if(ngayBatDau != null && ngayKetThuc == null) {
             criteria = criteria.and("ngayRaYlenh").gt(ngayBatDau);
@@ -81,10 +98,6 @@ public class YlenhService {
     	return mongoTemplate.find(query, Ylenh.class);
     }
     
-    public List<Ylenh> getByHoSoBenhAnIdAndLoaiYlenh(ObjectId hoSoBenhAnId, String maLoaiYlenh,Date ngayBatDau, Date ngayKetThuc, int start, int count) {
-        var pageable = new OffsetBasedPageable(count, start, Sort.by("id"));
-        return ylenhRepository.findByHoSoBenhAnRefObjectIdAndDmLoaiYlenhMaAndTrangThai(hoSoBenhAnId, maLoaiYlenh, TRANGTHAI_DULIEU.DEFAULT, pageable);
-    }
     
     public Ylenh save(@Nonnull Ylenh ylenh) {
         return ylenhRepository.save(ylenh);        
@@ -92,9 +105,11 @@ public class YlenhService {
     
     public Ylenh createOrUpdateFromHis(@Nonnull HoSoBenhAn hsba, @Nonnull Ylenh ylenh) {
         if(ylenh.idhis != null) {
-            ylenh.id = ylenhRepository.findByIdhis(ylenh.idhis).map(x -> x.id).orElse(null);
+            var ylenhOld = getByIdhis(ylenh.idhis);
+            ylenh.id = ylenhOld != null? ylenhOld.id : null;
             if(ylenh.id != null) {
                 donThuocService.deleteByYlenhId(ylenh.id);
+                dichVuKyThuatService.deleteByYlenhId(ylenh.id);
             }
         }
         
@@ -102,5 +117,14 @@ public class YlenhService {
         ylenh.benhNhanRef = hsba.benhNhanRef;
         ylenh.coSoKhamBenhRef = hsba.coSoKhamBenhRef;
         return ylenhRepository.save(ylenh);
+    }
+    
+    public Ylenh updateTrangThai(@Nonnull ObjectId id) {
+        var ylenh = getById(id);
+        if(ylenh != null) {
+            ylenh.trangThai = TRANGTHAI_YLENH.DA_XONG;
+            ylenhRepository.save(ylenh);
+        }
+        return ylenh;        
     }
 }

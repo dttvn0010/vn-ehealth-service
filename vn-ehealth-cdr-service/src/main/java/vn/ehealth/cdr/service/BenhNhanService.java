@@ -2,8 +2,6 @@ package vn.ehealth.cdr.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -15,6 +13,7 @@ import vn.ehealth.cdr.model.BenhNhan;
 import vn.ehealth.cdr.repository.BenhNhanRepository;
 import vn.ehealth.cdr.utils.JsonUtil;
 import vn.ehealth.cdr.utils.CDRConstants.MA_HANH_DONG;
+import vn.ehealth.cdr.utils.CDRConstants.TRANGTHAI_DULIEU;
 
 @Service
 public class BenhNhanService {
@@ -29,10 +28,8 @@ public class BenhNhanService {
     private LogService logService;
     
     public BenhNhan createOrUpdate(BenhNhan benhNhan, String jsonSt) {
-        
-        benhNhan.id = benhNhanRepository
-                            .findByIdDinhDanhChinh(benhNhan.idDinhDanhChinh)
-                            .map(x -> x.id).orElse(null);
+        var benhNhanOld = getByIdDinhDanhChinh(benhNhan.idDinhDanhChinh);
+        benhNhan.id = benhNhanOld != null? benhNhanOld.id : null;
         
         benhNhan = benhNhanRepository.save(benhNhan);
         
@@ -42,16 +39,31 @@ public class BenhNhanService {
         return benhNhan;
     }
     
-    public Optional<BenhNhan> getById(ObjectId id) {
-        return benhNhanRepository.findById(id);
+    public BenhNhan getById(ObjectId id) {
+        var benhNhan = benhNhanRepository.findById(id);
+        if(benhNhan.isPresent() && benhNhan.get().trangThai != TRANGTHAI_DULIEU.DA_XOA) {
+            return benhNhan.get();
+        }
+        return null;
     }
     
-    public Optional<BenhNhan> getByIdhis(String idhis) {
-    	return benhNhanRepository.findByIdhis(idhis);
+    public BenhNhan getByIdDinhDanhChinh(String idDinhDanhChinh) {
+        var criteria =  Criteria.where("idDinhDanhChinh").is(idDinhDanhChinh)
+                                 .and("trangThai").ne(TRANGTHAI_DULIEU.DA_XOA);
+    	return mongoTemplate.findOne(new Query(criteria), BenhNhan.class);
     }
     
-    public Optional<BenhNhan> getBySobhyt(String sobhyt) {
-        return benhNhanRepository.findBySobhyt(sobhyt);
+    public BenhNhan getByIdhis(String idhis) {
+        var criteria =  Criteria.where("idhis").is(idhis)
+                                 .and("trangThai").ne(TRANGTHAI_DULIEU.DA_XOA);
+        return mongoTemplate.findOne(new Query(criteria), BenhNhan.class);
+    }
+    
+    public BenhNhan getBySobhyt(String sobhyt) {
+        var criteria =  Criteria.where("sobhyt").is(sobhyt)
+                .and("trangThai").ne(TRANGTHAI_DULIEU.DA_XOA);
+        
+        return mongoTemplate.findOne(new Query(criteria), BenhNhan.class);
     }
     
     public long countBenhNhan(String keyword) {     
