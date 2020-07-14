@@ -213,21 +213,24 @@ public class CodeSystemController {
             valuePart.setName("value").setValue(new StringType(keyword.get()));
         }
         
-        if(advanceSearch.isPresent()) {
+        if(advanceSearch.isPresent() && !StringUtils.isBlank(advanceSearch.get())) {
             for(String codeValuePair : advanceSearch.get().split(",")) {
-                String[] arr = codeValuePair.split("|");
-                String code = arr[0];
-                String value = arr[1];
-                
-                if(arr.length == 2) {
-                    var propParam = params.addParameter();
-                    propParam.setName("property");
+                String[] arr = codeValuePair.split("\\|");
+                                    
+                if(arr.length == 2) {                  
+                    String code = arr[0];
+                    String value = arr[1];
                     
-                    var codePart = propParam.addPart();
-                    codePart.setName("code").setValue(new CodeType(code));
-                    
-                    var valuePart = propParam.addPart();
-                    valuePart.setName("value").setValue(new StringType(value));
+                    if(arr.length == 2) {
+                        var propParam = params.addParameter();
+                        propParam.setName("property");
+                        
+                        var codePart = propParam.addPart();
+                        codePart.setName("code").setValue(new CodeType(code));
+                        
+                        var valuePart = propParam.addPart();
+                        valuePart.setName("value").setValue(new StringType(value));
+                    }
                 }
             }
         }
