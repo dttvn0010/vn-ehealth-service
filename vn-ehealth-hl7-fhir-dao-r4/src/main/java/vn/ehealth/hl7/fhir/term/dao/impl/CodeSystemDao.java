@@ -342,7 +342,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 					    cond = mapOf("code", propertyCode, "value.value", propertyValue);
 					    
 					}else {
-					    cond = mapOf("code", propertyCode, "value.value", mapOf("$regex", propertyValue));
+					    cond = mapOf("code", propertyCode, "value.value", mapOf("$regex", propertyValue, "$options" , "i"));
 					}
 					
 					andConditions.add(mapOf(
