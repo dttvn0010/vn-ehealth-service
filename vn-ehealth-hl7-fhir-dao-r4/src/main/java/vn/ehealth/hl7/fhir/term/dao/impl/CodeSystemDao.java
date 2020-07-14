@@ -126,22 +126,28 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 		return null;
 	}
 	
-	@Cacheable(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType", condition = "#idType!=null")
-	public CodeSystem read(IdType idType) {
+	public CodeSystem _read(IdType idType, boolean includeConcepts) {
 		if (idType != null && idType.hasIdPart()) {
 			String fhirId = idType.getIdPart();
 			Query query = Query
 					.query(Criteria.where(ConstantKeys.QP_FHIRID).is(fhirId).and(ConstantKeys.QP_ACTIVE).is(true));
 
 			var entity = mongo.findOne(query, CodeSystemEntity.class);
-			if (entity != null) {
-				entity.concept = conceptDao.getByCodeSystem(entity._fhirId);
-				return transform(entity);
+			
+			if (entity != null && includeConcepts) {
+				entity.concept = conceptDao.getByCodeSystem(entity._fhirId);				
 			}
+			
+			return transform(entity);
 		}
 		
 		return null;
 	}
+	
+	@Cacheable(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType", condition = "#idType!=null")
+	public CodeSystem read(IdType idType) {
+        return _read(idType, true);
+    }
 
 	public CodeSystem readOrVread(IdType idType) {
 		if (idType.hasVersionIdPart() && idType.hasIdPart()) {
@@ -295,84 +301,113 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 		return retVal;
 	}
 	
-	public Parameters findMatches(Parameters params) {
-		Parameters retVal = new Parameters();
-		var codeSystemUrlParam = FPUtil.findFirst(params.getParameter(), x -> ConstantKeys.SP_SYSTEM.equals(x.getName()));
-		if(codeSystemUrlParam == null) return null;
-		String codeSystemUrl = ((UriType) codeSystemUrlParam.getValue()).getValue();
-		
-		var codeSystem = getByUrl(codeSystemUrl);
-		if(codeSystem == null) {
-			return null;
-		}
-		
-		boolean exact = false;
-		List<Object> andConditions = listOf(
-		            mapOf(ConstantKeys.QP_ACTIVE, true),
-		            mapOf("codeSystemId", codeSystem.getId())
-		        );
-		
-		for(var param : params.getParameter()) {
-			if(ConstantKeys.SP_EXACT.equals(param.getName())) {
-				exact = ((BooleanType) param.getValue()).getValue();
-			}
-			
-			if(ConstantKeys.SP_PROPERTY.equals(param.getName())) {
-				String propertyCode = "";
-				Object propertyValue = null;;
-				
-				for(var part : param.getPart()) {
-					if(ConstantKeys.SP_CODE.equals(part.getName())) {
-						propertyCode = ((CodeType) part.getValue()).getValue();
-					}
-					
-					if(ConstantKeys.SP_VALUE.equals(part.getName())) {
-						if(part.getValue() instanceof IntegerType) {
-							propertyValue = ((IntegerType) part.getValue()).getValue();
-						}else {
-							propertyValue = part.getValue().primitiveValue();
-						}
-					}
-				}
-				
-				if(!StringUtils.isEmpty(propertyCode)) {
-				    Map<String, Object> cond;
-				    
-					if(exact) {
-					    cond = mapOf("code", propertyCode, "value.value", propertyValue);
-					    
-					}else {
-					    cond = mapOf("code", propertyCode, "value.value", mapOf("$regex", propertyValue, "$options" , "i"));
-					}
-					
-					andConditions.add(mapOf(
+	private Map<String, Object> createFindMatchParams(Parameters params) {
+	    var codeSystemUrlParam = FPUtil.findFirst(params.getParameter(), x -> ConstantKeys.SP_SYSTEM.equals(x.getName()));
+        if(codeSystemUrlParam == null) return null;
+        String codeSystemUrl = ((UriType) codeSystemUrlParam.getValue()).getValue();
+        
+        var codeSystem = getByUrl(codeSystemUrl);
+        if(codeSystem == null) {
+            return null;
+        }
+        
+        boolean exact = false;
+        List<Object> andConditions = listOf(
+                    mapOf(ConstantKeys.QP_ACTIVE, true),
+                    mapOf("codeSystemId", codeSystem.getId())
+                );
+        
+        for(var param : params.getParameter()) {
+            if(ConstantKeys.SP_EXACT.equals(param.getName())) {
+                exact = ((BooleanType) param.getValue()).getValue();
+            }
+            
+            if(ConstantKeys.SP_PROPERTY.equals(param.getName())) {
+                String propertyCode = "";
+                Object propertyValue = null;;
+                
+                for(var part : param.getPart()) {
+                    if(ConstantKeys.SP_CODE.equals(part.getName())) {
+                        propertyCode = ((CodeType) part.getValue()).getValue();
+                    }
+                    
+                    if(ConstantKeys.SP_VALUE.equals(part.getName())) {
+                        if(part.getValue() instanceof IntegerType) {
+                            propertyValue = ((IntegerType) part.getValue()).getValue();
+                        }else {
+                            propertyValue = part.getValue().primitiveValue();
+                        }
+                    }
+                }
+                
+                if(!StringUtils.isEmpty(propertyCode)) {
+                    Map<String, Object> cond;
+                    
+                    if(exact) {
+                        cond = mapOf("code", propertyCode, "value.value", propertyValue);
+                        
+                    }else {
+                        cond = mapOf("code", propertyCode, "value.value", mapOf("$regex", propertyValue, "$options" , "i"));
+                    }
+                    
+                    andConditions.add(mapOf(
                             "property", mapOf("$elemMatch", cond)
                     ));
-				}
-			}
-		}
-		
-		var query = MongoUtils.createQuery(mapOf("$and", andConditions));
-		
-		var conceptEntityList = mongo.find(query, ConceptEntity.class);
-		
-		var match = retVal.addParameter();
-		match.setName("match");
-		
-		for(var conceptEntity : conceptEntityList) {
-			var part = match.addPart();
-			part.setName("code");
-			var code = new Coding();
-			code.setCode(conceptEntity.code);
-			code.setDisplay(conceptEntity.display);
-			code.setSystem(codeSystemUrl);
-			part.setValue(code);
-			if(conceptEntity.property != null) {
-			    for(var property : conceptEntity.property) {
-			        part.addPart().setName(property.code).setValue(BaseType.toFhir(property.value));
-			    }
-			}
-		}								
+                }
+            }
+        }
+        return mapOf("$and", andConditions);
+	}
+	
+	public long countMatches(Parameters parameters) {
+	    var params = createFindMatchParams(parameters);
+	    if(params == null) return 0;
+        
+        var query = MongoUtils.createQuery(params);
+        
+        return mongo.count(query, ConceptEntity.class);
+        
+    }
+	
+	public Parameters findMatches(Parameters parameters) {
+	    Parameters retVal = new Parameters();
+	    var match = retVal.addParameter();
+        match.setName("match");
+        
+	    var params = createFindMatchParams(parameters);
+	    
+	    if(params != null) {	    
+    	    var codeSystemUrlParam = FPUtil.findFirst(parameters.getParameter(), x -> ConstantKeys.SP_SYSTEM.equals(x.getName()));        
+            String codeSystemUrl = ((UriType) codeSystemUrlParam.getValue()).getValue();
+            
+            int page = 0;
+            var pageParam = FPUtil.findFirst(parameters.getParameter(), x -> ConstantKeys.SP_PAGE.equals(x.getName()));
+            if(pageParam != null) page = ((IntegerType) pageParam.getValue()).getValue();
+            
+            int count = ConstantKeys.DEFAULT_PAGE_SIZE;
+            var countParam = FPUtil.findFirst(parameters.getParameter(), x -> ConstantKeys.SP_COUNT.equals(x.getName()));        
+            if(countParam != null) count = ((IntegerType) countParam.getValue()).getValue();
+                        
+    		var query = MongoUtils.createQuery(params);
+    		query.skip(page * ConstantKeys.DEFAULT_PAGE_SIZE).limit(count);
+    		
+    		var conceptEntityList = mongo.find(query, ConceptEntity.class);
+    		    		
+    		for(var conceptEntity : conceptEntityList) {
+    			var part = match.addPart();
+    			part.setName("code");
+    			var code = new Coding();
+    			code.setCode(conceptEntity.code);
+    			code.setDisplay(conceptEntity.display);
+    			code.setSystem(codeSystemUrl);
+    			part.setValue(code);
+    			if(conceptEntity.property != null) {
+    			    for(var property : conceptEntity.property) {
+    			        part.addPart().setName(property.code).setValue(BaseType.toFhir(property.value));
+    			    }
+    			}
+    		}			
+	    }
 		
 		return retVal;
 	}

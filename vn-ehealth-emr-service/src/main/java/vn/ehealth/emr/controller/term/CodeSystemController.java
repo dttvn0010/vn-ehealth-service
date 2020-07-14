@@ -1,6 +1,7 @@
 package vn.ehealth.emr.controller.term;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ import vn.ehealth.emr.dto.term.CodeSystemDTO;
 import vn.ehealth.emr.dto.term.ConceptDTO;
 import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
+import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
 import vn.ehealth.hl7.fhir.term.dao.impl.CodeSystemDao;
 import vn.ehealth.hl7.fhir.term.dao.impl.ConceptDao;
@@ -51,11 +53,15 @@ public class CodeSystemController {
 	    return MongoUtils.createQuery(params);
 	}
 	
-	@GetMapping("/get_url_by_id/{id}")
+	@GetMapping("/get_by_id/{id}")
 	public ResponseEntity<?> getUrlById(@PathVariable String id) {
-		var codeSystem = codeSystemDao.read(FhirUtil.createIdType(id));
-		var result = mapOf("url", codeSystem.getUrl());
-		return ResponseEntity.ok(result);
+		var codeSystem = codeSystemDao._read(FhirUtil.createIdType(id), false);
+		System.out.print(codeSystem);
+		if(codeSystem != null) {
+		    return ResponseEntity.ok(CodeSystemDTO.fromFhir(codeSystem));
+		}else {
+		    return ResponseEntity.ok(new HashMap<>());
+		}
 	}
 	
 	@GetMapping("/count")
@@ -89,50 +95,26 @@ public class CodeSystemController {
             @RequestParam Optional<Integer> offset,
             @RequestParam Optional<Integer> limit) {
         try {
-            String system = CodeSystemValue.DICH_VU_KY_THUAT;
-            
-            Parameters params = new Parameters();
-            
-            var systemParam = params.addParameter();
-            systemParam.setName("system").setValue(new UriType(system));
-            
-            var exactParam = params.addParameter();
-            exactParam.setName("exact").setValue(new BooleanType(false));
-            
-            if(keyword.isPresent()) {
-                var propParam = params.addParameter();
-                propParam.setName("property");
-                
-                var codePart = propParam.addPart();
-                codePart.setName("code").setValue(new CodeType("display"));
-                                
-                var valuePart = propParam.addPart();
-                valuePart.setName("value").setValue(new StringType(keyword.get()));
-            }
+            String advanceSearch = "";
             
             if(maLoaiDVKT.isPresent()) {
-                var propParam = params.addParameter();
-                propParam.setName("property");                
-            
-                var codePart = propParam.addPart();
-                codePart.setName("code").setValue(new CodeType("maLoai"));
-                
-                var valuePart = propParam.addPart();
-                valuePart.setName("value").setValue(new StringType("(" + maLoaiDVKT.get()+ ")"));
+                advanceSearch += "maLoai|" + "(" + maLoaiDVKT.get()+ ")";
             }
-            
             if(maNhomDVKT.isPresent()) {
-                var propParam = params.addParameter();
-                propParam.setName("property");
-                
-                var codePart = propParam.addPart();
-                codePart.setName("code").setValue(new CodeType("maNhom"));
-                
-                var valuePart = propParam.addPart();
-                valuePart.setName("value").setValue(new StringType("(" + maNhomDVKT.get() + ")"));
+                advanceSearch += ",maNhom|" + "(" + maNhomDVKT.get()+ ")";
             }
             
-            var result = codeSystemDao.findMatches(params);
+            var parameters = createFindMatchParameters(CodeSystemValue.DICH_VU_KY_THUAT, keyword.orElse(""), advanceSearch);
+            
+            parameters.addParameter()
+                       .setName(ConstantKeys.SP_PAGE)
+                       .setValue(new IntegerType(offset.orElse(0)/ConstantKeys.DEFAULT_PAGE_SIZE));
+            
+            parameters.addParameter()
+                        .setName(ConstantKeys.SP_COUNT)
+                        .setValue(new IntegerType(limit.orElse(ConstantKeys.DEFAULT_PAGE_SIZE)));
+            
+            var result = codeSystemDao.findMatches(parameters);
             
             var match = result.getParameter()
                               .stream()
@@ -142,12 +124,7 @@ public class CodeSystemController {
                     
             List<ConceptDTO> conceptDTOList = new ArrayList<>();
             if(match != null) {
-                int skip = 0;
                 for(var part : match.getPart()) {
-                    if(offset.isPresent() && skip < offset.get()) {
-                        skip += 1;
-                        continue;
-                    }
                     var code = (Coding) part.getValue();
                     var conceptDTO = ConceptDTO.fromCode(code);
                     
@@ -169,10 +146,6 @@ public class CodeSystemController {
                     }
                     
                     conceptDTOList.add(conceptDTO);
-                    
-                    if(limit.isPresent() && conceptDTOList.size() >= limit.get()) {
-                        break;
-                    }
                 }
             }
             
@@ -182,39 +155,29 @@ public class CodeSystemController {
         }
     }
 	
-	@GetMapping("/count_match")
-    public long countMatch(@RequestParam Optional<String> codeSystemId,
-            @RequestParam Optional<String> codeSystemUrl,
-            @RequestParam Optional<String> keyword,
-            @RequestParam Optional<String> advanceSearch) {
+	private Parameters createFindMatchParameters(String codeSystemUrl, String keyword, String advanceSearch) {
+	    
+        var parameters = new Parameters();
         
-        String system = codeSystemUrl.orElse("");
-        if(StringUtils.isBlank(system)) {
-            var codeSystem = codeSystemDao.read(FhirUtil.createIdType(codeSystemId.orElseThrow()));
-            system = codeSystem.getUrl();
-        }
+        var systemParam = parameters.addParameter();
+        systemParam.setName("system").setValue(new UriType(codeSystemUrl));
         
-        Parameters params = new Parameters();
-        
-        var systemParam = params.addParameter();
-        systemParam.setName("system").setValue(new UriType(system));
-        
-        var exactParam = params.addParameter();
+        var exactParam = parameters.addParameter();
         exactParam.setName("exact").setValue(new BooleanType(false));
         
-        if(keyword.isPresent()) {
-            var propParam = params.addParameter();
+        if(!StringUtils.isBlank(keyword)) {
+            var propParam = parameters.addParameter();
             propParam.setName("property");
             
             var codePart = propParam.addPart();
             codePart.setName("code").setValue(new CodeType("display"));
             
             var valuePart = propParam.addPart();
-            valuePart.setName("value").setValue(new StringType(keyword.get()));
+            valuePart.setName("value").setValue(new StringType(keyword));
         }
         
-        if(advanceSearch.isPresent() && !StringUtils.isBlank(advanceSearch.get())) {
-            for(String codeValuePair : advanceSearch.get().split(",")) {
+        if(!StringUtils.isBlank(advanceSearch)) {
+            for(String codeValuePair : advanceSearch.split(",")) {
                 String[] arr = codeValuePair.split("\\|");
                                     
                 if(arr.length == 2) {                  
@@ -222,7 +185,7 @@ public class CodeSystemController {
                     String value = arr[1];
                     
                     if(arr.length == 2) {
-                        var propParam = params.addParameter();
+                        var propParam = parameters.addParameter();
                         propParam.setName("property");
                         
                         var codePart = propParam.addPart();
@@ -235,20 +198,23 @@ public class CodeSystemController {
             }
         }
         
+        return parameters;
+	}
+	
+	@GetMapping("/count_match")
+    public long countMatch(@RequestParam Optional<String> codeSystemId,
+            @RequestParam Optional<String> codeSystemUrl,
+            @RequestParam Optional<String> keyword,
+            @RequestParam Optional<String> advanceSearch) {
         
-        var result = codeSystemDao.findMatches(params);
-        
-        var match = result.getParameter()
-                          .stream()
-                          .filter(x -> "match".equals(x.getName()))
-                          .findFirst()
-                          .orElse(null);
-        if(match != null) {
-            return match.getPart().size();
+	    String system = codeSystemUrl.orElse("");
+        if(StringUtils.isBlank(system)) {
+            var codeSystem = codeSystemDao.read(FhirUtil.createIdType(codeSystemId.orElseThrow()));
+            system = codeSystem.getUrl();
         }
         
-        return 0;
-        
+        var parameters = createFindMatchParameters(system, keyword.orElse(""), advanceSearch.orElse(""));
+        return codeSystemDao.countMatches(parameters);
     }
 	
 	@GetMapping("/find_match")
@@ -259,51 +225,25 @@ public class CodeSystemController {
 	        @RequestParam Optional<Integer> offset,
 	        @RequestParam Optional<Integer> limit) {
 	    try {
+	        
 	        String system = codeSystemUrl.orElse("");
 	        if(StringUtils.isBlank(system)) {
 	            var codeSystem = codeSystemDao.read(FhirUtil.createIdType(codeSystemId.orElseThrow()));
 	            system = codeSystem.getUrl();
 	        }
-    	    
-    	    Parameters params = new Parameters();
-    	    
-    	    var systemParam = params.addParameter();
-    	    systemParam.setName("system").setValue(new UriType(system));
-    	    
-    	    var exactParam = params.addParameter();
-    	    exactParam.setName("exact").setValue(new BooleanType(false));
-    	    
-    	    if(keyword.isPresent()) {
-        	    var propParam = params.addParameter();
-        	    propParam.setName("property");
-        	    
-        	    var codePart = propParam.addPart();
-        	    codePart.setName("code").setValue(new CodeType("display"));
-        	    
-        	    var valuePart = propParam.addPart();
-        	    valuePart.setName("value").setValue(new StringType(keyword.get()));
-    	    }
-    	    
-    	    if(advanceSearch.isPresent() && !StringUtils.isBlank(advanceSearch.get())) {
-    	        for(String codeValuePair : advanceSearch.get().split(",")) {
-    	            String[] arr = codeValuePair.split("\\|");
-    	                	            
-    	            if(arr.length == 2) {
-    	                String code = arr[0];
-                        String value = arr[1];
-    	                var propParam = params.addParameter();
-    	                propParam.setName("property");
-    	                
-    	                var codePart = propParam.addPart();
-    	                codePart.setName("code").setValue(new CodeType(code));
-    	                
-    	                var valuePart = propParam.addPart();
-    	                valuePart.setName("value").setValue(new StringType(value));
-    	            }
-    	        }
-    	    }
-    	    
-    	    var result = codeSystemDao.findMatches(params);
+	        
+	        var parameters = createFindMatchParameters(system, keyword.orElse(""), advanceSearch.orElse(""));
+	        
+	        parameters.addParameter()
+	                   .setName(ConstantKeys.SP_PAGE)
+	                   .setValue(new IntegerType(offset.orElse(0)/ConstantKeys.DEFAULT_PAGE_SIZE));
+	        
+	        parameters.addParameter()
+                        .setName(ConstantKeys.SP_COUNT)
+                        .setValue(new IntegerType(limit.orElse(ConstantKeys.DEFAULT_PAGE_SIZE)));
+            
+            
+    	    var result = codeSystemDao.findMatches(parameters);
     	    
     	    var match = result.getParameter()
     	                      .stream()
@@ -313,19 +253,12 @@ public class CodeSystemController {
     	    	    
     	    List<ConceptDTO> conceptDTOList = new ArrayList<>();
     	    if(match != null) {
-    	        int skip = 0;
     	        for(var part : match.getPart()) {
-    	            if(offset.isPresent() && skip < offset.get()) {
-    	                skip += 1;
-    	                continue;
-    	            }
     	            var code = (Coding) part.getValue();
     	            var conceptDTO = ConceptDTO.fromCode(code);
     	            
     	            conceptDTO.property = new ArrayList<>();
     	            for(var prop : part.getPart()) {
-    	                if("display".equals(prop.getName())) continue;
-    	                
     	                var propDTO = new ConceptDTO.ConceptPropertyDTO();
     	                propDTO.code = prop.getName();
     	                
@@ -340,10 +273,6 @@ public class CodeSystemController {
     	            }
     	            
     	            conceptDTOList.add(conceptDTO);
-    	            
-    	            if(limit.isPresent() && conceptDTOList.size() >= limit.get()) {
-    	                break;
-    	            }
     	        }
     	    }
     	    

@@ -239,6 +239,7 @@ public class ConstantKeys {
     public static final String SP_PERSIST = "persist";
     
     public static final String SP_EXACT = "exact";
+    public static final String SP_COUNT = "count";
     
     // Query params
     public static final String QP_FHIRID = "_fhirId";
