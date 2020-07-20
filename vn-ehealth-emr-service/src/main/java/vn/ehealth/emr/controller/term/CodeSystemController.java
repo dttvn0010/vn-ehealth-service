@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.BooleanType;
@@ -191,8 +192,15 @@ public class CodeSystemController {
                         var codePart = propParam.addPart();
                         codePart.setName("code").setValue(new CodeType(code));
                         
+                        var pattern = Pattern.compile("[0-9]{4}");
+                        
                         var valuePart = propParam.addPart();
-                        valuePart.setName("value").setValue(new StringType(value));
+                        if(!StringUtils.isBlank(value) && value.startsWith("[") && value.endsWith("]")) {
+                            valuePart.setName("value").setValue(new CodeType(value.substring(1, value.length()-1)));
+                        }else {
+                            valuePart.setName("value").setValue(new StringType(value));
+                        }                        
+                        
                     }
                 }
             }
@@ -209,7 +217,7 @@ public class CodeSystemController {
         
 	    String system = codeSystemUrl.orElse("");
         if(StringUtils.isBlank(system)) {
-            var codeSystem = codeSystemDao.read(FhirUtil.createIdType(codeSystemId.orElseThrow()));
+            var codeSystem = codeSystemDao._read(FhirUtil.createIdType(codeSystemId.orElseThrow()), false);
             system = codeSystem.getUrl();
         }
         
@@ -228,7 +236,7 @@ public class CodeSystemController {
 	        
 	        String system = codeSystemUrl.orElse("");
 	        if(StringUtils.isBlank(system)) {
-	            var codeSystem = codeSystemDao.read(FhirUtil.createIdType(codeSystemId.orElseThrow()));
+	            var codeSystem = codeSystemDao._read(FhirUtil.createIdType(codeSystemId.orElseThrow()), false);
 	            system = codeSystem.getUrl();
 	        }
 	        
