@@ -324,7 +324,8 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
             
             if(ConstantKeys.SP_PROPERTY.equals(param.getName())) {
                 String propertyCode = "";
-                Object propertyValue = null;;
+                Object propertyValue = null;
+                boolean matchExact = exact;
                 
                 for(var part : param.getPart()) {
                     if(ConstantKeys.SP_CODE.equals(part.getName())) {
@@ -334,7 +335,11 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
                     if(ConstantKeys.SP_VALUE.equals(part.getName())) {
                         if(part.getValue() instanceof IntegerType) {
                             propertyValue = ((IntegerType) part.getValue()).getValue();
-                        }else {
+                            matchExact = true;
+                        } else if(part.getValue() instanceof CodeType) {
+                            propertyValue = ((CodeType) part.getValue()).getValue();
+                            matchExact = true;
+                        } else {
                             propertyValue = part.getValue().primitiveValue();
                         }
                     }
@@ -343,7 +348,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
                 if(!StringUtils.isEmpty(propertyCode)) {
                     Map<String, Object> cond;
                     
-                    if(exact) {
+                    if(matchExact) {
                         cond = mapOf("code", propertyCode, "value.value", propertyValue);
                         
                     }else {

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.CodeType;
@@ -191,8 +189,6 @@ public class CodeSystemController {
                         
                         var codePart = propParam.addPart();
                         codePart.setName("code").setValue(new CodeType(code));
-                        
-                        var pattern = Pattern.compile("[0-9]{4}");
                         
                         var valuePart = propParam.addPart();
                         if(!StringUtils.isBlank(value) && value.startsWith("[") && value.endsWith("]")) {
