@@ -358,14 +358,16 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
                             matchExact = true;
                         
                         } else if(propertyValue instanceof DateTimeType) {
-                            propertyValue = new java.sql.Date(((DateTimeType) propertyValue).getValue().getTime());
-                            
-                            if(propertyCode.endsWith("__from")) {
-                                propertyCode = propertyCode.replace("__from", "");
-                                op = "$gte";
-                            }else if(propertyCode.endsWith("__to")) {
-                                propertyCode = propertyCode.replace("__to", "");
-                                op = "$lte";
+                            propertyValue = ((DateTimeType) propertyValue).getValue();
+                            if(propertyValue != null) {
+                                
+                                if(propertyCode.endsWith("__from")) {
+                                    propertyCode = propertyCode.replace("__from", "");
+                                    op = "$gte";
+                                }else if(propertyCode.endsWith("__to")) {
+                                    propertyCode = propertyCode.replace("__to", "");
+                                    op = "$lte";
+                                }
                             }
                         
                         } else if(propertyValue != null) {
@@ -374,7 +376,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
                     }
                 }
                 
-                if(!StringUtils.isEmpty(propertyCode)) {
+                if(propertyValue != null && !StringUtils.isEmpty(propertyCode)) {
                     
                     if(op.equals("$eq")) {
                         Criteria cr = null;
