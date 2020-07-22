@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.CodeType;
 import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.StringType;
@@ -28,6 +29,7 @@ import vn.ehealth.hl7.fhir.core.util.FhirUtil;
 import vn.ehealth.hl7.fhir.core.util.ResponseUtil;
 import vn.ehealth.hl7.fhir.core.util.ConstantKeys;
 import vn.ehealth.hl7.fhir.core.util.Constants.CodeSystemValue;
+import vn.ehealth.hl7.fhir.core.util.DateUtil;
 import vn.ehealth.hl7.fhir.term.dao.impl.CodeSystemDao;
 import vn.ehealth.hl7.fhir.term.dao.impl.ConceptDao;
 import vn.ehealth.hl7.fhir.term.entity.CodeSystemEntity;
@@ -154,9 +156,30 @@ public class CodeSystemController {
         }
     }
 	
+	private Integer parseInt(String st) {
+	    try {
+	        return Integer.valueOf(st);
+	    }catch(NumberFormatException e) {
+	        return null;
+	    }
+	}
+	
 	private Parameters createFindMatchParameters(String codeSystemUrl, String keyword, String advanceSearch) {
 	    
-        var parameters = new Parameters();
+	    var parameters = new Parameters();
+	    
+	    var codeSystem = codeSystemDao.getByUrl(codeSystemUrl);
+	    
+	    if(codeSystem == null) {
+	        return parameters;
+	    }
+	    
+	    var typesMap = new HashMap<String, String>();
+        for(var prop : codeSystem.getProperty()) {
+            var propCode = prop.getCode();
+            var type = prop.getType().getDisplay();
+            typesMap.put(propCode, type);            
+        }
         
         var systemParam = parameters.addParameter();
         systemParam.setName("system").setValue(new UriType(codeSystemUrl));
@@ -182,8 +205,25 @@ public class CodeSystemController {
                 if(arr.length == 2) {                  
                     String code = arr[0];
                     String value = arr[1];
+                    var type = typesMap.get(code);
                     
-                    if(arr.length == 2) {
+                    if("dateTime".equals(type) && value.contains("~")) {
+                        arr = value.split("~");
+                        
+                        if(arr.length == 2) {
+                            var fromDate = DateUtil.parseStringToDate(arr[0], "dd/MM/yyyy");
+                            var toDate = DateUtil.parseStringToDate(arr[1], "dd/MM/yyyy");
+                            toDate.setTime(toDate.getTime() + 24 * 3600 *1000 - 1);
+                            
+                            var fromParam = parameters.addParameter().setName("property");                                
+                            fromParam.addPart().setName("code").setValue(new CodeType(code + "__from"));
+                            fromParam.addPart().setName("value").setValue(new DateTimeType(fromDate));                                          
+                            
+                            var toParam = parameters.addParameter().setName("property");                                
+                            toParam.addPart().setName("code").setValue(new CodeType(code + "__to"));
+                            toParam.addPart().setName("value").setValue(new DateTimeType(toDate));
+                        }
+                    }else {
                         var propParam = parameters.addParameter();
                         propParam.setName("property");
                         
@@ -191,11 +231,31 @@ public class CodeSystemController {
                         codePart.setName("code").setValue(new CodeType(code));
                         
                         var valuePart = propParam.addPart();
-                        if(!StringUtils.isBlank(value) && value.startsWith("[") && value.endsWith("]")) {
-                            valuePart.setName("value").setValue(new CodeType(value.substring(1, value.length()-1)));
+                        
+                        
+                        if("string".equals(type)) {
+                            if(value.startsWith("[") && value.endsWith("]")) {
+                                valuePart.setName("value").setValue(new CodeType(value.substring(1, value.length()-1)));
+                            }else {
+                                valuePart.setName("value").setValue(new StringType(value));
+                            }
+                            
+                        }else if("integer".equals(type)) {
+                            if(value.startsWith("[") && value.endsWith("]")) {
+                                Integer valueInteger = parseInt(value.substring(1, value.length()-1));
+                                if(valuePart != null) {
+                                    valuePart.setName("value").setValue(new IntegerType(valueInteger));
+                                }
+                            }else {
+                                Integer valueInteger = parseInt(value);
+                                if(valueInteger != null) {
+                                    valuePart.setName("value").setValue(new IntegerType(valueInteger));
+                                }
+                            }
+                            
                         }else {
                             valuePart.setName("value").setValue(new StringType(value));
-                        }                        
+                        }
                         
                     }
                 }
@@ -262,17 +322,21 @@ public class CodeSystemController {
     	            var conceptDTO = ConceptDTO.fromCode(code);
     	            
     	            conceptDTO.property = new ArrayList<>();
+    	            
     	            for(var prop : part.getPart()) {
     	                var propDTO = new ConceptDTO.ConceptPropertyDTO();
     	                propDTO.code = prop.getName();
     	                
     	                if(prop.getValue() instanceof IntegerType) {
                             propDTO.value = ((IntegerType) prop.getValue()).getValue();
+                            
                         }else if(prop.getValue() instanceof Coding) {
                             propDTO.value = CodingDTO.fromCoding((Coding) prop.getValue());
+                            
                         } else if (prop.getValue() != null) {
                             propDTO.value = prop.getValue().primitiveValue();
                         }
+    	                
     	                conceptDTO.property.add(propDTO);
     	            }
     	            

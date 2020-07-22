@@ -2,6 +2,7 @@ package vn.ehealth.hl7.fhir.term.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.CodeSystem;
 import org.hl7.fhir.r4.model.CodeType;
 import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.IntegerType;
@@ -17,6 +19,7 @@ import org.hl7.fhir.r4.model.Enumerations.PublicationStatus;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
+import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.UriType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -301,21 +304,31 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 		return retVal;
 	}
 	
-	private Map<String, Object> createFindMatchParams(Parameters params) {
+	private void appendCompareCriteria(Criteria cr, String op, Object value) {
+        switch(op) {
+            case "$lt": cr.lt(value); return;
+            case "$lte": cr.lte(value);  return;
+            case "$gt": cr.gt(value);  return;
+            case "$gte": cr.gte(value);  return;
+        }        
+    }
+	
+    private Criteria createFindMatchCriteria(Parameters params) {
 	    var codeSystemUrlParam = FPUtil.findFirst(params.getParameter(), x -> ConstantKeys.SP_SYSTEM.equals(x.getName()));
         if(codeSystemUrlParam == null) return null;
         String codeSystemUrl = ((UriType) codeSystemUrlParam.getValue()).getValue();
         
         var codeSystem = getByUrl(codeSystemUrl);
+        
         if(codeSystem == null) {
             return null;
         }
         
         boolean exact = false;
-        List<Object> andConditions = listOf(
-                    mapOf(ConstantKeys.QP_ACTIVE, true),
-                    mapOf("codeSystemId", codeSystem.getId())
-                );
+        var criteria = Criteria.where(ConstantKeys.QP_ACTIVE).is(true)
+                                .and("codeSystemId").is(codeSystem.getId());
+        
+        Map<String, Criteria> propertyCriteriaMap = new HashMap<>();
         
         for(var param : params.getParameter()) {
             if(ConstantKeys.SP_EXACT.equals(param.getName())) {
@@ -326,6 +339,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
                 String propertyCode = "";
                 Object propertyValue = null;
                 boolean matchExact = exact;
+                String op = "$eq";
                 
                 for(var part : param.getPart()) {
                     if(ConstantKeys.SP_CODE.equals(part.getName())) {
@@ -333,44 +347,75 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
                     }
                     
                     if(ConstantKeys.SP_VALUE.equals(part.getName())) {
-                        if(part.getValue() instanceof IntegerType) {
-                            propertyValue = ((IntegerType) part.getValue()).getValue();
+                        propertyValue = part.getValue();
+                        
+                        if(propertyValue instanceof IntegerType) {
+                            propertyValue = ((IntegerType) propertyValue).getValue();
                             matchExact = true;
-                        } else if(part.getValue() instanceof CodeType) {
-                            propertyValue = ((CodeType) part.getValue()).getValue();
+                        
+                        } else if(propertyValue instanceof CodeType) {
+                            propertyValue = ((CodeType) propertyValue).getValue();
                             matchExact = true;
-                        } else {
-                            propertyValue = part.getValue().primitiveValue();
+                        
+                        } else if(propertyValue instanceof DateTimeType) {
+                            propertyValue = new java.sql.Date(((DateTimeType) propertyValue).getValue().getTime());
+                            
+                            if(propertyCode.endsWith("__from")) {
+                                propertyCode = propertyCode.replace("__from", "");
+                                op = "$gte";
+                            }else if(propertyCode.endsWith("__to")) {
+                                propertyCode = propertyCode.replace("__to", "");
+                                op = "$lte";
+                            }
+                        
+                        } else if(propertyValue != null) {
+                            propertyValue = ((Type) propertyValue).primitiveValue();
                         }
                     }
                 }
                 
                 if(!StringUtils.isEmpty(propertyCode)) {
-                    Map<String, Object> cond;
                     
-                    if(matchExact) {
-                        cond = mapOf("code", propertyCode, "value.value", propertyValue);
-                        
+                    if(op.equals("$eq")) {
+                        Criteria cr = null;
+                        if(matchExact) {
+                            cr = Criteria.where("code").is(propertyCode)
+                                         .and("value.value").is(propertyValue);
+                            
+                        }else {
+                            cr = Criteria.where("code").is(propertyCode)
+                                         .and("value.value").regex((String) propertyValue, "i");
+                        }
+                        propertyCriteriaMap.put(propertyCode, cr);
                     }else {
-                        cond = mapOf("code", propertyCode, "value.value", mapOf("$regex", propertyValue, "$options" , "i"));
-                    }
-                    
-                    andConditions.add(mapOf(
-                            "property", mapOf("$elemMatch", cond)
-                    ));
+                        Criteria cr = propertyCriteriaMap.get(propertyCode);
+                        if(cr == null) {
+                            cr = Criteria.where("code").is(propertyCode)
+                                        .and("value.value");                            
+                            propertyCriteriaMap.put(propertyCode, cr);
+                        }
+                        appendCompareCriteria(cr, op, propertyValue);
+                    }                    
                 }
             }
         }
-        return mapOf("$and", andConditions);
+        
+        var propertyCriteriaList = new ArrayList<Criteria>();
+        for(String propertyCode : propertyCriteriaMap.keySet()) {
+            var cr = propertyCriteriaMap.get(propertyCode);
+            propertyCriteriaList.add(Criteria.where("property").elemMatch(cr));
+        }
+        
+        criteria.andOperator(propertyCriteriaList.toArray(new Criteria[0]));
+        
+        return criteria;
 	}
 	
 	public long countMatches(Parameters parameters) {
-	    var params = createFindMatchParams(parameters);
-	    if(params == null) return 0;
+	    var criteria = createFindMatchCriteria(parameters);
+	    if(criteria == null) return 0;
         
-        var query = MongoUtils.createQuery(params);
-        
-        return mongo.count(query, ConceptEntity.class);
+        return mongo.count(new Query(criteria), ConceptEntity.class);
         
     }
 	
@@ -379,9 +424,9 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 	    var match = retVal.addParameter();
         match.setName("match");
         
-	    var params = createFindMatchParams(parameters);
+        var criteria = createFindMatchCriteria(parameters);
 	    
-	    if(params != null) {	    
+	    if(criteria != null) {	    
     	    var codeSystemUrlParam = FPUtil.findFirst(parameters.getParameter(), x -> ConstantKeys.SP_SYSTEM.equals(x.getName()));        
             String codeSystemUrl = ((UriType) codeSystemUrlParam.getValue()).getValue();
             
@@ -393,7 +438,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
             var countParam = FPUtil.findFirst(parameters.getParameter(), x -> ConstantKeys.SP_COUNT.equals(x.getName()));        
             if(countParam != null) count = ((IntegerType) countParam.getValue()).getValue();
                         
-    		var query = MongoUtils.createQuery(params);
+    		var query = new Query(criteria);
     		query.skip(page * ConstantKeys.DEFAULT_PAGE_SIZE).limit(count);
     		
     		var conceptEntityList = mongo.find(query, ConceptEntity.class);
