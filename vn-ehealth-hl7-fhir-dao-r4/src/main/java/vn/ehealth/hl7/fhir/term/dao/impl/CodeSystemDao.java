@@ -149,7 +149,7 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
 	
 	@Cacheable(cacheResolver = CachingConfiguration.CACHE_RESOLVER_NAME, key = "#idType", condition = "#idType!=null")
 	public CodeSystem read(IdType idType) {
-        return _read(idType, true);
+        return _read(idType, false);
     }
 
 	public CodeSystem readOrVread(IdType idType) {
