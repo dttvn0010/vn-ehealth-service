@@ -406,7 +406,9 @@ public class CodeSystemDao extends BaseDao<CodeSystemEntity, CodeSystem> {
             propertyCriteriaList.add(Criteria.where("property").elemMatch(cr));
         }
         
-        criteria.andOperator(propertyCriteriaList.toArray(new Criteria[0]));
+        if(propertyCriteriaList.size() > 0) {
+            criteria.andOperator(propertyCriteriaList.toArray(new Criteria[0]));
+        }
         
         return criteria;
 	}
