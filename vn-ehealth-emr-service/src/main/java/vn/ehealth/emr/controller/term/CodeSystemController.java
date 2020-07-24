@@ -164,6 +164,13 @@ public class CodeSystemController {
 	    }
 	}
 	
+	private String escapeRegex(String s) {
+	    if(s != null) {
+	        return s.replace("[", "").replace("]", "");
+	    }
+	    return "";
+	}
+	
 	private Parameters createFindMatchParameters(String codeSystemUrl, String keyword, String advanceSearch) {
 	    
 	    var parameters = new Parameters();
@@ -199,7 +206,7 @@ public class CodeSystemController {
         }
         
         if(!StringUtils.isBlank(advanceSearch)) {
-            for(String codeValuePair : advanceSearch.split(",")) {
+            for(String codeValuePair : advanceSearch.split("##")) {
                 String[] arr = codeValuePair.split("\\|");
                                     
                 if(arr.length == 2) {                  
@@ -237,7 +244,7 @@ public class CodeSystemController {
                             if(value.startsWith("[") && value.endsWith("]")) {
                                 valuePart.setName("value").setValue(new CodeType(value.substring(1, value.length()-1)));
                             }else {
-                                valuePart.setName("value").setValue(new StringType(value));
+                                valuePart.setName("value").setValue(new StringType(escapeRegex(value)));
                             }
                             
                         }else if("integer".equals(type)) {
