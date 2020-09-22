@@ -43,13 +43,7 @@
             <artifactId>vn-ehealth-auth-service</artifactId>
             <version>1.0</version>
         </dependency>
-        
-        <dependency>
-            <groupId>vn.ehealth</groupId>
-            <artifactId>vn-ehealth-cdr-service</artifactId>
-            <version>1.0</version>
-        </dependency>
-        
+                
 		<dependency>
             <groupId>vn.ehealth</groupId>
             <artifactId>vn-ehealth-hl7-fhir-dao-r4</artifactId>
